@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+	jQuery('#user').focus();
 	jQuery( "#button_login" ).click(function() {
 		authentication();
 	});
@@ -14,6 +15,7 @@ jQuery(document).ready(function(){
 	       authentication();
 	    }
 	});
+
 });
 
 function authentication(){
@@ -37,7 +39,7 @@ function authentication(){
 					var promp_content = {
 									content_01:{
 										html:data,
-										buttons: { Cancelar: false, Ingresar: true },
+										buttons: { Cancelar: false},
 										focus: 1,
 										submit:function(e,v,m,f){
 											if(v){
@@ -47,12 +49,12 @@ function authentication(){
 												authentication();
 												return false;
 											}
-											jQuery.prompt.close(promp_content);
+											clean_form_login();
 										}
 									}
 								};
-			
 					jQuery.prompt(promp_content);
+					setTimeout("clean_form_login()",60000);
 					break
 			}
 		}
@@ -60,4 +62,21 @@ function authentication(){
 	
 }
 
+function authentication_perfil(id_user){
+	var id_usuario = id_user;
+	jQuery('#id_user').val(id_usuario);
+	authentication();
+}
 
+function clean_form_login(){
+	jQuery('#user').val('').focus();
+	jQuery('#pwd').val('');
+	jQuery.prompt.close();
+}
+
+function timerIncrement() {
+    var idleTime = idleTime + 1;
+    if (idleTime > 10) { // 20 minutes
+        clean_form_login();
+    }
+}

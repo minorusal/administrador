@@ -36,13 +36,15 @@
 		            <ul class="headmenu">
 		                <li class="right">
 		                    <div class="userloggedinfo">
-		                        <img src="<?php echo base_url().'assets/'.$this->session->userdata('avatar') ?>" style="max-width:80px;max-height:90px;" alt="" />
+		                        <img src="<?php echo base_url().'assets/avatar/'.$this->session->userdata('avatar_user') ?>" style="max-width:80px;max-height:90px;" alt="" />
 		                        <div class="userinfo">
-		                            <h5><?php echo $this->session->userdata('name') ?><small>- <?php echo $this->session->userdata('mail') ?></small></h5>
-		                            <h5>{<?php echo $this->session->userdata('nivel') ?>}</h5>
+		                            <h5>
+		                            	<img  src="<?php echo base_url().'assets/avatar/'.$this->session->userdata('avatar_pais') ?>" style="background:transparent;max-width:16px;max-height:16px;" />
+		                            	<?php echo $this->session->userdata('name') ?><small><br> <?php echo $this->session->userdata('mail') ?></small><br>
+		                            	{<?php echo $this->session->userdata('nivel') ?>}
+		                            </h5>
 		                            <ul>
 		                                <li><a href="<?php echo base_url() ?>">Edita tu Perfil</a></li>
-		                                <li><a href="<?php echo base_url() ?>">Configuraciones</a></li>
 		                                <li><a href="<?php echo base_url() ?>logout">Cerrar Sesión</a></li>
 		                            </ul>
 		                        </div>
@@ -57,13 +59,16 @@
 		        <div class="leftmenu">        
 		            <ul class="nav nav-tabs nav-stacked">
 		            	<li class="nav-header">Navigation</li>
-		            	<li class="dropdown"><a href=""><span class="iconfa-pencil"></span> Forms</a>
-		                	<ul>
-		                    	<li><a href="forms.html">Form Styles</a></li>
-		                        <li><a href="wizards.html">Wizard Form</a></li>
-		                        <li><a href="wysiwyg.html">WYSIWYG</a></li>
-		                    </ul>
-		                </li>
+		            	<?php 
+		            		/* Impresion de Modulos y Secciones de acuerdo al Perfil de Ingreso */
+                			foreach ($this->session->userdata('modulos') as $key => $value) {
+                				if($this->uri->segment(1) == strtolower($value['modulo'])){
+                					echo "<li class='active'><a href='forms.html'>$value[modulo]</a></li>";
+                				}else{
+                					echo "<li><a href='forms.html'>$value[modulo]</a></li>";
+                				}
+                			}
+                		?>
 		            </ul>
 		        </div>
 		    </div>
@@ -72,8 +77,8 @@
 	  		<!--rightpanel-->
 	  		<div class="rightpanel">
 	  			<ul class="breadcrumbs">
-		            <li><a href="<?php echo base_url();?>welcome"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
-		            <li>Dashboard</li>
+		            <li><a href="<?php echo base_url();?>inicio"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+		            <li>Inicio</li>
 		            <li class="right" id="skin-colors">
 	                    <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-tint"></i> Color Skins</a>
 	                    <ul class="dropdown-menu pull-right skin-color">
@@ -90,8 +95,7 @@
 		        <div class="pageheader">
 		            <div class="pageicon"><span class="iconfa-laptop"></span></div>
 		            <div class="pagetitle">
-		                <h5>All Features Summary</h5>
-		                <h1>Dashboard</h1>
+		                <h1>Inicio</h1>
 	            	</div>
 	        	</div>
 	        	<!--pageheader-->

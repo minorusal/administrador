@@ -10,6 +10,7 @@ class Inicio extends CI_Controller {
 		}
 	}
 	public function index(){
+		$data['titulo']       = 'inicio';
 		$data['mensaje']      = 'hola bienvenido';
 		$data['main_content'] = 'inicio';
 		$this->load->view('includes/template', $data); 	

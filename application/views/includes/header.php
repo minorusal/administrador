@@ -41,7 +41,7 @@
 		                            <h5>
 		                            	<img  src="<?php echo base_url().'assets/avatar/'.$this->session->userdata('avatar_pais') ?>" style="background:transparent;max-width:16px;max-height:16px;" />
 		                            	<?php echo $this->session->userdata('name') ?><small><br> <?php echo $this->session->userdata('mail') ?></small><br>
-		                            	{<?php echo $this->session->userdata('nivel') ?>}
+		                            	{<?php echo $this->session->userdata('perfil') ?>}
 		                            </h5>
 		                            <ul>
 		                                <li><a href="<?php echo base_url() ?>">Edita tu Perfil</a></li>
@@ -60,14 +60,41 @@
 		            <ul class="nav nav-tabs nav-stacked">
 		            	<li class="nav-header">Navigation</li>
 		            	<?php 
-		            		/* Impresion de Modulos y Secciones de acuerdo al Perfil de Ingreso */
-                			foreach ($this->session->userdata('modulos') as $key => $value) {
-                				if($this->uri->segment(1) == strtolower($value['modulo'])){
-                					echo "<li class='active'><a href='forms.html'>$value[modulo]</a></li>";
-                				}else{
-                					echo "<li><a href='forms.html'>$value[modulo]</a></li>";
-                				}
-                			}
+		            		/* Impresion de Modulos y Submodulos de acuerdo al Perfil de Ingreso */
+
+                			$count      = 0;
+							$navigate   = "";
+							$submodulo  = "";
+							$mod_routes = "";
+						    $items      = $this->session->userdata('modulos');
+						   
+						    foreach ($items as $item => $subitems) {
+						    	$mod_routes    = base_url().$subitems['routes'][0];
+						    	$mod_dropdown  = "";
+						    	$submodulo     = "";
+						    	$submod_routes = "";
+						    	$count         = 0;
+						    	if(array_key_exists('submodulo', $subitems)){
+					        		$submodulo = "<ul>";
+					        		foreach ($subitems['submodulo'] as $data) {
+					        			$submod_routes = $subitems['routes'][$count];
+					        			$submodulo .=  "<li><a href='$submod_routes'>$data</a></li>";
+					        			$count++;
+					        		}
+					        		$submodulo .=  "</ul>";
+					        		$mod_routes = "";
+					        		$mod_dropdown = "dropdown";
+					        	}
+						    	if (!is_numeric($item)) {
+					            	if($this->uri->segment(1) == strtolower($item)){
+					            		echo  "<li class='$mod_dropdown active'><a>".ucwords(strtolower($item))."</a>";
+					        		}else{
+					        			echo  "<li class='$mod_dropdown'><a href='$mod_routes'>".ucwords(strtolower($item))."</a>";
+					        		}
+					        	}
+					        	echo $submodulo;
+					        	echo "</li>";
+						    }
                 		?>
 		            </ul>
 		        </div>

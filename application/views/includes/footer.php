@@ -6,7 +6,7 @@
 		                        <span>&copy; 2013. IS Intelligent Solution. Todos los Derechos Reservados.</span>
 		                    </div>
 		                    <div class="footer-right">
-		                        <span>Designed by: <a href="http://themepixels.com/">ThemePixels</a></span>
+		                        <span>Designed by: <a href="http://www.isolution.mx/">IS Intelligent Solution</a></span>
 		                    </div>
 		                </div>
 		                <!--footer-->

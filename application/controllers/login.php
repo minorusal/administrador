@@ -45,9 +45,10 @@ class Login extends CI_Controller {
 			if($data_count>1){
 				echo json_encode($this->tbl_multiples_perfiles($data));
 			}else{
-				$data_modulos       = $this->Users_model->search_modules_for_user(explode('|', $data[0]['id_modulo']));
+				$data_modulos       = $this->Users_model->search_modules_for_user($data[0]['id_modulo']);
 				$data_modulos       = $this->object_to_array( $data_modulos );
 				$data[0]['modulos'] = $data_modulos;
+				$data[0]['modulos'] = $this->buil_array_navigator($data_modulos);
 				$this->session->set_userdata($data[0]);
 
 				echo 1;
@@ -56,6 +57,52 @@ class Login extends CI_Controller {
 			echo 0;
 		}
 	}
+	/**
+	* Prepara un array para la construccion
+	* del panel de navegacion 
+	* @param array $array_navigator
+	* @return array
+	*/
+	function buil_array_navigator($array_navigator){
+	
+		foreach ($array_navigator as $key => $value) {
+			if(!is_null($value['submodulo'])){
+				$data_navigator[$value['modulo']]['submodulo'][] = $value['submodulo'];
+				$data_navigator[$value['modulo']]['routes'][] = $value['submodulo_routes'];
+			}else{
+				$data_navigator[$value['modulo']]['routes'][] = $value['modulo_routes'];
+			}
+		}
+		return $data_navigator;
+	}
+
+	/*
+	function buil_panel_navigation($array_navigator){
+		$count     = 0;
+		$navigate  = "";
+	    $items     = $this->buil_array_navigator($array_navigator);
+	    $navigate .= '<ul>';
+	    foreach ($items as $item => $subitems) {
+	    	if (!is_numeric($item)) {
+            	$navigate .= "<li ><a >".ucwords(strtolower($item))."</a>";
+        	}
+        	if(array_key_exists('submodulo', $subitems)){
+        		$navigate .= '<ul>';
+        		foreach ($subitems['submodulo'] as $data) {
+        			$navigate .=  '<li>'.$data.'</li>';
+        			$count++;
+        		}
+        		$navigate .= '</ul>';
+        	}
+        	$navigate .= '</li>';
+	    }
+	    $navigate .= '</ul>';
+
+	    echo $navigate;
+	    die();
+	}
+	*/
+	
 	/**
 	* Recontruye el array devuelto por la consulta 
 	* en caso de multiples perfiles para 
@@ -81,8 +128,8 @@ class Login extends CI_Controller {
 								'empresa'     => $value['empresa'],
 								'id_sucursal' => $value['id_sucursal'],
 								'sucursal'    => $value['sucursal'],
-								'id_nivel'    => $value['id_nivel'],
-								'nivel'       => $value['nivel'],
+								'id_perfil'    => $value['id_perfil'],
+								'perfil'       => $value['perfil'],
 								'id_modulo'   => $value['id_modulo'],
 								'registro'    => $value['registro'],
 								'activo'      => $value['activo'],
@@ -115,7 +162,7 @@ class Login extends CI_Controller {
 			$tbl_data[] = array(
 								
 								'pais'   => '<img src='.base_url().'assets/avatar/'.$value['avatar_pais'].' />'.$value['pais'],
-								'nivel'  => '<a href="#" onclick="authentication_perfil('.$value['id_usuario'].')"><span>'.$value['nivel'].'</span></a>'
+								'perfil'  => '<a href="#" onclick="authentication_perfil('.$value['id_usuario'].')"><span>'.$value['perfil'].'</span></a>'
 						);
 			$bool = false;
 		}

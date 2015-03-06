@@ -9,6 +9,7 @@ class Users_model extends CI_Model{
 	function search_user_for_login($user, $pwd){
 		$query  = "	SELECT 
 						U.id_usuario
+						,P.id_personal
 						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
 						,P.telefono
 						,P.mail
@@ -21,8 +22,8 @@ class Users_model extends CI_Model{
 						,E.empresa
 						,S.id_sucursal
 						,S.sucursal
-						,N.id_nivel
-						,N.nivel
+						,N.id_perfil
+						,N.perfil
 						,N.id_modulo
 						,U.registro
 						,U.activo
@@ -31,7 +32,7 @@ class Users_model extends CI_Model{
 						sys_usuarios U
 					left join sys_personales P on U.id_personal = P.id_personal
 					left join sys_claves     C on U.id_clave    = C.id_clave
-					left join sys_niveles    N on U.id_nivel    = N.id_nivel
+					left join sys_perfiles   N on U.id_perfil  = N.id_perfil
 					left join sys_paises     Pa on U.id_pais    = Pa.id_pais
 					left join sys_empresas   E on U.id_empresa  = E.id_empresa
 					left join sys_sucursales S on U.id_sucursal = S.id_sucursal
@@ -42,7 +43,6 @@ class Users_model extends CI_Model{
 			return $query->result();
 		}		
 	}
-
 	/**
     * Busca Usuario por su id unico de registro
     * @param integer $id_user
@@ -51,6 +51,7 @@ class Users_model extends CI_Model{
 	function search_user_for_id($id_user){
 		$query  = "	SELECT 
 						U.id_usuario
+						,P.id_personal
 						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
 						,P.telefono
 						,P.mail
@@ -63,8 +64,8 @@ class Users_model extends CI_Model{
 						,E.empresa
 						,S.id_sucursal
 						,S.sucursal
-						,N.id_nivel
-						,N.nivel
+						,N.id_perfil
+						,N.perfil
 						,N.id_modulo
 						,U.registro
 						,U.activo
@@ -73,7 +74,7 @@ class Users_model extends CI_Model{
 						sys_usuarios U
 					left join sys_personales P on U.id_personal = P.id_personal
 					left join sys_claves     C on U.id_clave    = C.id_clave
-					left join sys_niveles    N on U.id_nivel    = N.id_nivel
+					left join sys_perfiles    N on U.id_perfil    = N.id_perfil
 					left join sys_paises     Pa on U.id_pais    = Pa.id_pais
 					left join sys_empresas   E on U.id_empresa  = E.id_empresa
 					left join sys_sucursales S on U.id_sucursal = S.id_sucursal
@@ -90,16 +91,18 @@ class Users_model extends CI_Model{
 	* @return array
 	*/
 	function search_modules_for_user($id_modulo){
-		$id_modulo = implode(',', $id_modulo);
 		$query  = "	SELECT 
-						 M.id_modulo
-						,M.modulo
-						,M.registro
-						,M.activo
+						 M.modulo
+						,M.routes as modulo_routes
+						,S.submodulo
+						,S.routes as submodulo_routes
 					FROM
 						sys_modulos M
+					LEFT JOIN sys_submodulos S ON M.id_modulo = S.id_modulo
 					WHERE
-						M.id_modulo IN ( $id_modulo ) AND M.activo = 1;
+						M.id_modulo IN ( $id_modulo ) AND M.activo = 1
+					ORDER BY 
+						M.id_modulo, S.id_submodulo;
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

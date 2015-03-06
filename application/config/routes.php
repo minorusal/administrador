@@ -39,7 +39,7 @@
 */
 
 $route['default_controller']       = 'login/index';
-$route['404_override'] = '';
+$route['404_override']             = 'error404';
 
 /*Punto de venta*/
 

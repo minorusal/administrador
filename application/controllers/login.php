@@ -47,7 +47,6 @@ class Login extends CI_Controller {
 			}else{
 				$data_modulos       = $this->Users_model->search_modules_for_user($data[0]['id_modulo']);
 				$data_modulos       = $this->object_to_array( $data_modulos );
-				$data[0]['modulos'] = $data_modulos;
 				$data[0]['modulos'] = $this->buil_array_navigator($data_modulos);
 				$this->session->set_userdata($data[0]);
 
@@ -67,42 +66,18 @@ class Login extends CI_Controller {
 	
 		foreach ($array_navigator as $key => $value) {
 			if(!is_null($value['submodulo'])){
-				$data_navigator[$value['modulo']]['submodulo'][] = $value['submodulo'];
-				$data_navigator[$value['modulo']]['routes'][] = $value['submodulo_routes'];
+				if(!is_null($value['seccion'])){
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'routes'=> $value['modulo'].'/'.$value['seccion_routes']);
+				}else{
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('routes' => $value['modulo'].'/'.$value['submodulo_routes']);
+				}
 			}else{
-				$data_navigator[$value['modulo']]['routes'][] = $value['modulo_routes'];
+				$data_navigator[$value['modulo']] = array('routes' => $value['modulo_routes']);
 			}
 		}
 		return $data_navigator;
 	}
-
-	/*
-	function buil_panel_navigation($array_navigator){
-		$count     = 0;
-		$navigate  = "";
-	    $items     = $this->buil_array_navigator($array_navigator);
-	    $navigate .= '<ul>';
-	    foreach ($items as $item => $subitems) {
-	    	if (!is_numeric($item)) {
-            	$navigate .= "<li ><a >".ucwords(strtolower($item))."</a>";
-        	}
-        	if(array_key_exists('submodulo', $subitems)){
-        		$navigate .= '<ul>';
-        		foreach ($subitems['submodulo'] as $data) {
-        			$navigate .=  '<li>'.$data.'</li>';
-        			$count++;
-        		}
-        		$navigate .= '</ul>';
-        	}
-        	$navigate .= '</li>';
-	    }
-	    $navigate .= '</ul>';
-
-	    echo $navigate;
-	    die();
-	}
-	*/
-	
+		
 	/**
 	* Recontruye el array devuelto por la consulta 
 	* en caso de multiples perfiles para 
@@ -128,8 +103,8 @@ class Login extends CI_Controller {
 								'empresa'     => $value['empresa'],
 								'id_sucursal' => $value['id_sucursal'],
 								'sucursal'    => $value['sucursal'],
-								'id_perfil'    => $value['id_perfil'],
-								'perfil'       => $value['perfil'],
+								'id_perfil'   => $value['id_perfil'],
+								'perfil'      => $value['perfil'],
 								'id_modulo'   => $value['id_modulo'],
 								'registro'    => $value['registro'],
 								'activo'      => $value['activo'],

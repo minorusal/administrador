@@ -91,18 +91,21 @@ class Users_model extends CI_Model{
 	* @return array
 	*/
 	function search_modules_for_user($id_modulo){
-		$query  = "	SELECT 
+		$query = "	SELECT 
 						 M.modulo
 						,M.routes as modulo_routes
-						,S.submodulo
-						,S.routes as submodulo_routes
+						,Sm.submodulo
+						,Sm.routes as submodulo_routes
+						,S.seccion
+						,S.routes as seccion_routes
 					FROM
 						sys_modulos M
-					LEFT JOIN sys_submodulos S ON M.id_modulo = S.id_modulo
+					LEFT JOIN sys_submodulos Sm ON M.id_modulo = Sm.id_modulo
+					LEFT JOIN sys_secciones S ON S.id_submodulo = Sm.id_submodulo
 					WHERE
-						M.id_modulo IN ( $id_modulo ) AND M.activo = 1
+						M.id_modulo IN ($id_modulo) AND M.activo = 1
 					ORDER BY 
-						M.id_modulo, S.id_submodulo;
+						M.id_modulo, Sm.id_submodulo;
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

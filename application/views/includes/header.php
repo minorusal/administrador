@@ -61,40 +61,32 @@
 		            	<li class="nav-header">Navigation</li>
 		            	<?php 
 		            		/* Impresion de Modulos y Submodulos de acuerdo al Perfil de Ingreso */
-
-                			$count      = 0;
-							$navigate   = "";
-							$submodulo  = "";
-							$mod_routes = "";
-						    $items      = $this->session->userdata('modulos');
-						   
-						    foreach ($items as $item => $subitems) {
-						    	$mod_routes    = base_url().$subitems['routes'][0];
-						    	$mod_dropdown  = "";
-						    	$submodulo     = "";
-						    	$submod_routes = "";
-						    	$count         = 0;
-						    	if(array_key_exists('submodulo', $subitems)){
-					        		$submodulo = "<ul>";
-					        		foreach ($subitems['submodulo'] as $data) {
-					        			$submod_routes = $subitems['routes'][$count];
-					        			$submodulo .=  "<li><a href='$submod_routes'>$data</a></li>";
-					        			$count++;
-					        		}
-					        		$submodulo .=  "</ul>";
-					        		$mod_routes = "";
-					        		$mod_dropdown = "dropdown";
-					        	}
-						    	if (!is_numeric($item)) {
-					            	if($this->uri->segment(1) == strtolower($item)){
-					            		echo  "<li class='$mod_dropdown active'><a>".ucwords(strtolower($item))."</a>";
-					        		}else{
-					        			echo  "<li class='$mod_dropdown'><a href='$mod_routes'>".ucwords(strtolower($item))."</a>";
-					        		}
-					        	}
-					        	echo $submodulo;
-					        	echo "</li>";
-						    }
+		            		$items = $this->session->userdata('modulos');
+		            		$uri   = $this->uri->segment(1);
+		            		function modulos($items, $uri, $sub = false) {
+							    $panel = "";
+							    if($sub){$panel .= "<ul>";}
+							    foreach ($items as $item => $subitems) {
+							        $mod_dropdown = "";
+							       	$content      = "";	
+							       	$routes       = "";
+							       	$active       = ($uri == strtolower($item)) ? "active":"";
+							        if(array_key_exists('content', $subitems)){
+							        	$mod_dropdown = "dropdown";
+							        	$content .= modulos($subitems['content'],$uri,$sub = true);
+							        }else{
+							        	$routes = $subitems['routes'];
+							        }
+					        		$panel .=  "<li class='$mod_dropdown $active'><a href='$routes'>".ucwords(strtolower($item))."</a>";
+							        $panel .= $content;
+							       	$panel .= "</li>";
+							    }
+							    if($sub){$panel .= "</ul>";}
+							    return $panel;
+							}
+							
+							echo modulos($items,$uri);
+                			
                 		?>
 		            </ul>
 		        </div>

@@ -83,6 +83,12 @@ class CI_Controller {
         $this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
         $this->output->set_header('Pragma: no-cache');
     }
+
+    public function load_view($view, $data){
+		$this->load->view('includes/header'); 
+		$this->parser->parse($view, $data);
+		$this->load->view('includes/footer'); 
+	}
 }
 // END Controller class
 

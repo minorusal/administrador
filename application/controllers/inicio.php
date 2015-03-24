@@ -14,7 +14,7 @@ class Inicio extends CI_Controller {
 		$data['mensaje'] = 'hola bienvenido';
 
 		$this->load->view('includes/header'); 
-		$this->parser->parse('inventario/catalogos', $data);
+		$this->parser->parse('inicio', $data);
 		$this->load->view('includes/footer'); 
 	
 	}

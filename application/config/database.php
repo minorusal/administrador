@@ -45,24 +45,40 @@
 | the active record class
 */
 
-$active_group = 'default';
+$active_group = 'config_system';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '1Sd3v3l0p3r.';
-$db['default']['database'] = 'develop';
-$db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = '';
-$db['default']['pconnect'] = TRUE;
-$db['default']['db_debug'] = TRUE;
-$db['default']['cache_on'] = FALSE;
-$db['default']['cachedir'] = '';
-$db['default']['char_set'] = 'utf8';
-$db['default']['dbcollat'] = 'utf8_general_ci';
-$db['default']['swap_pre'] = '';
-$db['default']['autoinit'] = TRUE;
-$db['default']['stricton'] = FALSE;
+$db['config_system']['hostname'] = 'localhost';
+$db['config_system']['username'] = 'root';
+$db['config_system']['password'] = '1Sd3v3l0p3r.';
+$db['config_system']['database'] = 'develop';
+$db['config_system']['dbdriver'] = 'mysql';
+$db['config_system']['dbprefix'] = '';
+$db['config_system']['pconnect'] = TRUE;
+$db['config_system']['db_debug'] = TRUE;
+$db['config_system']['cache_on'] = FALSE;
+$db['config_system']['cachedir'] = '';
+$db['config_system']['char_set'] = 'utf8';
+$db['config_system']['dbcollat'] = 'utf8_general_ci';
+$db['config_system']['swap_pre'] = '';
+$db['config_system']['autoinit'] = TRUE;
+$db['config_system']['stricton'] = FALSE;
+
+$db['mexico']['hostname'] = 'localhost';
+$db['mexico']['username'] = 'root';
+$db['mexico']['password'] = '1Sd3v3l0p3r.';
+$db['mexico']['database'] = 'adminventas_ci_mx';
+$db['mexico']['dbdriver'] = 'mysql';
+$db['mexico']['dbprefix'] = '';
+$db['mexico']['pconnect'] = TRUE;
+$db['mexico']['db_debug'] = TRUE;
+$db['mexico']['cache_on'] = FALSE;
+$db['mexico']['cachedir'] = '';
+$db['mexico']['char_set'] = 'utf8';
+$db['mexico']['dbcollat'] = 'utf8_general_ci';
+$db['mexico']['swap_pre'] = '';
+$db['mexico']['autoinit'] = TRUE;
+$db['mexico']['stricton'] = FALSE;
 
 
 /* End of file database.php */

@@ -102,7 +102,7 @@
 	  			<ul class="breadcrumbs">
 		            <li><a href="<?php echo base_url();?>"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
 		            <li><?php echo ucwords(strtolower($this->uri->uri_string()));?></li>
-		            <li class="right" id="skin-colors">
+		            <!--<li class="right" id="skin-colors">
 	                    <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-tint"></i> Color Skins</a>
 	                    <ul class="dropdown-menu pull-right skin-color">
 	                        <li><a href="default">Default</a></li>
@@ -112,7 +112,7 @@
 	                        <li><a href="green">Green</a></li>
 	                        <li><a href="brown">Brown</a></li>
 	                    </ul>
-		            </li>
+		            </li>-->
 		        </ul>
 		        
 		                	

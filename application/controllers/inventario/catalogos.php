@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Inicio extends CI_Controller {
+class Catalogos extends CI_Controller {
 	
 	public function __construct(){
 		parent::__construct();
@@ -9,13 +9,13 @@ class Inicio extends CI_Controller {
 			redirect('login');
 		}
 	}
-	public function index(){
-		$data['titulo']  = 'inicio';
-		$data['mensaje'] = 'hola bienvenido';
-
+	public function articulos(){
+		$data['titulo'] = 'catalogo de articulos';
+		
 		$this->load->view('includes/header'); 
 		$this->parser->parse('inventario/catalogos', $data);
 		$this->load->view('includes/footer'); 
-	
 	}
+
+	
 }

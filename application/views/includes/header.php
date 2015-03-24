@@ -62,22 +62,26 @@
 		            	<?php 
 		            		/* Impresion de Modulos y Submodulos de acuerdo al Perfil de Ingreso */
 		            		$items = $this->session->userdata('modulos');
-		            		$uri   = $this->uri->segment(1);
+		            		$uri   = $this->uri->segment_array();
 		            		function modulos($items, $uri, $sub = false) {
 							    $panel = "";
-							    if($sub){$panel .= "<ul>";}
+							    if($sub){$panel .= "<ul class=''>";}
 							    foreach ($items as $item => $subitems) {
 							        $mod_dropdown = "";
 							       	$content      = "";	
 							       	$routes       = "";
-							       	$active       = ($uri == strtolower($item)) ? "active":"";
+							       	$active       = "";
+							       	if(in_array(strtolower($item), $uri)){
+							        	$active  = "active";
+							        } 
 							        if(array_key_exists('content', $subitems)){
 							        	$mod_dropdown = "dropdown";
 							        	$content .= modulos($subitems['content'],$uri,$sub = true);
 							        }else{
-							        	$routes = $subitems['routes'];
+							        	$routes = base_url().$subitems['routes'];
 							        }
-					        		$panel .=  "<li class='$mod_dropdown $active'><a href='$routes'>".ucwords(strtolower($item))."</a>";
+
+					        		$panel .=  "<li class='$mod_dropdown $active '><a href='$routes'>".ucwords(strtolower($item))."</a>";
 							        $panel .= $content;
 							       	$panel .= "</li>";
 							    }
@@ -96,8 +100,8 @@
 	  		<!--rightpanel-->
 	  		<div class="rightpanel">
 	  			<ul class="breadcrumbs">
-		            <li><a href="<?php echo base_url();?>inicio"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
-		            <li>Inicio</li>
+		            <li><a href="<?php echo base_url();?>"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+		            <li><?php echo ucwords(strtolower($this->uri->uri_string()));?></li>
 		            <li class="right" id="skin-colors">
 	                    <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-tint"></i> Color Skins</a>
 	                    <ul class="dropdown-menu pull-right skin-color">
@@ -110,19 +114,6 @@
 	                    </ul>
 		            </li>
 		        </ul>
-		        <!--pageheader-->
-		        <div class="pageheader">
-		            <div class="pageicon"><span class="iconfa-laptop"></span></div>
-		            <div class="pagetitle">
-		                <h1>Inicio</h1>
-	            	</div>
-	        	</div>
-	        	<!--pageheader-->
-	  			
-	  			<!--maincontent-->
-		  		<div class="maincontent">
-		            <div class="maincontentinner">
-		            	<!--row-fluid-->
-		                <div class="row-fluid">
+		        
 		                	
 		                

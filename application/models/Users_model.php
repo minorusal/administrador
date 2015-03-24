@@ -105,7 +105,7 @@ class Users_model extends CI_Model{
 					WHERE
 						M.id_modulo IN ($id_modulo) AND M.activo = 1
 					ORDER BY 
-						M.id_modulo, Sm.id_submodulo;
+						M.id_modulo, Sm.id_submodulo,S.id_seccion;
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

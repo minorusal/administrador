@@ -67,7 +67,7 @@ class Login extends CI_Controller {
 		foreach ($array_navigator as $key => $value) {
 			if(!is_null($value['submodulo'])){
 				if(!is_null($value['seccion'])){
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'routes'=> $value['modulo'].'/'.$value['seccion_routes']);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'routes'=> $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes']);
 				}else{
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('routes' => $value['modulo'].'/'.$value['submodulo_routes']);
 				}

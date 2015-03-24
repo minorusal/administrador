@@ -1,1 +1,16 @@
-<h4><?php echo $mensaje ?></h4>
+
+<!--pageheader-->
+<div class="pageheader">
+    <div class="pageicon"><span class="iconfa-laptop"></span></div>
+    <div class="pagetitle">
+        <h1>{titulo}</h1>
+	</div>
+</div>
+<!--pageheader-->
+	
+	<!--maincontent-->
+	<div class="maincontent">
+    <div class="maincontentinner">
+    	<!--row-fluid-->
+        <div class="row-fluid">
+<h4>{mensaje}</h4>

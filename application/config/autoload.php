@@ -57,8 +57,7 @@ $autoload['libraries'] = array(	'database',
 								'session', 
 								'user_agent', 
 								'form_validation',
-								'table',
-								'parser');
+								'table','parser');
 
 
 /*

@@ -45,40 +45,40 @@
 | the active record class
 */
 
-$active_group = 'config_system';
+$active_group = 'global_system';
 $active_record = TRUE;
 
-$db['config_system']['hostname'] = 'localhost';
-$db['config_system']['username'] = 'root';
-$db['config_system']['password'] = '1Sd3v3l0p3r.';
-$db['config_system']['database'] = 'develop';
-$db['config_system']['dbdriver'] = 'mysql';
-$db['config_system']['dbprefix'] = '';
-$db['config_system']['pconnect'] = TRUE;
-$db['config_system']['db_debug'] = TRUE;
-$db['config_system']['cache_on'] = FALSE;
-$db['config_system']['cachedir'] = '';
-$db['config_system']['char_set'] = 'utf8';
-$db['config_system']['dbcollat'] = 'utf8_general_ci';
-$db['config_system']['swap_pre'] = '';
-$db['config_system']['autoinit'] = TRUE;
-$db['config_system']['stricton'] = FALSE;
+$db['global_system']['hostname'] = 'localhost';
+$db['global_system']['username'] = 'root';
+$db['global_system']['password'] = '1Sd3v3l0p3r.';
+$db['global_system']['database'] = 'develop';
+$db['global_system']['dbdriver'] = 'mysql';
+$db['global_system']['dbprefix'] = '';
+$db['global_system']['pconnect'] = TRUE;
+$db['global_system']['db_debug'] = TRUE;
+$db['global_system']['cache_on'] = FALSE;
+$db['global_system']['cachedir'] = '';
+$db['global_system']['char_set'] = 'utf8';
+$db['global_system']['dbcollat'] = 'utf8_general_ci';
+$db['global_system']['swap_pre'] = '';
+$db['global_system']['autoinit'] = TRUE;
+$db['global_system']['stricton'] = FALSE;
 
-$db['mexico']['hostname'] = 'localhost';
-$db['mexico']['username'] = 'root';
-$db['mexico']['password'] = '1Sd3v3l0p3r.';
-$db['mexico']['database'] = 'adminventas_ci_mx';
-$db['mexico']['dbdriver'] = 'mysql';
-$db['mexico']['dbprefix'] = '';
-$db['mexico']['pconnect'] = TRUE;
-$db['mexico']['db_debug'] = TRUE;
-$db['mexico']['cache_on'] = FALSE;
-$db['mexico']['cachedir'] = '';
-$db['mexico']['char_set'] = 'utf8';
-$db['mexico']['dbcollat'] = 'utf8_general_ci';
-$db['mexico']['swap_pre'] = '';
-$db['mexico']['autoinit'] = TRUE;
-$db['mexico']['stricton'] = FALSE;
+$db['mx']['hostname'] = 'localhost';
+$db['mx']['username'] = 'root';
+$db['mx']['password'] = '1Sd3v3l0p3r.';
+$db['mx']['database'] = 'adminvetas_mx';
+$db['mx']['dbdriver'] = 'mysql';
+$db['mx']['dbprefix'] = '';
+$db['mx']['pconnect'] = TRUE;
+$db['mx']['db_debug'] = TRUE;
+$db['mx']['cache_on'] = FALSE;
+$db['mx']['cachedir'] = '';
+$db['mx']['char_set'] = 'utf8';
+$db['mx']['dbcollat'] = 'utf8_general_ci';
+$db['mx']['swap_pre'] = '';
+$db['mx']['autoinit'] = TRUE;
+$db['mx']['stricton'] = FALSE;
 
 
 /* End of file database.php */

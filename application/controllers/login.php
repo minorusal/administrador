@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Login extends Base_Controller {
 	/**
     * Index del Controllador
     * @return void
@@ -169,8 +169,6 @@ class Login extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect('login');
 	}
-	
-	
 }
 
 /* End of file login.php */

@@ -58,37 +58,6 @@ class CI_Controller {
 	{
 		return self::$instance;
 	}
-
-	/*imprime un arreglo formateado para debug*/
-	public function print_format($array){
-		echo '<pre>';
-		print_r($array);
-		echo '</pre>';
-	}
-
-	/*convierte un objeto a un arreglo*/
-	public function object_to_array($obj){
-		$reaged = (array)$obj;
-		foreach($reaged as $key => &$field){
-			if(is_object($field))
-				$field = $this->object_to_array($field);
-		}
-		return $reaged;
-	}
-
-	/*elimina el cache almacenado*/
-	public function removeCache(){
-        $this->output->set_header('Last-Modified:'.gmdate('D, d M Y H:i:s').'GMT');
-        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
-        $this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
-        $this->output->set_header('Pragma: no-cache');
-    }
-
-    public function load_view($view, $data){
-		$this->load->view('includes/header'); 
-		$this->parser->parse($view, $data);
-		$this->load->view('includes/footer'); 
-	}
 }
 // END Controller class
 

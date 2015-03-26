@@ -21,19 +21,21 @@ class Catalogos extends Base_Controller {
 			$articulos[] = $value;
 		}
 
-
 		$data['titulo']      = 'Catalogo de Articulos';
 		$data['widgettitle'] = 'Listado de Articulos';
 
 		$data_tbl = $cat_articulos;
-
-
 		$tbl_plantilla = array('table_open' =>  '<table class="table table-bordered  responsive " ' );
 		$this->table->set_heading('ID','Articulo', 'clave corta');
 		$this->table->set_template($tbl_plantilla);
 		$content_tabla =  $this->table->generate($data_tbl);	
 		$data['tabla'] = $content_tabla;
-		$this->load_view('inventario/catalogos', $data);
+
+		$scripts['js'] = array(
+								array('name' => 'catalogos', 'dirname' => 'inventario')
+						);
+		
+		$this->load_view('inventario/catalogos', $data,$scripts);
 	}
 
 	

@@ -23,16 +23,19 @@ class Base_Controller extends CI_Controller {
     * de la seccion seleccionada
     * @param string $view
     * @param array $data
-    * @param array $js
+    * @param array $data_includes
     * @param string $ext
     * @return void
     */
-    public function load_view($view, $data=array(), $js='' ,$ext = '.html'){
+    public function load_view($view, $data=array(), $data_includes=array() ,$ext = '.html'){
 	
-		$ext = ($ext!='.html') ? '': $ext;
-		$items = $this->session->userdata('modulos');
-		$uri   = $this->uri->segment_array();
-	
+		$ext      = ($ext!='.html') ? '': $ext;
+		$items    = $this->session->userdata('modulos');
+		$uri      = $this->uri->segment_array();
+		$includes = $this->load_includes($data_includes);
+
+		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
+		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
 		$dataheader['panel_navigate'] = $this->buil_panel_navigate($items,$uri);
 		$dataheader['avatar_user']    = $this->session->userdata('avatar_user');
@@ -47,21 +50,59 @@ class Base_Controller extends CI_Controller {
 		$this->parser->parse('includes/header.html', $dataheader);
 		$this->parser->parse($view.$ext, $data);
 		$this->parser->parse('includes/footer.html',$datafooter); 
-		
 	}
 
+	/**
+    * Carga archivos js & css en el header
+    * @param array $data
+    * @return array
+    */
+	public function load_includes($data){
+		if(empty($data)){
+			return '';
+		}
+		$files_js  = '';
+		$files_css = '';
+		$url_js    = base_url().'assets/js/system';
+		$url_css   = base_url().'assets/css/system';
+		if (array_key_exists('js', $data)) {
+			foreach ($data['js'] as $key => $value) {
+				$js_name = $value['name'];
+				$js_dir  = $value['dirname'];
+				$files_js.= "<script type='text/javascript' src='$url_js/$js_dir/$js_name.js'></script>";
+			}
+		}
+		if (array_key_exists('css', $data)) {
+			foreach ($data['css'] as $key => $value) {
+				$css_name = $value['name'];
+				$css_dir  = $value['dirname'];
+				$files_css.= "<link rel='stylesheet' href='$url_css/$css_dir/$css_name.css' type='text/css'  />";
+			}
+		}
+
+		$data_load['js']  = $files_js;
+		$data_load['css'] = $files_css;
+
+		return $data_load;
+	}
 	/**
     * Carga una vista unica sin integrar el header 
     * ni el footer, puede servir para la carga de 
     * paginas de error
     * @param string $view
     * @param array $data
-    * @param array $js
+    * @param array $data_includes
     * @param string $ext
     * @return void
     */
-	public function load_view_unique($view, $data=array(), $js='' ,$ext = '.html'){
-		$ext = ($ext!='.html') ? '': $ext;
+	public function load_view_unique($view, $data=array(), $data_includes=array() ,$ext = '.html'){
+		$ext      = ($ext!='.html') ? '': $ext;
+		$includes = $this->load_includes($data_includes);
+
+		$data['data_js']  = (!empty($includes)) ? $includes['js']  : '';
+		$data['data_css'] = (!empty($includes)) ? $includes['css'] : '';
+		$data['base_url'] = base_url();
+		
 		$this->parser->parse($view.$ext, $data);
 	}
 
@@ -126,7 +167,6 @@ class Base_Controller extends CI_Controller {
 	        }else{
 	        	$routes = base_url().$subitems['routes'];
 	        }
-
     		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'>".ucwords(strtolower($item))."</a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
@@ -151,7 +191,6 @@ class Base_Controller extends CI_Controller {
 	* @param object $obj
 	* @return array
 	*/
-
 	public function object_to_array($obj){
 		$reaged = (array)$obj;
 		foreach($reaged as $key => &$field){

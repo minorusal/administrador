@@ -13,9 +13,7 @@ class Inicio extends Base_Controller {
 		$data['titulo']  = 'inicio';
 		$data['mensaje'] = 'hola bienvenido';
 
-		$this->load->view('includes/header'); 
-		$this->parser->parse('inicio', $data);
-		$this->load->view('includes/footer'); 
+		$this->load_view('inicio', $data);
 	
 	}
 }

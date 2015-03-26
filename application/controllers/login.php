@@ -10,7 +10,7 @@ class Login extends Base_Controller {
 		if($this->session->userdata('is_logged')){
 			redirect('inicio');
         }else{
-        	$this->load->view('login');	
+        	$this->load_view_login();	
         }
 	}
 

@@ -9,14 +9,17 @@ class Catalogos extends Base_Controller {
 			redirect('login');
 		}
 	}
-	public function articulos(){
-		$this->load->model('inventario/Catalogos_model');
-		$dominio = $this->session->userdata('dominio');
-		$this->load_database($dominio);
+	public function cat_articulos(){
+
+		$load_model    = $this->load->model('inventario/Catalogos_model');
+		$dominio       = $this->session->userdata('dominio');
+		$load_bd       = $this->load_database($dominio);
 		$cat_articulos = $this->Catalogos_model->articulos($dominio);
 		$cat_articulos = $this->object_to_array($cat_articulos);
-
-		//$this->print_format($cat_articulos);
+		
+		foreach ($cat_articulos as $key => $value) {
+			$articulos[] = $value;
+		}
 
 
 		$data['titulo']      = 'Catalogo de Articulos';
@@ -25,8 +28,8 @@ class Catalogos extends Base_Controller {
 		$data_tbl = $cat_articulos;
 
 
-		$tbl_plantilla = array('table_open' =>  '<table class="table table-bordered table-hover responsive " ' );
-
+		$tbl_plantilla = array('table_open' =>  '<table class="table table-bordered  responsive " ' );
+		$this->table->set_heading('ID','Articulo', 'clave corta');
 		$this->table->set_template($tbl_plantilla);
 		$content_tabla =  $this->table->generate($data_tbl);	
 		$data['tabla'] = $content_tabla;

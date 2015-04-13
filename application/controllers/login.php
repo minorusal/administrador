@@ -62,25 +62,25 @@ class Login extends Base_Controller {
 	* @param array $array_navigator
 	* @return array
 	*/
-	function buil_array_navigator($array_navigator){
+	function buil_array_navigator($navigator){
 		
-		foreach ($array_navigator as $key => $value) {
+		foreach ($navigator as $key => $value) {
 			if(!is_null($value['submodulo'])){
 				if(!is_null($value['seccion'])){
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes']);
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = array($value['submodulo_icon']);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = $value['submodulo_icon'];
+					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
 				}else{
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $value['modulo'].'/'.$value['submodulo_routes']);
-					$data_navigator[$value['modulo']]['icon'] = array($value['modulo_icon']);
+					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
 				}
 			}else{
-				$data_navigator[$value['modulo']] = array('icon' => $value['modulo_icon'] , 'routes' => $value['modulo_routes']);
+				$data_navigator[$value['modulo']] = array('icon'=>$value['modulo_icon'], 'routes' => $value['modulo_routes']);
 			}
 		}
-		//$this->print_debug($data_navigator);
 		return $data_navigator;
 	}
-		
+
 	/**
 	* Recontruye el array devuelto por la consulta 
 	* en caso de multiples perfiles para 

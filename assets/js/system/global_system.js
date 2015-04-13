@@ -24,7 +24,6 @@ function redirect(uri){
 }
 
 function load_contetn_tab(uri, id_content){
-
     jQuery.ajax({
         type: "POST",
         url: uri,

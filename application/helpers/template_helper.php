@@ -1,8 +1,16 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	if(!function_exists('tabbed_widgets')){
-		
-		function tabbed_widgets($config, $uri_string, $segment = 1, $content = ""){
+	if(!function_exists('table_tpl')){
+		function table_tpl($title, $data){
+
+			foreach ($data as $key => $value) {
+			//	$row . = '<tr>';
+			}
+		}
+	}
+
+	if(!function_exists('tabbed_tpl')){
+		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
 			$link         = "";
 			$tabs         = "";
 			$tabbed       = "";
@@ -15,8 +23,7 @@
 				$selected = ($i==($segment-1)) ? 'true' : "";
 				$display  = ($i==($segment-1)) ? 'display: block' : "";
 				$data     = ($i==($segment-1)) ? $content : "";
-
-				$link = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
+				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
 
 				$tabs_li .= "<li class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
 								<a href='#a-$i' onclick='load_contetn_tab($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>

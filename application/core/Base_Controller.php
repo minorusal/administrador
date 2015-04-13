@@ -171,7 +171,7 @@ class Base_Controller extends CI_Controller {
 	        if(array_key_exists('content', $subitems)){
 	        	$mod_dropdown = "dropdown";
 	        	$content     .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
-	        	$icon         = $subitems['icon'][0];
+	        	$icon         = $subitems['icon'];
 	        	$sub_nivel    = "<span class='iconfa-circle-arrow-down' style='float:right;'></span>";
 	        }else{
 	        	$routes = base_url().$subitems['routes'];

@@ -22,6 +22,15 @@ class Pagination_Bootstrap extends CI_Pagination{
 	var $num_tag_open		= '<li class="page">';
 	var $num_tag_close		= '</li>';
 	
+	/**
+	* Funcion encargada de Generar los links del paginador
+	* @param int $total_rows
+	* @param string $url
+	* @param int $per_page
+	* @param int $uri_segment
+	* @param array $config
+	*/
+
 	public function paginator_generate($total_rows = 5 , $url = '' , $per_page = 2 , $uri_segment = 4, $config = array()){
 		
 		if(!empty($config)){
@@ -39,6 +48,13 @@ class Pagination_Bootstrap extends CI_Pagination{
 
 		return $links;
 	}
+
+	/**
+	* Funcion encargada de Generar info acerca del paginador
+	* @param int $limit
+	* @param int $offset
+	* @param int $total_items
+	*/
 
 	public function showing_items($limit, $offset, $total_items){
 

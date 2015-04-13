@@ -43,6 +43,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_mail']      = $this->session->userdata('mail');
 		$dataheader['user_name']      = $this->session->userdata('name');
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
+		$dataheader['date']           = date('d/m/Y');
 		$dataheader['uri_string']     = ucwords(strtolower(str_replace('/','&nbsp;<span class="separator"></span>&nbsp;',$this->uri->uri_string())));
 
 		$datafooter = array();

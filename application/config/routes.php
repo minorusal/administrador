@@ -37,25 +37,23 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-/*Login*/
+/*Default*/
 $route['default_controller']       = 'login/index';
 $route['404_override']             = 'error404';
+/********/
 
-
+/*Login*/
 $route['login']                    = 'login/index';
 $route['login/authentication']     = 'login/authentication';
 $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
-
+/*******/
 $route['inicio']                   = 'inicio/index';
-
-
 
 /*Inventario*/
 $route['inventario/catalogos/articulos']        = 'inventario/catalogo_articulos/articulos';
 $route['inventario/catalogos/articulos/(:num)'] = 'inventario/catalogo_articulos/articulos/$1';
 
-//$route['inventario/catalogos/lineas'] = 'inventario/catalogo_lineas/lineas';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

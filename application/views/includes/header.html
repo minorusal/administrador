@@ -29,7 +29,7 @@
 	</head>
 	<body>
 		<div class="mainwrapper">
-			<div class="header">
+			<div class="header" style="overflow:hidden;height:auto;">
 		        <div class="logo">
 		            <a href="{base_url}"><img src="{base_url}assets/images/logo.png" alt="" /></a>
 		        </div>
@@ -40,13 +40,15 @@
 				            <div class="userloggedinfo">
 				                <img src="{base_url}assets/avatar/{avatar_user}" style="max-width:80px;max-height:90px;" alt="" />
 				                <div class="userinfo">
-				                    <h5>
-				                    	<img  src="{base_url}assets/avatar/{avatar_pais}" style="background:transparent;max-width:16px;max-height:16px;" />
-				                    	{user_name}<small><br>{user_mail}</small><br>
-				                    	{{user_perfil}}
-				                    </h5>
+				                    
 				                    <ul>
-				                        <li><a href="{base_url}">Edita tu Perfil</a></li>
+				                    	<h5>
+					                    	<img  src="{base_url}assets/avatar/{avatar_pais}" style="background:transparent;max-width:16px;max-height:16px;" />
+					                    	{user_name}<small><br>{user_mail}</small>
+					                    </h5>
+				                    	<li><a>{user_perfil}</a></li>
+				                        <li><a style="font-family:sans-serif;opacity:0.6;font-style:italic;">{date}&nbsp;&nbsp;<span id="liveclock"></span></a></li>
+				                        
 				                        <li><a href="{base_url}/logout">Cerrar Sesión</a></li>
 				                    </ul>
 				                </div>
@@ -75,7 +77,7 @@
 	  			<ul class="breadcrumbs">
 		            <li><a href="{base_url}"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
 		            <li>{uri_string}</li>
-		            <!--<li class="right" id="skin-colors">
+		            <li class="right" id="skin-colors">
 	                    <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-tint"></i> Color Skins</a>
 	                    <ul class="dropdown-menu pull-right skin-color">
 	                        <li><a href="default">Default</a></li>
@@ -85,5 +87,5 @@
 	                        <li><a href="green">Green</a></li>
 	                        <li><a href="brown">Brown</a></li>
 	                    </ul>
-		            </li>-->
+		            </li>
 		        </ul>        

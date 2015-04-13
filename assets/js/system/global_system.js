@@ -23,7 +23,7 @@ function redirect(uri){
     location.href = uri;
 }
 
-function load_contetn_tab(uri, id_content){
+function load_content_tab(uri, id_content){
     jQuery.ajax({
         type: "POST",
         url: uri,

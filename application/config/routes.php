@@ -37,7 +37,7 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-
+/*Login*/
 $route['default_controller']       = 'login/index';
 $route['404_override']             = 'error404';
 
@@ -51,8 +51,11 @@ $route['inicio']                   = 'inicio/index';
 
 
 
-/*INVENTARIO*/
+/*Inventario*/
+$route['inventario/catalogos/articulos']        = 'inventario/catalogo_articulos/articulos';
+$route['inventario/catalogos/articulos/(:num)'] = 'inventario/catalogo_articulos/articulos/$1';
 
+//$route['inventario/catalogos/lineas'] = 'inventario/catalogo_lineas/lineas';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

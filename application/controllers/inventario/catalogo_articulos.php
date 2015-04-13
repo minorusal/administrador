@@ -1,7 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Catalogos extends Base_Controller {
+class Catalogo_Articulos extends Base_Controller {
 	
+	var $uri_string  = 'inventario/catalogos/';
+
 	public function __construct(){
 		parent::__construct();
 		$this->removeCache();
@@ -15,7 +17,7 @@ class Catalogos extends Base_Controller {
 	public function content_tabs(){
 		$config_tab['names']    = array('nuevo articulo', 'listado articulos', 'detalle'); 
 		$config_tab['links']    = array('nuevo', 'articulos', 'otro'); 
-		$config_tab['action']   = array('new_art','content', 'other');
+		$config_tab['action']   = array('load_content_tab','redirect', 'load_content_tab');
 
 		return $config_tab;
 	}
@@ -23,8 +25,8 @@ class Catalogos extends Base_Controller {
 	public function articulos($offset = 0){
 		
 		$tabs        = $this->input->post('tabs');
+		$uri_string  = $this->uri_string;
 		$limit       = 5;
-		$uri_string  = 'inventario/catalogos/';
 		$uri_segment = $this->uri_segment(); 
 		$load_model  = $this->load->model('inventario/Catalogos_model');
 		$lts_content = $this->Catalogos_model->get_articulos($limit, $offset);
@@ -34,7 +36,7 @@ class Catalogos extends Base_Controller {
 		
 
 		$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-		$this->table->set_heading('ID','Articulo', 'clave corta','ID','Articulo', 'clave corta');
+		$this->table->set_heading('ID','Articulo', 'clave corta','ID','Articulo', 'clave');
 		$this->table->set_template($tbl_plantilla);
 		$tabla = $this->table->generate($lts_content);
 	  	
@@ -57,6 +59,9 @@ class Catalogos extends Base_Controller {
 
 		
 	}
+
+
+	
 
 	
 

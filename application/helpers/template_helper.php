@@ -24,9 +24,9 @@
 				$display  = ($i==($segment-1)) ? 'display: block' : "";
 				$data     = ($i==($segment-1)) ? $content : "";
 				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
-
+				$action   = $config['action'][$i];
 				$tabs_li .= "<li class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
-								<a href='#a-$i' onclick='load_contetn_tab($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
+								<a href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
 									".ucwords(strtolower($config['names'][$i]))."
 								</a>
 							</li>";

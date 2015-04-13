@@ -2,41 +2,59 @@
 
 class Catalogos extends Base_Controller {
 	
+
 	public function __construct(){
 		parent::__construct();
 		$this->removeCache();
 		if(!$this->session->userdata('is_logged')){
 			redirect('login');
 		}
+		$dominio = $this->session->userdata('dominio');
+		$this->load_database($dominio);
 	}
-	public function cat_articulos(){
+	
+	public function content_tabs(){
+		$config_tab['names']    = array('nuevo', 'articulos', 'otro'); 
+		$config_tab['links']    = array('nuevo', 'articulos', 'otro'); 
+		$config_tab['action']   = array('new_art','content', 'other');
 
-		$load_model    = $this->load->model('inventario/Catalogos_model');
-		$dominio       = $this->session->userdata('dominio');
-		$load_bd       = $this->load_database($dominio);
-		$cat_articulos = $this->Catalogos_model->articulos($dominio);
-		$cat_articulos = $this->object_to_array($cat_articulos);
+		return $config_tab;
+	}
+
+	public function articulos($offset = 0){
+		$tabs        = $this->input->post('tabs');
+		$limit       = 2;
+		$uri_string  = 'inventario/catalogos/';
+		$uri_segment = $this->uri_segment(); 
+		$load_model  = $this->load->model('inventario/Catalogos_model');
+		$lts_content = $this->Catalogos_model->get_articulos($limit, $offset);
+		$total_rows  = $this->Catalogos_model->get_total_articulos();
+		$url         = base_url($uri_string.'articulos/');
+		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment);
 		
-		foreach ($cat_articulos as $key => $value) {
-			$articulos[] = $value;
+
+		$this->table->set_heading('ID','Articulo', 'clave corta','ID','Articulo', 'clave corta');
+		$tabla = $this->table->generate($lts_content);
+	  
+		$data_tab['tabla']     = $tabla;
+		$data_tab['paginador'] = $paginador;
+		$data_tab['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+
+		
+		$view = $this->load_view_unique($uri_string.'articulos', $data_tab, true);
+		
+		
+		if(!$tabs){
+			$data['tabs'] = tabbed_widgets($this->content_tabs(),base_url($uri_string),2,$view); 
+			$this->load_view($uri_string.'catalogos', $data);
+		}else{
+			echo json_encode($view);
 		}
 
-		$data['titulo']      = 'Catalogo de Articulos';
-		$data['widgettitle'] = 'Listado de Articulos';
-
-		$data_tbl = $cat_articulos;
-		$tbl_plantilla = array('table_open' =>  '<table class="table table-bordered  responsive " ' );
-		$this->table->set_heading('ID','Articulo', 'clave corta');
-		$this->table->set_template($tbl_plantilla);
-		$content_tabla =  $this->table->generate($data_tbl);	
-		$data['tabla'] = $content_tabla;
-
-		$scripts['js'] = array(
-								array('name' => 'catalogos', 'dirname' => 'inventario')
-						);
 		
-		$this->load_view('inventario/catalogos', $data,$scripts);
 	}
+
+	
 
 	
 }

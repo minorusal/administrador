@@ -27,12 +27,12 @@ class Base_Controller extends CI_Controller {
     * @param string $ext
     * @return void
     */
-    public function load_view($view, $data=array(), $data_includes=array() ,$ext = '.html'){
+    public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 	
 		$ext      = ($ext!='.html') ? '': $ext;
 		$items    = $this->session->userdata('modulos');
 		$uri      = $this->uri->segment_array();
-		$includes = $this->load_includes($data_includes);
+		$includes = $this->load_scripts($data_includes);
 
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
@@ -53,57 +53,25 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
-    * Carga archivos js & css en el header
-    * @param array $data
-    * @return array
-    */
-	public function load_includes($data){
-		if(empty($data)){
-			return '';
-		}
-		$files_js  = '';
-		$files_css = '';
-		$url_js    = base_url().'assets/js/system';
-		$url_css   = base_url().'assets/css/system';
-		if (array_key_exists('js', $data)) {
-			foreach ($data['js'] as $key => $value) {
-				$js_name = $value['name'];
-				$js_dir  = $value['dirname'];
-				$files_js.= "<script type='text/javascript' src='$url_js/$js_dir/$js_name.js'></script>";
-			}
-		}
-		if (array_key_exists('css', $data)) {
-			foreach ($data['css'] as $key => $value) {
-				$css_name = $value['name'];
-				$css_dir  = $value['dirname'];
-				$files_css.= "<link rel='stylesheet' href='$url_css/$css_dir/$css_name.css' type='text/css'  />";
-			}
-		}
-
-		$data_load['js']  = $files_js;
-		$data_load['css'] = $files_css;
-
-		return $data_load;
-	}
-	/**
     * Carga una vista unica sin integrar el header 
     * ni el footer, puede servir para la carga de 
     * paginas de error
     * @param string $view
     * @param array $data
+    * @param boolean $autoload
     * @param array $data_includes
     * @param string $ext
     * @return void
     */
-	public function load_view_unique($view, $data=array(), $data_includes=array() ,$ext = '.html'){
+	public function load_view_unique($view, $data = array(), $autoload = false ,$data_includes = array() ,$ext = '.html'){
 		$ext      = ($ext!='.html') ? '': $ext;
-		$includes = $this->load_includes($data_includes);
+		$includes = $this->load_scripts($data_includes);
 
 		$data['data_js']  = (!empty($includes)) ? $includes['js']  : '';
 		$data['data_css'] = (!empty($includes)) ? $includes['css'] : '';
 		$data['base_url'] = base_url();
 		
-		$this->parser->parse($view.$ext, $data);
+		return $this->parser->parse($view.$ext, $data, $autoload);
 	}
 
 	/**
@@ -144,46 +112,90 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
+    * Carga archivos js & css en el header
+    * @param array $data
+    * @return array
+    */
+	public function load_scripts($data){
+		if(empty($data)){
+			return '';
+		}
+		$files_js  = '';
+		$files_css = '';
+		$url_js    = base_url().'assets/js/system';
+		$url_css   = base_url().'assets/css/system';
+		if (array_key_exists('js', $data)) {
+			foreach ($data['js'] as $key => $value) {
+				$js_name  = $value['name'];
+				$js_dir   = $value['dirname'];
+				$files_js.= "<script type='text/javascript' src='$url_js/$js_dir/$js_name.js'></script>";
+			}
+		}
+		if (array_key_exists('css', $data)) {
+			foreach ($data['css'] as $key => $value) {
+				$css_name  = $value['name'];
+				$css_dir   = $value['dirname'];
+				$files_css.= "<link rel='stylesheet' href='$url_css/$css_dir/$css_name.css' type='text/css'  />";
+			}
+		}
+
+		$data_load['js']  = $files_js;
+		$data_load['css'] = $files_css;
+
+		return $data_load;
+	}
+
+	/**
     * Contruye el Panel de navegacion
     * @param array $items
     * @param array $uri
     * @param bolean $sub
     * @return string
     */
-	public function buil_panel_navigate($items, $uri, $sub = false) {
-	    $panel = "";
-	    if($sub){$panel .= "<ul class=''>";}
+	public function buil_panel_navigate($items, $uri, $sub = false, $bool = false) {
+	    $panel    = "";
+	    $style_ul = "";
+	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='' $style_ul>";}
 	    foreach ($items as $item => $subitems) {
 	        $mod_dropdown = "";
 	       	$content      = "";	
 	       	$routes       = "";
 	       	$active       = "";
+	       	$icon         = "";
+	       	$sub_nivel    = "";
+	       	$bool         = false;
 	       	if(in_array(strtolower($item), $uri)){
 	        	$active  = "active";
+	        	$bool    = true;
 	        } 
 	        if(array_key_exists('content', $subitems)){
 	        	$mod_dropdown = "dropdown";
-	        	$content .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true);
+	        	$content     .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
+	        	$icon         = $subitems['icon'][0];
+	        	$sub_nivel    = "<span class='iconfa-circle-arrow-down' style='float:right;'></span>";
 	        }else{
 	        	$routes = base_url().$subitems['routes'];
+	        	$icon   = $subitems['icon'] ;
 	        }
-    		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'>".ucwords(strtolower($item))."</a>";
+
+    		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'><span class='$icon'></span>".ucwords(strtolower($item))." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
 	    }
 	    if($sub){$panel .= "</ul>";}
 	    return $panel;
-	}
-                		
+	}         		
 
     /**
 	* imprime un arreglo formateado para debug
+	* y detiene la ejecucion del script
 	* @return array $array
 	*/
-	public function print_format($array){
+	public function print_debug($array){
 		echo '<pre>';
 		print_r($array);
 		echo '</pre>';
+		die();
 	}
 
 	/**
@@ -211,7 +223,15 @@ class Base_Controller extends CI_Controller {
         $this->output->set_header('Pragma: no-cache');
     }
 
-    
+    /**
+    * Devuleve la cantidad de segmentos contenidos en la URL
+    * contabilizando a partir del dominio
+    * Ejemplo http://domain.com/sitio/pagina/3
+    * el valor devuleto sera 4
+    * @return void
+    */
+    public function uri_segment(){
+    	return $this->uri->total_segments();
+    }
 }
-
 ?>

@@ -1,4 +1,6 @@
-
+ jQuery(document).ready(function() {
+    jQuery(".tabbedwidget").tabs();       
+});
 function obj2json(_data){
     str = '{ ';
     first = true;
@@ -15,4 +17,21 @@ function obj2json(_data){
         }
     });
     return str+= '}';
+}
+
+function redirect(uri){
+    location.href = uri;
+}
+
+function load_contetn_tab(uri, id_content){
+
+    jQuery.ajax({
+        type: "POST",
+        url: uri,
+        dataType: 'json',
+        data: {tabs:1},
+        success: function(data){
+           jQuery('#a-'+id_content).html(data);
+        }
+    });
 }

@@ -25,6 +25,8 @@ class Users_model extends CI_Model{
 						,N.id_perfil
 						,N.perfil
 						,N.id_modulo
+						,N.id_submodulo
+						,N.id_seccion
 						,U.registro
 						,U.activo
 						,C.user
@@ -67,6 +69,8 @@ class Users_model extends CI_Model{
 						,N.id_perfil
 						,N.perfil
 						,N.id_modulo
+						,N.id_submodulo
+						,N.id_seccion
 						,U.registro
 						,U.activo
 						,C.user
@@ -94,10 +98,15 @@ class Users_model extends CI_Model{
 		$query = "	SELECT 
 						 M.modulo
 						,M.routes as modulo_routes
+						,M.icon as modulo_icon
+						,Sm.id_submodulo
 						,Sm.submodulo
 						,Sm.routes as submodulo_routes
+						,Sm.icon as submodulo_icon
+						,S.id_seccion
 						,S.seccion
 						,S.routes as seccion_routes
+						,S.icon as seccion_icon
 					FROM
 						sys_modulos M
 					LEFT JOIN sys_submodulos Sm ON M.id_modulo = Sm.id_modulo

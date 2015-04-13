@@ -49,9 +49,10 @@ $route['logout']                   = 'login/logout';
 
 $route['inicio']                   = 'inicio/index';
 
+
+
 /*INVENTARIO*/
 
-//$route['inventario/catalogos/cat_articulos'] = 'inventario/';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

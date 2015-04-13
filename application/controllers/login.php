@@ -63,18 +63,21 @@ class Login extends Base_Controller {
 	* @return array
 	*/
 	function buil_array_navigator($array_navigator){
-	
+		
 		foreach ($array_navigator as $key => $value) {
 			if(!is_null($value['submodulo'])){
 				if(!is_null($value['seccion'])){
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'routes'=> $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes']);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes']);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = array($value['submodulo_icon']);
 				}else{
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('routes' => $value['modulo'].'/'.$value['submodulo_routes']);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $value['modulo'].'/'.$value['submodulo_routes']);
+					$data_navigator[$value['modulo']]['icon'] = array($value['modulo_icon']);
 				}
 			}else{
-				$data_navigator[$value['modulo']] = array('routes' => $value['modulo_routes']);
+				$data_navigator[$value['modulo']] = array('icon' => $value['modulo_icon'] , 'routes' => $value['modulo_routes']);
 			}
 		}
+		//$this->print_debug($data_navigator);
 		return $data_navigator;
 	}
 		
@@ -106,6 +109,8 @@ class Login extends Base_Controller {
 								'id_perfil'   => $value['id_perfil'],
 								'perfil'      => $value['perfil'],
 								'id_modulo'   => $value['id_modulo'],
+								'id_submodulo'=> $value['id_submodulo'],
+								'id_seccion'  => $value['id_seccion'],
 								'registro'    => $value['registro'],
 								'activo'      => $value['activo'],
 								'user'        => $value['user'],

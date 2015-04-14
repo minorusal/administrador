@@ -21,6 +21,7 @@ Created by: Mienard Lumaad (@themepixels)
 @import url('roboto.css');
 @import url('lato.css');
 @import url('font-awesome.min.css');
+@import url('font-awesome.min.tpl.css');
 
 
 /***** RESET BROWSER STYLE *****/
@@ -310,8 +311,8 @@ h1,h2,h3,h4,h5 { font-weight: normal; line-height: normal; }
 .box-info .widgettitle { background-color: #71B8EE; }
 .box-info .widgetcontent { border-color: #71B8EE; }
 
-.box-inverse .widgettitle { background-color: #333; }
-.box-inverse .widgetcontent { border-color: #333; }
+.box-inverse .widgettitle { background-color: #333333; }
+.box-inverse .widgetcontent { border-color: #333333; }
 
 .minimize {
 		  width: 15px; height: 19px; display: block; color: #000; font-size: 22px; float: right; text-align: center;

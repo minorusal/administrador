@@ -14,7 +14,7 @@ class Catalogo_Articulos extends Base_Controller {
 		$this->load_database($dominio);
 	}
 	
-	public function content_tabs(){
+	public function config_tabs(){
 		$config_tab['names']    = array('nuevo articulo', 'listado articulos', 'detalle'); 
 		$config_tab['links']    = array('nuevo', 'articulos', 'otro'); 
 		$config_tab['action']   = array('load_content_tab','redirect', 'load_content_tab');
@@ -46,18 +46,28 @@ class Catalogo_Articulos extends Base_Controller {
 		$data_tab['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
 		
-		$view = $this->load_view_unique($uri_string.'articulos', $data_tab, true);
+		$view = $this->load_view_unique($uri_string.'articulos/listado', $data_tab, true);
 		
 		
 		if(!$tabs){
 			$data['titulo']  = 'Articulos';
-			$data['tabs']    = tabbed_tpl($this->content_tabs(),base_url($uri_string),2,$view); 
+			$data['tabs']    = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view); 
 			$this->load_view($uri_string.'catalogos', $data);
 		}else{
 			echo json_encode($view);
 		}
-
 		
+	}
+
+	public function nuevo_articulo(){
+
+		$uri_string  = $this->uri_string;
+		$view = $this->load_view_unique($uri_string.'articulos/new', '', true);
+
+		echo json_encode($view);
+	//	$data['titulo']  = 'Agregar Articulos';
+	//	$data['tabs']    = tabbed_tpl($this->content_tabs(),base_url($uri_string),1,$view); 
+	//	$this->load_view($uri_string.'catalogos', $data);
 	}
 
 

@@ -3,17 +3,15 @@
     window.onload = live_clock;
 });
 
-
 function live_clock(){
     if (!document.layers&&!document.all&&!document.getElementById)
     return
 
-     var Digital=new Date()
-     var hours=Digital.getHours()
-     var minutes=Digital.getMinutes()
-     var seconds=Digital.getSeconds()
-
-    var dn="PM"
+    var Digital = new Date()
+    var hours   = Digital.getHours()
+    var minutes = Digital.getMinutes()
+    var seconds = Digital.getSeconds()
+    var dn      = "PM"
     if (hours<12)
     dn="AM"
     if (hours>12)
@@ -25,7 +23,7 @@ function live_clock(){
      minutes="0"+minutes
      if (seconds<=9)
      seconds="0"+seconds
-    //change font size here to your desire
+
     myclock=hours+":"+minutes+":"+seconds+" "+dn
     if (document.layers){
         document.layers.liveclock.document.write(myclock)
@@ -37,6 +35,7 @@ function live_clock(){
         document.getElementById("liveclock").innerHTML=myclock
         setTimeout("live_clock()",1000)
 } 
+
 function obj2json(_data){
     str = '{ ';
     first = true;

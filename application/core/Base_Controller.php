@@ -104,7 +104,7 @@ class Base_Controller extends CI_Controller {
 		$data['base_url']          = base_url();
 		$data['form_open']         = form_open('', $att_fopen);
 		$data['form_input_hidden'] = form_input($att_hiden);
-		$data['form_input_user']   = form_input($att_user);
+		$data['form_input_user']   = form_input($att_user, '', 'placeholder="Usuario"');
 		$data['form_input_pwd']    = form_password($att_pwd, '', 'placeholder="Password"');
 		$data['form_button']       = form_button($att_btn);
 		$data['form_close']        = form_close();

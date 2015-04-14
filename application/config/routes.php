@@ -54,6 +54,8 @@ $route['inicio']                   = 'inicio/index';
 $route['inventario/catalogos/articulos']        = 'inventario/catalogo_articulos/articulos';
 $route['inventario/catalogos/articulos/(:num)'] = 'inventario/catalogo_articulos/articulos/$1';
 
+$route['inventario/catalogos/nuevo']        = 'inventario/catalogo_articulos/nuevo_articulo';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -4,7 +4,6 @@ class Inicio extends Base_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->removeCache();
 		if(!$this->session->userdata('is_logged')){
 			redirect('login');
 		}

@@ -2,7 +2,9 @@
 class Base_Controller extends CI_Controller {
  
     public function __construct() {
+
         parent::__construct();
+        $this->removeCache();
     }
 
     /**
@@ -44,7 +46,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_name']      = $this->session->userdata('name');
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
 		$dataheader['date']           = date('d/m/Y');
-		$dataheader['uri_string']     = ucwords(strtolower(str_replace('/','&nbsp;<span class="separator"></span>&nbsp;',$this->uri->uri_string())));
+		$dataheader['uri_string']     = text_format_tpl(str_replace('/','&nbsp;<span class="separator"></span>&nbsp;',$this->uri->uri_string()));
 
 		$datafooter = array();
 		
@@ -179,7 +181,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon   = $subitems['icon'] ;
 	        }
 
-    		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'><span class='$icon'></span>".ucwords(strtolower($item))." $sub_nivel </a>";
+    		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'><span class='$icon'></span>".text_format_tpl($item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
 	    }
@@ -233,6 +235,14 @@ class Base_Controller extends CI_Controller {
     */
     public function uri_segment(){
     	return $this->uri->total_segments();
+    }
+
+
+    public function ajax_post($post){
+    	return $this->input->post($post);
+    }
+    public function timestamp(){
+    	return date('Y-m-d H:m:s',now());
     }
 }
 ?>

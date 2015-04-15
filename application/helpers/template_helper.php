@@ -46,5 +46,32 @@
     	return $tabbed;
 
 		}
-	}	
+	}
+
+	if(!function_exists('alertas_tpl')){
+		function alertas_tpl($type = '', $mensaje = '' ,$close = false){
+			$alert = "";
+			$button_close = "";
+			if($type == ""){
+				$type = "alert";
+			}else{
+				$type = "alert-$type";
+			}
+			if($close){
+				$button_close = "button data-dismiss='alert' class='close' type='button'>×</button>";
+			}
+			
+			$alert ="<div class='alert $type'>$mensaje </div>";
+
+			return $alert;
+		}
+
+	if(!function_exists('text_format_tpl')){
+		function text_format_tpl($string){
+			return ucwords(strtolower($string));
+		}
+		
+	}
+}
+		
 ?>

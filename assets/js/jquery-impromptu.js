@@ -230,7 +230,7 @@
 		title: '',
 		closeText: '&times;',
 		buttons: {
-			Ok: true
+			
 		},
 		loaded: function(e){},
 		submit: function(e,v,m,f){},
@@ -242,7 +242,7 @@
 		overlayspeed: 'slow',
 		promptspeed: 'fast',
 		show: 'fadeIn',
-		focus: 0,
+		focus: 1,
 		defaultButton: 0,
 		useiframe: false,
 		top: '15%',

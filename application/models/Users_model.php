@@ -1,5 +1,5 @@
 <?php
-class Users_model extends CI_Model{
+class users_model extends CI_Model{
 	/**
     * Busca Usuario por usuario y password, funcion principla de login
     * @param string $user

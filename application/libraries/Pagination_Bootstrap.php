@@ -59,7 +59,12 @@ class Pagination_Bootstrap extends CI_Pagination{
 	public function showing_items($limit, $offset, $total_items){
 
 		$item_firts = $offset + 1;
-		$item_last  = $offset + $limit;
+		$item_last  = ($total_items < $limit)?$total_items :($offset + $limit);
+
+		if($total_items==0){
+			$item_firts = 0;
+			$item_last  = 0;
+		}
 		$showing    = '<div style="float:left;"><p class="text-info">Resultado '.$item_firts.' - '.$item_last.' de '.$total_items.' registros</p></div>';
 
 		return $showing;

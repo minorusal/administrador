@@ -1,12 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Login extends Base_Controller {
+class login extends Base_Controller {
 	/**
     * Index del Controllador
     * @return void
     */
 	public function index(){
-		$this->removeCache();
 		if($this->session->userdata('is_logged')){
 			redirect('inicio');
         }else{
@@ -29,14 +28,14 @@ class Login extends Base_Controller {
     * @return boolean
     */
 	function authentication(){	
-		$this->load->model('Users_model');
+		$this->load->model('users_model');
 		$id_user    = $this->input->post('id_user');
 		if($id_user==''){
 			$user   = $this->input->post('user');
 			$pwd    = $this->__encript_pwd($this->input->post('pwd'));
-			$data   = $this->Users_model->search_user_for_login($user, $pwd);
+			$data   = $this->users_model->search_user_for_login($user, $pwd);
 		}else{
-			$data   = $this->Users_model->search_user_for_id($id_user);
+			$data   = $this->users_model->search_user_for_id($id_user);
 		}
 		$data       = $this->query_result_to_array($this->object_to_array($data));
 		$data_count = count($data);
@@ -45,7 +44,7 @@ class Login extends Base_Controller {
 			if($data_count>1){
 				echo json_encode($this->tbl_multiples_perfiles($data));
 			}else{
-				$data_modulos       = $this->Users_model->search_modules_for_user($data[0]['id_modulo']);
+				$data_modulos       = $this->users_model->search_modules_for_user($data[0]['id_modulo']);
 				$data_modulos       = $this->object_to_array( $data_modulos );
 				$data[0]['modulos'] = $this->buil_array_navigator($data_modulos);
 				$this->session->set_userdata($data[0]);
@@ -170,7 +169,6 @@ class Login extends Base_Controller {
 	* @return void
 	*/
 	function logout(){
-		$this->removeCache();
 		$this->session->sess_destroy();
 		redirect('login');
 	}

@@ -3,6 +3,14 @@
     window.onload = live_clock;
 });
 
+function path(){
+    var pathname = window.location.pathname;
+    var hostname = pathname.split('/');
+    hostname = '/'+hostname[1]+'/';
+    return hostname;
+}
+
+
 function live_clock(){
     if (!document.layers&&!document.all&&!document.getElementById)
     return
@@ -68,4 +76,38 @@ function load_content_tab(uri, id_content){
            jQuery('#a-'+id_content).html(data);
         }
     });
+}
+
+function clean_formulario(){
+    jQuery(":text,textarea").each(function(){ 
+        jQuery(jQuery(this)).val('');
+    });
+}
+
+function values_requeridos(){
+    var ids = "";
+    jQuery(".value_important").each(function(){ 
+        var check = jQuery(this).val();
+        if(check == ''){
+            ids = jQuery(this).attr("id")+'|'+ids;
+        }
+    });
+    return ids;
+}
+
+function alertas_tpl(type , mensaje ,close){
+    var alert = "";
+    var button_close = "";
+    if(type == ""){
+        type = "alert";
+    }else{
+        type = "alert-"+type;
+    }
+    if(close){
+        button_close = "<button data-dismiss='alert' class='close' type='button'>×</button>";
+    }
+    
+    alert = "<div class='alert "+type+"'>"+button_close+mensaje+"</div>";
+
+    return alert
 }

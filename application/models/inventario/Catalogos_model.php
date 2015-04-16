@@ -23,6 +23,25 @@ class catalogos_model extends CI_Model{
 		}
 	}
 
+	function detalle_articulos($data){
+		$query = "SELECT 
+					ca.id_cat_articulo
+					,ca.articulo
+					,ca.clave_corta
+					,ca.descripcion
+					,ca.timestamp
+					,ca.id_usuario
+				FROM
+					av_cat_articulos ca
+				WHERE 
+					ca.id_cat_articulo = $data";
+
+       $query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
 	function get_articulos($limit, $offset){
 		$query = "SELECT 
 					ca.id_cat_articulo
@@ -51,7 +70,7 @@ class catalogos_model extends CI_Model{
         return $query->num_rows();
     }
 
-	public function insert_articulo($data){
+	public function insert_articulos($data){
 		$existe = $this->row_exist('av_cat_articulos', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
 			$query = $this->db->insert_string('av_cat_articulos', $data);

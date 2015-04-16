@@ -16,8 +16,8 @@ class catalogo_articulos extends Base_Controller {
 	
 	public function config_tabs(){
 		$config_tab['names']    = array('nuevo articulo', 'listado articulos', 'detalle'); 
-		$config_tab['links']    = array('agregar_articulo', 'articulos', 'otro'); 
-		$config_tab['action']   = array('load_content_tab','redirect', 'load_content_tab');
+		$config_tab['links']    = array('agregar_articulo', 'articulos', 'detalle_articulo'); 
+		$config_tab['action']   = array('load_content_tab','redirect', '');
 
 		return $config_tab;
 	}
@@ -38,8 +38,13 @@ class catalogo_articulos extends Base_Controller {
 		
 		foreach ($lts_content as $value) {
 			
+			$atrr = array(
+							'href' => '#',
+						  	'onclick' => 'detalle_articulo('.$value['id_cat_articulo'].')'
+					);
+
 			$tbl_data[] = array('id' => $value['id_cat_articulo'],
-								'articulo' => tool_tips_tpl($value['articulo'], 'Click para Editar'),
+								'articulo' => tool_tips_tpl($value['articulo'], 'Click para Editar', 'right' , $atrr),
 								'clave_corta' => $value['clave_corta'],
 								'descripcion' => $value['descripcion']);
 		}
@@ -86,7 +91,7 @@ class catalogo_articulos extends Base_Controller {
 								 'id_usuario' => $this->session->userdata('id_usuario'),
 								 'timestamp'  => $this->timestamp());
 			
-			$insert = $this->catalogos_model->insert_articulo($data_insert);
+			$insert = $this->catalogos_model->insert_articulos($data_insert);
 			if($insert){
 				echo 1;
 			}else{
@@ -96,7 +101,7 @@ class catalogo_articulos extends Base_Controller {
 			sleep(1);
 		}else{
 			$uri_string  = $this->uri_string;
-			$view = $this->load_view_unique($uri_string.'articulos/agregar', '', true);
+			$view = $this->load_view_unique($uri_string.'articulos/agregar_articulo', '', true);
 
 			echo json_encode($view);
 		}
@@ -104,7 +109,21 @@ class catalogo_articulos extends Base_Controller {
 	}
 
 
-	
+	public function detalle_articulo(){
+		$uri_string  = $this->uri_string;
+		$id_articulo    = $this->ajax_post('id_articulo');
+		$result = $this->catalogos_model->detalle_articulos($id_articulo);
+
+		foreach ($result as  $value) {
+			$data_detalle['articulo']         = $value['articulo']; 
+			$data_detalle['clave_corta']      = $value['clave_corta'];
+			$data_detalle['timestamp']        = $value['timestamp'];
+			$data_detalle['descripcion']      = $value['descripcion'];
+			$data_detalle['usuario_registro'] = $value['id_usuario'];
+		}
+		$view = $this->load_view_unique($uri_string.'articulos/detalle_articulo', $data_detalle, true);
+		echo json_encode($view);
+	}
 
 	
 

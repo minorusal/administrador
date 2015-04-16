@@ -56,6 +56,8 @@ $route['inventario/catalogos/articulos/(:num)'] = 'inventario/catalogo_articulos
 
 $route['inventario/catalogos/agregar_articulo']        = 'inventario/catalogo_articulos/agregar_articulo';
 
+$route['inventario/catalogos/detalle_articulo']        = 'inventario/catalogo_articulos/detalle_articulo';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

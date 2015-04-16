@@ -1,0 +1,33 @@
+    <div >
+        <div style="float:left">
+            <p>
+                <label>Nombre del Articulo: (*)</label>
+                <input id="articulo" type="text" name="articulo" class="input-xlarge value_important" value="{articulo}" />
+            </p>
+            <p>
+                <label>Clave Corta: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge value_important" value="{clave_corta}" />
+            </p>
+
+            <p>
+                <label>Fecha de Registro</label>
+                <input id="timestamp" type="text" name="timestamp" class="input-xlarge value_important" value="{timestamp}" />
+            </p>
+            <p>
+                <label>Registrado por:</label>
+                <input id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge value_important" value="{usuario_registro}" />
+            </p>
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>Descripcion:</label>
+            <textarea id="descripcion" name="descripcion" class="span8 ">{descripcion}</textarea>
+        </p>
+    <div id="mensajes" style="display:none"></div>
+
+        
+
+        <button class="btn btn-primary" onclick="agregar_articulo()">Guardar</button>
+    </div>

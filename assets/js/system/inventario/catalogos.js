@@ -1,6 +1,4 @@
 
-
-
 function agregar_articulo(){
 	var articulo = jQuery("#articulo").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -43,8 +41,6 @@ function agregar_articulo(){
 function buscar_articulo(){
 	var filtro = jQuery('#search-query').val();
 	if(filtro !== ''){
-
-	
 		jQuery.ajax({
 	        type: "POST",
 	        url: path()+"inventario/catalogos/articulos",
@@ -59,4 +55,18 @@ function buscar_articulo(){
 	        }
 	    });
 	}
+}
+
+function detalle_articulo(id_articulo){
+	jQuery('#ui-id-2').click();
+	jQuery.ajax({
+	        type: "POST",
+	        url: path()+"inventario/catalogos/detalle_articulo",
+	        dataType: 'json',
+	        data: {id_articulo: id_articulo},
+	      
+	        success: function(view){
+	        	jQuery('#a-2').html(view);
+	        }
+	    });
 }

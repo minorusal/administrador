@@ -68,6 +68,9 @@
 
 	if(!function_exists('text_format_tpl')){
 		function text_format_tpl($string){
+			if($string==''){
+				return $string;
+			}
 			return ucwords(strtolower($string));
 		}
 		
@@ -75,16 +78,28 @@
 
 	if(!function_exists('tool_tips_tpl')){
 		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $atrr = array()){
-			if(empty($attr)){
-				$tool_tip ="<ul class='tooltipsample'>
-                           		<a data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
-                        	</ul>";
-			}
+			$attrr = _attr_tpl($atrr);
+			$tool_tip ="<ul class='tooltipsample'>
+                       		<a $attrr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
+                    	</ul>";
+			
 			return $tool_tip ;
 		}
 		
 	}
 	
+
+	if(!function_exists('_attr_tpl')){
+		function _attr_tpl($input = array()){
+			if(!empty($input)){
+				$output = implode(' ', array_map(function ($v, $k) { return sprintf("%s='%s'", $k, $v); }, $input, array_keys($input)));
+			}else{
+				$output = '';
+			}
+			return $output ;
+		}
+		
+	}
 }
 		
 ?>

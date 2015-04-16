@@ -239,6 +239,9 @@ class Base_Controller extends CI_Controller {
 
 
     public function ajax_post($post){
+    	if($post===false){
+    		return $this->input->post();
+    	}
     	return $this->input->post($post);
     }
     public function timestamp(){

@@ -1381,7 +1381,7 @@ input[type="search"], input[type="tel"], input[type="color"], .uneditable-input,
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, 
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, 
 .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle { background: #171717; }
-.navbar-search .search-query { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
+/*.navbar-search .search-query { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }*/
 .navbar-form .btn { padding: 4px 10px; font-size: 11px; text-transform: uppercase; }
 
 .label {

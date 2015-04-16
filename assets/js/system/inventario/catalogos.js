@@ -1,3 +1,6 @@
+
+
+
 function agregar_articulo(){
 	var articulo = jQuery("#articulo").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -34,6 +37,26 @@ function agregar_articulo(){
 		});
 	}else{
 		jQuery("#mensajes").html(alertas_tpl('error' , ' <strong>Atencion!</strong><br>Los campos marcado con (*) son obligatorios, gracias' ,true)).show('slow');
-		
+	}
+}
+
+function buscar_articulo(){
+	var filtro = jQuery('#search-query').val();
+	if(filtro !== ''){
+
+	
+		jQuery.ajax({
+	        type: "POST",
+	        url: path()+"inventario/catalogos/articulos",
+	        dataType: 'json',
+	        data: {filtro: filtro},
+	        beforeSend : function(){
+	        	jQuery("#loader").html('Buscando<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+	        },
+	        success: function(view){
+	        	jQuery("#loader").html('');
+	        	jQuery('#a-1').html(view);
+	        }
+	    });
 	}
 }

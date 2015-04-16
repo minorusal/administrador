@@ -1,6 +1,15 @@
  jQuery(document).ready(function() {
     jQuery(".tabbedwidget").tabs();  
     window.onload = live_clock;
+
+    jQuery('a[data-rel]').each(function() {
+            jQuery(this).attr('rel', jQuery(this).data('rel'));
+        });
+    if(jQuery('.tooltipsample').length > 0)
+        jQuery('.tooltipsample').tooltip({selector: "a[rel=tooltip]"});
+        
+    jQuery('.popoversample').popover({selector: 'a[rel=popover]', trigger: 'hover'});
+        
 });
 
 function path(){
@@ -12,36 +21,39 @@ function path(){
 
 
 function live_clock(){
-    if (!document.layers&&!document.all&&!document.getElementById)
-    return
+    if (jQuery('#liveclock').length){
 
-    var Digital = new Date()
-    var hours   = Digital.getHours()
-    var minutes = Digital.getMinutes()
-    var seconds = Digital.getSeconds()
-    var dn      = "PM"
-    if (hours<12)
-    dn="AM"
-    if (hours>12)
-    hours=hours-12
-    if (hours==0)
-    hours=12
+        if (!document.layers&&!document.all&&!document.getElementById)
+        return
 
-     if (minutes<=9)
-     minutes="0"+minutes
-     if (seconds<=9)
-     seconds="0"+seconds
+        var Digital = new Date()
+        var hours   = Digital.getHours()
+        var minutes = Digital.getMinutes()
+        var seconds = Digital.getSeconds()
+        var dn      = "PM"
+        if (hours<12)
+        dn="AM"
+        if (hours>12)
+        hours=hours-12
+        if (hours==0)
+        hours=12
 
-    myclock=hours+":"+minutes+":"+seconds+" "+dn
-    if (document.layers){
-        document.layers.liveclock.document.write(myclock)
-        document.layers.liveclock.document.close()
+         if (minutes<=9)
+         minutes="0"+minutes
+         if (seconds<=9)
+         seconds="0"+seconds
+
+        myclock=hours+":"+minutes+":"+seconds+" "+dn
+        if (document.layers){
+            document.layers.liveclock.document.write(myclock)
+            document.layers.liveclock.document.close()
+        }
+        else if (document.all)
+            liveclock.innerHTML=myclock
+        else if (document.getElementById)
+            document.getElementById("liveclock").innerHTML=myclock
+            setTimeout("live_clock()",1000)
     }
-    else if (document.all)
-        liveclock.innerHTML=myclock
-    else if (document.getElementById)
-        document.getElementById("liveclock").innerHTML=myclock
-        setTimeout("live_clock()",1000)
 } 
 
 function obj2json(_data){

@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Pagination_Bootstrap extends CI_Pagination{
+class pagination_bootstrap extends CI_Pagination{
 	
 	var $first_link			= '&larr; Primero';
 	var $next_link			= 'Siguiente &raquo;';

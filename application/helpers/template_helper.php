@@ -72,6 +72,19 @@
 		}
 		
 	}
+
+	if(!function_exists('tool_tips_tpl')){
+		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $atrr = array()){
+			if(empty($attr)){
+				$tool_tip ="<ul class='tooltipsample'>
+                           		<a data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
+                        	</ul>";
+			}
+			return $tool_tip ;
+		}
+		
+	}
+	
 }
 		
 ?>

@@ -1,14 +1,34 @@
 <?php
 class catalogos_model extends CI_Model{
-		
-	function get_articulos($limit, $offset){
-		
+	function filtrar_articulos($data){
 		$query = "SELECT 
 					ca.id_cat_articulo
 					,ca.articulo
 					,ca.clave_corta
-					,if(ca.descripcion = '' , 'Sin Descripción', ca.descripcion) as descripcion
-					,ca.timestamp
+					,ca.descripcion
+				FROM
+					av_cat_articulos ca
+				WHERE 
+					ca.activo = 1
+				AND (
+					ca.articulo like '%$data%'
+				OR 
+					ca.clave_corta like '%$data%'
+				OR
+					ca.descripcion like '%$data%')";
+
+       $query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	function get_articulos($limit, $offset){
+		$query = "SELECT 
+					ca.id_cat_articulo
+					,ca.articulo
+					,ca.clave_corta
+					,ca.descripcion
 				FROM
 					av_cat_articulos ca
 				WHERE ca.activo = 1
@@ -21,6 +41,16 @@ class catalogos_model extends CI_Model{
 		}
 	}
 	
+	public function get_total_articulos(){
+		$query = "SELECT 
+					*
+				FROM
+					av_cat_articulos ca
+				WHERE ca.activo = 1";
+       	$query = $this->db->query($query);
+        return $query->num_rows();
+    }
+
 	public function insert_articulo($data){
 		$existe = $this->row_exist('av_cat_articulos', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
@@ -31,14 +61,7 @@ class catalogos_model extends CI_Model{
 		}else{
 			return false;
 		}
-		
 	}
-	
-	public function get_total_articulos(){
-        $consulta = $this->db->get('av_cat_articulos');
-        return $consulta->num_rows();
-    }
-
-    
+	  
 }
 ?>

@@ -9,7 +9,12 @@
 |	http://codeigniter.com/user_guide/general/hooks.html
 |
 */
-
+$hook['post_controller_constructor'] = array(
+                                'class'    => 'check_session',
+                                'function' => 'check_activity',
+                                'filename' => 'post_controllers.php',
+                                'filepath' => 'hooks'
+                                );
 
 
 /* End of file hooks.php */

@@ -6,11 +6,6 @@ class catalogo_articulos extends Base_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		if(!$this->session->userdata('is_logged')){
-			redirect('login');
-		}
-		$dominio = $this->session->userdata('dominio');
-		$this->load_database($dominio);
 		$load_model  = $this->load->model('inventario/catalogos_model');
 	}
 	

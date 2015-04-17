@@ -13,10 +13,13 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
     public function load_database($bd){
-    	$load = $this->load->database($bd,TRUE);
-    	if(!$load){
-    		return true;
+    	if($bd!=""){
+    		$load = $this->load->database($bd,TRUE);
+	    	if(!$load){
+	    		return true;
+	    	}
     	}
+    	
     }
 
     /**

@@ -4,9 +4,6 @@ class Inicio extends Base_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		if(!$this->session->userdata('is_logged')){
-			redirect('login');
-		}
 	}
 	public function index(){
 		$data['titulo']  = 'inicio';

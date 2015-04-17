@@ -83,10 +83,16 @@ class catalogos_model extends Base_Model{
 	}
 
 	public function update_articulos($data, $id_usuario){
-		$condicion = "id_cat_articulo = $id_usuario"; 
-		$query = $this->db->update_string('av_cat_articulos', $data, $condicion);
-		$query = $this->db->query($query);
-		return $query;
+		$condicion = array('id_cat_articulo !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_articulos', $condicion );
+		if(!$existe){
+			$condicion = "id_cat_articulo = $id_usuario"; 
+			$query = $this->db->update_string('av_cat_articulos', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
 	}
 	  
 }

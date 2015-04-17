@@ -188,18 +188,6 @@ class Base_Controller extends CI_Controller {
 	    return $panel;
 	}         		
 
-    /**
-	* imprime un arreglo formateado para debug
-	* y detiene la ejecucion del script
-	* @return array $array
-	*/
-	public function print_debug($array){
-		echo '<pre>';
-		print_r($array);
-		echo '</pre>';
-		die();
-	}
-
 	/**
 	* convierte un objeto a un arreglo
 	* @param object $obj

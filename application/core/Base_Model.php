@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Base_Model extends CI_Model {
-	
-	public function row_exist($table, $row){
+
+	public function row_exist($table, $row ){
     	$this->db->select();
 		$this->db->from($table);
 		$this->db->where($row);
@@ -12,6 +12,8 @@ class Base_Model extends CI_Model {
 			return false;
 		}
     }
+
+  
 
 }
 

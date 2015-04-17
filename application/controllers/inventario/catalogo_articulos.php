@@ -37,24 +37,25 @@ class catalogo_articulos extends Base_Controller {
 		$url         = base_url($uri_string.'articulos/');
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment);
 		
-		foreach ($lts_content as $value) {
-			
-			$atrr = array(
-							'href' => '#',
-						  	'onclick' => 'detalle_articulo('.$value['id_cat_articulo'].')'
-					);
-
-			$tbl_data[] = array('id' => $value['id_cat_articulo'],
-								'articulo' => tool_tips_tpl($value['articulo'], 'Ver Detalle', 'right' , $atrr),
-								'clave_corta' => $value['clave_corta'],
-								'descripcion' => $value['descripcion']);
-		}
-
-		$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-		$this->table->set_heading('id','articulo', 'clave corta','descripcion');
-		$this->table->set_template($tbl_plantilla);
-		$tabla = $this->table->generate($tbl_data);
 		if($total_rows>0){
+			foreach ($lts_content as $value) {
+				
+				$atrr = array(
+								'href' => '#',
+							  	'onclick' => 'detalle_articulo('.$value['id_cat_articulo'].')'
+						);
+
+				$tbl_data[] = array('id' => $value['id_cat_articulo'],
+									'articulo' => tool_tips_tpl($value['articulo'], 'Ver Detalle', 'right' , $atrr),
+									'clave_corta' => $value['clave_corta'],
+									'descripcion' => $value['descripcion']);
+			}
+
+			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$this->table->set_heading('id','articulo', 'clave corta','descripcion');
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
+		
 			$data_tab['tabla'] = $tabla;
 		}else{
 			$msg = '<strong>Info!</strong><br>No se encontraron coincidencias.';
@@ -142,17 +143,15 @@ class catalogo_articulos extends Base_Controller {
 							 'clave_corta'=> text_format_tpl($clave_corta), 
 							 'descripcion'=> text_format_tpl($descripcion));
 		
-		$insert = $this->catalogos_model->update_articulos($data_update, $id_articulo);
-		/*if($insert){
+		$update = $this->catalogos_model->update_articulos($data_update, $id_articulo);
+		if($update){
 			echo 1;
 		}else{
 			$msg = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro articulo, porfavor intente con una clave diferente';
 			echo json_encode(alertas_tpl('', $msg ,false));
 		}
-		sleep(1);*/
 
 		sleep(1);
-		echo 1 ;
 		
 	}
 

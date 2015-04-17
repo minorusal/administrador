@@ -1,7 +1,9 @@
  jQuery(document).ready(function() {
     jQuery(".tabbedwidget").tabs();  
     window.onload = live_clock;
-
+    tool_tips();    
+});
+function tool_tips(){
     jQuery('a[data-rel]').each(function() {
             jQuery(this).attr('rel', jQuery(this).data('rel'));
         });
@@ -9,16 +11,17 @@
         jQuery('.tooltipsample').tooltip({selector: "a[rel=tooltip]"});
         
     jQuery('.popoversample').popover({selector: 'a[rel=popover]', trigger: 'hover'});
-        
-});
-
+}
+function input_keypress(identificador, name_funcion){
+    var script = "<script>jQuery('#"+identificador+"').keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);if(keycode == '13'){   "+name_funcion+"(); } });</script>";
+        return script;
+}
 function path(){
     var pathname = window.location.pathname;
     var hostname = pathname.split('/');
     hostname = '/'+hostname[1]+'/';
     return hostname;
 }
-
 
 function live_clock(){
     if (jQuery('#liveclock').length){

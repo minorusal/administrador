@@ -1,4 +1,10 @@
-
+jQuery(document).ready(function() {
+	jQuery('#search-query').keypress(function(event){
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){  buscar_articulo(); 
+		} 
+	});
+});
 function agregar_articulo(){
 	var articulo    = jQuery("#articulo").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -67,8 +73,10 @@ function buscar_articulo(){
 	        	jQuery("#loader").html('Buscando<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
 	        },
 	        success: function(view){
+	        	var funcion = 'buscar_articulo';
 	        	jQuery("#loader").html('');
-	        	jQuery('#a-1').html(view);
+	        	jQuery('#a-1').html(view+input_keypress('search-query', funcion));				
+	        	tool_tips();
 	        }
 	    });
 	}

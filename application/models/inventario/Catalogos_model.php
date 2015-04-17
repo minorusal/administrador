@@ -1,5 +1,5 @@
 <?php
-class catalogos_model extends CI_Model{
+class catalogos_model extends Base_Model{
 	function filtrar_articulos($data){
 		$query = "SELECT 
 					ca.id_cat_articulo
@@ -80,6 +80,13 @@ class catalogos_model extends CI_Model{
 		}else{
 			return false;
 		}
+	}
+
+	public function update_articulos($data, $id_usuario){
+		$condicion = "id_cat_articulo = $id_usuario"; 
+		$query = $this->db->update_string('av_cat_articulos', $data, $condicion);
+		$query = $this->db->query($query);
+		return $query;
 	}
 	  
 }

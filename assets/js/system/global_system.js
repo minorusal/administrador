@@ -118,8 +118,6 @@ function alertas_tpl(type , mensaje ,close){
     if(close){
         button_close = "<button data-dismiss='alert' class='close' type='button'>×</button>";
     }
-    
     alert = "<div class='alert "+type+"'>"+button_close+mensaje+"</div>";
-
     return alert
 }

@@ -2,10 +2,10 @@
 
 class pagination_bootstrap extends CI_Pagination{
 	
-	var $first_link			= '&larr; Primero';
+	var $first_link			= '&laquo; Primero';
 	var $next_link			= 'Siguiente &raquo;';
 	var $prev_link			= '&laquo; Anterior';
-	var $last_link			= 'Ultimo &rarr;';
+	var $last_link			= 'Ultimo &raquo;';
 
 	var $full_tag_open		= '<div class="pagination" style="float:right;"><ul>';
 	var $full_tag_close		= '</ul></div>';

@@ -54,9 +54,10 @@ $route['inicio']                   = 'inicio/index';
 $route['inventario/catalogos/articulos']        = 'inventario/catalogo_articulos/articulos';
 $route['inventario/catalogos/articulos/(:num)'] = 'inventario/catalogo_articulos/articulos/$1';
 
-$route['inventario/catalogos/agregar_articulo']        = 'inventario/catalogo_articulos/agregar_articulo';
+$route['inventario/catalogos/agregar_articulo'] = 'inventario/catalogo_articulos/agregar_articulo';
 
-$route['inventario/catalogos/detalle_articulo']        = 'inventario/catalogo_articulos/detalle_articulo';
+$route['inventario/catalogos/detalle_articulo'] = 'inventario/catalogo_articulos/detalle_articulo';
+$route['inventario/catalogos/actualizar_articulo'] = 'inventario/catalogo_articulos/actualizar_articulo';
 
 
 /* End of file routes.php */

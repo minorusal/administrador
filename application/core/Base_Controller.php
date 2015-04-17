@@ -1,8 +1,7 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Base_Controller extends CI_Controller {
  
-    public function __construct() {
-
+    public function __construct(){
         parent::__construct();
         $this->removeCache();
     }
@@ -244,6 +243,7 @@ class Base_Controller extends CI_Controller {
     	}
     	return $this->input->post($post);
     }
+
     public function timestamp(){
     	return date('Y-m-d H:m:s',now());
     }

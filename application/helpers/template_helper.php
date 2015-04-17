@@ -1,8 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 	if(!function_exists('table_tpl')){
-		function table_tpl($title, $data){
-
+		function table_tpl($titles, $data){
 			foreach ($data as $key => $value) {
 			//	$row . = '<tr>';
 			}
@@ -25,8 +24,9 @@
 				$data     = ($i==($segment-1)) ? $content : "";
 				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
 				$action   = $config['action'][$i];
-				$tabs_li .= "<li class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
-								<a href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
+				$attr     = _attr_tpl($config['attr'][$i]);
+				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
+								<a $attr href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
 									".ucwords(strtolower($config['names'][$i]))."
 								</a>
 							</li>";
@@ -85,9 +85,7 @@
 			
 			return $tool_tip ;
 		}
-		
 	}
-	
 
 	if(!function_exists('_attr_tpl')){
 		function _attr_tpl($input = array()){
@@ -98,7 +96,6 @@
 			}
 			return $output ;
 		}
-		
 	}
 }
 		

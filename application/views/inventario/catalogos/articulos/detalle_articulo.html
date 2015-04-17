@@ -1,5 +1,7 @@
+    <div id="registro_loader"></div>
     <div >
         <div style="float:left">
+            <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" />
             <p>
                 <label>Nombre del Articulo: (*)</label>
                 <input id="articulo" type="text" name="articulo" class="input-xlarge value_important" value="{articulo}" />
@@ -11,11 +13,11 @@
 
             <p>
                 <label>Fecha de Registro</label>
-                <input id="timestamp" type="text" name="timestamp" class="input-xlarge value_important" value="{timestamp}" />
+                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
             </p>
             <p>
                 <label>Registrado por:</label>
-                <input id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge value_important" value="{usuario_registro}" />
+                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
             </p>
         </div>
         
@@ -26,8 +28,5 @@
             <textarea id="descripcion" name="descripcion" class="span8 ">{descripcion}</textarea>
         </p>
     <div id="mensajes" style="display:none"></div>
-
-        
-
-        <button class="btn btn-primary" onclick="agregar_articulo()">Guardar</button>
+        <button class="btn btn-primary" onclick="editar_articulo()">Guardar Cambios</button>
     </div>

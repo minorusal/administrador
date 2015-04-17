@@ -52,17 +52,6 @@ class CI_Model {
 		return $CI->$key;
 	}
 
-	public function row_exist($table, $row){
-    	$this->db->select();
-		$this->db->from($table);
-		$this->db->where($row);
-		$query = $this->db->get();
-		if($query->num_rows >= 1){
-			return true;
-		}else{
-			return false;
-		}
-    }
 }
 // END Model Class
 

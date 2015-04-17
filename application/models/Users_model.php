@@ -1,5 +1,5 @@
 <?php
-class users_model extends CI_Model{
+class users_model extends Base_Model{
 	/**
     * Busca Usuario por usuario y password, funcion principla de login
     * @param string $user
@@ -42,7 +42,7 @@ class users_model extends CI_Model{
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
-			return $query->result();
+			return $query->result_array();
 		}		
 	}
 	/**
@@ -86,7 +86,7 @@ class users_model extends CI_Model{
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
-			return $query->result();
+			return $query->result_array();
 		}		
 	}
 	/**
@@ -118,7 +118,7 @@ class users_model extends CI_Model{
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
-			return $query->result();
+			return $query->result_array();
 		}		
 	}
 

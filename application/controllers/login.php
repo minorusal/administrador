@@ -37,7 +37,7 @@ class login extends Base_Controller {
 		}else{
 			$data   = $this->users_model->search_user_for_id($id_user);
 		}
-		$data       = $this->query_result_to_array($this->object_to_array($data));
+		$data       = $this->query_result_to_array($data);
 		$data_count = count($data);
 		
 		if((is_array($data))&&(!empty($data))){
@@ -45,7 +45,6 @@ class login extends Base_Controller {
 				echo json_encode($this->tbl_multiples_perfiles($data));
 			}else{
 				$data_modulos       = $this->users_model->search_modules_for_user($data[0]['id_modulo']);
-				$data_modulos       = $this->object_to_array( $data_modulos );
 				$data[0]['modulos'] = $this->buil_array_navigator($data_modulos);
 				$this->session->set_userdata($data[0]);
 

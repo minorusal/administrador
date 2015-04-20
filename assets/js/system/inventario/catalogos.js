@@ -16,14 +16,10 @@ function agregar_articulo(){
 			dataType: "json",
 			data: {articulo : articulo, clave_corta:clave_corta, descripcion:descripcion},
 			beforeSend : function(){
-				jQuery("#registro_loader").html('Aplicando registro <img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
 			},
-			success : function(result){
-				if(result==1){
-					var msg = alertas_tpl('success' , '<strong>Done!</strong><br>El registro de dio de alta correctamente' ,true);
-				}else{
-					var msg = result;
-				}
+			success : function(msg){
+				
 			    jQuery("#mensajes").html(msg).show('slow');
 				jQuery("#registro_loader").html('');
 			}
@@ -44,15 +40,10 @@ function editar_articulo(){
 			dataType: "json",
 			data: {id_articulo:id_articulo, articulo : articulo, clave_corta:clave_corta, descripcion:descripcion},
 			beforeSend : function(){
-				jQuery("#registro_loader").html('Guardando cambios <img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
 			},
-			success : function(result){
+			success : function(msg){
 				
-				if(result==1){
-					var msg = alertas_tpl('success' , '<strong>Done!</strong><br>Los cambios se guardaron correctamente' ,true);
-				}else{
-					var msg = result;
-				}
 				jQuery("#mensajes").html(msg).show('slow');
 				jQuery("#registro_loader").html('');
 			}
@@ -70,7 +61,7 @@ function buscar_articulo(){
 	        dataType: 'json',
 	        data: {filtro: filtro},
 	        beforeSend : function(){
-	        	jQuery("#loader").html('Buscando<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
 	        },
 	        success: function(view){
 	        	var funcion = 'buscar_articulo';

@@ -17,8 +17,8 @@ class check_session extends Base_Controller
 				if(!$this->ci->session->userdata('is_logged')){
 					
 					if($ajax){
-						$msg = '<strong>Advertencia!</strong><br>Su sesion ha finalizado por favor inicie sesion nuevamente, gracias.';
-						echo json_encode(alertas_tpl('', $msg ,false));
+						$msg = $this->ci->lang_item("msg_seesion_destroy");
+						echo json_encode(alertas_tpl('error', $msg ,false));
 						exit;
 					}else{
 						redirect(base_url('login'));

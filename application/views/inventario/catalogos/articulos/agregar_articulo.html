@@ -2,11 +2,11 @@
     <div >
         <div style="float:left">
             <p>
-                <label>Nombre del Articulo: (*)</label>
+                <label>{nombre_articulo}: (*)</label>
                 <input id="articulo" type="text" name="articulo" class="input-xlarge value_important" value="" />
             </p>
             <p>
-                <label>Clave Corta: (*)</label>
+                <label>{cvl_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge value_important" value="" />
             </p>
         </div>
@@ -14,11 +14,11 @@
     </div>
     <div style="clear:both">
         <p>
-            <label>Descripcion:</label>
+            <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion" class="span8 "></textarea>
         </p>
         <div id="mensajes" style="display:none"></div>
 
-        <button class="btn btn-primary" onclick="agregar_articulo()">Guardar</button>
-        <button class="btn btn-primary" onclick="clean_formulario()">Limpiar</button>
+        <button class="btn btn-primary" onclick="agregar_articulo()">{guardar}</button>
+        <button class="btn btn-primary" onclick="clean_formulario()">{limpiar}</button>
     </div>

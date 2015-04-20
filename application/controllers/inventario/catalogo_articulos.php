@@ -7,11 +7,11 @@ class catalogo_articulos extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$load_model  = $this->load->model('inventario/catalogos_model');
-		$this->lang->load("views","es_ES");
+		$this->lang->load("inventario/catalogos","es_ES");
 	}
 	
 	public function config_tabs(){
-		$config_tab['names']    = array('nuevo articulo', 'listado articulos', 'detalle'); 
+		$config_tab['names']    = array($this->lang_item("nuevo_articulo"), $this->lang_item("listado_articulo"), $this->lang_item("detalle_articulo")); 
 		$config_tab['links']    = array('agregar_articulo', 'articulos', 'detalle_articulo'); 
 		$config_tab['action']   = array('load_content_tab','redirect', '');
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
@@ -42,19 +42,20 @@ class catalogo_articulos extends Base_Controller {
 						);
 
 				$tbl_data[] = array('id' => $value['id_cat_articulo'],
-									'articulo' => tool_tips_tpl($value['articulo'], 'Ver Detalle', 'right' , $atrr),
+									'articulo' => tool_tips_tpl($value['articulo'], $this->lang_item("tbl_detalle"), 'right' , $atrr),
 									'clave_corta' => $value['clave_corta'],
 									'descripcion' => $value['descripcion']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-			$this->table->set_heading('id','articulo', 'clave corta','descripcion');
+		
+			$this->table->set_heading($this->lang_item("id"),$this->lang_item("tbl_articulo"),$this->lang_item("tbl_clv"),$this->lang_item("tbl_descrip"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		
 			$data_tab['tabla'] = $tabla;
 		}else{
-			$msg = '<strong>Info!</strong><br>No se encontraron coincidencias.';
+			$msg = $this->lang_item("msg_searh_fail");
 			
 			$data_tab['tabla'] = alertas_tpl('', $msg ,false);
 		}
@@ -73,7 +74,6 @@ class catalogo_articulos extends Base_Controller {
 
 			$this->load_view($uri_string.'catalogos', $data, $data_includes);
 		}else{
-			sleep(1);
 			echo json_encode($view);
 		}
 	}
@@ -82,7 +82,7 @@ class catalogo_articulos extends Base_Controller {
 
 		$articulo    = $this->ajax_post('articulo');
 		$clave_corta = $this->ajax_post('clave_corta');
-		$descripcion = ($this->ajax_post('descripcion')=='')? 'Sin Descripción' : $this->ajax_post('descripcion');
+		$descripcion = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
 		if($articulo){
 			$data_insert = array('articulo'   => text_format_tpl($articulo),
 								 'clave_corta'=> text_format_tpl($clave_corta), 
@@ -92,15 +92,23 @@ class catalogo_articulos extends Base_Controller {
 			
 			$insert = $this->catalogos_model->insert_articulos($data_insert);
 			if($insert){
-				echo 1;
+				$msg = $this->lang_item("msg_update_success");
+				echo json_encode(alertas_tpl('success', $msg ,false));
 			}else{
-				$msg = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro articulo, porfavor intente con una clave diferente';
+				$msg = $this->lang_item("msg_err_clv");
 				echo json_encode(alertas_tpl('', $msg ,false));
 			}
-			sleep(1);
 		}else{
 			$uri_string  = $this->uri_string;
-			$view = $this->load_view_unique($uri_string.'articulos/agregar_articulo', '', true);
+
+
+			$data["nombre_articulo"] = $this->lang_item("nombre_articulo");
+			$data["cvl_corta"]       = $this->lang_item("cvl_corta");
+			$data["descrip"]         = $this->lang_item("descrip");
+			$data["guardar"]         = $this->lang_item("btn_guardar");
+			$data["limpiar"]         = $this->lang_item("btn_limpiar");
+
+			$view = $this->load_view_unique($uri_string.'articulos/agregar_articulo', $data, true);
 
 			echo json_encode($view);
 		}
@@ -118,7 +126,13 @@ class catalogo_articulos extends Base_Controller {
 		$data_detalle['clave_corta']      = $detalles[0]['clave_corta'];
 		$data_detalle['timestamp']        = $detalles[0]['timestamp'];
 		$data_detalle['descripcion']      = $detalles[0]['descripcion'];
-		$data_detalle["nombre_articulo"]  = $this->lang_item("view_nombre_articulo");
+
+		$data_detalle["nombre_articulo"]  = $this->lang_item("nombre_articulo");
+		$data_detalle["cvl_corta"]        = $this->lang_item("cvl_corta");
+		$data_detalle["descrip"]          = $this->lang_item("descrip");
+		$data_detalle["registro_por"]     = $this->lang_item("registro_por");
+		$data_detalle["fecha_registro"]   = $this->lang_item("fecha_registro");
+		$data_detalle["guardar"]          = $this->lang_item("btn_guardar");
 
 		$this->load_database('global_system');
 		$load_model        = $this->load->model('users_model');
@@ -135,7 +149,7 @@ class catalogo_articulos extends Base_Controller {
 		$id_articulo = $this->ajax_post('id_articulo');
 		$articulo    = $this->ajax_post('articulo');
 		$clave_corta = $this->ajax_post('clave_corta');
-		$descripcion = ($this->ajax_post('descripcion')=='')? 'Sin Descripción' : $this->ajax_post('descripcion');
+		$descripcion = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
 		
 		$data_update = array('articulo'   => text_format_tpl($articulo),
 							 'clave_corta'=> text_format_tpl($clave_corta), 
@@ -143,13 +157,13 @@ class catalogo_articulos extends Base_Controller {
 		
 		$update = $this->catalogos_model->update_articulos($data_update, $id_articulo);
 		if($update){
-			echo 1;
+			$msg = $this->lang_item("update_success");
+			echo json_encode(alertas_tpl('success', $msg ,false));
 		}else{
-			$msg = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro articulo, porfavor intente con una clave diferente';
+			$msg = $this->lang_item("msg_err_clv");
 			echo json_encode(alertas_tpl('', $msg ,false));
 		}
 
-		sleep(1);
 		
 	}
 

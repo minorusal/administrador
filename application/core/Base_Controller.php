@@ -4,6 +4,7 @@ class Base_Controller extends CI_Controller {
     public function __construct(){
         parent::__construct();
         $this->removeCache();
+        $this->lang_load("system","es_ES");
     }
 
     /**
@@ -262,10 +263,13 @@ class Base_Controller extends CI_Controller {
     * @return string
     */
 
-    public function lang_item($index){
+    public function lang_item($index, $format = true){
     	$index = str_replace('lang_', '', $index);
-    	$lang_item = ($this->lang->line('lang_'.$index)) ? text_format_tpl($this->lang->line('lang_'.$index)) : text_format_tpl($index);
+    	$lang_item = ($this->lang->line('lang_'.$index)) ? $this->lang->line('lang_'.$index) : $index;
     	
+    	if($format){
+    		$lang_item = text_format_tpl($lang_item);
+    	}
     	return $lang_item;
     }
 
@@ -277,7 +281,7 @@ class Base_Controller extends CI_Controller {
     */
 
     public function lang_load($name, $lang = "es_ES"){
-    	$this->lang->load($name,$lang);
+    	$this->lang->load(trim($name,'/'),$lang);
     }
     
     /**

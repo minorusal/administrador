@@ -67,10 +67,10 @@ class catalogo_articulos extends Base_Controller {
 		
 		if(!$post){
 
-			$data['titulo']  = 'Articulos';
-			$data['tabs']    = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
-
-			$data_includes['js'][] = array('name' => 'catalogos', 'dirname' => 'inventario');
+			$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+			$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+			$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
+			$data_includes['js'][]    = array('name' => 'catalogos', 'dirname' => 'inventario');
 
 			$this->load_view($uri_string.'catalogos', $data, $data_includes);
 		}else{

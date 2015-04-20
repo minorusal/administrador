@@ -37,10 +37,10 @@ class pagination_bootstrap extends CI_Pagination{
 		if(!empty($config)){
 			$this->initialize($config);
 		}else{
-			$config['first_link']  = $this->ci->lang_item("lang_first_link");
-			$config['next_link']   = $this->ci->lang_item("lang_next_link");
-			$config['prev_link']   = $this->ci->lang_item("lang_prev_link");
-			$config['last_link']   = $this->ci->lang_item("lang_last_link");
+			$config['first_link']  = $this->ci->lang_item("lang_pag_first_link");
+			$config['next_link']   = $this->ci->lang_item("lang_pag_next_link");
+			$config['prev_link']   = $this->ci->lang_item("lang_pag_prev_link");
+			$config['last_link']   = $this->ci->lang_item("lang_pag_last_link");
 			$config['total_rows']  = $total_rows;
 			$config['base_url']    = $url;
 			$config['per_page']    = $per_page;
@@ -70,7 +70,7 @@ class pagination_bootstrap extends CI_Pagination{
 			$item_firts = 0;
 			$item_last  = 0;
 		}
-		$showing    = '<div style="float:left;"><p class="text-info">'.$this->ci->lang_item("resultado").$item_firts.' - '.$item_last.$this->ci->lang_item("de",false).$total_items.$this->ci->lang_item("registros").'</p></div>';
+		$showing    = '<div style="float:left;"><p class="text-info">'.$this->ci->lang_item("pag_resultado").$item_firts.' - '.$item_last.$this->ci->lang_item("pag_de",false).$total_items.$this->ci->lang_item("pag_registros").'</p></div>';
 
 		return $showing;
 	}

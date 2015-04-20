@@ -7,6 +7,7 @@ class catalogo_articulos extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$load_model  = $this->load->model('inventario/catalogos_model');
+		$this->lang->load("views","es_ES");
 	}
 	
 	public function config_tabs(){
@@ -64,6 +65,7 @@ class catalogo_articulos extends Base_Controller {
 		$view = $this->load_view_unique($uri_string.'articulos/listado_articulos', $data_tab, true);
 		
 		if(!$post){
+
 			$data['titulo']  = 'Articulos';
 			$data['tabs']    = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
 
@@ -116,6 +118,7 @@ class catalogo_articulos extends Base_Controller {
 		$data_detalle['clave_corta']      = $detalles[0]['clave_corta'];
 		$data_detalle['timestamp']        = $detalles[0]['timestamp'];
 		$data_detalle['descripcion']      = $detalles[0]['descripcion'];
+		$data_detalle["nombre_articulo"]  = $this->lang_item("view_nombre_articulo");
 
 		$this->load_database('global_system');
 		$load_model        = $this->load->model('users_model');

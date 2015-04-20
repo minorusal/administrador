@@ -1,6 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class login extends Base_Controller {
+	public function __construct(){
+		parent::__construct();
+        $this->lang_load("login");
+	}
 	/**
     * Index del Controllador
     * @return void
@@ -9,7 +13,7 @@ class login extends Base_Controller {
 		if($this->session->userdata('is_logged')){
 			redirect('inicio');
         }else{
-        	$this->load_view_login();	
+        	$this->load_view_login();
         }
 	}
 
@@ -146,16 +150,16 @@ class login extends Base_Controller {
 		}
 
 		$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-		$this->table->set_heading('Pais', 'Perfil');
+		$this->table->set_heading($this->lang_item('row_pais'), $this->lang_item('row_perfil'));
 		$this->table->set_template($tbl_plantilla);
 
 		$tbl_info[] = array(
 								'image'  => $avatar,
-								'msg'    => 'Se Identifico mas de un perfil asociado a su usuario, favor de seleccionar un perfil de ingreso, gracias'
+								'msg'    => $this->lang_item('modal_msg')
 						);
 		$perfiles = $this->table->generate($tbl_data);
 		
-		$this->table->set_heading('Bienvenido:',$name_user);
+		$this->table->set_heading($this->lang_item('modal_saludo'),$name_user);
 		$this->table->set_template($tbl_plantilla);
 		$info = $this->table->generate($tbl_info);
 

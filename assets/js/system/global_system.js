@@ -17,9 +17,14 @@ function input_keypress(identificador, name_funcion){
         return script;
 }
 function path(){
+    
     var pathname = window.location.pathname;
     var hostname = pathname.split('/');
-    hostname = '/'+hostname[1]+'/';
+    if(document.domain=="localhost"){
+        hostname = '/'+hostname[1]+'/';
+    }else{
+        hostname = '/';
+    }
     return hostname;
 }
 

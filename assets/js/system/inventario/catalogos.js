@@ -90,7 +90,7 @@ function detalle_articulo(id_articulo){
         data: {id_articulo: id_articulo},
       
         success: function(view){
-        	jQuery('#ui-id-2').show();
+        	//jQuery('#ui-id-2').show();
         	jQuery('#a-2').html(view);
         }
     });

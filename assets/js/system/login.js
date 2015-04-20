@@ -38,8 +38,7 @@ function authentication(){
 					var promp_content = {
 									content_01:{
 										html:data,
-										buttons: { Cancelar: false},
-										focus: 1,
+										buttons: { },
 										submit:function(e,v,m,f){
 											if(v){
 												e.preventDefault();

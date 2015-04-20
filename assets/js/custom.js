@@ -1,10 +1,13 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function(){
-	var pathname = window.location.pathname;
-	var hostname = pathname.split('/');
-	hostname = '/'+hostname[1];
 
+	var hostname = path();
+
+	if(hostname=='/'){
+		hostname  = 'http://'+window.location.host;
+	}
+	
 	jQuery('.leftmenu .dropdown > a').click(function(){
 		if(!jQuery(this).next().is(':visible'))
 			jQuery(this).next().slideDown('fast');

@@ -1,6 +1,7 @@
 <?php
 class catalogos_model extends Base_Model{
 	
+	/*Articulos*/
 	public function filtrar_articulos($data){
 		$query = "SELECT 
 					ca.id_cat_articulo
@@ -92,7 +93,7 @@ class catalogos_model extends Base_Model{
 	}
 
 
-
+	/*Lineas*/
 	public function filtrar_lineas($data){
 		$query = "SELECT 
 					c.id_cat_linea

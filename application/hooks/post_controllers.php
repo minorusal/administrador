@@ -39,32 +39,20 @@ class check_session extends Base_Controller
 	}
 
 	public function check_sites_availables(){
-
 		$uri = "";
-
 		if($this->ci->session->userdata('is_logged')){
-			$uri_string   = $this->ci->uri->rsegment_array();
-
-			foreach ($uri_string as $value) {
-				$uri .= $value.'/';
-			}
-
-			$sites        = $this->ci->session->userdata('sites_availables');
-			//print_debug($uri_string);
-			//if ajax
-			foreach ($sites as $value) {
-				$sites_availables[] = $this->ci->uri->ruri_to_assoc($value);
-			}
+			$uri_string       = $this->ci->uri->uri_string();
+			$sites_availables = $this->ci->session->userdata('sites_availables');
+			$ajax = $this->ci->ajax_post(false);
 			$sites_availables[] = 'default_controller';
 			$sites_availables[] = 'inicio';
 			$sites_availables[] = 'logout';
 			$sites_availables[] = 'login';
 			$sites_availables[] = '404_override'; 
-
-			
 			if(!in_array($uri_string, $sites_availables)){
-				
-				//redirect(base_url('404_override'));
+				if(!$ajax){
+					redirect(base_url('404_override'));
+				}
 			}
 		}
 	}

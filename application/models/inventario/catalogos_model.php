@@ -92,7 +92,6 @@ class catalogos_model extends Base_Model{
 		}
 	}
 
-
 	/*Lineas*/
 	public function filtrar_lineas($data){
 		$query = "SELECT 
@@ -182,7 +181,97 @@ class catalogos_model extends Base_Model{
 		}else{
 			return false;
 		}
+	} 
+
+	/*um*/
+	public function filtrar_um($data){
+		$query = "SELECT 
+					c.id_cat_um
+					,c.um
+					,c.clave_corta
+					,c.descripcion
+				FROM
+					av_cat_um c
+				WHERE 
+					c.activo = 1
+				AND (
+					c.um like '%$data%'
+				OR 
+					c.clave_corta like '%$data%'
+				OR
+					c.descripcion like '%$data%')";
+
+       $query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
 	}
-	  
+	public function detalle_um($data){
+		$query = "SELECT 
+					c.id_cat_um
+					,c.um
+					,c.clave_corta
+					,c.descripcion
+					,c.timestamp
+					,c.id_usuario
+				FROM
+					av_cat_um c
+				WHERE 
+					c.id_cat_um = $data";
+
+       $query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_um($limit, $offset){
+		$query = "SELECT 
+					c.id_cat_um
+					,c.um
+					,c.clave_corta
+					,c.descripcion
+				FROM
+					av_cat_um c
+				WHERE c.activo = 1
+
+				LIMIT $offset ,$limit";
+       
+       $query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_total_um(){
+		$query = "SELECT 
+					*
+				FROM
+					av_cat_um c
+				WHERE c.activo = 1";
+       	$query = $this->db->query($query);
+        return $query->num_rows();
+    }
+	public function insert_um($data){
+		$existe = $this->row_exist('av_cat_um', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_cat_um', $data);
+			$query = $this->db->query($query);
+
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	public function update_um($data, $id_usuario){
+		$condicion = array('id_cat_um !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_um', $condicion );
+		if(!$existe){
+			$condicion = "id_cat_um = $id_usuario"; 
+			$query = $this->db->update_string('av_cat_um', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 }
 ?>

@@ -27,7 +27,7 @@
 				$attr     = _attr_tpl($config['attr'][$i]);
 				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
 								<a $attr href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
-									".ucwords(strtolower($config['names'][$i]))."
+									".$config['names'][$i]."
 								</a>
 							</li>";
 

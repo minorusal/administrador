@@ -33,7 +33,6 @@ class check_session extends Base_Controller
 				}
 			}
 		}
-
 		$dominio = $this->ci->session->userdata('dominio');
 		$this->ci->load_database($dominio);	
 	}

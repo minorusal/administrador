@@ -37,41 +37,49 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-/*Default*/
+
+/*DEFAULT*/
 $route['default_controller']       = 'login/index';
 $route['404_override']             = 'error404';
+$route['inicio']                   = 'inicio/index';
 /********/
 
-/*Login*/
+/*LOGIN*/
 $route['login']                    = 'login/index';
 $route['login/authentication']     = 'login/authentication';
 $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
 /*******/
-$route['inicio']                   = 'inicio/index';
 
-/*Inventario*/
+/*INVENTARIO*/
 
-/*catalogo articulos*/
+/*Catalogo Articulos*/
 $route['inventario/catalogos/articulos']           = 'inventario/catalogo_articulos/articulos';
 $route['inventario/catalogos/articulos/(:num)']    = 'inventario/catalogo_articulos/articulos/$1';
 $route['inventario/catalogos/agregar_articulo']    = 'inventario/catalogo_articulos/agregar_articulo';
 $route['inventario/catalogos/detalle_articulo']    = 'inventario/catalogo_articulos/detalle_articulo';
 $route['inventario/catalogos/actualizar_articulo'] = 'inventario/catalogo_articulos/actualizar_articulo';
 
-/*catalogo lineas*/
+/*Catalogo Lineas*/
 $route['inventario/catalogos/lineas']           = 'inventario/catalogo_lineas/lineas';
 $route['inventario/catalogos/lineas/(:num)']    = 'inventario/catalogo_lineas/lineas/$1';
 $route['inventario/catalogos/agregar_linea']    = 'inventario/catalogo_lineas/agregar_linea';
 $route['inventario/catalogos/detalle_linea']    = 'inventario/catalogo_lineas/detalle_linea';
 $route['inventario/catalogos/actualizar_linea'] = 'inventario/catalogo_lineas/actualizar_linea';
 
-/*catalogo inudade de medida*/
+/*Catalogo de U.M.*/
 $route['inventario/catalogos/um']            = 'inventario/catalogo_um/um';
 $route['inventario/catalogos/um/(:num)']     = 'inventario/catalogo_um/um/$1';
 $route['inventario/catalogos/agregar_um']    = 'inventario/catalogo_um/agregar_um';
 $route['inventario/catalogos/detalle_um']    = 'inventario/catalogo_um/detalle_um';
 $route['inventario/catalogos/actualizar_um'] = 'inventario/catalogo_um/actualizar_um';
+
+/*Catalogo de Marcas*/
+$route['inventario/catalogos/marcas']            = 'inventario/catalogo_marcas/marcas';
+$route['inventario/catalogos/marcas/(:num)']     = 'inventario/catalogo_marcas/marcas/$1';
+$route['inventario/catalogos/agregar_marcas']    = 'inventario/catalogo_marcas/agregar_marcas';
+$route['inventario/catalogos/detalle_marcas']    = 'inventario/catalogo_marcas/detalle_marcas';
+$route['inventario/catalogos/actualizar_marcas'] = 'inventario/catalogo_marcas/actualizar_marcas';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

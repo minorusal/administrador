@@ -37,10 +37,11 @@
 
 	/*Marcas*/
 
-	$lang['lang_marca']         = 'Marcas';
-	$lang['lang_nueva_marca']   = 'nueva Marca';
-	$lang['lang_listado_marca'] = 'Marcas';
-	$lang['lang_detalle_marca'] = 'detalle de marca';
+	$lang['lang_marcas']         = 'Marcas';
+	$lang['lang_nueva_marcas']   = 'nueva Marca';
+	$lang['lang_listado_marcas'] = 'Marcas';
+	$lang['lang_detalle_marcas'] = 'detalle de marca';
+	$lang['lang_nombre_marca']   = 'Nombre de la Marca';
 
 
 ?>

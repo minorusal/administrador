@@ -51,6 +51,7 @@ class check_session extends Base_Controller
 
 			$sites        = $this->ci->session->userdata('sites_availables');
 			//print_debug($uri_string);
+			//if ajax
 			foreach ($sites as $value) {
 				$sites_availables[] = $this->ci->uri->ruri_to_assoc($value);
 			}

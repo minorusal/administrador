@@ -57,6 +57,11 @@ $route['inventario/catalogos/agregar_articulo']    = 'inventario/catalogo_articu
 $route['inventario/catalogos/detalle_articulo']    = 'inventario/catalogo_articulos/detalle_articulo';
 $route['inventario/catalogos/actualizar_articulo'] = 'inventario/catalogo_articulos/actualizar_articulo';
 
+$route['inventario/catalogos/lineas']           = 'inventario/catalogo_lineas/lineas';
+$route['inventario/catalogos/lineas/(:num)']    = 'inventario/catalogo_lineas/lineas/$1';
+$route['inventario/catalogos/agregar_linea']    = 'inventario/catalogo_lineas/agregar_linea';
+$route['inventario/catalogos/detalle_linea']    = 'inventario/catalogo_lineas/detalle_linea';
+$route['inventario/catalogos/actualizar_linea'] = 'inventario/catalogo_lineas/actualizar_linea';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

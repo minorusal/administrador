@@ -1,0 +1,31 @@
+    <div id="registro_loader"></div>
+    <div >
+        <div style="float:left">
+            <input id="id_linea" type="hidden" name="id_linea" value="{id_linea}" />
+            <p>
+                <label>{nombre_linea}: (*)</label>
+                <input id="linea" type="text" name="linea" class="input-xlarge value_important" value="{linea}" />
+            </p>
+            <p>
+                <label>{cvl_corta}: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge value_important" value="{clave_corta}" />
+            </p>
+            <p>
+                <label>{fecha_registro}:</label>
+                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+            </p>
+            <p>
+                <label>{registro_por}:</label>
+                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+            </p>
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>{descrip}:</label>
+            <textarea id="descripcion" name="descripcion" class="span8 ">{descripcion}</textarea>
+        </p>
+    <div id="mensajes" style="display:none"></div>
+        <button class="btn btn-primary" onclick="editar_linea()">{guardar}</button>
+    </div>

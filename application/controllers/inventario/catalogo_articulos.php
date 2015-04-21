@@ -42,20 +42,20 @@ class catalogo_articulos extends Base_Controller {
 						);
 
 				$tbl_data[] = array('id' => $value['id_cat_articulo'],
-									'articulo' => tool_tips_tpl($value['articulo'], $this->lang_item("tbl_detalle"), 'right' , $atrr),
+									'articulo' => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta' => $value['clave_corta'],
 									'descripcion' => $value['descripcion']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 		
-			$this->table->set_heading($this->lang_item("id"),$this->lang_item("tbl_articulo"),$this->lang_item("tbl_clv"),$this->lang_item("tbl_descrip"));
+			$this->table->set_heading($this->lang_item("id"),$this->lang_item("articulo"),$this->lang_item("cvl_corta"),$this->lang_item("descripcion"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		
 			$data_tab['tabla'] = $tabla;
 		}else{
-			$msg = $this->lang_item("msg_searh_fail");
+			$msg = $this->lang_item("msg_searh_fail", false);
 			
 			$data_tab['tabla'] = alertas_tpl('', $msg ,false);
 		}
@@ -67,7 +67,7 @@ class catalogo_articulos extends Base_Controller {
 		
 		if(!$post){
 
-			$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+			$data['titulo_seccion']   = $this->lang_item("articulo");
 			$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 			$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
 			$data_includes['js'][]    = array('name' => 'catalogo_articulos', 'dirname' => 'inventario');
@@ -112,7 +112,7 @@ class catalogo_articulos extends Base_Controller {
 
 			$data["nombre_articulo"] = $this->lang_item("nombre_articulo");
 			$data["cvl_corta"]       = $this->lang_item("cvl_corta");
-			$data["descrip"]         = $this->lang_item("descrip");
+			$data["descrip"]         = $this->lang_item("descripcion");
 			$data["guardar"]         = $this->lang_item("btn_guardar");
 			$data["limpiar"]         = $this->lang_item("btn_limpiar");
 
@@ -137,7 +137,7 @@ class catalogo_articulos extends Base_Controller {
 
 		$data_detalle["nombre_articulo"]  = $this->lang_item("nombre_articulo");
 		$data_detalle["cvl_corta"]        = $this->lang_item("cvl_corta");
-		$data_detalle["descrip"]          = $this->lang_item("descrip");
+		$data_detalle["descrip"]          = $this->lang_item("descripcion");
 		$data_detalle["registro_por"]     = $this->lang_item("registro_por");
 		$data_detalle["fecha_registro"]   = $this->lang_item("fecha_registro");
 		$data_detalle["guardar"]          = $this->lang_item("btn_guardar");

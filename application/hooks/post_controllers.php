@@ -58,7 +58,7 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'inicio';
 			$sites_availables[] = 'logout';
 			$sites_availables[] = 'login';
-			$sites_availables[] = '404_override';
+			$sites_availables[] = '404_override'; 
 
 			
 			if(!in_array($uri_string, $sites_availables)){

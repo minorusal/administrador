@@ -12,15 +12,13 @@ class check_session extends Base_Controller
 		$interseccion = null;
 		$ajax = $this->ci->ajax_post(false);
 		if( $this->ci->uri->segment(1) != 'login' ){
-			if($this->ci->uri->segment(1) != 'login' ){
-				if(!$this->ci->session->userdata('is_logged')){
-					if($ajax){
-						$msg = $this->ci->lang_item("msg_seesion_destroy");
-						echo json_encode(alertas_tpl('error', $msg ,false));
-						exit;
-					}else{
-						redirect(base_url('login'));
-					}
+			if(!$this->ci->session->userdata('is_logged')){
+				if($ajax){
+					$msg = $this->ci->lang_item("msg_seesion_destroy");
+					echo json_encode(alertas_tpl('error', $msg ,false));
+					exit;
+				}else{
+					redirect(base_url('login'));
 				}
 			}
 		}else{
@@ -49,9 +47,14 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'login';
 			$sites_availables[] = '404_override'; 
 			if(!in_array($uri_string, $sites_availables)){
-				if(!$ajax){
-					redirect(base_url('404_override'));
+				if($uri_string==''){
+					redirect(base_url('inicio'));
+				}else{
+					if(!$ajax){
+						redirect(base_url('404_override'));
+					}
 				}
+				
 			}
 		}
 	}

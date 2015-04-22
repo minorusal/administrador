@@ -48,12 +48,7 @@ class login extends Base_Controller {
 			if($data_count>1){
 				echo json_encode($this->tbl_multiples_perfiles($data));
 			}else{
-				//$data_modulos                = $this->users_model->search_modules_for_user($data[0]['id_modulo']);
-				//$array_navigator             = $this->buil_array_navigator($data_modulos);
-				//$data[0]['sites_availables'] = $array_navigator[0];
-				//$data[0]['modulos']          = $array_navigator;
 				$this->session->set_userdata($data[0]);
-
 				echo 1;
 			}
 		}else{
@@ -134,7 +129,7 @@ class login extends Base_Controller {
 
 		$tbl_info[] = array(
 								'image'  => $avatar,
-								'msg'    => $this->lang_item('modal_msg')
+								'msg'    => $this->lang_item('modal_msg',false)
 						);
 		$perfiles = $this->table->generate($tbl_data);
 		

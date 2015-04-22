@@ -48,10 +48,10 @@ class login extends Base_Controller {
 			if($data_count>1){
 				echo json_encode($this->tbl_multiples_perfiles($data));
 			}else{
-				$data_modulos                = $this->users_model->search_modules_for_user($data[0]['id_modulo']);
-				$array_navigator             = $this->buil_array_navigator($data_modulos);
-				$data[0]['sites_availables'] = $array_navigator[0];
-				$data[0]['modulos']          = $array_navigator[1];
+				//$data_modulos                = $this->users_model->search_modules_for_user($data[0]['id_modulo']);
+				//$array_navigator             = $this->buil_array_navigator($data_modulos);
+				//$data[0]['sites_availables'] = $array_navigator[0];
+				//$data[0]['modulos']          = $array_navigator;
 				$this->session->set_userdata($data[0]);
 
 				echo 1;
@@ -60,35 +60,7 @@ class login extends Base_Controller {
 			echo 0;
 		}
 	}
-	/**
-	* Prepara un array para la construccion
-	* del panel de navegacion 
-	* @param array $array_navigator
-	* @return array
-	*/
-	function buil_array_navigator($navigator){
-		foreach ($navigator as $key => $value) {
-			$route = "";
-			if(!is_null($value['submodulo'])){
-				if(!is_null($value['seccion'])){
-					$route = $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes'];
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $route);
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = $value['submodulo_icon'];
-					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
-				}else{
-					$route = $value['modulo'].'/'.$value['submodulo_routes'];
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $route);
-					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
-				}
-			}else{
-				$route = $value['modulo_routes'];
-				$data_navigator[$value['modulo']] = array('icon'=>$value['modulo_icon'], 'routes' => $route);
-			}
-			$sites_availables[] = $route;
-		}
-		$data = array($sites_availables, $data_navigator);
-		return $data;
-	}
+	
 
 	/**
 	* Recontruye el array devuelto por la consulta 

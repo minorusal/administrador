@@ -34,11 +34,19 @@ class Base_Controller extends CI_Controller {
     */
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 		$this->lang_load("navigate");
-
 		$ext      = ($ext!='.html') ? '': $ext;
-		$items    = $this->session->userdata('modulos');
+		$items    = $this->session->userdata('id_modulo');
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
+		
+		$this->load->database('global_system',TRUE);
+		$this->load->model('users_model');
+		$data_modulos = $this->users_model->search_modules_for_user($items);
+		$data_modulos = $this->buil_array_navigator($data_modulos);
+		
+
+		$this->session->set_userdata('sites_availables', $data_modulos[0]);
+		$items    =  $data_modulos[1];
 
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
@@ -52,7 +60,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
 		
-		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' &raquo; ');
+		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
 
 		$datafooter = array();
@@ -156,6 +164,37 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
+	* Prepara un array para la construccion
+	* del panel de navegacion 
+	* @param array $array_navigator
+	* @return array
+	*/
+	function buil_array_navigator($navigator){
+		foreach ($navigator as $key => $value) {
+			$route = "";
+			if(!is_null($value['submodulo'])){
+				if(!is_null($value['seccion'])){
+					$route = $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes'];
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $route);
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = $value['submodulo_icon'];
+					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
+				}else{
+					$route = $value['modulo'].'/'.$value['submodulo_routes'];
+					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $route);
+					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
+				}
+			}else{
+				$route = $value['modulo_routes'];
+				$data_navigator[$value['modulo']] = array('icon'=>$value['modulo_icon'], 'routes' => $route);
+			}
+			$sites_availables[] = $route;
+		}
+		$data = array($sites_availables, $data_navigator);
+
+		return $data;
+	}
+
+	/**
     * Contruye el Panel de navegacion
     * @param array $items
     * @param array $uri
@@ -168,6 +207,7 @@ class Base_Controller extends CI_Controller {
 	    $style_ul = "";
 	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='' $style_ul>";}
 	    foreach ($items as $item => $subitems) {
+
 	        $mod_dropdown = "";
 	       	$content      = "";	
 	       	$routes       = "";

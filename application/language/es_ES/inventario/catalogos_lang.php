@@ -1,5 +1,6 @@
 <?php
-
+	
+	/*USOS MULTIPLES*/
 	$lang['lang_titulo_submodulo'] = 'Catalogos';
 	$lang['lang_tool_tip']         = 'Ver Detalle';
 	$lang['lang_sin_descripcion']  = 'Sin descripción';
@@ -11,16 +12,15 @@
 	$lang['lang_registro_por']    = 'Registrado por';
 	$lang['lang_msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
-	/*Articulos*/
+	/*ARTICULOS*/
 
 	$lang['lang_articulo']         = 'Articulos';
 	$lang['lang_nuevo_articulo']   = 'Nuevo Articulo';
 	$lang['lang_listado_articulo'] = 'Listado articulos';
 	$lang['lang_detalle_articulo'] = 'detalle articulos';
 	$lang['lang_nombre_articulo']  = 'Nombre del Articulo';
-
 	
-	/*Lineas*/
+	/*LINEAS*/
 
 	$lang['lang_linea']         = 'lineas';
 	$lang['lang_nueva_linea']   = 'Nueva linea';
@@ -28,14 +28,14 @@
 	$lang['lang_detalle_linea'] = 'detalle de linea';
 	$lang['lang_nombre_linea']  = 'Nombre de la linea';
 
-	/*Unidad de Medida*/
+	/*UNIDAD DE MEDIDA*/
 
 	$lang['lang_um']         = 'Unidad de medida';
 	$lang['lang_nueva_um']   = 'Nueva U.M.';
 	$lang['lang_listado_um'] = 'Unidades de Medida';
 	$lang['lang_detalle_um'] = 'detalle de U.M.';
 
-	/*Marcas*/
+	/*MARCAS*/
 
 	$lang['lang_marcas']         = 'Marcas';
 	$lang['lang_nueva_marcas']   = 'nueva Marca';

@@ -1,11 +1,11 @@
 <?php
-$lang['lang_inventario']   = 'inventario';	
-$lang['lang_catalogos']    = 'catalogos';
-$lang['lang_articulos']    = 'articulos';	
-$lang['lang_lineas']       = 'lineas';	
+$lang['inventario']   = 'inventario';	
+$lang['catalogos']    = 'catalogos';
+$lang['articulos']    = 'articulos';	
+$lang['lineas']       = 'lineas';	
 
 
-$lang['lang_close_session'] = 'Cerrar Sesión';	
+$lang['close_session'] = 'Cerrar Sesión';	
 
 
 ?>

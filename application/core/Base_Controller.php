@@ -270,10 +270,18 @@ class Base_Controller extends CI_Controller {
     * contabilizando a partir del dominio
     * Ejemplo http://domain.com/sitio/pagina/3
     * el valor devuleto sera 4
-    * @return void
+    * @return int
     */
     public function uri_segment(){
     	return $this->uri->total_segments();
+    }
+
+    /**
+    * Devuleve la URL actual
+    * @return string
+    */
+    public function uri_string(){
+    	return $this->uri->uri_string();
     }
 
     /**
@@ -306,7 +314,7 @@ class Base_Controller extends CI_Controller {
 
     public function lang_item($index, $format = true){
     	$index = str_replace('lang_', '', $index);
-    	$lang_item = ($this->lang->line('lang_'.$index)) ? $this->lang->line('lang_'.$index) : $index;
+    	$lang_item = ($this->lang->line($index)) ? $this->lang->line($index) : $index;
     	
     	if($format==true){
     		$lang_item = text_format_tpl($lang_item);

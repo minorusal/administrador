@@ -83,6 +83,7 @@ function obj2json(_data){
 }
 
 function redirect(uri){
+    jQuery('.ui-tabs-panel').html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
     location.href = uri;
 }
 

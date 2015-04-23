@@ -39,19 +39,18 @@ class Base_Controller extends CI_Controller {
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
 		
+
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 		$data_modulos = $this->users_model->search_modules_for_user($items);
 		$data_modulos = $this->buil_array_navigator($data_modulos);
-		
-
+		$items        =  $data_modulos[1];
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);
-		$items    =  $data_modulos[1];
-
+		
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
-		$dataheader['panel_navigate'] = $this->buil_panel_navigate($items,$uri);
+		$dataheader['panel_navigate'] = $this->buil_panel_navigate($items,$uri );
 		$dataheader['avatar_user']    = $this->session->userdata('avatar_user');
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
@@ -174,12 +173,12 @@ class Base_Controller extends CI_Controller {
 			$route = "";
 			if(!is_null($value['submodulo'])){
 				if(!is_null($value['seccion'])){
-					$route = $value['modulo'].'/'.$value['submodulo'].'/'.$value['seccion_routes'];
+					$route = $value['seccion_routes'];
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $route);
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = $value['submodulo_icon'];
 					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
 				}else{
-					$route = $value['modulo'].'/'.$value['submodulo_routes'];
+					$route = $value['submodulo_routes'];
 					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $route);
 					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
 				}
@@ -223,6 +222,7 @@ class Base_Controller extends CI_Controller {
 	        if(array_key_exists('content', $subitems)){
 	        	$mod_dropdown = "dropdown";
 	        	$content     .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
+	        	$routes       = base_url();
 	        	$icon         = $subitems['icon'];
 	        	$sub_nivel    = "<span class='iconfa-circle-arrow-down' style='float:right;'></span>";
 	        }else{

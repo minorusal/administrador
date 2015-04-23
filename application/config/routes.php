@@ -51,35 +51,35 @@ $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
 /*******/
 
-/*INVENTARIO*/
+/*compras*/
 
 /*Catalogo Articulos*/
-$route['inventario/catalogos/articulos']           = 'inventario/catalogo_articulos/articulos';
-$route['inventario/catalogos/articulos/(:num)']    = 'inventario/catalogo_articulos/articulos/$1';
-$route['inventario/catalogos/agregar_articulo']    = 'inventario/catalogo_articulos/agregar_articulo';
-$route['inventario/catalogos/detalle_articulo']    = 'inventario/catalogo_articulos/detalle_articulo';
-$route['inventario/catalogos/actualizar_articulo'] = 'inventario/catalogo_articulos/actualizar_articulo';
+$route['compras/catalogos/articulos']           = 'compras/catalogo_articulos/articulos';
+$route['compras/catalogos/articulos/(:num)']    = 'compras/catalogo_articulos/articulos/$1';
+$route['compras/catalogos/agregar_articulo']    = 'compras/catalogo_articulos/agregar_articulo';
+$route['compras/catalogos/detalle_articulo']    = 'compras/catalogo_articulos/detalle_articulo';
+$route['compras/catalogos/actualizar_articulo'] = 'compras/catalogo_articulos/actualizar_articulo';
 
 /*Catalogo Lineas*/
-$route['inventario/catalogos/lineas']           = 'inventario/catalogo_lineas/lineas';
-$route['inventario/catalogos/lineas/(:num)']    = 'inventario/catalogo_lineas/lineas/$1';
-$route['inventario/catalogos/agregar_linea']    = 'inventario/catalogo_lineas/agregar_linea';
-$route['inventario/catalogos/detalle_linea']    = 'inventario/catalogo_lineas/detalle_linea';
-$route['inventario/catalogos/actualizar_linea'] = 'inventario/catalogo_lineas/actualizar_linea';
+$route['compras/catalogos/lineas']           = 'compras/catalogo_lineas/lineas';
+$route['compras/catalogos/lineas/(:num)']    = 'compras/catalogo_lineas/lineas/$1';
+$route['compras/catalogos/agregar_linea']    = 'compras/catalogo_lineas/agregar_linea';
+$route['compras/catalogos/detalle_linea']    = 'compras/catalogo_lineas/detalle_linea';
+$route['compras/catalogos/actualizar_linea'] = 'compras/catalogo_lineas/actualizar_linea';
 
 /*Catalogo de U.M.*/
-$route['inventario/catalogos/um']            = 'inventario/catalogo_um/um';
-$route['inventario/catalogos/um/(:num)']     = 'inventario/catalogo_um/um/$1';
-$route['inventario/catalogos/agregar_um']    = 'inventario/catalogo_um/agregar_um';
-$route['inventario/catalogos/detalle_um']    = 'inventario/catalogo_um/detalle_um';
-$route['inventario/catalogos/actualizar_um'] = 'inventario/catalogo_um/actualizar_um';
+$route['compras/catalogos/um']            = 'compras/catalogo_um/um';
+$route['compras/catalogos/um/(:num)']     = 'compras/catalogo_um/um/$1';
+$route['compras/catalogos/agregar_um']    = 'compras/catalogo_um/agregar_um';
+$route['compras/catalogos/detalle_um']    = 'compras/catalogo_um/detalle_um';
+$route['compras/catalogos/actualizar_um'] = 'compras/catalogo_um/actualizar_um';
 
 /*Catalogo de Marcas*/
-$route['inventario/catalogos/marcas']            = 'inventario/catalogo_marcas/marcas';
-$route['inventario/catalogos/marcas/(:num)']     = 'inventario/catalogo_marcas/marcas/$1';
-$route['inventario/catalogos/agregar_marcas']    = 'inventario/catalogo_marcas/agregar_marcas';
-$route['inventario/catalogos/detalle_marcas']    = 'inventario/catalogo_marcas/detalle_marcas';
-$route['inventario/catalogos/actualizar_marcas'] = 'inventario/catalogo_marcas/actualizar_marcas';
+$route['compras/catalogos/marcas']            = 'compras/catalogo_marcas/marcas';
+$route['compras/catalogos/marcas/(:num)']     = 'compras/catalogo_marcas/marcas/$1';
+$route['compras/catalogos/agregar_marcas']    = 'compras/catalogo_marcas/agregar_marcas';
+$route['compras/catalogos/detalle_marcas']    = 'compras/catalogo_marcas/detalle_marcas';
+$route['compras/catalogos/actualizar_marcas'] = 'compras/catalogo_marcas/actualizar_marcas';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

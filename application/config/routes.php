@@ -51,7 +51,7 @@ $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
 /*******/
 
-/*compras*/
+/*COMPRAS*/
 
 /*Catalogo Articulos*/
 $route['compras/catalogos/presentaciones']            = 'compras/catalogo_presentaciones/presentaciones';

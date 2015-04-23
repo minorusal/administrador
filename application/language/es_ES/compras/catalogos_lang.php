@@ -15,10 +15,10 @@
 	/*PRESENTACIONESS*/
 
 	$lang['lang_presentaciones']         = 'presentaciones';
-	$lang['lang_nuevo_presentaciones']   = 'Nuevo presentaciones';
-	$lang['lang_listado_presentaciones'] = 'Listado presentaciones';
-	$lang['lang_detalle_presentaciones'] = 'detalle presentaciones';
-	$lang['lang_nombre_presentaciones']  = 'Nombre del presentaciones';
+	$lang['lang_nuevo_presentaciones']   = 'Nueva Presentacion';
+	$lang['lang_listado_presentaciones'] = 'presentaciones';
+	$lang['lang_detalle_presentaciones'] = 'presentacion';
+	$lang['lang_nombre_presentaciones']  = 'presentacion';
 	
 	/*LINEAS*/
 

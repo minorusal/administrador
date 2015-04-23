@@ -2,7 +2,7 @@
 
 class catalogo_lineas extends Base_Controller {
 	
-	var $uri_string  = 'compras/catalogos/';
+	var $uri_string   = 'compras/catalogos/';
 	var $view_content =  'compras/content';
 	public function __construct(){
 		parent::__construct();
@@ -109,7 +109,6 @@ class catalogo_lineas extends Base_Controller {
 		}else{
 			$uri_string  = $this->uri_string;
 
-
 			$data["nombre_linea"]    = $this->lang_item("nombre_linea");
 			$data["cvl_corta"]       = $this->lang_item("cvl_corta");
 			$data["descrip"]         = $this->lang_item("descripcion");
@@ -154,13 +153,11 @@ class catalogo_lineas extends Base_Controller {
 
 	public function actualizar_linea(){
 
-
 		$linea    = $this->ajax_post('linea');
 		$clave_corta = $this->ajax_post('clave_corta');
 			if(($linea)&&($clave_corta)){
 
-				$id_linea = $this->ajax_post('id_linea');
-				
+				$id_linea    = $this->ajax_post('id_linea');
 				$descripcion = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
 				
 				$data_update = array('linea'   => text_format_tpl($linea),

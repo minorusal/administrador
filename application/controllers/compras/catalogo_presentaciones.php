@@ -70,6 +70,7 @@ class catalogo_presentaciones extends Base_Controller {
 			$data['titulo_seccion']   = $this->lang_item("presentaciones");
 			$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 			$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
+			$data['icon']             = 'iconfa-book';
 			$data_includes['js'][]    = array('name' => 'catalogo_presentaciones', 'dirname' => 'compras');
 
 			$this->load_view($view_content, $data, $data_includes);

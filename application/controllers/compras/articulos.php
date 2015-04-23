@@ -35,12 +35,11 @@ class articulos extends Base_Controller {
 		return $uri;
 	}
 
-
 	public function index(){
 		
 		$data['titulo_seccion']   = $this->lang_item("articulos");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-
+		$data['icon']             = 'fa fa-cubes';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($this->uri_string()),1,'');
 
 		$this->load_view($this->uri_view(), $data);

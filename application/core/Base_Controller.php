@@ -216,6 +216,7 @@ class Base_Controller extends CI_Controller {
 	       	$sub_nivel    = "";
 	       	$bool         = false;
 	       	$lang_item    = "";
+	       	$class_clik   = "";
 	       	if(in_array(strtolower($item), $uri)){
 	        	$active  = "active";
 	        	$bool    = true;
@@ -225,14 +226,15 @@ class Base_Controller extends CI_Controller {
 	        	$content     .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
 	        	$routes       = base_url();
 	        	$icon         = $subitems['icon'];
+	        	$class_clik   = "";
 	        	$sub_nivel    = "<span class='iconfa-circle-arrow-down' style='float:right;'></span>";
 	        }else{
-	        	$routes = base_url().$subitems['routes'];
-	        	$icon   = $subitems['icon'] ;
+	        	$routes       = base_url().$subitems['routes'];
+	        	$icon         = $subitems['icon'] ;
+	        	$class_clik   = "load_controller";
 	        }
 	        $lang_item = $this->lang_item($item);
-
-    		$panel .= "<li class='$mod_dropdown $active '><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
+    		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
 	    }
@@ -350,8 +352,5 @@ class Base_Controller extends CI_Controller {
 		}
 		return trim($string, $separator);
 	}
-
-
-
 }
 ?>

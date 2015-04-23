@@ -1,7 +1,12 @@
  jQuery(document).ready(function() {
     jQuery(".tabbedwidget").tabs();  
     window.onload = live_clock;
-    tool_tips();    
+    tool_tips();
+
+    jQuery( ".load_controller" ).click(function() {
+        jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader25.gif"/>');
+        //jQuery(".maincontent").hide('slow');
+    });
 });
 function tool_tips(){
     jQuery('a[data-rel]').each(function() {

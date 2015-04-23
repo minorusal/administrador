@@ -2,8 +2,8 @@
 
 class catalogo_marcas extends Base_Controller {
 	
-	var $uri_string  = 'compras/catalogos/';
-
+	var $uri_string   =  'compras/catalogos/';
+	var $view_content =  'compras/content';
 	public function __construct(){
 		parent::__construct();
 		$load_model  = $this->load->model('compras/catalogos_model');
@@ -26,6 +26,7 @@ class catalogo_marcas extends Base_Controller {
 		$tabs        = $this->ajax_post('tabs');
 		
 		$uri_string  = $this->uri_string;
+		$view_content= $this->view_content;
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = (!$filtro)?$this->catalogos_model->get_marcas($limit, $offset) : $this->catalogos_model->filtrar_marcas($filtro);
@@ -72,7 +73,7 @@ class catalogo_marcas extends Base_Controller {
 			$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
 			$data_includes['js'][]    = array('name' => 'catalogo_marcas', 'dirname' => 'compras');
 
-			$this->load_view($uri_string.'catalogos', $data, $data_includes);
+			$this->load_view($view_content , $data, $data_includes);
 		}else{
 			echo json_encode($view);
 		}

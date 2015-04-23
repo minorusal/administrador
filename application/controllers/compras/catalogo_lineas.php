@@ -3,7 +3,7 @@
 class catalogo_lineas extends Base_Controller {
 	
 	var $uri_string  = 'compras/catalogos/';
-
+	var $view_content =  'compras/content';
 	public function __construct(){
 		parent::__construct();
 		$load_model  = $this->load->model('compras/catalogos_model');
@@ -24,7 +24,7 @@ class catalogo_lineas extends Base_Controller {
 		$post        = $this->ajax_post(false);
 		$filtro      = $this->ajax_post('filtro');
 		$tabs        = $this->ajax_post('tabs');
-		
+		$view_content= $this->view_content;
 		$uri_string  = $this->uri_string;
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
@@ -72,7 +72,7 @@ class catalogo_lineas extends Base_Controller {
 			$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($uri_string),2,$view);
 			$data_includes['js'][]    = array('name' => 'catalogo_lineas', 'dirname' => 'compras');
 
-			$this->load_view($uri_string.'catalogos', $data, $data_includes);
+			$this->load_view($view_content, $data, $data_includes);
 		}else{
 			echo json_encode($view);
 		}

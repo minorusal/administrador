@@ -54,11 +54,11 @@ $route['logout']                   = 'login/logout';
 /*compras*/
 
 /*Catalogo Articulos*/
-$route['compras/catalogos/articulos']           = 'compras/catalogo_articulos/articulos';
-$route['compras/catalogos/articulos/(:num)']    = 'compras/catalogo_articulos/articulos/$1';
-$route['compras/catalogos/agregar_articulo']    = 'compras/catalogo_articulos/agregar_articulo';
-$route['compras/catalogos/detalle_articulo']    = 'compras/catalogo_articulos/detalle_articulo';
-$route['compras/catalogos/actualizar_articulo'] = 'compras/catalogo_articulos/actualizar_articulo';
+$route['compras/catalogos/presentaciones']            = 'compras/catalogo_presentaciones/presentaciones';
+$route['compras/catalogos/presentaciones/(:num)']     = 'compras/catalogo_presentaciones/presentaciones/$1';
+$route['compras/catalogos/agregar_presentaciones']    = 'compras/catalogo_presentaciones/agregar_presentaciones';
+$route['compras/catalogos/detalle_presentaciones']    = 'compras/catalogo_presentaciones/detalle_presentaciones';
+$route['compras/catalogos/actualizar_presentaciones'] = 'compras/catalogo_presentaciones/actualizar_presentaciones';
 
 /*Catalogo Lineas*/
 $route['compras/catalogos/lineas']           = 'compras/catalogo_lineas/lineas';

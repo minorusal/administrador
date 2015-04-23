@@ -12,13 +12,13 @@
 	$lang['lang_registro_por']    = 'Registrado por';
 	$lang['lang_msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
-	/*ARTICULOS*/
+	/*PRESENTACIONESS*/
 
-	$lang['lang_articulo']         = 'Articulos';
-	$lang['lang_nuevo_articulo']   = 'Nuevo Articulo';
-	$lang['lang_listado_articulo'] = 'Listado articulos';
-	$lang['lang_detalle_articulo'] = 'detalle articulos';
-	$lang['lang_nombre_articulo']  = 'Nombre del Articulo';
+	$lang['lang_presentaciones']         = 'presentaciones';
+	$lang['lang_nuevo_presentaciones']   = 'Nuevo presentaciones';
+	$lang['lang_listado_presentaciones'] = 'Listado presentaciones';
+	$lang['lang_detalle_presentaciones'] = 'detalle presentaciones';
+	$lang['lang_nombre_presentaciones']  = 'Nombre del presentaciones';
 	
 	/*LINEAS*/
 

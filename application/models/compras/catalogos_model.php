@@ -1,19 +1,19 @@
 <?php
 class catalogos_model extends Base_Model{
 	
-	/*ARTICULOS*/
-	public function filtrar_articulos($data){
+	/*PRESENTACIONES*/
+	public function filtrar_presentaciones($data){
 		$query = "SELECT 
-					ca.id_cat_articulo
-					,ca.articulo
+					ca.id_cat_presentaciones
+					,ca.presentaciones
 					,ca.clave_corta
 					,ca.descripcion
 				FROM
-					av_cat_articulos ca
+					av_cat_presentaciones ca
 				WHERE 
 					ca.activo = 1
 				AND (
-					ca.articulo like '%$data%'
+					ca.presentaciones like '%$data%'
 				OR 
 					ca.clave_corta like '%$data%'
 				OR
@@ -24,32 +24,32 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function detalle_articulos($data){
+	public function detalle_presentaciones($data){
 		$query = "SELECT 
-					ca.id_cat_articulo
-					,ca.articulo
+					ca.id_cat_presentaciones
+					,ca.presentaciones
 					,ca.clave_corta
 					,ca.descripcion
 					,ca.timestamp
 					,ca.id_usuario
 				FROM
-					av_cat_articulos ca
+					av_cat_presentaciones ca
 				WHERE 
-					ca.id_cat_articulo = $data";
+					ca.id_cat_presentaciones = $data";
 
        $query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
-	public function get_articulos($limit, $offset){
+	public function get_presentaciones($limit, $offset){
 		$query = "SELECT 
-					ca.id_cat_articulo
-					,ca.articulo
+					ca.id_cat_presentaciones
+					,ca.presentaciones
 					,ca.clave_corta
 					,ca.descripcion
 				FROM
-					av_cat_articulos ca
+					av_cat_presentaciones ca
 				WHERE ca.activo = 1
 
 				LIMIT $offset ,$limit";
@@ -59,19 +59,19 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_total_articulos(){
+	public function get_total_presentaciones(){
 		$query = "SELECT 
 					*
 				FROM
-					av_cat_articulos ca
+					av_cat_presentaciones ca
 				WHERE ca.activo = 1";
        	$query = $this->db->query($query);
         return $query->num_rows();
     }
-	public function insert_articulos($data){
-		$existe = $this->row_exist('av_cat_articulos', array('clave_corta'=> $data['clave_corta']));
+	public function insert_presentaciones($data){
+		$existe = $this->row_exist('av_cat_presentaciones', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_cat_articulos', $data);
+			$query = $this->db->insert_string('av_cat_presentaciones', $data);
 			$query = $this->db->query($query);
 
 			return $query;
@@ -79,12 +79,12 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
-	public function update_articulos($data, $id_usuario){
-		$condicion = array('id_cat_articulo !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_cat_articulos', $condicion );
+	public function update_presentaciones($data, $id_usuario){
+		$condicion = array('id_cat_presentaciones !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_presentaciones', $condicion );
 		if(!$existe){
-			$condicion = "id_cat_articulo = $id_usuario"; 
-			$query = $this->db->update_string('av_cat_articulos', $data, $condicion);
+			$condicion = "id_cat_presentaciones = $id_usuario"; 
+			$query = $this->db->update_string('av_cat_presentaciones', $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{

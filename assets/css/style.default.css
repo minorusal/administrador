@@ -23,7 +23,8 @@ Created by: Mienard Lumaad (@themepixels)
 @import url('font-awesome.min.css');
 @import url('font-awesome.min.tpl.css');
 
-
+.chzn-container .chzn-results .highlighted 
+{ background-color: #0866c6; }
 /***** RESET BROWSER STYLE *****/
 /*******************************/
 
@@ -94,7 +95,7 @@ h1,h2,h3,h4,h5 { font-weight: normal; line-height: normal; }
 
 /*** HEADER ***/
 
-.header { background: #0866c6; clear: both; height: 110px; }
+.header { background: #0866c6; clear: both; height: 125px; }
 .headerinner { margin-left: 260px; }
 .header .logo { width: 260px; text-align: center; padding-top: 40px; float: left; }
 

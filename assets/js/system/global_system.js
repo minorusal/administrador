@@ -25,7 +25,7 @@ function path(){
     
     var pathname = window.location.pathname;
     var hostname = pathname.split('/');
-    if(document.domain=="localhost"){
+    if(document.domain=="192.168.230.14"){
         hostname = '/'+hostname[1]+'/';
     }else{
         hostname = '/';

@@ -42,7 +42,8 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_presentaciones($limit, $offset){
+	public function get_presentaciones($limit, $offset, $aplicar_limit = true){
+		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 					ca.id_cat_presentaciones
 					,ca.presentaciones
@@ -52,7 +53,7 @@ class catalogos_model extends Base_Model{
 					av_cat_presentaciones ca
 				WHERE ca.activo = 1
 
-				LIMIT $offset ,$limit";
+				$limit";
        
        $query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -133,7 +134,10 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_lineas($limit, $offset){
+	public function get_lineas($limit, $offset, $aplicar_limit = true){
+		
+		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+
 		$query = "SELECT 
 					c.id_cat_linea
 					,c.linea
@@ -143,7 +147,7 @@ class catalogos_model extends Base_Model{
 					av_cat_lineas c
 				WHERE c.activo = 1
 
-				LIMIT $offset ,$limit";
+				$limit";
        
        $query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -224,7 +228,8 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_um($limit, $offset){
+	public function get_um($limit, $offset, $aplicar_limit = true){
+		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 					c.id_cat_um
 					,c.um
@@ -234,7 +239,7 @@ class catalogos_model extends Base_Model{
 					av_cat_um c
 				WHERE c.activo = 1
 
-				LIMIT $offset ,$limit";
+				$limit";
        
        $query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -315,7 +320,8 @@ class catalogos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_marcas($limit, $offset){
+	public function get_marcas($limit, $offset, $aplicar_limit = true){
+		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 					c.id_cat_marcas
 					,c.marcas
@@ -325,7 +331,7 @@ class catalogos_model extends Base_Model{
 					av_cat_marcas c
 				WHERE c.activo = 1
 
-				LIMIT $offset ,$limit";
+				$limit";
        
        $query = $this->db->query($query);
 		if($query->num_rows >= 1){

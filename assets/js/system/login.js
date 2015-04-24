@@ -8,6 +8,7 @@ jQuery(document).ready(function(){
 	    if(keycode == '13'){
 	        authentication();
 	    }
+
 	});
 	jQuery('#pwd').keypress(function(event){
 	    var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -15,9 +16,14 @@ jQuery(document).ready(function(){
 	       authentication();
 	    }
 	});
+	 jQuery('a[data-rel]').each(function() {
+            jQuery(this).attr('rel', jQuery(this).data('rel'));
+        });
+
 });
 
 function authentication(){
+
 	var user     = jQuery('#user').val();
 	var pwd      = jQuery('#pwd').val();
 	var id_user  = jQuery('#id_user').val();
@@ -27,33 +33,25 @@ function authentication(){
 		dataType: 'json',
 		data: {id_user: id_user,user: user, pwd: pwd},
 		success: function(data){
+
 			switch (data){
 				case 0:
-						jQuery(location).attr('href','login');
+					jQuery(location).attr('href','login');
 					break
 				case 1:
-						jQuery(location).attr('href','inicio');
+					jQuery(location).attr('href','inicio');
 					break
 				default:
 					var promp_content = {
 									content_01:{
 										html:data,
-										buttons: { },
-										submit:function(e,v,m,f){
-											if(v){
-												e.preventDefault();
-												var id_usuario = jQuery('input:radio[name=perfil_ingreso]:checked').val();
-												jQuery('#id_user').val(id_usuario);
-												authentication();
-												return false;
-											}
-											clean_form_login();
-										}
+										buttons: { }
 									}
 								};
 					jQuery.prompt(promp_content);
 					setTimeout("clean_form_login()",60000);
 					break
+					
 			}
 		}
 	});

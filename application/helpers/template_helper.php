@@ -31,12 +31,12 @@
 								</a>
 							</li>";
 
-				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='$display'>
+				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='overflo $display'>
         							$data
     								</div>";
 			}
 
-			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all'>";
+			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:visible;'>";
     		$tabbed .= "<ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all' role='tablist'>";
     		$tabbed .= $tabs_li;
     		$tabbed .= "</ul>";
@@ -87,6 +87,25 @@
 		}
 	}
 
+	if(!function_exists('dropdown_tpl')){
+		function dropdown_tpl($data = array(), $key, $value, $ident = ""){
+			
+			$name = ($ident=="")?"selected": $ident;
+			$count = 0;
+			foreach ($data as $option => $item) {
+				if($count==0){
+					$options[0]= '-----';
+				}
+				$options[$item[$key]]= $item[$value];
+				$count++;
+			}
+
+			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, '', ' data-placeholder="Choose a Country..." class="chzn-select"').'</span>';
+			
+			return $selected;
+		}
+	}
+
 	if(!function_exists('_attr_tpl')){
 		function _attr_tpl($input = array()){
 			if(!empty($input)){
@@ -97,6 +116,8 @@
 			return $output ;
 		}
 	}
+
+	
 }
 		
 ?>

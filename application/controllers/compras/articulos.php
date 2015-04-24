@@ -9,6 +9,7 @@ class articulos extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model($this->uri_segment.'articulos_model');
+		$this->load->model($this->uri_segment.'catalogos_model');
 		$this->lang->load("compras/articulos","es_ES");
 	}
 
@@ -37,11 +38,20 @@ class articulos extends Base_Controller {
 
 	public function index(){
 		
+		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false),'id_cat_presentaciones', 'presentaciones');
+		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false),'id_cat_linea', 'linea');
+		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false),'id_cat_um', 'um');
+		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false),'id_cat_marcas', 'marcas');
+
+		
 		$data['titulo_seccion']   = $this->lang_item("articulos");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = 'fa fa-cubes';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($this->uri_string()),1,'');
-
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url($this->uri_string()),1,"$marcas<br>$presentaciones<br>$lineas<br>$um");
+		
 		$this->load_view($this->uri_view(), $data);
 	}
+
+
+
 }

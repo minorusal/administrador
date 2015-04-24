@@ -47,7 +47,8 @@ body.loginpage,
 .btn-primary[disabled],
 .btn-group.open .btn-primary.dropdown-toggle,
 .fc-widget-header,
-.fc-widget-header.fc-agenda-gutter.fc-last
+.fc-widget-header.fc-agenda-gutter.fc-last,
+.chzn-container .chzn-results .highlighted 
 { background-color: #47755e; }
 
 

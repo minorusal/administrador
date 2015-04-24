@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="{base_url}assets/js/template/jquery-ui-1.9.2.min.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/modernizr.min.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{base_url}assets/js/template/chosen.jquery.min.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/jquery.cookie.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/jquery.uniform.min.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/flot/jquery.flot.min.js"></script>
@@ -23,32 +24,30 @@
         <!--Archivos del sistema -->
         <script type="text/javascript" src="{base_url}assets/js/system/global_system.js"></script>
 		<script type="text/javascript" src="{base_url}assets/js/template/custom.js"></script>
+		<script type="text/javascript" src="{base_url}assets/js/template/forms.js"></script>
 		<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{base_url}assets/js/excanvas.min.js"></script><![endif]-->
 		<!-- Js de cada seccion -->
 		{data_js}
 	</head>
 	<body>
-		<div class="mainwrapper">
-			<div class="header" style="overflow:hidden;height:auto;">
+		<div class="mainwrapper" >
+			<div class="header" >
 		        <div class="logo">
 		            <a href="{base_url}"><img src="{base_url}assets/images/logo.png" alt="" /></a>
 		        </div>
 		        <!--headmenu-->
-		        <div class="headerinner">
+		        <div class="headerinner" >
 				    <ul class="headmenu">
 				        <li class="right">
 				            <div class="userloggedinfo">
 				                <img src="{base_url}assets/avatar/{avatar_user}" style="max-width:80px;max-height:90px;" alt="" />
+				                <img  src="{base_url}assets/avatar/{avatar_pais}" style="background:transparent;max-width:16px;max-height:16px;" />
 				                <div class="userinfo">
-				                    
+				                    <h5 style="font-style:italic;">{user_name} </h5>
 				                    <ul>
-				                    	<h5 style="font-style:italic;">
-					                    	<img  src="{base_url}assets/avatar/{avatar_pais}" style="background:transparent;max-width:16px;max-height:16px;" />
-					                    	{user_name}<small><br>{user_mail}</small>
-					                    </h5>
+				                    	<li><small>{user_mail}</small></li>
 				                    	<li><a style="font-family:sans-serif;font-style:italic;">{user_perfil}</a></li>
 				                        <li><a style="font-family:sans-serif;font-style:italic;">{date}&nbsp;&nbsp;<span id="liveclock"></span></a></li>
-				                      
 				                        <li><a style="font-family:sans-serif;font-style:italic;"href="{base_url}logout">{close_session}</a></li>
 				                    </ul>
 				                </div>
@@ -73,7 +72,7 @@
 		    <!-- leftpanel -->
 	  		
 	  		<!--rightpanel-->
-	  		<div class="rightpanel">
+	  		<div class="rightpanel" >
 	  			<ul class="breadcrumbs">
 		            <li><a href="{base_url}"><i class="iconfa-home"></i></a> &raquo;</li>
 		            <li>{uri_string}</li>

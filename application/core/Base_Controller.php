@@ -202,7 +202,7 @@ class Base_Controller extends CI_Controller {
     * @return string
     */
 	public function buil_panel_navigate($items, $uri, $sub = false, $bool = false) {
-		$this->lang_load("navigate");
+		
 	    $panel    = "";
 	    $style_ul = "";
 	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='' $style_ul>";}
@@ -233,7 +233,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $this->lang_item($item);
+	        $lang_item = $item;//$this->lang_item($item);
     		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";

@@ -38,10 +38,10 @@ class articulos extends Base_Controller {
 
 	public function index(){
 		
-		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false),'id_cat_presentaciones', 'presentaciones');
-		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false),'id_cat_linea', 'linea');
-		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false),'id_cat_um', 'um');
-		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false),'id_cat_marcas', 'marcas');
+		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false),'id_cat_presentaciones', array('clave_corta', 'presentaciones'));
+		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false),'id_cat_linea', array('clave_corta','linea'));
+		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false),'id_cat_um', array('clave_corta','um'));
+		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false),'id_cat_marcas', array('clave_corta','marcas'));
 
 		
 		$data['titulo_seccion']   = $this->lang_item("articulos");

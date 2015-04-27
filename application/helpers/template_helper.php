@@ -88,15 +88,25 @@
 	}
 
 	if(!function_exists('dropdown_tpl')){
-		function dropdown_tpl($data = array(), $key, $value, $ident = ""){
+		function dropdown_tpl($data = array(), $key, $value, $leyenda = "", $ident = ""){
 			
-			$name = ($ident=="")?"selected": $ident;
-			$count = 0;
+			$name         = ($ident=="")?"selected": $ident;
+			$count        = 0;
+			
 			foreach ($data as $option => $item) {
+				$option_value = "";
 				if($count==0){
-					$options[0]= '-----';
+					$options[0]= ($leyenda=="") ? '-----' : $leyenda;
 				}
-				$options[$item[$key]]= $item[$value];
+				if(is_array($value)){
+					foreach ($value as $string) {
+						$option_value .= $item[$string].'-';
+					}
+					$options[$item[$key]] = trim($option_value, '-');
+				}else{
+					$options[$item[$key]]= $item[$value];
+				}
+				
 				$count++;
 			}
 

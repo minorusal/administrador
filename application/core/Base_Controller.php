@@ -35,22 +35,27 @@ class Base_Controller extends CI_Controller {
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 		$this->lang_load("navigate");
 		$ext      = ($ext!='.html') ? '': $ext;
-		$items    = $this->session->userdata('id_modulo');
+		
+
+		$modulos    = $this->session->userdata('id_modulo');
+		$submodulos = $this->session->userdata('id_submodulo');
+		$secciones  = $this->session->userdata('id_seccion');
+		
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
 
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 
-		$data_modulos = $this->users_model->search_modules_for_user($items);
-		$data_modulos = $this->buil_array_navigator($data_modulos);
-		$items        =  $data_modulos[1];
+		$data_modulos   = $this->users_model->search_modules_for_user($modulos, $submodulos, $secciones);
+		$data_modulos   = $this->buil_array_navigator($data_modulos);
+		$navigate_items =  $data_modulos[1];
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);
 		
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
-		$dataheader['panel_navigate'] = $this->buil_panel_navigate($items,$uri );
+		$dataheader['panel_navigate'] = $this->buil_panel_navigate($navigate_items,$uri );
 		$dataheader['avatar_user']    = $this->session->userdata('avatar_user');
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
@@ -58,7 +63,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
-		
+
 		
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;

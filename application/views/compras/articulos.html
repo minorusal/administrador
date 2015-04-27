@@ -1,0 +1,24 @@
+
+<div >
+    <div style="float:left">
+        <p>
+            <label>{nombre_articulo}: (*)</label>
+            <input id="articulo" type="text" name="articulo" class="input-large " value="" />
+        </p>
+        <p>
+            <label>{cvl_corta}: (*)</label>
+            <input id="clave_corta" type="text" name="clave_corta" class="input-large " value="" />
+        </p>
+    </div>
+    
+</div>
+<div style="clear:both">
+    <p>
+        <label>{descripcion}:</label>
+        <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+    </p>
+    <div id="mensajes" style="display:none"></div>
+
+    <button class="btn btn-primary" onclick="agregar_linea()">{guardar}</button>
+    <button class="btn btn-primary" onclick="clean_formulario()">{limpiar}</button>
+</div>

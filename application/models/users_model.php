@@ -94,7 +94,7 @@ class users_model extends Base_Model{
 	* @param array $id_modulo
 	* @return array
 	*/
-	function search_modules_for_user($id_modulo){
+	function search_modules_for_user($id_modulo , $id_submodulos, $id_secciones){
 		$query = "	SELECT 
 						 M.modulo
 						,M.routes as modulo_routes
@@ -109,10 +109,10 @@ class users_model extends Base_Model{
 						,S.icon as seccion_icon
 					FROM
 						sys_modulos M
-					LEFT JOIN sys_submodulos Sm ON M.id_modulo = Sm.id_modulo
-					LEFT JOIN sys_secciones S ON S.id_submodulo = Sm.id_submodulo
+					LEFT JOIN (SELECT * FROM sys_submodulos WHERE id_submodulo IN ($id_submodulos)) Sm ON M.id_modulo = Sm.id_modulo
+					LEFT JOIN (SELECT * FROM sys_secciones WHERE id_seccion IN ($id_secciones))  S ON S.id_submodulo = Sm.id_submodulo
 					WHERE
-						M.id_modulo IN ($id_modulo) AND M.activo = 1
+						M.id_modulo IN ($id_modulo) AND M.activo = 1 
 					ORDER BY 
 						M.order, Sm.order,S.order;
 				";

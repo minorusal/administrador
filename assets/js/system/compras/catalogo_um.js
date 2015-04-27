@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 	});
 });
 function agregar_um(){
+	jQuery('#mensajes').hide();
 	var um    = jQuery("#um").val();
 	var clave_corta = jQuery("#clave_corta").val();
 	var descripcion = jQuery("#descripcion").text();
@@ -15,7 +16,7 @@ function agregar_um(){
 		dataType: "json",
 		data: {ajax : 1, um : um, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -26,6 +27,7 @@ function agregar_um(){
 
 }
 function editar_um(){
+	jQuery('#mensajes').hide();
 	var id_um = jQuery("#id_um").val();
 	var um    = jQuery("#um").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -37,7 +39,7 @@ function editar_um(){
 		dataType: "json",
 		data: {id_um:id_um, um : um, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -56,7 +58,7 @@ function buscar_um(){
 	        dataType: 'json',
 	        data: {filtro: filtro},
 	        beforeSend : function(){
-	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 	        },
 	        success: function(view){
 	        	var funcion = 'buscar_um';

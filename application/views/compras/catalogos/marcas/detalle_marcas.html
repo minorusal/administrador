@@ -1,14 +1,14 @@
-    <div id="registro_loader"></div>
+    
     <div >
         <div style="float:left">
             <input id="id_marcas" type="hidden" name="id_marcas" value="{id_marcas}" />
             <p>
                 <label>{nombre_marcas}: (*)</label>
-                <input id="marcas" type="text" name="marcas" class="input-xlarge value_important" value="{marcas}" />
+                <input id="marcas" type="text" name="marcas" class="input-xlarge requerido" value="{marcas}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
-                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge value_important" value="{clave_corta}" />
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
             </p>
             <p>
                 <label>{fecha_registro}:</label>
@@ -26,6 +26,7 @@
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
+    <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>
         <button class="btn btn-primary" onclick="editar_marcas()">{guardar}</button>
     </div>

@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 	});
 });
 function agregar_linea(){
+	jQuery('#mensajes').hide();
 	var linea    = jQuery("#linea").val();
 	var clave_corta = jQuery("#clave_corta").val();
 	var descripcion = jQuery("#descripcion").text();
@@ -15,7 +16,7 @@ function agregar_linea(){
 		dataType: "json",
 		data: {ajax : 1, linea : linea, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -26,6 +27,7 @@ function agregar_linea(){
 
 }
 function editar_linea(){
+	jQuery('#mensajes').hide();
 	var id_linea = jQuery("#id_linea").val();
 	var linea    = jQuery("#linea").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -37,7 +39,7 @@ function editar_linea(){
 		dataType: "json",
 		data: {id_linea:id_linea, linea : linea, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -56,7 +58,7 @@ function buscar_linea(){
 	        dataType: 'json',
 	        data: {filtro: filtro},
 	        beforeSend : function(){
-	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 	        },
 	        success: function(view){
 	        	var funcion = 'buscar_linea';

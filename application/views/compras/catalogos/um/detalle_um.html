@@ -1,14 +1,14 @@
-    <div id="registro_loader"></div>
+    
     <div >
         <div style="float:left">
             <input id="id_um" type="hidden" name="id_um" value="{id_um}" />
             <p>
                 <label>{nombre_um}: (*)</label>
-                <input id="um" type="text" name="um" class="input-xlarge value_important" value="{um}" />
+                <input id="um" type="text" name="um" class="input-xlarge requerido" value="{um}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
-                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge value_important" value="{clave_corta}" />
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
             </p>
             <p>
                 <label>{fecha_registro}:</label>
@@ -26,6 +26,7 @@
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
+    <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>
         <button class="btn btn-primary" onclick="editar_um()">{guardar}</button>
     </div>

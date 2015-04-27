@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 	});
 });
 function agregar_marcas(){
+	jQuery('#mensajes').hide();
 	var marcas    = jQuery("#marcas").val();
 	var clave_corta = jQuery("#clave_corta").val();
 	var descripcion = jQuery("#descripcion").text();
@@ -15,7 +16,7 @@ function agregar_marcas(){
 		dataType: "json",
 		data: {ajax : 1, marcas : marcas, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -26,6 +27,7 @@ function agregar_marcas(){
 
 }
 function editar_marcas(){
+	jQuery('#mensajes').hide();
 	var id_marcas = jQuery("#id_marcas").val();
 	var marcas    = jQuery("#marcas").val();
 	var clave_corta = jQuery("#clave_corta").val();
@@ -37,7 +39,7 @@ function editar_marcas(){
 		dataType: "json",
 		data: {id_marcas:id_marcas, marcas : marcas, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(msg){
 			
@@ -56,7 +58,7 @@ function buscar_marcas(){
 	        dataType: 'json',
 	        data: {filtro: filtro},
 	        beforeSend : function(){
-	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
+	        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 	        },
 	        success: function(view){
 	        	var funcion = 'buscar_marcas';

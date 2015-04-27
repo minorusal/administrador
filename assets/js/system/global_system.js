@@ -4,7 +4,7 @@
     tool_tips();
 
     jQuery( ".load_controller" ).click(function() {
-        jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader25.gif"/>');
+        jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         //jQuery(".maincontent").hide('slow');
     });
 });
@@ -112,13 +112,22 @@ function clean_formulario(){
 
 function values_requeridos(){
     var ids = "";
-    jQuery(".value_important").each(function(){ 
-        var check = jQuery(this).val();
-        if(check == ''){
-            ids = jQuery(this).attr("id")+'|'+ids;
+    var items_vacios = 0;
+    jQuery(".requerido").each(function(){ 
+        if(jQuery(this).prop('tagName')=='SELECT'){
+            var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
+            if(select.val()==0){
+                items_vacios++
+            }
+        }else{
+            if(jQuery(this).val() == ''){
+                ids = jQuery(this).attr("id")+'|'+ids;
+                items_vacios++
+            } 
         }
+        
     });
-    return ids;
+    return items_vacios;
 }
 
 function alertas_tpl(type , mensaje ,close){

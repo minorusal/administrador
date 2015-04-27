@@ -1,8 +1,9 @@
 <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
 	<div  class="dataTables_length" style="overflow: hidden;;">
 		<div  style="display: table-cell;">
-			<input id="search-query" type="text"  class="search-query" placeholder="Search" >
-			<button class="btn " id= "search_articulo" onclick="buscar_linea()">Buscar</button>
+			<span class="searchbar" style="position:inherit;">
+				<input type="text" name="keyword" placeholder="Search" class="biginput" id="search-query" autocomplete="off">
+			</span>
 			<div id="loader"></div>
 		</div>
 	</div>

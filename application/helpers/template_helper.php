@@ -21,7 +21,11 @@
 				$activate = ($i==($segment-1)) ? 'ui-tabs-active ui-state-active' : "";
 				$selected = ($i==($segment-1)) ? 'true' : "";
 				$display  = ($i==($segment-1)) ? 'display: block' : "";
-				$data     = ($i==($segment-1)) ? $content : "";
+				if(is_array($content)){
+					$data = (array_key_exists($i, $content) ) ? $content[$i] : '';
+				}else{
+					$data     = ($i==($segment-1)) ? $content : "";
+				}
 				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
 				$action   = $config['action'][$i];
 				$attr     = array_2_string_format($config['attr'][$i]);
@@ -61,7 +65,7 @@
 				$button_close = "button data-dismiss='alert' class='close' type='button'>×</button>";
 			}
 			
-			$alert ="<div class='alert $type'>$mensaje </div>";
+			$alert ="<div class='alert $type'> $mensaje </div>";
 
 			return $alert;
 		}
@@ -77,10 +81,10 @@
 	}
 
 	if(!function_exists('tool_tips_tpl')){
-		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $atrr = array()){
-			$attrr = array_2_string_format($atrr);
+		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $attr = array()){
+			$attr = array_2_string_format($attr);
 			$tool_tip ="<ul class='tooltipsample'>
-                       		<a $attrr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
+                       		<a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
                     	</ul>";
 			
 			return $tool_tip ;
@@ -88,9 +92,9 @@
 	}
 
 	if(!function_exists('dropdown_tpl')){
-		function dropdown_tpl($data = array(), $key, $value, $leyenda = "", $ident = ""){
+		function dropdown_tpl($data = array(), $value, $text, $name = "", $class = "" ,$leyenda = "" ){
 			
-			$name         = ($ident=="")?"selected": $ident;
+			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
 			
 			foreach ($data as $option => $item) {
@@ -98,32 +102,26 @@
 				if($count==0){
 					$options[0]= ($leyenda=="") ? '-----' : $leyenda;
 				}
-				if(is_array($value)){
-					foreach ($value as $string) {
+				if(is_array($text)){
+					foreach ($text as $string) {
 						$option_value .= $item[$string].'-';
 					}
-					$options[$item[$key]] = trim($option_value, '-');
+					$options[$item[$value]] = trim($option_value, '-');
 				}else{
-					$options[$item[$key]]= $item[$value];
+					$options[$item[$value]]= $item[$text];
 				}
 				
 				$count++;
 			}
 
-			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, '', ' data-placeholder="Choose a Country..." class="chzn-select"').'</span>';
+			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, '', " class='chzn-select $class'")."</span>";
 			
 			return $selected;
 		}
 	}
 
 
-	if(!function_exists('button_tpl')){
-		function button_tpl(){
-			
-
-		
-		}
-	}
+	
 	
 }
 		

@@ -9,6 +9,23 @@
             <label>{cvl_corta}: (*)</label>
             <input id="clave_corta" type="text" name="clave_corta" class="input-large " value="" />
         </p>
+
+        <p>
+            <label>{marca}: (*)</label>
+            {list_marca}
+        </p>
+        <p>
+            <label>{presentacion}: (*)</label>
+            {list_presentacion}
+        </p>
+        <p>
+            <label>{linea}: (*)</label>
+           {list_linea}
+        </p>
+        <p>
+            <label>{um}: (*)</label>
+            {list_um}
+        </p>
     </div>
     
 </div>
@@ -18,7 +35,6 @@
         <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
     </p>
     <div id="mensajes" style="display:none"></div>
-
-    <button class="btn btn-primary" onclick="agregar_linea()">{guardar}</button>
-    <button class="btn btn-primary" onclick="clean_formulario()">{limpiar}</button>
+    {button_save}
+    {button_reset}
 </div>

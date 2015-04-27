@@ -24,7 +24,7 @@
 				$data     = ($i==($segment-1)) ? $content : "";
 				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
 				$action   = $config['action'][$i];
-				$attr     = _attr_tpl($config['attr'][$i]);
+				$attr     = array_2_string_format($config['attr'][$i]);
 				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
 								<a $attr href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
 									".$config['names'][$i]."
@@ -78,7 +78,7 @@
 
 	if(!function_exists('tool_tips_tpl')){
 		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $atrr = array()){
-			$attrr = _attr_tpl($atrr);
+			$attrr = array_2_string_format($atrr);
 			$tool_tip ="<ul class='tooltipsample'>
                        		<a $attrr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
                     	</ul>";
@@ -116,17 +116,14 @@
 		}
 	}
 
-	if(!function_exists('_attr_tpl')){
-		function _attr_tpl($input = array()){
-			if(!empty($input)){
-				$output = implode(' ', array_map(function ($v, $k) { return sprintf("%s='%s'", $k, $v); }, $input, array_keys($input)));
-			}else{
-				$output = '';
-			}
-			return $output ;
+
+	if(!function_exists('button_tpl')){
+		function button_tpl(){
+			
+
+		
 		}
 	}
-
 	
 }
 		

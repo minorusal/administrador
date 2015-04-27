@@ -1,9 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
 	if(!function_exists('array_2_string_format')){
-		function array_2_string_format($input = array(), $glue = " ", $separator = "="){
+		function array_2_string_format($input = array(), $separator = "=", $glue = " "){
 			if(!empty($input)){
-				$output = implode($glue, array_map(function ($v, $k) { return sprintf("%s$separator'%s'", $k, $v); }, $input, array_keys($input)));
+				$output = implode($glue, array_map(function ($v, $k) { return sprintf("%s?'%s'" , $k, $v); }, $input, array_keys($input)));
+				$output = str_replace('?',$separator,$output);
 			}else{
 				$output = '';
 			}

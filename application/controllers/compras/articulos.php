@@ -25,7 +25,7 @@ class articulos extends Base_Controller {
 										'detalle_articulo'
 										); 
 		$config_tab['action']   = array('',
-										'load_content_tab_articulos', 
+										'load_content', 
 										''
 										);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
@@ -88,8 +88,8 @@ class articulos extends Base_Controller {
 		$lts_content = $this->articulos_model->get_articulos($limit, $offset, $filtro);
 
 		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo);
-		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load'));
+		$url         = base_url($uri_view);
+		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){
 			foreach ($lts_content as $value) {

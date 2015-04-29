@@ -14,7 +14,7 @@ class pagination_bootstrap extends CI_Pagination{
 	var $first_tag_close	= '</li>';
 	var $last_tag_open		= '<li class="next  paginate_button page">';
 	var $last_tag_close		= '</li>';
-	var $cur_tag_open		= '<li class="active"><a href="">';
+	var $cur_tag_open		= '<li class="active"><a>';
 	var $cur_tag_close		= '</a></li>';
 	var $next_tag_open		= '<li class="next  paginate_button  page">';
 	var $next_tag_close		= '</li>';
@@ -22,6 +22,7 @@ class pagination_bootstrap extends CI_Pagination{
 	var $prev_tag_close		= '</li>';
 	var $num_tag_open		= '<li class="page">';
 	var $num_tag_close		= '</li>';
+	var $anchor_class		= 'style=" cursor:pointer;"';
 	var $evento_link		= 'href';
 	var $function_js        = '';
 	var $params_js          = '';

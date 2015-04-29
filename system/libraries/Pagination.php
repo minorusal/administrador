@@ -234,8 +234,9 @@ class CI_Pagination {
 		{
 			$first_url = ($this->first_url == '') ? $this->base_url : $this->first_url;
 			
-			
-			$functions = ($this->function_js=="") ? $first_url : $this->function_js."('".$first_url."','".$this->params_js."')";
+			$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+
+			$functions = ($this->function_js=="") ? $first_url : $this->function_js."('".$first_url."'".$params_function_js.")";
 
 			$attri =  $this->evento_link.'="'.$functions.'"';
 			//href="'.$first_url.'"
@@ -256,7 +257,9 @@ class CI_Pagination {
 
 			if ($i == 0 && $this->first_url != '')
 			{
-				$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."','".$this->params_js."')";
+
+				$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+				$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."'".$params_function_js.")";
 
 				$attri =  $this->evento_link.'="'.$functions.'"';
 				// href="'.$this->first_url.'"
@@ -265,7 +268,9 @@ class CI_Pagination {
 			}
 			else
 			{
-				$functions = ($this->function_js=="") ? $this->base_url.$i : $this->function_js."('".$this->base_url.$i."','".$this->params_js."')";
+				$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+
+				$functions = ($this->function_js=="") ? $this->base_url.$i : $this->function_js."('".$this->base_url.$i."'".$params_function_js.")";
 
 				$attri =  $this->evento_link.'="'.$functions.'"';
 				//  href="'.$this->base_url.$i.'"
@@ -305,7 +310,11 @@ class CI_Pagination {
 						if ($n == '' && $this->first_url != '')
 						{	
 
-							$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."','".$this->params_js."')";
+							$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+							
+
+
+							$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."'".$params_function_js.")";
 
 							$attri =  $this->evento_link.'="'.$functions.'"';
 
@@ -316,7 +325,10 @@ class CI_Pagination {
 						}
 						else
 						{
-							$functions = ($this->function_js=="") ? $this->base_url.$n : $this->function_js."('".$this->base_url.$n."','".$this->params_js."')";
+							$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+
+
+							$functions = ($this->function_js=="") ? $this->base_url.$n : $this->function_js."('".$this->base_url.$n."'".$params_function_js.")";
 
 							$attri =  $this->evento_link.'="'.$functions.'"';
 
@@ -344,7 +356,9 @@ class CI_Pagination {
 				$i = ($this->cur_page * $this->per_page);
 			}
 
-			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."','".$this->params_js."')";
+			$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+
+			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."'".$params_function_js.")";
 
 			$attri =  $this->evento_link.'="'.$functions.'"';
 
@@ -366,7 +380,11 @@ class CI_Pagination {
 				$i = (($num_pages * $this->per_page) - $this->per_page);
 			}
 
-			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."','".$this->params_js."')";
+			$params_function_js = ($this->params_js=="") ? "" : ",'".$this->params_js."'";
+
+
+
+			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."'".$params_function_js.")";
 
 			$attri =  $this->evento_link.'="'.$functions.'"';
 

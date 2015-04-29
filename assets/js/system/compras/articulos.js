@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+	jQuery('#search-query').focus();
 	jQuery("button[name='save_articulo']").click(function(){
 		jQuery('#mensajes').hide();
 		var btn      = jQuery("button[name='save_articulo']");
@@ -67,7 +68,9 @@ function buscar_articulo(){
 		}
 	})
 }
-function load_content_tab_articulos(uri, id_content){
+
+function load_content(uri, id_content){
+	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -77,6 +80,7 @@ function load_content_tab_articulos(uri, id_content){
            if(id_content==1){
            		var funcion = 'buscar_articulo';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+           		jQuery('#search-query').val(filtro).focus();
            }else{
            		jQuery('#a-'+id_content).html(data);
            }

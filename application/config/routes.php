@@ -84,5 +84,6 @@ $route['compras/catalogos/actualizar_marcas'] = 'compras/catalogo_marcas/actuali
 /*Catalogo de Articulos*/
 $route['compras/articulos/(:num)']     = 'compras/articulos/index/$1';
 
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

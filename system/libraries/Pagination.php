@@ -61,6 +61,10 @@ class CI_Pagination {
 	var $display_pages		= TRUE;
 	var $anchor_class		= '';
 
+	var $evento_link		= 'href';
+	var $function_js        = '';
+	var $params_js          = '';
+
 	/**
 	 * Constructor
 	 *
@@ -229,7 +233,13 @@ class CI_Pagination {
 		if  ($this->first_link !== FALSE AND $this->cur_page > ($this->num_links + 1))
 		{
 			$first_url = ($this->first_url == '') ? $this->base_url : $this->first_url;
-			$output .= $this->first_tag_open.'<a '.$this->anchor_class.' href="'.$first_url.'">'.$this->first_link.'</a>'.$this->first_tag_close;
+			
+			
+			$functions = ($this->function_js=="") ? $first_url : $this->function_js."('".$first_url."','".$this->params_js."')";
+
+			$attri =  $this->evento_link.'="'.$functions.'"';
+			//href="'.$first_url.'"
+			$output .= $this->first_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$this->first_link.'</a>'.$this->first_tag_close;
 		}
 
 		// Render the "previous" link
@@ -246,12 +256,23 @@ class CI_Pagination {
 
 			if ($i == 0 && $this->first_url != '')
 			{
-				$output .= $this->prev_tag_open.'<a '.$this->anchor_class.' href="'.$this->first_url.'">'.$this->prev_link.'</a>'.$this->prev_tag_close;
+				$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."','".$this->params_js."')";
+
+				$attri =  $this->evento_link.'="'.$functions.'"';
+				// href="'.$this->first_url.'"
+				//'.$attri.'
+				$output .= $this->prev_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$this->prev_link.'</a>'.$this->prev_tag_close;
 			}
 			else
 			{
+				$functions = ($this->function_js=="") ? $this->base_url.$i : $this->function_js."('".$this->base_url.$i."','".$this->params_js."')";
+
+				$attri =  $this->evento_link.'="'.$functions.'"';
+				//  href="'.$this->base_url.$i.'"
+				//'.$attri.'
+
 				$i = ($i == 0) ? '' : $this->prefix.$i.$this->suffix;
-				$output .= $this->prev_tag_open.'<a '.$this->anchor_class.' href="'.$this->base_url.$i.'">'.$this->prev_link.'</a>'.$this->prev_tag_close;
+				$output .= $this->prev_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$this->prev_link.'</a>'.$this->prev_tag_close;
 			}
 
 		}
@@ -282,14 +303,29 @@ class CI_Pagination {
 						$n = ($i == $base_page) ? '' : $i;
 
 						if ($n == '' && $this->first_url != '')
-						{
-							$output .= $this->num_tag_open.'<a '.$this->anchor_class.' href="'.$this->first_url.'">'.$loop.'</a>'.$this->num_tag_close;
+						{	
+
+							$functions = ($this->function_js=="") ? $this->first_url : $this->function_js."('".$this->first_url."','".$this->params_js."')";
+
+							$attri =  $this->evento_link.'="'.$functions.'"';
+
+							//  href="'.$this->first_url.'"
+							//'.$attri.'
+
+							$output .= $this->num_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$loop.'</a>'.$this->num_tag_close;
 						}
 						else
 						{
+							$functions = ($this->function_js=="") ? $this->base_url.$n : $this->function_js."('".$this->base_url.$n."','".$this->params_js."')";
+
+							$attri =  $this->evento_link.'="'.$functions.'"';
+
+							//  href="'.$this->first_url.'"
+							//'.$attri.'
+
 							$n = ($n == '') ? '' : $this->prefix.$n.$this->suffix;
 
-							$output .= $this->num_tag_open.'<a '.$this->anchor_class.' href="'.$this->base_url.$n.'">'.$loop.'</a>'.$this->num_tag_close;
+							$output .= $this->num_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$loop.'</a>'.$this->num_tag_close;
 						}
 					}
 				}
@@ -308,7 +344,14 @@ class CI_Pagination {
 				$i = ($this->cur_page * $this->per_page);
 			}
 
-			$output .= $this->next_tag_open.'<a '.$this->anchor_class.' href="'.$this->base_url.$this->prefix.$i.$this->suffix.'">'.$this->next_link.'</a>'.$this->next_tag_close;
+			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."','".$this->params_js."')";
+
+			$attri =  $this->evento_link.'="'.$functions.'"';
+
+			// href="'.$this->base_url.$this->prefix.$i.$this->suffix.'"
+			//'.$attri.'
+
+			$output .= $this->next_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$this->next_link.'</a>'.$this->next_tag_close;
 		}
 
 		// Render the "Last" link
@@ -322,7 +365,14 @@ class CI_Pagination {
 			{
 				$i = (($num_pages * $this->per_page) - $this->per_page);
 			}
-			$output .= $this->last_tag_open.'<a '.$this->anchor_class.' href="'.$this->base_url.$this->prefix.$i.$this->suffix.'">'.$this->last_link.'</a>'.$this->last_tag_close;
+
+			$functions = ($this->function_js=="") ? $this->base_url.$this->prefix.$i.$this->suffix : $this->function_js."('".$this->base_url.$this->prefix.$i.$this->suffix."','".$this->params_js."')";
+
+			$attri =  $this->evento_link.'="'.$functions.'"';
+
+			// href="'.$this->base_url.$this->prefix.$i.$this->suffix.'"
+			//'.$attri.'
+			$output .= $this->last_tag_open.'<a '.$this->anchor_class.' '.$attri.'>'.$this->last_link.'</a>'.$this->last_tag_close;
 		}
 
 		// Kill double slashes.  Note: Sometimes we can end up with a double slash

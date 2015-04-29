@@ -38,12 +38,12 @@ class articulos extends Base_Controller {
 	}
 
 	public function index($offset = 0){
+		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
 		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false),'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
 		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false),'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
 		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false),'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
 		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false),'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
-
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset' ,'content' => $this->lang_item("btn_limpiar")));
 
@@ -87,9 +87,9 @@ class articulos extends Base_Controller {
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->articulos_model->get_articulos($limit, $offset, $filtro);
 
-		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, "", false));
+		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, $filtro, false));
 		$url         = base_url($this->uri_modulo.$this->uri_submodulo);
-		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment);
+		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load'));
 
 		if($total_rows>0){
 			foreach ($lts_content as $value) {

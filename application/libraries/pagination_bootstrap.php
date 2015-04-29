@@ -22,6 +22,9 @@ class pagination_bootstrap extends CI_Pagination{
 	var $prev_tag_close		= '</li>';
 	var $num_tag_open		= '<li class="page">';
 	var $num_tag_close		= '</li>';
+	var $evento_link		= 'href';
+	var $function_js        = '';
+	var $params_js          = '';
 	
 	/**
 	* Funcion encargada de Generar los links del paginador
@@ -32,22 +35,24 @@ class pagination_bootstrap extends CI_Pagination{
 	* @param array $config
 	*/
 
-	public function paginator_generate($total_rows = 5 , $url = '' , $per_page = 2 , $uri_segment = 4, $config = array()){
+	public function paginator_generate($total_rows = 5 , $url = '' , $per_page = 2 , $uri_segment = 4, $arr_config = array()){
 		
-		if(!empty($config)){
-			$this->initialize($config);
-		}else{
-			$config['first_link']  = $this->ci->lang_item("lang_pag_first_link");
-			$config['next_link']   = $this->ci->lang_item("lang_pag_next_link");
-			$config['prev_link']   = $this->ci->lang_item("lang_pag_prev_link");
-			$config['last_link']   = $this->ci->lang_item("lang_pag_last_link");
-			$config['total_rows']  = $total_rows;
-			$config['base_url']    = $url;
-			$config['per_page']    = $per_page;
-			$config['uri_segment'] = $uri_segment;
-
-			$this->initialize($config);
+		if(!empty($arr_config)){
+			foreach ($arr_config as $key => $value) {
+				$config[$key] = $value;
+			}
 		}
+		$config['first_link']  = $this->ci->lang_item("lang_pag_first_link");
+		$config['next_link']   = $this->ci->lang_item("lang_pag_next_link");
+		$config['prev_link']   = $this->ci->lang_item("lang_pag_prev_link");
+		$config['last_link']   = $this->ci->lang_item("lang_pag_last_link");
+		$config['total_rows']  = $total_rows;
+		$config['base_url']    = $url;
+		$config['per_page']    = $per_page;
+		$config['uri_segment'] = $uri_segment;
+
+		$this->initialize($config);
+		
 		
 		$links = $this->create_links();
 

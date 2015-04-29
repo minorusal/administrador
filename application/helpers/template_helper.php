@@ -26,11 +26,23 @@
 				}else{
 					$data     = ($i==($segment-1)) ? $content : "";
 				}
-				$link     = '"'.trim($uri_string.'/'.$config['links'][$i],"/").'"';
-				$action   = $config['action'][$i];
+				
+				
+				$uri_string = ($uri_string=="") ? "" : trim($uri_string,'/').'/';
+
+				$link    = ($config['links'][$i]=="") ? '"'.trim($uri_string,'/').'"'  : '"'.$uri_string.$config['links'][$i].'"';
+				
+				if($config['action'][$i]==""){
+					$onclick  = "";
+				}else{
+					$action = $config['action'][$i];
+					$onclick  = "onclick='$action($link, $i);'";
+				}
+				
+
 				$attr     = array_2_string_format($config['attr'][$i]);
 				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
-								<a $attr href='#a-$i' onclick='$action($link, $i);' class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
+								<a $attr href='#a-$i' $onclick class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
 									".$config['names'][$i]."
 								</a>
 							</li>";

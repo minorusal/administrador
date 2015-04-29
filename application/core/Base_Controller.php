@@ -284,6 +284,15 @@ class Base_Controller extends CI_Controller {
     	return $this->uri->total_segments();
     }
 
+
+    /**
+    * Devuleve el ultimo segmentos contenido en la URL
+    * @return int
+    */
+    public function uri_segment_end(){
+    	return $this->uri->segment($this->uri->total_segments());
+    }
+
     /**
     * Devuleve la URL actual
     * @return string

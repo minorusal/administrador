@@ -10,5 +10,6 @@ $lang['marca']            = "Seleccione su marca";
 $lang['presentacion']     = "Selecione una presentacion";
 $lang['linea']            = "Seleccione una linea";
 $lang['um']               = "Seleccione la unidad de medida";
-$lang['descripcion']      = "Descripcion del articulo";
+$lang['descripcion']      = "Descripcion";
+$lang['msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 ?>

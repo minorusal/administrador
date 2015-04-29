@@ -25,7 +25,7 @@ function path(){
     
     var pathname = window.location.pathname;
     var hostname = pathname.split('/');
-    if(document.domain=="192.168.230.14"){
+    if(document.domain=="localhost"){
         hostname = '/'+hostname[1]+'/';
     }else{
         hostname = '/';
@@ -108,6 +108,12 @@ function clean_formulario(){
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
     });
+
+    jQuery("select").each(function(){ 
+        jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');;
+    });
+    jQuery('.chzn-select').val('').trigger('liszt:updated');
+   
 }
 
 function values_requeridos(){
@@ -116,6 +122,7 @@ function values_requeridos(){
     jQuery(".requerido").each(function(){ 
         if(jQuery(this).prop('tagName')=='SELECT'){
             var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
+            
             if(select.val()==0){
                 items_vacios++
             }
@@ -125,7 +132,6 @@ function values_requeridos(){
                 items_vacios++
             } 
         }
-        
     });
     return items_vacios;
 }

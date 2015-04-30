@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/adminventas_ci';
+$config['base_url']	= 'http://192.168.230.14/adminventas_ci';
 
 /*
 |--------------------------------------------------------------------------

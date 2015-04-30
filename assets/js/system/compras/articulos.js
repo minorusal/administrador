@@ -64,6 +64,7 @@ function buscar_articulo(){
         	jQuery("#loader").html('');
         	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 			jQuery('#search-query').val(filtro).focus();
+			tool_tips();
 			
 		}
 	})
@@ -81,6 +82,7 @@ function load_content(uri, id_content){
            		var funcion = 'buscar_articulo';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
+           		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
            }

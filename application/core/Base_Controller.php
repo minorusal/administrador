@@ -48,14 +48,14 @@ class Base_Controller extends CI_Controller {
 		$this->load->model('users_model');
 
 		$data_modulos   = $this->users_model->search_modules_for_user($modulos, $submodulos, $secciones);
-		$data_modulos   = $this->buil_array_navigator($data_modulos);
+		$data_modulos   = $this->build_array_navigator($data_modulos);
 		$navigate_items =  $data_modulos[1];
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);
 		
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
-		$dataheader['panel_navigate'] = $this->buil_panel_navigate($navigate_items,$uri );
+		$dataheader['panel_navigate'] = $this->build_panel_navigate($navigate_items,$uri );
 		$dataheader['avatar_user']    = $this->session->userdata('avatar_user');
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
@@ -175,7 +175,7 @@ class Base_Controller extends CI_Controller {
 	* @param array $array_navigator
 	* @return array
 	*/
-	function buil_array_navigator($navigator){
+	function build_array_navigator($navigator){
 		foreach ($navigator as $key => $value) {
 			$route = "";
 			if(!is_null($value['submodulo'])){
@@ -207,7 +207,7 @@ class Base_Controller extends CI_Controller {
     * @param bolean $sub
     * @return string
     */
-	public function buil_panel_navigate($items, $uri, $sub = false, $bool = false) {
+	public function build_panel_navigate($items, $uri, $sub = false, $bool = false) {
 		
 	    $panel    = "";
 	    $style_ul = "";
@@ -229,7 +229,7 @@ class Base_Controller extends CI_Controller {
 	        } 
 	        if(array_key_exists('content', $subitems)){
 	        	$mod_dropdown = "dropdown";
-	        	$content     .= $this->buil_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
+	        	$content     .= $this->build_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
 	        	$routes       = base_url();
 	        	$icon         = $subitems['icon'];
 	        	$class_clik   = "";

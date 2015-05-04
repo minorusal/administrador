@@ -11,14 +11,7 @@
 
 jQuery(document).ready(function(){
 	
-
 	// Select with Search
 	jQuery(".chzn-select").chosen();
-	
-	
-	
-	
-	
-	
 	
 });

@@ -89,7 +89,6 @@
 			}
 			return ucwords(strtolower($string));
 		}
-		
 	}
 
 	if(!function_exists('tool_tips_tpl')){
@@ -102,6 +101,8 @@
 			return $tool_tip ;
 		}
 	}
+	
+	
 
 	if(!function_exists('dropdown_tpl')){
 		function dropdown_tpl($data = array(), $value, $text, $name = "", $class = "" ,$leyenda = "" ){

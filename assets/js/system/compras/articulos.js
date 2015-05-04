@@ -76,7 +76,7 @@ function load_content(uri, id_content){
         type: "POST",
         url: uri,
         dataType: 'json',
-        data: {tabs:1},
+        data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
            		var funcion = 'buscar_articulo';

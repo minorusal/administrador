@@ -61,8 +61,6 @@ class articulos extends Base_Controller {
         $data_tab_1['list_um']           = $um;
         $data_tab_1['button_save']       = $btn_save;
         $data_tab_1['button_reset']      = $btn_reset;
-		
-
 
 		$view_agregar_articulo   =  $this->load_view_unique($uri_view , $data_tab_1, true);
 		$view_listado_articulo   =  $this->listado_articulos($offset);
@@ -123,7 +121,11 @@ class articulos extends Base_Controller {
 			$tabla = $this->table->generate($tbl_data);
 
 			
+		}else{
+			$msg   = $this->lang_item("msg_query_null", false);
+			$tabla = alertas_tpl('', $msg ,false);
 		}
+			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
 			$data_tab_2['tabla']     = $tabla;
 			$data_tab_2['paginador'] = $paginador;
 			$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);

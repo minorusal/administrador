@@ -12,6 +12,19 @@ class articulos_model extends Base_Model{
 			return false;
 		}
 	}
+	
+	public function update_articulo($data, $id_articulo){
+		$condicion = array('id_cat_articulos !=' => $id_articulo, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_articulos', $condicion);
+		if(!$existe){
+			$condicion = "id_cat_articulos = $id_articulo"; 
+			$query = $this->db->update_string('av_cat_articulos', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 
 	public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true){
 		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulos  LIKE '%$filtro%' OR 

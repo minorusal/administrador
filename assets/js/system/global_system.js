@@ -124,6 +124,7 @@ function values_requeridos(){
             var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
             
             if(select.val()==0){
+                alert(select.val());
                 items_vacios++
             }
         }else{

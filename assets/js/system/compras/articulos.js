@@ -1,10 +1,11 @@
 jQuery(document).ready(function(){
 	jQuery('#search-query').focus();
 	jQuery("button[name='save_articulo']").click(function(){
-		jQuery('#mensajes').hide();
-		var btn      = jQuery("button[name='save_articulo']");
 		btn.attr('disabled','disabled');
-		var btn_text = btn.html();
+		jQuery('#mensajes').hide();
+
+		var btn          = jQuery("button[name='save_articulo']");
+		var btn_text     = btn.html();
 		
 		var incomplete   = values_requeridos();
         var articulo     = jQuery('#articulo').val();
@@ -19,7 +20,7 @@ jQuery(document).ready(function(){
 
 		jQuery.ajax({
 			type:"POST",
-			url: path()+"compras/articulos/agregar_articulo",
+			url: path()+"compras/articulos/insert_articulo",
 			dataType: "json",
 			data: {incomplete :incomplete, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,presentacion:presentacion,linea:linea,um:um,marca:marca },
 			beforeSend : function(){
@@ -37,6 +38,7 @@ jQuery(document).ready(function(){
 			}
 		})
 	});
+	
 	jQuery("button[name='reset']").click(function(){
 		clean_formulario();
 	});
@@ -99,10 +101,48 @@ function detalle_articulo(id_articulo){
         dataType: 'json',
         data: {id_articulo : id_articulo},
         success: function(data){
-       		
+        	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
         	jQuery('#ui-id-2').show('slow');
-           
         }
     });
+}
+
+function update_articulo(){
+		
+		jQuery('#mensajes').hide();
+		
+		var btn          = jQuery("button[name='update_articulo']");
+		btn.attr('disabled','disabled');
+		var btn_text     = btn.html();
+		
+		var incomplete   = values_requeridos();
+		var id_articulo  = jQuery('#id_articulo').val();
+        var articulo     = jQuery('#articulo').val();
+        var clave_corta  = jQuery('#clave_corta').val();
+        var descripcion  = jQuery('#descripcion').val();
+       
+        var presentacion = jQuery("select[name='lts_presentaciones_detalle'] option:selected").val();
+        var linea        = jQuery("select[name='lts_lineas_detalle'] option:selected").val();
+        var um           = jQuery("select[name='lts_um_detalle'] option:selected").val();
+        var marca        = jQuery("select[name='lts_marcas_detalle'] option:selected").val();
+
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/articulos/update_articulo",
+			dataType: "json",
+			data: {incomplete :incomplete,id_articulo:id_articulo, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,presentacion:presentacion,linea:linea,um:um,marca:marca },
+			beforeSend : function(){
+				jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			},
+			success : function(data){
+				btn.removeAttr('disabled');
+				var data = data.split('|');
+				if(data[0]==1){
+				}
+				jQuery("#update_loader").html('');
+			    jQuery("#mensajes_update").html(data[1]).show('slow');
+				
+			}
+		})
 }

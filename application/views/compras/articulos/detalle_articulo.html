@@ -1,6 +1,7 @@
 
 <div >
     <div style="float:left">
+    <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" />
         <p>
             <label>{nombre_articulo}: (*)</label>
             <input id="articulo" type="text" name="articulo" class="input-large requerido" value="{articulo_value}" />
@@ -44,6 +45,6 @@
         <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
     </p>
 </div>
-    <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
     {button_save}

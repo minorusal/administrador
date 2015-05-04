@@ -9,3 +9,4 @@ application/logs/*
 !application/logs/.htaccess
 
 application/config/config.php
+assets/js/system/inc.config.js

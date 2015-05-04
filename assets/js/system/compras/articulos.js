@@ -1,48 +1,5 @@
 jQuery(document).ready(function(){
 	jQuery('#search-query').focus();
-	jQuery("button[name='save_articulo']").click(function(){
-		btn.attr('disabled','disabled');
-		jQuery('#mensajes').hide();
-
-		var btn          = jQuery("button[name='save_articulo']");
-		var btn_text     = btn.html();
-		
-		var incomplete   = values_requeridos();
-        var articulo     = jQuery('#articulo').val();
-        var clave_corta  = jQuery('#clave_corta').val();
-        var descripcion  = jQuery('#descripcion').val();
-       
-        var presentacion = jQuery("select[name='lts_presentaciones'] option:selected").val();
-        var linea        = jQuery("select[name='lts_lineas'] option:selected").val();
-        var um           = jQuery("select[name='lts_um'] option:selected").val();
-        var marca        = jQuery("select[name='lts_marcas'] option:selected").val();
-
-
-		jQuery.ajax({
-			type:"POST",
-			url: path()+"compras/articulos/insert_articulo",
-			dataType: "json",
-			data: {incomplete :incomplete, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,presentacion:presentacion,linea:linea,um:um,marca:marca },
-			beforeSend : function(){
-				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-			},
-			success : function(data){
-				btn.removeAttr('disabled');
-				var data = data.split('|');
-				if(data[0]==1){
-					clean_formulario();
-				}
-				jQuery("#registro_loader").html('');
-			    jQuery("#mensajes").html(data[1]).show('slow');
-				
-			}
-		})
-	});
-	
-	jQuery("button[name='reset']").click(function(){
-		clean_formulario();
-	});
-
 	jQuery('#search-query').keypress(function(event){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 		if(keycode == '13'){  
@@ -110,7 +67,7 @@ function detalle_articulo(id_articulo){
 
 function update_articulo(){
 		
-		jQuery('#mensajes').hide();
+		jQuery('#mensajes_update').hide();
 		
 		var btn          = jQuery("button[name='update_articulo']");
 		btn.attr('disabled','disabled');
@@ -145,4 +102,45 @@ function update_articulo(){
 				
 			}
 		})
+}
+
+function insert_articulo(){
+		
+	var btn          = jQuery("button[name='update_articulo']");
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+
+	var btn          = jQuery("button[name='save_articulo']");
+	var btn_text     = btn.html();
+	
+	var incomplete   = values_requeridos();
+    var articulo     = jQuery('#articulo').val();
+    var clave_corta  = jQuery('#clave_corta').val();
+    var descripcion  = jQuery('#descripcion').val();
+   
+    var presentacion = jQuery("select[name='lts_presentaciones'] option:selected").val();
+    var linea        = jQuery("select[name='lts_lineas'] option:selected").val();
+    var um           = jQuery("select[name='lts_um'] option:selected").val();
+    var marca        = jQuery("select[name='lts_marcas'] option:selected").val();
+
+
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/articulos/insert_articulo",
+		dataType: "json",
+		data: {incomplete :incomplete, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,presentacion:presentacion,linea:linea,um:um,marca:marca },
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			var data = data.split('|');
+			if(data[0]==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data[1]).show('slow');
+			
+		}
+	})
 }

@@ -114,8 +114,8 @@ class articulos extends Base_Controller {
 		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false), '' ,'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
 		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false), '' ,'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
 		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false), '' ,'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
-		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo' , 'content' => $this->lang_item("btn_guardar") ));
-		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset' ,'content' => $this->lang_item("btn_limpiar")));
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
         $data_tab_1['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
         $data_tab_1['cvl_corta']         = $this->lang_item("cvl_corta",false);
@@ -136,7 +136,6 @@ class articulos extends Base_Controller {
 		}else{
 			return $this->load_view_unique($uri_view , $data_tab_1, true);
 		}
-		
 	}
 	public function detalle_articulo(){
 
@@ -176,7 +175,6 @@ class articulos extends Base_Controller {
 		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/detalle_articulo';
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
-
 	public function insert_articulo(){
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){

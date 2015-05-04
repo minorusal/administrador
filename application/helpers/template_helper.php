@@ -27,7 +27,6 @@
 					$data     = ($i==($segment-1)) ? $content : "";
 				}
 				
-				
 				$uri_string = ($uri_string=="") ? "" : trim($uri_string,'/').'/';
 
 				$link    = ($config['links'][$i]=="") ? '"'.trim($uri_string,'/').'"'  : '"'.$uri_string.$config['links'][$i].'"';
@@ -105,7 +104,6 @@
 			return $tool_tip ;
 		}
 	}
-	
 	
 
 	if(!function_exists('dropdown_tpl')){

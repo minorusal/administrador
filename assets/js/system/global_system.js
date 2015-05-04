@@ -21,16 +21,29 @@ function input_keypress(identificador, name_funcion){
     var script = "<script>jQuery('#"+identificador+"').keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);if(keycode == '13'){   "+name_funcion+"(); } });</script>";
         return script;
 }
-function path(){
-    
-    var pathname = window.location.pathname;
-    var hostname = pathname.split('/');
-    if(document.domain=="192.168.230.14"){
-        hostname = '/'+hostname[1]+'/';
-    }else{
-        hostname = '/';
+
+function dump_var(arr,level) {
+// Explota un array y regres su estructura
+// Uso: alert(dump_var(array));
+    var dumped_text = "";
+    if(!level) level = 0;   
+    //The padding given at the beginning of the line.
+    var level_padding = "";
+    for(var j=0;j<level+1;j++) level_padding += "    "; 
+    if(typeof(arr) == 'object') { //Array/Hashes/Objects 
+        for(var item in arr) {
+            var value = arr[item];          
+            if(typeof(value) == 'object') { //If it is an array,
+                dumped_text += level_padding + "'" + item + "' ...\n";
+                dumped_text += dump_var(value,level+1);
+            } else {
+                dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+            }
+        }
+    } else { //Stings/Chars/Numbers etc.
+        dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
     }
-    return hostname;
+    return dumped_text;
 }
 
 function live_clock(){

@@ -49,12 +49,16 @@ class Base_Controller extends CI_Controller {
 		$data_modulos   = $this->build_array_navigator($data_modulos);
 		$navigate_items =  $data_modulos[1];
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);
+
+
+		$img_path = base_url().'assets/avatar/users/';
+		$avatar_image = $this->session->userdata('avatar_user');
 		
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
 		$dataheader['panel_navigate'] = $this->build_panel_navigate($navigate_items,$uri );
-		$dataheader['avatar_user']    = $this->session->userdata('avatar_user');
+		$dataheader['avatar_user']    = (!file_exists($img_path.$avatar_image))?$img_path.'default.png':$img_path.$avatar_image;
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
 		$dataheader['user_name']      = $this->session->userdata('name');

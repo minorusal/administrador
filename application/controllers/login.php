@@ -106,8 +106,14 @@ class login extends Base_Controller {
 
 	function tbl_multiples_perfiles($data){
 		$bool = true;
+
 		foreach ($data as $value) {
-			$avatar    = array('data' => '<img src='.base_url().'assets/avatar/'.$value['avatar_user'].' />');
+			$img_path = base_url().'assets/avatar/users/';
+			$avatar_image = $img_path.$value['avatar_user'];
+
+			$avatar_foto = (!file_exists($avatar_image))?$img_path.'default.png':$avatar_image;
+
+			$avatar    = array('data' => '<img src='.$avatar_foto.' style="max-width:80px;max-height:90px;" />');
 			$name_user = $value['name'];
 			$attr      = array(
 	                            'name'    => 'perfil_ingreso',

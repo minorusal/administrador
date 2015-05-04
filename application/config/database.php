@@ -48,9 +48,9 @@
 $active_group = 'global_system';
 $active_record = TRUE;
 
-$db['global_system']['hostname'] = 'localhost';
-$db['global_system']['username'] = 'root';
-$db['global_system']['password'] = '1Sd3v3l0p3r.';
+$db['global_system']['hostname'] = '192.168.230.28';
+$db['global_system']['username'] = 'admincontrol2';
+$db['global_system']['password'] = '12345';
 $db['global_system']['database'] = '00_av_system';
 $db['global_system']['dbdriver'] = 'mysql';
 $db['global_system']['dbprefix'] = '';
@@ -64,9 +64,9 @@ $db['global_system']['swap_pre'] = '';
 $db['global_system']['autoinit'] = TRUE;
 $db['global_system']['stricton'] = FALSE;
 
-$db['mx']['hostname'] = 'localhost';
-$db['mx']['username'] = 'root';
-$db['mx']['password'] = '1Sd3v3l0p3r.';
+$db['mx']['hostname'] = '192.168.230.28';
+$db['mx']['username'] = 'admincontrol2';
+$db['mx']['password'] = '12345';
 $db['mx']['database'] = '00_av_mx';
 $db['mx']['dbdriver'] = 'mysql';
 $db['mx']['dbprefix'] = '';

@@ -15,7 +15,7 @@
 |
 */
 
-$config['base_url']	= 'http://localhost/pae/admincontrol.new/adminventasadmin/';
+$config['base_url']	= 'http://localhost/adminventas_ci/';
 
 
 /*

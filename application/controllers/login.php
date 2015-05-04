@@ -108,12 +108,12 @@ class login extends Base_Controller {
 		$bool = true;
 
 		foreach ($data as $value) {
-			$img_path = base_url().'assets/avatar/users/';
+			$img_path ='./assets/avatar/users/';
 			$avatar_image = $img_path.$value['avatar_user'];
 
-			$avatar_foto = (!file_exists($avatar_image))?$img_path.'default.png':$avatar_image;
+			$avatar_foto = (file_exists($avatar_image)) ? $avatar_image : $img_path.'default.png';
 
-			$avatar    = array('data' => '<img src='.$avatar_foto.' style="max-width:80px;max-height:90px;" />');
+						$avatar    = array('data' => '<img src='.$avatar_foto.' style="max-width:80px;max-height:90px;" />');
 			$name_user = $value['name'];
 			$attr      = array(
 	                            'name'    => 'perfil_ingreso',

@@ -1,6 +1,6 @@
 function path(Folder){
 // Obtiene Carpeta raiz
-    if(!Folder){Folder='adminventasadmin';}
+    if(!Folder){Folder='adminventas_ci';}
     Folrder = Folder + '/';
     var dominio = document.domain;
     var raiz = window.location.pathname.split(Folder);

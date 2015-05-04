@@ -11,7 +11,6 @@ class articulos extends Base_Controller {
 		$this->load->model($this->uri_modulo.'articulos_model');
 		$this->load->model($this->uri_modulo.'catalogos_model');
 		$this->lang->load("compras/articulos","es_ES");
-
 	}
 
 	public function config_tabs(){
@@ -40,13 +39,12 @@ class articulos extends Base_Controller {
 	public function index($offset = 0){
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
-		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false),'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
-		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false),'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
-		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false),'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
-		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false),'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
+		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false), '' ,'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
+		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false), '' ,'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
+		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false), '' ,'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
+		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false), '' ,'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset' ,'content' => $this->lang_item("btn_limpiar")));
-
 
         $data_tab_1['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
         $data_tab_1['cvl_corta']         = $this->lang_item("cvl_corta",false);
@@ -62,8 +60,8 @@ class articulos extends Base_Controller {
         $data_tab_1['button_save']       = $btn_save;
         $data_tab_1['button_reset']      = $btn_reset;
 
-		$view_agregar_articulo   =  $this->load_view_unique($uri_view , $data_tab_1, true);
-		$view_listado_articulo   =  $this->listado_articulos($offset);
+		$view_agregar_articulo    =  $this->load_view_unique($uri_view , $data_tab_1, true);
+		$view_listado_articulo    =  $this->listado_articulos($offset);
 		
 		$contenidos_tab           = array($view_agregar_articulo,$view_listado_articulo);
 
@@ -79,19 +77,16 @@ class articulos extends Base_Controller {
 	public function listado_articulos($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-
 		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/listado_articulos';
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->articulos_model->get_articulos($limit, $offset, $filtro);
-
 		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, $filtro, false));
 		$url         = base_url($uri_view);
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){
 			foreach ($lts_content as $value) {
-				
 				$atrr = array(
 								'href' => '#',
 							  	'onclick' => 'detalle_articulo('.$value['id_cat_articulos'].')'
@@ -119,13 +114,11 @@ class articulos extends Base_Controller {
 										$this->lang_item("descripcion"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
-
-			
 		}else{
-			$msg   = $this->lang_item("msg_query_null", false);
+			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
-			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
+			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$data_tab_2['tabla']     = $tabla;
 			$data_tab_2['paginador'] = $paginador;
 			$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
@@ -135,7 +128,6 @@ class articulos extends Base_Controller {
 			}else{
 				return $this->load_view_unique($uri_view , $data_tab_2, true);
 			}
-			
 	}
 	public function agregar_articulo(){
 		$incomplete  = $this->ajax_post('incomplete');
@@ -168,8 +160,44 @@ class articulos extends Base_Controller {
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
-
 		}
+	}
+	public function detalle_articulo(){
+
+		$id_articulo       = $this->ajax_post('id_articulo');
+		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
+		
+		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','',false), $detalle_articulo[0]['id_cat_presentaciones'], 'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
+		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','',false), $detalle_articulo[0]['id_cat_linea'], 'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
+		$um                = dropdown_tpl($this->catalogos_model->get_um('','',false), $detalle_articulo[0]['id_cat_um'], 'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
+		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','',false), $detalle_articulo[0]['id_cat_marcas'], 'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
+		
+		$btn_save          = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo' , 'content' => $this->lang_item("btn_guardar") ));
+		
+		$data_tab_3['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
+		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulos'];
+        $data_tab_3['cvl_corta']         = $this->lang_item("cvl_corta",false);
+        $data_tab_3['cvl_value']         = $detalle_articulo[0]['clave_corta'];
+        $data_tab_3['marca']             = $this->lang_item("marca",false);
+        $data_tab_3['presentacion']      = $this->lang_item("presentacion",false);
+        $data_tab_3['linea']             = $this->lang_item("linea",false);
+        $data_tab_3['um']                = $this->lang_item("um",false);
+        $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
+        $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
+        $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
+        $data_tab_3['list_marca']        = $marcas;
+        $data_tab_3['list_presentacion'] = $presentaciones;
+        $data_tab_3['list_linea']        = $lineas;
+        $data_tab_3['list_um']           = $um;
+        $data_tab_3['button_save']       = $btn_save;
+        
+        $this->load_database('global_system');
+        $this->load->model('users_model');
+        
+        $usuario_registro                 = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
+        $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
+		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/detalle_articulo';
+		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
 
 }

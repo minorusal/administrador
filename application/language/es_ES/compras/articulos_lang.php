@@ -2,8 +2,8 @@
 $lang['titulo_submodulo'] = "compras";
 $lang['articulos']        = "articulos";
 $lang['agregar_articulo'] = "nuevo articulo";
-$lang['listado_articulos']= "liado de articulos";
-$lang['detalle_articulo'] = "";
+$lang['listado_articulos']= "listado de articulos";
+$lang['detalle_articulo'] = "Detalle";
 $lang['nombre_articulo']  = "Nombre del articulo";
 $lang['cvl_corta']        = "Clave corta";
 $lang['marca']            = "Seleccione su marca";

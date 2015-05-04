@@ -20,7 +20,6 @@ class Base_Controller extends CI_Controller {
 	    		return true;
 	    	}
     	}
-    	
     }
 
     /**
@@ -35,7 +34,6 @@ class Base_Controller extends CI_Controller {
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 		$this->lang_load("navigate");
 		$ext      = ($ext!='.html') ? '': $ext;
-		
 
 		$modulos    = $this->session->userdata('id_modulo');
 		$submodulos = $this->session->userdata('id_submodulo');
@@ -64,7 +62,6 @@ class Base_Controller extends CI_Controller {
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
 
-		
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
 
@@ -213,7 +210,6 @@ class Base_Controller extends CI_Controller {
 	    $style_ul = "";
 	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='' $style_ul>";}
 	    foreach ($items as $item => $subitems) {
-
 	        $mod_dropdown = "";
 	       	$content      = "";	
 	       	$routes       = "";
@@ -239,7 +235,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $item;//$this->lang_item($item);
+	        $lang_item = $item;//$this->lang_item($item)//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
     		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";

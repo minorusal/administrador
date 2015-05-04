@@ -83,11 +83,15 @@
 		}
 
 	if(!function_exists('text_format_tpl')){
-		function text_format_tpl($string){
+		function text_format_tpl($string, $format = "f"){
 			if($string==''){
 				return $string;
 			}
-			return ucwords(strtolower($string));
+			if($format=="f"){
+				return ucfirst(strtolower($string));
+			}else{
+				return ucwords(strtolower($string));
+			}
 		}
 	}
 
@@ -105,7 +109,7 @@
 	
 
 	if(!function_exists('dropdown_tpl')){
-		function dropdown_tpl($data = array(), $value, $text, $name = "", $class = "" ,$leyenda = "" ){
+		function dropdown_tpl($data = array(), $selected , $value, $text, $name = "", $class = "" ,$leyenda = "" ){
 			
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
@@ -127,7 +131,7 @@
 				$count++;
 			}
 
-			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, '', " class='chzn-select $class'")."</span>";
+			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, " class='chzn-select $class'")."</span>";
 			
 			return $selected;
 		}

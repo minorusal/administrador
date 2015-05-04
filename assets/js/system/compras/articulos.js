@@ -71,6 +71,7 @@ function buscar_articulo(){
 }
 
 function load_content(uri, id_content){
+	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
         type: "POST",
@@ -86,6 +87,22 @@ function load_content(uri, id_content){
            }else{
            		jQuery('#a-'+id_content).html(data);
            }
+        }
+    });
+}
+
+function detalle_articulo(id_articulo){
+	jQuery('#ui-id-2').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/articulos/detalle_articulo",
+        dataType: 'json',
+        data: {id_articulo : id_articulo},
+        success: function(data){
+       		
+        	jQuery('#a-2').html(data);
+        	jQuery('#ui-id-2').show('slow');
+           
         }
     });
 }

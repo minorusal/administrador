@@ -43,12 +43,20 @@ class articulos_model extends Base_Model{
 				$limit
 					";
       
-       $query = $this->db->query($query);
+      	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
+	public function get_articulo_unico($id_articulo){
+		$query = "SELECT * FROM av_cat_articulos ca WHERE ca.id_cat_articulos = $id_articulo";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 	
 }
 ?>

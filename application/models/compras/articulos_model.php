@@ -12,7 +12,6 @@ class articulos_model extends Base_Model{
 			return false;
 		}
 	}
-	
 	public function update_articulo($data, $id_articulo){
 		$condicion = array('id_cat_articulos !=' => $id_articulo, 'clave_corta = '=> $data['clave_corta']); 
 		$existe = $this->row_exist('av_cat_articulos', $condicion);
@@ -25,7 +24,6 @@ class articulos_model extends Base_Model{
 			return false;
 		}
 	}
-
 	public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true){
 		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulos  LIKE '%$filtro%' OR 
 												cl.linea  LIKE '%$filtro%' OR 
@@ -61,7 +59,6 @@ class articulos_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-
 	public function get_articulo_unico($id_articulo){
 		$query = "SELECT * FROM av_cat_articulos ca WHERE ca.id_cat_articulos = $id_articulo";
 

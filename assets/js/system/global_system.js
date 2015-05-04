@@ -22,10 +22,9 @@ function input_keypress(identificador, name_funcion){
         return script;
 }
 function path(){
-    
     var pathname = window.location.pathname;
     var hostname = pathname.split('/');
-    if(document.domain=="192.168.230.14"){
+    if(document.domain=="localhost"){
         hostname = '/'+hostname[1]+'/';
     }else{
         hostname = '/';

@@ -91,7 +91,7 @@ function update_presentacion(){
 }
 
 function insert_presentacion(){
-	var btn          = jQuery("button[name='save_articulo']");
+	var btn          = jQuery("button[name='save_presentacion']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();

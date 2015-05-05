@@ -59,7 +59,64 @@ class catalogos_model extends Base_Model{
 	}
 
 	/*LINEAS*/
-	public function filtrar_lineas($data){
+
+	public function get_linea_unico($id_linea){
+		$query = "SELECT * FROM av_cat_lineas cl WHERE cl.id_cat_linea = $id_linea";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_lineas($limit, $offset, $filtro="", $aplicar_limit = true){
+		$filtro = ($filtro=="") ? "" : "AND (
+												cl.linea like '%$filtro%'
+											OR 
+												cl.clave_corta like '%$filtro%'
+											OR
+												cl.descripcion like '%$filtro%'
+										) ";
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						cl.id_cat_linea
+						,cl.linea
+						,cl.clave_corta
+						,cl.descripcion
+					FROM
+						av_cat_lineas cl
+					WHERE cl.activo = 1 $filtro
+					ORDER BY cl.id_cat_linea
+					$limit";
+      	
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+	public function insert_linea($data){
+		$existe = $this->row_exist('av_cat_lineas', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_cat_lineas', $data);
+			$query = $this->db->query($query);
+
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	public function update_linea($data, $id_linea){
+		$condicion = array('id_cat_linea !=' => $id_linea, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_lineas', $condicion);
+		if(!$existe){
+			$condicion = "id_cat_linea = $id_linea"; 
+			$query = $this->db->update_string('av_cat_lineas', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	/*public function filtrar_lineas($data){
 		$query = "SELECT 
 					c.id_cat_linea
 					,c.linea
@@ -151,7 +208,7 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	} 
-
+	*/
 	/*U.M.*/
 	public function filtrar_um($data){
 		$query = "SELECT 

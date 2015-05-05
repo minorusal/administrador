@@ -111,7 +111,7 @@ class articulos extends Base_Controller {
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
 		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
-		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','',false), '' ,'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
+		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
 		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false), '' ,'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
 		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false), '' ,'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
@@ -143,7 +143,7 @@ class articulos extends Base_Controller {
 		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
 		
 		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), $detalle_articulo[0]['id_cat_presentaciones'], 'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones_detalle", "requerido");
-		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','',false), $detalle_articulo[0]['id_cat_linea'], 'id_cat_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
+		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), $detalle_articulo[0]['id_cat_linea'], 'id_cat_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
 		$um                = dropdown_tpl($this->catalogos_model->get_um('','',false), $detalle_articulo[0]['id_cat_um'], 'id_cat_um', array('clave_corta','um'),"lts_um_detalle", "requerido");
 		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','',false), $detalle_articulo[0]['id_cat_marcas'], 'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas_detalle", "requerido");
 		

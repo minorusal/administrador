@@ -1,8 +1,66 @@
 <?php
 class catalogos_model extends Base_Model{
+	public function get_presentacion_unico($id_presentacion){
+		$query = "SELECT * FROM av_cat_presentaciones cp WHERE cp.id_cat_presentaciones = $id_presentacion";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_presentaciones($limit, $offset, $filtro="", $aplicar_limit = true){
+		$filtro = ($filtro=="") ? "" : "AND (
+												cp.presentaciones like '%$filtro%'
+											OR 
+												cp.clave_corta like '%$filtro%'
+											OR
+												cp.descripcion like '%$filtro%'
+										) ";
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						cp.id_cat_presentaciones
+						,cp.presentaciones
+						,cp.clave_corta
+						,cp.descripcion
+					FROM
+						av_cat_presentaciones cp
+					WHERE cp.activo = 1 $filtro
+					ORDER BY cp.id_cat_presentaciones
+					$limit";
+      	
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+	public function insert_presentacion($data){
+		$existe = $this->row_exist('av_cat_presentaciones', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_cat_presentaciones', $data);
+			$query = $this->db->query($query);
+
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	public function update_presentaciones($data, $id_presentacion){
+		$condicion = array('id_cat_presentaciones !=' => $id_presentacion, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_cat_presentaciones', $condicion);
+		if(!$existe){
+			$condicion = "id_cat_presentaciones = $id_presentacion"; 
+			$query = $this->db->update_string('av_cat_presentaciones', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 	
+	
+
 	/*PRESENTACIONES*/
-	public function filtrar_presentaciones($data){
+	/*public function filtrar_presentaciones($data){
 		$query = "SELECT 
 					ca.id_cat_presentaciones
 					,ca.presentaciones
@@ -92,7 +150,7 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
-
+	*/
 	/*LINEAS*/
 	public function filtrar_lineas($data){
 		$query = "SELECT 

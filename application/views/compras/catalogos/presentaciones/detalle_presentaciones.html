@@ -1,7 +1,7 @@
 
     <div >
         <div style="float:left">
-            <input id="id_presentaciones" type="hidden" name="id_presentaciones" value="{id_presentaciones}" />
+            <input id="id_presentacion" type="hidden" name="id_presentacion" value="{id_presentacion}" />
             <p>
                 <label>{nombre_presentaciones}: (*)</label>
                 <input id="presentaciones" type="text" name="presentaciones" class="input-xlarge requerido" value="{presentaciones}" />
@@ -26,7 +26,7 @@
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
-    <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>
-        <button class="btn btn-primary" onclick="editar_presentaciones()">{guardar}</button>
+        <div id="update_loader"></div>
+        <div id="mensajes_update" style="display:none"></div>
+         {button_save}
     </div>

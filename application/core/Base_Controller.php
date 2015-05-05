@@ -51,8 +51,8 @@ class Base_Controller extends CI_Controller {
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);
 
 
-		$img_path = './assets/avatar/users/';
-		$img_path_ = base_url().'assets/avatar/users/';
+		$img_path     = './assets/avatar/users/';
+		$img_path_    = base_url().'assets/avatar/users/';
 		$avatar_image = $this->session->userdata('avatar_user');
 		
 		

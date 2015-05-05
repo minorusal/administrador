@@ -71,7 +71,6 @@ function update_articulo(){
 		
 		var btn          = jQuery("button[name='update_articulo']");
 		btn.attr('disabled','disabled');
-		var btn_text     = btn.html();
 		
 		var incomplete   = values_requeridos();
 		var id_articulo  = jQuery('#id_articulo').val();
@@ -106,12 +105,9 @@ function update_articulo(){
 
 function insert_articulo(){
 		
-	var btn          = jQuery("button[name='update_articulo']");
+	var btn          = jQuery("button[name='save_articulo']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-
-	var btn          = jQuery("button[name='save_articulo']");
-	var btn_text     = btn.html();
 	
 	var incomplete   = values_requeridos();
     var articulo     = jQuery('#articulo').val();

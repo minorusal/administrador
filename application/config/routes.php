@@ -53,12 +53,10 @@ $route['logout']                   = 'login/logout';
 
 /*COMPRAS*/
 
-/*Catalogo Articulos*/
-$route['compras/catalogos/presentaciones']            = 'compras/catalogo_presentaciones/presentaciones';
-$route['compras/catalogos/presentaciones/(:num)']     = 'compras/catalogo_presentaciones/presentaciones/$1';
-$route['compras/catalogos/agregar_presentaciones']    = 'compras/catalogo_presentaciones/agregar_presentaciones';
-$route['compras/catalogos/detalle_presentaciones']    = 'compras/catalogo_presentaciones/detalle_presentaciones';
-$route['compras/catalogos/actualizar_presentaciones'] = 'compras/catalogo_presentaciones/actualizar_presentaciones';
+/*Catalogo Presentaciones*/
+$route['compras/catalogos/presentaciones']                               = 'compras/presentaciones/index';
+$route['compras/catalogos/presentaciones/listado_presentaciones/(:num)'] = 'compras/presentaciones/listado_presentaciones/$1';
+$route['compras/catalogos/presentaciones/listado_presentaciones']        = 'compras/presentaciones/listado_presentaciones';
 
 /*Catalogo Lineas*/
 $route['compras/catalogos/lineas']           = 'compras/catalogo_lineas/lineas';
@@ -81,8 +79,7 @@ $route['compras/catalogos/agregar_marcas']    = 'compras/catalogo_marcas/agregar
 $route['compras/catalogos/detalle_marcas']    = 'compras/catalogo_marcas/detalle_marcas';
 $route['compras/catalogos/actualizar_marcas'] = 'compras/catalogo_marcas/actualizar_marcas';
 
-/*Catalogo de Articulos*/
-$route['compras/articulos/(:num)']     = 'compras/articulos/index/$1';
+
 
 
 /* End of file routes.php */

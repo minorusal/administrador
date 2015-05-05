@@ -3,7 +3,7 @@
         <div style="float:left">
             <p>
                 <label>{nombre_marcas}: (*)</label>
-                <input id="marcas" type="text" name="marcas" class="input-xlarge requerido" value="" />
+                <input id="marca" type="text" name="marcas" class="input-xlarge requerido" value="" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
@@ -20,6 +20,6 @@
         <div id="registro_loader"></div>
         <div id="mensajes" style="display:none"></div>
 
-        <button class="btn btn-primary" onclick="agregar_marcas()">{guardar}</button>
-        <button class="btn btn-primary" onclick="clean_formulario()">{limpiar}</button>
+         {button_save}
+        {button_reset}
     </div>

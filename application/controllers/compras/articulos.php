@@ -70,10 +70,10 @@ class articulos extends Base_Controller {
 							  	'onclick' => 'detalle_articulo('.$value['id_compras_articulo'].')'
 						);
 				
-				$tbl_data[] = array('id'             => $value['articulos'],
-									'articulos'      => tool_tips_tpl($value['articulos'], $this->lang_item("tool_tip"), 'right' , $atrr),
+				$tbl_data[] = array('id'             => $value['articulo'],
+									'articulos'      => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
-									'marca'          => $value['marcas'],
+									'marca'          => $value['marca'],
 									'presentacione'  => $value['presentacion'],
 									'linea'          => $value['linea'],
 									'um'             => $value['um'],
@@ -85,7 +85,7 @@ class articulos extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("articulos"),
 										$this->lang_item("articulos"),
 										$this->lang_item("cvl_corta"),
-										$this->lang_item("marcas"),
+										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
@@ -112,8 +112,8 @@ class articulos extends Base_Controller {
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
 		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones", "requerido");
 		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_compras_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
-		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false), '' ,'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
-		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false), '' ,'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
+		$um             = dropdown_tpl($this->catalogos_model->get_um('','','',false), '' ,'id_compras_um', array('clave_corta','um'),"lts_um", "requerido");
+		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','','',false), '' ,'id_compras_marca', array('clave_corta','marca'),"lts_marcas", "requerido");
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
@@ -144,14 +144,14 @@ class articulos extends Base_Controller {
 		
 		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), $detalle_articulo[0]['id_compras_presentacion'], 'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones_detalle", "requerido");
 		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), $detalle_articulo[0]['id_compras_linea'], 'id_compras_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
-		$um                = dropdown_tpl($this->catalogos_model->get_um('','',false), $detalle_articulo[0]['id_cat_um'], 'id_cat_um', array('clave_corta','um'),"lts_um_detalle", "requerido");
-		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','',false), $detalle_articulo[0]['id_cat_marcas'], 'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas_detalle", "requerido");
+		$um                = dropdown_tpl($this->catalogos_model->get_um('','','',false), $detalle_articulo[0]['id_compras_um'], 'id_compras_um', array('clave_corta','um'),"lts_um_detalle", "requerido");
+		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','','',false), $detalle_articulo[0]['id_compras_marca'], 'id_compras_marca', array('clave_corta','marca'),"lts_marcas_detalle", "requerido");
 		
 		$btn_save          = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
 		
 		$data_tab_3['id_articulo']       = $id_articulo;
 		$data_tab_3['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
-		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulos'];
+		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulo'];
         $data_tab_3['cvl_corta']         = $this->lang_item("cvl_corta",false);
         $data_tab_3['cvl_value']         = $detalle_articulo[0]['clave_corta'];
         $data_tab_3['marca']             = $this->lang_item("marca",false);
@@ -188,13 +188,13 @@ class articulos extends Base_Controller {
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
 			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
-			$data_insert = array('articulos' => $articulo,
+			$data_insert = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
-								 'id_cat_marcas'=> $marca,
+								 'id_compras_marca'=> $marca,
 								 'id_compras_presentacion'=> $presentacion,
-								 'id_cat_um'=> $um,
+								 'id_compras_um'=> $um,
 								 'id_usuario' => $this->session->userdata('id_usuario'),
 								 'timestamp'  => $this->timestamp());
 			$insert = $this->articulos_model->insert_articulo($data_insert);
@@ -222,13 +222,13 @@ class articulos extends Base_Controller {
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
 			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
-			$data_update  = array('articulos' => $articulo,
+			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
-								 'id_cat_marcas'=> $marca,
+								 'id_compras_marca'=> $marca,
 								 'id_compras_presentacion'=> $presentacion,
-								 'id_cat_um'=> $um);
+								 'id_compras_um'=> $um);
 			$insert = $this->articulos_model->update_articulo($data_update,$id_articulo);
 
 			if($insert){

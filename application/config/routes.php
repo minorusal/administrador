@@ -55,31 +55,23 @@ $route['logout']                   = 'login/logout';
 
 /*Catalogo Presentaciones*/
 $route['compras/catalogos/presentaciones']                               = 'compras/presentaciones/index';
-$route['compras/catalogos/presentaciones/listado_presentaciones/(:num)'] = 'compras/presentaciones/listado_presentaciones/$1';
 $route['compras/catalogos/presentaciones/listado_presentaciones']        = 'compras/presentaciones/listado_presentaciones';
+$route['compras/catalogos/presentaciones/listado_presentaciones/(:num)'] = 'compras/presentaciones/listado_presentaciones/$1';
 
 /*Catalogo Lineas*/
-
 $route['compras/catalogos/lineas']                       = 'compras/lineas/index';
-$route['compras/catalogos/lineas/listado_lineas/(:num)'] = 'compras/lineas/listado_lineas/$1';
 $route['compras/catalogos/lineas/listado_lineas']        = 'compras/lineas/listado_lineas';
-
+$route['compras/catalogos/lineas/listado_lineas/(:num)'] = 'compras/lineas/listado_lineas/$1';
 
 /*Catalogo de U.M.*/
-$route['compras/catalogos/um']            = 'compras/catalogo_um/um';
-$route['compras/catalogos/um/(:num)']     = 'compras/catalogo_um/um/$1';
-$route['compras/catalogos/agregar_um']    = 'compras/catalogo_um/agregar_um';
-$route['compras/catalogos/detalle_um']    = 'compras/catalogo_um/detalle_um';
-$route['compras/catalogos/actualizar_um'] = 'compras/catalogo_um/actualizar_um';
+$route['compras/catalogos/um']                   = 'compras/um/index';
+$route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
+$route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
 /*Catalogo de Marcas*/
-$route['compras/catalogos/marcas']            = 'compras/catalogo_marcas/marcas';
-$route['compras/catalogos/marcas/(:num)']     = 'compras/catalogo_marcas/marcas/$1';
-$route['compras/catalogos/agregar_marcas']    = 'compras/catalogo_marcas/agregar_marcas';
-$route['compras/catalogos/detalle_marcas']    = 'compras/catalogo_marcas/detalle_marcas';
-$route['compras/catalogos/actualizar_marcas'] = 'compras/catalogo_marcas/actualizar_marcas';
-
-
+$route['compras/catalogos/marcas']                       = 'compras/marcas/index';
+$route['compras/catalogos/marcas/listado_marcas']        = 'compras/marcas/listado_marcas';
+$route['compras/catalogos/marcas/listado_marcas/(:num)'] = 'compras/marcas/listado_marcas/$1';
 
 
 /* End of file routes.php */

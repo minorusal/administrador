@@ -38,9 +38,9 @@ class presentaciones extends Base_Controller {
 
 	public function index($offset = 0){
 		
-		$view_listado_articulo    =  $this->listado_presentaciones($offset);
+		$view_listado_presentaciones    =  $this->listado_presentaciones($offset);
 		
-		$contenidos_tab           = $view_listado_articulo;
+		$contenidos_tab           = $view_listado_presentaciones;
 
 		$data['titulo_seccion']   = $this->lang_item("presentaciones");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");

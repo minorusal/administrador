@@ -37,9 +37,9 @@ class lineas extends Base_Controller {
 
 	public function index($offset = 0){
 		
-		$view_listado_articulo    = $this->listado_lineas($offset);
+		$view_listado_lineas      = $this->listado_lineas($offset);
 		
-		$contenidos_tab           = $view_listado_articulo;
+		$contenidos_tab           = $view_listado_lineas;
 
 		$data['titulo_seccion']   = $this->lang_item("linea");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");

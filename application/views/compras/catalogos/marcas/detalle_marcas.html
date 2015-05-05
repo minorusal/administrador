@@ -1,10 +1,10 @@
     
     <div >
         <div style="float:left">
-            <input id="id_marcas" type="hidden" name="id_marcas" value="{id_marcas}" />
+            <input id="id_marca" type="hidden" name="id_marcas" value="{id_marca}" />
             <p>
                 <label>{nombre_marcas}: (*)</label>
-                <input id="marcas" type="text" name="marcas" class="input-xlarge requerido" value="{marcas}" />
+                <input id="marca" type="text" name="marcas" class="input-xlarge requerido" value="{marcas}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
@@ -26,7 +26,7 @@
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
-    <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>
-        <button class="btn btn-primary" onclick="editar_marcas()">{guardar}</button>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+         {button_save}
     </div>

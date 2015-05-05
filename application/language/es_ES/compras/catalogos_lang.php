@@ -40,7 +40,7 @@
 	$lang['marcas']         = 'Marcas';
 	$lang['nueva_marcas']   = 'nueva Marca';
 	$lang['listado_marcas'] = 'Marcas';
-	$lang['detalle_marcas'] = 'detalle de marca';
+	$lang['detalle_marcas'] = 'detalle';
 	$lang['nombre_marca']   = 'Nombre de la Marca';
 
 

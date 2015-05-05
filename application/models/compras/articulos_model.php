@@ -25,9 +25,9 @@ class articulos_model extends Base_Model{
 		}
 	}
 	public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulos  LIKE '%$filtro%' OR 
+		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulo  LIKE '%$filtro%' OR 
 												cl.linea  LIKE '%$filtro%' OR 
-												cm.marcas  LIKE '%$filtro%' OR  
+												cm.marca  LIKE '%$filtro%' OR  
 												cp.presentacion  LIKE '%$filtro%' 
 												OR cu.um  LIKE '%$filtro%' 
 												OR ca.clave_corta  LIKE '%$filtro%' 
@@ -36,9 +36,9 @@ class articulos_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						ca.id_compras_articulo
-						,ca.articulos
+						,ca.articulo
 						,cl.linea
-						,cm.marcas
+						,cm.marca
 						,cp.presentacion
 						,cu.um
 						,ca.clave_corta
@@ -46,9 +46,9 @@ class articulos_model extends Base_Model{
 					FROM
 						av_compras_articulos ca
 					LEFT JOIN av_compras_lineas cl on cl.id_compras_linea = ca.id_compras_linea 
-					LEFT JOIN av_cat_marcas cm on cm.id_cat_marcas = ca.id_cat_marcas
+					LEFT JOIN av_compras_marcas cm on cm.id_compras_marca = ca.id_compras_marca
 					LEFT JOIN av_compras_presentaciones cp on cp.id_compras_presentacion = ca.id_compras_presentacion
-					LEFT JOIN av_cat_um cu on cu.id_cat_um = ca.id_cat_um
+					LEFT JOIN av_compras_um cu on cu.id_compras_um = ca.id_compras_um
 					WHERE ca.activo = 1 $filtro
 					ORDER BY ca.id_compras_articulo
 				$limit

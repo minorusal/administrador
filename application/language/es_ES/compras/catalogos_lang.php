@@ -17,7 +17,7 @@
 	$lang['presentaciones']         = 'presentaciones';
 	$lang['nuevo_presentaciones']   = 'Nueva Presentacion';
 	$lang['listado_presentaciones'] = 'presentaciones';
-	$lang['detalle_presentaciones'] = 'presentacion';
+	$lang['detalle_presentaciones'] = 'detalle';
 	$lang['nombre_presentaciones']  = 'presentacion';
 	
 	/*LINEAS*/

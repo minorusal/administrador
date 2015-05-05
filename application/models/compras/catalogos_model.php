@@ -1,5 +1,6 @@
 <?php
 class catalogos_model extends Base_Model{
+	/*PRESENTACIONES*/
 	public function get_presentacion_unico($id_presentacion){
 		$query = "SELECT * FROM av_cat_presentaciones cp WHERE cp.id_cat_presentaciones = $id_presentacion";
 
@@ -56,101 +57,7 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
-	
-	
 
-	/*PRESENTACIONES*/
-	/*public function filtrar_presentaciones($data){
-		$query = "SELECT 
-					ca.id_cat_presentaciones
-					,ca.presentaciones
-					,ca.clave_corta
-					,ca.descripcion
-				FROM
-					av_cat_presentaciones ca
-				WHERE 
-					ca.activo = 1
-				AND (
-					ca.presentaciones like '%$data%'
-				OR 
-					ca.clave_corta like '%$data%'
-				OR
-					ca.descripcion like '%$data%')";
-
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function detalle_presentaciones($data){
-		$query = "SELECT 
-					ca.id_cat_presentaciones
-					,ca.presentaciones
-					,ca.clave_corta
-					,ca.descripcion
-					,ca.timestamp
-					,ca.id_usuario
-				FROM
-					av_cat_presentaciones ca
-				WHERE 
-					ca.id_cat_presentaciones = $data";
-
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function get_presentaciones($limit, $offset, $aplicar_limit = true){
-		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		$query = "SELECT 
-					ca.id_cat_presentaciones
-					,ca.presentaciones
-					,ca.clave_corta
-					,ca.descripcion
-				FROM
-					av_cat_presentaciones ca
-				WHERE ca.activo = 1
-
-				$limit";
-       
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function get_total_presentaciones(){
-		$query = "SELECT 
-					*
-				FROM
-					av_cat_presentaciones ca
-				WHERE ca.activo = 1";
-       	$query = $this->db->query($query);
-        return $query->num_rows();
-    }
-	public function insert_presentaciones($data){
-		$existe = $this->row_exist('av_cat_presentaciones', array('clave_corta'=> $data['clave_corta']));
-		if(!$existe){
-			$query = $this->db->insert_string('av_cat_presentaciones', $data);
-			$query = $this->db->query($query);
-
-			return $query;
-		}else{
-			return false;
-		}
-	}
-	public function update_presentaciones($data, $id_usuario){
-		$condicion = array('id_cat_presentaciones !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_cat_presentaciones', $condicion );
-		if(!$existe){
-			$condicion = "id_cat_presentaciones = $id_usuario"; 
-			$query = $this->db->update_string('av_cat_presentaciones', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
-		}else{
-			return false;
-		}
-	}
-	*/
 	/*LINEAS*/
 	public function filtrar_lineas($data){
 		$query = "SELECT 

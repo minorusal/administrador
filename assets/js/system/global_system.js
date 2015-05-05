@@ -164,21 +164,3 @@ function alertas_tpl(type , mensaje ,close){
     alert = "<div class='alert "+type+"'>"+button_close+mensaje+"</div>";
     return alert
 }
-
-function path(Folder){
-// Obtiene Carpeta raiz
-    var json_url = "assets/js/system/config.json";
-    var valor = '';
-    jQuery.getJSON(json_url, function(data) {       
-        valor = data['system_path'];
-    });
-    setTimeout(function(){
-        var system_path = valor;
-        Folder = system_path;
-    }, 5);
-    Folrder = Folder + '/';
-    var dominio = document.domain;
-    var raiz = window.location.pathname.split(Folder);
-    var ruta = raiz[0] + Folder + '/';
-    return ruta;
-}

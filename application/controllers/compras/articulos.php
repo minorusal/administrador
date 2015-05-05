@@ -67,14 +67,14 @@ class articulos extends Base_Controller {
 			foreach ($lts_content as $value) {
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'detalle_articulo('.$value['id_cat_articulos'].')'
+							  	'onclick' => 'detalle_articulo('.$value['id_compras_articulo'].')'
 						);
 				
-				$tbl_data[] = array('id'             => $value['id_cat_articulos'],
+				$tbl_data[] = array('id'             => $value['articulos'],
 									'articulos'      => tool_tips_tpl($value['articulos'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
 									'marca'          => $value['marcas'],
-									'presentacione'  => $value['presentaciones'],
+									'presentacione'  => $value['presentacion'],
 									'linea'          => $value['linea'],
 									'um'             => $value['um'],
 									'descripcion'    => $value['descripcion']);
@@ -82,11 +82,11 @@ class articulos extends Base_Controller {
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 		
-			$this->table->set_heading(	$this->lang_item("id"),
+			$this->table->set_heading(	$this->lang_item("articulos"),
 										$this->lang_item("articulos"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("marcas"),
-										$this->lang_item("presentaciones"),
+										$this->lang_item("presentacion"),
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
 										$this->lang_item("descripcion"));
@@ -110,8 +110,8 @@ class articulos extends Base_Controller {
 	public function agregar_articulo(){
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
-		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones", "requerido");
-		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_cat_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
+		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones", "requerido");
+		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_compras_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
 		$um             = dropdown_tpl($this->catalogos_model->get_um('','',false), '' ,'id_cat_um', array('clave_corta','um'),"lts_um", "requerido");
 		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','',false), '' ,'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas", "requerido");
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
@@ -142,8 +142,8 @@ class articulos extends Base_Controller {
 		$id_articulo       = $this->ajax_post('id_articulo');
 		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
 		
-		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), $detalle_articulo[0]['id_cat_presentaciones'], 'id_cat_presentaciones', array('clave_corta', 'presentaciones'),"lts_presentaciones_detalle", "requerido");
-		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), $detalle_articulo[0]['id_cat_linea'], 'id_cat_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
+		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), $detalle_articulo[0]['id_compras_presentacion'], 'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones_detalle", "requerido");
+		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), $detalle_articulo[0]['id_compras_linea'], 'id_compras_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
 		$um                = dropdown_tpl($this->catalogos_model->get_um('','',false), $detalle_articulo[0]['id_cat_um'], 'id_cat_um', array('clave_corta','um'),"lts_um_detalle", "requerido");
 		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','',false), $detalle_articulo[0]['id_cat_marcas'], 'id_cat_marcas', array('clave_corta','marcas'),"lts_marcas_detalle", "requerido");
 		
@@ -191,9 +191,9 @@ class articulos extends Base_Controller {
 			$data_insert = array('articulos' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
-								 'id_cat_linea'=> $linea,
+								 'id_compras_linea'=> $linea,
 								 'id_cat_marcas'=> $marca,
-								 'id_cat_presentaciones'=> $presentacion,
+								 'id_compras_presentacion'=> $presentacion,
 								 'id_cat_um'=> $um,
 								 'id_usuario' => $this->session->userdata('id_usuario'),
 								 'timestamp'  => $this->timestamp());
@@ -225,9 +225,9 @@ class articulos extends Base_Controller {
 			$data_update  = array('articulos' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
-								 'id_cat_linea'=> $linea,
+								 'id_compras_linea'=> $linea,
 								 'id_cat_marcas'=> $marca,
-								 'id_cat_presentaciones'=> $presentacion,
+								 'id_compras_presentacion'=> $presentacion,
 								 'id_cat_um'=> $um);
 			$insert = $this->articulos_model->update_articulo($data_update,$id_articulo);
 

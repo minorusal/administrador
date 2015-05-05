@@ -66,10 +66,10 @@ class lineas extends Base_Controller {
 			foreach ($lts_content as $value) {
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'detalle_linea('.$value['id_cat_linea'].')'
+							  	'onclick' => 'detalle_linea('.$value['id_compras_linea'].')'
 						);
 	
-				$tbl_data[] = array('id'             => $value['id_cat_linea'],
+				$tbl_data[] = array('id'             => $value['linea'],
 									'linea'          => tool_tips_tpl($value['linea'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
 									'descripcion'    => $value['descripcion']);

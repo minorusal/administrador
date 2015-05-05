@@ -59,7 +59,6 @@ class catalogos_model extends Base_Model{
 	}
 
 	/*LINEAS*/
-
 	public function get_linea_unico($id_linea){
 		$query = "SELECT * FROM av_cat_lineas cl WHERE cl.id_cat_linea = $id_linea";
 
@@ -116,99 +115,7 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
-	/*public function filtrar_lineas($data){
-		$query = "SELECT 
-					c.id_cat_linea
-					,c.linea
-					,c.clave_corta
-					,c.descripcion
-				FROM
-					av_cat_lineas c
-				WHERE 
-					c.activo = 1
-				AND (
-					c.linea like '%$data%'
-				OR 
-					c.clave_corta like '%$data%'
-				OR
-					c.descripcion like '%$data%')";
 
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function detalle_lineas($data){
-		$query = "SELECT 
-					c.id_cat_linea
-					,c.linea
-					,c.clave_corta
-					,c.descripcion
-					,c.timestamp
-					,c.id_usuario
-				FROM
-					av_cat_lineas c
-				WHERE 
-					c.id_cat_linea = $data";
-
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function get_lineas($limit, $offset, $aplicar_limit = true){
-		
-		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-
-		$query = "SELECT 
-					c.id_cat_linea
-					,c.linea
-					,c.clave_corta
-					,c.descripcion
-				FROM
-					av_cat_lineas c
-				WHERE c.activo = 1
-
-				$limit";
-       
-       $query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}
-	public function get_total_lineas(){
-		$query = "SELECT 
-					*
-				FROM
-					av_cat_lineas c
-				WHERE c.activo = 1";
-       	$query = $this->db->query($query);
-        return $query->num_rows();
-    }
-	public function insert_lineas($data){
-		$existe = $this->row_exist('av_cat_lineas', array('clave_corta'=> $data['clave_corta']));
-		if(!$existe){
-			$query = $this->db->insert_string('av_cat_lineas', $data);
-			$query = $this->db->query($query);
-
-			return $query;
-		}else{
-			return false;
-		}
-	}
-	public function update_lineas($data, $id_usuario){
-		$condicion = array('id_cat_linea !=' => $id_usuario, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_cat_lineas', $condicion );
-		if(!$existe){
-			$condicion = "id_cat_linea = $id_usuario"; 
-			$query = $this->db->update_string('av_cat_lineas', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
-		}else{
-			return false;
-		}
-	} 
-	*/
 	/*U.M.*/
 	public function filtrar_um($data){
 		$query = "SELECT 

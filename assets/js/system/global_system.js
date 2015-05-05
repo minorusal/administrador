@@ -21,10 +21,13 @@ function input_keypress(identificador, name_funcion){
     var script = "<script>jQuery('#"+identificador+"').keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);if(keycode == '13'){   "+name_funcion+"(); } });</script>";
         return script;
 }
-
+function include_script(script){
+     var script = "<script>"+script+"</script>";
+        return script;
+}
 function dump_var(arr,level) {
-// Explota un array y regres su estructura
-// Uso: alert(dump_var(array));
+    // Explota un array y regres su estructura
+    // Uso: alert(dump_var(array));
     var dumped_text = "";
     if(!level) level = 0;   
     //The padding given at the beginning of the line.

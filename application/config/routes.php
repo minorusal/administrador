@@ -59,12 +59,7 @@ $route['compras/catalogos/presentaciones/listado_presentaciones/(:num)'] = 'comp
 $route['compras/catalogos/presentaciones/listado_presentaciones']        = 'compras/presentaciones/listado_presentaciones';
 
 /*Catalogo Lineas*/
-/*$route['compras/catalogos/lineas']           = 'compras/catalogo_lineas/lineas';
-$route['compras/catalogos/lineas/(:num)']    = 'compras/catalogo_lineas/lineas/$1';
-$route['compras/catalogos/agregar_linea']    = 'compras/catalogo_lineas/agregar_linea';
-$route['compras/catalogos/detalle_linea']    = 'compras/catalogo_lineas/detalle_linea';
-$route['compras/catalogos/actualizar_linea'] = 'compras/catalogo_lineas/actualizar_linea';
-*/
+
 $route['compras/catalogos/lineas']                       = 'compras/lineas/index';
 $route['compras/catalogos/lineas/listado_lineas/(:num)'] = 'compras/lineas/listado_lineas/$1';
 $route['compras/catalogos/lineas/listado_lineas']        = 'compras/lineas/listado_lineas';

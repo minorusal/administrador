@@ -39,7 +39,7 @@ class articulos extends Base_Controller {
 	public function index($offset = 0){
 		
 		
-		$view_listado_articulo    =  $this->listado_articulos($offset);
+		$view_listado_articulo    = $this->listado_articulos($offset);
 		
 		$contenidos_tab           = $view_listado_articulo;
 

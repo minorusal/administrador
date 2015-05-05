@@ -63,16 +63,15 @@ $route['compras/catalogos/lineas']                       = 'compras/lineas/index
 $route['compras/catalogos/lineas/listado_lineas']        = 'compras/lineas/listado_lineas';
 $route['compras/catalogos/lineas/listado_lineas/(:num)'] = 'compras/lineas/listado_lineas/$1';
 
-/*Catalogo de U.M.*/
-$route['compras/catalogos/um']                   = 'compras/um/index';
-$route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
-$route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
-
 /*Catalogo de Marcas*/
 $route['compras/catalogos/marcas']                       = 'compras/marcas/index';
 $route['compras/catalogos/marcas/listado_marcas']        = 'compras/marcas/listado_marcas';
 $route['compras/catalogos/marcas/listado_marcas/(:num)'] = 'compras/marcas/listado_marcas/$1';
 
+/*Catalogo de U.M.*/
+$route['compras/catalogos/um']                   = 'compras/um/index';
+$route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
+$route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

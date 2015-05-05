@@ -28,13 +28,6 @@
 	$lang['detalle_linea'] = 'detalle de linea';
 	$lang['nombre_linea']  = 'Nombre de la linea';
 
-	/*UNIDAD DE MEDIDA*/
-
-	$lang['um']         = 'Unidad de medida';
-	$lang['nueva_um']   = 'Nueva U.M.';
-	$lang['listado_um'] = 'Unidades de Medida';
-	$lang['detalle_um'] = 'detalle de U.M.';
-
 	/*MARCAS*/
 
 	$lang['marcas']         = 'Marcas';
@@ -42,6 +35,15 @@
 	$lang['listado_marcas'] = 'Marcas';
 	$lang['detalle_marcas'] = 'detalle';
 	$lang['nombre_marca']   = 'Nombre de la Marca';
+	
+	/*UNIDAD DE MEDIDA*/
+
+	$lang['um']         = 'Unidad de medida';
+	$lang['nueva_um']   = 'Nueva U.M.';
+	$lang['listado_um'] = 'Unidades de Medida';
+	$lang['detalle_um'] = 'detalle de U.M.';
+
+	
 
 
 ?>

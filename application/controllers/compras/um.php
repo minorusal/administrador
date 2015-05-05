@@ -15,7 +15,7 @@ class um extends Base_Controller {
 
 	public function config_tabs(){
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
-		$config_tab['names']    = array($this->lang_item("nueva_um"), 
+		$config_tab['names']    = array($this->lang_item("nueva_um",false), 
 										$this->lang_item("listado_um"), 
 										$this->lang_item("detalle_um")
 								); 

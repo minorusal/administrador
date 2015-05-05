@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
 	jQuery('#search-query').keypress(function(event){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 		if(keycode == '13'){  
-			buscar_marca();
+			buscar_um();
 		} 
 	});
 })

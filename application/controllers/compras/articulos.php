@@ -106,7 +106,7 @@ class articulos extends Base_Controller {
 	}
 	public function agregar_articulo(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/agregar_articulo';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/articulo_save';
 		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones", "requerido");
 		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_compras_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
 		$um             = dropdown_tpl($this->catalogos_model->get_um('','','',false), '' ,'id_compras_um', array('clave_corta','um'),"lts_um", "requerido");
@@ -169,7 +169,7 @@ class articulos extends Base_Controller {
         
         $usuario_registro               = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
         $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/detalle_articulo';
+		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/articulo_edit';
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
 	public function insert_articulo(){

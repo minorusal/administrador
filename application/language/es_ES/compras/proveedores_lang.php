@@ -1,6 +1,6 @@
 <?php
 $lang['titulo_submodulo']  = "compras";
-$lang['proveedor']         = "proveedor";
+$lang['proveedores']         = "proveedores";
 $lang['agregar_proveedor'] = "nuevo proveedor";
 $lang['listado_proveedor'] = "listado de proveedores";
 $lang['detalle_proveedor'] = "Detalle";

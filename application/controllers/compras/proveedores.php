@@ -41,7 +41,7 @@ class proveedores extends Base_Controller {
 		//$view_listado_articulo    = $this->listado_articulos($offset);
 		$contenidos_tab           = 'tab';//$view_listado_articulo;
 
-		$data['titulo_seccion']   = $this->lang_item("proveedor");
+		$data['titulo_seccion']   = $this->lang_item("proveedores");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = 'fa fa-users';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$contenidos_tab);

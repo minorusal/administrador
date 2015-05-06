@@ -101,7 +101,7 @@ class presentaciones extends Base_Controller {
 	}
 	public function detalle_presentacion(){
 
-		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/detalle_presentaciones';
+		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/presentaciones_edit';
 		$id_presentacion       = $this->ajax_post('id_presentacion');
 		$detalle_presentacion  = $this->catalogos_model->get_presentacion_unico($id_presentacion);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_presentacion' , 'onclick'=>'update_presentacion()','content' => $this->lang_item("btn_guardar") ));
@@ -128,7 +128,7 @@ class presentaciones extends Base_Controller {
 
 	public function agregar_presentacion(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/agregar_presentaciones';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/presentaciones_save';
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_presentacion','onclick'=>'insert_presentacion()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

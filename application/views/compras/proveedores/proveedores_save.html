@@ -1,0 +1,43 @@
+
+<div >
+    <div style="float:left">
+        <p>
+            <label>{nombre_articulo}: (*)</label>
+            <input id="articulo" type="text" name="articulo" class="input-large requerido" value="" />
+        </p>
+        <p>
+            <label>{cvl_corta}: (*)</label>
+            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+        </p>
+
+        <p>
+            <label>{marca}: (*)</label>
+            {list_marca}
+        </p>
+        <p>
+            <label>{presentacion}: (*)</label>
+            {list_presentacion}
+        </p>
+        <p>
+            <label>{linea}: (*)</label>
+           {list_linea}
+        </p>
+        <p>
+            <label>{um}: (*)</label>
+            {list_um}
+        </p>
+    </div>
+    
+</div>
+<div style="clear:both">
+    <p>
+        <label>{descripcion}:</label>
+        <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+    </p>
+</div>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+    
+    
+    {button_save}
+    {button_reset}

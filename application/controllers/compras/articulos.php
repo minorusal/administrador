@@ -55,12 +55,12 @@ class articulos extends Base_Controller {
 	public function listado_articulos($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/listado_articulos';
+		$uri_view    = $this->uri_modulo.'/listado';
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->articulos_model->get_articulos($limit, $offset, $filtro);
 		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, $filtro, false));
-		$url         = base_url($uri_view);
+		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'/listado_articulos');
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){

@@ -1,13 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	if(!function_exists('table_tpl')){
-		function table_tpl($titles, $data){
-			foreach ($data as $key => $value) {
-			//	$row . = '<tr>';
-			}
-		}
-	}
-
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
 			$link         = "";
@@ -62,7 +54,6 @@
 
 		}
 	}
-
 	if(!function_exists('alertas_tpl')){
 		function alertas_tpl($type = '', $mensaje = '' ,$close = false){
 			$alert = "";
@@ -93,19 +84,16 @@
 			}
 		}
 	}
-
 	if(!function_exists('tool_tips_tpl')){
 		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $attr = array()){
 			$attr = array_2_string_format($attr);
-			$tool_tip ="<ul class='tooltipsample'>
+			$tool_tip ="<ul class='tooltips'>
                        		<a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
                     	</ul>";
 			
 			return $tool_tip ;
 		}
 	}
-	
-
 	if(!function_exists('dropdown_tpl')){
 		function dropdown_tpl($data = array(), $selected , $value, $text, $name = "", $class = "" ,$leyenda = "" ){
 			
@@ -134,10 +122,6 @@
 			return $selected;
 		}
 	}
-
-
-	
-	
 }
 		
 ?>

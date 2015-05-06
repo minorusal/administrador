@@ -54,13 +54,13 @@ class presentaciones extends Base_Controller {
 	public function listado_presentaciones($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/listado_presentaciones';
+		$uri_view    = $this->uri_modulo.'/listado';
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->catalogos_model->get_presentaciones($limit, $offset, $filtro);
 
 		$total_rows  = count($this->catalogos_model->get_presentaciones($limit, $offset, $filtro, false));
-		$url         = base_url($uri_view);
+		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/listado_presentaciones');
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 	
 		if($total_rows>0){

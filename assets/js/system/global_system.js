@@ -12,10 +12,8 @@ function tool_tips(){
     jQuery('a[data-rel]').each(function() {
             jQuery(this).attr('rel', jQuery(this).data('rel'));
         });
-    if(jQuery('.tooltipsample').length > 0)
-        jQuery('.tooltipsample').tooltip({selector: "a[rel=tooltip]"});
-        
-    jQuery('.popoversample').popover({selector: 'a[rel=popover]', trigger: 'hover'});
+    if(jQuery('.tooltips').length > 0)
+        jQuery('.tooltips').tooltip({selector: "a[rel=tooltip]",offset: [0, 15]});
 }
 function input_keypress(identificador, name_funcion){
     var script = "<script>jQuery('#"+identificador+"').keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);if(keycode == '13'){   "+name_funcion+"(); } });</script>";
@@ -24,6 +22,18 @@ function input_keypress(identificador, name_funcion){
 function include_script(script){
      var script = "<script>"+script+"</script>";
         return script;
+}
+function remove_tr(id){
+     $("#"+id).click(function() {
+ 
+        // get handle to the current image (trashcan)
+        var img = $(this);
+        // gradually hide the parent row
+        img.parents("tr").fadeOut(function()  {
+            img.data("tooltip").hide();
+        });
+ 
+    });
 }
 function dump_var(arr,level) {
     // Explota un array y regres su estructura

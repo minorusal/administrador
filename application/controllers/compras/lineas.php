@@ -100,7 +100,7 @@ class lineas extends Base_Controller {
 	}
 	public function detalle_linea(){
 
-		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/detalle_lineas';
+		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/lineas_edit';
 		$id_linea              = $this->ajax_post('id_linea');
 		$detalle_linea         = $this->catalogos_model->get_linea_unico($id_linea);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_linea' , 'onclick'=>'update_linea()','content' => $this->lang_item("btn_guardar") ));
@@ -127,7 +127,7 @@ class lineas extends Base_Controller {
 
 	public function agregar_linea(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/agregar_lineas';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/lineas_save';
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_linea','onclick'=>'insert_linea()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

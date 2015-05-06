@@ -12,7 +12,6 @@ class articulos extends Base_Controller {
 		$this->load->model($this->uri_modulo.'catalogos_model');
 		$this->lang->load("compras/articulos","es_ES");
 	}
-
 	public function config_tabs(){
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		$config_tab['names']    = array($this->lang_item("agregar_articulo"), 
@@ -35,7 +34,6 @@ class articulos extends Base_Controller {
 	private function uri_view_principal(){
 		return $this->uri_modulo.$this->view_content;
 	}
-
 	public function index($offset = 0){
 		
 		
@@ -51,7 +49,6 @@ class articulos extends Base_Controller {
 		$js['js'][]     = array('name' => 'articulos', 'dirname' => 'compras');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
-
 	public function listado_articulos($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";

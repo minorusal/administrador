@@ -37,7 +37,6 @@ class proveedores extends Base_Controller {
 	}
 
 	public function index(){
-
 		//$view_listado_articulo    = $this->listado_articulos($offset);
 		$contenidos_tab           = 'tab';//$view_listado_articulo;
 

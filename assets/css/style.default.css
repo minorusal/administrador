@@ -95,7 +95,7 @@ h1,h2,h3,h4,h5 { font-weight: normal; line-height: normal; }
 
 /*** HEADER ***/
 
-.header { background: #0866c6; clear: both; height: 125px; }
+.header { background: #0866c6; clear: both; height: 142px; }
 .headerinner { margin-left: 260px; }
 .header .logo { width: 260px; text-align: center; padding-top: 40px; float: left; }
 

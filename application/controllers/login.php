@@ -111,7 +111,7 @@ class login extends Base_Controller {
 			$img_path ='./assets/avatar/users/';
 			$avatar_image = $img_path.$value['avatar_user'];
 
-			$avatar_foto = (file_exists($avatar_image)) ? $avatar_image : $img_path.'default.png';
+			$avatar_foto = (file_exists($avatar_image)) ? $avatar_image : $img_path.'sin_foto.png';
 
 						$avatar    = array('data' => '<img src='.$avatar_foto.' style="max-width:80px;max-height:90px;" />');
 			$name_user = $value['name'];

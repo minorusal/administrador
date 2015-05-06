@@ -60,7 +60,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
 		$dataheader['panel_navigate'] = $this->build_panel_navigate($navigate_items,$uri );
-		$dataheader['avatar_user']    = (file_exists($img_path.$avatar_image))? $img_path_.$avatar_image : $img_path_.'default.png';
+		$dataheader['avatar_user']    = (file_exists($img_path.$avatar_image))? $img_path_.$avatar_image : $img_path_.'sin_foto.png';
 		
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
@@ -68,6 +68,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
+		$dataheader['fecha_hoy']	  = fechaHoy();
 
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;

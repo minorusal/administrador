@@ -87,6 +87,7 @@ class articulos extends Base_Controller {
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
 										$this->lang_item("descripcion"));
+			
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		}else{

@@ -36,6 +36,10 @@ class proveedores extends Base_Controller {
 		return $this->uri_modulo.$this->view_content;
 	}
 
+	private function uri_cl_principal($pag = ''){
+		return $this->uri_modulo.$this->uri_submodulo.'/'.$pag;
+	}
+
 	public function index(){
 		//$view_listado_articulo    = $this->listado_articulos($offset);
 		$contenidos_tab           = $this->agregar_proveedor();//$view_listado_articulo;
@@ -45,7 +49,7 @@ class proveedores extends Base_Controller {
 		$data['icon']             = 'fa fa-users';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),1,$contenidos_tab);
 		
-		$js['js'][]     = array('name' => 'articulos', 'dirname' => 'compras');
+		$js['js'][]     = array('name' => 'proveedores', 'dirname' => 'compras');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 
 	}
@@ -64,7 +68,7 @@ class proveedores extends Base_Controller {
 									);
 		$btn_save   = form_button(array('class'   => 'btn btn-primary',
 										'name'    => 'save_proveedor',
-										'onclick' => 'insert_proveedor()', 
+										'onclick' => "send_form_ajax('".$this->uri_cl_principal('insert_proveedor')."','mensajes');", 
 										'content' => $this->lang_item("btn_guardar")));
 
 		$btn_reset  = form_button(array('class'   => 'btn btn-primary',
@@ -97,5 +101,11 @@ class proveedores extends Base_Controller {
 		}else{
 			return $this->load_view_unique($uri_view , $lbl, true);
 		}
+	}
+
+	public function insert_proveedor(){
+		$jsonData = array(	'result'  => $this->ajax_post('comentario'),
+							'functions' => array( 'clean_formulario' => '' ));
+		echo json_encode($jsonData);
 	}
 }

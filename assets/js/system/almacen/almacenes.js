@@ -50,9 +50,9 @@ function detalle_almacenes(id_almacen){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"compras/presentaciones/detalle_almacenes",
+        url: path()+"almacen/almacenes/detalle_almacenes",
         dataType: 'json',
-        data: {id_presentacion : id_presentacion},
+        data: {id_almacen : id_almacen},
         success: function(data){
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
@@ -60,22 +60,22 @@ function detalle_almacenes(id_almacen){
         }
     });
 }
-function update_presentacion(){
+function update_almacenes(){
 	jQuery('#mensajes_update').hide();
-	var btn          = jQuery("button[name='update_presentacion']");
+	var btn          = jQuery("button[name='update_almacenes']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete       = values_requeridos();
-	var id_presentacion  = jQuery('#id_presentacion').val();
-    var presentacion     = jQuery('#presentaciones').val();
+	var id_almacen  = jQuery('#id_almacen').val();
+    //var presentacion     = jQuery('#presentaciones').val();
     var clave_corta      = jQuery('#clave_corta').val();
     var descripcion      = jQuery('#descripcion').val();
   
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"compras/presentaciones/update_presentacion",
+		url: path()+"almacen/almacenes/update_almacenes",
 		dataType: "json",
-		data: {incomplete :incomplete,id_presentacion:id_presentacion, presentacion:presentacion, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete,id_almacen:id_almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

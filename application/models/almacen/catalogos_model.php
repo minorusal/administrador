@@ -12,7 +12,8 @@ class catalogos_model extends Base_Model
 	}
 
 	public function get_almacenes($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "AND (
+		$filtro = ($filtro=="") ? "" : "AND (   cp.almacenes like '%$filtro%'
+											OR
 												cp.clave_corta like '%$filtro%'
 											OR
 												cp.descripcion like '%$filtro%'
@@ -22,8 +23,10 @@ class catalogos_model extends Base_Model
 						cp.id_almacen_almacenes
 						,cp.clave_corta
 						,cp.descripcion
+						,cp.almacenes
 					FROM
 						av_almacen_almacenes cp
+					WHERE cp.activo = 1 $filtro
 					ORDER BY cp.id_almacen_almacenes
 					$limit";
       	
@@ -39,6 +42,18 @@ class catalogos_model extends Base_Model
 			$query = $this->db->insert_string('av_almacen_almacenes', $data);
 			$query = $this->db->query($query);
 
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	public function update_almacenes($data, $id_almacen){
+		$condicion = array('id_almacen_almacenes !=' => $id_almacen, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_almacen_almacenes', $condicion);
+		if(!$existe){
+			$condicion = "id_almacen_almacenes = $id_almacen"; 
+			$query = $this->db->update_string('av_almacen_almacenes', $data, $condicion);
+			$query = $this->db->query($query);
 			return $query;
 		}else{
 			return false;

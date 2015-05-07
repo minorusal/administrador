@@ -1,9 +1,9 @@
 <?php
 $lang['titulo_seccion'] 	= "Ordenes";
 $lang['titulo_submodulo'] 	= "Ordenes de Compra";
-$lang['ordenes_agregar'] 	= "Nueva Orden";
-$lang['ordenes_listado'] 	= "Listado";
-$lang['ordenes_detalle'] 	= "Detalle";
+$lang['agregar'] 			= "Nueva Orden";
+$lang['listado'] 			= "Listado de ordenes";
+$lang['detalle'] 			= "Detalle";
 
 $lang['orden_num'] 			= "No. Orden";
 $lang['id'] 				= "ID";

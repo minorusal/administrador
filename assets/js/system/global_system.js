@@ -249,3 +249,13 @@ function objLength(objeto) {
     }
     return size;
 }
+
+function imgLoader(idDiv, imageFile){
+// Muestra image de loader en <div> 
+    var imgPath     = path()+'assets/images/loaders/';
+    var imageName   = 'loader.gif';    
+    imageFile       = (!imageFile) ? imgPath + imageName : imageFile;
+    var htmlLoader  = '<img src="'+imageFile+'"/>';
+    jQuery(idDiv).html(htmlLoader);
+    return true;
+}

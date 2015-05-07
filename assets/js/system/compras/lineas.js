@@ -65,11 +65,11 @@ function update_linea(){
   var btn          = jQuery("button[name='update_linea']");
   btn.attr('disabled','disabled');
   var btn_text     = btn.html();  
-  var incomplete       = values_requeridos();
-  var id_linea         = jQuery('#id_linea').val();
-  var linea     = jQuery('#linea').val();
-  var clave_corta      = jQuery('#clave_corta').val();
-  var descripcion      = jQuery('#descripcion').val();
+  var incomplete   = values_requeridos();
+  var id_linea     = jQuery('#id_linea').val();
+  var linea        = jQuery('#linea').val();
+  var clave_corta  = jQuery('#clave_corta').val();
+  var descripcion  = jQuery('#descripcion').val();
   
   jQuery.ajax({
     type:"POST",

@@ -90,20 +90,20 @@ function update_almacenes(){
 	})
 }
 
-function insert_presentacion(){
-	var btn          = jQuery("button[name='save_presentacion']");
+function insert_almacen(){
+	var btn          = jQuery("button[name='save_almacen']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();
-    var presentacion = jQuery('#presentaciones').val();
+    var almacen      = jQuery('#almacenes').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
   
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"compras/presentaciones/insert_presentacion",
+		url: path()+"almacen/almacenes/insert_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete, presentacion:presentacion, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

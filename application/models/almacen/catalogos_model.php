@@ -32,6 +32,18 @@ class catalogos_model extends Base_Model
 			return $query->result_array();
 		}	
 	}
+
+	public function insert_almacen($data){
+		$existe = $this->row_exist('av_almacen_almacenes', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_almacen_almacenes', $data);
+			$query = $this->db->query($query);
+
+			return $query;
+		}else{
+			return false;
+		}
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

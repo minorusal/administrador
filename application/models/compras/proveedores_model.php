@@ -28,4 +28,11 @@ class proveedores_model extends Base_Model{
 		}	
 	}
 
+	public function get_entidades(){
+		$query = "SELECT * FROM av_administracion_entidades WHERE 1";
+		$query = $this->db->query($query);
+		if($query->num_rows>=1){
+			return $query->result_array();
+		}
+	}
 }

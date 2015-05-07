@@ -26,6 +26,13 @@
 		}
 	}
 
+	function dump_var($variable,$tipo=0){
+		echo "<pre>";
+		if(!$tipo){ print_r($variable); }else{var_dump($variable);}
+		echo "</pre>";
+		die();
+	}
+
 	function fechaHoy(){
 	// Crea fecha larga i.e: Miércoles 06 de Mayo del 2015
 		$dia=date("l");

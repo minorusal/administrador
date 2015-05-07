@@ -1,13 +1,11 @@
-
-<div >
-    <div style="float:left">
+    <div class="stdform ">
         <p>
             <label>{lbl_rsocial}: (*)</label>
-            <input id="articulo" type="text" name="articulo" class="input-large requerido" value="" />
+            <input id="rsocial" type="text" name="rsocial" class="input-xlarge requerido" value="" />
         </p>
         <p>
             <label>{lbl_nombre}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <input id="nombre" type="text" name="nombre" class="input-xlarge requerido" value="" />
         </p>
 
         <p>
@@ -16,65 +14,60 @@
         </p>
         <p>
             <label>{lbl_rfc}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <input id="rfc" type="text" name="rfc" class="input-large requerido" value="" />
         </p>
         <p>
-            <label>{lbl_calle}: (*)</label>
-           <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_calle}:</label>
+           <input id="calle" type="text" name="calle" class="input-large " value="" />
         </p>
         <p>
-            <label>{lbl_num_int}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_num_int}: </label>
+            <input id="num_int" type="text" name="num_int" class="input-small " value="" />
         </p>
 
         <p>
-            <label>{lbl_num_ext}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_num_ext}:</label>
+            <input id="num_ext" type="text" name="num_ext" class="input-small " value="" />
         </p>
         <p>
-            <label>{lbl_colonia}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_colonia}: </label>
+            <input id="colonia" type="text" name="colonia" class="input-large " value="" />
         </p>
         <p>
-            <label>{lbl_municipio}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_municipio}:</label>
+            <input id="municipio" type="text" name="municipio" class="input-large " value="" />
         </p>
         <p>
-            <label>{lbl_entidad}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_entidad} (*)</label>
+            {dropdown_entidad}
         </p>
         <p>
-            <label>{lbl_cp}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
-        </p>
-
-        <p>
-            <label>{lbl_telefonos}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_cp}: </label>
+            <input id="cp" type="text" name="cp" class="input-small " value="" />
         </p>
         <p>
-            <label>{lbl_email}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_telefono}: </label>
+            <input id="telefono" type="text" name="telefono" class="input-large " value="" />
         </p>
         <p>
-            <label>{lbl_contacto}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_email}: </label>
+            <input id="email" type="text" name="email" class="input-large " value="" />
         </p>
         <p>
-            <label>{lbl_comentario}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <label>{lbl_contacto}: </label>
+            <input id="contacto" type="text" name="contacto" class="input-xlarge " value="" />
         </p>
-
-    </div>
+        <p>
+            <label>{lbl_comentario}: </label>
+             <textarea id="comentario" name="comentario"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+        </p>
     
-</div>
-<div style="clear:both">
-    <p>
-        <label>{descripcion}:</label>
-        <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>   
+    
+    <p class="stdformbutton"> 
+        
+        {button_save}
+        {button_reset}
     </p>
 </div>
-    <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>    
-    {button_save}
-    {button_reset}

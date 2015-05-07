@@ -12,7 +12,8 @@ class catalogos_model extends Base_Model
 	}
 
 	public function get_almacenes($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "AND (
+		$filtro = ($filtro=="") ? "" : "AND (   cp.almacenes like '%$filtro%'
+											OR
 												cp.clave_corta like '%$filtro%'
 											OR
 												cp.descripcion like '%$filtro%'
@@ -22,8 +23,10 @@ class catalogos_model extends Base_Model
 						cp.id_almacen_almacenes
 						,cp.clave_corta
 						,cp.descripcion
+						,cp.almacenes
 					FROM
 						av_almacen_almacenes cp
+					WHERE cp.activo = 1 $filtro
 					ORDER BY cp.id_almacen_almacenes
 					$limit";
       	

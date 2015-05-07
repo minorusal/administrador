@@ -2,6 +2,15 @@
 class catalogos_model extends Base_Model
 {
 	/*ALMACENES*/
+	public function get_almacenes_unico($id_almacen){
+		$query = "SELECT * FROM av_almacen_almacenes cp WHERE cp.id_almacen_almacenes = $id_almacen";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
 	public function get_almacenes($limit, $offset, $filtro="", $aplicar_limit = true){
 		$filtro = ($filtro=="") ? "" : "AND (
 												cp.clave_corta like '%$filtro%'

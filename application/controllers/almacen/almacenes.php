@@ -160,13 +160,43 @@ class almacenes extends Base_Controller
 			$data_insert = array('clave_corta'    => $clave_corta,
 								 'descripcion'    => $descripcion,
 								 'id_usuario'     => $this->session->userdata('id_usuario'),
-								 'almacenes'        => $almacen,  
+								 'almacenes'      => $almacen,  
 								 'timestamp'      => $this->timestamp());
 			//print_r($data_insert);
 			//exit;
 			$insert = $this->catalogos_model->insert_almacen($data_insert);
 			//print_r($insert);
 			//exit;
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
+	}
+
+	public function update_almacen(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$id_almacen       = $this->ajax_post('id_almacen');
+			$almacen          = $this->ajax_post('almacen');
+			$clave_corta      = $this->ajax_post('clave_corta');
+			$descripcion      = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			//print_r($id_almacen);
+			//exit;
+			$data_update      = array('clave_corta'    => $clave_corta,
+									  'descripcion'    => $descripcion,
+									  'almacenes'      => $almacen);
+
+			//print_r($data_update);
+			//exit;
+			$insert = $this->catalogos_model->update_almacenes($data_update,$id_almacen);
+
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));

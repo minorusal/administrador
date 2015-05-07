@@ -44,6 +44,18 @@ class catalogos_model extends Base_Model
 			return false;
 		}
 	}
+	public function update_almacenes($data, $id_almacen){
+		$condicion = array('id_almacen_almacenes !=' => $id_almacen, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_almacen_almacenes', $condicion);
+		if(!$existe){
+			$condicion = "id_almacen_almacenes = $id_almacen"; 
+			$query = $this->db->update_string('av_almacen_almacenes', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

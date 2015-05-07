@@ -67,15 +67,15 @@ function update_almacenes(){
 	var btn_text     = btn.html();	
 	var incomplete       = values_requeridos();
 	var id_almacen  = jQuery('#id_almacen').val();
-    //var presentacion     = jQuery('#presentaciones').val();
+    var almacen     = jQuery('#almacen').val();
     var clave_corta      = jQuery('#clave_corta').val();
     var descripcion      = jQuery('#descripcion').val();
   
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/update_almacenes",
+		url: path()+"almacen/almacenes/update_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete,id_almacen:id_almacen, almace:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

@@ -12,7 +12,7 @@ class ordenes_model extends Base_Model{
 			return false;
 		}
 	}
-	public function update_orden($data=array()){
+	public function db_update_data($data=array()){
 		$resultado = false;
 		$id_compras_orden   = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
 		$filtro 			= ($id_compras_orden)?"id_compras_orden='$id_compras_orden'":'';
@@ -22,15 +22,16 @@ class ordenes_model extends Base_Model{
 		}
 		return $resultado;
 	}
-	public function get_ordenes($data=array()){
+	public function db_get_data($data=array()){
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
 		$filtro = ($buscar) ? "" : "";
 		// Limit
-		$limit 			= ($data['limit'])?$data['limit']:false;
-		$offset 		= ($data['offset'])?$data['offset']:false;
-		$aplicar_limit 	= ($data['aplicar_limit'])?true:false;
-		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+
 		// Query
 		$query = "	SELECT 
 						 id_compras_orden
@@ -42,7 +43,24 @@ class ordenes_model extends Base_Model{
 					GROUP BY orden_num ASC
 					$limit
 					";
-					// dump_var($query);
+		// dump_var($query);
+      	// Execute querie
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+	public function db_get_total_rows($data=array()){
+		// Filtro
+		$buscar = (isset($data['buscar']))?$data['buscar']:false;
+		$filtro = ($buscar) ? "" : "";
+		// Query
+		$query = "	SELECT count(*)
+					FROM vw_compras_orden_articulos
+					WHERE 1 $filtro
+					GROUP BY orden_num ASC
+					";
+		// dump_var($query);
       	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){

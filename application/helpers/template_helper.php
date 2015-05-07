@@ -117,7 +117,7 @@
 				$count++;
 			}
 
-			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, " class='chzn-select $class'")."</span>";
+			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, "  class='chzn-select $class'")."</span>";
 			
 			return $selected;
 		}

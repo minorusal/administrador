@@ -20,9 +20,51 @@ function input_keypress(identificador, name_funcion){
         return script;
 }
 function include_script(script){
-     var script = "<script>"+script+"</script>";
+    var functions = "";
+    if(jQuery.isArray(script)){
+        jQuery.each(script, function(key, value){
+            functions += value; 
+        });
+        var script = "<script>"+functions+"</script>";
         return script;
+    }
+    var script = "<script>"+script+"</script>";
+    return script;
 }
+function send_form_ajax(uri, content, form){
+    var uri     = (uri==undefined) ? '404_override' : uri;
+    var form    = (form==undefined) ? 'formulario' : form;
+    var objData = formData('#'+form); 
+    var functions = [];
+    var scripts = "";
+    jQuery.ajax({
+        type: "POST",
+        url: path()+uri,
+        dataType: 'json',
+        data: objData,
+        beforeSend : function(){
+            imgLoader();
+        },
+        success: function(data){
+            if(data.functions){
+                jQuery.each(data.functions, function(key, value){
+                    value = (jQuery.isArray(value)) ? value.join(',') : value;
+                    if(jQuery.isArray(value)){
+                        var params = value.join(',');
+                    }else{
+                        var params = value;
+                    }
+                    functions.push( key+'('+params+');');
+                });
+                scripts = include_script(functions);
+            }
+            jQuery('#'+content).html(data.result).show('slow');
+            jQuery( "body" ).append(scripts);
+            imgLoader_clean();
+        }
+    });
+}
+
 function remove_tr(id){
      $("#"+id).click(function() {
  
@@ -252,10 +294,20 @@ function objLength(objeto) {
 
 function imgLoader(idDiv, imageFile){
 // Muestra image de loader en <div> 
+    var imageFile   = ((imageFile=='') || (imageFile==undefined)) ? 'loader.gif' : imageFile;
+    var idDiv       = ((idDiv=='') || (idDiv==undefined)) ? 'loader' : idDiv;
+    
     var imgPath     = path()+'assets/images/loaders/';
     var imageName   = 'loader.gif';    
-    imageFile       = (!imageFile) ? imgPath + imageName : imageFile;
+
+    imageFile       = imgPath + imageName ;
+
     var htmlLoader  = '<img src="'+imageFile+'"/>';
-    jQuery(idDiv).html(htmlLoader);
+    jQuery('#'+idDiv).html(htmlLoader);
     return true;
+}
+
+function imgLoader_clean(idDiv){
+    var idDiv = ((idDiv=='') || (idDiv==undefined)) ? 'loader' : idDiv;
+    jQuery('#'+idDiv).html('');
 }

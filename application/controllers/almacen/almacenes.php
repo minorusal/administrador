@@ -19,8 +19,8 @@ class almacenes extends Base_Controller
 										$this->lang_item("listado_almacenes"), 
 										$this->lang_item("detalle_almacenes")
 								); 
-		$config_tab['links']    = array('compras/almacenes/nuevo_almacenes', 
-										'compras/almacenes/listado_almacenes/'.$pagina, 
+		$config_tab['links']    = array('almacen/almacenes/agregar_almacen', 
+										'almacen/almacenes/listado_almacenes/'.$pagina, 
 										'detalle_almacenes'
 										); 
 		$config_tab['action']   = array('load_content',
@@ -126,5 +126,52 @@ class almacenes extends Base_Controller
         $usuario_registro               = $this->users_model->search_user_for_id($detalle_almacenes[0]['id_usuario']);
         $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
+	}
+
+	public function agregar_almacen(){
+		
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/almacenes_save';
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'insert_almacen()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+
+		$data_tab_1["nombre_almacenes"] = $this->lang_item("nombre_almacenes");
+		$data_tab_1["cvl_corta"]             = $this->lang_item("cvl_corta");
+		$data_tab_1["descrip"]               = $this->lang_item("descripcion");
+
+        $data_tab_1['button_save']       = $btn_save;
+        $data_tab_1['button_reset']      = $btn_reset;
+
+        if($this->ajax_post(false)){
+				echo json_encode($this->load_view_unique($uri_view , $data_tab_1, true));
+		}else{
+			return $this->load_view_unique($uri_view , $data_tab_1, true);
+		}
+	}
+
+	public function insert_almacen(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			
+			$almacen = $this->ajax_post('almacen');
+			$clave_corta  = $this->ajax_post('clave_corta');
+			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$data_insert = array('almacen' => $presentacion,
+								 'clave_corta'    => $clave_corta, 
+								 'descripcion'    => $descripcion,
+								 'id_usuario'     => $this->session->userdata('id_usuario'),
+								 'timestamp'      => $this->timestamp());
+			$insert = $this->catalogos_model->insert_almacen($data_insert);
+
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
 	}
 }

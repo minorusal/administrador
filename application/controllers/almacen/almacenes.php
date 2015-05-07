@@ -154,17 +154,19 @@ class almacenes extends Base_Controller
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			
-			$almacen = $this->ajax_post('almacen');
+			$almacen = $this->ajax_post('almacenes');
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
-			$data_insert = array('almacen' => $presentacion,
-								 'clave_corta'    => $clave_corta, 
+			$data_insert = array('clave_corta'    => $clave_corta,
 								 'descripcion'    => $descripcion,
 								 'id_usuario'     => $this->session->userdata('id_usuario'),
+								 'almacenes'        => $almacen,  
 								 'timestamp'      => $this->timestamp());
+			//print_r($data_insert);
+			//exit;
 			$insert = $this->catalogos_model->insert_almacen($data_insert);
-
+			//print_r($insert);
+			//exit;
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));

@@ -103,7 +103,7 @@ function insert_almacen(){
 		type:"POST",
 		url: path()+"almacen/almacenes/insert_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

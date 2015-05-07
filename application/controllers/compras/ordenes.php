@@ -4,8 +4,6 @@ class ordenes extends Base_Controller {
 
 	private $modulo;
 	private $submodulo;
-	private $uri_modulo;
-	private $uri_submodulo;
 	private $view_content;
 	private $path;
 	private $icon;
@@ -18,8 +16,6 @@ class ordenes extends Base_Controller {
 		$this->modulo 			= 'compras';
 		$this->submodulo		= 'ordenes';
 		$this->icon 			= 'fa fa-archive'; #Icono de modulo
-		$this->uri_modulo 		= $this->modulo.'/';
-		$this->uri_submodulo 	= $this->submodulo;
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
@@ -29,11 +25,11 @@ class ordenes extends Base_Controller {
 		$this->tab2 			= 'listado';
 		$this->tab3 			= 'detalle';
 		// DB Model
-		$this->load->model($this->uri_modulo.$this->submodulo.'_model','db_model');
+		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 			// $this->load->model($this->uri_modulo.'articulos_model');
 			// $this->load->model($this->uri_modulo.'catalogos_model');
 		// Diccionario
-		$this->lang->load($this->uri_modulo.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
 	public function config_tabs(){
@@ -66,7 +62,7 @@ class ordenes extends Base_Controller {
 	}
 
 	private function uri_view_principal(){
-		return $this->uri_modulo.$this->view_content;
+		return $this->modulo.'/'.$this->view_content;
 	}
 
 	public function index(){
@@ -85,7 +81,7 @@ class ordenes extends Base_Controller {
 		$seccion 		= 'listado';
 		$tab_detalle	= $this->tab3;
 		$limit 			= $this->limit_max;
-		$uri_view 		= $this->uri_modulo.$seccion;
+		$uri_view 		= $this->modulo.'/'.$seccion;
 		$url_link 		= $this->path.$seccion;		
 		$sqlData = array(
 			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""

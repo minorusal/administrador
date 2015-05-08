@@ -303,11 +303,11 @@ function imgLoader(idDiv, imageFile){
     imageFile       = imgPath + imageName ;
 
     var htmlLoader  = '<img src="'+imageFile+'"/>';
-    jQuery('#'+idDiv).html(htmlLoader);
+    jQuery(idDiv).html(htmlLoader);
     return true;
 }
 
 function imgLoader_clean(idDiv){
-    var idDiv = ((idDiv=='') || (idDiv==undefined)) ? 'loader' : idDiv;
-    jQuery('#'+idDiv).html('');
+    var idDiv = ((idDiv=='') || (idDiv==undefined)) ? '#loader' : idDiv;
+    jQuery(idDiv).html('');
 }

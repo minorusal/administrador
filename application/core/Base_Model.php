@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once('Base_DBconfig.php');
 class Base_Model extends CI_Model {
 
 	public function row_exist($table, $row ){
@@ -12,9 +13,6 @@ class Base_Model extends CI_Model {
 			return false;
 		}
     }
-
-  
-
 }
 
 ?>

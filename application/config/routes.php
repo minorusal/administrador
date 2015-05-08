@@ -82,6 +82,8 @@ $route['compras/ordenes/listado_ordenes/(:num)'] = 'compras/ordenes/listado_orde
 
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			= 'almacen/almacenes/index';
+$route['almacen/catalogos/almacenes/listado_almacenes']        = 'almacen/almacenes/listado_almacenes';
+$route['almacen/catalogos/almacenes/listado_almacenes/(:num)'] = 'almacen/almacenes/listado_almacenes/$1';
 
 /*VENTAS*/
 
@@ -89,6 +91,8 @@ $route['almacen/catalogos/almacenes']			= 'almacen/almacenes/index';
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';
 /*Catalogo de vendedores*/
 $route['ventas/catalogos/vendedores']			= 'ventas/vendedores/index';
+
+
 
 
 /* End of file routes.php */

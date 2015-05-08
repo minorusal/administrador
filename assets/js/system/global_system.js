@@ -100,7 +100,6 @@ function dump_var(arr,level) {
     }
     return dumped_text;
 }
-
 function live_clock(){
     if (jQuery('#liveclock').length){
 
@@ -176,12 +175,10 @@ function clean_formulario(){
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
     });
-
     jQuery("select").each(function(){ 
         jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');;
     });
     jQuery('.chzn-select').val('').trigger('liszt:updated');
-   
 }
 
 function values_requeridos(){
@@ -220,14 +217,14 @@ function alertas_tpl(type , mensaje ,close){
 }
 
 function formData(selector, template){
-/**
-* Descripcion:  Crea un objeto recuperando los valores ingresados en los campos INPUT
-* Comentario:   Los elementos html deben estar dentro de un mismo <div> y tiene que 
-*               tener el atributo:data-campo="[nombre_campo]"
-* Ejemplo:      <div id="formulario"><input id="id_orden" type="hidden" data-campo="id_orden" value="{id_orden}" /></div>
-*               <script> var objData = formData('#formulario'); </script>
-* @author:      Oscar Maldonado - O3M
-*/
+    /**
+    * Descripcion:  Crea un objeto recuperando los valores ingresados en los campos INPUT
+    * Comentario:   Los elementos html deben estar dentro de un mismo <div> y tiene que 
+    *               tener el atributo:data-campo="[nombre_campo]"
+    * Ejemplo:      <div id="formulario"><input id="id_orden" type="hidden" data-campo="id_orden" value="{id_orden}" /></div>
+    *               <script> var objData = formData('#formulario'); </script>
+    * @author:      Oscar Maldonado - O3M
+    */
     var data = template ? template : {}; // Valores predeterminados - Opcional
     var c, f, r, v, m, $e, $elements = jQuery(selector).find("input, select, textarea");
     for (var i = 0; i < $elements.length; i++){
@@ -284,7 +281,7 @@ function formData(selector, template){
 }
 
 function objLength(objeto) {
-// Devuelve la longitud de un Objeto => array.length
+    // Devuelve la longitud de un Objeto => array.length
     var size = 0, key; 
     for (key in objeto) {
         if (objeto.hasOwnProperty(key)) size++;
@@ -293,9 +290,9 @@ function objLength(objeto) {
 }
 
 function imgLoader(idDiv, imageFile){
-// Muestra image de loader en <div> 
+    // Muestra image de loader en <div> 
     var imageFile   = ((imageFile=='') || (imageFile==undefined)) ? 'loader.gif' : imageFile;
-    var idDiv       = ((idDiv=='') || (idDiv==undefined)) ? 'loader' : idDiv;
+    var idDiv       = ((idDiv=='') || (idDiv==undefined)) ? '#loader' : idDiv;
     
     var imgPath     = path()+'assets/images/loaders/';
     var imageName   = 'loader.gif';    

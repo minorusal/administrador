@@ -43,10 +43,10 @@ class pagination_bootstrap extends CI_Pagination{
 				$config[$key] = $value;
 			}
 		}
-		$config['first_link']  = $this->ci->lang_item("lang_pag_first_link");
-		$config['next_link']   = $this->ci->lang_item("lang_pag_next_link");
-		$config['prev_link']   = $this->ci->lang_item("lang_pag_prev_link");
-		$config['last_link']   = $this->ci->lang_item("lang_pag_last_link");
+		$config['first_link']  = $this->ci->lang_item("lang_pag_first_link",false);
+		$config['next_link']   = $this->ci->lang_item("lang_pag_next_link",false);
+		$config['prev_link']   = $this->ci->lang_item("lang_pag_prev_link",false);
+		$config['last_link']   = $this->ci->lang_item("lang_pag_last_link",false);
 		$config['total_rows']  = $total_rows;
 		$config['base_url']    = $url;
 		$config['per_page']    = $per_page;

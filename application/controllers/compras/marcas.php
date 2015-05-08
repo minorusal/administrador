@@ -97,7 +97,7 @@ class marcas extends Base_Controller {
 	}
 	public function detalle_marca(){
 
-		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/detalle_marcas';
+		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/marcas_edit';
 		$id_marca              = $this->ajax_post('id_marca');
 		$detalle_linea         = $this->catalogos_model->get_marca_unico($id_marca);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_marca' , 'onclick'=>'update_marca()','content' => $this->lang_item("btn_guardar") ));
@@ -123,7 +123,7 @@ class marcas extends Base_Controller {
 	}
 	public function agregar_marca(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/agregar_marcas';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/marcas_save';
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_marca','onclick'=>'insert_marca()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

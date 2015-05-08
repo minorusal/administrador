@@ -73,8 +73,25 @@ $route['compras/catalogos/um']                   = 'compras/um/index';
 $route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
 $route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
-/*Ventas*/
-$route['ventas/catalogos/clientes']                   = 'ventas/clientes/index';
+/*Catalogo de Ordenes*/
+$route['compras/ordenes']                   	 = 'compras/ordenes/index';
+$route['compras/ordenes/listado_ordenes']        = 'compras/ordenes/listado_ordenes';
+$route['compras/ordenes/listado_ordenes/(:num)'] = 'compras/ordenes/listado_ordenes/$1';
+
+/*ALMACEN*/
+
+/*Catalogo de almacenes*/
+$route['almacen/catalogos/almacenes']			= 'almacen/almacenes/index';
+
+
+/*VENTAS*/
+
+/*Catalogo de clientes*/
+$route['ventas/catalogos/clientes']				= 'ventas/clientes/index';
+/*Catalogo de vendedores*/
+$route['ventas/catalogos/vendedores']			= 'ventas/vendedores/index';
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

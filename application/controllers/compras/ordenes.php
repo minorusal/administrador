@@ -7,9 +7,8 @@ class ordenes extends Base_Controller {
 	private $view_content;
 	private $path;
 	private $icon;
-
 	private $offset, $limit_max;
-	private $tab = array(), $tabs = array();
+	private $tab = array(), $tab_indice = array();
 
 	// private $tab, $tab1, $tab2, $tab3;
 	
@@ -23,13 +22,13 @@ class ordenes extends Base_Controller {
 		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
-		$this->tabs 				= array(
+		$this->tab_indice 		= array(
 									 'agregar'
 									,'listado'
 									,'detalle'
 								);
-		for($i=0; $i<=count($this->tabs)-1; $i++){
-			$this->tab[$this->tabs[$i]] = $this->tabs [$i];
+		for($i=0; $i<=count($this->tab_indice)-1; $i++){
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice [$i];
 		}
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
@@ -41,7 +40,7 @@ class ordenes extends Base_Controller {
 
 	public function config_tabs(){
 		for($i=1; $i<=count($this->tab); $i++){
-			${'tab_'.$i} = $this->tab [$this->tabs[$i-1]];
+			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
 		}
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
@@ -95,10 +94,10 @@ class ordenes extends Base_Controller {
 			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
+			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
-		$sqlData['aplicar_limit'] = true;	
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));

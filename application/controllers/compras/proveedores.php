@@ -2,60 +2,141 @@
 
 class proveedores extends Base_Controller { 
 
-	var $uri_modulo     = 'compras/';
-	var $uri_submodulo  = 'proveedores';
-	var $view_content   = 'content';
-	var $view_listado   = 'listado';
+	private $modulo;
+	private $submodulo;
+	private $view_content;
+	private $path;
+	private $icon;
+	private $offset, $limit_max;
+	private $tab = array(), $tab_indice = array();
+
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model($this->uri_modulo.'proveedores_model');
-		$this->lang->load("compras/proveedores","es_ES");
+		$this->modulo 			= 'compras';
+		$this->submodulo		= 'proveedores';
+		$this->icon 			= 'fa fa-users'; #Icono de modulo
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
+		$this->view_content 	= 'content';
+		$this->limit_max		= 5;
+		$this->offset			= 0;
+
+		$this->tab_indice 		= array(
+									 'agregar'
+									,'listado'
+									,'detalle'
+								);
+		for($i=0; $i<=count($this->tab_indice)-1; $i++){
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice [$i];
+		}
+
+		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
 	public function config_tabs(){
-		$pagina = (is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
-		$config_tab['names']    = array($this->lang_item("agregar_proveedor"), 
-										$this->lang_item("listado_proveedor"), 
-										$this->lang_item("detalle_proveedor")
+		for($i=1; $i<=count($this->tab); $i++){
+			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
+		}
+		$path  	= $this->path;
+		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		
+		$config_tab['names']    = array(
+										 $this->lang_item($tab_1)
+										,$this->lang_item($tab_2)
+										,$this->lang_item($tab_3)
 								); 
-		$config_tab['links']    = array('compras/proveedores/agregar_proveedor', 
-										'compras/proveedores/listado_proveedor/'.$pagina, 
-										''
-										); 
-		$config_tab['action']   = array('load_content',
-										'load_content', 
-										''
-										);
+		$config_tab['links']    = array(
+										 $path.$tab_1
+										,$path.$tab_2.'/'.$pagina
+										,$tab_3
+								); 
+		$config_tab['action']   = array(
+										 array('function' => '23'  )
+										,'load_content'
+										,''
+								);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
 		return $config_tab;
 	}
 
 	private function uri_view_principal(){
-		return $this->uri_modulo.$this->view_content;
-	}
-
-	private function uri_cl_principal($pag = ''){
-		return $this->uri_modulo.$this->uri_submodulo.'/'.$pag;
+		return $this->modulo.'/'.$this->view_content;
 	}
 
 	public function index(){
-		//$view_listado_articulo    = $this->listado_articulos($offset);
-		$contenidos_tab           = $this->agregar_proveedor();//$view_listado_articulo;
-
-		$data['titulo_seccion']   = $this->lang_item("seccion");
-		$data['titulo_submodulo'] = $this->lang_item("submodulo");
-		$data['icon']             = 'fa fa-users';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),1,$contenidos_tab);
-		
-		$js['js'][]     = array('name' => 'proveedores', 'dirname' => 'compras');
+		$tabl_inicial 			  = 2;
+		$view_listado    		  = $this->listado();		
+		$contenidos_tab           = $view_listado;
+		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['icon']             = $this->icon;
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
+		$js['js'][]               = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
-
 	}
-	public function listado_proveedores(){
 
+	public function listado($offset=0){
+		$seccion 		= '';
+		$accion 		= $this->tab['listado'];
+		$tab_detalle	= $this->tab['detalle'];
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.'/'.$accion;
+		$url_link 		= $this->path.$seccion.$accion;		
+		$sqlData = array(
+			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+			,'aplicar_limit'=> true
+		);
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = $this->db_model->db_get_total_rows();
+		$list_content = $this->db_model->db_get_data($sqlData);
+		$url          = base_url($url_link);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+
+		if($total_rows>0){
+			foreach ($list_content as $value) {
+				// Evento de enlace
+				$atrr = array(
+								'href' => '#',
+							  	'onclick' => $tab_detalle.'('.$value['id_compras_proveedor'].')'
+						);
+				// Datos para tabla
+				$tbl_data[] = array('id'                => $value['razon_social'],
+									'razon_social'      => tool_tips_tpl($value['razon_social'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'nombre_comercial'  => $value['nombre_comercial'],
+									'clave_corta'       => $value['clave_corta']
+									);
+			}
+
+			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			
+			$this->table->set_heading(	$this->lang_item("id"),
+										$this->lang_item("lbl_rsocial"),
+										$this->lang_item("lbl_nombre"),
+										$this->lang_item("lbl_clv"));
+			
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
+		}else{
+			$msg   = $this->lang_item("msg_query_null");
+			$tabla = alertas_tpl('', $msg ,false);
+		}
+			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+			$tabData['tabla']     = $tabla;
+			$tabData['paginador'] = $paginador;
+			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+
+			if($this->ajax_post(false)){
+				echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+			}else{
+				return $this->load_view_unique($uri_view , $tabData, true);
+			}
 	}
+
+
+	/*
 
 	public function agregar_proveedor(){
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/proveedores_save';
@@ -107,5 +188,5 @@ class proveedores extends Base_Controller {
 		$jsonData = array(	'result'  => $this->ajax_post('comentario'),
 							'functions' => array( 'clean_formulario' => '' ));
 		echo json_encode($jsonData);
-	}
+	}*/
 }

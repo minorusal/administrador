@@ -7,9 +7,8 @@ class ordenes extends Base_Controller {
 	private $view_content;
 	private $path;
 	private $icon;
-
 	private $offset, $limit_max;
-	private $tab, $tab1, $tab2, $tab3;
+	private $tab = array(), $tab_indice = array();
 	
 	public function __construct(){
 		parent::__construct();
@@ -21,9 +20,14 @@ class ordenes extends Base_Controller {
 		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar';
-		$this->tab2 			= 'listado';
-		$this->tab3 			= 'detalle';
+		$this->tab_indice 		= array(
+									 'agregar'
+									,'listado'
+									,'detalle'
+								);
+		for($i=0; $i<=count($this->tab_indice)-1; $i++){
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice [$i];
+		}
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 			// $this->load->model($this->uri_modulo.'articulos_model');
@@ -33,9 +37,9 @@ class ordenes extends Base_Controller {
 	}
 
 	public function config_tabs(){
-		$tab_1 	= $this->tab1;
-		$tab_2 	= $this->tab2;
-		$tab_3 	= $this->tab3;
+		for($i=1; $i<=count($this->tab); $i++){
+			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
+		}
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
@@ -65,7 +69,7 @@ class ordenes extends Base_Controller {
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index(){
+	public function index(){		
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
@@ -78,19 +82,20 @@ class ordenes extends Base_Controller {
 	}
 
 	public function listado($offset=0){
-		$seccion 		= 'listado';
-		$tab_detalle	= $this->tab3;
+		$seccion 		= '';
+		$accion 		= $this->tab['listado'];
+		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
-		$uri_view 		= $this->modulo.'/'.$seccion;
-		$url_link 		= $this->path.$seccion;		
+		$uri_view 		= $this->modulo.'/'.$accion;
+		$url_link 		= $this->path.$seccion.$accion;		
 		$sqlData = array(
 			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
+			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
-		$sqlData['aplicar_limit'] = true;	
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -136,8 +141,8 @@ class ordenes extends Base_Controller {
 	}
 
 		public function detalle(){
-		$seccion 		= 'detalle';
-		$tab_detalle	= $this->tab3;
+		$seccion 		= '';
+		$accion 		= $this->tab['detalle'];
 		$id_compras_orden = $this->ajax_post('id_compras_orden');
 		$detalle  		= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
@@ -158,7 +163,7 @@ class ordenes extends Base_Controller {
         $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
         $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view   					= $this->path.$this->submodulo.'_'.$seccion;
+		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 

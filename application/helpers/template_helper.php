@@ -27,7 +27,18 @@
 					$onclick  = "";
 				}else{
 					$action = $config['action'][$i];
-					$onclick  = "onclick='$action($link, $i);'";
+					if(is_array($action)){
+						foreach ($action as $function => $params) {
+							if(is_array($params)){
+								$params = implode(',', $params);
+							}
+							$onclick  = "onclick='$function($link, $params);'";
+						}
+						//print_debug($action);
+					}else{
+						$onclick  = "onclick='$action($link, $i);'";
+					}
+					
 				}
 				
 

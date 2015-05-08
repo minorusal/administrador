@@ -3,7 +3,7 @@ $lang['submodulo']     = "compras";
 $lang['seccion']       = "proveedores";
 
 $lang['lbl_rsocial']    = "Razon Social";
-$lang['lbl_nombre']	   = "Nombre del Proveedor";
+$lang['lbl_nombre']	    = "Nombre del Proveedor";
 $lang['lbl_clv']        = "Clave corta";
 $lang['lbl_rfc']        = "RFC";
 $lang['lbl_calle']      = "Calle";
@@ -20,9 +20,9 @@ $lang['lbl_comentario'] = "Comentario";
 
 
 
-$lang['agregar_proveedor'] = "nuevo proveedor";
-$lang['listado_proveedor'] = "listado de proveedores";
-$lang['detalle_proveedor'] = "Detalle";
+$lang['agregar'] = "nuevo proveedor";
+$lang['listado'] = "listado de proveedores";
+$lang['detalle'] = "Detalle";
 $lang['nombre_proveedor']  = "Nombre del proveedor";
 $lang['cvl_corta']         = "Clave corta";
 

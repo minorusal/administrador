@@ -8,18 +8,18 @@ jQuery(document).ready(function(){
 	});
 })
 
-function buscar_articulo(){
+function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"compras/ordenes/listado_ordenes",
+		url: path()+"compras/ordenes/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
 			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			var funcion = 'buscar_orden';
+			var funcion = 'buscar';
         	jQuery("#loader").html('');
         	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 			jQuery('#search-query').val(filtro).focus();
@@ -38,7 +38,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar_orden';
+           		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -50,10 +50,10 @@ function load_content(uri, id_content){
     });
 }
 
-function ordenes_detalle(id_compras_orden){	
+function detalle(id_compras_orden){	
 	jQuery.ajax({
         type: "POST",
-        url: path()+"compras/ordenes/ordenes_detalle",
+        url: path()+"compras/ordenes/detalle",
         dataType: 'json',
         data: {id_compras_orden : id_compras_orden},
         success: function(data){
@@ -66,16 +66,16 @@ function ordenes_detalle(id_compras_orden){
     });
 }
 
-function update_orden(){	
+function actualizar(){	
 		jQuery('#mensajes_update').hide();		
-		var btn          = jQuery("button[name='update_orden']");
+		var btn          = jQuery("button[name='update']");
 		btn.attr('disabled','disabled');
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
   		objData['incomplete'] = values_requeridos();
 		jQuery.ajax({
 			type:"POST",
-			url: path()+"compras/ordenes/update_orden",
+			url: path()+"compras/ordenes/actualizar",
 			dataType: "json",			
 			data : objData,
 			beforeSend : function(){
@@ -83,16 +83,14 @@ function update_orden(){
 			},
 			success : function(data){
 				btn.removeAttr('disabled');
-				var data = data.split('|');
-				if(data[0]==1){
-				}
+				// if(data.id==1){	}
 				jQuery("#update_loader").html('');
-			    jQuery("#mensajes_update").html(data[1]).show('slow');
+			    jQuery("#mensajes_update").html(data.contenido).show('slow');
 			}
 		})
 }
 
-function insert_articulo(){
+function insert(){
 		
 	var btn          = jQuery("button[name='save_orden']");
 	btn.attr('disabled','disabled');

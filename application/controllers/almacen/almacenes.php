@@ -54,13 +54,13 @@ class almacenes extends Base_Controller
 	{
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$uri_view    = $this->uri_modulo.'/listado';
+		$uri_view    = $this->uri_modulo.'listado';
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->catalogos_model->get_almacenes($limit, $offset, $filtro);
-
 		$total_rows  = count($this->catalogos_model->get_almacenes($limit, $offset, $filtro, false));
 		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/listado_almacenes');
+		//dump_var($url);
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 	
 		if($total_rows>0){
@@ -70,18 +70,17 @@ class almacenes extends Base_Controller
 							  	'onclick' => 'detalle_almacenes('.$value['id_almacen_almacenes'].')'
 						);
 	
-				$tbl_data[] = array('id'             => $value['id_almacen_almacenes'],
-									//'presentaciones' => tool_tips_tpl($value['presentacion'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									//'clave_corta'    => $value['clave_corta'],
+				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'clave_corta'    => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'almacenes'      => $value['almacenes'],
 									'descripcion'    => $value['descripcion']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 		
-			$this->table->set_heading(	$this->lang_item("id"),
-										$this->lang_item("almacenes"),
+			$this->table->set_heading(	$this->lang_item("cvl_corta"),
 										$this->lang_item("cvl_corta"),
+										$this->lang_item("almacen"),
 										$this->lang_item("descripcion"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -109,8 +108,9 @@ class almacenes extends Base_Controller
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_almacenes' , 'onclick'=>'update_almacenes()','content' => $this->lang_item("btn_guardar") ));
 		
 		$data_tab_3['id_almacen']            = $id_almacen;
-        $data_tab_3["nombre_almacen"]        = $this->lang_item("Nombre almacen");
+        $data_tab_3["nombre_almacen"]        = $this->lang_item("almacen");
 		$data_tab_3["cvl_corta"]        	 = $this->lang_item("cvl_corta");
+		$data_tab_3["descrip"]         	     = $this->lang_item("descripcion");
 		$data_tab_3["descrip"]         	     = $this->lang_item("descripcion");
 		$data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
 		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
@@ -184,14 +184,14 @@ class almacenes extends Base_Controller
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
 			$id_almacen       = $this->ajax_post('id_almacen');
-			$almacen          = $this->ajax_post('almacen');
+			$almacenes        = $this->ajax_post('almacen');
 			$clave_corta      = $this->ajax_post('clave_corta');
 			$descripcion      = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
 			//print_r($id_almacen);
 			//exit;
 			$data_update      = array('clave_corta'    => $clave_corta,
 									  'descripcion'    => $descripcion,
-									  'almacenes'      => $almacen);
+									  'almacenes'      => $almacenes);
 
 			//print_r($data_update);
 			//exit;

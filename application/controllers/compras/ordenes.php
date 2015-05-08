@@ -1,140 +1,165 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class ordenes extends Base_Controller { 
-	
-	var $uri_modulo     = 'compras/';
-	var $uri_submodulo  = 'ordenes';
-	var $view_content   = 'content';
-	public $Path 		= 'compras/ordenes/';
+
+	private $modulo;
+	private $submodulo;
+	private $view_content;
+	private $path;
+	private $icon;
+
+	private $offset, $limit_max;
+	private $tab, $tab1, $tab2, $tab3;
 	
 	public function __construct(){
 		parent::__construct();
-		$this->load->model($this->uri_modulo.'ordenes_model');
-		// $this->load->model($this->uri_modulo.'articulos_model');
-		// $this->load->model($this->uri_modulo.'catalogos_model');
-		$this->lang->load("compras/ordenes","es_ES");
+		$this->modulo 			= 'compras';
+		$this->submodulo		= 'ordenes';
+		$this->icon 			= 'fa fa-archive'; #Icono de modulo
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
+		$this->view_content 	= 'content';
+		$this->limit_max		= 5;
+		$this->offset			= 0;
+		// Tabs
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
+		// DB Model
+		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+			// $this->load->model($this->uri_modulo.'articulos_model');
+			// $this->load->model($this->uri_modulo.'catalogos_model');
+		// Diccionario
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
 	public function config_tabs(){
+		$tab_1 	= $this->tab1;
+		$tab_2 	= $this->tab2;
+		$tab_3 	= $this->tab3;
+		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item("ordenes_agregar")
-										,$this->lang_item("ordenes_listado")
-										,$this->lang_item("ordenes_detalle")
+										 $this->lang_item($tab_1)
+										,$this->lang_item($tab_2)
+										,$this->lang_item($tab_3)
 								); 
+		// Href de tabs
 		$config_tab['links']    = array(
-										 $this->Path.'ordenes_agregar'
-										,$this->Path.'ordenes_listado/'.$pagina
-										,'ordenes_detalle'
+										 $path.$tab_1
+										,$path.$tab_2.'/'.$pagina
+										,$tab_3
 								); 
+		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
 										,'load_content'
 										,''
 								);
+		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
 		return $config_tab;
 	}
 
 	private function uri_view_principal(){
-		return $this->uri_modulo.$this->view_content;
+		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index($offset = 0){
+	public function index(){
 		$tabl_inicial 			  = 2;
-		$view_listado    		  = $this->ordenes_listado($offset);		
+		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'fa fa-archive';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);
-		
-		$js['js'][]     = array('name' => 'ordenes', 'dirname' => 'compras');
+		$data['icon']             = $this->icon;
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
+		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function ordenes_listado($offset = 0){
-		$data_tab_2  	= "";
-		$limit 			= 5;
-		$uri_view 		= $this->uri_modulo.'/listado';
+	public function listado($offset=0){
+		$seccion 		= 'listado';
+		$tab_detalle	= $this->tab3;
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.'/'.$seccion;
+		$url_link 		= $this->path.$seccion;		
 		$sqlData = array(
 			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
-			,'uri_view'   	=> $uri_view
-			,'limit'      	=> $limit
 			,'offset' 		=> $offset
-			,'aplicar_limit'=> false
+			,'limit'      	=> $limit
 		);
-		$uri_segment = $this->uri_segment(); 
-		$lts_content = $this->ordenes_model->get_ordenes($sqlData);
-		$total_rows  = count($this->ordenes_model->get_ordenes($sqlData));
-		$url         = base_url($sqlData['uri_view']);
-		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $sqlData['limit'], $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
+		$sqlData['aplicar_limit'] = true;	
+		$list_content = $this->db_model->db_get_data($sqlData);
+		$url          = base_url($url_link);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){
-			foreach ($lts_content as $value) {
+			foreach ($list_content as $value) {
+				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'ordenes_detalle('.$value['id_compras_orden'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_compras_orden'].')'
 						);
-				
+				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'razon_social'   => $value['razon_social'],
 									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr)
 									);
 			}
-
+			// Plantilla
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-		
+			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),
 										$this->lang_item("razon_social"),
 										$this->lang_item("descripcion"));
+			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
-			$data_tab_2['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
-			$data_tab_2['tabla']     = $tabla;
-			$data_tab_2['paginador'] = $paginador;
-			$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+			$tabData['tabla']     = $tabla;
+			$tabData['paginador'] = $paginador;
+			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
 			if($this->ajax_post(false)){
-				echo json_encode( $this->load_view_unique($uri_view , $data_tab_2, true));
+				echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
 			}else{
-				return $this->load_view_unique($uri_view , $data_tab_2, true);
+				return $this->load_view_unique($uri_view , $tabData, true);
 			}
 	}
 
-		public function ordenes_detalle(){
-		$data_tab_3 ='';
+		public function detalle(){
+		$seccion 		= 'detalle';
+		$tab_detalle	= $this->tab3;
 		$id_compras_orden = $this->ajax_post('id_compras_orden');
-		$ordenes_detalle  = $this->ordenes_model->get_orden_unico($id_compras_orden);
-		// dump_var($ordenes_detalle);
-		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'update_orden' , 'onclick'=>'update_orden()','content' => $this->lang_item("btn_guardar") ));
-		
-		$data_tab_3['id_compras_orden']	 = $id_compras_orden;
-		$data_tab_3['orden_num']   		 = $this->lang_item("orden_num",false);
-		$data_tab_3['orden_num_value']	 = $ordenes_detalle[0]['orden_num'];
-        $data_tab_3['razon_social'] 	 = $this->lang_item("razon_social",false);
-		$data_tab_3['razon_social_value']= $ordenes_detalle[0]['razon_social'];
-        $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
-        $data_tab_3['descripcion_value'] = $ordenes_detalle[0]['descripcion'];
-        $data_tab_3['fecha_registro']    = $this->lang_item("fecha_registro",false);
-        $data_tab_3['timestamp']         = $ordenes_detalle[0]['timestamp'];
-        $data_tab_3['button_save']       = $btn_save;
+		$detalle  		= $this->db_model->get_orden_unico($id_compras_orden);
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		$tabData['id_compras_orden']	= $id_compras_orden;
+		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
+		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
+        $tabData['razon_social'] 	 	= $this->lang_item("razon_social",false);
+		$tabData['razon_social_value']	= $detalle[0]['razon_social'];
+        $tabData['descripcion']       	= $this->lang_item("descripcion",false);
+        $tabData['descripcion_value'] 	= $detalle[0]['descripcion'];
+        $tabData['fecha_registro']    	= $this->lang_item("fecha_registro",false);
+        $tabData['timestamp']         	= $detalle[0]['timestamp'];
+        $tabData['button_save']       	= $btn_save;
         
         $this->load_database('global_system');
         $this->load->model('users_model');
         
-        $usuario_registro               = $this->users_model->search_user_for_id($ordenes_detalle[0]['id_usuario']);
-        $data_tab_3['registro_por']    	= $this->lang_item("registro_por",false);
-        $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/ordenes_detalle';
-		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
+        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
+		$uri_view   					= $this->path.$this->submodulo.'_'.$seccion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	// public function agregar_orden(){
@@ -191,7 +216,7 @@ class ordenes extends Base_Controller {
 	// 							 'id_cat_um'=> $um,
 	// 							 'id_usuario' => $this->session->userdata('id_usuario'),
 	// 							 'timestamp'  => $this->timestamp());
-	// 		$insert = $this->ordenes_model->insert_orden($data_insert);
+	// 		$insert = $this->db_model->insert_orden($data_insert);
 
 	// 		if($insert){
 	// 			$msg = $this->lang_item("msg_insert_success",false);
@@ -203,19 +228,16 @@ class ordenes extends Base_Controller {
 	// 	}
 	// }
 
-
-	// public function update_orden(){
-	// 	$arrayData = array(
-	// 			'descripcion' => $this->ajax_post('descripcion')
-	// 		);
-	// 	echo json_encode($arrayData);
-	// }
-
-	public function update_orden(){
+	public function actualizar(){
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+
 		}else{
 			$sqlData = array(
 						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
@@ -223,14 +245,23 @@ class ordenes extends Base_Controller {
 						// ,'razon_social' 	=> $this->ajax_post('razon_social')
 						,'descripcion'		=> $this->ajax_post('descripcion')
 						);
-			$insert = $this->ordenes_model->update_orden($sqlData);
+			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
 			}
 		}
+		echo json_encode($json_respuesta);
 	}
 }

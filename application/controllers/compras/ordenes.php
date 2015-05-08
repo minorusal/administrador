@@ -9,8 +9,6 @@ class ordenes extends Base_Controller {
 	private $icon;
 	private $offset, $limit_max;
 	private $tab = array(), $tab_indice = array();
-
-	// private $tab, $tab1, $tab2, $tab3;
 	
 	public function __construct(){
 		parent::__construct();
@@ -71,7 +69,7 @@ class ordenes extends Base_Controller {
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index(){
+	public function index(){		
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;

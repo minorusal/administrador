@@ -1,12 +1,6 @@
 <?php
 class ordenes_model extends Base_Model{
 
-	public $dbdata, $dbinfo;
-	function __construct(){
-		$this->dbdata = new Base_DBconfig();
-		$this->dbinfo = $this->dbdata->db_config();
-	}
-
 	public function insert_orden($data){
 		$existe = $this->row_exist('av_compras_ordenes');
 		if(!$existe){

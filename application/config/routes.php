@@ -90,15 +90,13 @@ $route['almacen/catalogos/almacenes/listado']        = 'almacen/almacenes/listad
 $route['almacen/catalogos/almacenes/listado/(:num)'] = 'almacen/almacenes/listado/$1';
 
 
+
 /*VENTAS*/
 
 /*Catalogo de clientes*/
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';
 /*Catalogo de vendedores*/
 $route['ventas/catalogos/vendedores']			= 'ventas/vendedores/index';
-
-
-
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -24,9 +24,9 @@ class users_model extends Base_Model{
 						,S.sucursal
 						,N.id_perfil
 						,N.perfil
-						,N.id_modulo
-						,N.id_submodulo
-						,N.id_seccion
+						,N.id_menu_n1
+						,N.id_menu_n2
+						,N.id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -68,9 +68,9 @@ class users_model extends Base_Model{
 						,S.sucursal
 						,N.id_perfil
 						,N.perfil
-						,N.id_modulo
-						,N.id_submodulo
-						,N.id_seccion
+						,N.id_menu_n1
+						,N.id_menu_n2
+						,N.id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -78,7 +78,7 @@ class users_model extends Base_Model{
 						sys_usuarios U
 					left join sys_personales P on U.id_personal = P.id_personal
 					left join sys_claves     C on U.id_clave    = C.id_clave
-					left join sys_perfiles    N on U.id_perfil    = N.id_perfil
+					left join sys_perfiles   N on U.id_perfil   = N.id_perfil
 					left join sys_paises     Pa on U.id_pais    = Pa.id_pais
 					left join sys_empresas   E on U.id_empresa  = E.id_empresa
 					left join sys_sucursales S on U.id_sucursal = S.id_sucursal
@@ -94,34 +94,36 @@ class users_model extends Base_Model{
 	* @param array $id_modulo
 	* @return array
 	*/
-	function search_modules_for_user($id_modulo , $id_submodulos, $id_secciones){
+	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
+
+
 		$query = "	SELECT 
-						 M.modulo
-						,M.routes as modulo_routes
-						,M.icon as modulo_icon
-						,Sm.id_submodulo
-						,Sm.submodulo
-						,Sm.routes as submodulo_routes
-						,Sm.icon as submodulo_icon
-						,S.id_seccion
-						,S.seccion
-						,S.routes as seccion_routes
-						,S.icon as seccion_icon
+						 n1.menu_n1
+						,n1.routes as menu_n1_routes
+						,n1.icon as menu_n1_icon
+						,n2.id_menu_n2
+						,n2.menu_n2
+						,n2.routes as menu_n2_routes
+						,n2.icon as menu_n2_icon
+						,n3.id_menu_n3
+						,n3.menu_n3
+						,n3.routes as menu_n3_routes
+						,n3.icon as menu_n3_icon
 					FROM
-						sys_modulos M
-					LEFT JOIN (SELECT * FROM sys_submodulos WHERE id_submodulo IN ($id_submodulos)) Sm ON M.id_modulo = Sm.id_modulo
-					LEFT JOIN (SELECT * FROM sys_secciones WHERE id_seccion IN ($id_secciones))  S ON S.id_submodulo = Sm.id_submodulo
+						sys_menu_n1 n1
+					LEFT JOIN (SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2))  n2 ON n1.id_menu_n1 = n2.id_menu_n1
+					LEFT JOIN (SELECT * FROM sys_menu_n3 WHERE id_menu_n3 IN ($id_menu_n3))  n3 ON n3.id_menu_n2 = n2.id_menu_n2
 					WHERE
-						M.id_modulo IN ($id_modulo) AND M.activo = 1 
+						n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1 
 					ORDER BY 
-						M.order, Sm.order,S.order;
+						n1.order, n2.order,n3.order;
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}		
 	}
-
+	
 
 }
 

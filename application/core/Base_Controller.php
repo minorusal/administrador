@@ -35,9 +35,10 @@ class Base_Controller extends CI_Controller {
 		$this->lang_load("navigate");
 		$ext      = ($ext!='.html') ? '': $ext;
 
-		$modulos    = $this->session->userdata('id_modulo');
-		$submodulos = $this->session->userdata('id_submodulo');
-		$secciones  = $this->session->userdata('id_seccion');
+		$modulos    = $this->session->userdata('id_menu_n1');
+		$submodulos = $this->session->userdata('id_menu_n2');
+		$secciones  = $this->session->userdata('id_menu_n3');
+		$perfil     = $this->session->userdata('perfil');
 		
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
@@ -183,20 +184,20 @@ class Base_Controller extends CI_Controller {
 	function build_array_navigator($navigator){
 		foreach ($navigator as $key => $value) {
 			$route = "";
-			if(!is_null($value['submodulo'])){
-				if(!is_null($value['seccion'])){
-					$route = $value['seccion_routes'];
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['content'][$value['seccion']] = array( 'seccion'=> $value['seccion'] , 'icon' => $value['seccion_icon'],'routes'=> $route);
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']]['icon'] = $value['submodulo_icon'];
-					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
+			if(!is_null($value['menu_n2'])){
+				if(!is_null($value['menu_n3'])){
+					$route = $value['menu_n3_routes'];
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['content'][$value['menu_n3']] = array( 'menu_n3'=> $value['menu_n3'] , 'icon' => $value['menu_n3_icon'],'routes'=> $route);
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['icon'] = $value['menu_n2_icon'];
+					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
 				}else{
-					$route = $value['submodulo_routes'];
-					$data_navigator[$value['modulo']]['content'][$value['submodulo']] = array('icon' => $value['submodulo_icon'] , 'routes' => $route);
-					$data_navigator[$value['modulo']]['icon'] = $value['modulo_icon'];
+					$route = $value['menu_n2_routes'];
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']] = array('icon' => $value['menu_n2_icon'] , 'routes' => $route);
+					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
 				}
 			}else{
-				$route = $value['modulo_routes'];
-				$data_navigator[$value['modulo']] = array('icon'=>$value['modulo_icon'], 'routes' => $route);
+				$route = $value['menu_n1_routes'];
+				$data_navigator[$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'routes' => $route);
 			}
 			$sites_availables[] = $route;
 		}

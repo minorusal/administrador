@@ -44,7 +44,7 @@ class presentaciones extends Base_Controller {
 
 		$data['titulo_seccion']   = $this->lang_item("presentaciones");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'fa fa-newspaper-o';
+		$data['icon']             = 'fa fa-archive';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$contenidos_tab);
 		
 		$js['js'][]     = array('name' => 'presentaciones', 'dirname' => 'compras');

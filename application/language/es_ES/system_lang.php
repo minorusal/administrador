@@ -16,7 +16,7 @@
 	$lang['pag_first_link'] = '&laquo; Primero';
 	$lang['pag_next_link']  = 'Siguiente &raquo;';
 	$lang['pag_prev_link']  = '&laquo; Anterior';
-	$lang['pag_last_link']  = 'Ultimo &raquo;';
+	$lang['pag_last_link']  = 'Último &raquo;';
 
 	$lang['pag_registros']  = ' registros';
 	$lang['pag_resultado']  = 'Resultado ';

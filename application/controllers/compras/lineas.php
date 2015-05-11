@@ -43,7 +43,7 @@ class lineas extends Base_Controller {
 
 		$data['titulo_seccion']   = $this->lang_item("linea");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = ' iconfa-filter';
+		$data['icon']             = 'fa fa-tasks';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$contenidos_tab);
 		
 		$js['js'][]     = array('name' => 'lineas', 'dirname' => 'compras');

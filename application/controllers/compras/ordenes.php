@@ -14,7 +14,7 @@ class ordenes extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->submodulo		= 'ordenes';
-		$this->icon 			= 'fa fa-archive'; #Icono de modulo
+		$this->icon 			= 'fa fa-file-text'; #Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;

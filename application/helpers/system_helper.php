@@ -26,11 +26,13 @@
 		}
 	}
 
-	function dump_var($variable,$tipo=0){
-		echo "<pre>";
-		if(!$tipo){ print_r($variable); }else{var_dump($variable);}
-		echo "</pre>";
-		die();
+	if(!function_exists('dump_var')){
+		function dump_var($variable,$tipo=0){
+			echo "<pre>";
+			if(!$tipo){ print_r($variable); }else{var_dump($variable);}
+			echo "</pre>";
+			die();
+		}
 	}
 
 	function fechaHoy(){

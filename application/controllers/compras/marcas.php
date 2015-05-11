@@ -41,7 +41,7 @@ class marcas extends Base_Controller {
 
 		$data['titulo_seccion']   = $this->lang_item("marcas");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'iconfa-tag';
+		$data['icon']             = 'fa fa-tags';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$contenidos_tab);
 		
 		$js['js'][]     = array('name' => 'marcas', 'dirname' => 'compras');

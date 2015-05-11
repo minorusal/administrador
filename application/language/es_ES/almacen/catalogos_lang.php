@@ -1,5 +1,6 @@
 <?php
 /*USOS MULTIPLES*/
+	$lang['titulo_seccion']   = 'Almacenes';
 	$lang['titulo_submodulo'] = 'Catalogos';
 	$lang['tool_tip']         = 'Ver Detalle';
 	$lang['sin_descripcion']  = 'Sin descripción';
@@ -13,11 +14,16 @@
 
 	/*ALMACENES*/
 
-	$lang['almacenes']         = 'almacenes';
+	/*$lang['almacenes']         = 'almacenes';
 	$lang['nuevo_almacenes']   = 'Nuevo Almacen';
 	$lang['listado_almacenes'] = 'almacenes';
 	$lang['detalle_almacenes'] = 'detalle';
 	$lang['nombre_almacenes']  = 'almacen';
-	
+	*/
+	$lang['agregar']           = 'Nuevo Almacen';
+	$lang['listado']           = 'almacenes';
+	$lang['detalle']           = 'detalle';
+	$lang['nombre_almacenes']  = 'almacen';
+
 
 ?>

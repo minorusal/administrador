@@ -29,9 +29,10 @@ function load_content(uri, id_content){
 }
 function buscar_almacen(){
 	var filtro = jQuery('#search-query').val();
+	alert(filtro);
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/listado_almacenes",
+		url: path()+"almacen/almacenes/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -46,11 +47,12 @@ function buscar_almacen(){
 		}
 	})
 }
-function detalle_almacenes(id_almacen){
+
+function detalle(id_almacen){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/almacenes/detalle_almacenes",
+        url: path()+"almacen/almacenes/detalle",
         dataType: 'json',
         data: {id_almacen : id_almacen},
         success: function(data){
@@ -60,9 +62,9 @@ function detalle_almacenes(id_almacen){
         }
     });
 }
-function update_almacenes(){
+function actualizar(){
 	jQuery('#mensajes_update').hide();
-	var btn          = jQuery("button[name='update_almacenes']");
+	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete       = values_requeridos();
@@ -70,27 +72,25 @@ function update_almacenes(){
     var almacen     = jQuery('#almacen').val();
     var clave_corta      = jQuery('#clave_corta').val();
     var descripcion      = jQuery('#descripcion').val();
-  
+
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/update_almacen",
+		url: path()+"almacen/almacenes/actualizar",
 		dataType: "json",
 		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-			var data = data.split('|');
-			if(data[0]==1){
-			}
+			btn.removeAttr('disabled');		
+			jQuery("#mensajes_update").html(data.contenido).show('slow');
 			jQuery("#update_loader").html('');
-		    jQuery("#mensajes_update").html(data[1]).show('slow');
 		}
 	})
 }
 
-function insert_almacen(){
+
+function agregar(){
 	var btn          = jQuery("button[name='save_almacen']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
@@ -98,7 +98,7 @@ function insert_almacen(){
     var almacen      = jQuery('#almacenes').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-  
+
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/almacenes/insert_almacen",
@@ -109,6 +109,7 @@ function insert_almacen(){
 		},
 		success : function(data){
 			btn.removeAttr('disabled');
+
 			var data = data.split('|');
 			if(data[0]==1){
 				clean_formulario();
@@ -118,5 +119,7 @@ function insert_almacen(){
 		}
 	})
 }
+
+
 
 

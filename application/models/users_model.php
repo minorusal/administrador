@@ -96,7 +96,15 @@ class users_model extends Base_Model{
 	*/
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
 
-
+		if($root){
+			$sys_navigate_n1 = "1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE 1";
+		}else{
+			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2)";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE id_menu_n3 IN ($id_menu_n3)";
+		}
 		$query = "	SELECT 
 						 n1.menu_n1
 						,n1.routes as menu_n1_routes
@@ -111,10 +119,10 @@ class users_model extends Base_Model{
 						,n3.icon as menu_n3_icon
 					FROM
 						sys_menu_n1 n1
-					LEFT JOIN (SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2))  n2 ON n1.id_menu_n1 = n2.id_menu_n1
-					LEFT JOIN (SELECT * FROM sys_menu_n3 WHERE id_menu_n3 IN ($id_menu_n3))  n3 ON n3.id_menu_n2 = n2.id_menu_n2
+					LEFT JOIN ($sys_navigate_n2)  n2 ON n1.id_menu_n1 = n2.id_menu_n1
+					LEFT JOIN ($sys_navigate_n3)  n3 ON n3.id_menu_n2 = n2.id_menu_n2
 					WHERE
-						n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1 
+						$sys_navigate_n1
 					ORDER BY 
 						n1.order, n2.order,n3.order;
 				";

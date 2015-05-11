@@ -35,10 +35,10 @@ class Base_Controller extends CI_Controller {
 		$this->lang_load("navigate");
 		$ext      = ($ext!='.html') ? '': $ext;
 
-		$modulos    = $this->session->userdata('id_menu_n1');
-		$submodulos = $this->session->userdata('id_menu_n2');
-		$secciones  = $this->session->userdata('id_menu_n3');
-		$perfil     = $this->session->userdata('perfil');
+		$nivel_1  = $this->session->userdata('id_menu_n1');
+		$nivel_2  = $this->session->userdata('id_menu_n2');
+		$nivel_3  = $this->session->userdata('id_menu_n3');
+		$perfil   = $this->session->userdata('perfil');
 		
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
@@ -46,7 +46,8 @@ class Base_Controller extends CI_Controller {
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 
-		$data_modulos   = $this->users_model->search_modules_for_user($modulos, $submodulos, $secciones);
+		$user_root = (strtolower($perfil)=='root') ? true : false;
+		$data_modulos   = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 		$data_modulos   = $this->build_array_navigator($data_modulos);
 		$navigate_items =  $data_modulos[1];
 		$this->session->set_userdata('sites_availables', $data_modulos[0]);

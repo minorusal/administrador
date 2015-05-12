@@ -49,7 +49,7 @@ function load_content(uri, id_content){
 }
 function insert_cliente(){
   var btn          = jQuery("button[name='save_cliente']");
-  btn.attr('disabled','disabled');
+  //btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
   var incomplete    = values_requeridos();    
@@ -127,7 +127,6 @@ function update_cliente(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-
   var entidad = jQuery("select[name='lts_entidades'] option:selected").val();
 
 

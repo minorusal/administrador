@@ -81,7 +81,6 @@ class clientes extends Base_Controller {
 		}else{
 			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'agregar_clientes', $data_1, true);
 		}
-		
 	}
 
 	public function listado_clientes($offset = 0){
@@ -144,37 +143,47 @@ class clientes extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
-								 'razon_social'=> $this->ajax_post('razon_social'),
-								 'clave_corta'=> $this->ajax_post('clave_corta'),
-								 'rfc'=> $this->ajax_post('rfc'),
-								 'calle'=> $this->ajax_post('calle'),
-								 'num_int'=> $this->ajax_post('num_int'),
-								 'num_ext'=> $this->ajax_post('num_ext'),
-								 'colonia' => $this->ajax_post('colonia'),
-								 'municipio' => $this->ajax_post('municipio'),
-								 'entidad' => $this->ajax_post('entidad'),
-								 'cp' => $this->ajax_post('cp'),
-								 'telefonos' => $this->ajax_post('telefonos'),
-								 'email' => $this->ajax_post('email'),
-								 'timestamp'  => $this->timestamp(),
-								 'activo'  => 1);
-
-			$insert = $this->clientes_model->insert_cliente($data_insert);
-
-			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
-			}else{
+			$clave_corta= $this->ajax_post('clave_corta');
+			$existe = count($this->clientes_model->get_existencia_cliente($clave_corta));
+			
+			if($existe>0){
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}else{
+				$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
+									 'razon_social'=> $this->ajax_post('razon_social'),
+									 'clave_corta'=> $this->ajax_post('clave_corta'),
+									 'rfc'=> $this->ajax_post('rfc'),
+									 'calle'=> $this->ajax_post('calle'),
+									 'num_int'=> $this->ajax_post('num_int'),
+									 'num_ext'=> $this->ajax_post('num_ext'),
+									 'colonia' => $this->ajax_post('colonia'),
+									 'municipio' => $this->ajax_post('municipio'),
+									 'entidad' => $this->ajax_post('entidad'),
+									 'cp' => $this->ajax_post('cp'),
+									 'telefonos' => $this->ajax_post('telefonos'),
+									 'email' => $this->ajax_post('email'),
+									 'timestamp'  => $this->timestamp(),
+									 'activo'  => 1);
+
+				$insert = $this->clientes_model->insert_cliente($data_insert);
+
+				if($insert){
+					$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				}
 			}
+			
 		}
 	}
 
 	public function detalle_cliente(){
 		$id_cliente       = $this->ajax_post('id_cliente');
 		$detalle_cliente  = $this->clientes_model->get_cliente_unico($id_cliente);
+		$lts_entidades  = dropdown_tpl(	$this->clientes_model->catalogo_entidades(), $detalle_cliente[0]['entidad'] ,'id_administracion_entidad', array('clave_corta','entidad'),'lts_entidades', 'requerido'); 
         
         $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'editar_cliente';
         $data_tab_3['id_cliente']    = $detalle_cliente[0]['id_ventas_clientes'];
@@ -197,7 +206,7 @@ class clientes extends Base_Controller {
 		$data_tab_3['municipio'] 	 = $this->lang_item("municipio");
 		$data_tab_3['municipio_value'] = $detalle_cliente[0]['municipio'];
 		$data_tab_3['entidad'] 		   = $this->lang_item("entidad");
-		$data_tab_3['entidad_value']   = $detalle_cliente[0]['entidad'];
+		$data_tab_3['dropdown_entidad']   = $lts_entidades;
 		$data_tab_3['cp'] 			   = $this->lang_item("cp");
 		$data_tab_3['cp_value']    	   = $detalle_cliente[0]['cp'];
 		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
@@ -219,18 +228,18 @@ class clientes extends Base_Controller {
 		}else{
 			$id_cliente  = $this->ajax_post('id_cliente');
 			$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
-								 'razon_social'=> $this->ajax_post('razon_social'),
-								 'clave_corta'=> $this->ajax_post('clave_corta'),
-								 'rfc'=> $this->ajax_post('rfc'),
-								 'calle'=> $this->ajax_post('calle'),
-								 'num_int'=> $this->ajax_post('num_int'),
-								 'num_ext'=> $this->ajax_post('num_ext'),
-								 'colonia' => $this->ajax_post('colonia'),
-								 'municipio' => $this->ajax_post('municipio'),
-								 'entidad' => $this->ajax_post('entidad'),
-								 'cp' => $this->ajax_post('cp'),
-								 'telefonos' => $this->ajax_post('telefonos'),
-								 'email' => $this->ajax_post('email'));
+							 'razon_social'=> $this->ajax_post('razon_social'),
+							 'clave_corta'=> $this->ajax_post('clave_corta'),
+							 'rfc'=> $this->ajax_post('rfc'),
+							 'calle'=> $this->ajax_post('calle'),
+							 'num_int'=> $this->ajax_post('num_int'),
+							 'num_ext'=> $this->ajax_post('num_ext'),
+							 'colonia' => $this->ajax_post('colonia'),
+							 'municipio' => $this->ajax_post('municipio'),
+							 'entidad' => $this->ajax_post('entidad'),
+							 'cp' => $this->ajax_post('cp'),
+							 'telefonos' => $this->ajax_post('telefonos'),
+							 'email' => $this->ajax_post('email'));
 
 			$update = $this->clientes_model->update_cliente($data_insert,$id_cliente);
 			if($update){

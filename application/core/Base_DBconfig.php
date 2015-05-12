@@ -26,6 +26,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_sucursales'	=>	'sys_sucursales'
 					 	,'tbl_usuarios'		=>	'sys_usuarios'
 					 	// Vistas
+					 	,'vw_personal'		=>	'vw_personal'
 					 	// ,'[tbl_alias]'	=>	'[tabla]'
 					 	)
 					,1 => array(
@@ -46,6 +47,8 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_clientes'				=>	'av_ventas_clientes'
 					 	// Vistas
 					 	,'vw_orden_articulos'				=>	'vw_ordenes_con_articulos'
+					 	,'vw_articulos'						=>	'vw_articulos'
+					 	,'vw_proveedores_articulos'			=>	'vw_proveedores_articulos'
 					 	// ,'[tbl_alias]'	=>	'[tabla]'
 					 	)
 		);			

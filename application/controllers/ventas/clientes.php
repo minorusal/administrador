@@ -9,7 +9,7 @@ class clientes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model($this->uri_modulo.'clientes_model');
-		$this->lang->load("ventas/ventas","es_ES");
+		$this->lang->load("ventas/clientes","es_ES");
 	}
 
 	public function config_tabs(){
@@ -24,8 +24,6 @@ class clientes extends Base_Controller {
 										'load_content',
 										'');
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
-		return $config_tab;
 
 		return $config_tab;
 	}
@@ -44,7 +42,6 @@ class clientes extends Base_Controller {
 		
 		$js['js'][]     = array('name' => 'clientes', 'dirname' => 'ventas');
 		$this->load_view($this->uri_view_principal(), $data, $js);
-
 	}
 
 	public function agregar_clientes(){

@@ -53,7 +53,7 @@ class articulos_model extends Base_Model{
 					ORDER BY ca.id_compras_articulo
 				$limit
 					";
-      
+      	//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

@@ -4,7 +4,6 @@ class catalogos_model extends Base_Model
 	/*ALMACENES*/
 		
 	/*Traer información para el listado de los almacenes*/
-	//public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true)
 	public function db_get_data($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
@@ -68,6 +67,13 @@ class catalogos_model extends Base_Model
 			return false;
 		}
 	}
+
+	/*PASILLOS*/
+
+	/*public function db_get_data_pasillos($data=array());
+	{
+
+	}*/
 }
 
 //WHERE cp.activo = 1 $filtro

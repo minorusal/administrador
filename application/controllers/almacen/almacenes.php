@@ -77,7 +77,7 @@ class almacenes extends Base_Controller
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+		$data['titulo_seccion']     = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
@@ -226,7 +226,7 @@ class almacenes extends Base_Controller
 	public function agregar(){
 		
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
-		
+		$sucursales    = dropdown_tpl($this->db_model->get_sucursales('','','',false), '' ,'id_almacen_almacenes', array('clave_corta', 'almacenes'),"lts_presentaciones", "requerido");
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

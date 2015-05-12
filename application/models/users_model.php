@@ -38,7 +38,9 @@ class users_model extends Base_Model{
 					left join sys_paises     Pa on U.id_pais    = Pa.id_pais
 					left join sys_empresas   E on U.id_empresa  = E.id_empresa
 					left join sys_sucursales S on U.id_sucursal = S.id_sucursal
-					WHERE C.user = '$user' AND C.pwd = '$pwd' AND U.activo = 1;
+					WHERE C.user = '$user' AND C.pwd = '$pwd' AND U.activo = 1
+					ORDER BY 
+						N.id_perfil;
 				";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -102,8 +104,8 @@ class users_model extends Base_Model{
 			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
-			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2)";
-			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE id_menu_n3 IN ($id_menu_n3)";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE id_menu_n3 IN ($id_menu_n3) AND activo = 1";
 		}
 		$query = "	SELECT 
 						 n1.menu_n1

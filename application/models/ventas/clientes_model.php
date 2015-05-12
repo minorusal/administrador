@@ -9,7 +9,6 @@ class clientes_model extends Base_Model{
 	}
 	function catalogo_entidades(){
 		$query = "SELECT * FROM av_administracion_entidades WHERE activo=1";
-
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -47,7 +46,7 @@ class clientes_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function update_cliente($data, $id_cliente){
+	function update_cliente($data, $id_cliente){
 		$condicion = array('id_ventas_clientes !=' => $id_cliente, 'clave_corta = '=> $data['clave_corta']); 
 		$existe = $this->row_exist('av_ventas_clientes', $condicion);
 		if(!$existe){
@@ -57,6 +56,14 @@ class clientes_model extends Base_Model{
 			return $query;
 		}else{
 			return false;
+		}
+	}
+	function get_existencia_cliente($clave_corta){
+		$query = "SELECT * FROM av_ventas_clientes vc WHERE vc.clave_corta = '$clave_corta'";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
 		}
 	}
 }

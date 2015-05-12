@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
 	jQuery('#search-query').keypress(function(event){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 		if(keycode == '13'){  
-			buscar_almacen();
+			buscar();
 		} 
 	});
 })
@@ -17,7 +17,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar_almacen';
+           		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -27,9 +27,8 @@ function load_content(uri, id_content){
         }
     });
 }
-function buscar_almacen(){
+function buscar(){
 	var filtro = jQuery('#search-query').val();
-	alert(filtro);
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/almacenes/listado",
@@ -39,7 +38,7 @@ function buscar_almacen(){
 			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			var funcion = 'buscar_almacen';
+			var funcion = 'buscar';
         	jQuery("#loader").html('');
         	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 			jQuery('#search-query').val(filtro).focus();

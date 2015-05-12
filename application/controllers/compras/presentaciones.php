@@ -54,6 +54,7 @@ class presentaciones extends Base_Controller {
 	public function listado_presentaciones($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		
 		$uri_view    = $this->uri_modulo.'/listado';
 		$limit       = 5;
 		$uri_segment = $this->uri_segment(); 

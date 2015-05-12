@@ -4,54 +4,35 @@ class catalogos_model extends Base_Model
 	/*ALMACENES*/
 		
 	/*Traer información para el listado de los almacenes*/
+	//public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true)
 	public function db_get_data($data=array())
 	{
-		// Filtro
-		$buscar = (isset($data['buscar']))?$data['buscar']:false;
-		$filtro = ($buscar) ? "" : "";
-
-		// Limit
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$filtro = ($filtro) ? "AND (av.almacenes like '%$filtro%' OR 
+												  av.clave_corta like '%$filtro%' OR
+												  av.descripcion like '%$filtro%')" : "";
 
-		// Query
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
-						 id_almacen_almacenes
-						,clave_corta
-						,descripcion
-						,almacenes
-					FROM av_almacen_almacenes
-					WHERE 1 $filtro
-					GROUP BY id_almacen_almacenes ASC
+						 av.id_almacen_almacenes
+						,av.clave_corta
+						,av.descripcion
+						,av.almacenes
+					FROM av_almacen_almacenes av
+					WHERE av.activo = 1 $filtro
+					GROUP BY av.id_almacen_almacenes ASC
 					$limit
 					";
 		
-      	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
-	/*Traer el número total de registros*/
-	public function db_get_total_rows($data=array())
-	{
-		// Filtro
-		$buscar = (isset($data['buscar']))?$data['buscar']:false;
-		$filtro = ($buscar) ? "" : "";
-		// Query
-		$query = "	SELECT count(*)
-					FROM av_almacen_almacenes
-					WHERE 1 $filtro
-					GROUP BY id_almacen_almacenes ASC
-					";
-      	// Execute querie
-      	$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-			return $query->result_array();
-	}
 	/*Trae la información para el formulario de edición de almacen*/
 	public function get_orden_unico($id_almacen_almacenes){
 		$query = "SELECT * FROM av_almacen_almacenes WHERE id_almacen_almacenes = $id_almacen_almacenes";

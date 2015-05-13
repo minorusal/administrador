@@ -103,7 +103,7 @@ function agregar(){
 
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/insert_almacen",
+		url: path()+"almacen/pasillos/insert_pasillos",
 		dataType: "json",
 		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){

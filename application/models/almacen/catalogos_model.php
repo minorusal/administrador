@@ -110,8 +110,7 @@ class catalogos_model extends Base_Model
 		$filtro = ($filtro) ? "AND (av.pasillos like '%$filtro%' OR
 									av.descripcion like '%$filtro%' OR  
 									av.clave_corta like '%$filtro%' OR
-									al.almacenes like '%$filtro%' OR
-									gv.gavetas like '%$filtro%')" : "";
+									al.almacenes like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						 av.id_almacen_pasillos
@@ -120,11 +119,8 @@ class catalogos_model extends Base_Model
 						,av.pasillos
 						,al.id_almacen_almacenes
 						,al.almacenes
-						,gv.id_almacen_gavetas
-						,gv.gavetas
 					FROM av_almacen_pasillos av
 					LEFT JOIN av_almacen_almacenes al on al.id_almacen_almacenes = av.id_almacen_almacenes
-					LEFT JOIN av_almacen_gavetas gv on gv.id_almacen_gavetas = av.id_almacen_gavetas
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_pasillos ASC
 					$limit
@@ -163,7 +159,7 @@ class catalogos_model extends Base_Model
 
 	/*GAVETAS*/
 
-	public function db_get_data_gaveta($data=array())
+	/*public function db_get_data_gaveta($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -187,7 +183,7 @@ class catalogos_model extends Base_Model
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}
+	}*/
 }
 
 //WHERE cp.activo = 1 $filtro

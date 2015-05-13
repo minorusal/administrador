@@ -1,6 +1,11 @@
 <?php
 class catalogos_model extends Base_Model
 {
+	/*private $db_b;
+	public function __construct()
+	{
+		$this->db_b = $this->load->database('mx',TRUE);
+	}*/
 	/*ALMACENES*/
 		
 	/*Traer información para el listado de los almacenes*/
@@ -25,7 +30,6 @@ class catalogos_model extends Base_Model
 					GROUP BY av.id_almacen_almacenes ASC
 					$limit
 					";
-		
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -66,6 +70,31 @@ class catalogos_model extends Base_Model
 		}else{
 			return false;
 		}
+	}
+
+	public function get_sucursales($limit, $offset, $filtro="", $aplicar_limit = true){
+		$filtro = ($filtro=="") ? "" : "(
+												cp.presentacion like '%$filtro%'
+											OR 
+												cp.clave_corta like '%$filtro%'
+											OR
+												cp.descripcion like '%$filtro%'
+										) ";
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						cp.id_sucursal
+						,cp.sucursal
+						,cp.razon_social
+						,cp.rfc
+					FROM
+						sys_sucursales cp
+					";
+      	
+      	$query = $this->db->query($query);
+      	//print_debug($query->result_array());
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 
 	/*PASILLOS*/

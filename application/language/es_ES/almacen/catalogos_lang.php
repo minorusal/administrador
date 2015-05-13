@@ -15,6 +15,7 @@
 
 	$lang['almacenes']         = 'almacenes';
 	$lang['agregar']           = 'nuevo almacen';
+	$lang['lista_sucursales']  = "Presentación";
 	$lang['listado']           = 'almacenes';
 	$lang['detalle']           = 'detalle';
 	$lang['nombre_almacenes']  = 'almacen';

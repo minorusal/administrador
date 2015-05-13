@@ -224,15 +224,18 @@ class almacenes extends Base_Controller
 	}
 	
 	public function agregar(){
-		
+
+		$this->load_database('global_system');
+
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
-		$sucursales    = dropdown_tpl($this->db_model->get_sucursales('','','',false), '' ,'id_almacen_almacenes', array('clave_corta', 'almacenes'),"lts_presentaciones", "requerido");
+		$sucursales    = dropdown_tpl($this->db_model->get_sucursales('','','',false), '' ,'id_sucursal', array('sucursal', 'sucursal'),"lts_sucursales", "requerido");
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
 		$tab_1["nombre_almacenes"]      = $this->lang_item("nombre_almacenes");
 		$tab_1["cvl_corta"]             = $this->lang_item("cvl_corta");
 		$tab_1["descrip"]               = $this->lang_item("descripcion");
+		$tab_1["list_sucursal"]         = $sucursales;
 
         $tab_1['button_save']       = $btn_save;
         $tab_1['button_reset']      = $btn_reset;

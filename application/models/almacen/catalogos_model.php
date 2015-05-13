@@ -25,6 +25,7 @@ class catalogos_model extends Base_Model
 						,av.clave_corta
 						,av.descripcion
 						,av.almacenes
+						,av.id_sucursal
 					FROM av_almacen_almacenes av
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_almacenes ASC
@@ -44,9 +45,12 @@ class catalogos_model extends Base_Model
 			return $query->result_array();
 		}
 	}
+
+
 	/*Actualliza la información en el formuladio de edición de almacen*/
 	public function db_update_data($data=array())
 	{
+		//print_debug($data);
 		$condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
 		$existe = $this->row_exist('av_almacen_almacenes', $condicion);
 		if(!$existe){

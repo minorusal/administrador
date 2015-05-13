@@ -117,8 +117,8 @@ class almacenes extends Base_Controller
 						);
 				
 				$tbl_data[] = array('id'             => $value['clave_corta'],
-									'clave_corta'    => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'almacenes'      => $value['almacenes'],
+									'almacenes'      => tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'    => $value['clave_corta'],
 									'descripcion'    => $value['descripcion']);
 			}
 			
@@ -126,8 +126,8 @@ class almacenes extends Base_Controller
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("cvl_corta"),
-										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
+										$this->lang_item("cvl_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

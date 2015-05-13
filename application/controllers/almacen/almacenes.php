@@ -101,7 +101,7 @@ class almacenes extends Base_Controller
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 		);
-		
+		//$this->load_database('global_system');
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;	
@@ -119,6 +119,7 @@ class almacenes extends Base_Controller
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'almacenes'      => tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
+									'sucursal'       => $value['sucursal'],
 									'descripcion'    => $value['descripcion']);
 			}
 			
@@ -128,6 +129,7 @@ class almacenes extends Base_Controller
 			$this->table->set_heading(	$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
 										$this->lang_item("cvl_corta"),
+										$this->lang_item("sucursal"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

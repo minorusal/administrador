@@ -17,8 +17,8 @@ class catalogos_model extends Base_Model
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 		$filtro = ($filtro) ? "AND (av.almacenes like '%$filtro%' OR 
 												  av.clave_corta like '%$filtro%' OR
-												  av.descripcion like '%$filtro%')" : "";
-
+												  av.descripcion like '%$filtro%' OR
+												  su.sucursal like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						 av.id_almacen_almacenes
@@ -26,7 +26,9 @@ class catalogos_model extends Base_Model
 						,av.descripcion
 						,av.almacenes
 						,av.id_sucursal
-					FROM av_almacen_almacenes av
+						,su.sucursal
+					FROM 00_av_mx.av_almacen_almacenes av
+					LEFT JOIN 00_av_system.sys_sucursales su on su.id_sucursal = av.id_sucursal
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_almacenes ASC
 					$limit

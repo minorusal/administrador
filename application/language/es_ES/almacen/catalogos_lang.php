@@ -19,6 +19,7 @@
 	$lang['listado']           = 'almacenes';
 	$lang['detalle']           = 'detalle';
 	$lang['nombre_almacenes']  = 'almacen';
+	$lang['sucursal']          = 'sucursal';
 
 	/*PASILLOS*/
 

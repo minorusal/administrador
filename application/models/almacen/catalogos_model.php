@@ -65,7 +65,6 @@ class catalogos_model extends Base_Model
 		if(!$existe){
 			$query = $this->db->insert_string('av_almacen_almacenes', $data);
 			$query = $this->db->query($query);
-
 			return $query;
 		}else{
 			return false;
@@ -84,14 +83,11 @@ class catalogos_model extends Base_Model
 		$query = "	SELECT 
 						cp.id_sucursal
 						,cp.sucursal
-						,cp.razon_social
-						,cp.rfc
 					FROM
 						sys_sucursales cp
 					";
       	
       	$query = $this->db->query($query);
-      	//print_debug($query->result_array());
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	

@@ -97,12 +97,12 @@ function agregar(){
     var almacen      = jQuery('#almacenes').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-
+    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/almacenes/insert_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

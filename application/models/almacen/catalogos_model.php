@@ -9,7 +9,7 @@ class catalogos_model extends Base_Model
 	/*ALMACENES*/
 		
 	/*Traer información para el listado de los almacenes*/
-	public function db_get_data($data=array())
+	public function db_get_data_almacen($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -99,12 +99,39 @@ class catalogos_model extends Base_Model
 		}	
 	}
 
-	/*PASILLOS*/
-
-	/*public function db_get_data_pasillos($data=array());
+	public function db_get_data_pasillo($data=array())
 	{
-
-	}*/
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$filtro = ($filtro) ? "AND (av.pasillos like '%$filtro%' OR
+									av.descripcion like '%$filtro%' OR  
+									av.clave_corta like '%$filtro%' OR
+									al.almacenes like '%$filtro%' OR
+									gv.gavetas like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query = "	SELECT 
+						 av.id_almacen_pasillos
+						,av.clave_corta
+						,av.descripcion
+						,av.pasillos
+						,al.id_almacen_almacenes
+						,al.almacenes
+						,gv.id_almacen_gavetas
+						,gv.gavetas
+					FROM av_almacen_pasillos av
+					LEFT JOIN av_almacen_almacenes al on al.id_almacen_almacenes = av.id_almacen_almacenes
+					LEFT JOIN av_almacen_gavetas gv on gv.id_almacen_gavetas = av.id_almacen_gavetas
+					WHERE av.activo = 1 $filtro
+					GROUP BY av.id_almacen_pasillos ASC
+					$limit
+					";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

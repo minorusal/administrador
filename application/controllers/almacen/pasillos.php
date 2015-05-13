@@ -101,9 +101,9 @@ class pasillos extends Base_Controller
 		);
 		
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_data($sqlData));
+		$total_rows	  = count($this->db_model->db_get_data_pasillo($sqlData));
 		$sqlData['aplicar_limit'] = false;	
-		$list_content = $this->db_model->db_get_data($sqlData);
+		$list_content = $this->db_model->db_get_data_pasillo($sqlData);
 		
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -111,13 +111,15 @@ class pasillos extends Base_Controller
 			foreach ($list_content as $value) {
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'detalle('.$value['id_almacen_almacenes'].')'
+							  	'onclick' => 'detalle('.$value['id_almacen_pasillos'].')'
 						);
 				
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'clave_corta'    => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'almacenes'      => $value['almacenes'],
-									'descripcion'    => $value['descripcion']);
+									'pasillos'       => $value['pasillos'],
+									'almacen'        => $value['almacenes'],
+									'gaveta'        => $value['gavetas'],
+									'descripcion'    => $value['descripcion']);	
 			}
 			
 			// Plantilla
@@ -125,7 +127,9 @@ class pasillos extends Base_Controller
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("cvl_corta"),
 										$this->lang_item("cvl_corta"),
+										$this->lang_item("pasillo"),
 										$this->lang_item("almacen"),
+										$this->lang_item("gavetas"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

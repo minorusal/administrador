@@ -38,7 +38,7 @@ class users_model extends Base_Model{
 					left join sys_paises     Pa on U.id_pais    = Pa.id_pais
 					left join sys_empresas   E on U.id_empresa  = E.id_empresa
 					left join sys_sucursales S on U.id_sucursal = S.id_sucursal
-					WHERE C.user = '$user' AND C.pwd = '$pwd' AND U.activo = 1
+					WHERE md5(C.user) = md5('$user') AND C.pwd = '$pwd' AND U.activo = 1
 					ORDER BY 
 						N.id_perfil;
 				";
@@ -100,8 +100,8 @@ class users_model extends Base_Model{
 
 		if($root){
 			$sys_navigate_n1 = "1";
-			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE 1";
-			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE 1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE activo = 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
 			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";
@@ -121,7 +121,7 @@ class users_model extends Base_Model{
 						,n3.icon as menu_n3_icon
 					FROM
 						sys_menu_n1 n1
-					LEFT JOIN ($sys_navigate_n2)  n2 ON n1.id_menu_n1 = n2.id_menu_n1
+					LEFT JOIN ($sys_navigate_n2 )  n2 ON n1.id_menu_n1 = n2.id_menu_n1
 					LEFT JOIN ($sys_navigate_n3)  n3 ON n3.id_menu_n2 = n2.id_menu_n2
 					WHERE
 						$sys_navigate_n1

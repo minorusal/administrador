@@ -31,7 +31,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/listado",
+		url: path()+"almacen/pasillos/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -47,13 +47,13 @@ function buscar(){
 	})
 }
 
-function detalle(id_almacen){
+function detalle(id_pasillo){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/almacenes/detalle",
+        url: path()+"almacen/pasillos/detalle",
         dataType: 'json',
-        data: {id_almacen : id_almacen},
+        data: {id_pasillo : id_pasillo},
         success: function(data){
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
@@ -66,17 +66,20 @@ function actualizar(){
 	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
-	var incomplete       = values_requeridos();
-	var id_almacen  = jQuery('#id_almacen').val();
-    var almacen     = jQuery('#almacen').val();
-    var clave_corta      = jQuery('#clave_corta').val();
-    var descripcion      = jQuery('#descripcion').val();
+	var incomplete   = values_requeridos();
+	var id_pasillo   = jQuery('#id_pasillo').val();
+    var pasillos     = jQuery('#pasillo').val();
+    var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
+    var id_gaveta    = jQuery("select[name='lts_gavetas'] option:selected").val();
+
+    var clave_corta  = jQuery('#clave_corta').val();
+    var descripcion  = jQuery('#descripcion').val();
 
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/actualizar",
+		url: path()+"almacen/pasillos/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete,id_pasillo:id_pasillo, pasillos:pasillos, id_almacen:id_almacen, id_gaveta:id_gaveta, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

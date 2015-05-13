@@ -40,7 +40,7 @@ class catalogos_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de almacen*/
-	public function get_orden_unico($id_almacen_almacenes){
+	public function get_orden_unico_almacen($id_almacen_almacenes){
 		$query = "SELECT * FROM av_almacen_almacenes WHERE id_almacen_almacenes = $id_almacen_almacenes";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -99,6 +99,8 @@ class catalogos_model extends Base_Model
 		}	
 	}
 
+
+	/*PASILLOS*/
 	public function db_get_data_pasillo($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
@@ -125,6 +127,60 @@ class catalogos_model extends Base_Model
 					LEFT JOIN av_almacen_gavetas gv on gv.id_almacen_gavetas = av.id_almacen_gavetas
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_pasillos ASC
+					$limit
+					";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+
+	/*Trae la información para el formulario de edición de pasillo*/
+	public function get_orden_unico_pasillo($id_almacen_pasillos){
+		$query = "SELECT * FROM av_almacen_pasillos WHERE id_almacen_pasillos = $id_almacen_pasillos";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	/*Actualliza la información en el formuladio de edición de pasillos*/
+	public function db_update_data_pasillo($data=array())
+	{
+		$condicion = array('id_almacen_pasillos !=' => $data['id_almacen_pasillos'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_almacen_pasillos', $condicion);
+		if(!$existe){
+			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
+			$query = $this->db->update_string('av_almacen_pasillos', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
+
+
+
+	/*GAVETAS*/
+
+	public function db_get_data_gaveta($data=array())
+	{
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$filtro = ($filtro) ? "AND (av.gavetas like '%$filtro%' OR 
+									av.clave_corta like '%$filtro%' OR
+									av.descripcion like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query = "	SELECT 
+						 av.id_almacen_gavetas
+						,av.clave_corta
+						,av.descripcion
+						,av.gavetas
+					FROM av_almacen_gavetas av
+					WHERE av.activo = 1 $filtro
+					GROUP BY av.id_almacen_gavetas ASC
 					$limit
 					";
       	$query = $this->db->query($query);

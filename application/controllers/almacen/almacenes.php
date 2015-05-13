@@ -156,7 +156,7 @@ class almacenes extends Base_Controller
 	public function detalle()
 	{
 		$id_almacen_almacenes = $this->ajax_post('id_almacen');
-		$detalle  		      = $this->db_model->get_orden_unico($id_almacen_almacenes);
+		$detalle  		      = $this->db_model->get_orden_unico_almacen($id_almacen_almacenes);
 		$this->load_database('global_system');
 		$this->load->model('sucursales_model');
 		$seccion 		      = 'detalle';
@@ -167,7 +167,6 @@ class almacenes extends Base_Controller
         $tabData['id_almacen']            = $id_almacen_almacenes;
         $tabData["nombre_almacen"]        = $this->lang_item("almacen");
 		$tabData["cvl_corta"]        	  = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	  = $this->lang_item("descripcion");
 		$tabData["descrip"]         	  = $this->lang_item("descripcion");
 		$tabData["registro_por"]    	  = $this->lang_item("registro_por");
 		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");

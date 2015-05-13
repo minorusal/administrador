@@ -152,4 +152,84 @@ class pasillos extends Base_Controller
 				return $this->load_view_unique($uri_view , $tabData, true);
 			}
 	}
+
+	public function detalle()
+	{
+		$id_almacen_pasillos = $this->ajax_post('id_pasillo');
+		$detalle  		      = $this->db_model->get_orden_unico_pasillo($id_almacen_pasillos);
+		
+		$seccion      = 'detalle';
+		$tab_detalle  = $this->tab3;
+		$almacenes    = dropdown_tpl($this->db_model->db_get_data_almacen('','','',false), $detalle[0]['id_almacen_almacenes'], 'id_almacen_almacenes', array('almacenes'),"lts_almacenes", "requerido");
+		$gavetas      = dropdown_tpl($this->db_model->db_get_data_gaveta('','','',false), $detalle[0]['id_almacen_gavetas'], 'id_almacen_gavetas', array('gavetas'),"lts_gavetas", "");
+		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+                
+        $tabData['id_pasillo']            = $id_almacen_pasillos;
+        $tabData["nombre_pasillos"]       = $this->lang_item("pasillo");
+		$tabData["cvl_corta"]        	  = $this->lang_item("cvl_corta");
+		$tabData["descrip"]         	  = $this->lang_item("descripcion");
+		$tabData["registro_por"]    	  = $this->lang_item("registro_por");
+		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
+		$tabData["list_almacen"]          = $almacenes;
+		$tabData["almacen"]               = $this->lang_item("almacen");
+		$tabData["list_gaveta"]           = $gavetas;
+		$tabData["gaveta"]                = $this->lang_item("gavetas");
+		$tabData["gaveta"]                = $this->lang_item("gaveta");
+        $tabData['pasillo']               = $detalle[0]['pasillos'];
+		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
+        $tabData['descripcion']           = $detalle[0]['descripcion'];
+        $tabData['timestamp']             = $detalle[0]['timestamp'];
+        $tabData['button_save']           = $btn_save;
+        
+        $this->load_database('global_system');
+        $this->load->model('users_model');
+        
+        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
+		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
+
+	public function actualizar(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+
+		}else{
+			$sqlData = array(
+						 'id_almacen_pasillos'	    => $this->ajax_post('id_pasillo')
+						,'pasillos' 		        => $this->ajax_post('pasillos')
+						,'clave_corta' 				=> $this->ajax_post('clave_corta')
+						,'descripcion'				=> $this->ajax_post('descripcion')
+						,'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
+						,'id_almacen_gavetas'	    => $this->ajax_post('id_gaveta')
+						);
+			$insert = $this->db_model->db_update_data_pasillo($sqlData);
+			if($insert){
+				
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
 }

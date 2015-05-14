@@ -12,5 +12,5 @@ $lang['linea']            = "Linea";
 $lang['um']               = "Unidad de Medida";
 $lang['descripcion']      = "Descripción";
 $lang['sin_descripcion']  = 'Sin descripción';
-$lang['msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
+$lang['msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, por favor intente con una clave diferente.';
 ?>

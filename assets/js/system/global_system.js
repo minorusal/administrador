@@ -19,6 +19,10 @@ function input_keypress(identificador, name_funcion){
     var script = "<script>jQuery('#"+identificador+"').keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);if(keycode == '13'){   "+name_funcion+"(); } });</script>";
         return script;
 }
+function input_keyup(identificador, name_funcion){
+    var script = "<script>jQuery('#"+identificador+"').keyup(function(e){if(e.which == '13' || e.which == 8){   "+name_funcion+"(); } });</script>";
+        return script;
+}
 function include_script(script){
     var functions = "";
     if(jQuery.isArray(script)){

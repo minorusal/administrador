@@ -1,12 +1,9 @@
 jQuery(document).ready(function(){
-	jQuery('#search-query').focus();
-	jQuery('#search-query').keypress(function(event){
-		var keycode = (event.keyCode ? event.keyCode : event.which);
-		if(keycode == '13'){  
-			buscar_articulo();
-		} 
-	});
+	var Buscar = jQuery('#search-query');
+	Buscar.focus();
+	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
 })
+
 
 function buscar(){
 	var filtro = jQuery('#search-query').val();

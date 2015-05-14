@@ -36,7 +36,11 @@ class ordenes_model extends Base_Model{
 		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
-		$filtro = ($buscar) ? "" : "";
+		$filtro = ($buscar) ? "and (orden_num LIKE '$buscar%' 
+							   or razon_social LIKE '$buscar%'
+							   or descripcion LIKE '$buscar%'
+							   )" 
+							: "";
 		// Limit
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -66,7 +70,11 @@ class ordenes_model extends Base_Model{
 		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
-		$filtro = ($buscar) ? "" : "";
+		$filtro = ($buscar) ? "and (orden_num LIKE '$buscar%' 
+							   or razon_social LIKE '$buscar%'
+							   or descripcion LIKE '$buscar%'
+							   )" 
+							: "";
 		// Query
 		$query = "	SELECT count(*)
 					FROM $db1.$tbl1

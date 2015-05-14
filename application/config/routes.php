@@ -81,15 +81,14 @@ $route['compras/ordenes/listado_ordenes/(:num)'] = 'compras/ordenes/listado_orde
 /*ALMACEN*/
 
 /*Catalogo de almacenes*/
-/*$route['almacen/catalogos/almacenes']			= 'almacen/almacenes/index';
-$route['almacen/catalogos/almacenes/listado_almacenes']        = 'almacen/almacenes/listado_almacenes';
-$route['almacen/catalogos/almacenes/listado_almacenes/(:num)'] = 'almacen/almacenes/listado_almacenes/$1';*/
-
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 $route['almacen/catalogos/almacenes/listado']        = 'almacen/almacenes/listado';
 $route['almacen/catalogos/almacenes/listado/(:num)'] = 'almacen/almacenes/listado/$1';
 
-
+/*Catalogo de pasillos*/
+$route['almacen/catalogos/pasillos']			     = 'almacen/pasillos/index';
+$route['almacen/catalogos/almacenes/pasillos']        = 'almacen/pasillos/listado';
+$route['almacen/catalogos/almacenes/pasillos/(:num)'] = 'almacen/pasillos/listado/$1';
 
 /*VENTAS*/
 

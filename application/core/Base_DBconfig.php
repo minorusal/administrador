@@ -39,6 +39,7 @@ class Base_DBconfig extends Base_Controller {
 					 	 // Tablas
 					 	,'tbl_administracion_entidades'		=>	'av_administracion_entidades'
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
+					 	,'tbl_almacen_gavetas' 			    =>	'av_almacen_gavetas'
 					 	,'tbl_compras_articulos'			=>	'av_compras_articulos'
 					 	,'tbl_compras_lineas'				=>	'av_compras_lineas'
 					 	,'tbl_compras_marcas'				=>	'av_compras_marcas'
@@ -49,6 +50,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_proveedores_articulos'=>	'av_compras_proveedores_articulos'
 					 	,'tbl_compras_um'					=>	'av_compras_um'
 					 	,'tbl_compras_clientes'				=>	'av_ventas_clientes'
+					 	,'tbl_sys_sucursales'				=>	'sys_sucursales'
 					 	// Vistas
 					 	,'vw_orden_articulos'				=>	'vw_ordenes_con_articulos'
 					 	,'vw_articulos'						=>	'vw_articulos'

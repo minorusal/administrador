@@ -108,7 +108,7 @@ class articulos extends Base_Controller {
 			return $this->load_view_unique($uri_view , $data_tab_2, true);
 		}
 	}
-	
+
 	public function agregar_articulo(){
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/articulo_save';
@@ -170,7 +170,6 @@ class articulos extends Base_Controller {
 		}
 	}
 	public function detalle_articulo(){
-		$this->excel->generate_excel();
 		$id_articulo       = $this->ajax_post('id_articulo');
 		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
 		// listas

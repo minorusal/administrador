@@ -180,7 +180,7 @@ class catalogos_model extends Base_Model
 
 	/*GAVETAS*/
 
-	/*public function db_get_data_gaveta($data=array())
+	public function db_get_data_gaveta($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -204,7 +204,16 @@ class catalogos_model extends Base_Model
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
+
+	/*Trae la información para el formulario de edición de gaveta*/
+	public function get_orden_unico_gaveta($id_almacen_gavetas){
+		$query = "SELECT * FROM av_almacen_gavetas WHERE id_almacen_gavetas = $id_almacen_gavetas";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

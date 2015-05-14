@@ -86,7 +86,7 @@ $route['almacen/catalogos/almacenes/listado']        = 'almacen/almacenes/listad
 $route['almacen/catalogos/almacenes/listado/(:num)'] = 'almacen/almacenes/listado/$1';
 
 /*Catalogo de pasillos*/
-$route['almacen/catalogos/pasillos']			     = 'almacen/pasillos/index';
+$route['almacen/catalogos/pasillos']			      = 'almacen/pasillos/index';
 $route['almacen/catalogos/almacenes/pasillos']        = 'almacen/pasillos/listado';
 $route['almacen/catalogos/almacenes/pasillos/(:num)'] = 'almacen/pasillos/listado/$1';
 

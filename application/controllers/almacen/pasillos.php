@@ -115,8 +115,8 @@ class pasillos extends Base_Controller
 						);
 				
 				$tbl_data[] = array('id'             => $value['clave_corta'],
-									'clave_corta'    => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'pasillos'       => $value['pasillos'],
+									'pasillos'       => tool_tips_tpl($value['pasillos'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'    => $value['clave_corta'],
 									'almacen'        => $value['almacenes'],
 									//'gaveta'        => $value['gavetas'],
 									'descripcion'    => $value['descripcion']);	
@@ -126,8 +126,8 @@ class pasillos extends Base_Controller
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("cvl_corta"),
-										$this->lang_item("cvl_corta"),
 										$this->lang_item("pasillo"),
+										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
 										//$this->lang_item("gavetas"),
 										$this->lang_item("descripcion"));

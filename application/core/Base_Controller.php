@@ -46,8 +46,8 @@ class Base_Controller extends CI_Controller {
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 
-		$user_root = (strtolower($perfil)=='root') ? true : false;
-		$data_modulos   = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
+		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
+		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 		
 		if((is_array($data_modulos))){
 			$data_modulos   = $this->build_array_navigator($data_modulos);

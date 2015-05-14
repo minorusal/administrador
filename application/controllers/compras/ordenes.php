@@ -25,7 +25,7 @@ class ordenes extends Base_Controller {
 		$this->path 				= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 		= 'content';
 		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;
-		$this->limit_max			= 5;
+		$this->limit_max			= 20;
 		$this->offset				= 0;
 		// Tabs
 		$this->tab_inicial 			= 2;
@@ -160,7 +160,7 @@ class ordenes extends Base_Controller {
 		
 		$dropArray = array(
 					'data'		=> $this->db_model->db_get_proveedores()
-					// ,'selected' => '' 
+					,'selected' => $detalle[0]['id_compras_proveedor'] 
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"

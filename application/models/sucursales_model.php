@@ -6,7 +6,7 @@ class sucursales_model extends Base_Model
 						cp.id_sucursal
 						,cp.sucursal
 					FROM
-						sys_sucursales cp
+						00_av_system.sys_sucursales cp
 					";
       	
       	$query = $this->db->query($query);

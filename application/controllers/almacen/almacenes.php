@@ -157,11 +157,11 @@ class almacenes extends Base_Controller
 	{
 		$id_almacen_almacenes = $this->ajax_post('id_almacen');
 		$detalle  		      = $this->db_model->get_orden_unico_almacen($id_almacen_almacenes);
-		$this->load_database('global_system');
 		$this->load->model('sucursales_model');
 		$seccion 		      = 'detalle';
 		$tab_detalle	      = $this->tab3;
 		$sucursales           = dropdown_tpl($this->db_model->get_sucursales('','','',false), $detalle[0]['id_sucursal'], 'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
+		$tipos                = dropdown_tpl($this->db_model->db_get_data_tipos('','','',false), $detalle[0]['id_almacen_tipos'], 'id_almacen_tipos', array('tipos'),"lts_tipos", "requerido");
 		$btn_save             = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_almacen']            = $id_almacen_almacenes;
@@ -172,6 +172,8 @@ class almacenes extends Base_Controller
 		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
 		$tabData["list_sucursal"]         = $sucursales;
 		$tabData["sucursal"]              = $this->lang_item("sucursal");
+		$tabData["list_tipo"]             = $tipos;
+		$tabData["tipo"]                  = $this->lang_item("tipo");
         $tabData['almacen']               = $detalle[0]['almacenes'];
 		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
         $tabData['descripcion']           = $detalle[0]['descripcion'];
@@ -207,6 +209,7 @@ class almacenes extends Base_Controller
 						,'clave_corta' 				=> $this->ajax_post('clave_corta')
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_sucursal'				=> $this->ajax_post('id_sucursal')
+						,'id_almacen_tipos'				    => $this->ajax_post('id_tipo')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){

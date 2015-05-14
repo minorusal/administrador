@@ -120,6 +120,7 @@ class almacenes extends Base_Controller
 									'almacenes'      => tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
 									'sucursal'       => $value['sucursal'],
+									'tipos'          => $value['tipos'],
 									'descripcion'    => $value['descripcion']);
 			}
 			
@@ -130,6 +131,7 @@ class almacenes extends Base_Controller
 										$this->lang_item("almacen"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("sucursal"),
+										$this->lang_item("tipo"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

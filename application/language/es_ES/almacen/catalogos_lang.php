@@ -24,11 +24,11 @@
 
 	/*PASILLOS*/
 
-	$lang['pasillos']           = 'pasillos';
-	$lang['agregar_pasillos']   = 'nuevo pasillo';
-	$lang['listado_pasillos']   = 'pasillos';
-	$lang['detalle_pasillos']   = 'detalle';
-	$lang['nombre_pasillos']    = 'pasillo';
+	$lang['pasillos']          = 'pasillos';
+	$lang['agregar_pasillo']   = 'nuevo pasillo';
+	$lang['listado_pasillo']   = 'pasillos';
+	$lang['detalle_pasillo']   = 'detalle';
+	$lang['nombre_pasillos']   = 'pasillo';
 
 
 ?>

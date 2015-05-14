@@ -158,8 +158,16 @@ class ordenes extends Base_Controller {
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
 		
-		$proveedores     	= dropdown_tpl($this->db_model->db_get_proveedores(), $detalle[0]['id_compras_proveedor'] ,'id_compras_proveedor', array('clave_corta','razon_social'),"id_proveedor", "requerido");
-
+		$dropArray = array(
+					'data'		=> $this->db_model->db_get_proveedores()
+					// ,'selected' => '' 
+					,'value' 	=> 'id_compras_proveedor'
+					,'text' 	=> array('clave_corta','razon_social')
+					,'name' 	=> "id_proveedor"
+					,'class' 	=> "requerido"
+					// ,'leyenda' 	=> ''
+				);
+		$proveedores    = dropdown_tpl($dropArray);
 		$tabData['id_compras_orden']	= $id_compras_orden;
 		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
 		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];

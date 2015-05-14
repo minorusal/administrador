@@ -161,9 +161,14 @@ class ordenes extends Base_Controller {
         $tabData['timestamp']         	= $detalle[0]['timestamp'];
         $tabData['button_save']       	= $btn_save;
                
-        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        if($detalle[0]['id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+    	}else{
+    		$usuario_name = '';
+    	}
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
+        $tabData['usuario_registro']	= $usuario_name;
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}

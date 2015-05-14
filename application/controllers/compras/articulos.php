@@ -94,7 +94,7 @@ class articulos extends Base_Controller {
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
-			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
 			$data_tab_2['tabla']     = $tabla;
 			$data_tab_2['paginador'] = $paginador;
 			$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);

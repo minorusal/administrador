@@ -25,7 +25,7 @@ class ordenes extends Base_Controller {
 		$this->path 				= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 		= 'content';
 		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;
-		$this->limit_max			= 20;
+		$this->limit_max			= 10;
 		$this->offset				= 0;
 		// Tabs
 		$this->tab_inicial 			= 2;
@@ -109,7 +109,7 @@ class ordenes extends Base_Controller {
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-		// dump_var($total_rows);
+
 		if($total_rows){
 			foreach ($list_content as $value) {
 				// Evento de enlace
@@ -157,10 +157,10 @@ class ordenes extends Base_Controller {
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-		
+
 		$dropArray = array(
 					'data'		=> $this->db_model->db_get_proveedores()
-					,'selected' => $detalle[0]['id_compras_proveedor'] 
+					,'selected' => $detalle[0]['id_proveedor'] 
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"

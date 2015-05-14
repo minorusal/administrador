@@ -1,11 +1,6 @@
 <?php
 class catalogos_model extends Base_Model
 {
-	/*private $db_b;
-	public function __construct()
-	{
-		$this->db_b = $this->load->database('mx',TRUE);
-	}*/
 	/*ALMACENES*/
 		
 	/*Traer información para el listado de los almacenes*/
@@ -18,7 +13,8 @@ class catalogos_model extends Base_Model
 		$filtro = ($filtro) ? "AND (av.almacenes like '%$filtro%' OR 
 												  av.clave_corta like '%$filtro%' OR
 												  av.descripcion like '%$filtro%' OR
-												  su.sucursal like '%$filtro%')" : "";
+												  su.sucursal like '%$filtro%' OR
+												  ti.tipos like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						 av.id_almacen_almacenes
@@ -27,8 +23,10 @@ class catalogos_model extends Base_Model
 						,av.almacenes
 						,av.id_sucursal
 						,su.sucursal
+						,ti.tipos
 					FROM 00_av_mx.av_almacen_almacenes av
 					LEFT JOIN 00_av_system.sys_sucursales su on su.id_sucursal = av.id_sucursal
+					LEFT JOIN 00_av_mx.av_almacen_tipos ti on ti.id_almacen_tipos = av.id_almacen_tipos
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_almacenes ASC
 					$limit
@@ -41,7 +39,7 @@ class catalogos_model extends Base_Model
 
 	/*Trae la información para el formulario de edición de almacen*/
 	public function get_orden_unico_almacen($id_almacen_almacenes){
-		$query = "SELECT * FROM av_almacen_almacenes WHERE id_almacen_almacenes = $id_almacen_almacenes";
+		$query = "SELECT * FROM 00_av_mx.av_almacen_almacenes WHERE id_almacen_almacenes = $id_almacen_almacenes";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -77,22 +75,32 @@ class catalogos_model extends Base_Model
 		}
 	}
 
+	/*Obtiene las sucursales relacionadas con almacenes*/
 	public function get_sucursales($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "(
-												cp.presentacion like '%$filtro%'
-											OR 
-												cp.clave_corta like '%$filtro%'
-											OR
-												cp.descripcion like '%$filtro%'
-										) ";
 		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
 		$query = "	SELECT 
 						cp.id_sucursal
 						,cp.sucursal
 					FROM
-						sys_sucursales cp
+						00_av_system.sys_sucursales cp
 					";
       	
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+
+
+	/*Obtiene los tipos de almacenes*/
+	public function db_get_data_tipos($limit, $offset, $filtro="", $aplicar_limit = true){
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						at.id_almacen_tipos
+						,at.tipos
+					FROM
+						av_almacen_tipos at
+					";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

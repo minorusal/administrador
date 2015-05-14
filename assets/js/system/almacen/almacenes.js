@@ -22,7 +22,9 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data);
+           		//jQuery('#a-'+id_content).html(data);
+           		var chosen  = 'jQuery(".chzn-select").chosen();';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen));
            }
         }
     });
@@ -55,8 +57,10 @@ function detalle(id_almacen){
         dataType: 'json',
         data: {id_almacen : id_almacen},
         success: function(data){
+        	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
+        	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
         }
     });
@@ -66,18 +70,19 @@ function actualizar(){
 	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
-	var incomplete       = values_requeridos();
-	var id_almacen  = jQuery('#id_almacen').val();
-    var almacen     = jQuery('#almacen').val();
-    var clave_corta      = jQuery('#clave_corta').val();
-    var descripcion      = jQuery('#descripcion').val();
+	var incomplete   = values_requeridos();
+	var id_almacen   = jQuery('#id_almacen').val();
+    var almacen      = jQuery('#almacen').val();
+    var clave_corta  = jQuery('#clave_corta').val();
+    var descripcion  = jQuery('#descripcion').val();
     var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
+    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
 
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/almacenes/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal },
+		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -99,11 +104,12 @@ function agregar(){
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
     var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
+    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/almacenes/insert_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal },
+		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

@@ -108,10 +108,40 @@ class articulos extends Base_Controller {
 	public function agregar_articulo(){
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/articulo_save';
-		$presentaciones = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), '' ,'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones", "requerido");
-		$lineas         = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), '' ,'id_compras_linea', array('clave_corta','linea'),"lts_lineas", "requerido");
-		$um             = dropdown_tpl($this->catalogos_model->get_um('','','',false), '' ,'id_compras_um', array('clave_corta','um'),"lts_um", "requerido");
-		$marcas         = dropdown_tpl($this->catalogos_model->get_marcas('','','',false), '' ,'id_compras_marca', array('clave_corta','marca'),"lts_marcas", "requerido");
+		// listas
+		$dropArray = array(
+					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
+					,'value' 	=> 'id_compras_presentacion'
+					,'text' 	=> array('clave_corta', 'presentacion')
+					,'name' 	=> "lts_presentaciones"
+					,'class' 	=>  "requerido"
+				);
+		$presentaciones = dropdown_tpl($dropArray);
+		$dropArray2 = array(
+					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
+					,'value' 	=> 'id_compras_linea'
+					,'text' 	=> array('clave_corta','linea')
+					,'name' 	=> "lts_lineas"
+					,'class' 	=> "requerido"
+				);
+		$lineas         = dropdown_tpl($dropArray2);
+		$dropArray3 = array(
+					 'data'		=> $this->catalogos_model->get_um('','','',false)
+					,'value' 	=> 'id_compras_um'
+					,'text' 	=> array('clave_corta','um')
+					,'name' 	=> "lts_um"
+					,'class' 	=> "requerido"
+					);
+		$um             = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
+					,'value' 	=> 'id_compras_marca'
+					,'text' 	=> array('clave_corta','marca')
+					,'name' 	=> "lts_marcas"
+					,'class' 	=> "requerido"
+					);
+		$marcas         = dropdown_tpl($dropArray4);
+		// 
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
@@ -136,15 +166,46 @@ class articulos extends Base_Controller {
 		}
 	}
 	public function detalle_articulo(){
-
 		$id_articulo       = $this->ajax_post('id_articulo');
 		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
-		
-		$presentaciones    = dropdown_tpl($this->catalogos_model->get_presentaciones('','','',false), $detalle_articulo[0]['id_compras_presentacion'], 'id_compras_presentacion', array('clave_corta', 'presentacion'),"lts_presentaciones_detalle", "requerido");
-		$lineas            = dropdown_tpl($this->catalogos_model->get_lineas('','','',false), $detalle_articulo[0]['id_compras_linea'], 'id_compras_linea', array('clave_corta','linea'),"lts_lineas_detalle", "requerido");
-		$um                = dropdown_tpl($this->catalogos_model->get_um('','','',false), $detalle_articulo[0]['id_compras_um'], 'id_compras_um', array('clave_corta','um'),"lts_um_detalle", "requerido");
-		$marcas            = dropdown_tpl($this->catalogos_model->get_marcas('','','',false), $detalle_articulo[0]['id_compras_marca'], 'id_compras_marca', array('clave_corta','marca'),"lts_marcas_detalle", "requerido");
-		
+		// listas
+		$dropArray = array(
+					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
+					,'value' 	=> 'id_compras_presentacion'
+					,'text' 	=> array('clave_corta', 'presentacion')
+					,'name' 	=> "lts_presentaciones"
+					,'class' 	=>  "requerido"
+					,'selected' => $detalle_articulo[0]['id_compras_presentacion']
+				);
+		$presentaciones = dropdown_tpl($dropArray);
+		$dropArray2 = array(
+					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
+					,'value' 	=> 'id_compras_linea'
+					,'text' 	=> array('clave_corta','linea')
+					,'name' 	=> "lts_lineas"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle_articulo[0]['id_compras_linea']
+				);
+		$lineas         = dropdown_tpl($dropArray2);
+		$dropArray3 = array(
+					 'data'		=> $this->catalogos_model->get_um('','','',false)
+					,'value' 	=> 'id_compras_um'
+					,'text' 	=> array('clave_corta','um')
+					,'name' 	=> "lts_um"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle_articulo[0]['id_compras_um']
+					);
+		$um             = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
+					,'value' 	=> 'id_compras_marca'
+					,'text' 	=> array('clave_corta','marca')
+					,'name' 	=> "lts_marcas"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle_articulo[0]['id_compras_marca']
+					);
+		$marcas         = dropdown_tpl($dropArray4);
+		// 
 		$btn_save          = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
 		
 		$data_tab_3['id_articulo']       = $id_articulo;

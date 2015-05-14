@@ -22,9 +22,7 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		//jQuery('#a-'+id_content).html(data);
-           		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+           		jQuery('#a-'+id_content).html(data);
            }
         }
     });
@@ -57,10 +55,8 @@ function detalle(id_pasillo){
         dataType: 'json',
         data: {id_pasillo : id_pasillo},
         success: function(data){
-        	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
-        	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
         }
     });
@@ -105,12 +101,11 @@ function agregar(){
     var clave_corta  = jQuery('#clave_corta').val();
     var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
     var descripcion  = jQuery('#descripcion').val();
-
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/pasillos/insert_pasillo",
 		dataType: "json",
-		data: {incomplete :incomplete, pasillo:pasillo, clave_corta:clave_corta, id_almacen:id_almacen, descripcion:descripcion },
+		data: {incomplete :incomplete, pasillo:pasillos, clave_corta:clave_corta, id_almacen:id_almacen, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

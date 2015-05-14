@@ -52,7 +52,8 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_um'					=>	'av_compras_um'
 					 	,'tbl_compras_clientes'				=>	'av_ventas_clientes'
 					 	// Vistas
-					 	,'vw_orden_articulos'				=>	'vw_ordenes_con_articulos'
+					 	,'vw_compras_orden_articulos'		=>	'vw_compras_ordenes_con_articulos'
+					 	,'vw_compras_orden_proveedores'		=>	'vw_compras_ordenes_con_proveedores'
 					 	,'vw_articulos'						=>	'vw_articulos'
 					 	,'vw_proveedores_articulos'			=>	'vw_proveedores_articulos'
 					 	// ,'[tbl_alias]'	=>	'[tabla]'

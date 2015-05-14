@@ -45,13 +45,16 @@ class clientes extends Base_Controller {
 	}
 
 	public function agregar_clientes(){
-		$lts_entidades  = dropdown_tpl(		$this->clientes_model->catalogo_entidades(), 
-										'' ,
-										'id_administracion_entidad', 
-										array('clave_corta','entidad'),
-										'lts_entidades', 
-										'requerido'
-									); 
+		// Listas
+		$dropArray = array(
+					 'data'		=> $this->clientes_model->catalogo_entidades()
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('clave_corta','entidad')
+					,'name' 	=> "lts_entidades"
+					,'class' 	=> "requerido"
+				);
+		$lts_entidades  = dropdown_tpl($dropArray); 
+		// 
 		$data_1['tabs'] 		  =	'nuevo cliente';
 		$data_1['nombre_cliente'] =	$this->lang_item("nombre_cliente");
 		$data_1['direccion'] 	  =	$this->lang_item("direccion");
@@ -180,8 +183,17 @@ class clientes extends Base_Controller {
 	public function detalle_cliente(){
 		$id_cliente       = $this->ajax_post('id_cliente');
 		$detalle_cliente  = $this->clientes_model->get_cliente_unico($id_cliente);
-		$lts_entidades  = dropdown_tpl(	$this->clientes_model->catalogo_entidades(), $detalle_cliente[0]['entidad'] ,'id_administracion_entidad', array('clave_corta','entidad'),'lts_entidades', 'requerido'); 
-        
+		// Listas
+		$dropArray = array(
+					 'data'		=> $this->clientes_model->catalogo_entidades()
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('clave_corta','entidad')
+					,'name' 	=> "lts_entidades"
+					,'class' 	=> "requerido"
+					,'selected'	=> $detalle_cliente[0]['entidad']
+				);
+		$lts_entidades  = dropdown_tpl($dropArray); 
+        // 
         $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'editar_cliente';
         $data_tab_3['id_cliente']    = $detalle_cliente[0]['id_ventas_clientes'];
 		$data_tab_3['nombre_cliente']= $this->lang_item("nombre_cliente");

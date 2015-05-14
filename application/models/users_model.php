@@ -27,6 +27,9 @@ class users_model extends Base_Model{
 						,N.id_menu_n1
 						,N.id_menu_n2
 						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -83,6 +86,9 @@ class users_model extends Base_Model{
 						,N.id_menu_n1
 						,N.id_menu_n2
 						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -107,6 +113,11 @@ class users_model extends Base_Model{
 	* @return array
 	*/
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
+
+		$id_menu_n1 = ($id_menu_n1=='') ? '0' : $id_menu_n1;
+		$id_menu_n2 = ($id_menu_n2=='') ? '0' : $id_menu_n2;
+		$id_menu_n3 = ($id_menu_n3=='') ? '0' : $id_menu_n3;
+
 		// DB Info
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_menu_n1'];

@@ -235,11 +235,12 @@ class almacenes extends Base_Controller
 	
 	public function agregar(){
 
-		$this->load_database('global_system');
+		//$this->load_database('global_system');
 		$this->load->model('sucursales_model');
 
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
-		$sucursales    = dropdown_tpl($this->sucursales_model->get_sucursales('','','',false), '' ,'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
+		$sucursales    = dropdown_tpl($this->db_model->get_sucursales('','','',false), '' ,'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
+		$tipos         = dropdown_tpl($this->db_model->db_get_data_tipos('','','',false), '' ,'id_almacen_tipos', array('tipos'),"lts_tipos", "requerido");
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
@@ -247,6 +248,8 @@ class almacenes extends Base_Controller
 		$tab_1["cvl_corta"]             = $this->lang_item("cvl_corta");
 		$tab_1["list_sucursal"]         = $sucursales;
 		$tab_1["sucursal"]              = $this->lang_item("sucursal");
+		$tab_1["list_tipo"]             = $tipos;
+		$tab_1["tipo"]                  = $this->lang_item("tipo");
 		$tab_1["descrip"]               = $this->lang_item("descripcion");
 
         $tab_1['button_save']       = $btn_save;
@@ -270,11 +273,13 @@ class almacenes extends Base_Controller
 			$almacen = $this->ajax_post('almacenes');
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$sucursal  = $this->ajax_post('id_sucursal');
+			$tipo  = $this->ajax_post('id_tipo');
 			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
 			$data_insert = array('clave_corta'    => $clave_corta,
 								 'descripcion'    => $descripcion,
 								 'id_usuario'     => $this->session->userdata('id_usuario'),
 								 'id_sucursal'    => $sucursal,
+								 'id_almacen_tipos'  => $tipo,
 								 'almacenes'      => $almacen,  
 								 'timestamp'      => $this->timestamp());
 			

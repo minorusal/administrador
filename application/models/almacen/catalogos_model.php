@@ -74,13 +74,6 @@ class catalogos_model extends Base_Model
 
 	/*Obtiene las sucursales relacionadas con almacenes*/
 	public function get_sucursales($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "(
-												cp.presentacion like '%$filtro%'
-											OR 
-												cp.clave_corta like '%$filtro%'
-											OR
-												cp.descripcion like '%$filtro%'
-										) ";
 		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
 		$query = "	SELECT 
 						cp.id_sucursal
@@ -94,6 +87,7 @@ class catalogos_model extends Base_Model
 			return $query->result_array();
 		}	
 	}
+
 
 	/*Obtiene los tipos de almacenes*/
 	public function db_get_data_tipos($limit, $offset, $filtro="", $aplicar_limit = true){

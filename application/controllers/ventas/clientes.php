@@ -4,7 +4,6 @@ class clientes extends Base_Controller {
 	var $uri_modulo     = 'ventas/';
 	var $uri_submodulo  = 'clientes/';
 	var $view_content   = 'content';
-	var $view_listado   = 'listado';
 
 	public function __construct(){
 		parent::__construct();
@@ -52,10 +51,7 @@ class clientes extends Base_Controller {
 										'lts_entidades', 
 										'requerido'
 									); 
-		$data_1['tabs'] 		  =	'nuevo cliente';
 		$data_1['nombre_cliente'] =	$this->lang_item("nombre_cliente");
-		$data_1['direccion'] 	  =	$this->lang_item("direccion");
-		$data_1['descripcion'] 	  =	$this->lang_item("descripcion");
 		$data_1['rfc'] 			  =	$this->lang_item("rfc_clientes");
 		$data_1['razon_social']   =	$this->lang_item("razon_social");
 		$data_1['clave_corta'] 	  =	$this->lang_item("clave_corta");
@@ -89,7 +85,7 @@ class clientes extends Base_Controller {
 
 		$lts_content =$this->clientes_model->consulta_clientes($limit,$offset,$filtro);
 		$total_rows  = count($this->clientes_model->consulta_clientes($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado_clientes');
+		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado');
 
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
@@ -114,7 +110,7 @@ class clientes extends Base_Controller {
 										$this->lang_item("nombre_cliente"),
 										$this->lang_item("razon_social"),
 										$this->lang_item("clave_corta"),
-										$this->lang_item("rfc"),
+										$this->lang_item("rfc_clientes"),
 										$this->lang_item("telefonos"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);

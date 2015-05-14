@@ -99,9 +99,9 @@ class users_model extends Base_Model{
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
 
 		if($root){
-			$sys_navigate_n1 = "1";
-			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE 1";
-			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE 1";
+			$sys_navigate_n1 = "n1.activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE activo = 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
 			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";

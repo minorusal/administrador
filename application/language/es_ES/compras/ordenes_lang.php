@@ -12,6 +12,4 @@ $lang['descripcion'] 		= "Descripción";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";
-
-
 ?>

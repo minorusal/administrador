@@ -163,6 +163,19 @@ class catalogos_model extends Base_Model
 		}
 	}
 
+	/*Inserta registro de pasillos*/
+	public function db_insert_data_pasillos($data = array())
+	{
+		$existe = $this->row_exist('av_almacen_pasillos', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_almacen_pasillos', $data);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
+
 
 
 	/*GAVETAS*/

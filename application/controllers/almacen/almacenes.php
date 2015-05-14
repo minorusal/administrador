@@ -165,14 +165,21 @@ class almacenes extends Base_Controller
 		$sucursales_array = array(
 					 'data'		=> $this->db_model->get_sucursales('','','',false)
 					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
+					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle[0]['id_sucursal']
 					);
-		//$sucursales           = dropdown_tpl($this->db_model->get_sucursales('','','',false), $detalle[0]['id_sucursal'], 'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
 		$sucursales           = dropdown_tpl($sucursales_array);
-		$tipos                = dropdown_tpl($this->db_model->db_get_data_tipos('','','',false), $detalle[0]['id_almacen_tipos'], 'id_almacen_tipos', array('tipos'),"lts_tipos", "requerido");
+		$tipos_array = array(
+					 'data'		=> $this->db_model->db_get_data_tipos('','','',false)
+					,'value' 	=> 'id_almacen_tipos'
+					,'text' 	=> array('tipos')
+					,'name' 	=> "lts_tipos"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle[0]['id_almacen_tipos']
+					);
+		$tipos                = dropdown_tpl($tipos_array);
 		$btn_save             = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_almacen']            = $id_almacen_almacenes;
@@ -250,8 +257,23 @@ class almacenes extends Base_Controller
 		$this->load->model('sucursales_model');
 
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
-		$sucursales    = dropdown_tpl($this->db_model->get_sucursales('','','',false), '' ,'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
-		$tipos         = dropdown_tpl($this->db_model->db_get_data_tipos('','','',false), '' ,'id_almacen_tipos', array('tipos'),"lts_tipos", "requerido");
+		$sucursales_array = array(
+					 'data'		=> $this->db_model->get_sucursales('','','',false)
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('sucursal')
+					,'name' 	=> "lts_sucursales"
+					,'class' 	=> "requerido"
+					);
+		$sucursales    = dropdown_tpl($sucursales_array);
+		
+		$tipos_array = array(
+					 'data'		=> $this->db_model->db_get_data_tipos('','','',false)
+					,'value' 	=> 'id_almacen_tipos'
+					,'text' 	=> array('tipos')
+					,'name' 	=> "lts_tipos"
+					,'class' 	=> "requerido"
+					);
+		$tipos         = dropdown_tpl($tipos_array);
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

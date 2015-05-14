@@ -22,7 +22,9 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data);
+           		//jQuery('#a-'+id_content).html(data);
+           		var chosen  = 'jQuery(".chzn-select").chosen();';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen));
            }
         }
     });
@@ -55,8 +57,10 @@ function detalle(id_pasillo){
         dataType: 'json',
         data: {id_pasillo : id_pasillo},
         success: function(data){
+        	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
+        	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
         }
     });

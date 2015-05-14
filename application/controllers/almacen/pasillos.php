@@ -159,7 +159,15 @@ class pasillos extends Base_Controller
 		
 		$seccion      = 'detalle';
 		$tab_detalle  = $this->tab3;
-		$almacenes    = dropdown_tpl($this->db_model->db_get_data_almacen('','','',false), $detalle[0]['id_almacen_almacenes'], 'id_almacen_almacenes', array('almacenes'),"lts_almacenes", "requerido");
+		$almacenes_array = array(
+					 'data'		=> $this->db_model->db_get_data_almacen('','','',false)
+					,'value' 	=> 'id_almacen_almacenes'
+					,'text' 	=> array('almacenes')
+					,'name' 	=> "lts_almacenes"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle[0]['id_almacen_almacenes']
+					);
+		$almacenes    = dropdown_tpl($almacenes_array);
 		//$gavetas      = dropdown_tpl($this->db_model->db_get_data_gaveta('','','',false), $detalle[0]['id_almacen_gavetas'], 'id_almacen_gavetas', array('gavetas'),"lts_gavetas", "");
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
@@ -234,7 +242,14 @@ class pasillos extends Base_Controller
 	public function agregar_pasillo(){
 
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/pasillos_save';  #almacen/catalogos/pasillos/pasillos_save
-		$almacenes     = dropdown_tpl($this->db_model->db_get_data_almacen('','','',false), '', 'id_almacen_almacenes', array('almacenes'),"lts_almacenes", "requerido");
+		$almacenes_array = array(
+					 'data'		=> $this->db_model->db_get_data_almacen('','','',false)
+					,'value' 	=> 'id_almacen_almacenes'
+					,'text' 	=> array('almacenes')
+					,'name' 	=> "lts_almacenes"
+					,'class' 	=> "requerido"
+					);
+		$almacenes     = dropdown_tpl($almacenes_array);
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

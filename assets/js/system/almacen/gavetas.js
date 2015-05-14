@@ -49,13 +49,13 @@ function buscar(){
 	})
 }
 
-function detalle(id_pasillo){
+function detalle(id_gaveta){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/pasillos/detalle",
+        url: path()+"almacen/gavetas/detalle",
         dataType: 'json',
-        data: {id_pasillo : id_pasillo},
+        data: {id_gaveta : id_gaveta},
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');

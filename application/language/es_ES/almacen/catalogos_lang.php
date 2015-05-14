@@ -30,5 +30,13 @@
 	$lang['detalle_pasillo']   = 'detalle';
 	$lang['nombre_pasillos']   = 'pasillo';
 
+	/*GAVETAS*/
+
+	$lang['gavetas']           = 'gavetas';
+	$lang['agregar_gaveta']    = 'nueva gaveta';
+	$lang['listado_gaveta']    = 'gavetas';
+	$lang['detalle_gaveta']    = 'detalle';
+	$lang['nombre_gaveta']     = 'gaveta';
+
 
 ?>

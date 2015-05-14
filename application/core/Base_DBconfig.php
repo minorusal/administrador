@@ -25,6 +25,10 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_submodulos'	=>	'sys_submodulos'
 					 	,'tbl_sucursales'	=>	'sys_sucursales'
 					 	,'tbl_usuarios'		=>	'sys_usuarios'
+					 	,'tbl_menu_n1'		=>	'sys_menu_n1'
+					 	,'tbl_menu_n2'		=>	'sys_menu_n2'
+					 	,'tbl_menu_n3'		=>	'sys_menu_n3'
+					 	
 					 	// Vistas
 					 	,'vw_personal'		=>	'vw_personal'
 					 	// ,'[tbl_alias]'	=>	'[tabla]'

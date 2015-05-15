@@ -3,22 +3,22 @@ jQuery(document).ready(function(){
   jQuery('#search-query').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){  
-      buscar_cliente();
+      buscar_vendedores();
     } 
   });
 })
-function buscar_cliente(){
+function buscar_vendedores(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/listado_clientes",
+    url: path()+"ventas/vendedores/listado_vendedores",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
       jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      var funcion = 'buscar_cliente';
+      var funcion = 'buscar_vendedores';
           jQuery("#loader").html('');
           jQuery('#a-1').html(data+input_keypress('search-query', funcion));
       jQuery('#search-query').val(filtro).focus();
@@ -36,7 +36,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar_cliente';
+           		var funcion = 'buscar_vendedores';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -47,14 +47,14 @@ function load_content(uri, id_content){
         }
     });
 }
-function insert_cliente(){
-  var btn          = jQuery("button[name='save_cliente']");
+function insert_vendedor(){
+ var btn          = jQuery("button[name='save_vendedor']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
-  var incomplete    = values_requeridos();
+  var incomplete    = values_requeridos();    
+
   var  nombre       = jQuery('#nombre').val();
-  var  razon_social = jQuery('#razon_social').val();
   var  clave_corta  = jQuery('#clave_corta').val();
   var  rfc          = jQuery('#rfc').val();
   var  calle        = jQuery('#calle').val();
@@ -65,15 +65,17 @@ function insert_cliente(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
-  var sucursal    = jQuery("select[name='lts_sucursales'] option:selected").val();
+
+  var entidad = jQuery("select[name='lts_entidades'] option:selected").val();
+  var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
+
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/insert_cliente",
+    url: path()+"ventas/vendedores/insert_vendedor",
     dataType: "json",
     data: {
-            incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,cp:cp,telefonos:telefonos,email:email,sucursal:sucursal},
+            incomplete :incomplete,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -89,13 +91,13 @@ function insert_cliente(){
     }
   })
 }
-function detalle_articulo(id_cliente){
+function detalle_vendedor(id_vendedor){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
-        url: path()+"ventas/clientes/detalle_cliente",
+        url: path()+"ventas/vendedores/detalle_vendedor",
         dataType: 'json',
-        data: {id_cliente : id_cliente},
+        data: {id_vendedor : id_vendedor},
         success: function(data){
           var chosen = 'jQuery(".chzn-select").chosen();';
           jQuery('#a-0').html('');
@@ -104,16 +106,14 @@ function detalle_articulo(id_cliente){
         }
     });
 }
-
-function update_cliente(){
-  var btn          = jQuery("button[name='update_cliente']");
-  /*btn.attr('disabled','disabled');*/
+function update_vendedor(){
+  var btn          = jQuery("button[name='update_vendedor']");
+ /* btn.attr('disabled','disabled');*/
   jQuery('#mensajes').hide();
   
   var incomplete    = values_requeridos();    
-  var  id_cliente   = jQuery('#id_cliente').val();
+  var  id_vendedor   = jQuery('#id_vendedor').val();
   var  nombre       = jQuery('#nombre').val();
-  var  razon_social = jQuery('#razon_social').val();
   var  clave_corta  = jQuery('#clave_corta').val();
   var  rfc          = jQuery('#rfc').val();
   var  calle        = jQuery('#calle').val();
@@ -127,12 +127,13 @@ function update_cliente(){
   var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
   var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
 
+
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/update_cliente",
+    url: path()+"ventas/vendedores/update_vendedor",
     dataType: "json",
     data: {
-            incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -143,6 +144,7 @@ function update_cliente(){
       }
       jQuery("#update_loader").html('');
         jQuery("#mensajes_update").html(data[1]).show('slow');
+      
     }
   });
 }

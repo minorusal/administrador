@@ -129,9 +129,9 @@ class users_model extends Base_Model{
 		$tbl3 	= $this->dbinfo[0]['tbl_menu_n3'];
 		// Query
 		if($root){
-			$sys_navigate_n1 = "1";
-			$sys_navigate_n2 = "SELECT * FROM $db1.$tbl2 WHERE activo = 1";
-			$sys_navigate_n3 = "SELECT * FROM $db1.$tbl3 WHERE activo = 1";
+			$sys_navigate_n1 = "n1.activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE activo = 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
 			$sys_navigate_n2 = "SELECT * FROM $db1.$tbl2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";

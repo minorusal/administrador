@@ -9,6 +9,7 @@ $lang['orden_num'] 			= "No. Orden";
 $lang['id'] 				= "ID";
 $lang['razon_social'] 		= "Razón social";
 $lang['descripcion'] 		= "Descripción";
+$lang['sucursal'] 			= "Sucursal";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

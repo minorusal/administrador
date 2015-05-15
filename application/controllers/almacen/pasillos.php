@@ -25,9 +25,9 @@ class pasillos extends Base_Controller
 		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar_pasillos';
-		$this->tab2 			= 'listado_pasillos';
-		$this->tab3 			= 'detalle_pasillos';
+		$this->tab1 			= 'agregar_pasillo';
+		$this->tab2 			= 'listado_pasillo';
+		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 			// $this->load->model($this->uri_modulo.'articulos_model');
@@ -51,7 +51,7 @@ class pasillos extends Base_Controller
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #almacen/almacenes/agregar
+										 $path.$tab_1             #almacen/almacenes/agregar_pasillo
 										,$path.$tab_2.'/'.$pagina #almacen/almacenes/listado/pagina
 										,$tab_3                   #detalle
 								); 
@@ -115,8 +115,8 @@ class pasillos extends Base_Controller
 						);
 				
 				$tbl_data[] = array('id'             => $value['clave_corta'],
-									'clave_corta'    => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'pasillos'       => $value['pasillos'],
+									'pasillos'       => tool_tips_tpl($value['pasillos'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'    => $value['clave_corta'],
 									'almacen'        => $value['almacenes'],
 									//'gaveta'        => $value['gavetas'],
 									'descripcion'    => $value['descripcion']);	
@@ -126,8 +126,8 @@ class pasillos extends Base_Controller
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("cvl_corta"),
-										$this->lang_item("cvl_corta"),
 										$this->lang_item("pasillo"),
+										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
 										//$this->lang_item("gavetas"),
 										$this->lang_item("descripcion"));
@@ -159,7 +159,15 @@ class pasillos extends Base_Controller
 		
 		$seccion      = 'detalle';
 		$tab_detalle  = $this->tab3;
-		$almacenes    = dropdown_tpl($this->db_model->db_get_data_almacen('','','',false), $detalle[0]['id_almacen_almacenes'], 'id_almacen_almacenes', array('almacenes'),"lts_almacenes", "requerido");
+		$almacenes_array = array(
+					 'data'		=> $this->db_model->db_get_data_almacen('','','',false)
+					,'value' 	=> 'id_almacen_almacenes'
+					,'text' 	=> array('almacenes')
+					,'name' 	=> "lts_almacenes"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle[0]['id_almacen_almacenes']
+					);
+		$almacenes    = dropdown_tpl($almacenes_array);
 		//$gavetas      = dropdown_tpl($this->db_model->db_get_data_gaveta('','','',false), $detalle[0]['id_almacen_gavetas'], 'id_almacen_gavetas', array('gavetas'),"lts_gavetas", "");
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
@@ -231,18 +239,25 @@ class pasillos extends Base_Controller
 		echo json_encode($json_respuesta);
 	}
 
-	public function agregar(){
+	public function agregar_pasillo(){
 
-		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/pasillos_save';
-		$sucursales    = dropdown_tpl($this->sucursales_model->get_sucursales('','','',false), '' ,'id_sucursal', array('sucursal'),"lts_sucursales", "requerido");
-		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/pasillos_save';  #almacen/catalogos/pasillos/pasillos_save
+		$almacenes_array = array(
+					 'data'		=> $this->db_model->db_get_data_almacen('','','',false)
+					,'value' 	=> 'id_almacen_almacenes'
+					,'text' 	=> array('almacenes')
+					,'name' 	=> "lts_almacenes"
+					,'class' 	=> "requerido"
+					);
+		$almacenes     = dropdown_tpl($almacenes_array);
+		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["nombre_almacenes"]      = $this->lang_item("nombre_almacenes");
-		$tab_1["cvl_corta"]             = $this->lang_item("cvl_corta");
-		$tab_1["list_sucursal"]         = $sucursales;
-		$tab_1["sucursal"]              = $this->lang_item("sucursal");
-		$tab_1["descrip"]               = $this->lang_item("descripcion");
+		$tab_1["nombre_pasillos"]      = $this->lang_item("nombre_pasillos");
+		$tab_1["cvl_corta"]            = $this->lang_item("cvl_corta");
+		$tab_1["list_almacen"]         = $almacenes;
+		$tab_1["almacen"]              = $this->lang_item("almacen");
+		$tab_1["descrip"]              = $this->lang_item("descripcion");
 
         $tab_1['button_save']       = $btn_save;
         $tab_1['button_reset']      = $btn_reset;
@@ -252,6 +267,36 @@ class pasillos extends Base_Controller
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
 		}else{
 			return $this->load_view_unique($seccion , $tab_1, true);
+		}
+	}
+
+	public function insert_pasillo(){
+		$incomplete  = $this->ajax_post('incomplete');
+		
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$pasillo     = $this->ajax_post('pasillo');
+			$clave_corta  = $this->ajax_post('clave_corta');
+			$id_almacen   = $this->ajax_post('id_almacen');
+			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$data_insert  = array('clave_corta'         => $clave_corta,
+								 'descripcion'          => $descripcion,
+								 'id_usuario'           => $this->session->userdata('id_usuario'),
+								 'id_almacen_almacenes' => $id_almacen,
+								 'pasillos'             => $pasillo,  
+								 'timestamp'            => $this->timestamp());
+			
+			$insert = $this->db_model->db_insert_data_pasillos($data_insert);
+			
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
 		}
 	}
 }

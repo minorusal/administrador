@@ -27,6 +27,9 @@ class users_model extends Base_Model{
 						,N.id_menu_n1
 						,N.id_menu_n2
 						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -83,6 +86,9 @@ class users_model extends Base_Model{
 						,N.id_menu_n1
 						,N.id_menu_n2
 						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
 						,U.registro
 						,U.activo
 						,C.user
@@ -102,11 +108,20 @@ class users_model extends Base_Model{
 		}		
 	}
 	/**
-	* Consulta los modulos a los que tiene acceso el usuario
-	* @param array $id_modulo
+	* Consulta los modulos a los que tiene acceso el usuario de acuerdo a su perfil (tabla perfiles),
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_menu_n1
+	* @param string $id_menu_n2
+	* @param string $id_menu_n3
+	* @param bool $root
 	* @return array
 	*/
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
+
+		$id_menu_n1 = ($id_menu_n1=='') ? '0' : $id_menu_n1;
+		$id_menu_n2 = ($id_menu_n2=='') ? '0' : $id_menu_n2;
+		$id_menu_n3 = ($id_menu_n3=='') ? '0' : $id_menu_n3;
+
 		// DB Info
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_menu_n1'];

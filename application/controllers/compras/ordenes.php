@@ -1,25 +1,34 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class ordenes extends Base_Controller { 
-
+/**
+* Nombre:		Ordenes de compra
+* Ubicación:	Compras>Ordenes
+* Descripción:	Funcionamiento para la sección de ordenes de compra
+* @author:		Oscar Maldonado - OM
+* Creación: 	2015-05-11
+* Modificación:	OM-2015-05-14
+*/
 	private $modulo;
 	private $submodulo;
-	private $view_content;
+	private $view_content, $uri_view_principal;
 	private $path;
 	private $icon;
 	private $offset, $limit_max;
-	private $tab = array(), $tab_indice = array();
+	private $tab_inicial, $tab = array(), $tab_indice = array();
 	
 	public function __construct(){
 		parent::__construct();
-		$this->modulo 			= 'compras';
-		$this->submodulo		= 'ordenes';
-		$this->icon 			= 'fa fa-file-text'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
-		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
-		$this->offset			= 0;
+		$this->modulo 				= 'compras';
+		$this->submodulo			= 'ordenes';
+		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
+		$this->path 				= $this->modulo.'/'.$this->submodulo.'/';
+		$this->view_content 		= 'content';
+		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;
+		$this->limit_max			= 10;
+		$this->offset				= 0;
 		// Tabs
+		$this->tab_inicial 			= 2;
 		$this->tab_indice 		= array(
 									 'agregar'
 									,'listado'
@@ -31,13 +40,14 @@ class ordenes extends Base_Controller {
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('users_model','users_model');
-			// $this->load->model($this->uri_modulo.'articulos_model');
-			// $this->load->model($this->uri_modulo.'catalogos_model');
+		// $this->load->model($this->uri_modulo.'articulos_model','articulos_model');
+		// $this->load->model($this->uri_modulo.'catalogos_model','catalogos_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
 	public function config_tabs(){
+	// Creación de tabs en el contenedor principal
 		for($i=1; $i<=count($this->tab); $i++){
 			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
 		}
@@ -66,12 +76,9 @@ class ordenes extends Base_Controller {
 		return $config_tab;
 	}
 
-	private function uri_view_principal(){
-		return $this->modulo.'/'.$this->view_content;
-	}
-
 	public function index(){		
-		$tabl_inicial 			  = 2;
+	// Carga de pagina inicial
+		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
@@ -79,18 +86,20 @@ class ordenes extends Base_Controller {
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
-		$this->load_view($this->uri_view_principal(), $data, $js);
+		$this->load_view($this->uri_view_principal, $data, $js);
 	}
 
 	public function listado($offset=0){
+	// Crea tabla con listado de elementos capturados 
 		$seccion 		= '';
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(
-			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
+			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 			,'aplicar_limit'=> true
@@ -129,27 +138,36 @@ class ordenes extends Base_Controller {
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
-			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
-			$tabData['tabla']     = $tabla;
-			$tabData['paginador'] = $paginador;
-			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+		$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search",false),$total_rows , $filtro) : "";
+		$tabData['tabla']     = $tabla;
+		$tabData['paginador'] = $paginador;
+		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
-			if($this->ajax_post(false)){
-				echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-			}else{
-				return $this->load_view_unique($uri_view , $tabData, true);
-			}
+		if($this->ajax_post(false)){
+			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+		}else{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
 	}
 
-		public function detalle(){
+	public function detalle(){
+	// Crea formulario de detalle y edición
 		$seccion 			= '';
 		$accion 			= $this->tab['detalle'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-		
-		$proveedores     	= dropdown_tpl($this->db_model->db_get_proveedores(), $detalle[0]['id_compras_proveedor'] ,'id_compras_proveedor', array('clave_corta','razon_social'),"id_proveedor", "requerido");
 
+		$dropArray = array(
+					'data'		=> $this->db_model->db_get_proveedores()
+					,'selected' => $detalle[0]['id_proveedor'] 
+					,'value' 	=> 'id_compras_proveedor'
+					,'text' 	=> array('clave_corta','razon_social')
+					,'name' 	=> "id_proveedor"
+					,'class' 	=> "requerido"
+					// ,'leyenda' 	=> ''
+				);
+		$proveedores    = dropdown_tpl($dropArray);
 		$tabData['id_compras_orden']	= $id_compras_orden;
 		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
 		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
@@ -161,14 +179,20 @@ class ordenes extends Base_Controller {
         $tabData['timestamp']         	= $detalle[0]['timestamp'];
         $tabData['button_save']       	= $btn_save;
                
-        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        if($detalle[0]['id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+    	}else{
+    		$usuario_name = '';
+    	}
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
+        $tabData['usuario_registro']	= $usuario_name;
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function agregar(){
+	// Crea formulario para agregar nuevo elemento
 		$seccion 		= '';
 		$accion 		= $this->tab['agregar'];
 		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
@@ -193,7 +217,7 @@ class ordenes extends Base_Controller {
         $tabData['descripcion']     = $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  = $this->lang_item("fecha_registro",false);
         $tabData['timestamp']       = date('Y-m-d H:i');
-
+        $tabData['registro_por']   	= $this->lang_item("registro_por",false);
         $tabData['usuario_registro']= $this->session->userdata('name');
         $tabData['button_save']     = $btn_save;
         $tabData['button_reset']    = $btn_reset;
@@ -205,8 +229,8 @@ class ordenes extends Base_Controller {
 		}
 	}
 
-
 	public function insert(){
+	// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -246,6 +270,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function actualizar(){
+	// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);

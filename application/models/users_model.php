@@ -108,8 +108,12 @@ class users_model extends Base_Model{
 		}		
 	}
 	/**
-	* Consulta los modulos a los que tiene acceso el usuario
-	* @param array $id_modulo
+	* Consulta los modulos a los que tiene acceso el usuario de acuerdo a su perfil (tabla perfiles),
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_menu_n1
+	* @param string $id_menu_n2
+	* @param string $id_menu_n3
+	* @param bool $root
 	* @return array
 	*/
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){

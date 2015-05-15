@@ -71,19 +71,19 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete   = values_requeridos();
-	var id_pasillo   = jQuery('#id_pasillo').val();
-    var pasillos     = jQuery('#pasillo').val();
+	var id_gaveta   = jQuery('#id_gaveta').val();
+    var gavetas     = jQuery('#gaveta').val();
     var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
-    var id_gaveta    = jQuery("select[name='lts_gavetas'] option:selected").val();
+    var id_pasillo    = jQuery("select[name='lts_pasillos'] option:selected").val();
 
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
 
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/pasillos/actualizar",
+		url: path()+"almacen/gavetas/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_pasillo:id_pasillo, pasillos:pasillos, id_almacen:id_almacen, id_gaveta:id_gaveta, clave_corta:clave_corta, descripcion:descripcion },
+		data: {incomplete :incomplete,id_gaveta:id_gaveta, gavetas:gavetas, id_almacen:id_almacen, id_pasillo:id_pasillo, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

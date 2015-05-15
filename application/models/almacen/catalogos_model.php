@@ -186,16 +186,24 @@ class catalogos_model extends Base_Model
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (av.gavetas like '%$filtro%' OR 
+		$filtro = ($filtro) ? "AND (am.almacenes like '%$filtro%' OR
+									al.pasillos like '%$filtro%' OR
+									av.gavetas like '%$filtro%' OR 
 									av.clave_corta like '%$filtro%' OR
 									av.descripcion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						 av.id_almacen_gavetas
+						,al.pasillos
+						,av.id_almacen_pasillos
+						,am.almacenes
+						,av.id_almacen_almacenes
 						,av.clave_corta
 						,av.descripcion
 						,av.gavetas
 					FROM av_almacen_gavetas av
+					LEFT JOIN av_almacen_pasillos al on al.id_almacen_pasillos = av.id_almacen_pasillos
+					LEFT JOIN av_almacen_almacenes am on am.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_gavetas ASC
 					$limit
@@ -212,6 +220,21 @@ class catalogos_model extends Base_Model
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
+		}
+	}
+
+	/*Actualliza la información en el formuladio de edición de gavetas*/
+	public function db_update_data_gaveta($data=array())
+	{
+		$condicion = array('id_almacen_gavetas !=' => $data['id_almacen_gavetas'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_almacen_gavetas', $condicion);
+		if(!$existe){
+			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
+			$query = $this->db->update_string('av_almacen_gavetas', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
 		}
 	}
 }

@@ -103,6 +103,7 @@ public function config_tabs()
 		$total_rows	  = count($this->db_model->db_get_data_gaveta($sqlData));
 		$sqlData['aplicar_limit'] = false;	
 		$list_content = $this->db_model->db_get_data_gaveta($sqlData);
+		//print_debug($list_content);
 		
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -116,8 +117,8 @@ public function config_tabs()
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'gavetas'       => tool_tips_tpl($value['gavetas'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
-									'gaveta'        => $value['gavetas'],
-									//'gaveta'        => $value['gavetas'],
+									'gaveta'        => $value['almacenes'],
+									'pasillos'        => $value['pasillos'],
 									'descripcion'    => $value['descripcion']);	
 			}
 			
@@ -128,7 +129,7 @@ public function config_tabs()
 										$this->lang_item("gaveta"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
-										//$this->lang_item("gavetas"),
+										$this->lang_item("pasillos"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -168,24 +169,32 @@ public function config_tabs()
 					,'selected' => $detalle[0]['id_almacen_almacenes']
 					);
 		$almacenes    = dropdown_tpl($almacenes_array);
-		//$gavetas      = dropdown_tpl($this->db_model->db_get_data_gaveta('','','',false), $detalle[0]['id_almacen_gavetas'], 'id_almacen_gavetas', array('gavetas'),"lts_gavetas", "");
+		$pasillos_array = array(
+					 'data'		=> $this->db_model->db_get_data_pasillo('','','',false)
+					,'value' 	=> 'id_almacen_pasillos'
+					,'text' 	=> array('pasillos')
+					,'name' 	=> "lts_pasillos"
+					,'class' 	=> ""
+					,'selected' => $detalle[0]['id_almacen_pasillos']
+					);
+		$pasillos    = dropdown_tpl($pasillos_array);
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
-        $tabData['id_pasillo']            = $id_almacen_gavetas;
-        $tabData["nombre_pasillos"]       = $this->lang_item("pasillo");
-		$tabData["cvl_corta"]        	  = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	  = $this->lang_item("descripcion");
-		$tabData["registro_por"]    	  = $this->lang_item("registro_por");
-		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
-		$tabData["list_almacen"]          = $almacenes;
-		$tabData["almacen"]               = $this->lang_item("almacen");
-		//$tabData["list_gaveta"]           = $gavetas;
-		//$tabData["gaveta"]                = $this->lang_item("gavetas");
+        $tabData['id_gaveta']            = $id_almacen_gavetas;
+        $tabData["nombre_gavetas"]       = $this->lang_item("gaveta");
+		$tabData["cvl_corta"]        	 = $this->lang_item("cvl_corta");
+		$tabData["descrip"]         	 = $this->lang_item("descripcion");
+		$tabData["registro_por"]    	 = $this->lang_item("registro_por");
+		$tabData["fecha_registro"]       = $this->lang_item("fecha_registro");
+		$tabData["list_almacen"]         = $almacenes;
+		$tabData["almacen"]              = $this->lang_item("almacen");
+		$tabData["list_pasillo"]         = $pasillos;
+		$tabData["pasillo"]              = $this->lang_item("pasillos");
         $tabData['gaveta']               = $detalle[0]['gavetas'];
-		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
-        $tabData['descripcion']           = $detalle[0]['descripcion'];
-        $tabData['timestamp']             = $detalle[0]['timestamp'];
-        $tabData['button_save']           = $btn_save;
+		$tabData['clave_corta']          = $detalle[0]['clave_corta'];
+        $tabData['descripcion']          = $detalle[0]['descripcion'];
+        $tabData['timestamp']            = $detalle[0]['timestamp'];
+        $tabData['button_save']          = $btn_save;
         
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -196,4 +205,49 @@ public function config_tabs()
 		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
+
+	public function actualizar(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+
+		}else{
+			//$pasillo  = ($this->ajax_post('id_pasillo')=='')? $this->lang_item("sin_pasillo") : $this->ajax_post('id_pasillo');
+			$sqlData = array(
+						 'id_almacen_gavetas'	    => $this->ajax_post('id_gaveta')
+						,'gavetas' 		           => $this->ajax_post('gavetas')
+						,'clave_corta' 				=> $this->ajax_post('clave_corta')
+						,'descripcion'				=> $this->ajax_post('descripcion')
+						,'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
+						,'id_almacen_pasillos'	    => $this->ajax_post('id_pasillo')//$pasillo
+						);//$filtro      = ($this->ajax_post('pasillo')) ? $this->ajax_post('pasillo') : "";
+
+			$insert = $this->db_model->db_update_data_gaveta($sqlData);
+			if($insert){
+				
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
+
 }

@@ -3,6 +3,7 @@
 	$lang['titulo_submodulo'] = 'catalogos';
 	$lang['tool_tip']         = 'ver detalle';
 	$lang['sin_descripcion']  = 'sin descripción';
+	$lang['sin_pasillo']      = 'sin pasillo';
 
 	$lang['id']               = 'id';
 	$lang['cvl_corta']        = 'clave corta';

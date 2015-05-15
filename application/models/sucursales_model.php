@@ -1,12 +1,14 @@
 <?php
 class sucursales_model extends Base_Model
 {
-	public function get_sucursales($limit, $offset, $filtro="", $aplicar_limit = true){
-		$query = "	SELECT 
-						cp.id_sucursal
-						,cp.sucursal
-					FROM
-						00_av_system.sys_sucursales cp
+	public function get_sucursales($data=array()){
+		// DB Info
+		$db1 	= $this->dbinfo[0]['db'];
+		$tbl1 	= $this->dbinfo[0]['tbl_sucursales'];
+		// Query
+		$query = "	SELECT *
+					FROM $db1.$tbl1
+					WHERE 1 $filtro
 					";
       	
       	$query = $this->db->query($query);

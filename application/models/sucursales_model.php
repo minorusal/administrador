@@ -6,6 +6,7 @@ class sucursales_model extends Base_Model
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_sucursales'];
 		// Query
+		$filtro = (isset($data['filtro']))?$data['filtro']:'';
 		$query = "	SELECT *
 					FROM $db1.$tbl1
 					WHERE 1 $filtro

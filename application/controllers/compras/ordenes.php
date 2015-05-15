@@ -40,6 +40,7 @@ class ordenes extends Base_Controller {
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('users_model','users_model');
+		$this->load->model('sucursales_model','sucursales_model');
 		// $this->load->model($this->uri_modulo.'articulos_model','articulos_model');
 		// $this->load->model($this->uri_modulo.'catalogos_model','catalogos_model');
 		// Diccionario
@@ -168,11 +169,23 @@ class ordenes extends Base_Controller {
 					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
+		$dropArray2 = array(
+					 'data'		=> $this->sucursales_model->get_sucursales()
+					,'selected' => $detalle[0]['id_sucursal']
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('clave_corta','sucursal')
+					,'name' 	=> "id_sucursal"
+					,'class' 	=> "requerido"
+				);
+		$sucursales	    = dropdown_tpl($dropArray2);
+		// 
 		$tabData['id_compras_orden']	= $id_compras_orden;
 		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
 		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
         $tabData['razon_social'] 	 	= $this->lang_item("razon_social",false);
 		$tabData['list_proveedores']	= $proveedores;
+		$tabData['sucursal']     		= $this->lang_item("sucursal",false);
+        $tabData['list_sucursales']		= $sucursales;
         $tabData['descripcion']       	= $this->lang_item("descripcion",false);
         $tabData['descripcion_value'] 	= $detalle[0]['descripcion'];
         $tabData['fecha_registro']    	= $this->lang_item("fecha_registro",false);
@@ -207,6 +220,14 @@ class ordenes extends Base_Controller {
 					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
+		$dropArray2 = array(
+					 'data'		=> $this->sucursales_model->get_sucursales()
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('clave_corta','sucursal')
+					,'name' 	=> "id_sucursal"
+					,'class' 	=> "requerido"
+				);
+		$sucursales	    = dropdown_tpl($dropArray2);
 		// Botones
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
@@ -214,6 +235,8 @@ class ordenes extends Base_Controller {
 		$tabData['orden_num']   	= $this->lang_item("orden_num",false);
 		$tabData['razon_social'] 	= $this->lang_item("razon_social",false);
         $tabData['list_proveedores']= $proveedores;
+        $tabData['sucursal']     	= $this->lang_item("sucursal",false);
+        $tabData['list_sucursales']	= $sucursales;
         $tabData['descripcion']     = $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  = $this->lang_item("fecha_registro",false);
         $tabData['timestamp']       = date('Y-m-d H:i');
@@ -245,6 +268,7 @@ class ordenes extends Base_Controller {
 						,'orden_num' 		=> $this->ajax_post('orden_num')
 						,'id_proveedor' 	=> $this->ajax_post('id_proveedor')
 						,'descripcion'		=> $this->ajax_post('descripcion')
+						,'id_sucursal'  	=> $this->ajax_post('id_sucursal')
 						,'id_usuario' 		=> $this->session->userdata('id_usuario')
 						,'timestamp'  		=> $this->timestamp()
 						);

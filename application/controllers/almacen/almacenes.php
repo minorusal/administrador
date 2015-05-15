@@ -101,7 +101,6 @@ class almacenes extends Base_Controller
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 		);
-		//$this->load_database('global_system');
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_data_almacen($sqlData));
 		$sqlData['aplicar_limit'] = false;	

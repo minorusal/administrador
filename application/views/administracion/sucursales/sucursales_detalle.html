@@ -1,0 +1,49 @@
+<div id="formulario">
+    <div >
+        <div style="float:left">
+            <input id="id_sucursal" type="hidden" name="id_sucursal" value="{id_sucursal}" />
+            <p>
+                <label>{nombre_sucursal}: (*)</label>
+                <input id="sucursal" type="text" name="sucursal" class="input-xlarge requerido" value="{sucursal}" />
+            </p>
+            <p>
+                <label>{cvl_corta}: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
+            </p>
+            <p>
+                <label>{razon_social}: (*)</label>
+                <input id="razon_social" type="text" name="razon_social" class="input-xlarge requerido" value="{razon_social}" />
+            </p>
+            <p>
+                <label>{rfc}: (*)</label>
+                <input id="rfc" type="text" name="rfc" class="input-xlarge requerido" value="{rfc}" />
+            </p>
+            <p>
+                <label>{telefono}: (*)</label>
+                <input id="telefono" type="text" name="telefono" class="input-xlarge requerido" value="{telefono}" />
+            </p>
+            <p>
+                <label>{telefono}: (*)</label>
+                <input id="telefono" type="text" name="telefono" class="input-xlarge requerido" value="{telefono}" />
+            </p>
+            <p>
+                <label>{entidad}: (*)</label>
+                {list_entidad}
+            </p>           
+            <p>
+                <label>{registro_por}:</label>
+                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+            </p>
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>{descrip}:</label>
+            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
+        </p>
+        <div id="update_loader"></div>
+        <div id="mensajes_update" style="display:none"></div>
+         {button_save}
+    </div>
+</div>

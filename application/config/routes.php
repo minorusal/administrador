@@ -97,6 +97,13 @@ $route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/
 
 /*VENTAS*/
 
+/*ADMINISTRACION*/
+
+/*Catalogo de Sucursales*/
+$route['administracion/sucursales']                   	       = 'administracion/sucursales/index';
+$route['administracion/sucursales/listado_sucursales']         = 'administracion/sucursales/listado_sucursales';
+$route['administracion/sucursales/listado_sucursales/(:num)']  = 'administracion/sucursales/listado_sucursales/$1';
+
 /*Catalogo de clientes*/
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';
 /*Catalogo de vendedores*/

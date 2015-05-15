@@ -54,10 +54,9 @@ $autoload['packages'] = array();
 
 $autoload['libraries'] = array(	'database', 
 								'pagination',
+								'excel',
 								'pagination_bootstrap',
 								'session', 
-								'user_agent', 
-								'form_validation',
 								'table',
 								'parser');
 

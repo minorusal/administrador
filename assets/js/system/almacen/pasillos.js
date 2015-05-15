@@ -109,7 +109,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"almacen/pasillos/insert_pasillo",
 		dataType: "json",
-		data: {incomplete :incomplete, pasillo:pasillos, clave_corta:clave_corta, id_almacen:id_almacen, descripcion:descripcion },
+		data: {incomplete :incomplete, pasillo:pasillo, clave_corta:clave_corta, id_almacen:id_almacen, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -125,6 +125,8 @@ function agregar(){
 		}
 	})
 }
+
+
 
 
 

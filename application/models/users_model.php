@@ -108,8 +108,12 @@ class users_model extends Base_Model{
 		}		
 	}
 	/**
-	* Consulta los modulos a los que tiene acceso el usuario
-	* @param array $id_modulo
+	* Consulta los modulos a los que tiene acceso el usuario de acuerdo a su perfil (tabla perfiles),
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_menu_n1
+	* @param string $id_menu_n2
+	* @param string $id_menu_n3
+	* @param bool $root
 	* @return array
 	*/
 	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
@@ -125,9 +129,9 @@ class users_model extends Base_Model{
 		$tbl3 	= $this->dbinfo[0]['tbl_menu_n3'];
 		// Query
 		if($root){
-			$sys_navigate_n1 = "1";
-			$sys_navigate_n2 = "SELECT * FROM $db1.$tbl2 WHERE activo = 1";
-			$sys_navigate_n3 = "SELECT * FROM $db1.$tbl3 WHERE activo = 1";
+			$sys_navigate_n1 = "n1.activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE activo = 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
 			$sys_navigate_n2 = "SELECT * FROM $db1.$tbl2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";

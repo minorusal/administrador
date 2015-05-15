@@ -1,0 +1,65 @@
+
+<div class="stdform ">
+   
+    <input id="id_vendedor" type="hidden" name="id_vendedor" value="{id_vendedor}" />
+        <p>
+            <label>{nombre_vendedor}: (*)</label>
+            <input id="nombre" type="text" name="nombre" class="input-large requerido" value="{vendedor_value}" />
+        </p>
+        <p>
+            <label>{clave_corta}: (*)</label>
+            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="{clave_value}" />
+        </p>
+        <p>
+            <label>{rfc}: (*)</label>
+            <input id="rfc" type="text" name="rfc" class="input-large requerido" value="{rfc_value}" />
+        </p>
+        <p>
+            <label>{calle}:</label>
+            <input id="calle" type="text" name="calle" class="input-large" value="{calle_value}" />
+        </p>
+        <p>
+            <label>{num_int}:</label>
+            <input id="num_int" type="text" name="num_int" class="input-large" value="{num_int_value}" />
+        </p>
+        <p>
+            <label>{num_ext}:</label>
+            <input id="num_ext" type="text" name="num_ext" class="input-large" value="{num_ext_value}" />
+        </p>
+        <p>
+            <label>{colonia}:</label>
+            <input id="colonia" type="text" name="colonia" class="input-large" value="{colonia_value}" />
+        </p>
+        <p>
+            <label>{municipio}:</label>
+            <input id="municipio" type="text" name="municipio" class="input-large " value="{municipio_value}" />
+        </p>
+        <p>
+             <label>{entidad} (*)</label>
+                {dropdown_entidad}
+        </p>
+        <p>
+        <label>{sucursal} (*)</label>
+            {dropdown_sucursal}
+        <p>
+        <p>
+            <label>{cp}:</label>
+            <input id="cp" type="text" name="cp" class="input-large " value="{cp_value}" />
+        </p>
+        <p>
+            <label>{telefonos}:</label>
+            <input id="telefonos" type="text" name="telefonos" class="input-large" value="{telefonos_value}" />
+        </p>
+        <p>
+            <label>{email}:</label>
+            <input id="email" type="text" name="email" class="input-large" value="{email}" />
+        </p>
+        <p>
+            <label>{timestamp}:</label>
+            <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp_value}</span>
+        </p>
+
+</div>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    {button_save}

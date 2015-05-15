@@ -4,7 +4,6 @@ class clientes extends Base_Controller {
 	var $uri_modulo     = 'ventas/';
 	var $uri_submodulo  = 'clientes/';
 	var $view_content   = 'content';
-	var $view_listado   = 'listado';
 
 	public function __construct(){
 		parent::__construct();
@@ -53,12 +52,16 @@ class clientes extends Base_Controller {
 					,'name' 	=> "lts_entidades"
 					,'class' 	=> "requerido"
 				);
+		$dropArray2 = array(
+					 'data'		=> $this->clientes_model->cat_sucursales()
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('sucursal')
+					,'name' 	=> "lts_sucursales"
+					,'class' 	=> "requerido"
+				);
 		$lts_entidades  = dropdown_tpl($dropArray); 
-		// 
-		$data_1['tabs'] 		  =	'nuevo cliente';
+		$lts_sucursales  = dropdown_tpl($dropArray2); 
 		$data_1['nombre_cliente'] =	$this->lang_item("nombre_cliente");
-		$data_1['direccion'] 	  =	$this->lang_item("direccion");
-		$data_1['descripcion'] 	  =	$this->lang_item("descripcion");
 		$data_1['rfc'] 			  =	$this->lang_item("rfc_clientes");
 		$data_1['razon_social']   =	$this->lang_item("razon_social");
 		$data_1['clave_corta'] 	  =	$this->lang_item("clave_corta");
@@ -68,6 +71,7 @@ class clientes extends Base_Controller {
 		$data_1['colonia'] 		  =	$this->lang_item("colonia");
 		$data_1['municipio'] 	  =	$this->lang_item("municipio");
 		$data_1['entidad'] 		  =	$this->lang_item("entidad");
+		$data_1['sucursal'] 	  =	$this->lang_item("sucursal");
 		$data_1['cp'] 			  =	$this->lang_item("cp");
 		$data_1['telefonos'] 	  =	$this->lang_item("telefonos");
 		$data_1['email'] 		  =	$this->lang_item("email");
@@ -75,6 +79,7 @@ class clientes extends Base_Controller {
 		$data_1['button_save']    = form_button(array('class'=>"btn btn-primary",'name' => 'save_cliente','onclick'=>'insert_cliente()' , 'content' => $this->lang_item("btn_guardar") ));
 		$data_1['button_reset']   = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		$data_1['dropdown_entidad'] = $lts_entidades;
+		$data_1['dropdown_sucursal'] = $lts_sucursales;
 
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'agregar_clientes', $data_1, true));
@@ -117,7 +122,7 @@ class clientes extends Base_Controller {
 										$this->lang_item("nombre_cliente"),
 										$this->lang_item("razon_social"),
 										$this->lang_item("clave_corta"),
-										$this->lang_item("rfc"),
+										$this->lang_item("rfc_clientes"),
 										$this->lang_item("telefonos"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -151,20 +156,21 @@ class clientes extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}else{
 				$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
-									 'razon_social'=> $this->ajax_post('razon_social'),
-									 'clave_corta'=> $this->ajax_post('clave_corta'),
-									 'rfc'=> $this->ajax_post('rfc'),
-									 'calle'=> $this->ajax_post('calle'),
-									 'num_int'=> $this->ajax_post('num_int'),
-									 'num_ext'=> $this->ajax_post('num_ext'),
-									 'colonia' => $this->ajax_post('colonia'),
-									 'municipio' => $this->ajax_post('municipio'),
-									 'entidad' => $this->ajax_post('entidad'),
-									 'cp' => $this->ajax_post('cp'),
-									 'telefonos' => $this->ajax_post('telefonos'),
-									 'email' => $this->ajax_post('email'),
-									 'timestamp'  => $this->timestamp(),
-									 'activo'  => 1);
+									 'razon_social'	  => $this->ajax_post('razon_social'),
+									 'clave_corta'	  => $this->ajax_post('clave_corta'),
+									 'rfc'	          => $this->ajax_post('rfc'),
+									 'calle'	      => $this->ajax_post('calle'),
+									 'num_int'		  => $this->ajax_post('num_int'),
+									 'num_ext'		  => $this->ajax_post('num_ext'),
+									 'colonia' 		  => $this->ajax_post('colonia'),
+									 'municipio' 	  => $this->ajax_post('municipio'),
+									 'entidad' 		  => $this->ajax_post('entidad'),
+									 'sucursal' 	  => $this->ajax_post('sucursal'),
+									 'cp' 			  => $this->ajax_post('cp'),
+									 'telefonos' 	  => $this->ajax_post('telefonos'),
+									 'email' 		  => $this->ajax_post('email'),
+									 'timestamp'  	  => $this->timestamp(),
+									 'activo'         => 1);
 
 				$insert = $this->clientes_model->insert_cliente($data_insert);
 
@@ -185,15 +191,23 @@ class clientes extends Base_Controller {
 		$detalle_cliente  = $this->clientes_model->get_cliente_unico($id_cliente);
 		// Listas
 		$dropArray = array(
-					 'data'		=> $this->clientes_model->catalogo_entidades()
-					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('clave_corta','entidad')
-					,'name' 	=> "lts_entidades"
-					,'class' 	=> "requerido"
-					,'selected'	=> $detalle_cliente[0]['entidad']
+					 'data'		 => $this->clientes_model->catalogo_entidades()
+					 ,'selected' => $detalle_cliente[0]['entidad']
+					,'value' 	 => 'id_administracion_entidad'
+					,'text' 	 => array('clave_corta','entidad')
+					,'name' 	 => "lts_entidades"
+					,'class' 	 => "requerido"
 				);
-		$lts_entidades  = dropdown_tpl($dropArray); 
-        // 
+        $dropArray2 = array(
+					 'data'		=> $this->clientes_model->cat_sucursales()
+					 ,'selected' => $detalle_cliente[0]['sucursal']
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('sucursal')
+					,'name' 	=> "lts_sucursales"
+					,'class' 	=> "requerido"
+				);
+       	$lts_entidades  = dropdown_tpl($dropArray);
+       	$lts_sucursal   = dropdown_tpl($dropArray2);
         $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'editar_cliente';
         $data_tab_3['id_cliente']    = $detalle_cliente[0]['id_ventas_clientes'];
 		$data_tab_3['nombre_cliente']= $this->lang_item("nombre_cliente");
@@ -216,6 +230,8 @@ class clientes extends Base_Controller {
 		$data_tab_3['municipio_value'] = $detalle_cliente[0]['municipio'];
 		$data_tab_3['entidad'] 		   = $this->lang_item("entidad");
 		$data_tab_3['dropdown_entidad']   = $lts_entidades;
+		$data_tab_3['sucursal'] 		   = $this->lang_item("sucursal");
+		$data_tab_3['dropdown_sucursal']   = $lts_sucursal;
 		$data_tab_3['cp'] 			   = $this->lang_item("cp");
 		$data_tab_3['cp_value']    	   = $detalle_cliente[0]['cp'];
 		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
@@ -246,6 +262,7 @@ class clientes extends Base_Controller {
 							 'colonia' => $this->ajax_post('colonia'),
 							 'municipio' => $this->ajax_post('municipio'),
 							 'entidad' => $this->ajax_post('entidad'),
+							 'sucursal' => $this->ajax_post('sucursal'),
 							 'cp' => $this->ajax_post('cp'),
 							 'telefonos' => $this->ajax_post('telefonos'),
 							 'email' => $this->ajax_post('email'));

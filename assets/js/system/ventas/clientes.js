@@ -33,7 +33,7 @@ function load_content(uri, id_content){
         type: "POST",
         url: uri,
         dataType: 'json',
-        data: {filtro : 1, tabs:1},
+        data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
            		var funcion = 'buscar_cliente';
@@ -49,11 +49,10 @@ function load_content(uri, id_content){
 }
 function insert_cliente(){
   var btn          = jQuery("button[name='save_cliente']");
-  //btn.attr('disabled','disabled');
+  btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
-  var incomplete    = values_requeridos();    
-
+  var incomplete    = values_requeridos();
   var  nombre       = jQuery('#nombre').val();
   var  razon_social = jQuery('#razon_social').val();
   var  clave_corta  = jQuery('#clave_corta').val();
@@ -66,16 +65,15 @@ function insert_cliente(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-
-  var entidad = jQuery("select[name='lts_entidades'] option:selected").val();
-
+  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
+  var sucursal    = jQuery("select[name='lts_sucursales'] option:selected").val();
 
   jQuery.ajax({
     type:"POST",
     url: path()+"ventas/clientes/insert_cliente",
     dataType: "json",
     data: {
-            incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio, entidad:entidad, cp:cp, telefonos:telefonos, email:email},
+            incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,cp:cp,telefonos:telefonos,email:email,sucursal:sucursal},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -108,13 +106,12 @@ function detalle_articulo(id_cliente){
 }
 
 function update_cliente(){
-  var btn          = jQuery("button[name='save_cliente']");
-  btn.attr('disabled','disabled');
+  var btn          = jQuery("button[name='update_cliente']");
+  /*btn.attr('disabled','disabled');*/
   jQuery('#mensajes').hide();
   
   var incomplete    = values_requeridos();    
-
-  var  id_cliente       = jQuery('#id_cliente').val();
+  var  id_cliente   = jQuery('#id_cliente').val();
   var  nombre       = jQuery('#nombre').val();
   var  razon_social = jQuery('#razon_social').val();
   var  clave_corta  = jQuery('#clave_corta').val();
@@ -127,15 +124,15 @@ function update_cliente(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-  var entidad = jQuery("select[name='lts_entidades'] option:selected").val();
-
+  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
+  var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
 
   jQuery.ajax({
     type:"POST",
     url: path()+"ventas/clientes/update_cliente",
     dataType: "json",
     data: {
-            incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio, entidad:entidad, cp:cp, telefonos:telefonos, email:email},
+            incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -146,7 +143,6 @@ function update_cliente(){
       }
       jQuery("#update_loader").html('');
         jQuery("#mensajes_update").html(data[1]).show('slow');
-      
     }
-  })
+  });
 }

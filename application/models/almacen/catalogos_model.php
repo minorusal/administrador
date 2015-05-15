@@ -180,22 +180,30 @@ class catalogos_model extends Base_Model
 
 	/*GAVETAS*/
 
-	/*public function db_get_data_gaveta($data=array())
+	public function db_get_data_gaveta($data=array())
 	{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (av.gavetas like '%$filtro%' OR 
+		$filtro = ($filtro) ? "AND (am.almacenes like '%$filtro%' OR
+									al.pasillos like '%$filtro%' OR
+									av.gavetas like '%$filtro%' OR 
 									av.clave_corta like '%$filtro%' OR
 									av.descripcion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						 av.id_almacen_gavetas
+						,al.pasillos
+						,av.id_almacen_pasillos
+						,am.almacenes
+						,av.id_almacen_almacenes
 						,av.clave_corta
 						,av.descripcion
 						,av.gavetas
 					FROM av_almacen_gavetas av
+					LEFT JOIN av_almacen_pasillos al on al.id_almacen_pasillos = av.id_almacen_pasillos
+					LEFT JOIN av_almacen_almacenes am on am.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_gavetas ASC
 					$limit
@@ -204,7 +212,44 @@ class catalogos_model extends Base_Model
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
+
+	/*Trae la información para el formulario de edición de gaveta*/
+	public function get_orden_unico_gaveta($id_almacen_gavetas){
+		$query = "SELECT * FROM av_almacen_gavetas WHERE id_almacen_gavetas = $id_almacen_gavetas";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	/*Actualliza la información en el formuladio de edición de gavetas*/
+	public function db_update_data_gaveta($data=array())
+	{
+		$condicion = array('id_almacen_gavetas !=' => $data['id_almacen_gavetas'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist('av_almacen_gavetas', $condicion);
+		if(!$existe){
+			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
+			$query = $this->db->update_string('av_almacen_gavetas', $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
+
+	/*Inserta registro de gavetas*/
+	public function db_insert_data_gavetas($data = array())
+	{
+		$existe = $this->row_exist('av_almacen_gavetas', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_almacen_gavetas', $data);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

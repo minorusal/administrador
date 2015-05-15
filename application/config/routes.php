@@ -90,6 +90,11 @@ $route['almacen/catalogos/pasillos']			      = 'almacen/pasillos/index';
 $route['almacen/catalogos/almacenes/pasillos']        = 'almacen/pasillos/listado';
 $route['almacen/catalogos/almacenes/pasillos/(:num)'] = 'almacen/pasillos/listado/$1';
 
+/*Catalogo de gavetas*/
+$route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
+$route['almacen/catalogos/almacenes/gavetas']        = 'almacen/gavetas/listado';
+$route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/$1';
+
 /*VENTAS*/
 
 /*Catalogo de clientes*/

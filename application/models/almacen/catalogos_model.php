@@ -237,6 +237,19 @@ class catalogos_model extends Base_Model
 			return false;
 		}
 	}
+
+	/*Inserta registro de gavetas*/
+	public function db_insert_data_gavetas($data = array())
+	{
+		$existe = $this->row_exist('av_almacen_gavetas', array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string('av_almacen_gavetas', $data);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 }
 
 //WHERE cp.activo = 1 $filtro

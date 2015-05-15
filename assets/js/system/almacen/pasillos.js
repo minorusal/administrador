@@ -126,36 +126,7 @@ function agregar(){
 	})
 }
 
-/*function agregar(){
-	var btn          = jQuery("button[name='save_almacen']");
-	btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();
-	var incomplete   = values_requeridos();
-    var almacen      = jQuery('#almacenes').val();
-    var clave_corta  = jQuery('#clave_corta').val();
-    var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
-	jQuery.ajax({
-		type:"POST",
-		url: path()+"almacen/almacenes/insert_almacen",
-		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
-		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-		},
-		success : function(data){
-			btn.removeAttr('disabled');
 
-			var data = data.split('|');
-			if(data[0]==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
-		}
-	})
-}*/
 
 
 

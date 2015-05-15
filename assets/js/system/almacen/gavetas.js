@@ -104,12 +104,13 @@ function agregar(){
     var gaveta      = jQuery('#gavetas').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
+    var id_pasillo   = jQuery("select[name='lts_pasillos'] option:selected").val();
     var descripcion  = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/pasillos/insert_pasillo",
+		url: path()+"almacen/gavetas/insert_gaveta",
 		dataType: "json",
-		data: {incomplete :incomplete, pasillo:pasillos, clave_corta:clave_corta, id_almacen:id_almacen, descripcion:descripcion },
+		data: {incomplete :incomplete, gaveta:gaveta, clave_corta:clave_corta, id_almacen:id_almacen, id_pasillo:id_pasillo, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

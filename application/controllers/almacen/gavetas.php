@@ -250,4 +250,65 @@ public function config_tabs()
 		echo json_encode($json_respuesta);
 	}
 
+	public function agregar_gaveta(){
+
+		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/gavetas_save';  #almacen/catalogos/pasillos/pasillos_save
+		$almacenes_array = array(
+					 'data'		=> $this->db_model->db_get_data_almacen('','','',false)
+					,'value' 	=> 'id_almacen_almacenes'
+					,'text' 	=> array('almacenes')
+					,'name' 	=> "lts_almacenes"
+					,'class' 	=> "requerido"
+					);
+		$almacenes     = dropdown_tpl($almacenes_array);
+		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+
+		$tab_1["nombre_pasillos"]      = $this->lang_item("nombre_pasillos");
+		$tab_1["cvl_corta"]            = $this->lang_item("cvl_corta");
+		$tab_1["list_almacen"]         = $almacenes;
+		$tab_1["almacen"]              = $this->lang_item("almacen");
+		$tab_1["descrip"]              = $this->lang_item("descripcion");
+
+        $tab_1['button_save']       = $btn_save;
+        $tab_1['button_reset']      = $btn_reset;
+
+
+        if($this->ajax_post(false)){
+				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
+		}else{
+			return $this->load_view_unique($seccion , $tab_1, true);
+		}
+	}
+
+	public function insert_gaveta(){
+		$incomplete  = $this->ajax_post('incomplete');
+		
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$pasillo     = $this->ajax_post('pasillo');
+			$clave_corta  = $this->ajax_post('clave_corta');
+			$id_almacen   = $this->ajax_post('id_almacen');
+			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$data_insert  = array('clave_corta'         => $clave_corta,
+								 'descripcion'          => $descripcion,
+								 'id_usuario'           => $this->session->userdata('id_usuario'),
+								 'id_almacen_almacenes' => $id_almacen,
+								 'pasillos'             => $pasillo,  
+								 'timestamp'            => $this->timestamp());
+			
+			$insert = $this->db_model->db_insert_data_pasillos($data_insert);
+			
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
+	}
+
 }

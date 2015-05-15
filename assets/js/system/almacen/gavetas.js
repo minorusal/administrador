@@ -33,7 +33,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/pasillos/listado",
+		url: path()+"almacen/gavetas/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -97,11 +97,11 @@ function actualizar(){
 
 
 function agregar(){
-	var btn          = jQuery("button[name='save_pasillo']");
+	var btn          = jQuery("button[name='save_gaveta']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();
-    var pasillo      = jQuery('#pasillos').val();
+    var gaveta      = jQuery('#gavetas').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
     var descripcion  = jQuery('#descripcion').val();

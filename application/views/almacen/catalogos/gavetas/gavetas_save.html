@@ -1,0 +1,33 @@
+    <div >
+        <div style="float:left">
+            <p>
+                <label>{nombre_gavetas}: (*)</label>
+                <input id="gavetas" type="text" name="gavetas" class="input-xlarge requerido" value="" />
+            </p>
+            <p>
+                <label>{cvl_corta}: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" />
+            </p>
+             <p>
+                <label>{almacen}: (*)</label>
+                {list_almacen}
+            </p>
+            <p>
+                <label>{pasillo}: (*)</label>
+                {list_pasillo}
+            </p>
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>{descrip}:</label>
+            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+        </p>
+        <div id="registro_loader"></div>
+        <div id="mensajes" style="display:none"></div>
+
+         {button_save}
+        {button_reset}
+
+    </div>

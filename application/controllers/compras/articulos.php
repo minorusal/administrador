@@ -102,11 +102,11 @@ class articulos extends Base_Controller {
 							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx')
 							);
 
-		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
-		$data_tab_2['tabla']     = $tabla;
-		$data_tab_2['export_xls']= button_tpl($buttonTPL);
-		$data_tab_2['paginador'] = $paginador;
-		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+		$data_tab_2['filtro']         = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
+		$data_tab_2['tabla']          = $tabla;
+		$data_tab_2['export']         = button_tpl($buttonTPL);
+		$data_tab_2['paginador']      = $paginador;
+		$data_tab_2['item_info']      = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
 
 		if($this->ajax_post(false)){
@@ -340,10 +340,11 @@ class articulos extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'   => $this->lang_item("articulos"),
+		$params = array(	'tittle'  => $this->lang_item("seccion"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
+		
 		$this->excel->generate_excel($params);
 	}
 }

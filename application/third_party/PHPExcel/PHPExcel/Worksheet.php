@@ -332,6 +332,13 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
     */
     private $_codeName = null;
 
+    private $arrayItems = array(
+                                'borders' => array(
+                                    'allborders' => array(
+                                        'style' => PHPExcel_Style_Border::BORDER_THIN
+                                    )
+                                )
+                            );
 	/**
      * Create a new worksheet
      *
@@ -2394,6 +2401,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
             foreach ($source as $rowData) {
                 $currentColumn = $startColumn;
                 foreach($rowData as $cellValue) {
+                    $this->getStyle($currentColumn . $startRow)->applyFromArray($this->arrayItems);
                     if ($strictNullComparison) {
                         if ($cellValue !== $nullValue) {
                             // Set cell value

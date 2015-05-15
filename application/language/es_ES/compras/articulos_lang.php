@@ -10,7 +10,7 @@ $lang['marca']            = "Marca";
 $lang['presentacion']     = "Presentaci√≥n";
 $lang['linea']            = "Linea";
 $lang['um']               = "Unidad de Medida";
-$lang['descripcion']      = "DescripciÛn";
-$lang['sin_descripcion']  = 'Sin descripciÛn';
-$lang['msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
+$lang['descripcion']      = "Descripci√≥n";
+$lang['sin_descripcion']  = 'Sin descripci√≥n';
+$lang['msg_err_clv']     = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, por favor intente con una clave diferente.';
 ?>

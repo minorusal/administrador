@@ -98,6 +98,7 @@ class articulos extends Base_Controller {
 
 		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
 		$data_tab_2['tabla']     = $tabla;
+		$data_tab_2['export']    = form_button(array('class'=>"btn btn-primary",'content' => $this->lang_item("btn_guardar") ));;
 		$data_tab_2['paginador'] = $paginador;
 		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -236,6 +237,8 @@ class articulos extends Base_Controller {
         $usuario_registro               = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
         $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
 		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/articulo_edit';
+
+		
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
 	public function insert_articulo(){

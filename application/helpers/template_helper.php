@@ -82,7 +82,7 @@
 
 			return $alert;
 		}
-
+	}
 	if(!function_exists('text_format_tpl')){
 		function text_format_tpl($string, $format = "f"){
 			if($string==''){
@@ -105,7 +105,6 @@
 			return $tool_tip ;
 		}
 	}
-
 	if(!function_exists('dropdown_tpl')){
 		// Crea una lista <select>
 		function dropdown_tpl($params=array()){			
@@ -142,6 +141,29 @@
 			return false;
 		}
 	}
-}
+	
+	if(!function_exists('button_tpl')){
+		function button_tpl($params=array()){
+			$button = "";
+			if(isset($params)){
+				$text 		= (isset($params['text']))?$params['text']:false;
+				$iconsweets = (isset($params['iconsweets']))?$params['iconsweets']:'';
+				$onclick 	= (isset($params['onclick']))?$params['onclick']:false;
+			}else{
+				return false;
+			}
+
+			if(is_array($text)){
+				for ($i=0; $i < count($text); $i++) { 
+					
+					$label = $text[$i];
+					$icon  = ($iconsweets[$i]) ? $iconsweets[$i] : 'iconsweets-link'; 
+					$button .= "<li><a href='' class='btn btn-rounded'> <i class='$incon'></i> &nbsp; $label</a> </li>";
+				}
+			}else{
+			}
+		}
+	}
+
 		
 ?>

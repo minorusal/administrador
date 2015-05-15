@@ -3,7 +3,6 @@
 	$lang['titulo_submodulo'] = 'catalogos';
 	$lang['tool_tip']         = 'ver detalle';
 	$lang['sin_descripcion']  = 'sin descripción';
-	$lang['sin_pasillo']      = 'sin pasillo';
 
 	$lang['id']               = 'id';
 	$lang['cvl_corta']        = 'clave corta';
@@ -30,14 +29,6 @@
 	$lang['listado_pasillo']   = 'pasillos';
 	$lang['detalle_pasillo']   = 'detalle';
 	$lang['nombre_pasillos']   = 'pasillo';
-
-	/*GAVETAS*/
-
-	$lang['gavetas']           = 'gavetas';
-	$lang['agregar_gaveta']    = 'nueva gaveta';
-	$lang['listado_gaveta']    = 'gavetas';
-	$lang['detalle_gaveta']    = 'detalle';
-	$lang['nombre_gaveta']     = 'gaveta';
 
 
 ?>

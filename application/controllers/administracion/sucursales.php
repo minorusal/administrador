@@ -125,7 +125,7 @@ class sucursales extends Base_Controller
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("sucursal"),
-										$this->lang_item("razon_social"),
+										$this->lang_item("rz"),
 										$this->lang_item("direccion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -150,22 +150,31 @@ class sucursales extends Base_Controller
 	{
 		$id_sucursal  = $this->ajax_post('id_sucursal');
 		$detalle  	  = $this->db_model->get_orden_unico_sucursal($id_sucursal);
-		//print_debug($detalle);
 		$seccion 	  = 'detalle';
 		$tab_detalle  = $this->tab3;
+		$this->load->model('entidades_model');
+		$entidades_array = array(
+					 'data'		=> $this->entidades_model->get_entidades('','','',false)
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('entidad')
+					,'name' 	=> "lts_entidades"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle[0]['id_entidad']
+					);
+		$entidades           = dropdown_tpl($entidades_array);
 		$btn_save             = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_sucursal']     = $id_sucursal;
-        $tabData["sucursal"]        = $this->lang_item("sucursal");
-		$tabData["cvl_corta"]       = $this->lang_item("cvl_corta");
-		$tabData["razon_social"]    = $this->lang_item("razon_social");
-		$tabData["rfc"]             = $this->lang_item("rfc");
-		$tabData["direccion"]       = $this->lang_item("direccion");
-		$tabData["telefono"]        = $this->lang_item("telefono");
+        $tabData["nombre_sucursal"] = $this->lang_item("nombre_sucursal");
+		$tabData["cvl_corta"]       = $this->lang_item("clave_corta");
+		$tabData["r_social"]        = $this->lang_item("rz");
+		$tabData["r_f_c"]           = $this->lang_item("rfc");
+		$tabData["dir"]             = $this->lang_item("direccion");
+		$tabData["tel"]             = $this->lang_item("tel");
 		$tabData["registro_por"]    = $this->lang_item("registro_por");
 		$tabData["fecha_registro"]  = $this->lang_item("fecha_registro");
-		//$tabData["list_sucursal"]   = $sucursales;
-		//$tabData["sucursal"]              = $this->lang_item("sucursal");
+		$tabData["list_entidad"]  = $entidades;
+		$tabData["entidad"]       = $this->lang_item("entidad");
 		//$tabData["list_tipo"]             = $tipos;
 		//$tabData["tipo"]                  = $this->lang_item("tipo");
         $tabData['sucursal']        = $detalle[0]['sucursal'];

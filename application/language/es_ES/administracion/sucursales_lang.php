@@ -5,10 +5,12 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
-$lang['sucursal'] 			= "sucursal";
+$lang['nombre_sucursal'] 	= "sucursal";
 $lang['clave_corta'] 		= "clave corta";
-$lang['razon_social'] 		= "Razón social";
-$lang['descripcion'] 		= "Descripción";
+$lang['direccion']          = "dirección";
+$lang['rz'] 		        = "Razón social";
+$lang['rfc'] 		        = "rfc";
+$lang['tel'] 		        = "teléfono";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

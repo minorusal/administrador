@@ -1,10 +1,14 @@
 <?php
 class ordenes_model extends Base_Model{
 
-	public function insert_orden($data){
-		$existe = $this->row_exist('av_compras_ordenes');
+	public function insert($data=array()){
+		// DB Info
+		$db1 	= $this->dbinfo[1]['db'];
+		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes'];
+		// Query
+		$existe = $this->row_exist($db1.'.'.$tbl1,array('orden_num ='=> $data['orden_num']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_ordenes', $data);
+			$query = $this->db->insert_string($db1.'.'.$tbl1, $data);
 			$query = $this->db->query($query);
 
 			return $query;
@@ -29,7 +33,7 @@ class ordenes_model extends Base_Model{
 	public function db_get_data($data=array()){	
 		// DB Info
 		$db1 	= $this->dbinfo[1]['db'];
-		$tbl1 	= $this->dbinfo[1]['vw_orden_articulos'];
+		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
 		$filtro = ($buscar) ? "" : "";
@@ -59,7 +63,7 @@ class ordenes_model extends Base_Model{
 	public function db_get_total_rows($data=array()){
 		// DB Info
 		$db1 	= $this->dbinfo[1]['db'];
-		$tbl1 	= $this->dbinfo[1]['vw_orden_articulos'];
+		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
 		$filtro = ($buscar) ? "" : "";
@@ -79,7 +83,7 @@ class ordenes_model extends Base_Model{
 	public function get_orden_unico($id_compras_orden){
 		// DB Info
 		$db1 	= $this->dbinfo[1]['db'];
-		$tbl1 	= $this->dbinfo[1]['vw_orden_articulos'];
+		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
 		// Query
 		$query = "SELECT * FROM $db1.$tbl1 WHERE id_compras_orden = $id_compras_orden";
 		$query = $this->db->query($query);
@@ -108,7 +112,7 @@ class ordenes_model extends Base_Model{
 						,clave_corta
 					FROM $db1.$tbl1
 					WHERE 1 $filtro
-					GROUP BY orden_num ASC
+					GROUP BY clave_corta ASC
 					$limit
 					";
 		// dump_var($query);

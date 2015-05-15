@@ -22,9 +22,7 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		//jQuery('#a-'+id_content).html(data);
-           		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+           		jQuery('#a-'+id_content).html(data);
            }
         }
     });
@@ -33,7 +31,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/listado",
+		url: path()+"almacen/pasillos/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -49,18 +47,16 @@ function buscar(){
 	})
 }
 
-function detalle(id_almacen){
+function detalle(id_pasillo){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/almacenes/detalle",
+        url: path()+"almacen/pasillos/detalle",
         dataType: 'json',
-        data: {id_almacen : id_almacen},
+        data: {id_pasillo : id_pasillo},
         success: function(data){
-        	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
-        	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
         }
     });
@@ -71,18 +67,19 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete   = values_requeridos();
-	var id_almacen   = jQuery('#id_almacen').val();
-    var almacen      = jQuery('#almacen').val();
+	var id_pasillo   = jQuery('#id_pasillo').val();
+    var pasillos     = jQuery('#pasillo').val();
+    var id_almacen   = jQuery("select[name='lts_almacenes'] option:selected").val();
+    var id_gaveta    = jQuery("select[name='lts_gavetas'] option:selected").val();
+
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
 
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/actualizar",
+		url: path()+"almacen/pasillos/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete :incomplete,id_pasillo:id_pasillo, pasillos:pasillos, id_almacen:id_almacen, id_gaveta:id_gaveta, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -103,13 +100,12 @@ function agregar(){
     var almacen      = jQuery('#almacenes').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
+
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/insert_almacen",
+		url: path()+"almacen/pasillos/insert_pasillos",
 		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

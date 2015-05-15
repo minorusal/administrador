@@ -73,6 +73,7 @@ function actualizar(){
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
   		objData['incomplete'] = values_requeridos();
+  		// alert(dump_var(objData));
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/ordenes/actualizar",
@@ -90,39 +91,28 @@ function actualizar(){
 		})
 }
 
-function insert(){
-		
-	var btn          = jQuery("button[name='save_orden']");
+function insert(){		
+	var btn          = jQuery("button[name='save']");
 	btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();
-	
-	var incomplete   = values_requeridos();
-    var articulo     = jQuery('#articulo').val();
-    var clave_corta  = jQuery('#clave_corta').val();
-    var descripcion  = jQuery('#descripcion').val();
-   
-    var presentacion = jQuery("select[name='lts_presentaciones'] option:selected").val();
-    var linea        = jQuery("select[name='lts_lineas'] option:selected").val();
-    var um           = jQuery("select[name='lts_um'] option:selected").val();
-    var marca        = jQuery("select[name='lts_marcas'] option:selected").val();
-
-
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"compras/ordenes/insert_orden",
+		url: path()+"compras/ordenes/insert",
 		dataType: "json",
-		data: {incomplete :incomplete, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,presentacion:presentacion,linea:linea,um:um,marca:marca },
+		data : objData,
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
 			btn.removeAttr('disabled');
-			var data = data.split('|');
-			if(data[0]==1){
+			if(data.id==1){
 				clean_formulario();
 			}
 			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
 			
 		}
 	})

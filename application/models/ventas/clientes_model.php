@@ -15,7 +15,7 @@ class clientes_model extends Base_Model{
 		}	
 	}
 	function consulta_clientes($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=="") ? "" : "AND ( 	vc.nombre_cliente  LIKE '%$filtro%' OR 
+		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre_cliente  LIKE '%$filtro%' OR 
 												vc.razon_social  LIKE '%$filtro%' OR 
 												vc.clave_corta  LIKE '%$filtro%' OR  
 												vc.rfc  LIKE '%$filtro%'  
@@ -65,5 +65,12 @@ class clientes_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+	function cat_sucursales(){
+		$query = "SELECT * FROM 00_av_system.sys_sucursales WHERE activo=1";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 }

@@ -1,23 +1,23 @@
 <div id="formulario">
     <div >
         <div style="float:left">
-            <input id="id_almacen" type="hidden" name="id_almacen" value="{id_almacen}" />
+            <input id="id_pasillo" type="hidden" name="id_pasillo" value="{id_pasillo}" />
             <p>
-                <label>{nombre_almacen}: (*)</label>
-                <input id="almacen" type="text" name="almacen" class="input-xlarge requerido" value="{almacen}" />
+                <label>{nombre_pasillos}: (*)</label>
+                <input id="pasillo" type="text" name="pasillo" class="input-xlarge requerido" value="{pasillo}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
             </p>
             <p>
-                <label>{sucursal}: (*)</label>
-                {list_sucursal}
+                <label>{almacen}: (*)</label>
+                {list_almacen}
             </p>
-            <p>
-                <label>{tipo}: (*)</label>
-                {list_tipo}
-            </p>
+           <!-- <p>
+                <label>{gaveta}: </label>
+                {list_gaveta}
+            </p>-->
             <p>
                 <label>{fecha_registro}:</label>
                 <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>

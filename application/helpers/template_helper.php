@@ -105,32 +105,41 @@
 			return $tool_tip ;
 		}
 	}
+
 	if(!function_exists('dropdown_tpl')){
-		function dropdown_tpl($data = array(), $selected , $value, $text, $name = "", $class = "" ,$leyenda = "" ){
-			
+		// Crea una lista <select>
+		function dropdown_tpl($params=array()){			
+			if(isset($params)){
+				$data 		= (isset($params['data']))?$params['data']:false;
+				$selected 	= (isset($params['selected']))?$params['selected']:'';
+				$value 		= (isset($params['value']))?$params['value']:false;
+				$text 		= (isset($params['text']))?$params['text']:false;
+				$name 		= (isset($params['name']))?$params['name']:false;
+				$class 		= (isset($params['class']))?$params['class']:'';
+				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
+			}
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
-			
-			foreach ($data as $option => $item) {
-				$option_value = "";
-				if($count==0){
-					$options[0]= ($leyenda=="") ? '-----' : $leyenda;
-				}
-				if(is_array($text)){
-					foreach ($text as $string) {
-						$option_value .= $item[$string].'-';
+			if($data && $name && $value && $text){
+				foreach ($data as $option => $item) {
+					$option_value = "";
+					if($count==0){
+						$options[0]= $leyenda;
 					}
-					$options[$item[$value]] = trim($option_value, '-');
-				}else{
-					$options[$item[$value]]= $item[$text];
+					if(is_array($text)){
+						foreach ($text as $string) {
+							$option_value .= $item[$string].'-';
+						}
+						$options[$item[$value]] = trim($option_value, '-');
+					}else{
+						$options[$item[$value]]= $item[$text];
+					}					
+					$count++;
 				}
-				
-				$count++;
+				$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, "  class='chzn-select $class' data-campo='$name'")."</span>";
+				return $selected;
 			}
-
-			$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, "  class='chzn-select $class'")."</span>";
-			
-			return $selected;
+			return false;
 		}
 	}
 }

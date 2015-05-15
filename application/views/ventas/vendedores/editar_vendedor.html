@@ -1,14 +1,10 @@
 
 <div class="stdform ">
    
-    <input id="id_cliente" type="hidden" name="id_cliente" value="{id_cliente}" />
+    <input id="id_vendedor" type="hidden" name="id_vendedor" value="{id_vendedor}" />
         <p>
-            <label>{nombre_cliente}: (*)</label>
-            <input id="nombre" type="text" name="nombre" class="input-large requerido" value="{cliente_value}" />
-        </p>
-        <p>
-            <label>{razon_social}: (*)</label>
-            <input id="razon_social" type="text" name="razon_social" class="input-large requerido" value="{rs_value}" />
+            <label>{nombre_vendedor}: (*)</label>
+            <input id="nombre" type="text" name="nombre" class="input-large requerido" value="{vendedor_value}" />
         </p>
         <p>
             <label>{clave_corta}: (*)</label>
@@ -43,9 +39,9 @@
                 {dropdown_entidad}
         </p>
         <p>
-             <label>{sucursal} (*)</label>
-                {dropdown_sucursal}
-        </p>
+        <label>{sucursal} (*)</label>
+            {dropdown_sucursal}
+        <p>
         <p>
             <label>{cp}:</label>
             <input id="cp" type="text" name="cp" class="input-large " value="{cp_value}" />

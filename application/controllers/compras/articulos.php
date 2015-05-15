@@ -96,9 +96,15 @@ class articulos extends Base_Controller {
 			$tabla = alertas_tpl('', $msg ,false);
 		}
 
+
+		$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx')
+							);
+
 		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
 		$data_tab_2['tabla']     = $tabla;
-		$data_tab_2['export']    = form_button(array('class'=>"btn btn-primary",'content' => $this->lang_item("btn_guardar") ));;
+		$data_tab_2['export_xls']= button_tpl($buttonTPL);
 		$data_tab_2['paginador'] = $paginador;
 		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -178,7 +184,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta', 'presentacion')
-					,'name' 	=> "lts_presentaciones"
+					,'name' 	=> "lts_presentaciones_detalle"
 					,'class' 	=>  "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_presentacion']
 				);
@@ -187,7 +193,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
 					,'text' 	=> array('clave_corta','linea')
-					,'name' 	=> "lts_lineas"
+					,'name' 	=> "lts_lineas_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_linea']
 				);
@@ -196,7 +202,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_um('','','',false)
 					,'value' 	=> 'id_compras_um'
 					,'text' 	=> array('clave_corta','um')
-					,'name' 	=> "lts_um"
+					,'name' 	=> "lts_um_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_um']
 					);
@@ -205,7 +211,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
 					,'value' 	=> 'id_compras_marca'
 					,'text' 	=> array('clave_corta','marca')
-					,'name' 	=> "lts_marcas"
+					,'name' 	=> "lts_marcas_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_marca']
 					);
@@ -295,6 +301,8 @@ class articulos extends Base_Controller {
 								 'id_compras_marca'=> $marca,
 								 'id_compras_presentacion'=> $presentacion,
 								 'id_compras_um'=> $um);
+
+	
 			$insert = $this->articulos_model->update_articulo($data_update,$id_articulo);
 
 			if($insert){
@@ -305,5 +313,37 @@ class articulos extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+
+	public function export_xlsx(){
+		$lts_content = $this->articulos_model->get_articulos('', '', '', false);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['articulo'],
+									 $value['clave_corta'],
+									 $value['marca'],
+									 $value['presentacion'],
+									 $value['linea'],
+									 $value['um'],
+									 $value['descripcion']);
+			}
+			
+			$set_heading = array (
+									$this->lang_item("articulos"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("marca"),
+									$this->lang_item("presentacion"),
+									$this->lang_item("lineas"),
+									$this->lang_item("u.m."),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'tittle'   => $this->lang_item("articulos"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_excel($params);
 	}
 }

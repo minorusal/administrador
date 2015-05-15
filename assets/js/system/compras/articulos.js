@@ -84,6 +84,7 @@ function update_articulo(){
         var um           = jQuery("select[name='lts_um_detalle'] option:selected").val();
         var marca        = jQuery("select[name='lts_marcas_detalle'] option:selected").val();
 
+      
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/articulos/update_articulo",

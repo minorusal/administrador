@@ -7,41 +7,69 @@ class excel extends PHPExcel{
 		parent::__construct();
 	}
 
-	public function generate_excel(){
+	private $styleHeaders = array(
+									'alignment' => array(
+												'horizontal' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+									),
+							        'fill' => array(
+							            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+							            'color' => array('rgb' => '000000'),
+							        ),
+									'font'  => array(
+									        'bold'  => true,
+									        'color' => array('rgb' => 'FFFFFF'),
+									        'size'  => 10,
+									        'name'  => 'Verdana'
+									        )
+								);
+	
+
+
+	
+	public function generate_excel($params = array()){
+		
+		$tittle = (isset($params['tittle']))?$params['tittle'] : 'IS XLSX';
+
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
 								->setLastModifiedBy("IS Intelligent Solution")
-								->setTitle("Office 2007 XLSX Test Document")
-								->setSubject("Office 2007 XLSX Test Document")
+								->setTitle($tittle)
+								->setSubject("Office 2007 XLSX")
 								->setDescription("Office 2007 XLSX Document")
 								->setKeywords("office 2007 openxml");
 
-		$objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Hello')
-            ->setCellValue('B2', 'world!')
-            ->setCellValue('C1', 'Hello')
-            ->setCellValue('D2', 'world!');
+		
+		$countHeaders = count($params['headers'])+64;
+		$column       = chr($countHeaders).'1';
 
-		// Miscellaneous glyphs, UTF-8
-		$objPHPExcel->setActiveSheetIndex(0)
-		            ->setCellValue('A4', 'Miscellaneous glyphs')
-		            ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+        $objPHPExcel->setActiveSheetIndex(0);
+        
+      	$objPHPExcel->getActiveSheet()->fromArray($params['headers'], null, 'A1');
+      	
+      	$objPHPExcel->getActiveSheet()->getStyle("A1:$column")->applyFromArray($this->styleHeaders);
+      	
+      	$objPHPExcel->getDefaultStyle()->getBorders()->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+		$objPHPExcel->getDefaultStyle()->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+		$objPHPExcel->getDefaultStyle()->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+		$objPHPExcel->getDefaultStyle()->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
 
-		// Rename worksheet
-		$objPHPExcel->getActiveSheet()->setTitle('Simple');
-
-
-		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
-		$objPHPExcel->setActiveSheetIndex(0);
-
-		// Redirect output to a client’s web browser (Excel2007)
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="01simple.xlsx"');
+      	foreach(range('A',$column) as $columnID) {
+		    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+		}
+      	
+      	$objPHPExcel->getActiveSheet()->fromArray($params['items'], null, 'A2'); 
+      	
 	
-
+		$objPHPExcel->setActiveSheetIndex(0);
+	
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$params['tittle'].'.xlsx"');
+	
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 		$objWriter->save('php://output');
 		exit;
 
 	}
+
+
 }

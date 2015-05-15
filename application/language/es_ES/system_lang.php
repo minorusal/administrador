@@ -9,6 +9,7 @@
 	$lang['msg_query_search']        = '<div style="float:left;"><p class="text-info">Se han encontrado %d registros para "%s".</p></div>'; 
 	$lang['msg_err_clv']             = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
+	$lang['btn_xlsx']     = 'Generar Excel';
 	$lang['btn_guardar']  = 'guardar cambios';
 	$lang['btn_limpiar']  = 'limpiar';
 	$lang['btn_search']   = 'buscar';

@@ -19,7 +19,7 @@ class sucursales extends Base_Controller
 		$this->submodulo		= 'sucursales';
 		//$this->seccion          = 'almacenes';
 		$this->icon 			= 'fa fa-share-alt-square'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #almacen/almacenes/
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; #almacen/almacenes/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -79,18 +79,14 @@ class sucursales extends Base_Controller
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
+		//print_debug($js);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
 	public function listado($offset=0){
 	// Crea tabla con listado de elementos capturados 
-		/*$seccion 		= '';
-		$accion 		= $this->tab['listado'];
-		$tab_detalle	= $this->tab['detalle'];
-		$limit 			= $this->limit_max;
-		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$modulo.$accion;*/
+		
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
@@ -153,7 +149,8 @@ class sucursales extends Base_Controller
 	public function detalle()
 	{
 		$id_sucursal  = $this->ajax_post('id_sucursal');
-		$detalle  	  = $this->db_model->get_orden_unico_sucursal($id_sucursal);   
+		$detalle  	  = $this->db_model->get_orden_unico_sucursal($id_sucursal);
+		//print_debug($detalle);
 		$seccion 	  = 'detalle';
 		$tab_detalle  = $this->tab3;
 		$btn_save             = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
@@ -177,7 +174,7 @@ class sucursales extends Base_Controller
         $tabData['rfc']             = $detalle[0]['rfc'];
         $tabData['direccion']       = $detalle[0]['direccion'];
         $tabData['telefono']        = $detalle[0]['telefono'];
-        $tabData['timestamp']       = $detalle[0]['timestamp'];
+        $tabData['timestamp']       = $detalle[0]['registro'];
         $tabData['button_save']     = $btn_save;
         
         $this->load_database('global_system');
@@ -186,7 +183,7 @@ class sucursales extends Base_Controller
         $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
         $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->submodulo.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 

@@ -47,7 +47,7 @@ class sucursales_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de sucursales*/
-	public function get_orden_unico_sucursal($id_almacen_almacenes){
+	public function get_orden_unico_sucursal($id_sucursal){
 		$query = "SELECT * FROM 00_av_system.sys_sucursales WHERE id_sucursal = $id_sucursal";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

@@ -30,8 +30,6 @@ class pasillos extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
-			// $this->load->model($this->uri_modulo.'articulos_model');
-			// $this->load->model($this->uri_modulo.'catalogos_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}

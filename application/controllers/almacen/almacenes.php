@@ -31,8 +31,7 @@ class almacenes extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
-			// $this->load->model($this->uri_modulo.'articulos_model');
-			// $this->load->model($this->uri_modulo.'catalogos_model');
+		$this->load->model('administracion/sucursales_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
@@ -165,11 +164,11 @@ class almacenes extends Base_Controller
 	{
 		$id_almacen_almacenes = $this->ajax_post('id_almacen');
 		$detalle  		      = $this->db_model->get_orden_unico_almacen($id_almacen_almacenes);
-		$this->load->model('sucursales_model');
+		
 		$seccion 		      = 'detalle';
 		$tab_detalle	      = $this->tab3;
 		$sucursales_array = array(
-					 'data'		=> $this->db_model->get_sucursales('','','',false)
+					 'data'		=> $this->db_model2->get_sucursales('','','',false)
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"
@@ -258,13 +257,9 @@ class almacenes extends Base_Controller
 	}
 	
 	public function agregar(){
-
-		//$this->load_database('global_system');
-		$this->load->model('sucursales_model');
-
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
 		$sucursales_array = array(
-					 'data'		=> $this->db_model->get_sucursales('','','',false)
+					 'data'		=> $this->db_model2->get_sucursales('','','',false)
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"

@@ -326,4 +326,38 @@ class almacenes extends Base_Controller
 			}
 		}
 	}
+
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['articulo'],
+									 $value['clave_corta'],
+									 $value['marca'],
+									 $value['presentacion'],
+									 $value['linea'],
+									 $value['um'],
+									 $value['descripcion']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("articulos"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("marca"),
+									$this->lang_item("presentacion"),
+									$this->lang_item("lineas"),
+									$this->lang_item("u.m."),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'tittle'  => $this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
+	}
 }

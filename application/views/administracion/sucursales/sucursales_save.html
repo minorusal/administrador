@@ -1,0 +1,43 @@
+   
+    <div >
+        <div style="float:left">
+            <p>
+                <label>{nombre_sucursal}: (*)</label>
+                <input id="sucursal" type="text" name="sucursal" class="input-xlarge requerido" value="" />
+            </p>
+            <p>
+                <label>{cvl_corta}: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" />
+            </p>
+             <p>
+                <label>{r_social}: (*)</label>
+                <input id="razon_social" type="text" name="razon_social" class="input-xlarge requerido" value="" />
+            </p>
+             <p>
+                <label>{r_f_c}: (*)</label>
+                <input id="rfc" type="text" name="rfc" class="input-xlarge requerido" value="" />
+            </p>
+            <p>
+                <label>{tel}: (*)</label>
+                <input id="telefono" type="text" name="telefono" class="input-xlarge requerido" value="" />
+            </p>
+            <p>
+                <label>{entidad}: (*)</label>
+                {list_entidad}
+            </p> 
+            
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>{direccion}:</label>
+            <textarea id="direccion" name="direccion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+        </p>
+        <div id="registro_loader"></div>
+        <div id="mensajes" style="display:none"></div>
+
+         {button_save}
+        {button_reset}
+
+    </div>

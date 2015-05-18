@@ -71,18 +71,20 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete   = values_requeridos();
-	var id_almacen   = jQuery('#id_almacen').val();
-    var almacen      = jQuery('#almacen').val();
+	var id_sucursal  = jQuery('#id_sucursal').val();
+    var sucursal     = jQuery('#sucursal').val();
     var clave_corta  = jQuery('#clave_corta').val();
-    var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
+    var razon_social = jQuery('#razon_social').val();
+    var rfc          = jQuery('#rfc').val();
+    var telefono     = jQuery('#telefono').val();
+    var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
+    var direccion	 = jQuery("#direccion").val();
 
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/sucursales/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -100,16 +102,18 @@ function agregar(){
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();
-    var almacen      = jQuery('#almacenes').val();
+    var sucursal     = jQuery('#sucursal').val();
     var clave_corta  = jQuery('#clave_corta').val();
-    var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
+    var razon_social = jQuery('#razon_social').val();
+    var rfc          = jQuery('#rfc').val();
+    var tel          = jQuery('#telefono').val();
+    var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
+    var direccion    =jQuery('#direccion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/sucursales/insert_almacen",
+		url: path()+"administracion/sucursales/insert_sucursal",
 		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete :incomplete, sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, id_entidad:id_entidad, direccion:direccion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

@@ -1,4 +1,4 @@
-
+<div id="formulario">
     <div >
         <div style="float:left">
             <input id="id_sucursal" type="hidden" name="id_sucursal" value="{id_sucursal}" />
@@ -6,7 +6,7 @@
                 <label>{nombre_sucursal}: (*)</label>
                 <input id="sucursal" type="text" name="sucursal" class="input-xlarge requerido" value="{sucursal}" />
             </p>
-           <p>
+            <p>
                 <label>{cvl_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
             </p>
@@ -22,23 +22,28 @@
                 <label>{tel}: (*)</label>
                 <input id="telefono" type="text" name="telefono" class="input-xlarge requerido" value="{telefono}" />
             </p>
-            <p>
+             <p>
                 <label>{entidad}: (*)</label>
                 {list_entidad}
-            </p>           
+            </p> 
+            <p>
+                <label>{fecha_registro}:</label>
+                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+            </p>            
             <p>
                 <label>{registro_por}:</label>
-                <span readonly id="usuario_registro" type="text" name="usuario_registro"  class="input-xlarge  uneditable-input requerido" >{usuario_registro}</span>
+                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
             </p>
         </div>
         
     </div>
-    <div style="clear:both"> 
+    <div style="clear:both">
         <p>
             <label>{dir}:</label>
-            <textarea id="direccion" name="direccion"  class="span5" style="resize: vertical; height: 100px;">{direccion}</textarea>
+            <textarea id="direccion" name="direccion"  class="span5 requerido" style="resize: vertical; height: 100px;">{direccion}</textarea>
         </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
          {button_save}
     </div>
+</div>

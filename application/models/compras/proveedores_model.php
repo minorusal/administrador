@@ -119,7 +119,7 @@ class proveedores_model extends Base_Model{
 						,p.id_usuario
 						,p.activo
 					FROM $tbl1 p 
-					LEFT JOIN $tbl2 e on p.id_compras_proveedor = e.id_compras_proveedor
+					LEFT JOIN $tbl2 e on p.id_administracion_entidad = e.id_administracion_entidad
 					WHERE id_compras_proveedor = $id_compras_proveedor";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

@@ -35,7 +35,7 @@ class ordenes extends Base_Controller {
 									,'detalle'
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
-			$this->tab[$this->tab_indice[$i]] = $this->tab_indice [$i];
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
 		}
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
@@ -47,7 +47,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function config_tabs(){
-	// Creación de tabs en el contenedor principal
+		// Creación de tabs en el contenedor principal
 		for($i=1; $i<=count($this->tab); $i++){
 			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
 		}
@@ -77,7 +77,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function index(){		
-	// Carga de pagina inicial
+		// Carga de pagina inicial
 		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
@@ -90,7 +90,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function listado($offset=0){
-	// Crea tabla con listado de elementos capturados 
+		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '';
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
@@ -151,7 +151,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function detalle(){
-	// Crea formulario de detalle y edición
+		// Crea formulario de detalle y edición
 		$seccion 			= '';
 		$accion 			= $this->tab['detalle'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
@@ -192,7 +192,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function agregar(){
-	// Crea formulario para agregar nuevo elemento
+		// Crea formulario para agregar nuevo elemento
 		$seccion 		= '';
 		$accion 		= $this->tab['agregar'];
 		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
@@ -230,7 +230,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function insert(){
-	// Recibe datos de formulario e inserta un nuevo registro en la BD
+		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -270,7 +270,7 @@ class ordenes extends Base_Controller {
 	}
 
 	public function actualizar(){
-	// Recibe datos de formulario y actualiza un registro existente en la BD
+		// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);

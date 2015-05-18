@@ -27,13 +27,12 @@ class proveedores extends Base_Controller {
 									,'detalle'
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
-			$this->tab[$this->tab_indice[$i]] = $this->tab_indice [$i];
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
 		}
 
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
-
 	public function config_tabs(){
 		for($i=1; $i<=count($this->tab); $i++){
 			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
@@ -52,48 +51,47 @@ class proveedores extends Base_Controller {
 										,$tab_3
 								); 
 		$config_tab['action']   = array(
-										 array('function' => '23'  )
+										 'load_content'
 										,'load_content'
 										,''
 								);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 		return $config_tab;
 	}
-
 	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
-
 	public function index(){
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['titulo_seccion']   = $this->lang_item("seccion");
+		$data['titulo_submodulo'] = $this->lang_item("submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]               = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
-
 	public function listado($offset=0){
 		$seccion 		= '';
+		$filtro         = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
 		$sqlData = array(
-			 'buscar'      	=> ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : ""
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
-			,'aplicar_limit'=> true
-		);
+						 'buscar'      	=> $filtro
+						,'offset' 		=> $offset
+						,'limit'      	=> $limit
+						,'aplicar_limit'=> true
+					);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = $this->db_model->db_get_total_rows();
+		$total_rows	  = $this->db_model->db_get_total_rows($sqlData);
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+
 
 		if($total_rows>0){
 			foreach ($list_content as $value) {
@@ -106,7 +104,9 @@ class proveedores extends Base_Controller {
 				$tbl_data[] = array('id'                => $value['razon_social'],
 									'razon_social'      => tool_tips_tpl($value['razon_social'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'nombre_comercial'  => $value['nombre_comercial'],
-									'clave_corta'       => $value['clave_corta']
+									'rfc'               => $value['rfc'],
+									'clave_corta'       => $value['clave_corta'],
+									'entidad'           => $value['entidad']
 									);
 			}
 
@@ -115,16 +115,26 @@ class proveedores extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("lbl_rsocial"),
 										$this->lang_item("lbl_nombre"),
-										$this->lang_item("lbl_clv"));
-			
+										$this->lang_item("lbl_rfc"),
+										$this->lang_item("lbl_clv"),
+										$this->lang_item("lbl_entidad")
+
+									);
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
+
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		}else{
-			$msg   = $this->lang_item("msg_query_null");
-			$tabla = alertas_tpl('', $msg ,false);
+			$buttonTPL = "";
+			$msg       = $this->lang_item("msg_query_null");
+			$tabla     = alertas_tpl('', $msg ,false);
 		}
 			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$tabData['tabla']     = $tabla;
+			$tabData['export']    = button_tpl($buttonTPL);
 			$tabData['paginador'] = $paginador;
 			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -134,59 +144,99 @@ class proveedores extends Base_Controller {
 				return $this->load_view_unique($uri_view , $tabData, true);
 			}
 	}
+	public function export_xlsx(){
+		$filtro  = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array(
+						 'buscar'      	 => $filtro
+						,'aplicar_limit' => 0
+					);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									$value['razon_social'],
+									$value['nombre_comercial'],
+									$value['clave_corta'],
+									$value['rfc'],
+									$value['calle'],
+									$value['num_int'],
+									$value['num_ext'],
+									$value['colonia'],
+									$value['municipio'],
+									$value['entidad'],
+									$value['cp'],
+									$value['telefonos'],
+									$value['email'],
+									$value['contacto'],
+									$value['comentarios']
+							);
+			}
 
-
-	/*
-
-	public function agregar_proveedor(){
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/proveedores_save';
-		$lts_entidades  = dropdown_tpl(		$this->proveedores_model->get_entidades('','','',false), 
-										'' ,
-										'id_administracion_entidad', 
-										array('clave_corta','entidad'),
-										'lts_entidades', 
-										'requerido'
-									);
-		$btn_save   = form_button(array('class'   => 'btn btn-primary',
-										'name'    => 'save_proveedor',
-										'onclick' => "send_form_ajax('".$this->uri_cl_principal('insert_proveedor')."','mensajes');", 
-										'content' => $this->lang_item("btn_guardar")));
-
-		$btn_reset  = form_button(array('class'   => 'btn btn-primary',
-										'name'    => 'reset',
-										'value'   => 'reset',
-										'onclick' => 'clean_formulario()',
-										'content' => $this->lang_item("btn_limpiar")));
-
-		$lbl['lbl_rsocial']    = $this->lang_item('lbl_rsocial');
-		$lbl['lbl_nombre']     = $this->lang_item('lbl_nombre');
-		$lbl['lbl_clv']        = $this->lang_item('lbl_clv');
-		$lbl['lbl_rfc']        = $this->lang_item('lbl_rfc');
-		$lbl['lbl_calle']      = $this->lang_item('lbl_calle');
-		$lbl['lbl_num_int']    = $this->lang_item('lbl_num_int');
-		$lbl['lbl_num_ext']    = $this->lang_item('lbl_num_ext');
-		$lbl['lbl_colonia']    = $this->lang_item('lbl_colonia');
-		$lbl['lbl_municipio']  = $this->lang_item('lbl_municipio');
-		$lbl['lbl_entidad']    = $this->lang_item('lbl_entidad');
-		$lbl['lbl_cp']         = $this->lang_item('lbl_cp');
-		$lbl['lbl_telefono']   = $this->lang_item('lbl_telefono');
-		$lbl['lbl_email']      = $this->lang_item('lbl_email');
-		$lbl['lbl_contacto']   = $this->lang_item('lbl_contacto');
-		$lbl['lbl_comentario'] = $this->lang_item('lbl_comentario');
-		$lbl['dropdown_entidad'] = $lts_entidades;
-		$lbl['button_save']    = $btn_save;
-		$lbl['button_reset']   = $btn_reset;
-
-		if($this->ajax_post(false)){
-				echo json_encode($this->load_view_unique($uri_view , $lbl, true));
-		}else{
-			return $this->load_view_unique($uri_view , $lbl, true);
+			$set_heading = array(
+									$this->lang_item("lbl_rsocial"),
+									$this->lang_item("lbl_nombre"),
+									$this->lang_item("lbl_clv"),
+									$this->lang_item("lbl_rfc"),
+									$this->lang_item("lbl_calle"),
+									$this->lang_item("lbl_num_int"),
+									$this->lang_item("lbl_num_ext"),
+									$this->lang_item("lbl_colonia"),
+									$this->lang_item("lbl_municipio"),
+									$this->lang_item("lbl_entidad"),
+									$this->lang_item("lbl_cp"),
+									$this->lang_item("lbl_telefono"),
+									$this->lang_item("lbl_email"),
+									$this->lang_item("lbl_contacto"),
+									$this->lang_item("lbl_comentario")
+								);
+	
 		}
+		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 
-	public function insert_proveedor(){
-		$jsonData = array(	'result'  => $this->ajax_post('comentario'),
-							'functions' => array( 'clean_formulario' => '' ));
-		echo json_encode($jsonData);
-	}*/
+	public function detalle(){
+		// Crea formulario de detalle y edición
+		$seccion 			    = '';
+		$accion 			    = $this->tab['detalle'];
+		$id_compras_proveedor 	= $this->ajax_post('id_compras_proveedor');
+		$detalle  			    = $this->db_model->get_orden_unico($id_compras_proveedor);
+		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+
+		$dropArray = array(
+					'data'		=> $this->db_model->db_get_proveedores()
+					,'selected' => $detalle[0]['id_proveedor'] 
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('clave_corta','razon_social')
+					,'name' 	=> "id_proveedor"
+					,'class' 	=> "requerido"
+					// ,'leyenda' 	=> ''
+				);
+		$proveedores    = dropdown_tpl($dropArray);
+		$tabData['id_compras_orden']	= $id_compras_orden;
+		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
+		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
+        $tabData['razon_social'] 	 	= $this->lang_item("razon_social",false);
+		$tabData['list_proveedores']	= $proveedores;
+        $tabData['descripcion']       	= $this->lang_item("descripcion",false);
+        $tabData['descripcion_value'] 	= $detalle[0]['descripcion'];
+        $tabData['fecha_registro']    	= $this->lang_item("fecha_registro",false);
+        $tabData['timestamp']         	= $detalle[0]['timestamp'];
+        $tabData['button_save']       	= $btn_save;
+               
+        if($detalle[0]['id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+    	}else{
+    		$usuario_name = '';
+    	}
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+        $tabData['usuario_registro']	= $usuario_name;
+		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
 }

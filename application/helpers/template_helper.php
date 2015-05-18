@@ -108,7 +108,7 @@
 	if(!function_exists('dropdown_tpl')){
 		// Crea una lista <select>
 		function dropdown_tpl($params=array()){			
-			if(isset($params)){
+			if(!empty($params)){
 				$data 		= (isset($params['data']))?$params['data']:false;
 				$selected 	= (isset($params['selected']))?$params['selected']:'';
 				$value 		= (isset($params['value']))?$params['value']:false;
@@ -145,10 +145,11 @@
 	if(!function_exists('button_tpl')){
 		function button_tpl($params=array()){
 			$button = "";
-			if(isset($params)){
+			if(!empty($params)){
 				$text 		= (isset($params['text']))?$params['text']:false;
 				$iconsweets = (isset($params['iconsweets']))?$params['iconsweets']:'';
 				$onclick 	= (isset($params['onclick']))?$params['onclick']:false;
+				$href    	= (isset($params['href']))?$params['href']:false;
 			}else{
 				return false;
 			}
@@ -158,10 +159,21 @@
 					
 					$label = $text[$i];
 					$icon  = ($iconsweets[$i]) ? $iconsweets[$i] : 'iconsweets-link'; 
-					$button .= "<li><a href='' class='btn btn-rounded'> <i class='$incon'></i> &nbsp; $label</a> </li>";
+					$jsOn  = ($onclick[$i]) ? 'onclick="'.$onclick[$i].'"' : ''; 
+					$link  = ($href[$i]) ? $href[$i] : ''; 
+					$button .= "<li><a href='$link' class='btn btn-rounded'> <i class='$icon'></i> &nbsp; $label</a> </li>";
 				}
+
+				$button .= '<ul class="list-nostyle list-inline">'.$button.'</ul>';
 			}else{
+				$label = $text;
+				$icon  = ($iconsweets) ? $iconsweets: 'iconsweets-link'; 
+				$jsOn  = ($onclick) ? 'onclick="'.$onclick.'"' : ''; 
+				$link  = ($href) ? $href : ''; 
+				$button = "<ul class='list-nostyle list-inline'><li><a href='$link' class='btn btn-rounded'> <i class='$icon'></i> &nbsp; $label</a> </li></ul>";
 			}
+
+			return $button;
 		}
 	}
 

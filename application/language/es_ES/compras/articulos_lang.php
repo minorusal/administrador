@@ -1,4 +1,5 @@
 <?php
+$lang['seccion']          = "Catalogo de Artículos";
 $lang['titulo_submodulo'] = "compras";
 $lang['articulos']        = "artículos";
 $lang['agregar_articulo'] = "nuevo artículo";

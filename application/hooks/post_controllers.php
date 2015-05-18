@@ -46,13 +46,14 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'logout';
 			$sites_availables[] = 'login';
 			$sites_availables[] = '404_override'; 
-			
 			if(!in_array($uri_string, $sites_availables)){
 				if($uri_string==''){
 					redirect(base_url('inicio'));
 				}else{
 					if(!$ajax){
-						redirect(base_url('404_override'));
+						if(!mb_strstr($this->ci->uri_segment_end(),'export_')){
+							redirect(base_url('404_override'));
+						}						
 					}
 				}
 				

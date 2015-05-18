@@ -91,16 +91,25 @@ class articulos extends Base_Controller {
 			
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))
+							);
 		}else{
+			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
 
-		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
-		$data_tab_2['tabla']     = $tabla;
-		$data_tab_2['export']    = form_button(array('class'=>"btn btn-primary",'content' => $this->lang_item("btn_guardar") ));;
-		$data_tab_2['paginador'] = $paginador;
-		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+
+		
+
+		$data_tab_2['filtro']         = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
+		$data_tab_2['tabla']          = $tabla;
+		$data_tab_2['export']         = button_tpl($buttonTPL);
+		$data_tab_2['paginador']      = $paginador;
+		$data_tab_2['item_info']      = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
 
 		if($this->ajax_post(false)){
@@ -178,7 +187,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta', 'presentacion')
-					,'name' 	=> "lts_presentaciones"
+					,'name' 	=> "lts_presentaciones_detalle"
 					,'class' 	=>  "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_presentacion']
 				);
@@ -187,7 +196,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
 					,'text' 	=> array('clave_corta','linea')
-					,'name' 	=> "lts_lineas"
+					,'name' 	=> "lts_lineas_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_linea']
 				);
@@ -196,7 +205,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_um('','','',false)
 					,'value' 	=> 'id_compras_um'
 					,'text' 	=> array('clave_corta','um')
-					,'name' 	=> "lts_um"
+					,'name' 	=> "lts_um_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_um']
 					);
@@ -205,7 +214,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
 					,'value' 	=> 'id_compras_marca'
 					,'text' 	=> array('clave_corta','marca')
-					,'name' 	=> "lts_marcas"
+					,'name' 	=> "lts_marcas_detalle"
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_marca']
 					);
@@ -223,6 +232,8 @@ class articulos extends Base_Controller {
         $data_tab_3['linea']             = $this->lang_item("linea",false);
         $data_tab_3['um']                = $this->lang_item("um",false);
         $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
+        $data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
+		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
         $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
         $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_marca']        = $marcas;
@@ -253,7 +264,7 @@ class articulos extends Base_Controller {
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
@@ -287,7 +298,7 @@ class articulos extends Base_Controller {
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
@@ -295,6 +306,8 @@ class articulos extends Base_Controller {
 								 'id_compras_marca'=> $marca,
 								 'id_compras_presentacion'=> $presentacion,
 								 'id_compras_um'=> $um);
+
+	
 			$insert = $this->articulos_model->update_articulo($data_update,$id_articulo);
 
 			if($insert){
@@ -305,5 +318,39 @@ class articulos extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['articulo'],
+									 $value['clave_corta'],
+									 $value['marca'],
+									 $value['presentacion'],
+									 $value['linea'],
+									 $value['um'],
+									 $value['descripcion']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("articulos"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("marca"),
+									$this->lang_item("presentacion"),
+									$this->lang_item("lineas"),
+									$this->lang_item("u.m."),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'tittle'  => $this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

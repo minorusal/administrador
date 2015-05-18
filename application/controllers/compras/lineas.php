@@ -83,12 +83,21 @@ class lineas extends Base_Controller {
 										$this->lang_item("descripcion"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->uri_modulo.$this->uri_seccion.'/export_xlsx?filtro='.base64_encode($filtro))
+								);
+
 		}else{
+			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
+			
 			$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$data_tab_2['tabla']     = $tabla;
+			$data_tab_2['export']    = button_tpl($buttonTPL);
 			$data_tab_2['paginador'] = $paginador;
 			$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -154,7 +163,7 @@ class lineas extends Base_Controller {
 			
 			$linea        = $this->ajax_post('linea');
 			$clave_corta  = $this->ajax_post('clave_corta');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('linea'          => $linea,
 								 'clave_corta'    => $clave_corta, 
 								 'descripcion'    => $descripcion,
@@ -181,7 +190,7 @@ class lineas extends Base_Controller {
 			$id_linea         = $this->ajax_post('id_linea');
 			$linea            = $this->ajax_post('linea');
 			$clave_corta      = $this->ajax_post('clave_corta');
-			$descripcion      = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion      = $this->ajax_post('descripcion');
 			
 			$data_update      = array('linea'          => $linea,
 									  'clave_corta'    => $clave_corta, 
@@ -198,5 +207,31 @@ class lineas extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$lts_content = $this->catalogos_model->get_lineas('', '', $filtro , false);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									$value['linea'],
+									$value['clave_corta'],
+									$value['descripcion']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("linea"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("linea"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

@@ -30,8 +30,6 @@ class pasillos extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
-			// $this->load->model($this->uri_modulo.'articulos_model');
-			// $this->load->model($this->uri_modulo.'catalogos_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
@@ -134,14 +132,21 @@ class pasillos extends Base_Controller
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+
+			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
 		}
 		else
 		{
+			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
 			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$tabData['tabla']     = $tabla;
+			$tabData['export']    = button_tpl($buttonTPL);
 			$tabData['paginador'] = $paginador;
 			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -298,5 +303,39 @@ class pasillos extends Base_Controller
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data_pasillo($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['pasillos'],
+									 $value['clave_corta'],
+									 $value['almacenes'],
+									 $value['descripcion']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("pasillos"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("almacenes"),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'tittle'  => $this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

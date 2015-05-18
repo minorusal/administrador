@@ -18,6 +18,7 @@ class articulos_model extends Base_Model{
 		if(!$existe){
 			$condicion = "id_compras_articulo = $id_articulo"; 
 			$query = $this->db->update_string('av_compras_articulos', $data, $condicion);
+			//print_debug($query);
 			$query = $this->db->query($query);
 			return $query;
 		}else{

@@ -8,6 +8,8 @@ class clientes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model($this->uri_modulo.'clientes_model');
+		$this->load->model('administracion/entidades_model','ent_model');
+		$this->load->model('administracion/sucursales_model','sucur_model');
 		$this->lang->load("ventas/clientes","es_ES");
 	}
 
@@ -46,14 +48,14 @@ class clientes extends Base_Controller {
 	public function agregar_clientes(){
 		// Listas
 		$dropArray = array(
-					 'data'		=> $this->clientes_model->catalogo_entidades()
+					 'data'		=> $this->ent_model->get_entidades_default()
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('clave_corta','entidad')
 					,'name' 	=> "lts_entidades"
 					,'class' 	=> "requerido"
 				);
 		$dropArray2 = array(
-					 'data'		=> $this->clientes_model->cat_sucursales()
+					 'data'		=> $this->sucur_model->db_get_data()
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"
@@ -82,9 +84,9 @@ class clientes extends Base_Controller {
 		$data_1['dropdown_sucursal'] = $lts_sucursales;
 
 		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'agregar_clientes', $data_1, true));
+			echo json_encode($this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true));
 		}else{
-			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'agregar_clientes', $data_1, true);
+			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true);
 		}
 	}
 
@@ -191,7 +193,7 @@ class clientes extends Base_Controller {
 		$detalle_cliente  = $this->clientes_model->get_cliente_unico($id_cliente);
 		// Listas
 		$dropArray = array(
-					 'data'		 => $this->clientes_model->catalogo_entidades()
+					 'data'		 => $this->ent_model->get_entidades_default()
 					 ,'selected' => $detalle_cliente[0]['entidad']
 					,'value' 	 => 'id_administracion_entidad'
 					,'text' 	 => array('clave_corta','entidad')
@@ -199,7 +201,7 @@ class clientes extends Base_Controller {
 					,'class' 	 => "requerido"
 				);
         $dropArray2 = array(
-					 'data'		=> $this->clientes_model->cat_sucursales()
+					 'data'		=> $this->sucur_model->db_get_data()
 					 ,'selected' => $detalle_cliente[0]['sucursal']
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
@@ -208,7 +210,7 @@ class clientes extends Base_Controller {
 				);
        	$lts_entidades  = dropdown_tpl($dropArray);
        	$lts_sucursal   = dropdown_tpl($dropArray2);
-        $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'editar_cliente';
+        $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'cliente_edit';
         $data_tab_3['id_cliente']    = $detalle_cliente[0]['id_ventas_clientes'];
 		$data_tab_3['nombre_cliente']= $this->lang_item("nombre_cliente");
 		$data_tab_3['cliente_value'] = $detalle_cliente[0]['nombre_cliente'];

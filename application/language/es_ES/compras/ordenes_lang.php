@@ -7,7 +7,7 @@ $lang['detalle'] 			= "Detalle";
 
 $lang['orden_num'] 			= "No. Orden";
 $lang['id'] 				= "ID";
-$lang['razon_social'] 		= "Razón social";
+$lang['proveedor'] 			= "Proveedor";
 $lang['descripcion'] 		= "Descripción";
 $lang['sucursal'] 			= "Sucursal";
 

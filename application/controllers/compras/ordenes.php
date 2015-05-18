@@ -130,7 +130,7 @@ class ordenes extends Base_Controller {
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),
-										$this->lang_item("razon_social"),
+										$this->lang_item("proveedor"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -182,7 +182,7 @@ class ordenes extends Base_Controller {
 		$tabData['id_compras_orden']	= $id_compras_orden;
 		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
 		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
-        $tabData['razon_social'] 	 	= $this->lang_item("razon_social",false);
+        $tabData['proveedor'] 	 		= $this->lang_item("proveedor",false);
 		$tabData['list_proveedores']	= $proveedores;
 		$tabData['sucursal']     		= $this->lang_item("sucursal",false);
         $tabData['list_sucursales']		= $sucursales;
@@ -233,7 +233,7 @@ class ordenes extends Base_Controller {
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		// Etiquetas
 		$tabData['orden_num']   	= $this->lang_item("orden_num",false);
-		$tabData['razon_social'] 	= $this->lang_item("razon_social",false);
+		$tabData['proveedor'] 		= $this->lang_item("proveedor",false);
         $tabData['list_proveedores']= $proveedores;
         $tabData['sucursal']     	= $this->lang_item("sucursal",false);
         $tabData['list_sucursales']	= $sucursales;
@@ -310,6 +310,9 @@ class ordenes extends Base_Controller {
 						,'orden_num' 		=> $this->ajax_post('orden_num')
 						,'id_proveedor' 	=> $this->ajax_post('id_proveedor')
 						,'descripcion'		=> $this->ajax_post('descripcion')
+						,'id_sucursal'  	=> $this->ajax_post('id_sucursal')
+						,'id_usuario' 		=> $this->session->userdata('id_usuario')
+						,'timestamp'  		=> $this->timestamp()
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){

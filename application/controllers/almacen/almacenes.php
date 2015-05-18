@@ -135,14 +135,21 @@ class almacenes extends Base_Controller
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+
+			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
 		}
 		else
 		{
+			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
 			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$tabData['tabla']     = $tabla;
+			$tabData['export']    = button_tpl($buttonTPL);
 			$tabData['paginador'] = $paginador;
 			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
@@ -226,7 +233,7 @@ class almacenes extends Base_Controller
 						,'clave_corta' 				=> $this->ajax_post('clave_corta')
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_sucursal'				=> $this->ajax_post('id_sucursal')
-						,'id_almacen_tipos'				    => $this->ajax_post('id_tipo')
+						,'id_almacen_tipos'			=> $this->ajax_post('id_tipo')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
@@ -306,7 +313,7 @@ class almacenes extends Base_Controller
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$sucursal  = $this->ajax_post('id_sucursal');
 			$tipo  = $this->ajax_post('id_tipo');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('clave_corta'    => $clave_corta,
 								 'descripcion'    => $descripcion,
 								 'id_usuario'     => $this->session->userdata('id_usuario'),
@@ -327,28 +334,30 @@ class almacenes extends Base_Controller
 		}
 	}
 
-	public function export_xlsx(){
+	public function export_xlsx($offset=0){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
-		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
+		$limit 		 = $this->limit_max;
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data_almacen($sqlData);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['articulo'],
+									 $value['almacenes'],
 									 $value['clave_corta'],
-									 $value['marca'],
-									 $value['presentacion'],
-									 $value['linea'],
-									 $value['um'],
+									 $value['sucursal'],
+									 $value['tipos'],
 									 $value['descripcion']);
 			}
 			
 			$set_heading = array(
-									$this->lang_item("articulos"),
+									$this->lang_item("almacenes"),
 									$this->lang_item("cvl_corta"),
-									$this->lang_item("marca"),
-									$this->lang_item("presentacion"),
-									$this->lang_item("lineas"),
-									$this->lang_item("u.m."),
+									$this->lang_item("sucursal"),
+									$this->lang_item("tipo"),
 									$this->lang_item("descripcion"));
 	
 		}

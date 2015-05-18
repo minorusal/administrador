@@ -15,8 +15,6 @@ class sucursales_model extends Base_Model
 		}	
 	}
 
-	
-
 	/*Traer información para el listado de las sucursales*/
 	public function db_get_data($data=array())
 	{

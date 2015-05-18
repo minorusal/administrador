@@ -91,6 +91,7 @@ class articulos extends Base_Controller {
 			
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 							'iconsweets' => 'iconsweets-excel',
 							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))

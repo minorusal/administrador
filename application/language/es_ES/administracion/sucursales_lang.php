@@ -8,7 +8,7 @@ $lang['detalle'] 			= "Detalle";
 $lang['nombre_sucursal'] 	= "sucursal";
 $lang['clave_corta'] 		= "clave corta";
 $lang['direccion']          = "dirección";
-$lang['rz'] 		        = "Razón social";
+$lang['rs'] 		        = "Razón social";
 $lang['rfc'] 		        = "rfc";
 $lang['tel'] 		        = "teléfono";
 

@@ -27,5 +27,12 @@
 
 	$lang['fecha_registro']  = 'Fecha de Registro';
 	$lang['registro_por']    = 'Registrado por';
-	$lang['catalogo']         = 'Catalogo de ';
+
+	$lang['lbl_ultima_modificacion']   = 'Ultima modificacion';
+	$lang['val_ultima_modificacion']   = 'Fecha de ultima modificacion %s realizada por $d';
+
+	$lang['lbl_fecha_registro']  = 'Fecha de Registro';
+	$lang['lbl_usuario_regitro'] = 'Registrado por';
+
+	$lang['catalogo']        = 'Catalogo de ';
 ?>

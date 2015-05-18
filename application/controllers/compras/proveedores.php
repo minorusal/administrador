@@ -31,6 +31,7 @@ class proveedores extends Base_Controller {
 		}
 
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+		$this->load->model('administracion/entidades_model','entidad');
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 	public function config_tabs(){
@@ -207,35 +208,54 @@ class proveedores extends Base_Controller {
 		$detalle  			    = $this->db_model->get_orden_unico($id_compras_proveedor);
 		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
 
+
 		$dropArray = array(
-					'data'		=> $this->db_model->db_get_proveedores()
-					,'selected' => $detalle[0]['id_proveedor'] 
+					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
+					,'selected' => $detalle[0]['id_administracion_entidad'] 
 					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('clave_corta','razon_social')
-					,'name' 	=> "id_proveedor"
+					,'text' 	=> array('ent_abrev','entidad')
+					,'name' 	=> "id_administracion_entidad"
 					,'class' 	=> "requerido"
-					// ,'leyenda' 	=> ''
 				);
-		$proveedores    = dropdown_tpl($dropArray);
-		$tabData['id_compras_orden']	= $id_compras_orden;
-		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
-		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
-        $tabData['razon_social'] 	 	= $this->lang_item("razon_social",false);
-		$tabData['list_proveedores']	= $proveedores;
-        $tabData['descripcion']       	= $this->lang_item("descripcion",false);
-        $tabData['descripcion_value'] 	= $detalle[0]['descripcion'];
-        $tabData['fecha_registro']    	= $this->lang_item("fecha_registro",false);
-        $tabData['timestamp']         	= $detalle[0]['timestamp'];
-        $tabData['button_save']       	= $btn_save;
+		//$entidades  				 = 
+
+		$tabData['lbl_rsocial']            =  $this->lang_item('lbl_rsocial', false);
+		$tabData['lbl_nombre']             =  $this->lang_item('lbl_nombre', false);
+		$tabData['lbl_clv']                =  $this->lang_item('lbl_clv', false);
+		$tabData['lbl_rfc']                =  $this->lang_item('lbl_rfc', false);
+		$tabData['lbl_calle']              =  $this->lang_item('lbl_calle', false);
+		$tabData['lbl_num_int']            =  $this->lang_item('lbl_num_int', false);
+		$tabData['lbl_num_ext']            =  $this->lang_item('lbl_num_ext', false);
+		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
+		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
+		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
+		$tabData['dropdown_entidad']       = dropdown_tpl($dropArray);
+		$tabData['lbl_cp']                 = $this->lang_item('lbl_cp', false);
+		$tabData['lbl_telefono']           = $this->lang_item('lbl_telefono', false);
+		$tabData['lbl_email']              = $this->lang_item('lbl_email', false);
+		$tabData['lbl_contacto']           = $this->lang_item('lbl_contacto', false);
+		$tabData['lbl_comentario']         = $this->lang_item('lbl_comentario', false);
+		
+		$tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
+
+		
+
+
+		$tabData['button_save']      = $btn_save;
+
+
                
-        if($detalle[0]['id_usuario']){
+        /*if($detalle[0]['id_usuario']){
         	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
     	}else{
     		$usuario_name = '';
-    	}
-        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= $usuario_name;
+    	}*/
+        //$tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      //  $tabData['usuario_registro']	= $usuario_name;
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}

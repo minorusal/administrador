@@ -25,4 +25,7 @@
 
 	$lang['tool_tip']       = 'Ver Detalle';
 
+	$lang['fecha_registro']  = 'Fecha de Registro';
+	$lang['registro_por']    = 'Registrado por';
+	$lang['catalogo']         = 'Catalogo de ';
 ?>

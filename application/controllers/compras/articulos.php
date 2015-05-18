@@ -232,6 +232,8 @@ class articulos extends Base_Controller {
         $data_tab_3['linea']             = $this->lang_item("linea",false);
         $data_tab_3['um']                = $this->lang_item("um",false);
         $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
+        $data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
+		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
         $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
         $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_marca']        = $marcas;

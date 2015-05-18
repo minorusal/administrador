@@ -7,7 +7,7 @@ class excel extends PHPExcel{
 		parent::__construct();
 	}
 	
-	public function generate_xlsx($params = array()){
+	public function generate_xlsx($params = array(), $debug = false){
 		
 		$tittle  = (array_key_exists('tittle',$params)) ? $params['tittle'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
@@ -18,8 +18,8 @@ class excel extends PHPExcel{
 			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
 									->setLastModifiedBy("IS Intelligent Solution")
 									->setTitle($tittle)
-									->setSubject("Office 2007 XLSX")
-									->setDescription("Office 2007 XLSX Document")
+									->setSubject($tittle)
+									->setDescription($tittle)
 									->setKeywords("office 2007 openxml");
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
@@ -53,13 +53,15 @@ class excel extends PHPExcel{
 	      	
 		
 			$objPHPExcel->setActiveSheetIndex(0);
-		
-			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-			header('Content-Disposition: attachment;filename="'.$tittle.'.xlsx"');
-		
-			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			$objWriter->save('php://output');
-			exit;
+			if($debug==false){
+				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+				header('Content-Disposition: attachment;filename="'.$tittle.'.xlsx"');
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save('php://output');
+				exit;
+			}
+				
+			
 		}else{
 			redirect('override_404');
 		}

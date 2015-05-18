@@ -28,9 +28,8 @@ class sucursales extends Base_Controller
 		$this->tab2 			= 'listado';
 		$this->tab3 			= 'detalle';
 		// DB Model
-		$this->load->model($this->submodulo.'_model','db_model');
-			// $this->load->model($this->uri_modulo.'articulos_model');
-			// $this->load->model($this->uri_modulo.'catalogos_model');
+		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+		$this->load->model('administracion/entidades_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
@@ -160,9 +159,8 @@ class sucursales extends Base_Controller
 		$detalle  	  = $this->db_model->get_orden_unico_sucursal($id_sucursal);
 		$seccion 	  = 'detalle';
 		$tab_detalle  = $this->tab3;
-		$this->load->model('entidades_model');
 		$entidades_array = array(
-					 'data'		=> $this->entidades_model->get_entidades('','','',false)
+					 'data'		=> $this->db_model2->get_entidades('','','',false)
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('entidad')
 					,'name' 	=> "lts_entidades"
@@ -251,9 +249,8 @@ class sucursales extends Base_Controller
 	public function agregar()
 	{
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/sucursales_save';
-		$this->load->model('entidades_model');
 		$entidades_array = array(
-					 'data'		=> $this->entidades_model->get_entidades('','','',false)
+					 'data'		=> $this->db_model2->get_entidades('','','',false)
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('entidad')
 					,'name' 	=> "lts_entidades"

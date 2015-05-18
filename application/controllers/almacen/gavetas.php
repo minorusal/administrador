@@ -357,7 +357,7 @@ public function config_tabs()
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("seccion"),
+		$params = array(	'tittle'  => $this->lang_item("Gavetas"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

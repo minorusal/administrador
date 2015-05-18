@@ -211,7 +211,7 @@ class marcas extends Base_Controller {
 									$value['clave_corta'],
 									$value['descripcion']);
 			}
-			$set_heading = array (
+			$set_heading = array(
 									$this->lang_item("marcas"),
 									$this->lang_item("cvl_corta"),
 									$this->lang_item("descripcion"));

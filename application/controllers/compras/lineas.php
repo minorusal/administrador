@@ -220,7 +220,7 @@ class lineas extends Base_Controller {
 									$value['descripcion']);
 			}
 			
-			$set_heading = array (
+			$set_heading = array(
 									$this->lang_item("linea"),
 									$this->lang_item("cvl_corta"),
 									$this->lang_item("descripcion"));

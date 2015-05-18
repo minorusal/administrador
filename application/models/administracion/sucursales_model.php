@@ -29,6 +29,7 @@ class sucursales_model extends Base_Model
 		$query = "	SELECT 
 						 su.id_sucursal
 						,su.clave_corta
+						,su.rfc
 						,su.direccion
 						,su.sucursal
 						,su.razon_social

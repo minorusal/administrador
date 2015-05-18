@@ -301,8 +301,8 @@ class Base_Controller extends CI_Controller {
     * Devuleve el ultimo segmentos contenido en la URL
     * @return int
     */
-    public function uri_segment_end(){
-    	return $this->uri->segment($this->uri->total_segments());
+    public function uri_segment_end($prev = 0){
+    	return $this->uri->segment($this->uri->total_segments()-$prev);
     }
 
     /**
@@ -325,6 +325,21 @@ class Base_Controller extends CI_Controller {
     		return $this->input->post();
     	}
     	return $this->input->post($post);
+    }
+
+
+    /**
+    * Si $get es false devuleve un arreglo con el total de items 
+    * recibidos por el metodo GET[]
+    * de lo contrario devolvera el item con respecto al index $get
+    * @param int $get
+    * @return array
+    */
+    public function ajax_get($get){
+    	if($get===false){
+    		return $this->input->get();
+    	}
+    	return $this->input->get($get);
     }
 
     /**

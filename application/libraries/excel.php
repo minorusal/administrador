@@ -7,7 +7,7 @@ class excel extends PHPExcel{
 		parent::__construct();
 	}
 	
-	public function generate_excel($params = array()){
+	public function generate_xlsx($params = array()){
 		
 		$tittle  = (array_key_exists('tittle',$params)) ? $params['tittle'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;

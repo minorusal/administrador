@@ -91,16 +91,18 @@ class articulos extends Base_Controller {
 			
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))
+							);
 		}else{
+			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
 
 
-		$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
-							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx')
-							);
+		
 
 		$data_tab_2['filtro']         = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
 		$data_tab_2['tabla']          = $tabla;
@@ -316,7 +318,8 @@ class articulos extends Base_Controller {
 	}
 
 	public function export_xlsx(){
-		$lts_content = $this->articulos_model->get_articulos('', '', '', false);
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
@@ -345,6 +348,6 @@ class articulos extends Base_Controller {
 							'headers' => $set_heading
 						);
 		
-		$this->excel->generate_excel($params);
+		$this->excel->generate_xlsx($params);
 	}
 }

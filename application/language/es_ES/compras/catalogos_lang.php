@@ -2,6 +2,7 @@
 	
 	/*USOS MULTIPLES*/
 	$lang['titulo_submodulo'] = 'Catalogos';
+	$lang['catalogo']         = 'Catalogo de ';
 	$lang['tool_tip']         = 'Ver Detalle';
 	$lang['sin_descripcion']  = 'Sin descripción';
 

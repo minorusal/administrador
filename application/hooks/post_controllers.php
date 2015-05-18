@@ -51,7 +51,7 @@ class check_session extends Base_Controller
 					redirect(base_url('inicio'));
 				}else{
 					if(!$ajax){
-						if(!mb_strstr($this->ci->uri_segment_end(),'export')){
+						if(!mb_strstr($this->ci->uri_segment_end(),'export_')){
 							redirect(base_url('404_override'));
 						}						
 					}

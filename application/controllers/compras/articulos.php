@@ -261,7 +261,7 @@ class articulos extends Base_Controller {
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
@@ -295,7 +295,7 @@ class articulos extends Base_Controller {
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
 			$marca        = $this->ajax_post('marca');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,

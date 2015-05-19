@@ -260,8 +260,13 @@ class almacenes extends Base_Controller
 	
 	public function agregar(){
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/almacenes_save';
+		$sqlData = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> ''
+			,'limit'      	=> ''
+		);
 		$sucursales_array = array(
-					 'data'		=> $this->db_model2->get_sucursales('','','',false)
+					 'data'		=> $this->db_model2->db_get_data()
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"
@@ -270,7 +275,7 @@ class almacenes extends Base_Controller
 		$sucursales    = dropdown_tpl($sucursales_array);
 		
 		$tipos_array = array(
-					 'data'		=> $this->db_model->db_get_data_tipos('','','',false)
+					 'data'		=> $this->db_model->db_get_data_tipos($sqlData)
 					,'value' 	=> 'id_almacen_tipos'
 					,'text' 	=> array('tipos')
 					,'name' 	=> "lts_tipos"

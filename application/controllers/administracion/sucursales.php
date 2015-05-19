@@ -16,9 +16,10 @@ class sucursales extends Base_Controller
 	{
 		parent::__construct();
 		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'sucursales';
+		$this->submodulo		= 'catalogos';
+		$this->seccion          = 'sucursales';
 		$this->icon 			= 'fa fa-sitemap'; 
-		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/sucursales
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -27,10 +28,10 @@ class sucursales extends Base_Controller
 		$this->tab2 			= 'listado';
 		$this->tab3 			= 'detalle';
 		// DB Model
-		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model('administracion/entidades_model','db_model2');
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs()
 	{
@@ -41,15 +42,15 @@ class sucursales extends Base_Controller
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) 
-										,$this->lang_item($tab_2) 
-										,$this->lang_item($tab_3) 
+										 $this->lang_item($tab_1) #agregar
+										,$this->lang_item($tab_2) #listado
+										,$this->lang_item($tab_3) #detalle
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             
-										,$path.$tab_2.'/'.$pagina 
-										,$tab_3                   
+										 $path.$tab_1             #administracion/sucursales/agregar
+										,$path.$tab_2.'/'.$pagina #administracion/sucursales/listado
+										,$tab_3                   #detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -72,12 +73,12 @@ class sucursales extends Base_Controller
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']     = $this->lang_item($this->submodulo);
+		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
@@ -94,10 +95,10 @@ class sucursales extends Base_Controller
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
-			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
+		$sqlData['aplicar_limit'] = false;
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -197,7 +198,8 @@ class sucursales extends Base_Controller
         $usuario_registro             = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']      = $this->lang_item("registro_por",false);
         $tabData['usuario_registro']  = text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view   				  = $this->modulo.'/'.$this->submodulo.'/'.$this->submodulo.'_'.$seccion;
+        									   #administracion/catalogos/sucursales/sucursales_detalle	
+		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
@@ -248,8 +250,8 @@ class sucursales extends Base_Controller
 	}
 
 	public function agregar()
-	{
-		$seccion       = $this->modulo.'/'.$this->submodulo.'/sucursales_save';
+	{							#administracion/catalogos/sucursales/sucursales_save
+		$seccion       = $this->modulo.'/'.$this->seccion.'/sucursales_save';
 		$entidades_array = array(
 					 'data'		  => $this->db_model2->get_entidades('','','',false)
 					,'value' 	  => 'id_administracion_entidad'

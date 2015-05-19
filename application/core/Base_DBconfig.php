@@ -38,6 +38,7 @@ class Base_DBconfig extends Base_Controller {
 					 	 'db'								=>	'00_av_mx'
 					 	 // Tablas
 					 	,'tbl_administracion_entidades'		=>	'av_administracion_entidades'
+					 	,'tbl_administracion_forma_pago'	=>	'av_administracion_forma_pago'
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
 					 	,'tbl_almacen_tipos'				=>	'av_almacen_tipos'
 					 	,'tbl_almacen_gavetas' 			    =>	'av_almacen_gavetas'
@@ -45,12 +46,14 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_lineas'				=>	'av_compras_lineas'
 					 	,'tbl_compras_marcas'				=>	'av_compras_marcas'
 					 	,'tbl_compras_ordenes'				=>	'av_compras_ordenes'
+					 	,'tbl_compras_ordenes_tipo'			=>	'av_compras_orden_tipo'
 					 	,'tbl_compras_ordenes_articulos'	=>	'av_compras_ordenes_articulos'
 					 	,'tbl_compras_presentaciones'		=>	'av_compras_presentaciones'
 					 	,'tbl_compras_proveedores'			=>	'av_compras_proveedores'
 					 	,'tbl_compras_proveedores_articulos'=>	'av_compras_proveedores_articulos'
 					 	,'tbl_compras_um'					=>	'av_compras_um'
 					 	,'tbl_compras_clientes'				=>	'av_ventas_clientes'
+					 	
 					 	// Vistas
 					 	,'vw_compras_orden_articulos'		=>	'vw_compras_ordenes_con_articulos'
 					 	,'vw_compras_orden_proveedores'		=>	'vw_compras_ordenes_con_proveedores'

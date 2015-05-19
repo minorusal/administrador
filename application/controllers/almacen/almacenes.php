@@ -20,8 +20,8 @@ class almacenes extends Base_Controller
 		$this->modulo 			= 'almacen';
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'almacenes';
-		$this->icon 			= 'fa fa-database'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #almacen/almacenes/
+		$this->icon 			= 'fa fa-database'; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -45,15 +45,15 @@ class almacenes extends Base_Controller
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #almacen/almacenes/agregar
-										,$path.$tab_2.'/'.$pagina #almacen/almacenes/listado/pagina
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -76,11 +76,10 @@ class almacenes extends Base_Controller
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']     = $this->lang_item($this->seccion);
+		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
@@ -92,28 +91,26 @@ class almacenes extends Base_Controller
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.$seccion;
 		$url_link 		= $this->path.'listado';	
-
-		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-
-		$sqlData = array(
+		$filtro         = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$sqlData        = array(
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 		);
-		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_data_almacen($sqlData));
+		$uri_segment    = $this->uri_segment(); 
+		$total_rows	    = count($this->db_model->db_get_data_almacen($sqlData));
 		$sqlData['aplicar_limit'] = false;	
-		$list_content = $this->db_model->db_get_data_almacen($sqlData);
-		
-		$url          = base_url($url_link);
-		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-		if($total_rows>0){
-			foreach ($list_content as $value) {
+		$list_content   = $this->db_model->db_get_data_almacen($sqlData);
+		$url            = base_url($url_link);
+		$paginador      = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		if($total_rows>0)
+		{
+			foreach ($list_content as $value)
+			{
 				$atrr = array(
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_almacenes'].')'
 						);
-				
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'almacenes'      => tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
@@ -121,7 +118,6 @@ class almacenes extends Base_Controller
 									'tipos'          => $value['tipos'],
 									'descripcion'    => $value['descripcion']);
 			}
-			
 			// Plantilla
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
@@ -133,18 +129,17 @@ class almacenes extends Base_Controller
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
-			$tabla = $this->table->generate($tbl_data);
-
-			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+			$tabla     = $this->table->generate($tbl_data);
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
 		}
 		else
 		{
-			$buttonTPL = "";
-			$msg   = $this->lang_item("msg_query_null");
-			$tabla = alertas_tpl('', $msg ,false);
+			$buttonTPL            = "";
+			$msg                  = $this->lang_item("msg_query_null");
+			$tabla                = alertas_tpl('', $msg ,false);
 		}
 			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 			$tabData['tabla']     = $tabla;
@@ -167,7 +162,7 @@ class almacenes extends Base_Controller
 		
 		$seccion 		      = 'detalle';
 		$tab_detalle	      = $this->tab3;
-		$sucursales_array = array(
+		$sucursales_array     = array(
 					 'data'		=> $this->db_model2->get_sucursales('','','',false)
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
@@ -175,8 +170,8 @@ class almacenes extends Base_Controller
 					,'class' 	=> "requerido"
 					,'selected' => $detalle[0]['id_sucursal']
 					);
-		$sucursales           = dropdown_tpl($sucursales_array);
-		$tipos_array = array(
+		$sucursales            = dropdown_tpl($sucursales_array);
+		$tipos_array           = array(
 					 'data'		=> $this->db_model->db_get_data_tipos('','','',false)
 					,'value' 	=> 'id_almacen_tipos'
 					,'text' 	=> array('tipos')
@@ -184,8 +179,8 @@ class almacenes extends Base_Controller
 					,'class' 	=> "requerido"
 					,'selected' => $detalle[0]['id_almacen_tipos']
 					);
-		$tipos                = dropdown_tpl($tipos_array);
-		$btn_save             = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		$tipos                 = dropdown_tpl($tipos_array);
+		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_almacen']            = $id_almacen_almacenes;
         $tabData["nombre_almacen"]        = $this->lang_item("almacen");
@@ -206,18 +201,20 @@ class almacenes extends Base_Controller
         $this->load_database('global_system');
         $this->load->model('users_model');
         
-        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
-        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
-		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+        $usuario_registro                 = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        $tabData['registro_por']    	  = $this->lang_item("registro_por",false);
+        $tabData['usuario_registro']	  = text_format_tpl($usuario_registro[0]['name'],"u");
+		$uri_view   					  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 
-	public function actualizar(){
+	public function actualizar()
+	{
 		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
+		if($incomplete>0)
+		{
+			$msg            = $this->lang_item("msg_campos_obligatorios",false);
 
 			$json_respuesta = array(
 						 'id' 		=> 0
@@ -225,7 +222,9 @@ class almacenes extends Base_Controller
 						,'success' 	=> false
 				);
 
-		}else{
+		}
+		else
+		{
 			$sqlData = array(
 						 'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
 						,'almacenes' 		        => $this->ajax_post('almacen')
@@ -235,7 +234,8 @@ class almacenes extends Base_Controller
 						,'id_almacen_tipos'			=> $this->ajax_post('id_tipo')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
-			if($insert){
+			if($insert)
+			{
 				
 				$msg = $this->lang_item("msg_insert_success",false);
 				$json_respuesta = array(
@@ -243,7 +243,9 @@ class almacenes extends Base_Controller
 						,'contenido'=> alertas_tpl('success', $msg ,false)
 						,'success' 	=> true
 				);
-			}else{
+			}
+			else
+			{
 
 				$msg = $this->lang_item("msg_err_clv",false);
 				$json_respuesta = array(
@@ -290,20 +292,27 @@ class almacenes extends Base_Controller
         $tab_1['button_reset']      = $btn_reset;
 
 
-        if($this->ajax_post(false)){
+        if($this->ajax_post(false))
+        {
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
-		}else{
+		}
+		else
+		{
 			return $this->load_view_unique($seccion , $tab_1, true);
 		}
 	}
 
-	public function insert_almacen(){
+	public function insert_almacen()
+	{
 		$incomplete  = $this->ajax_post('incomplete');
 
-		if($incomplete>0){
+		if($incomplete>0)
+		{
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}else{
+		}
+		else
+		{
 			$almacen = $this->ajax_post('almacenes');
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$sucursal  = $this->ajax_post('id_sucursal');
@@ -319,17 +328,21 @@ class almacenes extends Base_Controller
 			
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
-			if($insert){
+			if($insert)
+			{
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
-			}else{
+			}
+			else
+			{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
 	}
 
-	public function export_xlsx($offset=0){
+	public function export_xlsx($offset=0)
+	{
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$limit 		 = $this->limit_max;
 		$sqlData = array(
@@ -339,7 +352,8 @@ class almacenes extends Base_Controller
 		);
 		$lts_content = $this->db_model->db_get_data_almacen($sqlData);
 		if(count($lts_content)>0){
-			foreach ($lts_content as $value) {
+			foreach ($lts_content as $value)
+			{
 				$set_data[] = array(
 									 $value['almacenes'],
 									 $value['clave_corta'],
@@ -347,7 +361,6 @@ class almacenes extends Base_Controller
 									 $value['tipos'],
 									 $value['descripcion']);
 			}
-			
 			$set_heading = array(
 									$this->lang_item("almacenes"),
 									$this->lang_item("cvl_corta"),
@@ -356,7 +369,6 @@ class almacenes extends Base_Controller
 									$this->lang_item("descripcion"));
 	
 		}
-
 		$params = array(	'tittle'  => $this->lang_item("Almacenes"),
 							'items'   => $set_data,
 							'headers' => $set_heading

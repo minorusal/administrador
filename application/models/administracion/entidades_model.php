@@ -29,7 +29,7 @@ class entidades_model extends Base_Model
 			return $query->result_array();
 		}	
 	}
-	public function get_entidades($limit, $offset, $filtro="", $aplicar_limit = true){
+	/*public function get_entidades($limit, $offset, $filtro="", $aplicar_limit = true){
 		$query = "	SELECT 
 						en.id_administracion_entidad
 						,en.entidad
@@ -40,5 +40,5 @@ class entidades_model extends Base_Model
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}
+	}*/
 }

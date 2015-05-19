@@ -42,6 +42,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
 					 	,'tbl_almacen_tipos'				=>	'av_almacen_tipos'
 					 	,'tbl_almacen_gavetas' 			    =>	'av_almacen_gavetas'
+					 	,'tbl_almacen_pasillos'				=>	'av_almacen_pasillos'
 					 	,'tbl_compras_articulos'			=>	'av_compras_articulos'
 					 	,'tbl_compras_lineas'				=>	'av_compras_lineas'
 					 	,'tbl_compras_marcas'				=>	'av_compras_marcas'

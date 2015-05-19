@@ -1,23 +1,19 @@
 <?php
 class sucursales_model extends Base_Model
 {
-	public function get_sucursales($limit, $offset, $filtro="", $aplicar_limit = true){
-		$query = "	SELECT 
-						cp.id_sucursal
-						,cp.sucursal
-					FROM
-						00_av_system.sys_sucursales cp
-					";
-      	
-      	$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}	
+	private $db1;
+	private $tbl1;
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->db1 = $this->dbinfo[0]['db'];
+		$this->tbl1 = $this->dbinfo[0]['tbl_sucursales'];
 	}
-
-	/*Traer información para el listado de las sucursales*/
+	//Función que obtiene toda la información de la tabla sys_sucursales
 	public function db_get_data($data=array())
 	{
+		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -26,6 +22,7 @@ class sucursales_model extends Base_Model
 									su.direccion like '%$filtro%' OR
 									su.sucursal like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		//Query
 		$query = "	SELECT 
 						 su.id_sucursal
 						,su.clave_corta
@@ -33,7 +30,7 @@ class sucursales_model extends Base_Model
 						,su.direccion
 						,su.sucursal
 						,su.razon_social
-					FROM 00_av_system.sys_sucursales su
+					FROM $tbl_sucursales su
 					WHERE su.activo = 1 $filtro
 					GROUP BY su.id_sucursal ASC
 					$limit
@@ -45,8 +42,10 @@ class sucursales_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de sucursales*/
-	public function get_orden_unico_sucursal($id_sucursal){
-		$query = "SELECT * FROM 00_av_system.sys_sucursales WHERE id_sucursal = $id_sucursal";
+	public function get_orden_unico_sucursal($id_sucursal)
+	{
+		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
+		$query = "SELECT * FROM $tbl_sucursales WHERE id_sucursal = $id_sucursal";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -56,11 +55,12 @@ class sucursales_model extends Base_Model
 	/*Actualliza la información en el formuladio de edición de sucursales*/
 	public function db_update_data($data=array())
 	{
+		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
 		$condicion = array('id_sucursal !=' => $data['id_sucursal'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('00_av_system.sys_sucursales', $condicion);
+		$existe = $this->row_exist($tbl_sucursales, $condicion);
 		if(!$existe){
 			$condicion = "id_sucursal = ".$data['id_sucursal']; 
-			$query = $this->db->update_string('00_av_system.sys_sucursales', $data, $condicion);
+			$query = $this->db->update_string($tbl_sucursales, $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{
@@ -71,9 +71,10 @@ class sucursales_model extends Base_Model
 	/*Inserta registro de sucursales*/
 	public function db_insert_data($data = array())
 	{
-		$existe = $this->row_exist('00_av_system.sys_sucursales', array('clave_corta'=> $data['clave_corta']));
+		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
+		$existe = $this->row_exist($tbl_sucursales, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('00_av_system.sys_sucursales', $data);
+			$query = $this->db->insert_string($tbl_sucursales, $data);
 			$query = $this->db->query($query);
 			return $query;
 		}else{

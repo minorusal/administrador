@@ -164,8 +164,13 @@ class sucursales extends Base_Controller
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);
 		$entidades_array = array(
-					 'data'		     => $this->db_model2->get_entidades('','','',false)
+					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
 					,'value' 	     => 'id_administracion_entidad'
 					,'text' 	     => array('entidad')
 					,'name' 	     => "lts_entidades"
@@ -252,8 +257,13 @@ class sucursales extends Base_Controller
 	public function agregar()
 	{							#administracion/catalogos/sucursales/sucursales_save
 		$seccion       = $this->modulo.'/'.$this->seccion.'/sucursales_save';
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);
 		$entidades_array = array(
-					 'data'		  => $this->db_model2->get_entidades('','','',false)
+					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
 					,'value' 	  => 'id_administracion_entidad'
 					,'text' 	  => array('entidad')
 					,'name' 	  => "lts_entidades"

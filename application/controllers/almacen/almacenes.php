@@ -162,8 +162,13 @@ class almacenes extends Base_Controller
 		
 		$seccion 		      = 'detalle';
 		$tab_detalle	      = $this->tab3;
+		$sqlData = array(
+			 'buscar'      	 => ''
+			,'offset' 		 => 0
+			,'limit'      	 => 0
+		);
 		$sucursales_array     = array(
-					 'data'		=> $this->db_model2->get_sucursales('','','',false)
+					 'data'     => $this->db_model2->db_get_data($sqlData)
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"

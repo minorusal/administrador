@@ -115,6 +115,7 @@ class marcas extends Base_Controller {
 		$data_tab_3["descrip"]         	     = $this->lang_item("descripcion");
 		$data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
 		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
+		$data_tab_3["lbl_ultima_modiciacion"]= $this->lang_item('lbl_ultima_modificacion', false);
         $data_tab_3['marcas']                = $detalle_linea[0]['marca'];
 		$data_tab_3['clave_corta']           = $detalle_linea[0]['clave_corta'];
         $data_tab_3['descripcion']           = $detalle_linea[0]['descripcion'];
@@ -123,7 +124,16 @@ class marcas extends Base_Controller {
         
         $this->load_database('global_system');
         $this->load->model('users_model');
-        	
+        
+         if($detalle_linea[0]['edit_id_usuario']){
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle_linea[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$data_tab_3['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle_linea[0]['edit_timestamp']), $usuario_name);
+    	}else{
+    		$usuario_name = '';
+    		$data_tab_3['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+    	}
+
         $usuario_registro               = $this->users_model->search_user_for_id($detalle_linea[0]['id_usuario']);
         $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
@@ -186,7 +196,9 @@ class marcas extends Base_Controller {
 			
 			$data_update      = array('marca'          => $marca,
 									  'clave_corta'    => $clave_corta, 
-									  'descripcion'    => $descripcion);
+									  'descripcion'    => $descripcion
+									  ,'edit_id_usuario' => $this->session->userdata('id_usuario')
+									  ,'edit_timestamp'  => $this->timestamp());
 
 
 			$insert = $this->catalogos_model->update_marca($data_update,$id_marca);

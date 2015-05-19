@@ -92,10 +92,7 @@ class proveedores_model extends Base_Model{
 		return $query->num_rows;
 	}
 	public function insert($data=array()){
-		// DB Info
-
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_proveedores'];
-		// Query
 		$existe = $this->row_exist($tbl1,array('clave_corta ='=> $data['clave_corta']));
 		if(!$existe){
 			$query = $this->db->insert_string($tbl1, $data);
@@ -107,7 +104,6 @@ class proveedores_model extends Base_Model{
 		}
 	}
 	public function db_update_data($data=array()){
-		// DB Info
 		$tbl1 	   = $this->dbinfo[1]['tbl_compras_proveedores'];
 		$condicion = array('id_compras_proveedor !=' => $data['id_compras_proveedor'], 'clave_corta'=> $data['clave_corta']); 
 		$existe    = $this->row_exist($tbl1, $condicion);
@@ -121,10 +117,7 @@ class proveedores_model extends Base_Model{
 		}else{
 			return false;
 		}
-
 	}
-
-
 	public function get_proveedor_unico($id_compras_proveedor){
 		// DB Info
 		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];

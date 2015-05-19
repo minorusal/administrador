@@ -1,24 +1,26 @@
 <?php
 class clientes_model extends Base_Model{
 
-	function insert_cliente($data){		
-		$query = $this->db->insert_string('av_ventas_clientes', $data);
+	function insert_cliente($data){	
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];	
+		$query = $this->db->insert_string($tbl1, $data);
 		$query = $this->db->query($query);
 
 			return $query;
 	}
-	function catalogo_entidades(){
-		$query = "SELECT * FROM av_administracion_entidades WHERE activo=1";
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}	
-	}
 	function consulta_clientes($limit, $offset, $filtro="", $aplicar_limit = true){
-		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre_cliente  LIKE '%$filtro%' OR 
-												vc.razon_social  LIKE '%$filtro%' OR 
-												vc.clave_corta  LIKE '%$filtro%' OR  
-												vc.rfc  LIKE '%$filtro%'  
+		
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];
+		$tbl2 	= $this->dbinfo[1]['tbl_administracion_entidades'];
+		$tbl3 	= $this->dbinfo[0]['tbl_sucursales'];
+		$bd 	= $this->dbinfo[0]['db'];
+
+		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre_cliente LIKE '%$filtro%' OR 
+												vc.razon_social   LIKE '%$filtro%' OR 
+												vc.clave_corta    LIKE '%$filtro%' OR  
+												vc.rfc            LIKE '%$filtro%' OR 
+												e.entidad         LIKE '%$filtro%' OR
+												su.sucursal       LIKE '%$filtro%' 
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
@@ -27,19 +29,25 @@ class clientes_model extends Base_Model{
 						vc.razon_social,
 						vc.clave_corta,
 						vc.rfc,
-						vc.telefonos
+						vc.telefonos,
+						e.entidad,
+						su.sucursal
 					FROM 
-						av_ventas_clientes vc
+						$tbl1 vc
+					LEFT JOIN $tbl2 e on vc.entidad = e.id_administracion_entidad
+					LEFT JOIN $bd.$tbl3  su on vc.sucursal = su.id_sucursal
 					WHERE vc.activo = 1 $filtro
 					ORDER BY vc.id_ventas_clientes
 				$limit;";
 		$query = $this->db->query($query);
+
 		if($query->num_rows >= 1){
 			 return $query->result_array();
 		}	
 	}
 	function get_cliente_unico($id_cliente){
-		$query = "SELECT * FROM av_ventas_clientes vc WHERE vc.id_ventas_clientes = $id_cliente";
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];
+		$query = "SELECT * FROM $tbl1 vc WHERE vc.id_ventas_clientes = $id_cliente";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -47,11 +55,13 @@ class clientes_model extends Base_Model{
 		}
 	}
 	function update_cliente($data, $id_cliente){
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];
+
 		$condicion = array('id_ventas_clientes !=' => $id_cliente, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_ventas_clientes', $condicion);
+		$existe = $this->row_exist($tbl1, $condicion);
 		if(!$existe){
 			$condicion = "id_ventas_clientes = $id_cliente"; 
-			$query = $this->db->update_string('av_ventas_clientes', $data, $condicion);
+			$query = $this->db->update_string($tbl1, $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{
@@ -59,18 +69,12 @@ class clientes_model extends Base_Model{
 		}
 	}
 	function get_existencia_cliente($clave_corta){
-		$query = "SELECT * FROM av_ventas_clientes vc WHERE vc.clave_corta = '$clave_corta'";
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];
+		$query = "SELECT * FROM $tbl1 vc WHERE vc.clave_corta = '$clave_corta'";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
-	}
-	function cat_sucursales(){
-		$query = "SELECT * FROM 00_av_system.sys_sucursales WHERE activo=1";
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}	
 	}
 }

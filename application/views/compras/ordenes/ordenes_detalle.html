@@ -4,12 +4,12 @@
             <td>
             <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
                 <label>{orden_num}: (*)</label>
-                <input id="orden_num" type="text" data-campo="orden_num" class="input-large requerido" value="{orden_num_value}" />
+                <input id="orden_num" type="text" data-campo="orden_num" class="input-large requerido uneditable-input" value="{orden_num_value}" />
             </td>
         </tr>
         <tr>
             <td>
-                <label>{razon_social}: (*)</label>
+                <label>{proveedor}: (*)</label>
                 {list_proveedores}
             </td>
         </tr>    
@@ -17,6 +17,12 @@
             <td>
                 <label>{descripcion}:</label>
                 <textarea id="descripcion" data-campo="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{sucursal}:</label>
+                {list_sucursales}
             </td>
         </tr>
         <tr>

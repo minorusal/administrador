@@ -104,9 +104,9 @@ $route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/
 $route['administracion/sucursales/listado_sucursales']         = 'administracion/sucursales/listado_sucursales';
 $route['administracion/sucursales/listado_sucursales/(:num)']  = 'administracion/sucursales/listado_sucursales/$1';*/
 
-$route['administracion/catalogos/sucursales']                   	     = 'administracion/sucursales/index';
-$route['administracion/catalogos/sucursales/listado_sucursales']         = 'administracion/sucursales/listado_sucursales';
-$route['administracion/catalogos/sucursales/listado_sucursales/(:num)']  = 'administracion/sucursales/listado_sucursales/$1';
+$route['administracion/catalogos_generales/sucursales']                   	       = 'administracion/sucursales/index';
+$route['administracion/catalogos_generales/sucursales/listado_sucursales']         = 'administracion/sucursales/listado_sucursales';
+$route['administracion/catalogos_generales/sucursales/listado_sucursales/(:num)']  = 'administracion/sucursales/listado_sucursales/$1';
 
 /*Catalogo de clientes*/
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';

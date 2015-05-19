@@ -236,7 +236,7 @@ class Base_Controller extends CI_Controller {
 	       	$bool         = false;
 	       	$lang_item    = "";
 	       	$class_clik   = "";
-	       	if(in_array(strtolower($item), $uri)){
+	       	if(in_array(strtolower(str_replace(' ','_', $item)), $uri)){
 	        	$active  = "active";
 	        	$bool    = true;
 	        } 
@@ -252,7 +252,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $item;//$this->lang_item($item)//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
+	        $lang_item = $this->lang_item($item);//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
     		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";

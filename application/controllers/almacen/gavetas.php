@@ -183,6 +183,8 @@ class gavetas extends Base_Controller
         $tabData["nombre_gavetas"]       = $this->lang_item("gaveta");
 		$tabData["cvl_corta"]        	 = $this->lang_item("cvl_corta");
 		$tabData["descrip"]         	 = $this->lang_item("descripcion");
+		$tabData["ultima_modificacion"]  = $this->lang_item("ultima_modificacion");
+		$tabData["mod_por"]              = $this->lang_item("modificado_por");
 		$tabData["registro_por"]    	 = $this->lang_item("registro_por");
 		$tabData["fecha_registro"]       = $this->lang_item("fecha_registro");
 		$tabData["list_almacen"]         = $almacenes;
@@ -192,10 +194,16 @@ class gavetas extends Base_Controller
         $tabData['gaveta']               = $detalle[0]['gavetas'];
 		$tabData['clave_corta']          = $detalle[0]['clave_corta'];
         $tabData['descripcion']          = $detalle[0]['descripcion'];
-        $tabData['timestamp']            = $detalle[0]['timestamp'];
-        $tabData['button_save']          = $btn_save;
+        $tabData['ult_modificacion']     = $detalle[0]['edit_timestamp'];
+
         $this->load_database('global_system');
         $this->load->model('users_model');
+
+        $usuario_modifico                = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        $tabData['modificado_por']		 = text_format_tpl($usuario_modifico[0]['name'],"u");
+        $tabData['timestamp']            = $detalle[0]['timestamp'];
+        $tabData['button_save']          = $btn_save;
+
         $usuario_registro                = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']    	 = $this->lang_item("registro_por",false);
         $tabData['usuario_registro']	 = text_format_tpl($usuario_registro[0]['name'],"u");
@@ -225,6 +233,8 @@ class gavetas extends Base_Controller
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
 						,'id_almacen_pasillos'	    => $this->ajax_post('id_pasillo')
+						,'edit_timestamp'			=> $this->timestamp()
+						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data_gaveta($sqlData);
 			if($insert)

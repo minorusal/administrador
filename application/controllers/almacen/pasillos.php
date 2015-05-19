@@ -173,7 +173,6 @@ class pasillos extends Base_Controller
 					,'selected' => $detalle[0]['id_almacen_almacenes']
 					);
 		$almacenes    = dropdown_tpl($almacenes_array);
-		//$gavetas      = dropdown_tpl($this->db_model->db_get_data_gaveta('','','',false), $detalle[0]['id_almacen_gavetas'], 'id_almacen_gavetas', array('gavetas'),"lts_gavetas", "");
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_pasillo']            = $id_almacen_pasillos;
@@ -184,16 +183,20 @@ class pasillos extends Base_Controller
 		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
 		$tabData["list_almacen"]          = $almacenes;
 		$tabData["almacen"]               = $this->lang_item("almacen");
-		//$tabData["list_gaveta"]           = $gavetas;
-		//$tabData["gaveta"]                = $this->lang_item("gavetas");
+		$tabData["ultima_modificacion"]   = $this->lang_item("ultima_modificacion");
+		$tabData["mod_por"]               = $this->lang_item("modificado_por");
         $tabData['pasillo']               = $detalle[0]['pasillos'];
 		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
         $tabData['descripcion']           = $detalle[0]['descripcion'];
-        $tabData['timestamp']             = $detalle[0]['timestamp'];
-        $tabData['button_save']           = $btn_save;
-        
+        $tabData['ult_modificacion']      = $detalle[0]['edit_timestamp'];
+
         $this->load_database('global_system');
         $this->load->model('users_model');
+
+        $usuario_modifico                 = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        $tabData['modificado_por']		  = text_format_tpl($usuario_modifico[0]['name'],"u");
+        $tabData['timestamp']             = $detalle[0]['timestamp'];
+        $tabData['button_save']           = $btn_save;
         
         $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
@@ -220,7 +223,8 @@ class pasillos extends Base_Controller
 						,'clave_corta' 				=> $this->ajax_post('clave_corta')
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
-						//,'id_almacen_gavetas'	    => $this->ajax_post('id_gaveta')
+						,'edit_timestamp'			=> $this->timestamp()
+						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data_pasillo($sqlData);
 			if($insert){

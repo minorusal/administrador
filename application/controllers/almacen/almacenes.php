@@ -10,7 +10,6 @@ class almacenes extends Base_Controller
 	private $path;
 	private $icon;
 
-
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;
 
@@ -187,28 +186,50 @@ class almacenes extends Base_Controller
 		$tipos                 = dropdown_tpl($tipos_array);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
-        $tabData['id_almacen']            = $id_almacen_almacenes;
-        $tabData["nombre_almacen"]        = $this->lang_item("almacen");
-		$tabData["cvl_corta"]        	  = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	  = $this->lang_item("descripcion");
-		$tabData["registro_por"]    	  = $this->lang_item("registro_por");
-		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
-		$tabData["list_sucursal"]         = $sucursales;
-		$tabData["sucursal"]              = $this->lang_item("sucursal");
-		$tabData["list_tipo"]             = $tipos;
-		$tabData["tipo"]                  = $this->lang_item("tipo");
-        $tabData['almacen']               = $detalle[0]['almacenes'];
-		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
-        $tabData['descripcion']           = $detalle[0]['descripcion'];
-        $tabData['timestamp']             = $detalle[0]['timestamp'];
-        $tabData['button_save']           = $btn_save;
-        
+        $tabData['id_almacen']             = $id_almacen_almacenes;
+        $tabData["nombre_almacen"]         = $this->lang_item("almacen");
+		$tabData["cvl_corta"]        	   = $this->lang_item("cvl_corta");
+		$tabData["descrip"]         	   = $this->lang_item("descripcion");
+		$tabData["ultima_modificacion"]    = $this->lang_item("ultima_modificacion");
+		$tabData["mod_por"]                = $this->lang_item("modificado_por");
+		$tabData["registro_por"]    	   = $this->lang_item("registro_por");
+		$tabData["fecha_registro"]         = $this->lang_item("fecha_registro");
+		$tabData["list_sucursal"]          = $sucursales;
+		$tabData["sucursal"]               = $this->lang_item("sucursal");
+		$tabData["list_tipo"]              = $tipos;
+		$tabData["tipo"]                   = $this->lang_item("tipo");
+        $tabData['almacen']                = $detalle[0]['almacenes'];
+		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
+        $tabData['descripcion']            = $detalle[0]['descripcion'];
+        $tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['val_fecha_registro']     =  $detalle[0]['timestamp'];
+        $tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
+
         $this->load_database('global_system');
         $this->load->model('users_model');
-        
-        $usuario_registro                 = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
-        $tabData['registro_por']    	  = $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	  = text_format_tpl($usuario_registro[0]['name'],"u");
+
+        $usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+        if($detalle[0]['edit_id_usuario'])
+        {
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+        }
+        else
+        {
+        	$usuario_name = '';
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+        }
+
+        $tabData['button_save']           = $btn_save;
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
+
 		$uri_view   					  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
@@ -237,6 +258,8 @@ class almacenes extends Base_Controller
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_sucursal'				=> $this->ajax_post('id_sucursal')
 						,'id_almacen_tipos'			=> $this->ajax_post('id_tipo')
+						,'edit_timestamp'			=> $this->timestamp()
+						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)
@@ -328,13 +351,13 @@ class almacenes extends Base_Controller
 			$sucursal  = $this->ajax_post('id_sucursal');
 			$tipo  = $this->ajax_post('id_tipo');
 			$descripcion  = $this->ajax_post('descripcion');
-			$data_insert = array('clave_corta'    => $clave_corta,
-								 'descripcion'    => $descripcion,
-								 'id_usuario'     => $this->session->userdata('id_usuario'),
-								 'id_sucursal'    => $sucursal,
+			$data_insert = array('clave_corta'       => $clave_corta,
+								 'descripcion'       => $descripcion,
+								 'id_usuario'        => $this->session->userdata('id_usuario'),
+								 'id_sucursal'       => $sucursal,
 								 'id_almacen_tipos'  => $tipo,
-								 'almacenes'      => $almacen,  
-								 'timestamp'      => $this->timestamp());
+								 'almacenes'         => $almacen,  
+								 'timestamp'         => $this->timestamp());
 			
 			$insert = $this->db_model->db_insert_data($data_insert);
 			

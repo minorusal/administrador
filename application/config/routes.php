@@ -69,9 +69,9 @@ $route['compras/catalogos/marcas/listado_marcas']        = 'compras/marcas/lista
 $route['compras/catalogos/marcas/listado_marcas/(:num)'] = 'compras/marcas/listado_marcas/$1';
 
 /*Catalogo de U.M.*/
-$route['compras/catalogos/um']                   = 'compras/um/index';
-$route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
-$route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
+$route['compras/catalogos/unidad_de_medida']                   = 'compras/um/index';
+$route['compras/catalogos/unidad_de_medida/listado_um']        = 'compras/um/listado_um';
+$route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
 /*Catalogo de Ordenes*/
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';
@@ -95,8 +95,6 @@ $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
 $route['almacen/catalogos/almacenes/gavetas']        = 'almacen/gavetas/listado';
 $route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/$1';
 
-/*VENTAS*/
-
 /*ADMINISTRACION*/
 
 /*Catalogo de Sucursales*/
@@ -108,6 +106,8 @@ $route['administracion/catalogos_generales/sucursales/listado_sucursales/(:num)'
 $route['administracion/control_de_usuarios/usuarios']                   	   = 'administracion/usuarios/index';
 $route['administracion/control_de_usuarios/usuarios/listado_usuarios']         = 'administracion/usuarios/listado_usuarios';
 $route['administracion/control_de_usuarios/usuarios/listado_usuarios/(:num)']  = 'administracion/usuarios/listado_usuarios/$1';
+
+/*VENTAS*/
 
 /*Catalogo de clientes*/
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';

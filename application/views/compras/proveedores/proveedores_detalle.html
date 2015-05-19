@@ -1,4 +1,5 @@
 <div id="formulario" class="stdform">
+        <input id="id_compras_proveedor" data-campo="id_compras_proveedor" type="hidden" name="id_compras_proveedor" value="{id_compras_proveedor}" />
         <p>
             <label>{lbl_rsocial}: (*)</label>
             <input id="rsocial" type="text" data-campo="rsocial" class="input-xlarge requerido" value="{val_rsocial}" />
@@ -64,15 +65,17 @@
         
         <p>
             <label>{lbl_fecha_registro}: </label>
-            <input id="contacto" type="text" data-campo="contacto" class="input-xlarge " readonly value="{val_fecha_registro}" />
+
+            <span id="fecha_registro" type="text" data-campo="fecha_registro" name="timestamp" class=" input-xlarge uneditable-input" >{val_fecha_registro}</span>
         </p>
         <p>
             <label>{lbl_usuario_regitro}: </label>
-            <input id="contacto" type="text" data-campo="contacto" class="input-xlarge " readonly value="{val_usuarios_registro}" />
+         
+            <span id="usuario_regitro" type="text" data-campo="usuario_regitro" name="timestamp" class=" input-xlarge uneditable-input" >{val_usuarios_registro}</span>
         </p>
         <p>
             <label>{lbl_ultima_modiciacion}: </label>
-            <textarea id="contacto" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
         </p>
     
     <div id="update_loader"></div>

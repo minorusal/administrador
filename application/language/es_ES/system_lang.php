@@ -1,5 +1,32 @@
 <?php	
-	
+	$lang['fecha_actual']= 'de %s del %s';
+	$lang['timestamp_string'] = 'de %s del %s a las %s hrs.';
+	$lang['lbl_ultima_modificacion']   = 'Ultima modificacion';
+	$lang['lbl_sin_modificacion']      = 'Sin moficiaciones desde su creacion';
+	$lang['val_ultima_modificacion']   = 'Realizada el %s por %s';
+
+	$lang['lunes']      = 'Lunes';
+	$lang['martes']     = 'Martes';
+	$lang['miercoles']  = 'Miércoles';
+	$lang['jueves']     = 'Jueves';
+	$lang['viernes']    = 'Viernes';
+	$lang['sabado']     = 'Sábado';
+	$lang['domingo']    = 'Domingo';
+	$lang['enero']      = 'Enero';
+	$lang['febrero']    = 'Febrero';
+	$lang['marzo']      = 'Marzo';
+	$lang['abril']      = 'Abril';
+	$lang['mayo']       = 'Mayo';
+	$lang['junio']      = 'Junio';
+	$lang['julio']      = 'Julio';
+	$lang['agosto']     = 'Agosto';
+	$lang['septiembre'] = 'Septiembre';
+	$lang['octubre']    = 'Octubre';
+	$lang['noviembre']  = 'Noviembre';
+	$lang['diciembre']  = 'Diciembre';
+
+
+
 	$lang['msg_searh_fail']          = '<strong>Atencion!</strong><br>No se encontraron coincidencias.';
 	$lang['msg_query_null']          = '<strong>Atencion!</strong><br>No se encontraron registros.';
 	$lang['msg_insert_success']      = '<strong>Exito!</strong><br>El registro de dio de alta correctamente';
@@ -28,8 +55,7 @@
 	$lang['fecha_registro']  = 'Fecha de Registro';
 	$lang['registro_por']    = 'Registrado por';
 
-	$lang['lbl_ultima_modificacion']   = 'Ultima modificacion';
-	$lang['val_ultima_modificacion']   = 'Fecha de ultima modificacion %s realizada por $d';
+
 
 	$lang['lbl_fecha_registro']  = 'Fecha de Registro';
 	$lang['lbl_usuario_regitro'] = 'Registrado por';

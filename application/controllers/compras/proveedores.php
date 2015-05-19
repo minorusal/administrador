@@ -237,25 +237,54 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_comentario']         = $this->lang_item('lbl_comentario', false);
 		
 		$tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-		$tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
 
+		$tabData['val_rsocial']            = $detalle[0]['razon_social'];
+		$tabData['val_nombre']             = $detalle[0]['nombre_comercial'];
+		$tabData['val_clv']                = $detalle[0]['clave_corta'];
+		$tabData['val_rfc']                = $detalle[0]['rfc'];
+		$tabData['val_calle']              = $detalle[0]['calle'];
+		$tabData['val_num_int']            = $detalle[0]['num_int'];
+		$tabData['val_num_ext']            = $detalle[0]['num_ext'];
+		$tabData['val_colonia']            = $detalle[0]['colonia'];
+		$tabData['val_municipio']          = $detalle[0]['municipio'];
+		$tabData['val_cp']                 = $detalle[0]['cp'];
+		$tabData['val_telefono']           = $detalle[0]['telefonos'];
+		$tabData['val_email']              = $detalle[0]['email'];
+		$tabData['val_contacto']           = $detalle[0]['contacto'];
+		$tabData['val_comentario']         = $detalle[0]['comentarios'];
+
+
+
+//id_compras_proveedor
+
+
+		$tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
+		
 		
 
+		$this->load_database('global_system');
+        $this->load->model('users_model');
+    	
+    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+    	$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
+    	$tabData['val_usuarios_registro']  = $usuario_name ;
+	
 
-		$tabData['button_save']      = $btn_save;
-
-
-               
-        /*if($detalle[0]['id_usuario']){
-        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        if($detalle[0]['edit_id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
     	}else{
     		$usuario_name = '';
-    	}*/
-        //$tabData['registro_por']    	= $this->lang_item("registro_por",false);
-      //  $tabData['usuario_registro']	= $usuario_name;
+    		$tabData['val_ultima_modificacion']= $this->lang_item('lbl_sin_modificacion', false);
+    	}
+
+    	$tabData['button_save']            = $btn_save;
+
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}

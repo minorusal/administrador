@@ -77,7 +77,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
-		$dataheader['fecha_hoy']	  = fechaHoy();
+		$dataheader['fecha_hoy']	  = $this->timestamp_complete();
 
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
@@ -236,7 +236,7 @@ class Base_Controller extends CI_Controller {
 	       	$bool         = false;
 	       	$lang_item    = "";
 	       	$class_clik   = "";
-	       	if(in_array(strtolower($item), $uri)){
+	       	if(in_array(strtolower(str_replace(' ','_', $item)), $uri)){
 	        	$active  = "active";
 	        	$bool    = true;
 	        } 
@@ -252,7 +252,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $item;//$this->lang_item($item)//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
+	        $lang_item = $this->lang_item($item);//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
     		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
@@ -349,6 +349,88 @@ class Base_Controller extends CI_Controller {
     public function timestamp(){
     	return date('Y-m-d H:m:s');
     }
+
+    public function days($index = false){
+		$days[0]= 'lunes';
+		$days[1]= 'martes';
+		$days[2]= 'miercoles';
+		$days[3]= 'jueves';
+		$days[4]= 'viernes';
+		$days[5]= 'sabado';
+		$days[6]= 'domingo';
+
+		if($index){
+			return $days[ltrim($index,'0')];
+		}
+		return $days;
+    }
+    public function months($index = false){
+		$months[0]  = 'enero';
+		$months[1]  = 'febrero';
+		$months[2]  = 'marzo';
+		$months[3]  = 'abril';
+		$months[4]  = 'mayo';
+		$months[5]  = 'junio';
+		$months[6]  = 'julio';
+		$months[7]  = 'agosto';
+		$months[8]  = 'septiembre';
+		$months[9]  = 'octubre';
+		$months[10] = 'noviembre';
+		$months[11] = 'diciembre	';
+
+		if($index){
+			return $months[ltrim($index,'0')];
+		}
+		return $months;
+		
+		
+    }
+    public function timestamp_complete($timestamp = "" , $time = false){
+	// Crea fecha larga i.e: Miércoles 06 de Mayo del 2015
+    	if($timestamp==""){
+			$dia=date("l");
+			if ($dia=="Monday") $dia=$this->lang_item('lunes', false);
+			if ($dia=="Tuesday") $dia=$this->lang_item('martes', false);
+			if ($dia=="Wednesday") $dia=$this->lang_item('miercoles', false);
+			if ($dia=="Thursday") $dia=$this->lang_item('jueves', false);
+			if ($dia=="Friday") $dia=$this->lang_item('viernes', false);
+			if ($dia=="Saturday") $dia=$this->lang_item('sabado', false);
+			if ($dia=="Sunday") $dia=$this->lang_item('domingo', false);
+			$dia2=date("d");
+			$mes=date("F");
+			if ($mes=="January") $mes=$this->lang_item('enero', false);
+			if ($mes=="February") $mes=$this->lang_item('febrero', false);
+			if ($mes=="March") $mes=$this->lang_item('marzo', false);
+			if ($mes=="April") $mes=$this->lang_item('abril', false);
+			if ($mes=="May") $mes=$this->lang_item('mayo', false);
+			if ($mes=="June") $mes=$this->lang_item('junio', false);
+			if ($mes=="July") $mes=$this->lang_item('julio', false);
+			if ($mes=="August") $mes=$this->lang_item('agosto', false);
+			if ($mes=="September")$mes=$this->lang_item('septiembre', false);
+			if ($mes=="October") $mes=$this->lang_item('octubre', false);
+			if ($mes=="November") $mes=$this->lang_item('noviembre', false);
+			if ($mes=="December") $mes=$this->lang_item('diciembre', false);
+			$anio=date("Y");
+
+			if($time){
+				$time = date('H:m:s');
+				return "$dia $dia2 ". sprintf($this->lang_item('timestamp_string', false),$mes, $anio, $time);
+			}
+			return "$dia $dia2 ". sprintf($this->lang_item('fecha_actual', false),$mes, $anio);
+		}else{
+			
+			$days      = $this->days();
+			$timestamp = explode(' ', $timestamp);
+			$time      = $timestamp[1];
+			$date      = explode('-', $timestamp[0]);
+			$day       = $this->lang_item($days[intval(  (date("w",mktime(0,0,0,$date[1],$date[2],$date[0])))-1)]);
+			$month     = $this->lang_item($this->months($date[1]-1));
+			$time      = date('H:m:s');
+			$fecha     =  "$day ".$date[2]." ". sprintf($this->lang_item('timestamp_string', false),$month, $date[0], $time);
+			
+			return $fecha;
+		}
+	}
 
     /**
     * Devuelve el item de idioma con respecto al indice $index

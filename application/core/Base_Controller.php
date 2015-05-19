@@ -82,7 +82,7 @@ class Base_Controller extends CI_Controller {
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
 
-		$datafooter = array();
+		$datafooter = array('anio' => date('Y'));
 		
 		$data = (empty($data)) ? array() : $data;
 		$this->parser->parse('includes/header.html', $dataheader);

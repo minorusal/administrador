@@ -2,10 +2,14 @@
 class catalogos_model extends Base_Model
 {
 	/*ALMACENES*/
-		
+
 	/*Traer información para el listado de los almacenes*/
 	public function db_get_data_almacen($data=array())
 	{
+		// DB Info
+		/*$db1 	= $this->dbinfo[1]['db'];
+		$tbl1 	= $this->dbinfo[1]['av_almacen_almacenes'];*/
+
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -25,6 +29,7 @@ class catalogos_model extends Base_Model
 						,su.sucursal
 						,ti.tipos
 					FROM 00_av_mx.av_almacen_almacenes av
+					
 					LEFT JOIN 00_av_system.sys_sucursales su on su.id_sucursal = av.id_sucursal
 					LEFT JOIN 00_av_mx.av_almacen_tipos ti on ti.id_almacen_tipos = av.id_almacen_tipos
 					WHERE av.activo = 1 $filtro
@@ -91,22 +96,18 @@ class catalogos_model extends Base_Model
 		}	
 	}
 
-
-	/*Obtiene los tipos de almacenes*/
-	public function db_get_data_tipos($limit, $offset, $filtro="", $aplicar_limit = true){
-		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
-		$query = "	SELECT 
-						at.id_almacen_tipos
-						,at.tipos
-					FROM
-						av_almacen_tipos at
-					";
-      	$query = $this->db->query($query);
+	public function db_get_data_tipos($data=array())
+	{
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$limit 	= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query  = "SELECT * FROM av_almacen_tipos at";
+      	$query  = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
-
 
 	/*PASILLOS*/
 	public function db_get_data_pasillo($data=array())

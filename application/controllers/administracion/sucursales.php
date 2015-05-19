@@ -359,7 +359,7 @@ class sucursales extends Base_Controller
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("Sucursales"),
+		$params = array(	'title'   => $this->lang_item("Sucursales"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

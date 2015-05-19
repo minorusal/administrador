@@ -9,7 +9,7 @@ class excel extends PHPExcel{
 	
 	public function generate_xlsx($params = array(), $debug = false){
 		
-		$tittle  = (array_key_exists('tittle',$params)) ? $params['tittle'] : 'IS_XLSX';
+		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
 		$items   = (array_key_exists('items',$params)) ? $params['items'] : false;
 
@@ -17,9 +17,9 @@ class excel extends PHPExcel{
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
 									->setLastModifiedBy("IS Intelligent Solution")
-									->setTitle($tittle)
-									->setSubject($tittle)
-									->setDescription($tittle)
+									->setTitle($title)
+									->setSubject($title)
+									->setDescription($title)
 									->setKeywords("office 2007 openxml");
 
 			$objDrawing = new PHPExcel_Worksheet_Drawing();
@@ -38,7 +38,7 @@ class excel extends PHPExcel{
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
 			$objPHPExcel->getActiveSheet()->getStyle("A1:".chr($countHeaders).'1')->applyFromArray($this->defaultStyle_headers());
-			$objPHPExcel->getActiveSheet()->setCellValue('C1', $tittle);
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', $title);
 	        $objPHPExcel->setActiveSheetIndex(0);
 	        
 	      	$objPHPExcel->getActiveSheet()->fromArray($params['headers'], null, 'A3');
@@ -55,7 +55,7 @@ class excel extends PHPExcel{
 			$objPHPExcel->setActiveSheetIndex(0);
 			if($debug==false){
 				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-				header('Content-Disposition: attachment;filename="'.$tittle.'.xlsx"');
+				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save('php://output');
 				exit;

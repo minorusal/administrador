@@ -218,7 +218,7 @@ class um extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("um"),
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("um"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

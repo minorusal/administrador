@@ -331,7 +331,7 @@ class pasillos extends Base_Controller
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("Pasillos"),
+		$params = array(	'title'   => $this->lang_item("Pasillos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

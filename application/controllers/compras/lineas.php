@@ -227,7 +227,7 @@ class lineas extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("linea"),
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("linea"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

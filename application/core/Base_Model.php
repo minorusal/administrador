@@ -8,11 +8,14 @@ class Base_Model extends CI_Model {
 		$this->dbinfo = $this->dbdata->db_config();
 	}
 
-	public function row_exist($table, $row ){
+	public function row_exist($table, $row, $debug=false){
     	$this->db->select();
 		$this->db->from($table);
 		$this->db->where($row);
 		$query = $this->db->get();
+		if($debug){
+			print_debug($query->result_array());
+		}
 		if($query->num_rows >= 1){
 			return true;
 		}else{

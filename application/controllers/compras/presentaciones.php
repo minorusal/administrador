@@ -228,7 +228,7 @@ class presentaciones extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("presentaciones"),
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("presentaciones"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

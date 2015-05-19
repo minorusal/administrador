@@ -217,7 +217,7 @@ class marcas extends Base_Controller {
 									$this->lang_item("descripcion"));
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("marcas"),
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("marcas"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

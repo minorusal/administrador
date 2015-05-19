@@ -346,7 +346,7 @@ class articulos extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("seccion"),
+		$params = array(	'title'   => $this->lang_item("seccion"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

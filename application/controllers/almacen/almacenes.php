@@ -379,7 +379,7 @@ class almacenes extends Base_Controller
 									$this->lang_item("descripcion"));
 	
 		}
-		$params = array(	'tittle'  => $this->lang_item("Almacenes"),
+		$params = array(	'title'   => $this->lang_item("Almacenes"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

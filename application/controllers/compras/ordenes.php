@@ -99,6 +99,7 @@ class ordenes extends Base_Controller {
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$buttonTPL 		= '';
 		$sqlData = array(
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
@@ -135,6 +136,11 @@ class ordenes extends Base_Controller {
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			// XLS
+			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->path.$seccion).'/export_xlsx?filtro='.base64_encode($filtro)
+							);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
@@ -143,6 +149,7 @@ class ordenes extends Base_Controller {
 		$tabData['tabla']     = $tabla;
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+		$tabData['export']    = button_tpl($buttonTPL);
 
 		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
@@ -332,5 +339,43 @@ class ordenes extends Base_Controller {
 			}
 		}
 		echo json_encode($json_respuesta);
+	}
+
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array('buscar' => $filtro);
+		$list_content = $this->db_model->db_get_data($sqlData);		
+		if($list_content){
+			foreach ($list_content as $value) {
+				$set_data[] = array(
+									 $value['id_compras_orden'],
+									 $value['orden_num'],
+									 $value['descripcion']
+									 // ,
+									 // $value['id_proveedor'],
+									 // $value['id_sucursal'],
+									 // $value['fecha_registro'],
+									 // $value['timestamp']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("ID"),
+									$this->lang_item("orden_num"),
+									$this->lang_item("descripcion")
+									// ,
+									// $this->lang_item("proveedor"),
+									// $this->lang_item("sucursal"),
+									// $this->lang_item("fecha_registro"),
+									// $this->lang_item("timestamp")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("ordenes"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
 	}
 }

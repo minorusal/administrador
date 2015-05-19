@@ -66,3 +66,54 @@ function detalle(id_compras_proveedor){
         }
     });
 }
+
+function insert(){		
+	var btn          = jQuery("button[name='save']");
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/proveedores/insert",
+		dataType: "json",
+		data : objData,
+		beforeSend : function(){
+			imgLoader("#registro_loader");
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			if(data.id==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
+			
+		}
+	})
+}
+
+function actualizar(){	
+		jQuery('#mensajes_update').hide();		
+		var btn          = jQuery("button[name='update']");
+		btn.attr('disabled','disabled');
+  		// Obtiene campos en formulario
+  		var objData = formData('#formulario');
+  		objData['incomplete'] = values_requeridos();
+  		// alert(dump_var(objData));
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/proveedores/actualizar",
+			dataType: "json",			
+			data : objData,
+			beforeSend : function(){
+				imgLoader("#update_loader");
+			},
+			success : function(data){
+				btn.removeAttr('disabled');
+				jQuery("#update_loader").html('');
+			    jQuery("#mensajes_update").html(data.contenido).show('slow');
+			}
+		})
+}

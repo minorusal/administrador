@@ -4,7 +4,7 @@ class um extends Base_Controller {
 
 	var $uri_modulo     = 'compras/';
 	var $uri_submodulo  = 'catalogos';
-	var $uri_seccion    = 'um';
+	var $uri_seccion    = 'unidad_de_medida';
 	var $view_content   = 'content';
 	
 	public function __construct(){
@@ -82,7 +82,7 @@ class um extends Base_Controller {
 			$tabla = $this->table->generate($tbl_data);
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
-								'href'       => base_url($this->uri_modulo.$this->uri_seccion.'/export_xlsx?filtro='.base64_encode($filtro))
+								'href'       => base_url($this->uri_modulo.'/um/export_xlsx?filtro='.base64_encode($filtro))
 								);
 
 		}else{
@@ -104,7 +104,7 @@ class um extends Base_Controller {
 	}
 	public function detalle_um(){
 
-		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/um_edit';
+		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/um/um_edit';
 		$id_um                 = $this->ajax_post('id_um');
 		$detalle_linea         = $this->catalogos_model->get_um_unico($id_um);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_um' , 'onclick'=>'update_um()','content' => $this->lang_item("btn_guardar") ));
@@ -115,6 +115,7 @@ class um extends Base_Controller {
 		$data_tab_3["descrip"]         	     = $this->lang_item("descripcion");
 		$data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
 		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
+		$data_tab_3["lbl_ultima_modiciacion"]= $this->lang_item('lbl_ultima_modificacion', false);
         $data_tab_3['um']                    = $detalle_linea[0]['um'];
 		$data_tab_3['clave_corta']           = $detalle_linea[0]['clave_corta'];
         $data_tab_3['descripcion']           = $detalle_linea[0]['descripcion'];
@@ -123,14 +124,22 @@ class um extends Base_Controller {
         
         $this->load_database('global_system');
         $this->load->model('users_model');
-        	
+        
+        if($detalle_linea[0]['edit_id_usuario']){
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle_linea[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$data_tab_3['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle_linea[0]['edit_timestamp']), $usuario_name);
+    	}else{
+    		$usuario_name = '';
+    		$data_tab_3['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+    	}
         $usuario_registro               = $this->users_model->search_user_for_id($detalle_linea[0]['id_usuario']);
         $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
 	public function agregar_um(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/um_save';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/um/um_save';
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_um','onclick'=>'insert_um()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
@@ -186,7 +195,9 @@ class um extends Base_Controller {
 			
 			$data_update      = array('um'          => $um,
 									  'clave_corta'    => $clave_corta, 
-									  'descripcion'    => $descripcion);
+									  'descripcion'    => $descripcion
+									  ,'edit_id_usuario' => $this->session->userdata('id_usuario')
+									  ,'edit_timestamp'  => $this->timestamp());
 
 
 			$insert = $this->catalogos_model->update_um($data_update,$id_um);
@@ -218,7 +229,7 @@ class um extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("catalogo", false).$this->lang_item("um"),
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("um"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

@@ -82,7 +82,7 @@ class Base_Controller extends CI_Controller {
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
 
-		$datafooter = array();
+		$datafooter = array('anio' => date('Y'));
 		
 		$data = (empty($data)) ? array() : $data;
 		$this->parser->parse('includes/header.html', $dataheader);
@@ -252,7 +252,7 @@ class Base_Controller extends CI_Controller {
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $this->lang_item(str_replace(' ','_', $item));//<--Si se activa esta funcion se alentiza la carga de la vista "optimizar!";
+	        $lang_item = $this->lang_item(str_replace(' ','_', $item));//<--Si se activa esta funcion se alentiza la carga de la vista "OPTIMIZAR!!!!!!!";
     		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";

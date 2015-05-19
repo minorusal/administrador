@@ -93,7 +93,6 @@ class proveedores extends Base_Controller {
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
-
 		if($total_rows>0){
 			foreach ($list_content as $value) {
 				// Evento de enlace

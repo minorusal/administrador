@@ -1,6 +1,4 @@
-    
-    <div >
-        <div style="float:left">
+<div id="formulario" class="stdform">
             <input id="id_linea" type="hidden" name="id_linea" value="{id_linea}" />
             <p>
                 <label>{nombre_linea}: (*)</label>
@@ -18,15 +16,18 @@
                 <label>{registro_por}:</label>
                 <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
             </p>
-        </div>
-        
-    </div>
-    <div style="clear:both">
-        <p>
-            <label>{descrip}:</label>
-            <textarea id="descripcion" name="descripcion"   class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
-        </p>
+
+            <p>
+                <label>{descrip}:</label>
+                <textarea id="descripcion" name="descripcion"   class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
+            </p>
+            <p>
+                <label>{lbl_ultima_modiciacion}: </label>
+                <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            </p>
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
          {button_save}
-    </div>
+    </p>
+</div>

@@ -351,13 +351,13 @@ class Base_Controller extends CI_Controller {
     }
 
     public function days($index = false){
-		$days[0]= 'lunes';
-		$days[1]= 'martes';
-		$days[2]= 'miercoles';
-		$days[3]= 'jueves';
-		$days[4]= 'viernes';
-		$days[5]= 'sabado';
-		$days[6]= 'domingo';
+		$days[0]= $this->lang_item('lunes',false);
+		$days[1]= $this->lang_item('martes',false);
+		$days[2]= $this->lang_item('miercoles',false);
+		$days[3]= $this->lang_item('jueves',false);
+		$days[4]= $this->lang_item('viernes',false);
+		$days[5]= $this->lang_item('sabado',false);
+		$days[6]= $this->lang_item('domingo',false);
 
 		if($index){
 			return $days[ltrim($index,'0')];
@@ -365,18 +365,18 @@ class Base_Controller extends CI_Controller {
 		return $days;
     }
     public function months($index = false){
-		$months[0]  = 'enero';
-		$months[1]  = 'febrero';
-		$months[2]  = 'marzo';
-		$months[3]  = 'abril';
-		$months[4]  = 'mayo';
-		$months[5]  = 'junio';
-		$months[6]  = 'julio';
-		$months[7]  = 'agosto';
-		$months[8]  = 'septiembre';
-		$months[9]  = 'octubre';
-		$months[10] = 'noviembre';
-		$months[11] = 'diciembre	';
+		$months[0]  = $this->lang_item('enero', false);
+		$months[1]  = $this->lang_item('febrero', false);
+		$months[2]  = $this->lang_item('marzo', false);
+		$months[3]  = $this->lang_item('abril', false);
+		$months[4]  = $this->lang_item('mayo', false);
+		$months[5]  = $this->lang_item('junio', false);
+		$months[6]  = $this->lang_item('julio', false);
+		$months[7]  = $this->lang_item('agosto', false);
+		$months[8]  = $this->lang_item('septiembre', false);
+		$months[9]  = $this->lang_item('octubre', false);
+		$months[10] = $this->lang_item('noviembre', false);
+		$months[11] = $this->lang_item('diciembre	', false);
 
 		if($index){
 			return $months[ltrim($index,'0')];
@@ -423,8 +423,8 @@ class Base_Controller extends CI_Controller {
 			$timestamp = explode(' ', $timestamp);
 			$time      = $timestamp[1];
 			$date      = explode('-', $timestamp[0]);
-			$day       = $this->lang_item($days[intval(  (date("w",mktime(0,0,0,$date[1],$date[2],$date[0])))-1)]);
-			$month     = $this->lang_item($this->months($date[1]-1));
+			$day       = $days[intval(  (date("w",mktime(0,0,0,$date[1],$date[2],$date[0])))-1)];
+			$month     = $this->months($date[1]-1);
 			$time      = date('H:m:s');
 			$fecha     =  "$day ".$date[2]." ". sprintf($this->lang_item('timestamp_string', false),$month, $date[0], $time);
 			

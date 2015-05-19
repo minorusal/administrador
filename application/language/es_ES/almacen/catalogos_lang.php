@@ -13,14 +13,16 @@
 
 	/*ALMACENES*/
 
-	$lang['almacenes']         = 'almacenes';
-	$lang['agregar']           = 'nuevo almacen';
-	$lang['lista_sucursales']  = "Presentación";
-	$lang['listado']           = 'almacenes';
-	$lang['detalle']           = 'detalle';
-	$lang['nombre_almacenes']  = 'almacen';
-	$lang['sucursal']          = 'sucursal';
-	$lang['tipo']              = 'tipo';
+	$lang['almacenes']            = 'almacenes';
+	$lang['agregar']              = 'nuevo almacen';
+	$lang['lista_sucursales']     = "Presentación";
+	$lang['listado']              = 'almacenes';
+	$lang['detalle']              = 'detalle';
+	$lang['nombre_almacenes']     = 'almacen';
+	$lang['sucursal']             = 'sucursal';
+	$lang['tipo']                 = 'tipo';
+	$lang['ultima_modificacion']  = 'ultima modificación';
+	$lang['modificado_por']       = 'modificado por';
 
 	/*PASILLOS*/
 

@@ -69,9 +69,9 @@ $route['compras/catalogos/marcas/listado_marcas']        = 'compras/marcas/lista
 $route['compras/catalogos/marcas/listado_marcas/(:num)'] = 'compras/marcas/listado_marcas/$1';
 
 /*Catalogo de U.M.*/
-$route['compras/catalogos/um']                   = 'compras/um/index';
-$route['compras/catalogos/um/listado_um']        = 'compras/um/listado_um';
-$route['compras/catalogos/um/listado_um/(:num)'] = 'compras/um/listado_um/$1';
+$route['compras/catalogos/unidad_de_medida']                   = 'compras/um/index';
+$route['compras/catalogos/unidad_de_medida/listado_um']        = 'compras/um/listado_um';
+$route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
 /*Catalogo de Ordenes*/
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';

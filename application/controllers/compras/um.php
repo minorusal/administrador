@@ -4,7 +4,7 @@ class um extends Base_Controller {
 
 	var $uri_modulo     = 'compras/';
 	var $uri_submodulo  = 'catalogos';
-	var $uri_seccion    = 'um';
+	var $uri_seccion    = 'unidad_de_medida';
 	var $view_content   = 'content';
 	
 	public function __construct(){
@@ -82,7 +82,7 @@ class um extends Base_Controller {
 			$tabla = $this->table->generate($tbl_data);
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
-								'href'       => base_url($this->uri_modulo.$this->uri_seccion.'/export_xlsx?filtro='.base64_encode($filtro))
+								'href'       => base_url($this->uri_modulo.'/um/export_xlsx?filtro='.base64_encode($filtro))
 								);
 
 		}else{
@@ -104,7 +104,7 @@ class um extends Base_Controller {
 	}
 	public function detalle_um(){
 
-		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/um_edit';
+		$uri_view              = $this->uri_modulo.$this->uri_submodulo.'/um/um_edit';
 		$id_um                 = $this->ajax_post('id_um');
 		$detalle_linea         = $this->catalogos_model->get_um_unico($id_um);
 		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'update_um' , 'onclick'=>'update_um()','content' => $this->lang_item("btn_guardar") ));
@@ -130,7 +130,7 @@ class um extends Base_Controller {
 	}
 	public function agregar_um(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/'.$this->uri_seccion.'/um_save';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/um/um_save';
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_um','onclick'=>'insert_um()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 

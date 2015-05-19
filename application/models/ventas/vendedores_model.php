@@ -1,9 +1,17 @@
 <?php
 class vendedores_model extends Base_Model{
 	function get_vendedores($limit, $offset, $filtro="", $aplicar_limit = true){
+
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
+		$tbl2 	= $this->dbinfo[1]['tbl_administracion_entidades'];
+		$tbl3 	= $this->dbinfo[0]['tbl_sucursales'];
+		$bd 	= $this->dbinfo[0]['db'];
+
 		$filtro = ($filtro=="") ? "" : "AND ( 	vv.nombre_vendedor  LIKE '%$filtro%' OR 
-												vv.clave_corta  LIKE '%$filtro%' OR  
-												vv.rfc  LIKE '%$filtro%'  
+												vv.clave_corta  LIKE '%$filtro%' OR
+												vv.rfc            LIKE '%$filtro%' OR 
+												e.entidad         LIKE '%$filtro%' OR
+												su.sucursal       LIKE '%$filtro%' 
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
@@ -11,9 +19,13 @@ class vendedores_model extends Base_Model{
 						vv.nombre_vendedor,
 						vv.clave_corta,
 						vv.rfc,
-						vv.telefonos
+						vv.telefonos,
+						e.entidad,
+						su.sucursal
 					FROM 
-						av_ventas_vendedores vv
+						$tbl1 vv
+					LEFT JOIN $tbl2  e on vv.entidad = e.id_administracion_entidad
+					LEFT JOIN $bd.$tbl3 su on vv.sucursal = su.id_sucursal
 					WHERE vv.activo = 1 $filtro
 					ORDER BY vv.id_ventas_vendedores
 				$limit;";
@@ -23,7 +35,9 @@ class vendedores_model extends Base_Model{
 		}	
 	}
 	function get_existencia_vendedor($clave_corta){
-		$query = "SELECT * FROM av_ventas_vendedores vv WHERE vv.clave_corta = '$clave_corta'";
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
+
+		$query = "SELECT * FROM $tbl1 vv WHERE vv.clave_corta = '$clave_corta'";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -31,7 +45,9 @@ class vendedores_model extends Base_Model{
 		}
 	}
 	function get_vendedor_unico($id_vendedor){
-		$query = "SELECT * FROM av_ventas_vendedores vv WHERE vv.id_ventas_vendedores = $id_vendedor";
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
+
+		$query = "SELECT * FROM $tbl1 vv WHERE vv.id_ventas_vendedores = $id_vendedor";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -39,35 +55,25 @@ class vendedores_model extends Base_Model{
 		}
 	}
 	function insert_vendedor($data){
-		$query = $this->db->insert_string('av_ventas_vendedores', $data);
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
+
+		$query = $this->db->insert_string($tbl1, $data);
 		$query = $this->db->query($query);
 
 			return $query;
 	}
-	function catalogo_entidades(){
-		$query = "SELECT * FROM av_administracion_entidades WHERE activo=1";
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}	
-	}
 	function update_vendedor($data, $id_vendedor){
+		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
+
 		$condicion = array('id_ventas_vendedores !=' => $id_vendedor, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_ventas_vendedores', $condicion);
+		$existe = $this->row_exist($tbl1 , $condicion);
 		if(!$existe){
 			$condicion = "id_ventas_vendedores = $id_vendedor"; 
-			$query = $this->db->update_string('av_ventas_vendedores', $data, $condicion);
+			$query = $this->db->update_string($tbl1, $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{
 			return false;
 		}
-	}
-	function cat_sucursales(){
-		$query = "SELECT * FROM 00_av_system.sys_sucursales WHERE activo=1";
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}	
 	}
 }

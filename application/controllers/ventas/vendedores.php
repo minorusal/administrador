@@ -86,7 +86,6 @@ class vendedores extends Base_Controller {
 			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'vendedores_save', $data_1, true);
 		}
 	}
-
 	public function listado_vendedores($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -110,7 +109,9 @@ class vendedores extends Base_Controller {
 									'nombre_vendedor'  => tool_tips_tpl($value['nombre_vendedor'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'     => $value['clave_corta'],
 									'rfc'  			  => $value['rfc'],
-									'telefonos'       => $value['telefonos']);
+									'telefonos'       => $value['telefonos'],
+									'entidad'       => $value['entidad'],
+									'sucursal'       => $value['sucursal']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
@@ -119,7 +120,9 @@ class vendedores extends Base_Controller {
 										$this->lang_item("nombre_vendedor"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("rfc_vendedores"),
-										$this->lang_item("telefonos"));
+										$this->lang_item("telefonos"),
+										$this->lang_item("entidad"),
+										$this->lang_item("sucursal"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
 		}else{
@@ -164,6 +167,7 @@ class vendedores extends Base_Controller {
 									 'telefonos'      => $this->ajax_post('telefonos'),
 									 'email'          => $this->ajax_post('email'),
 									 'timestamp'      => $this->timestamp(),
+									 'id_usuario'     => $this->session->userdata('id_usuario'),
 									 'activo'         => 1);
 
 				$insert = $this->vendedores_model->insert_vendedor($data_insert);

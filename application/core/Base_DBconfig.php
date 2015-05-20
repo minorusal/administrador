@@ -37,6 +37,7 @@ class Base_DBconfig extends Base_Controller {
 						// Base de datos
 					 	 'db'								=>	'00_av_mx'
 					 	 // Tablas
+					 	,'tbl_administracion_descuentos'	=>	'av_administracion_descuentos'
 					 	,'tbl_administracion_entidades'		=>	'av_administracion_entidades'
 					 	,'tbl_administracion_forma_pago'	=>	'av_administracion_forma_pago'
 					 	,'tbl_administracion_impuestos'  	=>	'av_administracion_impuestos'

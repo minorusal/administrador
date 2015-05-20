@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class impuestos extends Base_Controller
+class descuentos extends Base_Controller
 {
 	private $modulo;
 	private $submodulo;
@@ -17,9 +17,9 @@ class impuestos extends Base_Controller
 		parent::__construct();
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'catalogos';
-		$this->seccion          = 'impuestos';
-		$this->icon 			= 'fa fa-tasks'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/impuestos
+		$this->seccion          = 'descuentos';
+		$this->icon 			= 'fa fa-tag'; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/descuentos
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -32,7 +32,6 @@ class impuestos extends Base_Controller
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
-
 	public function config_tabs()
 	{
 		$tab_1 	= $this->tab1;
@@ -62,7 +61,6 @@ class impuestos extends Base_Controller
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 		return $config_tab;
 	}
-
 	private function uri_view_principal()
 	{
 		return $this->modulo.'/'.$this->view_content;
@@ -109,12 +107,12 @@ class impuestos extends Base_Controller
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_administracion_impuestos'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_administracion_descuentos'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_administracion_impuestos'],
-									'impuesto'      => tool_tips_tpl($value['impuesto'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'valor'         => $value['valor'],
+				$tbl_data[] = array('id'            => $value['id_administracion_descuentos'],
+									'impuesto'      => tool_tips_tpl($value['descuento'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'valor'         => $value['valor_descuento'],
 									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
@@ -123,7 +121,7 @@ class impuestos extends Base_Controller
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
-										$this->lang_item("impuesto"),
+										$this->lang_item("descuento"),
 										$this->lang_item("valor"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
@@ -158,8 +156,8 @@ class impuestos extends Base_Controller
 
 	public function detalle()
 	{
-		$id_impuesto                 = $this->ajax_post('id_impuesto');
-		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_impuesto);
+		$id_descuento                = $this->ajax_post('id_descuento');
+		$detalle  	                 = $this->db_model->get_orden_unico_descuento($id_descuento);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData        = array(
@@ -168,15 +166,15 @@ class impuestos extends Base_Controller
 			,'limit'      	=> 0
 		);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
-        $tabData['id_impuesto']            = $id_impuesto;
-        $tabData["nombre_impuesto"]        = $this->lang_item("nombre_impuesto");
+        $tabData['id_descuento']           = $id_descuento;
+        $tabData["nombre_descuento"]       = $this->lang_item("nombre_descuento");
 		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
 		$tabData["desc"]                   = $this->lang_item("descripcion");
 		$tabData["val"]                    = $this->lang_item("valor");
-        $tabData['impuesto']               = $detalle[0]['impuesto'];
+        $tabData['descuento']              = $detalle[0]['descuento'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
-        $tabData["valor"]                  = $detalle[0]['valor'];
+        $tabData["valor_descuento"]        = $detalle[0]['valor_descuento'];
         $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
         $tabData['val_fecha_registro']     = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
@@ -223,13 +221,13 @@ class impuestos extends Base_Controller
 		else
 		{
 			$sqlData = array(
-						 'id_administracion_impuestos'	     => $this->ajax_post('id_impuesto')
-						,'impuesto'          => $this->ajax_post('impuesto')
-						,'valor'             => $this->ajax_post('valor')
-						,'clave_corta' 	     => $this->ajax_post('clave_corta')
-						,'descripcion'	     => $this->ajax_post('descripcion')
-						,'edit_timestamp'    => $this->timestamp()
-						,'edit_id_usuario'	 => $this->session->userdata('id_usuario')
+						 'id_administracion_descuentos' => $this->ajax_post('id_descuento')
+						,'descuento'          		    => $this->ajax_post('descuento')
+						,'valor_descuento'             	=> $this->ajax_post('valor_descuento')
+						,'clave_corta' 	     		    => $this->ajax_post('clave_corta')
+						,'descripcion'	     		    => $this->ajax_post('descripcion')
+						,'edit_timestamp'    	   	    => $this->timestamp()
+						,'edit_id_usuario'	 		    => $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)
@@ -255,8 +253,8 @@ class impuestos extends Base_Controller
 	}
 
 	public function agregar()
-	{							#administracion/catalogos_generales/impuestos/impuestos_save
-		$seccion       = $this->modulo.'/'.$this->seccion.'/impuestos_save';
+	{							#administracion/catalogos_generales/descuentos/descuentos_save
+		$seccion       = $this->modulo.'/'.$this->seccion.'/descuentos_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
@@ -265,14 +263,14 @@ class impuestos extends Base_Controller
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["nombre_impuesto"]  = $this->lang_item("nombre_impuesto");
-		$tab_1["impuesto"]         = $this->lang_item("impuesto");
-		$tab_1["valor"]            = $this->lang_item("valor");
-		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
-		$tab_1["desc"]             = $this->lang_item("descripcion");
+		$tab_1["nombre_descuento"]  = $this->lang_item("nombre_descuento");
+		$tab_1["descuento"]         = $this->lang_item("descuento");
+		$tab_1["valor"]             = $this->lang_item("valor");
+		$tab_1["cvl_corta"]         = $this->lang_item("clave_corta");
+		$tab_1["desc"]              = $this->lang_item("descripcion");
 
-        $tab_1['button_save']      = $btn_save;
-        $tab_1['button_reset']     = $btn_reset;
+        $tab_1['button_save']       = $btn_save;
+        $tab_1['button_reset']      = $btn_reset;
 
 
         if($this->ajax_post(false))
@@ -285,23 +283,23 @@ class impuestos extends Base_Controller
 		}
 	}
 
-	public function insert_impuesto(){
+	public function insert_descuento(){
 		$incomplete  = $this->ajax_post('incomplete');
 
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			$impuesto        = $this->ajax_post('impuesto');
-			$valor           = $this->ajax_post('valor');
+			$impuesto        = $this->ajax_post('descuento');
+			$valor           = $this->ajax_post('valor_descuento');
 			$clave_corta     = $this->ajax_post('clave_corta');
 			$descripcion     = $this->ajax_post('descripcion');
-			$data_insert     = array('impuesto' => $impuesto,
-								 'valor'        => $valor,
-								 'clave_corta'  => $clave_corta,
-								 'descripcion'  => $descripcion,
-								 'id_usuario'   => $this->session->userdata('id_usuario'),  
-								 'registro'     => $this->timestamp());
+			$data_insert     = array('descuento'   => $impuesto,
+								 'valor_descuento' => $valor,
+								 'clave_corta'     => $clave_corta,
+								 'descripcion'     => $descripcion,
+								 'id_usuario'      => $this->session->userdata('id_usuario'),  
+								 'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
 			if($insert){
@@ -326,21 +324,21 @@ class impuestos extends Base_Controller
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['impuesto'],
-									 $value['valor'],
+									 $value['descuento'],
+									 $value['valor_descuento'],
 									 $value['clave_corta'],
 									 $value['descripcion']);
 			}
 			
 			$set_heading = array(
-									$this->lang_item("impuesto"),
-									$this->lang_item("valor"),
+									$this->lang_item("descuento"),
+									$this->lang_item("valor_descuento"),
 									$this->lang_item("clave_corta"),
 									$this->lang_item("descripcion"));
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Impuestos"),
+		$params = array(	'title'   => $this->lang_item("Descuentos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

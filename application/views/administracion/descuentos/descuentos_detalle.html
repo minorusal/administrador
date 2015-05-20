@@ -1,29 +1,25 @@
 <div id="formulario" class="stdform">
     <div >
         <div style="float:left">
-            <input id="id_gaveta" type="hidden" name="id_gaveta" value="{id_gaveta}" />
+            <input id="id_descuento" type="hidden" name="id_descuento" value="{id_descuento}" />
             <p>
-                <label>{nombre_gavetas}: (*)</label>
-                <input id="gaveta" type="text" name="gaveta" class="input-xlarge requerido" value="{gaveta}" />
+                <label>{nombre_descuento}: (*)</label>
+                <input id="descuento" type="text" name="descuento" class="input-xlarge requerido" value="{descuento}" />
+            </p>
+            <p>
+                <label>{val}: (*)</label>
+                <input id="valor_descuento" type="text" name="valor_descuento" class="input-xlarge requerido" value="{valor_descuento}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
-            </p>
-            <p>
-                <label>{almacen}: (*)</label>
-                {list_almacen}
-            </p>
-             <p>
-                <label>{pasillo}:</label>
-                {list_pasillo}
             </p>
         </div>
         
     </div>
     <div style="clear:both">
         <p>
-            <label>{descrip}:</label>
+            <label>{desc}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
         <p>
@@ -40,8 +36,8 @@
         </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
-    <p class="stdformbutton">
-        {button_save}
+    <p class="stdformbutton"> 
+       {button_save}
     </p>
     </div>
 </div>

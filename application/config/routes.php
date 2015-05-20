@@ -118,6 +118,11 @@ $route['administracion/catalogos_generales/impuestos']                   	     =
 $route['administracion/catalogos_generales/impuestos/listado_impuestos']         = 'administracion/impuestos/listado_impuestos';
 $route['administracion/catalogos_generales/impuestos/listado_impuestos/(:num)']  = 'administracion/impuestos/listado_impuestos/$1';
 
+/*Catalogo de Descuentos*/
+$route['administracion/catalogos_generales/descuentos']                   	     = 'administracion/descuentos/index';
+$route['administracion/catalogos_generales/impuestos/listado_descuentos']         = 'administracion/descuentos/listado_descuentos';
+$route['administracion/catalogos_generales/impuestos/listado_descuentos/(:num)']  = 'administracion/descuentos/listado_descuentos/$1';
+
 /*VENTAS*/
 
 /*Catalogo de clientes*/

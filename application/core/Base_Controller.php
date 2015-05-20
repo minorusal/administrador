@@ -347,7 +347,7 @@ class Base_Controller extends CI_Controller {
     * @return string
     */
     public function timestamp(){
-    	return date('Y-m-d H:m:s');
+    	return date('Y-m-d H:i:s');
     }
 
     public function days($index = false){

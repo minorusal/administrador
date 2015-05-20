@@ -97,15 +97,26 @@ $route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/
 
 /*ADMINISTRACION*/
 
+/*
+ * CONTROL DE USUARIOS
+ */
+/*Catalogo de Usuarios*/
+$route['administracion/control_de_usuarios/usuarios']                   	   = 'administracion/usuarios/index';
+$route['administracion/control_de_usuarios/usuarios/listado_usuarios']         = 'administracion/usuarios/listado_usuarios';
+$route['administracion/control_de_usuarios/usuarios/listado_usuarios/(:num)']  = 'administracion/usuarios/listado_usuarios/$1';
+
+/*
+ * CATALOGOS GENERALES
+ */
 /*Catalogo de Sucursales*/
 $route['administracion/catalogos_generales/sucursales']                   	       = 'administracion/sucursales/index';
 $route['administracion/catalogos_generales/sucursales/listado_sucursales']         = 'administracion/sucursales/listado_sucursales';
 $route['administracion/catalogos_generales/sucursales/listado_sucursales/(:num)']  = 'administracion/sucursales/listado_sucursales/$1';
 
-/*Catalogo de Usuarios*/
-$route['administracion/control_de_usuarios/usuarios']                   	   = 'administracion/usuarios/index';
-$route['administracion/control_de_usuarios/usuarios/listado_usuarios']         = 'administracion/usuarios/listado_usuarios';
-$route['administracion/control_de_usuarios/usuarios/listado_usuarios/(:num)']  = 'administracion/usuarios/listado_usuarios/$1';
+/*Catalogo de Impuestos*/
+$route['administracion/catalogos_generales/impuestos']                   	     = 'administracion/impuestos/index';
+$route['administracion/catalogos_generales/impuestos/listado_impuestos']         = 'administracion/impuestos/listado_impuestos';
+$route['administracion/catalogos_generales/impuestos/listado_impuestos/(:num)']  = 'administracion/impuestos/listado_impuestos/$1';
 
 /*VENTAS*/
 

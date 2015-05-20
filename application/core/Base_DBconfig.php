@@ -17,6 +17,7 @@ class Base_DBconfig extends Base_Controller {
 					 	 // Tablas
 					 	,'tbl_claves'		=>	'sys_claves'
 					 	,'tbl_empresas'		=>	'sys_empresas'
+					 	,'tbl_impuestos'	=>	'sys_impuestos'
 					 	,'tbl_modulos'		=>	'sys_modulos'
 					 	,'tbl_paises'		=>	'sys_paises'
 					 	,'tbl_perfiles'		=>	'sys_perfiles'

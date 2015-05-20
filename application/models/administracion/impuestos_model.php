@@ -7,8 +7,8 @@ class impuestos_model extends Base_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->db1 = $this->dbinfo[0]['db'];
-		$this->tbl1 = $this->dbinfo[0]['tbl_impuestos'];
+		$this->db1  = $this->dbinfo[1]['db'];
+		$this->tbl1 = $this->dbinfo[1]['tbl_administracion_impuestos'];
 	}
 	//Función que obtiene toda la información de la tabla sys_impuestos
 	public function db_get_data($data=array())
@@ -28,7 +28,7 @@ class impuestos_model extends Base_Model
 						 *
 					FROM $tbl im
 					WHERE im.activo = 1 $filtro
-					GROUP BY im.id_impuesto ASC
+					GROUP BY im.id_administracion_impuestos ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -38,10 +38,10 @@ class impuestos_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de la tabla sys_impuestos*/
-	public function get_orden_unico_sucursal($id_impuesto)
+	public function get_orden_unico_sucursal($id_administracion_impuestos)
 	{
 		$tbl   = $this->db1.'.'.$this->tbl1;
-		$query = "SELECT * FROM $tbl WHERE id_impuesto = $id_impuesto";
+		$query = "SELECT * FROM $tbl WHERE id_administracion_impuestos = $id_administracion_impuestos";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -52,11 +52,11 @@ class impuestos_model extends Base_Model
 	public function db_update_data($data=array())
 	{
 		$tbl       = $this->db1.'.'.$this->tbl1;
-		$condicion = array('id_impuesto !=' => $data['id_impuesto'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion = array('id_administracion_impuestos !=' => $data['id_administracion_impuestos'], 'clave_corta = '=> $data['clave_corta']); 
 		$existe    = $this->row_exist($tbl, $condicion);
 		if(!$existe)
 		{
-			$condicion = "id_impuesto = ".$data['id_impuesto']; 
+			$condicion = "id_administracion_impuestos = ".$data['id_administracion_impuestos']; 
 			$query = $this->db->update_string($tbl, $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;

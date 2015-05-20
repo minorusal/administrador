@@ -17,7 +17,6 @@ class Base_DBconfig extends Base_Controller {
 					 	 // Tablas
 					 	,'tbl_claves'		=>	'sys_claves'
 					 	,'tbl_empresas'		=>	'sys_empresas'
-					 	,'tbl_impuestos'	=>	'sys_impuestos'
 					 	,'tbl_modulos'		=>	'sys_modulos'
 					 	,'tbl_paises'		=>	'sys_paises'
 					 	,'tbl_perfiles'		=>	'sys_perfiles'
@@ -40,6 +39,7 @@ class Base_DBconfig extends Base_Controller {
 					 	 // Tablas
 					 	,'tbl_administracion_entidades'		=>	'av_administracion_entidades'
 					 	,'tbl_administracion_forma_pago'	=>	'av_administracion_forma_pago'
+					 	,'tbl_administracion_impuestos'  	=>	'av_administracion_impuestos'
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
 					 	,'tbl_almacen_tipos'				=>	'av_almacen_tipos'
 					 	,'tbl_almacen_gavetas' 			    =>	'av_almacen_gavetas'

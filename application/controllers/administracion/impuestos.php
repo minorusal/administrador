@@ -109,10 +109,10 @@ class impuestos extends Base_Controller
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_impuesto'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_administracion_impuestos'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_impuesto'],
+				$tbl_data[] = array('id'            => $value['id_administracion_impuestos'],
 									'impuesto'      => tool_tips_tpl($value['impuesto'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'valor'         => $value['valor'],
 									'clave_corta'   => $value['clave_corta'],
@@ -223,7 +223,7 @@ class impuestos extends Base_Controller
 		else
 		{
 			$sqlData = array(
-						 'id_impuesto'	     => $this->ajax_post('id_impuesto')
+						 'id_administracion_impuestos'	     => $this->ajax_post('id_impuesto')
 						,'impuesto'          => $this->ajax_post('impuesto')
 						,'valor'             => $this->ajax_post('valor')
 						,'clave_corta' 	     => $this->ajax_post('clave_corta')

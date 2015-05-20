@@ -56,11 +56,19 @@
         </p>
         <p>
             <label>{email}:</label>
-            <input id="email" type="text" name="email" class="input-large" value="{email}" />
+            <input id="email" type="text" name="email" class="input-large" value="{val_email}" />
         </p>
         <p>
             <label>{timestamp}:</label>
             <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp_value}</span>
+        </p>
+         <p>
+            <label>{registro_por}: </label>
+            <input id="contacto" type="text" data-campo="contacto" class="input-xlarge " readonly value="{val_usuarios_registro}" />
+        </p>
+        <p>
+            <label>{lbl_ultima_modiciacion}: </label>
+            <textarea id="contacto" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
         </p>
 
 </div>

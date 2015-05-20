@@ -30,7 +30,6 @@ class vendedores extends Base_Controller {
 	private function uri_view_principal(){
 		return $this->uri_modulo.$this->view_content;
 	}
-
 	public function index(){
 		$view_listado_vendedores 	= $this->listado_vendedores();		
 
@@ -42,7 +41,6 @@ class vendedores extends Base_Controller {
 		$js['js'][]     = array('name' => 'vendedores', 'dirname' => 'ventas');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
-
 	public function agregar_vendedores(){
 		// Listas
 		$dropArray = array(
@@ -125,11 +123,18 @@ class vendedores extends Base_Controller {
 										$this->lang_item("sucursal"));
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))
+							);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
+			$buttonTPL = "";
 		}
+
 		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+		$data_tab_2['export']    = button_tpl($buttonTPL);
 		$data_tab_2['tabla']     = $tabla;
 		$data_tab_2['paginador'] = $paginador;
 		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
@@ -206,37 +211,57 @@ class vendedores extends Base_Controller {
        	$lts_entidades  = dropdown_tpl($dropArray);
        	$lts_sucursal   = dropdown_tpl($dropArray2);
         
-        $uri_view   				 = $this->uri_modulo.$this->uri_submodulo.'vendedores_edit';
-        $data_tab_3['id_vendedor']    = $detalle_vendedor[0]['id_ventas_vendedores'];
-		$data_tab_3['nombre_vendedor']= $this->lang_item("nombre_vendedor");
-		$data_tab_3['vendedor_value'] = $detalle_vendedor[0]['nombre_vendedor'];
-		$data_tab_3['clave_corta'] 	 = $this->lang_item("clave_corta");
-		$data_tab_3['clave_value']   = $detalle_vendedor[0]['clave_corta'];
-		$data_tab_3['rfc']           = $this->lang_item("rfc");
-		$data_tab_3['rfc_value']     = $detalle_vendedor[0]['rfc'];
-		$data_tab_3['calle'] 	     = $this->lang_item("calle");
-		$data_tab_3['calle_value']   = $detalle_vendedor[0]['calle'];
-		$data_tab_3['num_int']  	 = $this->lang_item("num_int");
-		$data_tab_3['num_int_value'] = $detalle_vendedor[0]['num_int'];
-		$data_tab_3['num_ext'] 	 	 = $this->lang_item("num_ext");
-		$data_tab_3['num_ext_value'] = $detalle_vendedor[0]['num_ext'];
-		$data_tab_3['colonia'] 		 = $this->lang_item("colonia");
-		$data_tab_3['colonia_value'] = $detalle_vendedor[0]['colonia'];
-		$data_tab_3['municipio'] 	 = $this->lang_item("municipio");
-		$data_tab_3['municipio_value'] = $detalle_vendedor[0]['municipio'];
+        $uri_view   				   = $this->uri_modulo.$this->uri_submodulo.'vendedores_edit';
+		$data_tab_3['nombre_vendedor'] = $this->lang_item("nombre_vendedor");
+		$data_tab_3['clave_corta'] 	   = $this->lang_item("clave_corta");
+		$data_tab_3['rfc']             = $this->lang_item("rfc");
+		$data_tab_3['calle'] 	       = $this->lang_item("calle");
+		$data_tab_3['num_int']  	   = $this->lang_item("num_int");
+		$data_tab_3['num_ext'] 	 	   = $this->lang_item("num_ext");
+		$data_tab_3['colonia'] 		   = $this->lang_item("colonia");
+		$data_tab_3['municipio'] 	   = $this->lang_item("municipio");
 		$data_tab_3['entidad'] 		   = $this->lang_item("entidad");
-		$data_tab_3['dropdown_entidad']   = $lts_entidades;
-		$data_tab_3['sucursal'] 		   = $this->lang_item("sucursal");
-		$data_tab_3['dropdown_sucursal']   = $lts_sucursal;
+		$data_tab_3['sucursal'] 	   = $this->lang_item("sucursal");
 		$data_tab_3['cp'] 			   = $this->lang_item("cp");
-		$data_tab_3['cp_value']    	   = $detalle_vendedor[0]['cp'];
 		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
-		$data_tab_3['telefonos_value'] = $detalle_vendedor[0]['telefonos'];
 		$data_tab_3['email'] 		   = $this->lang_item("email");
-		$data_tab_3['email']           = $detalle_vendedor[0]['email'];
 		$data_tab_3['timestamp'] 	   = $this->lang_item("fecha_registro");
-		$data_tab_3['timestamp_value'] = $detalle_vendedor[0]['timestamp'];
+		$data_tab_3['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
 		$data_tab_3['button_save']     = form_button(array('class'=>"btn btn-primary",'name' => 'update_vendedor','onclick'=>'update_vendedor()' , 'content' => $this->lang_item("btn_guardar") ));
+
+		$data_tab_3['id_vendedor']     = $detalle_vendedor[0]['id_ventas_vendedores'];
+		$data_tab_3['vendedor_value']  = $detalle_vendedor[0]['nombre_vendedor'];
+		$data_tab_3['clave_value']     = $detalle_vendedor[0]['clave_corta'];
+		$data_tab_3['rfc_value']       = $detalle_vendedor[0]['rfc'];
+		$data_tab_3['calle_value']     = $detalle_vendedor[0]['calle'];
+		$data_tab_3['num_int_value']   = $detalle_vendedor[0]['num_int'];
+		$data_tab_3['num_ext_value']   = $detalle_vendedor[0]['num_ext'];
+		$data_tab_3['colonia_value']   = $detalle_vendedor[0]['colonia'];
+		$data_tab_3['municipio_value'] = $detalle_vendedor[0]['municipio'];
+		$data_tab_3['dropdown_entidad']= $lts_entidades;
+		$data_tab_3['dropdown_sucursal']= $lts_sucursal;
+		$data_tab_3['cp_value']    	   = $detalle_vendedor[0]['cp'];
+		$data_tab_3['telefonos_value'] = $detalle_vendedor[0]['telefonos'];
+		$data_tab_3['email']           = $detalle_vendedor[0]['email'];
+		$data_tab_3['timestamp_value'] = $detalle_vendedor[0]['timestamp'];
+
+		$this->load_database('global_system');
+        $this->load->model('users_model');
+    	
+    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle_vendedor[0]['id_usuario']);
+    	$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
+    	$data_tab_3['val_usuarios_registro']  = $usuario_name ;
+
+    	if($detalle_vendedor[0]['edit_id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle_vendedor[0]['edit_id_usuario']);
+        	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+        	$data_tab_3['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle_vendedor[0]['edit_timestamp']), $usuario_name);
+    	}else{
+    		$usuario_name = '';
+    		$data_tab_3['val_ultima_modificacion']= $this->lang_item('lbl_sin_modificacion', false);
+    	}
+    	$data_tab_3['registro_por']    	= $this->lang_item("registro_por",false);
+      	$data_tab_3['usuario_registro']	= $usuario_name;
 
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
@@ -259,7 +284,9 @@ class vendedores extends Base_Controller {
 							 'sucursal' 	  => $this->ajax_post('sucursal'),
 							 'cp' => $this->ajax_post('cp'),
 							 'telefonos' => $this->ajax_post('telefonos'),
-							 'email' => $this->ajax_post('email'));
+							 'email' => $this->ajax_post('email'),
+							 'edit_timestamp'  	  => $this->timestamp(),
+							 'edit_id_usuario'     => $this->session->userdata('id_usuario'));
 
 			$update = $this->vendedores_model->update_vendedor($data_insert,$id_vendedor);
 			if($update){
@@ -270,6 +297,36 @@ class vendedores extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$lts_content = $this->vendedores_model->get_vendedores('', '', $filtro , false);
+	
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['nombre_vendedor'],
+									 $value['clave_corta'],
+									 $value['rfc'],
+									 $value['telefonos'],
+									 $value['entidad'],
+									 $value['sucursal']);
+			}
+			$set_heading = array(
+									$this->lang_item("nombre_vendedor"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("rfc"),
+									$this->lang_item("telefonos"),
+									$this->lang_item("entidad"),
+									$this->lang_item("sucursal"));
+	
+		}
+		$params = array(	'tittle'  => $this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }
 ?>

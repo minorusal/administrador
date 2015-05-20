@@ -9,5 +9,6 @@ $lang['clave_corta']   		= "clave corta";
 $lang['rfc_vendedores']   	= "rfc";
 $lang['num_int']   			= "Número interior";
 $lang['num_ext']   			= "número exterior";
-
+$lang['val_usuarios_registro']= "registrado por";
+$lang['seccion']            = "Catalogo de Vendedores";
 ?>

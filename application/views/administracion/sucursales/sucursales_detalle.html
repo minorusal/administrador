@@ -1,4 +1,4 @@
-<div id="formulario">
+<div id="formulario" class="stdform">
     <div >
         <div style="float:left">
             <input id="id_sucursal" type="hidden" name="id_sucursal" value="{id_sucursal}" />
@@ -22,17 +22,13 @@
                 <label>{tel}: (*)</label>
                 <input id="telefono" type="text" name="telefono" class="input-xlarge requerido" value="{telefono}" />
             </p>
-             <p>
-                <label>{entidad}: (*)</label>
-                {list_entidad}
-            </p> 
             <p>
-                <label>{fecha_registro}:</label>
-                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
-            </p>            
+                <label>{lbl_fecha_registro}: </label>
+                <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
+            </p>           
             <p>
-                <label>{registro_por}:</label>
-                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+                <label>{lbl_usuario_regitro}: </label>
+                <input id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
             </p>
         </div>
         
@@ -42,8 +38,14 @@
             <label>{dir}:</label>
             <textarea id="direccion" name="direccion"  class="span5 requerido" style="resize: vertical; height: 100px;">{direccion}</textarea>
         </p>
+        <p>
+            <label>{lbl_ultima_modiciacion}: </label>
+            <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
-         {button_save}
+    <p class="stdformbutton">
+        {button_save}
+    </p>
     </div>
 </div>

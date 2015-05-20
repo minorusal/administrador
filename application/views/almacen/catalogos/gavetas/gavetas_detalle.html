@@ -1,4 +1,4 @@
-<div id="formulario">
+<div id="formulario" class="stdform">
     <div >
         <div style="float:left">
             <input id="id_gaveta" type="hidden" name="id_gaveta" value="{id_gaveta}" />
@@ -19,20 +19,12 @@
                 {list_pasillo}
             </p>
             <p>
-                <label>{ultima_modificacion}: (*)</label>
-                <span id="ult_modificacion" type="text" name="ult_modificacion" class="input-xlarge uneditable-input" >{ult_modificacion} </span>
-            </p>
+                <label>{lbl_fecha_registro}: </label>
+                <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
+            </p>           
             <p>
-                <label>{mod_por}: (*)</label>
-                <span id="modificado_por" type="text" name="modificado_por" class="input-xlarge uneditable-input">{modificado_por}</span>
-            </p>
-            <p>
-                <label>{fecha_registro}:</label>
-                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
-            </p>            
-            <p>
-                <label>{registro_por}:</label>
-                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+                <label>{lbl_usuario_regitro}: </label>
+                <input id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
             </p>
         </div>
         
@@ -42,8 +34,14 @@
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
+        <p>
+            <label>{lbl_ultima_modiciacion}: </label>
+            <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
-         {button_save}
+    <p class="stdformbutton">
+        {button_save}
+    </p>
     </div>
 </div>

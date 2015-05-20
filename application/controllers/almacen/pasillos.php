@@ -175,32 +175,46 @@ class pasillos extends Base_Controller
 		$almacenes    = dropdown_tpl($almacenes_array);
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
-        $tabData['id_pasillo']            = $id_almacen_pasillos;
-        $tabData["nombre_pasillos"]       = $this->lang_item("pasillo");
-		$tabData["cvl_corta"]        	  = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	  = $this->lang_item("descripcion");
-		$tabData["registro_por"]    	  = $this->lang_item("registro_por");
-		$tabData["fecha_registro"]        = $this->lang_item("fecha_registro");
-		$tabData["list_almacen"]          = $almacenes;
-		$tabData["almacen"]               = $this->lang_item("almacen");
-		$tabData["ultima_modificacion"]   = $this->lang_item("ultima_modificacion");
-		$tabData["mod_por"]               = $this->lang_item("modificado_por");
-        $tabData['pasillo']               = $detalle[0]['pasillos'];
-		$tabData['clave_corta']           = $detalle[0]['clave_corta'];
-        $tabData['descripcion']           = $detalle[0]['descripcion'];
-        $tabData['ult_modificacion']      = $detalle[0]['edit_timestamp'];
+        $tabData['id_pasillo']             = $id_almacen_pasillos;
+        $tabData["nombre_pasillos"]        = $this->lang_item("pasillo");
+		$tabData["cvl_corta"]        	   = $this->lang_item("cvl_corta");
+		$tabData["descrip"]         	   = $this->lang_item("descripcion");
+		$tabData["registro_por"]    	   = $this->lang_item("registro_por");
+		$tabData["fecha_registro"]         = $this->lang_item("fecha_registro");
+		$tabData["list_almacen"]           = $almacenes;
+		$tabData["almacen"]                = $this->lang_item("almacen");
+        $tabData['pasillo']                = $detalle[0]['pasillos'];
+		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
+        $tabData['descripcion']            = $detalle[0]['descripcion'];
+        $tabData['ult_modificacion']       = $detalle[0]['edit_timestamp'];
+        $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
 
         $this->load_database('global_system');
         $this->load->model('users_model');
 
-        $usuario_modifico                 = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
-        $tabData['modificado_por']		  = text_format_tpl($usuario_modifico[0]['name'],"u");
-        $tabData['timestamp']             = $detalle[0]['timestamp'];
+        $usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+	    if($detalle[0]['edit_id_usuario'])
+        {
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+        }
+        else
+        {
+        	$usuario_name = '';
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+        }
+
         $tabData['button_save']           = $btn_save;
-        
-        $usuario_registro               = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= text_format_tpl($usuario_registro[0]['name'],"u");
+      	$tabData['usuario_registro']	= $usuario_name;
+
 		$uri_view   					= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
@@ -223,8 +237,8 @@ class pasillos extends Base_Controller
 						,'clave_corta' 				=> $this->ajax_post('clave_corta')
 						,'descripcion'				=> $this->ajax_post('descripcion')
 						,'id_almacen_almacenes'	    => $this->ajax_post('id_almacen')
-						,'edit_timestamp'			=> $this->timestamp()
-						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
+						,'edit_id_usuario' 		    => $this->session->userdata('id_usuario')
+						,'edit_timestamp'  		    => $this->timestamp()
 						);
 			$insert = $this->db_model->db_update_data_pasillo($sqlData);
 			if($insert){

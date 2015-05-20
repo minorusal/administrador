@@ -177,32 +177,50 @@ class sucursales extends Base_Controller
 					,'class' 	     => "requerido"
 					,'selected'      => $detalle[0]['id_entidad']
 					);
-		$entidades                   = dropdown_tpl($entidades_array);
-		$btn_save                    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
-        $tabData['id_sucursal']      = $id_sucursal;
-        $tabData["nombre_sucursal"]  = $this->lang_item("nombre_sucursal");
-		$tabData["cvl_corta"]        = $this->lang_item("clave_corta");
-		$tabData["r_social"]         = $this->lang_item("rs");
-		$tabData["r_f_c"]            = $this->lang_item("rfc");
-		$tabData["dir"]              = $this->lang_item("direccion");
-		$tabData["tel"]              = $this->lang_item("tel");
-		$tabData["registro_por"]     = $this->lang_item("registro_por");
-		$tabData["fecha_registro"]   = $this->lang_item("fecha_registro");
-		$tabData["list_entidad"]     = $entidades;
-		$tabData["entidad"]          = $this->lang_item("entidad");
-        $tabData['sucursal']         = $detalle[0]['sucursal'];
-		$tabData['clave_corta']      = $detalle[0]['clave_corta'];
-        $tabData['razon_social']     = $detalle[0]['razon_social'];
-        $tabData['rfc']              = $detalle[0]['rfc'];
-        $tabData['direccion']        = $detalle[0]['direccion'];
-        $tabData['telefono']         = $detalle[0]['telefono'];
-        $tabData['timestamp']        = $detalle[0]['registro'];
-        $tabData['button_save']      = $btn_save;
+		$entidades                         = dropdown_tpl($entidades_array);
+		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
+        $tabData['id_sucursal']            = $id_sucursal;
+        $tabData["nombre_sucursal"]        = $this->lang_item("nombre_sucursal");
+		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
+		$tabData["r_social"]               = $this->lang_item("rs");
+		$tabData["r_f_c"]                  = $this->lang_item("rfc");
+		$tabData["dir"]                    = $this->lang_item("direccion");
+		$tabData["tel"]                    = $this->lang_item("tel");
+		$tabData["list_entidad"]           = $entidades;
+		$tabData["entidad"]                = $this->lang_item("entidad");
+        $tabData['sucursal']               = $detalle[0]['sucursal'];
+		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
+        $tabData['razon_social']           = $detalle[0]['razon_social'];
+        $tabData['rfc']                    = $detalle[0]['rfc'];
+        $tabData['direccion']              = $detalle[0]['direccion'];
+        $tabData['telefono']               = $detalle[0]['telefono'];
+        $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
+        
         $this->load_database('global_system');
         $this->load->model('users_model');
-        $usuario_registro             = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
-        $tabData['registro_por']      = $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']  = text_format_tpl($usuario_registro[0]['name'],"u");
+
+        $usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+        if($detalle[0]['edit_id_usuario'])
+        {
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+        }
+        else
+        {
+        	$usuario_name = '';
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+        }
+
+        $tabData['button_save']           = $btn_save;
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
         									   #administracion/catalogos/sucursales/sucursales_detalle	
 		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -230,6 +248,8 @@ class sucursales extends Base_Controller
 						,'id_entidad'	 => $this->ajax_post('id_entidad')
 						,'telefono'		 => $this->ajax_post('telefono')
 						,'direccion'	 => $this->ajax_post('direccion')
+						,'edit_timestamp'			=> $this->timestamp()
+						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)

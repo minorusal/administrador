@@ -425,7 +425,7 @@ class Base_Controller extends CI_Controller {
 			$date      = explode('-', $timestamp[0]);
 			$day       = $days[intval(  (date("w",mktime(0,0,0,$date[1],$date[2],$date[0])))-1)];
 			$month     = $this->months($date[1]-1);
-			$time      = date('H:m:s');
+			//$time      = date('H:m:s');
 			$fecha     =  "$day ".$date[2]." ". sprintf($this->lang_item('timestamp_string', false),$month, $date[0], $time);
 			
 			return $fecha;

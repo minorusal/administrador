@@ -55,7 +55,7 @@ function detalle(id_impuesto){
         type: "POST",
         url: path()+"administracion/impuestos/detalle",
         dataType: 'json',
-        data: {id_sucursal : id_sucursal},
+        data: {id_impuesto : id_impuesto},
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
@@ -71,19 +71,16 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete   = values_requeridos();
-	var id_sucursal  = jQuery('#id_sucursal').val();
-    var sucursal     = jQuery('#sucursal').val();
+	var id_impuesto  = jQuery('#id_impuesto').val();
+	var valor        = jQuery('#valor').val();
+    var impuesto     = jQuery('#impuesto').val();
     var clave_corta  = jQuery('#clave_corta').val();
-    var razon_social = jQuery('#razon_social').val();
-    var rfc          = jQuery('#rfc').val();
-    var telefono     = jQuery('#telefono').val();
-    var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
-    var direccion	 = jQuery("#direccion").val();
+    var descripcion  = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/impuestos/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
+		data: {incomplete:incomplete, id_impuesto:id_impuesto, valor:valor, impuesto:impuesto, valor:valor, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -97,23 +94,20 @@ function actualizar(){
 
 
 function agregar(){
-	var btn          = jQuery("button[name='save_sucursal']");
+	var btn          = jQuery("button[name='save_impuesto']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();
-	var id_sucursal = jQuery('#id_sucursal').val();
-    var sucursal     = jQuery('#sucursal').val();
+	var id_impuesto  = jQuery('#id_impuesto').val();
+    var impuesto     = jQuery('#impuesto').val();
+    var valor 		 = jQuery('#valor').val();
     var clave_corta  = jQuery('#clave_corta').val();
-    var razon_social = jQuery('#razon_social').val();
-    var rfc          = jQuery('#rfc').val();
-    var tel          = jQuery('#telefono').val();
-    var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
-    var direccion    =jQuery('#direccion').val();
+    var descripcion  = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/impuestos/insert_sucursal",
+		url: path()+"administracion/impuestos/insert_impuesto",
 		dataType: "json",
-		data: {incomplete :incomplete, id_sucursal:id_sucursal ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, id_entidad:id_entidad, direccion:direccion },
+		data: {incomplete :incomplete, id_impuesto:id_impuesto ,impuesto:impuesto, valor:valor, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

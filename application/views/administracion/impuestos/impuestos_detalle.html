@@ -3,8 +3,12 @@
         <div style="float:left">
             <input id="id_impuesto" type="hidden" name="id_impuesto" value="{id_impuesto}" />
             <p>
-                <label>{nombre_almacen}: (*)</label>
+                <label>{nombre_impuesto}: (*)</label>
                 <input id="impuesto" type="text" name="impuesto" class="input-xlarge requerido" value="{impuesto}" />
+            </p>
+            <p>
+                <label>{val}: (*)</label>
+                <input id="valor" type="text" name="valor" class="input-xlarge requerido" value="{valor}" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
@@ -23,7 +27,7 @@
     </div>
     <div style="clear:both">
         <p>
-            <label>{descrip}:</label>
+            <label>{desc}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
         <p>

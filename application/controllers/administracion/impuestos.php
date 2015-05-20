@@ -114,6 +114,7 @@ class impuestos extends Base_Controller
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['id_impuesto'],
 									'impuesto'      => tool_tips_tpl($value['impuesto'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'valor'         => $value['valor'],
 									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
@@ -123,6 +124,7 @@ class impuestos extends Base_Controller
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("impuesto"),
+										$this->lang_item("valor"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
@@ -152,5 +154,197 @@ class impuestos extends Base_Controller
 		{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
+	}
+
+	public function detalle()
+	{
+		$id_impuesto                 = $this->ajax_post('id_impuesto');
+		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_impuesto);
+		$seccion 	                 = 'detalle';
+		$tab_detalle                 = $this->tab3;
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);
+		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
+        $tabData['id_impuesto']            = $id_impuesto;
+        $tabData["nombre_impuesto"]        = $this->lang_item("nombre_impuesto");
+		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
+		$tabData["desc"]                   = $this->lang_item("descripcion");
+		$tabData["val"]                    = $this->lang_item("valor");
+        $tabData['impuesto']               = $detalle[0]['impuesto'];
+		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
+        $tabData['descripcion']            = $detalle[0]['descripcion'];
+        $tabData["valor"]                  = $detalle[0]['valor'];
+        $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
+        
+        $this->load_database('global_system');
+        $this->load->model('users_model');
+
+        $usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+        if($detalle[0]['edit_id_usuario'])
+        {
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+        }
+        else
+        {
+        	$usuario_name = '';
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+        }
+
+        $tabData['button_save']           = $btn_save;
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
+        									   #administracion/catalogos/sucursales/sucursales_detalle	
+		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
+
+	public function actualizar()
+	{
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			$json_respuesta = array(
+						 'id' 		     => 0
+						,'contenido'     => alertas_tpl('error', $msg ,false)
+						,'success' 	     => false
+				);
+		}
+		else
+		{
+			$sqlData = array(
+						 'id_impuesto'	     => $this->ajax_post('id_impuesto')
+						,'impuesto'          => $this->ajax_post('impuesto')
+						,'valor'             => $this->ajax_post('valor')
+						,'clave_corta' 	     => $this->ajax_post('clave_corta')
+						,'descripcion'	     => $this->ajax_post('descripcion')
+						,'edit_timestamp'    => $this->timestamp()
+						,'edit_id_usuario'	 => $this->session->userdata('id_usuario')
+						);
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert)
+			{
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		     => 1
+						,'contenido'     => alertas_tpl('success', $msg ,false)
+						,'success' 	     => true
+				);
+			}
+			else
+			{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		    => 0
+						,'contenido'    => alertas_tpl('', $msg ,false)
+						,'success'    	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
+
+	public function agregar()
+	{							#administracion/catalogos_generales/impuestos/impuestos_save
+		$seccion       = $this->modulo.'/'.$this->seccion.'/impuestos_save';
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);
+		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+
+		$tab_1["nombre_impuesto"]  = $this->lang_item("nombre_impuesto");
+		$tab_1["impuesto"]         = $this->lang_item("impuesto");
+		$tab_1["valor"]            = $this->lang_item("valor");
+		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
+		$tab_1["desc"]             = $this->lang_item("descripcion");
+
+        $tab_1['button_save']      = $btn_save;
+        $tab_1['button_reset']     = $btn_reset;
+
+
+        if($this->ajax_post(false))
+        {
+				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion , $tab_1, true);
+		}
+	}
+
+	public function insert_impuesto(){
+		$incomplete  = $this->ajax_post('incomplete');
+
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$impuesto        = $this->ajax_post('impuesto');
+			$valor           = $this->ajax_post('valor');
+			$clave_corta     = $this->ajax_post('clave_corta');
+			$descripcion     = $this->ajax_post('descripcion');
+			$data_insert     = array('impuesto' => $impuesto,
+								 'valor'        => $valor,
+								 'clave_corta'  => $clave_corta,
+								 'descripcion'  => $descripcion,
+								 'id_usuario'   => $this->session->userdata('id_usuario'),  
+								 'registro'     => $this->timestamp());
+			$insert = $this->db_model->db_insert_data($data_insert);
+			
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
+	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['impuesto'],
+									 $value['valor'],
+									 $value['clave_corta'],
+									 $value['descripcion']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("impuesto"),
+									$this->lang_item("valor"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("descripcion"));
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Impuestos"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

@@ -7,7 +7,8 @@ $lang['detalle'] 			= "Detalle";
 
 $lang['nombre_impuesto'] 	= "impuesto";
 $lang['clave_corta'] 		= "clave corta";
-$lang['descripcion']        = "descripcion";
+$lang['descripcion']        = "descripción";
+$lang['valor']              = "valor";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

@@ -128,6 +128,11 @@ $route['administracion/catalogos_generales/formas_de_pago']                   	 
 $route['administracion/catalogos_generales/formas_de_pago/listado_formas_de_pago']         = 'administracion/formas_de_pago/listado_formaspagos';
 $route['administracion/catalogos_generales/formas_de_pago/listado_formas_de_pago/(:num)']  = 'administracion/formas_de_pago/listado_formaspagos/$1';
 
+/*Catalogo de Creditos*/
+$route['administracion/catalogos_generales/creditos']                   	   = 'administracion/creditos/index';
+$route['administracion/catalogos_generales/creditos/listado_creditos']         = 'administracion/creditos/listado_creditos';
+$route['administracion/catalogos_generales/creditos/listado_creditos/(:num)']  = 'administracion/creditos/listado_creditos/$1';
+
 /*VENTAS*/
 
 /*Catalogo de clientes*/

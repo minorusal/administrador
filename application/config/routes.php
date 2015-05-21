@@ -119,9 +119,14 @@ $route['administracion/catalogos_generales/impuestos/listado_impuestos']        
 $route['administracion/catalogos_generales/impuestos/listado_impuestos/(:num)']  = 'administracion/impuestos/listado_impuestos/$1';
 
 /*Catalogo de Descuentos*/
-$route['administracion/catalogos_generales/descuentos']                   	     = 'administracion/descuentos/index';
+$route['administracion/catalogos_generales/descuentos']                   	      = 'administracion/descuentos/index';
 $route['administracion/catalogos_generales/impuestos/listado_descuentos']         = 'administracion/descuentos/listado_descuentos';
 $route['administracion/catalogos_generales/impuestos/listado_descuentos/(:num)']  = 'administracion/descuentos/listado_descuentos/$1';
+
+/*Catalogo de Formas de pago*/
+$route['administracion/catalogos_generales/formas_de_pago']                   	           = 'administracion/formas_de_pago/index';
+$route['administracion/catalogos_generales/formas_de_pago/listado_formas_de_pago']         = 'administracion/formas_de_pago/listado_formaspagos';
+$route['administracion/catalogos_generales/formas_de_pago/listado_formas_de_pago/(:num)']  = 'administracion/formas_de_pago/listado_formaspagos/$1';
 
 /*VENTAS*/
 

@@ -58,7 +58,6 @@ class check_session extends Base_Controller
 						}
 					}
 				}
-				
 			}
 		}
 	}

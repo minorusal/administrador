@@ -321,7 +321,7 @@ class formas_de_pago extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Formas de pago"),
+		$params = array(	'title'   => $this->lang_item("Catálogo de Formas de pago"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

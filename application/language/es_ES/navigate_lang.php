@@ -40,6 +40,7 @@ $lang['impuestos']              = 'impuestos';
 $lang['descuentos']            	= 'descuentos';
 $lang['formas_de_pago']         = 'Formas de pago';
 $lang['creditos']               = 'creditos';
+$lang['entidades']              = 'entidades';
 
 $lang['close_session']       = 'Cerrar Sesión';	
 

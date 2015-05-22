@@ -1,4 +1,26 @@
 
+.scrollToTop{
+  width:8%; 
+  height:10%;
+  min-width: 3%;
+  /*border: 3px solid #333;*/
+  text-align:center; 
+  background: whiteSmoke;
+  position:fixed;
+  bottom:8px;
+  right:20px;
+  display:none;
+  background:url(../img/turquoise.png) no-repeat center;
+  background-size: 88%;
+  max-width: 80px;
+  overflow: hidden;
+  /*Transparencia*/
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  -moz-opacity:0.7;
+  -khtml-opacity: 0.7;
+  opacity: 0.7;
+}
 /* login */
 .inputwrapper button { background: #0096d2; border-color: #0c57a3; }
 .inputwrapper button:hover { background: #0972dd; border-color: #0c57a3; }

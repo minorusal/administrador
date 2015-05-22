@@ -7,7 +7,7 @@ class sucursales_model extends Base_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->db1 = $this->dbinfo[0]['db'];
+		$this->db1  = $this->dbinfo[0]['db'];
 		$this->tbl1 = $this->dbinfo[0]['tbl_sucursales'];
 	}
 	//Función que obtiene toda la información de la tabla sys_sucursales

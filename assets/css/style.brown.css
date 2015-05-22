@@ -1,4 +1,25 @@
-
+.scrollToTop{
+  width:8%; 
+  height:10%;
+  min-width: 3%;
+  /*border: 3px solid #333;*/
+  text-align:center; 
+  background: whiteSmoke;
+  position:fixed;
+  bottom:8px;
+  right:20px;
+  display:none;
+  background:url(../img/brown.png) no-repeat center;
+  background-size: 88%;
+  max-width: 80px;
+  overflow: hidden;
+  /*Transparencia*/
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  -moz-opacity:0.7;
+  -khtml-opacity: 0.7;
+  opacity: 0.7;
+}
 /* login */
 .inputwrapper button { background: #896f5d; border-color: #5b4c41; }
 .inputwrapper button:hover { background: #5b4c41; border-color: #4e3f35; }

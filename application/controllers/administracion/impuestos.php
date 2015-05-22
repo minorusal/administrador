@@ -340,7 +340,7 @@ class impuestos extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Impuestos"),
+		$params = array(	'title'   => $this->lang_item("Catálogo de Impuestos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

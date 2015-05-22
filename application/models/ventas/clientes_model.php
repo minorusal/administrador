@@ -34,8 +34,8 @@ class clientes_model extends Base_Model{
 						su.sucursal
 					FROM 
 						$tbl1 vc
-					LEFT JOIN $tbl2 e on vc.entidad = e.id_administracion_entidad
-					LEFT JOIN $bd.$tbl3  su on vc.sucursal = su.id_sucursal
+					LEFT JOIN $tbl2 e on vc.id_entidad = e.id_administracion_entidad
+					LEFT JOIN $bd.$tbl3  su on vc.id_sucursal = su.id_sucursal
 					WHERE vc.activo = 1 $filtro
 					ORDER BY vc.id_ventas_clientes
 				$limit;";

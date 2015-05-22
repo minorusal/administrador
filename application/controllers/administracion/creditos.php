@@ -339,7 +339,7 @@ class creditos extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Creditos"),
+		$params = array(	'title'   => $this->lang_item("Catálogos Creditos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

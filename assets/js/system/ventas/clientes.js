@@ -3,22 +3,22 @@ jQuery(document).ready(function(){
   jQuery('#search-query').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){  
-      buscar_cliente();
+      buscar();
     } 
   });
 })
-function buscar_cliente(){
+function buscar(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/listado_clientes",
+    url: path()+"ventas/clientes/listado",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
       jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      var funcion = 'buscar_cliente';
+      var funcion = 'buscar';
           jQuery("#loader").html('');
           jQuery('#a-1').html(data+input_keypress('search-query', funcion));
       jQuery('#search-query').val(filtro).focus();
@@ -36,7 +36,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar_cliente';
+           		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -47,7 +47,7 @@ function load_content(uri, id_content){
         }
     });
 }
-function insert_cliente(){
+function insert(){
   var btn          = jQuery("button[name='save_cliente']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -70,7 +70,7 @@ function insert_cliente(){
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/insert_cliente",
+    url: path()+"ventas/clientes/insert",
     dataType: "json",
     data: {
             incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,cp:cp,telefonos:telefonos,email:email,id_sucursal:id_sucursal},
@@ -89,11 +89,11 @@ function insert_cliente(){
     }
   })
 }
-function detalle_articulo(id_cliente){
+function detalle(id_cliente){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
-        url: path()+"ventas/clientes/detalle_cliente",
+        url: path()+"ventas/clientes/detalle",
         dataType: 'json',
         data: {id_cliente : id_cliente},
         success: function(data){
@@ -105,7 +105,7 @@ function detalle_articulo(id_cliente){
     });
 }
 
-function update_cliente(){
+function update(){
   var btn          = jQuery("button[name='update_cliente']");
   /*btn.attr('disabled','disabled');*/
   jQuery('#mensajes').hide();
@@ -129,7 +129,7 @@ function update_cliente(){
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/update_cliente",
+    url: path()+"ventas/clientes/update",
     dataType: "json",
     data: {
             incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},

@@ -1,0 +1,18 @@
+CONTEMPO MEXICO 
+======================================== 
+TICKET: 000006 
+FECHA: 19/03/2015 12:37 PM. 
+TIPO : CUENTAS POR COBRAR 
+CAJERO: 5201503190815 
+CAJA: AMERICAN TEXTIL 
+SUCURSAL: AMERICAN TEXTIL 
+======================================== 
+CLIENTE: COMENSAL PRUEBA 
+DNI: 123456 
+======================================== 
+#    ART.         CLV.           IMPORTE 
+001 COMIDA       32150  $        17.00 
+======================================== 
+TOTAL                   $        17.00 
+EFECTIVO                $         0.00 
+VUELTO                  $         0.00 

@@ -1,7 +1,7 @@
 <?php
 class sucursales_model extends Base_Model
 {
-	/*public function get_sucursales($data=array()){
+	public function get_sucursales($data=array()){
 		// DB Info
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_sucursales'];
@@ -16,5 +16,5 @@ class sucursales_model extends Base_Model
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
 }

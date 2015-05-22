@@ -7,7 +7,7 @@ class usuarios extends Base_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model($this->uri_modulo.'usuarios_model');
+		$this->load->model('users_model');
 		$this->load->model('administracion/sucursales_model','sucur_model');
 		$this->load->model('administracion/empresas_model','empresas_model');
 		$this->lang->load("administracion/usuarios","es_ES");

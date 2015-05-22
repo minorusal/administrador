@@ -111,8 +111,8 @@ class clientes extends Base_Controller {
 									'clave_corta'     => $value['clave_corta'],
 									'rfc'  			  => $value['rfc'],
 									'telefonos'       => $value['telefonos'],
-									'entidad'       => $value['entidad'],
-									'sucursal'       => $value['sucursal']);
+									'id_entidad'      => $value['entidad'],
+									'id_sucursal'     => $value['sucursal']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
@@ -129,16 +129,22 @@ class clientes extends Base_Controller {
 			$tabla = $this->table->generate($tbl_data);
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'export_xlsx?filtro='.base64_encode($filtro))
 							);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 			$buttonTPL = "";
 		}
+		
+		$buttonIPX = array( 'text'       => $this->lang_item("btn_xlsx"), 
+							'iconsweets' => 'iconsweets-excel',
+							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'import_xlsx')
+							);
 
 		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 		$data_tab_2['export']    = button_tpl($buttonTPL);
+		$data_tab_2['import']    = button_tpl($buttonIPX);
 		$data_tab_2['tabla']     = $tabla;
 		$data_tab_2['paginador'] = $paginador;
 		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
@@ -171,8 +177,8 @@ class clientes extends Base_Controller {
 									 'num_ext'		  => $this->ajax_post('num_ext'),
 									 'colonia' 		  => $this->ajax_post('colonia'),
 									 'municipio' 	  => $this->ajax_post('municipio'),
-									 'entidad' 		  => $this->ajax_post('entidad'),
-									 'sucursal' 	  => $this->ajax_post('sucursal'),
+									 'id_entidad' 		  => $this->ajax_post('id_entidad'),
+									 'id_sucursal' 	  => $this->ajax_post('id_sucursal'),
 									 'cp' 			  => $this->ajax_post('cp'),
 									 'telefonos' 	  => $this->ajax_post('telefonos'),
 									 'email' 		  => $this->ajax_post('email'),
@@ -227,7 +233,7 @@ class clientes extends Base_Controller {
 		$data_tab_3['colonia'] 		 = $this->lang_item("colonia");
 		$data_tab_3['municipio'] 	 = $this->lang_item("municipio");
 		$data_tab_3['entidad'] 		   = $this->lang_item("entidad");
-		$data_tab_3['sucursal'] 		   = $this->lang_item("sucursal");
+		$data_tab_3['sucursal'] 	   = $this->lang_item("sucursal");
 		$data_tab_3['cp'] 			   = $this->lang_item("cp");
 		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
 		$data_tab_3['email'] 		   = $this->lang_item("email");
@@ -288,8 +294,8 @@ class clientes extends Base_Controller {
 							 'num_ext'=> $this->ajax_post('num_ext'),
 							 'colonia' => $this->ajax_post('colonia'),
 							 'municipio' => $this->ajax_post('municipio'),
-							 'entidad' => $this->ajax_post('entidad'),
-							 'sucursal' => $this->ajax_post('sucursal'),
+							 'id_entidad' => $this->ajax_post('id_entidad'),
+							 'id_sucursal' => $this->ajax_post('id_sucursal'),
 							 'cp' => $this->ajax_post('cp'),
 							 'telefonos' => $this->ajax_post('telefonos'),
 							 'email' => $this->ajax_post('email'),
@@ -319,7 +325,7 @@ class clientes extends Base_Controller {
 									 $value['clave_corta'],
 									 $value['rfc'],
 									 $value['telefonos'],
-									 $value['entidad'],
+									 $value['id_entidad'],
 									 $value['sucursal']);
 			}
 			$set_heading = array(
@@ -333,11 +339,15 @@ class clientes extends Base_Controller {
 	
 		}
 
-		$params = array(	'tittle'  => $this->lang_item("seccion"),
+		$params = array(	'title'  => $this->lang_item("seccion"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
 		
-		$this->excel->generate_xlsx($params);
+		$this->excel->generate_xlsx($params);		
+	}
+	public function import_xlsx(){
+		$ex=$this->excel->test();
+		dump_var($ex);
 	}
 }

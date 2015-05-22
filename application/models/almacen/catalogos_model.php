@@ -75,7 +75,6 @@ class catalogos_model extends Base_Model
 	/*Actualliza la información en el formuladio de edición de almacen*/
 	public function db_update_data($data=array())
 	{
-		print_debug($data);
 		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
 		$condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
 		$existe = $this->row_exist($tbl_almacenes, $condicion);

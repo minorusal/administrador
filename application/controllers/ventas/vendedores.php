@@ -321,7 +321,7 @@ class vendedores extends Base_Controller {
 									$this->lang_item("sucursal"));
 	
 		}
-		$params = array(	'tittle'  => $this->lang_item("seccion"),
+		$params = array(	'title'  => $this->lang_item("seccion"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

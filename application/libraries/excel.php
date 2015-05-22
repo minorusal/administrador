@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once(APPPATH.'third_party/PHPExcel/PHPExcel.php');
+require_once(APPPATH.'third_party/PHPExcel/PHPExcel/IOFactory.php');
 
 class excel extends PHPExcel{
 	
@@ -83,5 +84,37 @@ class excel extends PHPExcel{
 									        )
 								);
 		return $styleHeaders;
+	}
+
+	public function test(){
+		$inputFileName = 'application/xls/Catalogo_clientes.xlsx';
+
+		//  Read your Excel workbook
+		try{
+		    $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+		   // var_dump($inputFileType);
+		    $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+		    $objPHPExcel = $objReader->load($inputFileName);
+		    //var_dump($objPHPExcel);
+		} catch(Exception $e) {
+		    die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+		}
+
+		//  Get worksheet dimensions
+		$sheet = $objPHPExcel->getSheet(0); 
+		$highestRow = $sheet->getHighestRow(); 
+	 	$highestColumn = $sheet->getHighestColumn();
+
+		//  Loop through each row of the worksheet in turn
+		for ($row = 4; $row <= $highestRow; $row++){ 
+		    //  Read a row of data into an array
+		    $rowData[] = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+		                                    NULL,
+		                                    TRUE,
+		                                    FALSE);
+		    //  Insert row data array into your database of choice here
+		}
+		return $rowData;
+
 	}
 }

@@ -101,9 +101,9 @@ $route['almacen/catalogos/almacenes/gavetas/(:num)'] = 'almacen/gavetas/listado/
  * CONTROL DE USUARIOS
  */
 /*Catalogo de Usuarios*/
-$route['administracion/control_de_usuarios/usuarios']                   	   = 'administracion/usuarios/index';
-$route['administracion/control_de_usuarios/usuarios/listado_usuarios']         = 'administracion/usuarios/listado_usuarios';
-$route['administracion/control_de_usuarios/usuarios/listado_usuarios/(:num)']  = 'administracion/usuarios/listado_usuarios/$1';
+$route['administracion/ctrlUsuarios/usuarios']                   	    = 'administracion/usuarios/index';
+$route['administracion/ctrlUsuarios/usuarios/listado_usuarios']         = 'administracion/usuarios/listado_usuarios';
+$route['administracion/ctrlUsuarios/usuarios/listado_usuarios/(:num)']  = 'administracion/usuarios/listado_usuarios/$1';
 
 /*
  * CATALOGOS GENERALES

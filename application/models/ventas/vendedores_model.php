@@ -24,8 +24,8 @@ class vendedores_model extends Base_Model{
 						su.sucursal
 					FROM 
 						$tbl1 vv
-					LEFT JOIN $tbl2  e on vv.entidad = e.id_administracion_entidad
-					LEFT JOIN $bd.$tbl3 su on vv.sucursal = su.id_sucursal
+					LEFT JOIN $tbl2  e on vv.id_entidad = e.id_administracion_entidad
+					LEFT JOIN $bd.$tbl3 su on vv.id_sucursal = su.id_sucursal
 					WHERE vv.activo = 1 $filtro
 					ORDER BY vv.id_ventas_vendedores
 				$limit;";

@@ -82,12 +82,8 @@ $route['compras/ordenes/listado_ordenes/(:num)'] = 'compras/ordenes/listado_orde
 
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
-
-
 /*Catalogo de pasillos*/
-$route['almacen/catalogos/pasillos']			      = 'almacen/pasillos/index';
-
-
+$route['almacen/catalogos/pasillos']			     = 'almacen/pasillos/index';
 /*Catalogo de gavetas*/
 $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
 
@@ -98,27 +94,22 @@ $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
  * CONTROL DE USUARIOS
  */
 /*Catalogo de Usuarios*/
-$route['administracion/ctrlUsuarios/usuarios']                   	    = 'administracion/usuarios/index';
+$route['administracion/ctrlUsuarios/usuarios']               = 'administracion/usuarios/index';
 /*
  * CATALOGOS GENERALES
  */
 /*Catalogo de Sucursales*/
-$route['administracion/catalogos_generales/sucursales']                   	       = 'administracion/sucursales/index';
-
+$route['administracion/catalogos_generales/sucursales']      = 'administracion/sucursales/index';
 /*Catalogo de Impuestos*/
-$route['administracion/catalogos_generales/impuestos']                   	     = 'administracion/impuestos/index';
-
+$route['administracion/catalogos_generales/impuestos']       = 'administracion/impuestos/index';
 /*Catalogo de Descuentos*/
-$route['administracion/catalogos_generales/descuentos']                   	      = 'administracion/descuentos/index';
-
+$route['administracion/catalogos_generales/descuentos']      = 'administracion/descuentos/index';
 /*Catalogo de Formas de pago*/
-$route['administracion/catalogos_generales/formas_de_pago']                   	           = 'administracion/formas_de_pago/index';
-
+$route['administracion/catalogos_generales/formas_de_pago']  = 'administracion/formas_de_pago/index';
 /*Catalogo de Creditos*/
-$route['administracion/catalogos_generales/creditos']                   	   = 'administracion/creditos/index';
-
+$route['administracion/catalogos_generales/creditos']        = 'administracion/creditos/index';
 /*Catálogo de Entidades*/
-$route['administracion/catalogos_generales/entidades']                         = 'administracion/entidades/index'; 
+$route['administracion/catalogos_generales/entidades']       = 'administracion/entidades/index'; 
 
 /*VENTAS*/
 

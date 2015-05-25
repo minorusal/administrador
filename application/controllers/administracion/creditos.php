@@ -157,9 +157,9 @@ class creditos extends Base_Controller
 	public function detalle()
 	{
 		$id_credito                = $this->ajax_post('id_credito');
-		$detalle  	                 = $this->db_model->get_orden_unico_credito($id_credito);
-		$seccion 	                 = 'detalle';
-		$tab_detalle                 = $this->tab3;
+		$detalle  	               = $this->db_model->get_orden_unico_credito($id_credito);
+		$seccion 	               = 'detalle';
+		$tab_detalle               = $this->tab3;
 		$sqlData        = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
@@ -174,7 +174,7 @@ class creditos extends Base_Controller
         $tabData['credito']                = $detalle[0]['credito'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
-        $tabData["valor_credito"]        = $detalle[0]['valor_credito'];
+        $tabData["valor_credito"]          = $detalle[0]['valor_credito'];
         $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
         $tabData['val_fecha_registro']     = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
@@ -339,7 +339,7 @@ class creditos extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Creditos"),
+		$params = array(	'title'   => $this->lang_item("Catálogos Creditos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

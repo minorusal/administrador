@@ -40,7 +40,9 @@ class ordenes extends Base_Controller {
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('users_model','users_model');
-		$this->load->model('sucursales_model','sucursales_model');
+		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
+		$this->load->model('administracion/creditos_model','creditos_model');
 		// $this->load->model($this->uri_modulo.'articulos_model','articulos_model');
 		// $this->load->model($this->uri_modulo.'catalogos_model','catalogos_model');
 		// Diccionario
@@ -176,29 +178,59 @@ class ordenes extends Base_Controller {
 					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
+
 		$dropArray2 = array(
-					 'data'		=> $this->sucursales_model->get_sucursales()
-					,'selected' => $detalle[0]['id_sucursal']
+					 'data'		=> $this->sucursales_model->db_get_data()
+					 ,'selected' => $detalle[0]['id_sucursal']
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('clave_corta','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 				);
 		$sucursales	    = dropdown_tpl($dropArray2);
+		$dropArray3 = array(
+					 'data'		=> $this->formas_de_pago_model->db_get_data()
+					 ,'selected' => $detalle[0]['id_forma_pago']
+					,'value' 	=> 'id_forma_pago'
+					,'text' 	=> array('clave_corta','descripcion')
+					,'name' 	=> "id_forma_pago"
+					,'class' 	=> "requerido"
+				);
+		$forma_pago	    = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->creditos_model->db_get_data()
+					 ,'selected' => $detalle[0]['id_administracion_creditos']
+					,'value' 	=> 'id_administracion_creditos'
+					,'text' 	=> array('clave_corta','credito')
+					,'name' 	=> "id_administracion_creditos"
+					,'class' 	=> "requerido"
+				);
+		$creditos	    = dropdown_tpl($dropArray4);
 		// 
-		$tabData['id_compras_orden']	= $id_compras_orden;
-		$tabData['orden_num']   		= $this->lang_item("orden_num",false);
-		$tabData['orden_num_value']	 	= $detalle[0]['orden_num'];
-        $tabData['proveedor'] 	 		= $this->lang_item("proveedor",false);
-		$tabData['list_proveedores']	= $proveedores;
-		$tabData['sucursal']     		= $this->lang_item("sucursal",false);
-        $tabData['list_sucursales']		= $sucursales;
-        $tabData['descripcion']       	= $this->lang_item("descripcion",false);
-        $tabData['descripcion_value'] 	= $detalle[0]['descripcion'];
-        $tabData['fecha_registro']    	= $this->lang_item("fecha_registro",false);
-        $tabData['timestamp']         	= $detalle[0]['timestamp'];
-        $tabData['button_save']       	= $btn_save;
-               
+		$tabData['id_compras_orden']		 = $id_compras_orden;
+		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
+		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
+        $tabData['proveedor'] 	 			 = $this->lang_item("proveedor",false);
+		$tabData['list_proveedores']		 = $proveedores;
+		$tabData['sucursal']     			 = $this->lang_item("sucursal",false);
+        $tabData['list_sucursales']			 = $sucursales;
+        $tabData['descripcion']       		 = $this->lang_item("descripcion",false);
+        $tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
+        $tabData['fecha_registro']    		 = $this->lang_item("fecha_registro",false);
+        $tabData['timestamp']         		 = $detalle[0]['timestamp'];
+        $tabData['button_save']       		 = $btn_save;
+        $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
+		$tabData['orden_fecha_value']	 	 = $detalle[0]['orden_fecha'];
+        $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
+        $tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
+		$tabData['entrega_fecha']            = $this->lang_item("entrega_fecha",false);
+        $tabData['entrega_fecha_value']	     = $detalle[0]['entrega_fecha'];
+        $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
+        $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
+        $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
+        $tabData['observaciones_value']      = $detalle[0]['observaciones'];
+
+
         if($detalle[0]['id_usuario']){
         	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
@@ -228,13 +260,29 @@ class ordenes extends Base_Controller {
 				);
 		$proveedores    = dropdown_tpl($dropArray);
 		$dropArray2 = array(
-					 'data'		=> $this->sucursales_model->get_sucursales()
+					 'data'		=> $this->sucursales_model->db_get_data()
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('clave_corta','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 				);
 		$sucursales	    = dropdown_tpl($dropArray2);
+		$dropArray3 = array(
+					 'data'		=> $this->formas_de_pago_model->db_get_data()
+					,'value' 	=> 'id_forma_pago'
+					,'text' 	=> array('clave_corta','descripcion')
+					,'name' 	=> "id_forma_pago"
+					,'class' 	=> "requerido"
+				);
+		$forma_pago	    = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->creditos_model->db_get_data()
+					,'value' 	=> 'id_administracion_creditos'
+					,'text' 	=> array('clave_corta','credito')
+					,'name' 	=> "id_administracion_creditos"
+					,'class' 	=> "requerido"
+				);
+		$creditos	    = dropdown_tpl($dropArray4);
 		// Botones
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
@@ -244,11 +292,15 @@ class ordenes extends Base_Controller {
         $tabData['list_proveedores']= $proveedores;
         $tabData['sucursal']     	= $this->lang_item("sucursal",false);
         $tabData['list_sucursales']	= $sucursales;
+        $tabData['forma_pago']     	= $this->lang_item("forma_pago",false);
+        $tabData['list_forma_pago']	= $forma_pago;
+        $tabData['creditos']     	= $this->lang_item("creditos",false);
+        $tabData['list_creditos']	= $creditos;
         $tabData['descripcion']     = $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  = $this->lang_item("fecha_registro",false);
         $tabData['timestamp']       = date('Y-m-d H:i');
-        $tabData['registro_por']   	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']= $this->session->userdata('name');
+        //$tabData['registro_por']   	= $this->lang_item("registro_por",false);
+        //$tabData['usuario_registro']= $this->session->userdata('name');
         $tabData['button_save']     = $btn_save;
         $tabData['button_reset']    = $btn_reset;
         // Respuesta
@@ -271,15 +323,20 @@ class ordenes extends Base_Controller {
 				);
 		}else{
 			$sqlData = array(
-						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
-						,'orden_num' 		=> $this->ajax_post('orden_num')
-						,'id_proveedor' 	=> $this->ajax_post('id_proveedor')
-						,'descripcion'		=> $this->ajax_post('descripcion')
-						,'id_sucursal'  	=> $this->ajax_post('id_sucursal')
-						,'id_usuario' 		=> $this->session->userdata('id_usuario')
-						,'timestamp'  		=> $this->timestamp()
+						'orden_num' 		 => $this->ajax_post('orden_num')
+						,'orden_fecha' 		 => $this->ajax_post('orden_fecha')
+						,'id_proveedor' 	 => $this->ajax_post('id_proveedor')
+						,'descripcion'		 => $this->ajax_post('descripcion')
+						,'id_sucursal'  	 => $this->ajax_post('id_sucursal')
+						,'entrega_direccion' => $this->ajax_post('entrega_direccion')
+						,'entrega_fecha'     => $this->ajax_post('entrega_fecha')
+						,'id_forma_pago'     => $this->ajax_post('id_forma_pago')
+						,'id_credito' 		 => $this->ajax_post('id_administracion_creditos')
+						,'prefactura_num' 	 => $this->ajax_post('prefactura_num')
+						,'observaciones' 	 => $this->ajax_post('observaciones')
+						,'id_usuario' 		 => $this->session->userdata('id_usuario')
+						,'timestamp'  		 => $this->timestamp()
 						);
-
 			$insert = $this->db_model->insert($sqlData);
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
@@ -314,13 +371,20 @@ class ordenes extends Base_Controller {
 		}else{
 			$sqlData = array(
 						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
-						,'orden_num' 		=> $this->ajax_post('orden_num')
+						,'orden_fecha' 		 => $this->ajax_post('orden_fecha')
 						,'id_proveedor' 	=> $this->ajax_post('id_proveedor')
 						,'descripcion'		=> $this->ajax_post('descripcion')
 						,'id_sucursal'  	=> $this->ajax_post('id_sucursal')
+						,'entrega_direccion' => $this->ajax_post('entrega_direccion')
+						,'entrega_fecha'     => $this->ajax_post('entrega_fecha')
+						,'id_forma_pago'     => $this->ajax_post('id_forma_pago')
+						,'id_credito' 		 => $this->ajax_post('id_administracion_creditos')
+						,'prefactura_num' 	 => $this->ajax_post('prefactura_num')
+						,'observaciones' 	 => $this->ajax_post('observaciones')
 						,'id_usuario' 		=> $this->session->userdata('id_usuario')
 						,'timestamp'  		=> $this->timestamp()
 						);
+
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);

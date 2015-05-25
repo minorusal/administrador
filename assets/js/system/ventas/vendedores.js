@@ -3,22 +3,22 @@ jQuery(document).ready(function(){
   jQuery('#search-query').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){  
-      buscar_vendedores();
+      buscar();
     } 
   });
 })
-function buscar_vendedores(){
+function buscar(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/vendedores/listado_vendedores",
+    url: path()+"ventas/vendedores/listado",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
       jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      var funcion = 'buscar_vendedores';
+      var funcion = 'buscar';
           jQuery("#loader").html('');
           jQuery('#a-1').html(data+input_keypress('search-query', funcion));
       jQuery('#search-query').val(filtro).focus();
@@ -36,7 +36,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar_vendedores';
+           		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -47,7 +47,7 @@ function load_content(uri, id_content){
         }
     });
 }
-function insert_vendedor(){
+function insert(){
  var btn          = jQuery("button[name='save_vendedor']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -66,16 +66,16 @@ function insert_vendedor(){
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
 
-  var entidad = jQuery("select[name='lts_entidades'] option:selected").val();
-  var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
+  var id_entidad = jQuery("select[name='lts_entidades'] option:selected").val();
+  var id_sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
 
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/vendedores/insert_vendedor",
+    url: path()+"ventas/vendedores/insert",
     dataType: "json",
     data: {
-            incomplete :incomplete,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -91,11 +91,11 @@ function insert_vendedor(){
     }
   })
 }
-function detalle_vendedor(id_vendedor){
+function detalle(id_vendedor){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
-        url: path()+"ventas/vendedores/detalle_vendedor",
+        url: path()+"ventas/vendedores/detalle",
         dataType: 'json',
         data: {id_vendedor : id_vendedor},
         success: function(data){
@@ -106,7 +106,7 @@ function detalle_vendedor(id_vendedor){
         }
     });
 }
-function update_vendedor(){
+function update(){
   var btn          = jQuery("button[name='update_vendedor']");
  /* btn.attr('disabled','disabled');*/
   jQuery('#mensajes').hide();
@@ -124,16 +124,16 @@ function update_vendedor(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
-  var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
+  var id_entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
+  var id_sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
 
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/vendedores/update_vendedor",
+    url: path()+"ventas/vendedores/update",
     dataType: "json",
     data: {
-            incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },

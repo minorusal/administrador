@@ -3,22 +3,22 @@ jQuery(document).ready(function(){
   jQuery('#search-query').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){  
-      buscar();
+      buscar_usuario();
     } 
   });
 })
-function buscar(){
+function buscar_usuario(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/listado",
+    url: path()+"administracion/usuarios/listado_usuarios",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
       jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      var funcion = 'buscar';
+      var funcion = 'buscar_usuario';
           jQuery("#loader").html('');
           jQuery('#a-1').html(data+input_keypress('search-query', funcion));
       jQuery('#search-query').val(filtro).focus();
@@ -36,7 +36,7 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar';
+           		var funcion = 'buscar_usuario';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
@@ -47,7 +47,22 @@ function load_content(uri, id_content){
         }
     });
 }
-function insert(){
+function detalle_usuario(id_usuario){
+  jQuery('#ui-id-2').click();
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"administracion/usuarios/detalle_usuario",
+        dataType: 'json',
+        data: {id_usuario : id_usuario},
+        success: function(data){
+          var chosen = 'jQuery(".chzn-select").chosen();';
+          jQuery('#a-0').html('');
+          jQuery('#a-2').html(data+include_script(chosen));
+          jQuery('#ui-id-2').show('slow');
+        }
+    });
+}
+/*function insert_cliente(){
   var btn          = jQuery("button[name='save_cliente']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -65,15 +80,15 @@ function insert(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-  var id_entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
-  var id_sucursal    = jQuery("select[name='lts_sucursales'] option:selected").val();
+  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
+  var sucursal    = jQuery("select[name='lts_sucursales'] option:selected").val();
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/insert",
+    url: path()+"ventas/clientes/insert_cliente",
     dataType: "json",
     data: {
-            incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,cp:cp,telefonos:telefonos,email:email,id_sucursal:id_sucursal},
+            incomplete :incomplete, nombre:nombre,razon_social:razon_social, clave_corta:clave_corta, rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,cp:cp,telefonos:telefonos,email:email,sucursal:sucursal},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -89,26 +104,11 @@ function insert(){
     }
   })
 }
-function detalle(id_cliente){
-  jQuery('#ui-id-2').click();
-  jQuery.ajax({
-        type: "POST",
-        url: path()+"ventas/clientes/detalle",
-        dataType: 'json',
-        data: {id_cliente : id_cliente},
-        success: function(data){
-          var chosen = 'jQuery(".chzn-select").chosen();';
-          jQuery('#a-0').html('');
-          jQuery('#a-2').html(data+include_script(chosen));
-          jQuery('#ui-id-2').show('slow');
-        }
-    });
-}
 
-function update(){
+function update_cliente(){
   var btn          = jQuery("button[name='update_cliente']");
   /*btn.attr('disabled','disabled');*/
-  jQuery('#mensajes').hide();
+  /*jQuery('#mensajes').hide();
   
   var incomplete    = values_requeridos();    
   var  id_cliente   = jQuery('#id_cliente').val();
@@ -124,15 +124,15 @@ function update(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-  var id_entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
-  var id_sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
+  var entidad       = jQuery("select[name='lts_entidades'] option:selected").val();
+  var sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"ventas/clientes/update",
+    url: path()+"ventas/clientes/update_cliente",
     dataType: "json",
     data: {
-            incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete, id_cliente:id_cliente,nombre:nombre,razon_social:razon_social,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,entidad:entidad,sucursal:sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -146,3 +146,4 @@ function update(){
     }
   });
 }
+*/

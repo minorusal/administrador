@@ -4,9 +4,15 @@
             <td>
             <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
                 <label>{orden_num}: (*)</label>
-                <input id="orden_num" type="text" data-campo="orden_num" class="input-large requerido uneditable-input" value="{orden_num_value}" />
+                <input id="orden_num" type="text" data-campo="orden_num" class="input-large uneditable-input" value="{orden_num_value}" />
             </td>
         </tr>
+        <tr>
+            <td>
+                <label>{orden_fecha}: (*)</label>
+                <input id="orden_fecha" type="text" data-campo="orden_fecha" class="input-large requerido" value="{orden_fecha_value}" />
+            </td>
+        <tr>
         <tr>
             <td>
                 <label>{proveedor}: (*)</label>
@@ -23,6 +29,42 @@
             <td>
                 <label>{sucursal}:</label>
                 {list_sucursales}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{entrega_direccion}:</label>
+                <textarea id="entrega_direccion" data-campo="entrega_direccion" class="span5" style="resize: vertical; height: 100px;">{entrega_direccion_value}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{entrega_fecha}: (*)</label>
+                <input id="entrega_fecha" type="text" data-campo="entrega_fecha" class="input-large requerido" value="{entrega_fecha_value}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{forma_pago}: (*)</label>
+                {list_forma_pago}
+            </td>
+        </tr>
+        <tr>        
+            <td>
+                <label>{creditos}:</label>
+                {list_creditos}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{prefactura_num}: (*)</label>
+                <input id="prefactura_num" data-campo="prefactura_num" type="text" class="input-large requerido" value="{prefactura_num_value}" />
+            </td>
+        </tr>
+          <tr>
+            <td>
+                <label>{observaciones}:</label>
+                <textarea id="observaciones" data-campo="observaciones" class="span5" style="resize: vertical; height: 100px;">{observaciones_value}</textarea>
             </td>
         </tr>
         <tr>

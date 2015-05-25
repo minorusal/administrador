@@ -338,7 +338,7 @@ class descuentos extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Descuentos"),
+		$params = array(	'title'   => $this->lang_item("Catálogos Descuentos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

@@ -37,6 +37,7 @@
 	$lang['msg_err_clv']             = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
 	$lang['btn_xlsx']     = 'Generar Excel';
+	$lang['btn_import_xlsx']     = 'Importar Excel';
 	$lang['btn_guardar']  = 'guardar cambios';
 	$lang['btn_limpiar']  = 'limpiar';
 	$lang['btn_search']   = 'buscar';

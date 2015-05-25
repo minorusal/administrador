@@ -17,9 +17,9 @@ class vendedores extends Base_Controller {
 		$config_tab['names']    = array($this->lang_item("agregar_vendedores"), 
 										$this->lang_item("listado_vendedores"),
 										$this->lang_item("detalle_vendedores")); 
-		$config_tab['links']    = array('ventas/vendedores/agregar_vendedores', 
-										'ventas/vendedores/listado_vendedores/'.$pagina,
-										'detalle_vendedores'); 
+		$config_tab['links']    = array('ventas/vendedores/agregar', 
+										'ventas/vendedores/listado/'.$pagina,
+										'detalle'); 
 		$config_tab['action']   = array('load_content',
 										'load_content',
 										'');
@@ -31,17 +31,17 @@ class vendedores extends Base_Controller {
 		return $this->uri_modulo.$this->view_content;
 	}
 	public function index(){
-		$view_listado_vendedores 	= $this->listado_vendedores();		
+		$view_listado 	= $this->listado();		
 
 		$data['titulo_seccion']   = $this->lang_item("vendedores");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = 'fa fa-users';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado_vendedores);
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado);
 		
 		$js['js'][]     = array('name' => 'vendedores', 'dirname' => 'ventas');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
-	public function agregar_vendedores(){
+	public function agregar(){
 		// Listas
 		$dropArray = array(
 					 'data'		=> $this->ent_model->get_entidades_default()
@@ -73,7 +73,7 @@ class vendedores extends Base_Controller {
 		$data_1['telefonos'] 	  =	$this->lang_item("telefonos");
 		$data_1['email'] 		  =	$this->lang_item("email");
 		$data_1['contacto'] 	  =	$this->lang_item("contacto");
-		$data_1['button_save']    = form_button(array('class'=>"btn btn-primary",'name' => 'save_vendedor','onclick'=>'insert_vendedor()' , 'content' => $this->lang_item("btn_guardar") ));
+		$data_1['button_save']    = form_button(array('class'=>"btn btn-primary",'name' => 'save_vendedor','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$data_1['button_reset']   = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		$data_1['dropdown_entidad'] = $lts_entidades;
 		$data_1['dropdown_sucursal'] = $lts_sucursales;
@@ -84,7 +84,7 @@ class vendedores extends Base_Controller {
 			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'vendedores_save', $data_1, true);
 		}
 	}
-	public function listado_vendedores($offset = 0){
+	public function listado($offset = 0){
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$uri_view    = $this->uri_modulo.'listado';
@@ -93,23 +93,23 @@ class vendedores extends Base_Controller {
 
 		$lts_content =$this->vendedores_model->get_vendedores($limit,$offset,$filtro);
 		$total_rows  = count($this->vendedores_model->get_vendedores($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado_vendedores');
+		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado');
 
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows>0){
 			foreach ($lts_content as $value) {
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'detalle_vendedor('.$value['id_ventas_vendedores'].')'
+							  	'onclick' => 'detalle('.$value['id_ventas_vendedores'].')'
 						);
 
 				$tbl_data[] = array('id'              => $value['nombre_vendedor'],
-									'nombre_vendedor'  => tool_tips_tpl($value['nombre_vendedor'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'nombre_vendedor' => tool_tips_tpl($value['nombre_vendedor'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'     => $value['clave_corta'],
 									'rfc'  			  => $value['rfc'],
 									'telefonos'       => $value['telefonos'],
-									'entidad'       => $value['entidad'],
-									'sucursal'       => $value['sucursal']);
+									'entidad'         => $value['entidad'],
+									'sucursal'        => $value['sucursal']);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
@@ -145,7 +145,7 @@ class vendedores extends Base_Controller {
 			return $this->load_view_unique($uri_view , $data_tab_2, true);
 		}
 	}
-	public function insert_vendedor(){
+	public function insert(){
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -166,8 +166,8 @@ class vendedores extends Base_Controller {
 									 'num_ext'	      => $this->ajax_post('num_ext'),
 									 'colonia' 		  => $this->ajax_post('colonia'),
 									 'municipio' 	  => $this->ajax_post('municipio'),
-									 'entidad'        => $this->ajax_post('entidad'),
-									 'sucursal' 	  => $this->ajax_post('sucursal'),
+									 'id_entidad'     => $this->ajax_post('id_entidad'),
+									 'id_sucursal' 	  => $this->ajax_post('id_sucursal'),
 									 'cp' 			  => $this->ajax_post('cp'),
 									 'telefonos'      => $this->ajax_post('telefonos'),
 									 'email'          => $this->ajax_post('email'),
@@ -188,13 +188,13 @@ class vendedores extends Base_Controller {
 			
 		}
 	}
-	public function detalle_vendedor(){
+	public function detalle(){
 		$id_vendedor       = $this->ajax_post('id_vendedor');
-		$detalle_vendedor  = $this->vendedores_model->get_vendedor_unico($id_vendedor);
+		$detalle  = $this->vendedores_model->get_vendedor_unico($id_vendedor);
 		// Listas
 		$dropArray = array(
 					 'data'		 => $this->ent_model->get_entidades_default()
-					 ,'selected' => $detalle_vendedor[0]['entidad']
+					 ,'selected' => $detalle[0]['id_entidad']
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('clave_corta','entidad')
 					,'name' 	=> "lts_entidades"
@@ -202,7 +202,7 @@ class vendedores extends Base_Controller {
 				);
 		 $dropArray2 = array(
 					 'data'		=> $this->sucur_model->db_get_data()
-					,'selected' => $detalle_vendedor[0]['sucursal']
+					,'selected' => $detalle[0]['id_sucursal']
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('sucursal')
 					,'name' 	=> "lts_sucursales"
@@ -227,35 +227,35 @@ class vendedores extends Base_Controller {
 		$data_tab_3['email'] 		   = $this->lang_item("email");
 		$data_tab_3['timestamp'] 	   = $this->lang_item("fecha_registro");
 		$data_tab_3['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-		$data_tab_3['button_save']     = form_button(array('class'=>"btn btn-primary",'name' => 'update_vendedor','onclick'=>'update_vendedor()' , 'content' => $this->lang_item("btn_guardar") ));
+		$data_tab_3['button_save']     = form_button(array('class'=>"btn btn-primary",'name' => 'update_vendedor','onclick'=>'update()' , 'content' => $this->lang_item("btn_guardar") ));
 
-		$data_tab_3['id_vendedor']     = $detalle_vendedor[0]['id_ventas_vendedores'];
-		$data_tab_3['vendedor_value']  = $detalle_vendedor[0]['nombre_vendedor'];
-		$data_tab_3['clave_value']     = $detalle_vendedor[0]['clave_corta'];
-		$data_tab_3['rfc_value']       = $detalle_vendedor[0]['rfc'];
-		$data_tab_3['calle_value']     = $detalle_vendedor[0]['calle'];
-		$data_tab_3['num_int_value']   = $detalle_vendedor[0]['num_int'];
-		$data_tab_3['num_ext_value']   = $detalle_vendedor[0]['num_ext'];
-		$data_tab_3['colonia_value']   = $detalle_vendedor[0]['colonia'];
-		$data_tab_3['municipio_value'] = $detalle_vendedor[0]['municipio'];
+		$data_tab_3['id_vendedor']     = $detalle[0]['id_ventas_vendedores'];
+		$data_tab_3['vendedor_value']  = $detalle[0]['nombre_vendedor'];
+		$data_tab_3['clave_value']     = $detalle[0]['clave_corta'];
+		$data_tab_3['rfc_value']       = $detalle[0]['rfc'];
+		$data_tab_3['calle_value']     = $detalle[0]['calle'];
+		$data_tab_3['num_int_value']   = $detalle[0]['num_int'];
+		$data_tab_3['num_ext_value']   = $detalle[0]['num_ext'];
+		$data_tab_3['colonia_value']   = $detalle[0]['colonia'];
+		$data_tab_3['municipio_value'] = $detalle[0]['municipio'];
 		$data_tab_3['dropdown_entidad']= $lts_entidades;
 		$data_tab_3['dropdown_sucursal']= $lts_sucursal;
-		$data_tab_3['cp_value']    	   = $detalle_vendedor[0]['cp'];
-		$data_tab_3['telefonos_value'] = $detalle_vendedor[0]['telefonos'];
-		$data_tab_3['email']           = $detalle_vendedor[0]['email'];
-		$data_tab_3['timestamp_value'] = $detalle_vendedor[0]['timestamp'];
+		$data_tab_3['cp_value']    	   = $detalle[0]['cp'];
+		$data_tab_3['telefonos_value'] = $detalle[0]['telefonos'];
+		$data_tab_3['email']           = $detalle[0]['email'];
+		$data_tab_3['timestamp_value'] = $detalle[0]['timestamp'];
 
 		$this->load_database('global_system');
         $this->load->model('users_model');
     	
-    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle_vendedor[0]['id_usuario']);
+    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
     	$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
     	$data_tab_3['val_usuarios_registro']  = $usuario_name ;
 
-    	if($detalle_vendedor[0]['edit_id_usuario']){
-        	$usuario_registro           = $this->users_model->search_user_for_id($detalle_vendedor[0]['edit_id_usuario']);
+    	if($detalle[0]['edit_id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
-        	$data_tab_3['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle_vendedor[0]['edit_timestamp']), $usuario_name);
+        	$data_tab_3['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
     	}else{
     		$usuario_name = '';
     		$data_tab_3['val_ultima_modificacion']= $this->lang_item('lbl_sin_modificacion', false);
@@ -265,7 +265,7 @@ class vendedores extends Base_Controller {
 
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
-	public function update_vendedor(){
+	public function update(){
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -280,14 +280,13 @@ class vendedores extends Base_Controller {
 							 'num_ext'=> $this->ajax_post('num_ext'),
 							 'colonia' => $this->ajax_post('colonia'),
 							 'municipio' => $this->ajax_post('municipio'),
-							 'entidad' => $this->ajax_post('entidad'),
-							 'sucursal' 	  => $this->ajax_post('sucursal'),
+							 'id_entidad' => $this->ajax_post('id_entidad'),
+							 'id_sucursal' 	  => $this->ajax_post('id_sucursal'),
 							 'cp' => $this->ajax_post('cp'),
 							 'telefonos' => $this->ajax_post('telefonos'),
 							 'email' => $this->ajax_post('email'),
 							 'edit_timestamp'  	  => $this->timestamp(),
 							 'edit_id_usuario'     => $this->session->userdata('id_usuario'));
-
 			$update = $this->vendedores_model->update_vendedor($data_insert,$id_vendedor);
 			if($update){
 				$msg = $this->lang_item("msg_insert_success",false);
@@ -321,7 +320,7 @@ class vendedores extends Base_Controller {
 									$this->lang_item("sucursal"));
 	
 		}
-		$params = array(	'tittle'  => $this->lang_item("seccion"),
+		$params = array(	'title'  => $this->lang_item("seccion"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

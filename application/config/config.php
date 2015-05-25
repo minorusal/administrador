@@ -12,7 +12,7 @@
 |
 | If this is not set then CodeIgniter will guess the protocol, domain and
 | path to your installation.
-|
+|  
 */
 
 $config['base_url']	= 'http://localhost/adminventas_ci/';
@@ -182,7 +182,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -247,7 +247,7 @@ $config['encryption_key'] = '6187c07425c5e2670253b769933b48a4';
 |
 */
 $config['sess_cookie_name']		= 'ci_session';
-$config['sess_expiration']		= 1800;
+$config['sess_expiration']		= 7200;
 $config['sess_expire_on_close']	= TRUE;
 $config['sess_encrypt_cookie']	= FALSE;
 $config['sess_use_database']	= FALSE;

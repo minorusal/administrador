@@ -1,224 +1,425 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class usuarios extends Base_Controller { 
 
-	var $uri_modulo     = 'administracion/';
-	var $uri_submodulo  = 'usuarios/';
-	var $view_content   = 'content';
+	private $modulo;
+	private $submodulo;
+	private $view_content;
+	private $path;
+	private $icon;
+	private $offset, $limit_max;
+	private $tab = array(), $tab_indice = array();
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('users_model');
-		$this->load->model('administracion/sucursales_model','sucur_model');
-		$this->load->model('administracion/empresas_model','empresas_model');
-		$this->lang->load("administracion/usuarios","es_ES");
+		$this->modulo 			= 'administracion';
+		$this->submodulo		= 'control_de_usuarios';
+		$this->seccion          = 'usuarios';
+		$this->icon 			= 'fa fa-user'; #Icono de modulo
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
+		$this->view_content 	= 'content';
+		$this->limit_max		= 5;
+		$this->offset			= 0;
+
+		$this->tab_indice 		= array(
+									 'agregar'
+									,'listado'
+									,'detalle'
+								);
+		for($i=0; $i<=count($this->tab_indice)-1; $i++){
+			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
+		}
+
+		$this->load->model('users_model','db_model');
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
-		$pagina = (is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
-		$config_tab['names']    = array($this->lang_item("agregar_usuario"), 
-										$this->lang_item("listado_usuario"),
-										$this->lang_item("detalle_usuario")); 
-		$config_tab['links']    = array('administracion/usuarios/agregar_usuario', 
-										'administracion/usuarios/listado_usuarios/'.$pagina,
-										'detalle_usuario'); 
-		$config_tab['action']   = array('load_content',
-										'load_content',
-										'');
+		for($i=1; $i<=count($this->tab); $i++){
+			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
+		}
+		$path  	= $this->path;
+		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		
+		$config_tab['names']    = array(
+										 $this->lang_item($tab_1)
+										,$this->lang_item($tab_2)
+										,$this->lang_item($tab_3)
+								); 
+		$config_tab['links']    = array(
+										 $path.$tab_1
+										,$path.$tab_2.'/'.$pagina
+										,$tab_3
+								); 
+		$config_tab['action']   = array(
+										 'load_content'
+										,'load_content'
+										,''
+								);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->uri_modulo.$this->view_content;
+		return $this->modulo.'/'.$this->view_content;
 	}
 	public function index(){
-		
-		$view_listado_usuarios 	= $this->listado_usuarios();
-		$data['titulo_seccion']   = $this->lang_item("usuario");
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'fa fa-users';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado_usuarios);
-		
-		$js['js'][]     = array('name' => 'usuarios', 'dirname' => 'administracion');
+		$tabl_inicial 			  = 2;
+		$view_listado    		  = $this->listado();		
+		$contenidos_tab           = $view_listado;
+		$data['titulo_seccion']   = $this->lang_item("seccion");
+		$data['titulo_submodulo'] = $this->lang_item("submodulo");
+		$data['icon']             = $this->icon;
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
+		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
-	/*public function agregar_usuarios(){
-		// Listas
-		$dropArray = array(
-					 'data'		=> $this->ent_model->get_entidades_default()
-					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('clave_corta','entidad')
-					,'name' 	=> "lts_entidades"
-					,'class' 	=> "requerido"
-				);
-		$dropArray2 = array(
-					 'data'		=> $this->sucur_model->db_get_data()
-					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('sucursal')
-					,'name' 	=> "lts_sucursales"
-					,'class' 	=> "requerido"
-				);
-		$lts_entidades  = dropdown_tpl($dropArray); 
-		$lts_sucursales  = dropdown_tpl($dropArray2); 
-		$data_1['nombre_cliente'] =	$this->lang_item("nombre_cliente");
-		$data_1['rfc'] 			  =	$this->lang_item("rfc_clientes");
-		$data_1['razon_social']   =	$this->lang_item("razon_social");
-		$data_1['clave_corta'] 	  =	$this->lang_item("clave_corta");
-		$data_1['calle']  		  =	$this->lang_item("calle");
-		$data_1['num_int'] 		  =	$this->lang_item("num_int");
-		$data_1['num_ext'] 	 	  =	$this->lang_item("num_ext");
-		$data_1['colonia'] 		  =	$this->lang_item("colonia");
-		$data_1['municipio'] 	  =	$this->lang_item("municipio");
-		$data_1['entidad'] 		  =	$this->lang_item("entidad");
-		$data_1['sucursal'] 	  =	$this->lang_item("sucursal");
-		$data_1['cp'] 			  =	$this->lang_item("cp");
-		$data_1['telefonos'] 	  =	$this->lang_item("telefonos");
-		$data_1['email'] 		  =	$this->lang_item("email");
-		$data_1['contacto'] 	  =	$this->lang_item("contacto");
-		$data_1['button_save']    = form_button(array('class'=>"btn btn-primary",'name' => 'save_cliente','onclick'=>'insert_cliente()' , 'content' => $this->lang_item("btn_guardar") ));
-		$data_1['button_reset']   = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
-		$data_1['dropdown_entidad'] = $lts_entidades;
-		$data_1['dropdown_sucursal'] = $lts_sucursales;
-
-		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true));
-		}else{
-			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true);
-		}
-	}
-	*/
-	public function listado_usuarios($offset = 0){
-		$data_tab_2  = "";
-		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$uri_view    = $this->uri_modulo.'listado';
-		$limit       = 5;
-		$uri_segment = $this->uri_segment(); 
-
-		$lts_content =$this->usuarios_model->get_usuarios($limit,$offset,$filtro);
-		$total_rows  = count($this->usuarios_model->get_usuarios($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado_usuarios');
-
-		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+	/*public function listado($offset=0){
+		$seccion 		= '';
+		$filtro         = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$accion 		= $this->tab['listado'];
+		$tab_detalle	= $this->tab['detalle'];
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.'/'.$accion;
+		$url_link 		= $this->path.$seccion.$accion;		
+		$sqlData = array(
+						 'buscar'      	=> $filtro
+						,'offset' 		=> $offset
+						,'limit'      	=> $limit
+						,'aplicar_limit'=> true
+					);
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = $this->db_model->db_get_total_rows($sqlData);
+		$list_content = $this->db_model->db_get_data($sqlData);
+		$url          = base_url($url_link);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){
-			foreach ($lts_content as $value) {
+			foreach ($list_content as $value) {
+				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => 'detalle_usuario('.$value['id_usuario'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_compras_proveedor'].')'
 						);
-
-
-				$tbl_data[] = array('id'      => $value['nombre'],
-									'nombre'  => tool_tips_tpl($value['nombre'].' '.$value['paterno'].' '.$value['materno'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'perfil'  => $value['perfil'],
-									'pais'    => $value['pais'],
-									'empresa' => $value['empresa'],
-									'sucursal'=> $value['sucursal']);
+				// Datos para tabla
+				$tbl_data[] = array('id'                => $value['razon_social'],
+									'razon_social'      => tool_tips_tpl($value['razon_social'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'nombre_comercial'  => $value['nombre_comercial'],
+									'rfc'               => $value['rfc'],
+									'clave_corta'       => $value['clave_corta'],
+									'entidad'           => $value['entidad']
+									);
 			}
 
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
-		
-			$this->table->set_heading(	$this->lang_item("nombre"),
-										$this->lang_item("nombre"),
-										$this->lang_item("perfil"),
-										$this->lang_item("pais"),
-										$this->lang_item("empresa"),
-										$this->lang_item("sucursal"));
+			
+			$this->table->set_heading(	$this->lang_item("id"),
+										$this->lang_item("lbl_rsocial"),
+										$this->lang_item("lbl_nombre"),
+										$this->lang_item("lbl_rfc"),
+										$this->lang_item("lbl_clv"),
+										$this->lang_item("lbl_entidad")
+
+									);
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
 
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
-			/*$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
-							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'export_xlsx?filtro='.base64_encode($filtro))
-							);*/
 		}else{
-			$msg   = $this->lang_item("msg_query_null");
-			$tabla = alertas_tpl('', $msg ,false);
-			//$buttonTPL = "";
+			$buttonTPL = "";
+			$msg       = $this->lang_item("msg_query_null");
+			$tabla     = alertas_tpl('', $msg ,false);
 		}
-		
-		/*$buttonIPX = array( 'text'       => $this->lang_item("btn_xlsx"), 
-							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'import_xlsx')
-							);*/
+			$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+			$tabData['tabla']     = $tabla;
+			$tabData['export']    = button_tpl($buttonTPL);
+			$tabData['paginador'] = $paginador;
+			$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
-		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
-		//$data_tab_2['export']    = button_tpl($buttonTPL);
-		//$data_tab_2['import']    = button_tpl($buttonIPX);
-		$data_tab_2['tabla']     = $tabla;
-		$data_tab_2['paginador'] = $paginador;
-		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-
-		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($uri_view,$data_tab_2,true));
-		}else{
-			return $this->load_view_unique($uri_view , $data_tab_2, true);
-		}
+			if($this->ajax_post(false)){
+				echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+			}else{
+				return $this->load_view_unique($uri_view , $tabData, true);
+			}
 	}
-	public function detalle_usuario(){
-		$id_usuario       = $this->ajax_post('id_usuario');
-		$detalle_usuario  = $this->usuarios_model->get_usuario_unico($id_usuario);
-		$uri_view   	  = $this->uri_modulo.$this->uri_submodulo.'usuario_edit';
-        $dropArray = array(
-					 'data'		 => $this->sucur_model->db_get_data()
-					 ,'selected' => $detalle_usuario[0]['id_sucursal']
-					,'value' 	 => 'id_sucursal'
-					,'text' 	 => array('sucursal')
-					,'name' 	 => "lts_sucursales"
-					,'class' 	 => "requerido"
-				);
-		 $dropArray2 = array(
-			 'data'		 => $this->empresas_model->db_get_data()
-			 ,'selected' => $detalle_usuario[0]['id_empresa']
-			,'value' 	 => 'id_empresa'
-			,'text' 	 => array('empresa')
-			,'name' 	 => "lts_sucursales"
-			,'class' 	 => "requerido"
-		);         	
-		 
+	public function export_xlsx(){
+		$filtro  = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array(
+						 'buscar'      	 => $filtro
+						,'aplicar_limit' => 0
+					);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									$value['razon_social'],
+									$value['nombre_comercial'],
+									$value['clave_corta'],
+									$value['rfc'],
+									$value['calle'],
+									$value['num_int'],
+									$value['num_ext'],
+									$value['colonia'],
+									$value['municipio'],
+									$value['entidad'],
+									$value['cp'],
+									$value['telefonos'],
+									$value['email'],
+									$value['contacto'],
+									$value['comentarios']
+							);
+			}
+
+			$set_heading = array(
+									$this->lang_item("lbl_rsocial"),
+									$this->lang_item("lbl_nombre"),
+									$this->lang_item("lbl_clv"),
+									$this->lang_item("lbl_rfc"),
+									$this->lang_item("lbl_calle"),
+									$this->lang_item("lbl_num_int"),
+									$this->lang_item("lbl_num_ext"),
+									$this->lang_item("lbl_colonia"),
+									$this->lang_item("lbl_municipio"),
+									$this->lang_item("lbl_entidad"),
+									$this->lang_item("lbl_cp"),
+									$this->lang_item("lbl_telefono"),
+									$this->lang_item("lbl_email"),
+									$this->lang_item("lbl_contacto"),
+									$this->lang_item("lbl_comentario")
+								);
+	
+		}
+		$params = array(	'title'   => $this->lang_item("catalogo", false).$this->lang_item("seccion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
 		
-       	$lts_sucursal              = dropdown_tpl($dropArray);
-       	$lts_empresa               = dropdown_tpl($dropArray2);
-		$data_tab_3['nombre']      = $this->lang_item("nombre");
-		$data_tab_3['paterno']     = $this->lang_item("paterno");
-		$data_tab_3['materno'] 	   = $this->lang_item("materno");
-		$data_tab_3['perfil']      = $this->lang_item("perfil");
-		$data_tab_3['registro'] 	   = $this->lang_item("registro");
-		$data_tab_3['telefono']    = $this->lang_item("telefono");
-		$data_tab_3['mail'] 	   = $this->lang_item("mail");
-		$data_tab_3['pais'] 	   = $this->lang_item("pais");
-		$data_tab_3['button_save'] = form_button(array('class'=>"btn btn-primary",'name' => 'update_usuario','onclick'=>'update_usuario()' , 'content' => $this->lang_item("btn_guardar") ));
-		//DATA
-		$data_tab_3['id_usuario']        = $detalle_usuario[0]['id_usuario'];
-		$data_tab_3['nombre_val']        = $detalle_usuario[0]['nombre'];
-		$data_tab_3['paterno_val']       = $detalle_usuario[0]['paterno'];
-		$data_tab_3['materno_val']       = $detalle_usuario[0]['materno'];
-		$data_tab_3['perfil_val']        = $detalle_usuario[0]['perfil'];
-		$data_tab_3['registro_val']      = $detalle_usuario[0]['registro'];
-		$data_tab_3['telefono_val']      = $detalle_usuario[0]['telefono'];
-		$data_tab_3['mail_val']          = $detalle_usuario[0]['mail'];
-		$data_tab_3['pais_val']          = $detalle_usuario[0]['pais'];
-		$data_tab_3['dropdown_empresa']  = $lts_empresa;
-		$data_tab_3['dropdown_sucursal'] = $lts_sucursal;
+		$this->excel->generate_xlsx($params);
+	}
+	public function detalle(){
+		$seccion 			    = '';
+		$accion 			    = $this->tab['detalle'];
+		$id_compras_proveedor 	= $this->ajax_post('id_compras_proveedor');
+		$detalle  			    = $this->db_model->get_proveedor_unico($id_compras_proveedor);
+		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
 
-		//$this->load_database('global_system');
-       // $this->load->model('users_model');
+		$dropArray = array(
+					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
+					,'selected' => $detalle[0]['id_administracion_entidad'] 
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('ent_abrev','entidad')
+					,'name' 	=> "id_administracion_entidad"
+					,'class' 	=> "requerido"
+				);
+
+		$tabData['lbl_rsocial']            =  $this->lang_item('lbl_rsocial', false);
+		$tabData['lbl_nombre']             =  $this->lang_item('lbl_nombre', false);
+		$tabData['lbl_clv']                =  $this->lang_item('lbl_clv', false);
+		$tabData['lbl_rfc']                =  $this->lang_item('lbl_rfc', false);
+		$tabData['lbl_calle']              =  $this->lang_item('lbl_calle', false);
+		$tabData['lbl_num_int']            =  $this->lang_item('lbl_num_int', false);
+		$tabData['lbl_num_ext']            =  $this->lang_item('lbl_num_ext', false);
+		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
+		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
+		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
+		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
+		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
+		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
+		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
+		$tabData['lbl_contacto']           =  $this->lang_item('lbl_contacto', false);
+		$tabData['lbl_comentario']         =  $this->lang_item('lbl_comentario', false);
+		$tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
+		$tabData['id_compras_proveedor']   =  $detalle[0]['id_compras_proveedor'];
+		$tabData['val_rsocial']            =  $detalle[0]['razon_social'];
+		$tabData['val_nombre']             =  $detalle[0]['nombre_comercial'];
+		$tabData['val_clv']                =  $detalle[0]['clave_corta'];
+		$tabData['val_rfc']                =  $detalle[0]['rfc'];
+		$tabData['val_calle']              =  $detalle[0]['calle'];
+		$tabData['val_num_int']            =  $detalle[0]['num_int'];
+		$tabData['val_num_ext']            =  $detalle[0]['num_ext'];
+		$tabData['val_colonia']            =  $detalle[0]['colonia'];
+		$tabData['val_municipio']          =  $detalle[0]['municipio'];
+		$tabData['val_cp']                 =  $detalle[0]['cp'];
+		$tabData['val_telefono']           =  $detalle[0]['telefonos'];
+		$tabData['val_email']              =  $detalle[0]['email'];
+		$tabData['val_contacto']           =  $detalle[0]['contacto'];
+		$tabData['val_comentario']         =  $detalle[0]['comentarios'];
+		$tabData['val_fecha_registro']     =  $detalle[0]['timestamp'];
+		
+		$this->load_database('global_system');
+        $this->load->model('users_model');
     	
-    	//$usuario_registro                  = $this->users_model->search_user_for_id($detalle_usuario[0]['id_usuario']);
-    	//$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
-    	//$data_tab_3['val_usuarios_registro']  = $usuario_name ;
+    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+    	$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
+    	$tabData['val_usuarios_registro']  = $usuario_name ;
+	
 
-    	/*if($detalle_cliente[0]['edit_id_usuario']){
-        	$usuario_registro           = $this->users_model->search_user_for_id($detalle_cliente[0]['edit_id_usuario']);
-        	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
-        	$data_tab_3['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle_cliente[0]['edit_timestamp']), $usuario_name);
+        if($detalle[0]['edit_id_usuario']){
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
     	}else{
     		$usuario_name = '';
-    		$data_tab_3['val_ultima_modificacion']= $this->lang_item('lbl_sin_modificacion', false);
-    	}*/
-    	//$data_tab_3['registro_por']    	= $this->lang_item("registro_por",false);
-      	//$data_tab_3['usuario_registro']	= $usuario_name;
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+    	}
 
-		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
+    	$tabData['button_save']         = $btn_save;
+        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
+		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
+	public function agregar(){
+		$seccion 		= '';
+		$accion 		= $this->tab['agregar'];
+		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
+		$dropArray = array(
+					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('ent_abrev','entidad')
+					,'name' 	=> "id_administracion_entidad"
+					,'class' 	=> "requerido"
+				);
 
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+		
+		$tabData['lbl_rsocial']            =  $this->lang_item('lbl_rsocial', false);
+		$tabData['lbl_nombre']             =  $this->lang_item('lbl_nombre', false);
+		$tabData['lbl_clv']                =  $this->lang_item('lbl_clv', false);
+		$tabData['lbl_rfc']                =  $this->lang_item('lbl_rfc', false);
+		$tabData['lbl_calle']              =  $this->lang_item('lbl_calle', false);
+		$tabData['lbl_num_int']            =  $this->lang_item('lbl_num_int', false);
+		$tabData['lbl_num_ext']            =  $this->lang_item('lbl_num_ext', false);
+		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
+		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
+		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
+		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
+		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
+		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
+		$tabData['lbl_contacto']           =  $this->lang_item('lbl_contacto', false);
+		$tabData['lbl_comentario']         =  $this->lang_item('lbl_comentario', false);
+		$tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
+
+		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
+		$tabData['button_save']            =  $btn_save;
+        $tabData['button_reset']           =  $btn_reset;
+
+        if($this->ajax_post(false)){
+				echo json_encode($this->load_view_unique($uri_view , $tabData, true));
+		}else{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
+	public function insert(){
+		// Recibe datos de formulario e inserta un nuevo registro en la BD
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+		}else{
+			$sqlData = array(
+							 'razon_social'              => $this->ajax_post('rsocial')
+							,'nombre_comercial'          => $this->ajax_post('nombre')
+							,'clave_corta'               => $this->ajax_post('clave_corta')
+							,'rfc'                       => $this->ajax_post('rfc')
+							,'calle'                     => $this->ajax_post('calle')
+							,'num_int'                   => $this->ajax_post('num_int')
+							,'num_ext'                   => $this->ajax_post('num_ext')
+							,'colonia'                   => $this->ajax_post('colonia')
+							,'municipio'                 => $this->ajax_post('municipio')
+							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
+							,'cp'                        => $this->ajax_post('cp')
+							,'telefonos'                 => $this->ajax_post('telefono')
+							,'email'                     => $this->ajax_post('email')
+							,'contacto'                  => $this->ajax_post('contacto')
+							,'comentarios'               => $this->ajax_post('comentario')
+							,'id_usuario' 		         => $this->session->userdata('id_usuario')
+							,'timestamp'  		         => $this->timestamp()
+
+						);
+
+
+			
+			//print_debug($sqlData);
+
+			$insert = $this->db_model->insert($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
+	public function actualizar(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+
+		}else{
+			$sqlData = array(
+							'id_compras_proveedor'	     => $this->ajax_post('id_compras_proveedor')
+							,'razon_social'              => $this->ajax_post('rsocial')
+							,'nombre_comercial'          => $this->ajax_post('nombre')
+							,'clave_corta'               => $this->ajax_post('clave_corta')
+							,'rfc'                       => $this->ajax_post('rfc')
+							,'calle'                     => $this->ajax_post('calle')
+							,'num_int'                   => $this->ajax_post('num_int')
+							,'num_ext'                   => $this->ajax_post('num_ext')
+							,'colonia'                   => $this->ajax_post('colonia')
+							,'municipio'                 => $this->ajax_post('municipio')
+							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
+							,'cp'                        => $this->ajax_post('cp')
+							,'telefonos'                 => $this->ajax_post('telefono')
+							,'email'                     => $this->ajax_post('email')
+							,'contacto'                  => $this->ajax_post('contacto')
+							,'comentarios'               => $this->ajax_post('comentario')
+							,'edit_id_usuario' 		     => $this->session->userdata('id_usuario')
+							,'edit_timestamp'  		     => $this->timestamp()
+
+						);
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}*/
 }

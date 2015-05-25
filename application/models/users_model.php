@@ -164,7 +164,7 @@ class users_model extends Base_Model{
 		}		
 	}
 	
-	function get_usuarios($limit, $offset, $filtro="", $aplicar_limit = true){
+	/*function get_usuarios($limit, $offset, $filtro="", $aplicar_limit = true){
 		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
 		$tbl2 	= $this->dbinfo[0]['tbl_personales'];
 		$tbl3 	= $this->dbinfo[0]['tbl_perfiles'];
@@ -243,7 +243,7 @@ class users_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
-	}
+	}*/
 
 }
 

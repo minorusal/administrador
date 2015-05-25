@@ -1,0 +1,87 @@
+
+
+    
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+  /*jQuery('#search-query').focus();
+  jQuery('#search-query').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){  
+      buscar_usuario();
+    } 
+  });*/
+
+jQuery("#red").treeview({
+    animated: "fast",
+    collapsed: true,
+    unique: false,
+    persist: "cookie",
+    toggle: function() {
+      window.console && console.log("%o was toggled", this);
+    }
+  });
+})
+</script>
+<div id="formulario" class="stdform">
+    <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
+    <p>
+        <label>{lbl_nombre}: (*)</label>
+        <input id="nombre" type="text" name="nombre" class="input-large requerido" value="{nombre_val}" />
+    </p>
+    <p>
+        <label>{lbl_paterno}: (*)</label>
+        <input id="razon_social" type="text" name="razon_social" class="input-large requerido" value="{paterno_val}" />
+    </p>
+    <p>
+        <label>{lbl_materno}: (*)</label>
+        <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="{materno_val}" />
+    </p>
+    <p>
+        <label>{lbl_perfil}: (*)</label>
+        {dropdown_perfil}
+    </p>
+    
+    <ul id="red" class="treeview-red">
+        <li><input type="checkbox" /><span>Item 1</span>
+            <ul>
+                <li><input type="checkbox" /><span>Item 1.0</span>
+                    <ul>
+                        <li><input type="checkbox" /><span>Item 1.0.0</span></li>
+                    </ul>
+                </li>
+                <li><input type="checkbox" /><span>Item 1.1</span></li>
+                <li><input type="checkbox" /><span>Item 1.2</span>
+                    <ul>
+                        <li><input type="checkbox" /><span>Item 1.2.0</span>
+                        <ul>
+                            <li><input type="checkbox" /><span>Item 1.2.0.0</span></li>
+                            <li><input type="checkbox" /><span>Item 1.2.0.1</span></li>
+                            <li><input type="checkbox" /><span>Item 1.2.0.2</span></li>
+                        </ul>
+                    </li>
+                        <li><input type="checkbox" /><span>Item 1.2.1</span>
+                        <ul>
+                            <li><input type="checkbox" /><span>Item 1.2.1.0</span></li>
+                        </ul>
+                    </li>
+                        <li><input type="checkbox" /><span>Item 1.2.2</span>
+                        <ul>
+                            <li><input type="checkbox" /><span>Item 1.2.2.0</span></li>
+                            <li><input type="checkbox" /><span>Item 1.2.2.1</span></li>
+                            <li><input type="checkbox" /><span>Item 1.2.2.2</span></li>
+                        </ul>
+                    </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+        {button_reset}
+    </p>
+</div>

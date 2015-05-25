@@ -164,49 +164,91 @@ class users_model extends Base_Model{
 		}		
 	}
 	
-	/*function get_usuarios($limit, $offset, $filtro="", $aplicar_limit = true){
+	function db_get_data($data = array()){
+
+		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
 		$tbl2 	= $this->dbinfo[0]['tbl_personales'];
-		$tbl3 	= $this->dbinfo[0]['tbl_perfiles'];
-		$tbl4 	= $this->dbinfo[0]['tbl_paises'];
-		$tbl5 	= $this->dbinfo[0]['tbl_empresas'];
-		$tbl6 	= $this->dbinfo[0]['tbl_sucursales'];
-		$bd 	= $this->dbinfo[0]['db'];
+		$tbl3 	= $this->dbinfo[0]['tbl_claves'];
+		$tbl4 	= $this->dbinfo[0]['tbl_perfiles'];
+		$tbl5 	= $this->dbinfo[0]['tbl_paises'];
+		$tbl6 	= $this->dbinfo[0]['tbl_empresas'];
+		$tbl7 	= $this->dbinfo[0]['tbl_sucursales'];
 
-		$filtro = ($filtro=='') ? "" : "AND ( 	sp.nombre   LIKE '%$filtro%' OR 
-												sp.paterno  LIKE '%$filtro%' OR 
-												sp.materno  LIKE '%$filtro%' OR  
-												spl.perfil  LIKE '%$filtro%' OR 
-												spa.pais    LIKE '%$filtro%' OR
-												se.empresas LIKE '%$filtro%' OR
-												ss.sucursal LIKE '%$filtro%' 
+		$filtro = ($filtro=='') ? "" : "AND ( 	name   LIKE '%$filtro%' 
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		$query = "SELECT 
-						su.id_usuario,
-						sp.nombre,
-						sp.paterno,
-						sp.materno,
-						spl.perfil,
-						spa.pais,
-						ss.sucursal,
-						se.empresa
+		$query = "	SELECT 
+						 U.id_usuario
+						,P.id_personal
+						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
+						,P.telefono
+						,P.mail
+						,P.avatar as avatar_user
+						,Pa.id_pais
+						,Pa.pais
+						,Pa.dominio
+						,Pa.avatar as avatar_pais
+						,E.id_empresa
+						,E.empresa
+						,S.id_sucursal
+						,S.sucursal
+						,N.id_perfil
+						,N.perfil
+						,N.id_menu_n1
+						,N.id_menu_n2
+						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
+						,U.registro
+						,U.activo
+						,C.user
 					FROM 
-						$bd.$tbl1 su
-					LEFT JOIN $bd.$tbl2 sp on su.id_personal = sp.id_personal
-					LEFT JOIN $bd.$tbl3 spl on su.id_perfil  = spl.id_perfil
-					LEFT JOIN $bd.$tbl4 spa on su.id_pais    = spa.id_pais
-					LEFT JOIN $bd.$tbl5 se on su.id_empresa  = se.id_empresa
-					LEFT JOIN $bd.$tbl6 ss on su.id_sucursal = ss.id_sucursal
-					WHERE su.activo = 1 $filtro
-					ORDER BY su.id_usuario
-				$limit;";
+						$db1.$tbl1 U
+					left join $db1.$tbl2 P on U.id_personal = P.id_personal
+					left join $db1.$tbl3 C on U.id_clave    = C.id_clave
+					left join $db1.$tbl4 N on U.id_perfil   = N.id_perfil
+					left join $db1.$tbl5 Pa on U.id_pais    = Pa.id_pais
+					left join $db1.$tbl6 E on U.id_empresa  = E.id_empresa
+					left join $db1.$tbl7 S on U.id_sucursal = S.id_sucursal
+					WHERE U.id_usuario = $id_user  AND U.activo = 1 $filtro $limit";
+		
+		print_debug($query);
 		$query = $this->db->query($query);
 
 		if($query->num_rows >= 1){
 			 return $query->result_array();
 		}	
 	}
+	public function db_get_total_rows($data=array()){
+		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];
+		$tbl2 = $this->dbinfo[1]['tbl_administracion_entidades'];
+
+		$buscar = (array_key_exists('buscar',$data))?$data['buscar']:false;
+		$filtro = ($buscar) ? "AND ( 	p.razon_social  LIKE '%$buscar%' OR 
+										p.nombre_comercial  LIKE '%$buscar%' OR
+										p.clave_corta  LIKE '%$buscar%' OR
+										p.rfc  LIKE '%$buscar%' OR
+										e.entidad LIKE '%$buscar%'
+											)" : "";
+		$query = "SELECT 
+						 *
+					FROM 
+						$db1.$tbl1 U
+					left join $db1.$tbl2 P on U.id_personal = P.id_personal
+					left join $db1.$tbl3 C on U.id_clave    = C.id_clave
+					left join $db1.$tbl4 N on U.id_perfil   = N.id_perfil
+					left join $db1.$tbl5 Pa on U.id_pais    = Pa.id_pais
+					left join $db1.$tbl6 E on U.id_empresa  = E.id_empresa
+					left join $db1.$tbl7 S on U.id_sucursal = S.id_sucursal
+					WHERE U.id_usuario = $id_user  AND U.activo = 1 $filtro";
+
+      	$query = $this->db->query($query);
+		return $query->num_rows;
+	}
+
+	/*
 	function get_usuario_unico($id_usuario){
 		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
 		$tbl2 	= $this->dbinfo[0]['tbl_personales'];

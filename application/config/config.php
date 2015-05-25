@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 | If this is not set then CodeIgniter will guess the protocol, domain and
-| path to your installation.
+| path to your install  ation.
 |
 */
 
@@ -25,7 +25,7 @@ $config['base_url']	= 'http://localhost/adminventas_ci/';
 |
 | Typically this will be your index.php file, unless you've renamed it to
 | something else. If you are using mod_rewrite to remove the page set this
-| variable so that it is blank.
+| variable so that it is  blank.
 |
 */
 $config['index_page'] = '';

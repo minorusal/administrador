@@ -5,9 +5,8 @@ class entidades_model extends Base_Model
 		
 		$tbl =  $this->dbinfo[1]['db'].'.'. $this->dbinfo[1]['tbl_administracion_entidades'];
 		$buscar = (array_key_exists('buscar',$data))?$data['buscar']:false;
-		$filtro = ($buscar) ? "AND ( 	e.ent	
-			/*Traer informacion para el formulario de edicion de entidades*/_abrev  LIKE '%$buscar%' OR 
-										e.id_entidad  LIKE '%$buscar%' OR
+		$filtro = ($buscar) ? "AND ( 	e.ent_abrev  LIKE '%$buscar%' OR 
+										e.id_administracion_entidad  LIKE '%$buscar%' OR
 										e.clave_corta  LIKE '%$buscar%'
 									)" : "";
 		

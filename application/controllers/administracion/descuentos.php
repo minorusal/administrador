@@ -118,7 +118,7 @@ class descuentos extends Base_Controller
 									);
 			}
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("descuento"),
@@ -260,7 +260,7 @@ class descuentos extends Base_Controller
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
-		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_descuento','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
 		$tab_1["nombre_descuento"]  = $this->lang_item("nombre_descuento");

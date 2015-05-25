@@ -22,7 +22,7 @@ function load_content(uri,id_content)
 			if(id_content == 1)
 			{
 				var funcion = 'buscar';
-				jQuery('#a-1').html(data+input_keypress('#search-query',funcion);
+				jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 				jQuery('#search-query').val(filtro).focus();
 				tool_tips();
 			}
@@ -40,12 +40,12 @@ function buscar()
 {
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
-		type: 'POST'.
+		type: 'POST',
 		url: path()+"administracion/entidades/listado",
 		dataType: "json",
 		data: {filtro:filtro},
 		beforeSend : function(){
-			jQuery('#loader').html('<img src="'path()+'assets/images/loaders/loader.gif"/>');
+			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
 			var funcion = 'buscar';
@@ -61,12 +61,16 @@ function detalle(id_entidad)
 {
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
-		type¨: 'POST',
+		type: 'POST',
 		url: parh()+"administracion/entidades/detalle",
 		dataType: 'json',
-		data {id_entidad:id:entidad},
+		data: {id_entidad:id_entidad},
 		success : function(data){
-			var chosen = "jQuery('.chzn_select').chosen();";
+			var chosen = 'jQuery(".chzn-select").chosen();';
+        	jQuery('#a-0').html('');
+        	jQuery('#a-2').html(data);
+        	jQuery('#a-2').html(data+include_script(chosen));
+        	jQuery('#ui-id-2').show('slow');
 		}		
 	});
 }
@@ -84,7 +88,7 @@ function actualizar()
 	var abreviatura = jQuery('#abreviatura');
 	jQuery.ajax({
 		type: 'POST',
-		url: paht()+'administracion/entidades/actualizar';
+		url: path()+'administracion/entidades/actualizar',
 		dataType: 'json',
 		data: {incomplete:incomplete, id_entidad:id_entidad, entidad:entidad, clave_corta:clave_corta},
 		beforeSend: function(){
@@ -123,7 +127,7 @@ function agregar()
 				clean_formulario();
 			}
 			jQuery('#registro_loader').html('');
-			jQuery('#mensajes').html(data[1].show('slow');
+			jQuery("#mensajes").html(data[1]).show('slow');
 		}
 	});
 }

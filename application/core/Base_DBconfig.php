@@ -37,11 +37,13 @@ class Base_DBconfig extends Base_Controller {
 						// Base de datos
 					 	 'db'								=>	'00_av_mx'
 					 	 // Tablas
+					 	,'tbl_administracion_areas'  	    =>	'av_administracion_areas'
 					 	,'tbl_administracion_creditos'  	=>	'av_administracion_creditos'
 					 	,'tbl_administracion_descuentos'	=>	'av_administracion_descuentos'
 					 	,'tbl_administracion_entidades'		=>	'av_administracion_entidades'
 					 	,'tbl_administracion_forma_pago'	=>	'av_administracion_forma_pago'
 					 	,'tbl_administracion_impuestos'  	=>	'av_administracion_impuestos'
+					 	,'tbl_administracion_puestos'   	=>	'av_administracion_puestos'
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
 					 	,'tbl_almacen_tipos'				=>	'av_almacen_tipos'
 					 	,'tbl_almacen_gavetas' 			    =>	'av_almacen_gavetas'

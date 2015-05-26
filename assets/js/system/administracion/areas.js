@@ -7,7 +7,6 @@ jQuery(document).ready(function(){
 		} 
 	});
 })
-
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
@@ -30,35 +29,33 @@ function load_content(uri, id_content){
         }
     });
 }
-
-function buscar()
-{
+function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
-		type: 'POST',
-		url: path()+"administracion/entidades/listado",
+		type:"POST",
+		url: path()+"administracion/areas/listado",
 		dataType: "json",
-		data: {filtro:filtro},
+		data: {filtro : filtro},
 		beforeSend : function(){
 			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
 			var funcion = 'buscar';
-			jQuery("#loader").html('');
-			jQuery('#a-1').html(data+input_keypress('search-query',funcion));
+        	jQuery("#loader").html('');
+        	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();
 		}
-	});
+	})
 }
 
-function detalle(id_entidad){
+function detalle(id_area){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"administracion/entidades/detalle",
+        url: path()+"administracion/areas/detalle",
         dataType: 'json',
-        data: {id_entidad : id_entidad},
+        data: {id_area : id_area},
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
@@ -68,23 +65,21 @@ function detalle(id_entidad){
         }
     });
 }
-
-function actualizar()
-{
+function actualizar(){
 	jQuery('#mensajes_update').hide();
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();	
 	var incomplete      = values_requeridos();
-	var id_entidad = jQuery('#id_entidad').val();
-	var entidad =  jQuery('#entidad').val();
-	var clave_corta = jQuery('#clave_corta').val();
-	var abreviatura = jQuery('#abrev').val();
+	var id_area      = jQuery('#id_area').val();
+    var area         = jQuery('#area').val();
+    var clave_corta     = jQuery('#clave_corta').val();
+    var descripcion     = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/entidades/actualizar",
+		url: path()+"administracion/areas/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_entidad:id_entidad, entidad:entidad, clave_corta:clave_corta, abreviatura:abreviatura},
+		data: {incomplete:incomplete, id_area:id_area, area:area, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -96,32 +91,37 @@ function actualizar()
 	})
 }
 
-function agregar()
-{
-	var btn = jQuery("button[name='save_entidad']");
+
+function agregar(){
+	var btn          = jQuery("button[name='save_area']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-	var incomplete = values_requeridos();
-	var entidad = jQuery('#entidad').val();
-	var clave_corta = jQuery('#clave_corta').val();
-	var abreviatura = jQuery('#abrev').val();
+	var incomplete       = values_requeridos();
+	var id_area       = jQuery('#id_area').val();
+    var area          = jQuery('#area').val();
+    var clave_corta      = jQuery('#clave_corta').val();
+    var descripcion      = jQuery('#descripcion').val();
 	jQuery.ajax({
-		type: 'POST',
-		url: path()+'administracion/entidades/insert_entidad',
-		dataType: 'json',
-		data: {incomplete:incomplete, entidad, clave_corta, abreviatura},
-		beforeSend: function(){
-			jQuery('#update_loader').html('img src="'+path()+'assets/images/loaders/loader.gif />"');
+		type:"POST",
+		url: path()+"administracion/areas/insert_puesto",
+		dataType: "json",
+		data: {incomplete :incomplete, id_area:id_area, area:area, clave_corta:clave_corta, descripcion:descripcion},
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
-		success: function(data){
+		success : function(data){
 			btn.removeAttr('disabled');
+
 			var data = data.split('|');
-			if(data[0] == 1)
-			{
+			if(data[0]==1){
 				clean_formulario();
 			}
-			jQuery('#registro_loader').html('');
-			jQuery("#mensajes").html(data[1]).show('slow');
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	});
+	})
 }
+
+
+
+

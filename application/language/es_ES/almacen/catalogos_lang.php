@@ -41,4 +41,22 @@
 	$lang['nombre_gavetas']   = 'gaveta';
 
 
+	/*TRANSPORTES*/
+
+	$lang['lbl_empresa']           = 'espresa';
+	$lang['lbl_nombre_conductor']  = 'nombre del conductor';
+	$lang['lbl_empresa']           = 'espresa';
+	$lang["lbl_num_licencia"]	   = 'número de licencia';
+	$lang["lbl_marca"]	           = 'marca';
+	$lang["lbl_modelo"]	           = 'modelo';
+	$lang["lbl_placas"]	           = 'placas';
+
+	$lang['transportes']          = 'transportes';
+	$lang['agregar_transporte']   = 'nuevo transporte';
+	$lang['listado_transporte']   = 'transportes';
+	$lang['detalle_transporte']   = 'detalle';
+	$lang['nombre_transportes']   = 'transportes';
+	$lang['num_lic']              = 'número de licencia';
+
+
 ?>

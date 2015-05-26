@@ -33,7 +33,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/listado",
+		url: path()+"almacen/transportes/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -49,13 +49,13 @@ function buscar(){
 	})
 }
 
-function detalle(id_almacen){
+function detalle(id_transporte){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/almacenes/detalle",
+        url: path()+"almacen/transportes/detalle",
         dataType: 'json',
-        data: {id_almacen : id_almacen},
+        data: {id_transporte : id_transporte},
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
@@ -65,24 +65,27 @@ function detalle(id_almacen){
         }
     });
 }
+
 function actualizar(){
 	jQuery('#mensajes_update').hide();
 	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
 	var incomplete   = values_requeridos();
-	var id_almacen   = jQuery('#id_almacen').val();
-    var almacen      = jQuery('#almacen').val();
+	var id_transporte   = jQuery('#id_transporte').val();
+    var empresa      = jQuery('#txt_empresa').val();
+    var conductor      = jQuery('#txt_nombre_conductor').val();
+    var licencia      = jQuery('#txt_num_licencia').val();
+    var marca      = jQuery('#txt_marca').val();
+    var modelo      = jQuery('#txt_modelo').val();
+    var placas      = jQuery('#txt_placas').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
-
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/actualizar",
+		url: path()+"almacen/transportes/actualizar",
 		dataType: "json",
-		data: {incomplete :incomplete,id_almacen:id_almacen, almacen:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete :incomplete,id_transporte:id_transporte, empresa:empresa, conductor:conductor, licencia:licencia, marca:marca, modelo:modelo, placas:placas, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -96,20 +99,23 @@ function actualizar(){
 
 
 function agregar(){
-	var btn          = jQuery("button[name='save_almacen']");
+	var btn          = jQuery("button[name='save_transporte']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete   = values_requeridos();
-    var almacen      = jQuery('#almacenes').val();
+    var empresa      = jQuery('#txt_empresa').val();
+    var conductor    = jQuery('#txt_nombre_conductor').val();
+    var licencia     = jQuery('#txt_licencia').val();
+    var marca        = jQuery('#txt_marca').val();
+    var modelo       = jQuery('#txt_modelo').val();
+    var placas      = jQuery('#txt_placas').val();
     var clave_corta  = jQuery('#clave_corta').val();
     var descripcion  = jQuery('#descripcion').val();
-    var id_sucursal  = jQuery("select[name='lts_sucursales'] option:selected").val();
-    var id_tipo      = jQuery("select[name='lts_tipos'] option:selected").val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/insert_almacen",
+		url: path()+"almacen/trasportes/insert_almacen",
 		dataType: "json",
-		data: {incomplete :incomplete, almacenes:almacen, clave_corta:clave_corta, descripcion:descripcion, id_sucursal:id_sucursal, id_tipo:id_tipo },
+		data: {incomplete :incomplete, empresa:empresa, conductor:conductor, licencia:licencia, marca:marca, modelo:modelo, placas:placas, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

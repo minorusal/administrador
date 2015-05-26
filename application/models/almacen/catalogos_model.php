@@ -177,7 +177,7 @@ class catalogos_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
-			$query = $this->db->update_string($tbl_pasillos, $data, $condicion);
+			$query = $this->db->update_string($tbl_pasillos, $data, $condicion);	
 			$query = $this->db->query($query);
 			return $query;
 		}

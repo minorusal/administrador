@@ -58,7 +58,8 @@ $autoload['libraries'] = array(	'database',
 								'pagination_bootstrap',
 								'session', 
 								'table',
-								'parser');
+								'parser'
+								,'impresion');
 
 
 /*

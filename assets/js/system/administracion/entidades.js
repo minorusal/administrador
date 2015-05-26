@@ -70,3 +70,60 @@ function detalle(id_entidad)
 		}		
 	});
 }
+
+function actualizar()
+{
+	jQuery('#mensajes_update').hode();
+	var btn = jQuery("button[name='actualizar']");
+	btn.attr('disabled','disabled');
+	var btn_text = btn.html();
+	var incomplete = values_requeridos();
+	var id_entidad = jQuery('#id_sucursal');
+	var entidad =  jQuery('#entidad');
+	var clave_corta = jQuery('#clave_corta');
+	var abreviatura = jQuery('#abreviatura');
+	jQuery.ajax({
+		type: 'POST',
+		url: paht()+'administracion/entidades/actualizar';
+		dataType: 'json',
+		data: {incomplete:incomplete, id_entidad:id_entidad, entidad:entidad, clave_corta:clave_corta},
+		beforeSend: function(){
+			jQuery('#update_loader').html('img src="'+parh()+'assets/images/loaders/loader.gif />"');
+		},
+		success: function(data){
+			btn.removeAttr('disabled');
+			jQuery('#mensajes_update').html(data.contenido).show('slow');
+			jQuery("#update_loader").html('');
+		}
+	})
+}
+
+function agregar()
+{
+	var btn = jQuery("button[name='save_entidad']");
+	bet.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+	var incomplete = values_requeridos();
+	var entidad = jQuery('#entidad');
+	var clave_corta = jQuery('#clave_corta');
+	var abreviatura = jQuery('#abreviatura');
+	jQuery.ajax({
+		type: 'POST',
+		url: path()+'administracion/entidades/insert_entidad',
+		dataType: 'json',
+		data: {incomplete:incomplete, entidad, clave_corta, abreviatura},
+		beforeSend: function(){
+			jQuery('#update_loader').html('img src="'+path()+'assets/images/loaders/loader.gif />"');
+		},
+		success: function(data){
+			btn.removeAttr('disabled');
+			var data = data.split('|');
+			if(data[0] == 1)
+			{
+				clean_formulario();
+			}
+			jQuery('#registro_loader').html('');
+			jQuery('#mensajes').html(data[1].show('slow');
+		}
+	});
+}

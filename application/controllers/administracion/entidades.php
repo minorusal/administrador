@@ -15,22 +15,22 @@ class entidades extends Base_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->modulo    = 'administracion';
-		$this->submodulo = 'submodulo';
-		$this->seccion   = 'entidades';
-		$this->icon      = 'fa fa-map-marker';
-		$this->path 	 =  $this->modulo.'/'.$this->seccion;
-		$this->view_content = 'content';
-		$this->limit_max = 5;
-		$this->offset = 0;
-		//Tabs
-		$this->tab1 = 'agregar';
-		$this->tab2 = 'listado';
-		$this->tab3 = 'detalle';
-		//DB Model
+		$this->modulo 			= 'administracion';
+		$this->submodulo		= 'catalogos';
+		$this->seccion          = 'entidades';
+		$this->icon 			= 'fa fa-map-marker'; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/entidades
+		$this->view_content 	= 'content';
+		$this->limit_max		= 5;
+		$this->offset			= 0;
+		// Tabs
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
+		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		//Diccionario
-		$this->lang->load($this->modulo.'/'.$this->seccion,"es_Es");
+		// Diccionario
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
 	public function config_tabs()
@@ -172,25 +172,24 @@ class entidades extends Base_Controller
 		$tabData['abreviatura'] = $this->lang_item("abreviatura");
 		$tabData['entidad'] = $detalle[0]['entidad'];
 		$tabData['clave_corta'] = $detalle[0]['clave_corta'];
-		$tabData['ent_abrev'] = $detalle[0]['ent_abrev'];
+		$tabData['abrev'] = $detalle[0]['ent_abrev'];
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-		$tabData['val_fecha_registro'] = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registo'] = $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_registro'] = $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_registro'] = $this->lang_item('lbl_usuario_registro',false);
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_regitro', false);
 
 		$this->load_database('global_system');
-		$this->load->model('users_model');
+        $this->load->model('users_model');
 
-		$usuario_registro = $this->users_model->search_iser_for_id($detalle[0]['id_usuario']);
-		$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
-		$tabData['val_usuarios_registro'] = $usuario_name;
+		$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
 
 		if($detalle[0]['edit_id_usuario'])
 		{
 			$usuario_registro = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
 			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
-			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamo_complete($detalle[0]['edit_timestamp']), $usuario_name);
+			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
 		}
 		else
 		{
@@ -222,19 +221,19 @@ class entidades extends Base_Controller
 				 'id_administracion_entidad' => $this->ajax_post('id_entidad')
 				,'entidad' => $this->ajax_post('entidad')
 				,'clave_corta' => $this->ajax_post('clave_corta')
-				,'ent_abrev' => $this->post_ajax('abreviatura')
+				,'ent_abrev' => $this->ajax_post('abreviatura')
 				,'edit_timestamp' => $this->timestamp()
 				,'edit_id_usuario' => $this->session->userdata('id_usuario')
 				);
-			$update = $this->db_model_db_update($sqlData);
+			$update = $this->db_model->db_update_data($sqlData);
 			if($update)
 			{
-				$msg = $this->lang_item("msg_insert_success",$msg, false);
+				$msg = $this->lang_item("msg_insert_success",false);
 				$json_respuesta = array(
-					 'id' => 1
-					,'contenido' =>alertas_tpl('success',$msg, false)
-					,'success' => true
-					);
+						 'id' 		     => 1
+						,'contenido'     => alertas_tpl('success', $msg ,false)
+						,'success' 	     => true
+				);
 			}
 			else
 			{
@@ -315,7 +314,7 @@ class entidades extends Base_Controller
 
 	public function export_xlsx($offset = 0)
 	{
-		$filtro = ($this->ajax_get('filtro'))?base64_encode($this->ajax_get('filyto')):"";
+		$filtro = ($this->ajax_get('filtro'))?base64_encode($this->ajax_get('filtro')):"";
 		$limit = $this->limit_max;
 		$sqlData = array(
 			 'buscar' => $filtro

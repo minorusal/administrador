@@ -22,8 +22,8 @@ class imprimir_ticket extends Base_Controller {
 			,'logo' 		=> 'assets/images/logo.bmp'
 			// ,'impresora' 	=> 'PDFCreator'
 			,'formato' 		=> true
-			,'codebar' 		=> '1234567890123'
-			,'codeqr' 		=> 'assets/images/qr_isolution.bmp'			
+			// ,'codebar' 		=> '1234567890123'
+			// ,'codeqr' 		=> 'assets/images/qr_isolution.bmp'			
 			);
 		if($this->impresion->enviar_a_impresora($impData)){
 			echo "Impresi&oacute;n enviada: ".date('Y-m-d H:i:s');

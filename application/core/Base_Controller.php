@@ -159,7 +159,7 @@ class Base_Controller extends CI_Controller {
 		if(empty($data)){
 			return '';
 		}
-		$files_js  = '';
+		$files_js  = '';//"<script type='text/javascript' src='".base_url()."/assets/js/template/forms.js'></script>";
 		$files_css = '';
 		$url_js    = base_url().'assets/js/system';
 		$url_css   = base_url().'assets/css/system';

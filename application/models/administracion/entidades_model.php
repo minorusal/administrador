@@ -71,16 +71,12 @@ class entidades_model extends Base_Model
 	public function db_insert_data($data = array())
 	{
 		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
-		$condicion = array('id_administracion_entidad !=' => $data['id_administracion_entidad'], 'clave_corta' => $data['clave_corta']);
-		$existe = $this->row_exist($tbl,$condicion);
-		if(!$existe)
-		{		
-			$query = $this->db->insert_string($tbl,$data);
+		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string($tbl, $data);
 			$query = $this->db->query($query);
 			return $query;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}

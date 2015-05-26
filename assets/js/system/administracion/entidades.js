@@ -99,12 +99,12 @@ function actualizar()
 function agregar()
 {
 	var btn = jQuery("button[name='save_entidad']");
-	bet.attr('disabled','disabled');
+	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete = values_requeridos();
-	var entidad = jQuery('#entidad');
-	var clave_corta = jQuery('#clave_corta');
-	var abreviatura = jQuery('#abreviatura');
+	var entidad = jQuery('#entidad').val();
+	var clave_corta = jQuery('#clave_corta').val();
+	var abreviatura = jQuery('#abrev').val();
 	jQuery.ajax({
 		type: 'POST',
 		url: path()+'administracion/entidades/insert_entidad',

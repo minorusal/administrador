@@ -225,8 +225,8 @@ class entidades extends Base_Controller
 				,'edit_timestamp' => $this->timestamp()
 				,'edit_id_usuario' => $this->session->userdata('id_usuario')
 				);
-			$update = $this->db_model->db_update_data($sqlData);
-			if($update)
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert)
 			{
 				$msg = $this->lang_item("msg_insert_success",false);
 				$json_respuesta = array(
@@ -237,12 +237,12 @@ class entidades extends Base_Controller
 			}
 			else
 			{
-				$msg = $this->lang_item("msg_err-clv", false);
+				$msg = $this->lang_item("msg_err_clv",false);
 				$json_respuesta = array(
-					 'id' => 0
-					,'contenido' => alertas_tpl('', $msg, false)
-					,'success' => false
-					);
+						 'id' 		    => 0
+						,'contenido'    => alertas_tpl('', $msg ,false)
+						,'success'    	=> false
+				);
 			}
 		}
 		echo json_encode($json_respuesta);
@@ -256,18 +256,18 @@ class entidades extends Base_Controller
 			,'offset' => 0
 			,'limit' => 0
 			);
-		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_entidad', 'onclick'=>'agregar()','content'=>$this->lang-item("btn_guardar")));
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_entidad', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
 		$tab_1['nombre_entidad'] = $this->lang_item("nombre_entidad");
 		$tab_1['entidad'] = $this->lang_item('entidad');
-		$tab['cvl_corta'] = $this->lang_item('clave_corta');
+		$tab_1['cvl_corta'] = $this->lang_item('clave_corta');
 		$tab_1['abreviatura'] = $this->lang_item('abreviatura');
 
 		$tab_1['button_save'] = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
 
-		if($this->ajax_port(false))
+		if($this->ajax_post(false))
 		{
 			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
 		}
@@ -282,8 +282,8 @@ class entidades extends Base_Controller
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
 		{
-			$msg = $this->lang->ajax_post("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error',$msg,false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
 		else
 		{
@@ -291,58 +291,56 @@ class entidades extends Base_Controller
 			$clave_corta = $this->ajax_post('clave_corta');
 			$abreviatura = $this->ajax_post('abreviatura');
 			$data_insert = array(
-				 'entidad' => $entidad
-				 ,'clave_corta' => $clave_vorta
+				  'entidad' => $entidad
+				 ,'clave_corta' => $clave_corta
 				 ,'ent_abrev' => $abreviatura
 				 ,'id_usuario' => $this->session->userdata('id_usuario')
-				 ,'timestamp' => $this->$this->timestamp()
+				 ,'timestamp' => $this->timestamp()
 				);
+
 			$insert = $this->db_model->db_insert_data($data_insert);
 
-			if($insert)
-			{
-				$msg = $this->lang_item("msg_insert_success", false);
-				echo json_encode('1|'.alertas_tpl('',$msg,false));
-			}
-			else
-			{
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('',$msg,false));
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
 	}
 
-	public function export_xlsx($offset = 0)
-	{
-		$filtro = ($this->ajax_get('filtro'))?base64_encode($this->ajax_get('filtro')):"";
-		$limit = $this->limit_max;
-		$sqlData = array(
-			 'buscar' => $filtro
-			,'offset' =>$offset
-			,'limit' =>$limit
-			);
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
 		$lts_content = $this->db_model->get_entidades_default($sqlData);
-		if(count($lts_content) > 0)
-		{
-			foreach($lts_content as $value)
-			{
-				$set_data = array(
-					 $value['entidad']
-					,$value['clave_corta']
-					,$value['ent_abrev']
-					);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['entidad'],
+									 $value['clave_corta'],
+									 $value['ent_abrev']
+									 );
 			}
-			$set_heding = array(
-				 $this->lang_item('entidad')
-				,$this->lang_item('clave_corta')
-				,$this->lang_item('abreviatura')
-				);
+			
+			$set_heading = array(
+									$this->lang_item("entidad"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("abreviatura")
+									);
+	
 		}
-		$params = array(
-			 'title' => $this->lang_item("Catalogo Entidades")
-			,'items' => $set_data
-			,'headers' => $set_heading
-			);
+
+		$params = array(	'title'   => $this->lang_item("Catálogos Entidades"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
 		$this->excel->generate_xlsx($params);
 	}
 }

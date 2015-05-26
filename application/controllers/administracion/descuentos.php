@@ -290,11 +290,11 @@ class descuentos extends Base_Controller
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			$impuesto        = $this->ajax_post('descuento');
+			$descuento        = $this->ajax_post('descuento');
 			$valor           = $this->ajax_post('valor_descuento');
 			$clave_corta     = $this->ajax_post('clave_corta');
 			$descripcion     = $this->ajax_post('descripcion');
-			$data_insert     = array('descuento'   => $impuesto,
+			$data_insert     = array('descuento'   => $descuento,
 								 'valor_descuento' => $valor,
 								 'clave_corta'     => $clave_corta,
 								 'descripcion'     => $descripcion,

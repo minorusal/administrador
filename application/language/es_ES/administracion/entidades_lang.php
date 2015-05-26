@@ -4,6 +4,7 @@ $lang['titulo_submodulo'] = 'administracion';
 $lang['agragar']          = 'nueva entidad';
 $lang['listado']          = 'listado de entidades';
 $lang['detalle']          = 'detalle';
+$lang['clv_corta']          = 'clave_corta';
 
 $lang['lbl_fecha_registro'] = 'fecha de registro';
 

@@ -1,0 +1,44 @@
+
+
+    
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+
+        jQuery("#treeview-modules").treeview({
+            animated: "fast",
+            control:"#sidetreecontrol",
+            collapsed: true,
+            unique: false
+           
+          });
+    })
+</script>
+<div id="formulario" class="stdform">
+    <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
+    <p>
+        <label>{lbl_nombre}: (*)</label>
+        <input id="nombre" type="text" name="nombre" class="input-large requerido" value="{nombre_val}" />
+    </p>
+    <p>
+        <label>{lbl_paterno}: (*)</label>
+        <input id="razon_social" type="text" name="razon_social" class="input-large requerido" value="{paterno_val}" />
+    </p>
+    <p>
+        <label>{lbl_materno}: (*)</label>
+        <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="{materno_val}" />
+    </p>
+    <p>
+        <label>{lbl_perfil}: (*)</label>
+        {dropdown_perfil}
+    </p>
+
+   {tree_view}
+
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+        {button_reset}
+    </p>
+</div>
+

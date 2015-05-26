@@ -38,9 +38,7 @@
 					}else{
 						$onclick  = "onclick='$action($link, $i);'";
 					}
-					
 				}
-				
 
 				$attr     = array_2_string_format($config['attr'][$i]);
 				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
@@ -141,7 +139,6 @@
 			return false;
 		}
 	}
-	
 	if(!function_exists('button_tpl')){
 		function button_tpl($params=array()){
 			$button = "";
@@ -174,6 +171,11 @@
 			}
 
 			return $button;
+		}
+	}
+	if(!function_exists('treeview_tpl')){
+		function treeview_tpl($data = array()){
+			
 		}
 	}
 

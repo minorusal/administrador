@@ -17,6 +17,7 @@ class barcode{
     protected $font_name, $font_size; #Fuente
     protected $barcode_escala, $barcode_grosor; #Imagen
     public $barcode_img_tipo; #Formato de imagen
+    protected $archivo;
     
     function __construct(){
         $this->font_name        = APPPATH.'third_party/barcode/font/Arial.ttf';
@@ -24,6 +25,7 @@ class barcode{
         $this->barcode_escala   = 2;
         $this->barcode_grosor   = 20;
         $this->barcode_img_tipo = 'png'; #wbmp|png|gif|jpg
+        $this->archivo          = 'assets\tmp\barcode.'.$this->barcode_img_tipo;
     }
 
     public function create($texto=''){
@@ -57,8 +59,7 @@ class barcode{
             /* Here is the list of the arguments
             1 - Filename (empty : display on screen)
             2 - Background color */
-            $archivo = 'assets\tmp\barcode.'.$tipo;
-            $drawing = new BCGDrawing($archivo, $color_white);
+            $drawing = new BCGDrawing($this->archivo, $color_white);
             if($drawException) {
                 $drawing->drawException($drawException);
             } else {
@@ -98,7 +99,7 @@ class barcode{
                             break;
                 default :   return false; break;
             }
-            return $archivo;
+            return $this->archivo;
         }else{
             return false;
         }

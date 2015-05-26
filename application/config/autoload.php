@@ -59,7 +59,8 @@ $autoload['libraries'] = array(	'database',
 								'session', 
 								'table',
 								'parser'
-								,'impresion');
+								,'impresion'
+								,'barcode');
 
 
 /*

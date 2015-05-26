@@ -1,7 +1,7 @@
 <?php 
 $lang['titulo_seccion']   = 'entidades';
 $lang['titulo_submodulo'] = 'administracion';
-$lang['agragar']          = 'nueva entidad';
+$lang['agregar']          = 'nueva entidad';
 $lang['listado']          = 'listado de entidades';
 $lang['detalle']          = 'detalle';
 $lang['clv_corta']          = 'clave_corta';

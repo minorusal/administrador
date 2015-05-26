@@ -1,0 +1,39 @@
+<div id="formulario" class="stdform">
+    <div >
+        <div style="float:left">
+            <input id="id_puesto" type="hidden" name="id_puesto" value="{id_puesto}" />
+            <p>
+                <label>{nombre_puesto}: (*)</label>
+                <input id="puesto" type="text" name="puesto" class="input-xlarge requerido" value="{puesto}" />
+            </p>
+            <p>
+                <label>{cvl_corta}: (*)</label>
+                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
+            </p>
+        </div>
+        
+    </div>
+    <div style="clear:both">
+        <p>
+            <label>{desc}:</label>
+            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
+        </p>
+        <p>
+            <label>{lbl_fecha_registro}: </label>
+            <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
+        </p>           
+        <p>
+            <label>{lbl_usuario_registro}: </label>
+            <input id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
+        </p>
+        <p>
+            <label>{lbl_ultima_modificacion}: </label>
+            <textarea id="ultima_modifiacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        </p>
+        <div id="update_loader"></div>
+        <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+       {button_save}
+    </p>
+    </div>
+</div>

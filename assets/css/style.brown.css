@@ -20,6 +20,7 @@
   -khtml-opacity: 0.7;
   opacity: 0.7;
 }
+.treeview .hover { color: #6c5c51; cursor: pointer; }
 /* login */
 .inputwrapper button { background: #896f5d; border-color: #5b4c41; }
 .inputwrapper button:hover { background: #5b4c41; border-color: #4e3f35; }

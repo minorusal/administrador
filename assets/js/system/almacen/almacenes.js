@@ -22,7 +22,7 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		//jQuery('#a-'+id_content).html(data);
+           		jQuery('#a-'+id_content).html(data);
            		var chosen  = 'jQuery(".chzn-select").chosen();';
            		jQuery('#a-'+id_content).html(data+include_script(chosen));
            }

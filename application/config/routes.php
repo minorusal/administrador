@@ -75,8 +75,6 @@ $route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/lis
 
 /*Catalogo de Ordenes*/
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';
-$route['compras/ordenes/listado_ordenes']        = 'compras/ordenes/listado_ordenes';
-$route['compras/ordenes/listado_ordenes/(:num)'] = 'compras/ordenes/listado_ordenes/$1';
 
 /*ALMACEN*/
 
@@ -86,6 +84,8 @@ $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 $route['almacen/catalogos/pasillos']			     = 'almacen/pasillos/index';
 /*Catalogo de gavetas*/
 $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
+/*Catalogo de transportes*/
+$route['almacen/catalogos/transportes']			     = 'almacen/transportes/index';
 
 
 /*ADMINISTRACION*/
@@ -94,7 +94,11 @@ $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
  * CONTROL DE USUARIOS
  */
 /*Catalogo de Usuarios*/
-$route['administracion/ctrlUsuarios/usuarios']               = 'administracion/usuarios/index';
+$route['administracion/control_de_usuarios/usuarios']        = 'administracion/usuarios/index';
+/*Catalogo de Puestos*/
+$route['administracion/control_de_usuarios/puestos']        = 'administracion/puestos/index';
+/*Catalogo de Areas*/
+$route['administracion/control_de_usuarios/areas']        = 'administracion/areas/index';
 /*
  * CATALOGOS GENERALES
  */

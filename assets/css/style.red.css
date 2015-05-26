@@ -21,6 +21,7 @@
   -khtml-opacity: 0.7;
   opacity: 0.7;
 }
+.treeview .hover { color: #bb2f0e; cursor: pointer; }
 /* login */
 .inputwrapper button { background: #d3401e; border-color: #b02808; }
 .inputwrapper button:hover { background: #b02808; border-color: #a42406; }

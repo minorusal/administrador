@@ -6,7 +6,7 @@ class users_model extends Base_Model{
     * @param string $pwd
     * @return array
     */
-	function search_user_for_login($user, $pwd){
+	public function search_user_for_login($user, $pwd){
 		$query  = "	SELECT 
 						U.id_usuario
 						,P.id_personal
@@ -55,7 +55,7 @@ class users_model extends Base_Model{
     * @param integer $id_user
     * @return array
     */
-	function search_user_for_id($id_user){
+	public function search_user_for_id($id_user){
 		// DB Info
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
@@ -116,7 +116,7 @@ class users_model extends Base_Model{
 	* @param bool $root
 	* @return array
 	*/
-	function search_modules_for_user($id_menu_n1 , $id_menu_n2, $id_menu_n3, $root = false ){
+	public function search_modules_for_user($id_menu_n1= '' , $id_menu_n2= '', $id_menu_n3= '', $root = false ){
 
 		$id_menu_n1 = ($id_menu_n1=='') ? '0' : $id_menu_n1;
 		$id_menu_n2 = ($id_menu_n2=='') ? '0' : $id_menu_n2;
@@ -138,7 +138,8 @@ class users_model extends Base_Model{
 			$sys_navigate_n3 = "SELECT * FROM $db1.$tbl3 WHERE id_menu_n3 IN ($id_menu_n3) AND activo = 1";
 		}
 		$query = "	SELECT 
-						 n1.menu_n1
+						n1.id_menu_n1
+						,n1.menu_n1
 						,n1.routes as menu_n1_routes
 						,n1.icon as menu_n1_icon
 						,n2.id_menu_n2
@@ -163,7 +164,20 @@ class users_model extends Base_Model{
 			return $query->result_array();
 		}		
 	}
-	
+	/**
+	* Consulta la info de un perfil en especifico
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_perfil
+	* @return array
+	*/
+	public function search_data_perfil($id_perfil){
+		$db1   = $this->dbinfo[0]['db'];
+		$tbl1  = $this->dbinfo[0]['tbl_perfiles'];
+		$query = "SELECT * FROM $db1.$tbl1 WHERE id_perfil = $id_perfil";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}	
+
 	function db_get_data($data = array()){
 
 		$db1 	= $this->dbinfo[0]['db'];

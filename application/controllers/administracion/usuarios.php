@@ -147,41 +147,22 @@ class usuarios extends Base_Controller {
 	public function agregar(){
 		$seccion 		= '';
 		$uri_view   	= $this->view_agregar;
-		/*$dropArray = array(
-					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
-					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('ent_abrev','entidad')
-					,'name' 	=> "id_administracion_entidad"
-					,'class' 	=> "requerido"
-				);*/
+
 
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
-
-		$tabData['base_url']       = base_url();
+		
+		
+		$tabData['base_url']               =  base_url();
 
 		$tabData['lbl_nombre']             =  $this->lang_item('lbl_nombre', false);
 		$tabData['lbl_paterno']            =  $this->lang_item('lbl_paterno', false);
 		$tabData['lbl_materno']            =  $this->lang_item('lbl_materno', false);
 		$tabData['lbl_perfil']             =  $this->lang_item('lbl_perfil', false);
-		/*$tabData['lbl_num_int']            =  $this->lang_item('lbl_num_int', false);
-		$tabData['lbl_num_ext']            =  $this->lang_item('lbl_num_ext', false);
-		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
-		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
-		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
-		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
-		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
-		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
-		$tabData['lbl_contacto']           =  $this->lang_item('lbl_contacto', false);
-		$tabData['lbl_comentario']         =  $this->lang_item('lbl_comentario', false);
-		$tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
-		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
-
-		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
-		$tabData['button_save']            =  $btn_save;
-        $tabData['button_reset']           =  $btn_reset;*/
+		$tabData['tree_view']              =  $this->treeview_perfiles(4);
+		
+		
 
         if($this->ajax_post(false)){
 				echo json_encode($this->load_view_unique($uri_view , $tabData, true));
@@ -190,4 +171,99 @@ class usuarios extends Base_Controller {
 		}
 	}
 
+	public function treeview_perfiles($id_perfil = 2){
+		$this->load_database('global_system');
+		$info_perfil  = $this->db_model->search_data_perfil($id_perfil);
+		$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
+		$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
+		$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
+
+		$id_niveles   = array(
+						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
+						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
+						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
+						);
+		$data_modulos = $this->db_model->search_modules_for_user('', '' , '' , true);
+		$data_modulos = $this->build_array_treeview($data_modulos);
+		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles);
+	}
+
+	public function build_array_treeview($navigator){
+		foreach ($navigator as $key => $value) {
+			if(!is_null($value['menu_n2'])){
+				if(!is_null($value['menu_n3'])){
+					$id = $value['id_menu_n3'];
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['content'][$value['id_menu_n3'].'-'.$value['menu_n3']] = array( 'menu_n3'=> $value['id_menu_n3'].'-'.$value['menu_n3'] , 'icon' => $value['menu_n3_icon'], 'nivel' => 3);
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['icon']  = $value['menu_n2_icon'];
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['nivel'] = 2;
+				}else{
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']] = array('icon' => $value['menu_n2_icon'],  'nivel' => 2);
+				}
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['nivel'] = 1;
+			}else{
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'nivel' => 1);
+			}
+		}
+		return $data_navigator;
+	}
+
+	public function list_tree_view($items, $id_niveles = array(), $sub = false){
+
+	    $panel    = "";
+	    $style_ul = "";
+	    $style    = "treeview-gray";
+	    if($sub){ 
+	    	$panel .= "<ul>";
+		}else{
+			$panel .= "<ul id = 'treeview-modules' class='treeview-gray'>";
+	    }
+	    foreach ($items as $item => $subitems) {
+	    	$item         = explode('-', $item);
+	    	$itemId       = $item[0]; 
+	    	$itemName     = $item[1];
+	    	$content      = "";	
+			$sub_nivel    = "";
+			$checked      = "";
+	        if(array_key_exists('content', $subitems)){
+	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true);
+	        }
+	        $icon      = $subitems['icon'];
+	        $nivel     = $subitems['nivel'];
+	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
+
+	        switch ($nivel) {
+	        	case 1:
+	        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
+	        			$checked = "checked='checked'";
+	        		}else{
+	        			$checked = '';
+	        		}
+	        		break;
+	        	case 2:
+	        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
+	        			$checked = "checked='checked'";
+	        		}else{
+	        			$checked = '';
+	        		}
+	        		break;
+	        	case 3:
+	        		if(in_array($itemId, $id_niveles['id_menu_n3'])){
+	        			$checked = "checked='checked'";
+	        		}else{
+	        			$checked = '';
+	        		}
+	        		break;
+	        	default:
+	        		break;
+	        }
+    		$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        $panel    .= $content;
+	       	$panel    .= "</li>";
+	    }
+	    if($sub){$panel .= "</ul>";}
+	    return $panel;
+	}
+	
 }

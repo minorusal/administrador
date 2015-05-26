@@ -5,6 +5,7 @@ class Base_Controller extends CI_Controller {
         parent::__construct();
         $this->removeCache();
         $this->lang_load("system","es_ES");
+        $this->lang_load("navigate");
     }
 
     /**
@@ -32,7 +33,7 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
-		$this->lang_load("navigate");
+		
 		$ext      = ($ext!='.html') ? '': $ext;
 
 		$nivel_1  = $this->session->userdata('id_menu_n1');
@@ -210,7 +211,7 @@ class Base_Controller extends CI_Controller {
 			$sites_availables[] = $route;
 		}
 		$data = array($sites_availables, $data_navigator);
-
+		//print_debug($data);
 		return $data;
 	}
 
@@ -475,6 +476,15 @@ class Base_Controller extends CI_Controller {
 			$string =  $string.$separator. $lang_item;
 		}
 		return trim($string, $separator);
+	}
+
+	/**
+    * Devuelve lavariable de session con respecto al indice $index
+    * @param int $index
+    * @return string
+    */
+	public function item_session($index){
+		return $this->session->userdata($index);
 	}
 }
 ?>

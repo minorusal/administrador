@@ -1,21 +1,5 @@
 jQuery(document).ready(function(){
-  /*jQuery('#search-query').focus();
-  jQuery('#search-query').keypress(function(event){
-    var keycode = (event.keyCode ? event.keyCode : event.which);
-    if(keycode == '13'){  
-      buscar_usuario();
-    } 
-  });*/
 
-jQuery("#red").treeview({
-    animated: "fast",
-    collapsed: true,
-    unique: false,
-    persist: "cookie",
-    toggle: function() {
-      window.console && console.log("%o was toggled", this);
-    }
-  });
 })
 function buscar_usuario(){
   var filtro = jQuery('#search-query').val();

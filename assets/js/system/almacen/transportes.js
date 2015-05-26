@@ -105,7 +105,7 @@ function agregar(){
 	var incomplete   = values_requeridos();
     var empresa      = jQuery('#txt_empresa').val();
     var conductor    = jQuery('#txt_nombre_conductor').val();
-    var licencia     = jQuery('#txt_licencia').val();
+    var licencia     = jQuery('#txt_num_licencia').val();
     var marca        = jQuery('#txt_marca').val();
     var modelo       = jQuery('#txt_modelo').val();
     var placas      = jQuery('#txt_placas').val();
@@ -113,7 +113,7 @@ function agregar(){
     var descripcion  = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/trasportes/insert_almacen",
+		url: path()+"almacen/transportes/insert_transporte",
 		dataType: "json",
 		data: {incomplete :incomplete, empresa:empresa, conductor:conductor, licencia:licencia, marca:marca, modelo:modelo, placas:placas, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){

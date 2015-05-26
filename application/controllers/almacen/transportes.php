@@ -218,4 +218,163 @@ class transportes extends Base_Controller
 		$uri_view   					  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
+
+	public function actualizar()
+	{
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0)
+		{
+			$msg            = $this->lang_item("msg_campos_obligatorios",false);
+
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+
+		}
+		else
+		{
+			$sqlData = array(
+						 'id_almacen_transportes'  => $this->ajax_post('id_transporte')
+						,'empresa' 		           => $this->ajax_post('empresa')
+						,'conductor' 				=> $this->ajax_post('conductor')
+						,'num_lic'				    => $this->ajax_post('licencia')
+						,'marca'				    => $this->ajax_post('marca')
+						,'modelo'			        => $this->ajax_post('modelo')
+						,'placas'			        => $this->ajax_post('placas')
+						,'clave_corta'			    => $this->ajax_post('clave_corta')
+						,'descripcion'			    => $this->ajax_post('descripcion')
+						,'edit_timestamp'			=> $this->timestamp()
+						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
+						);
+			$insert = $this->db_model->db_update_data_transporte($sqlData);
+			if($insert)
+			{
+				
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}
+			else
+			{
+
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
+
+	public function agregar(){
+		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$this->seccion.'_save';		
+		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+
+		$tab_1["lbl_empresa"]            = $this->lang_item("lbl_empresa");
+		$tab_1["lbl_nombre_conductor"]   = $this->lang_item("lbl_nombre_conductor");
+		$tab_1["lbl_num_licencia"]       = $this->lang_item("lbl_num_licencia");
+		$tab_1["cvl_corta"]              = $this->lang_item("cvl_corta");
+		$tab_1["lbl_marca"]              = $this->lang_item("lbl_marca");
+		$tab_1["lbl_modelo"]             = $this->lang_item("lbl_modelo");
+		$tab_1["lbl_placas"]             = $this->lang_item("lbl_placas");
+		$tab_1['descrip']                = $this->lang_item("descripcion");
+
+        $tab_1['button_save']       = $btn_save;
+        $tab_1['button_reset']      = $btn_reset;
+
+
+        if($this->ajax_post(false))
+        {
+				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion , $tab_1, true);
+		}
+	}
+
+	public function insert_transporte()
+	{
+		$incomplete  = $this->ajax_post('incomplete');
+
+		if($incomplete>0)
+		{
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}
+		else
+		{
+			$data_insert = array('empresa'        => $this->ajax_post('empresa')
+								 ,'conductor'     => $this->ajax_post('conductor')
+								 ,'num_lic'       => $this->ajax_post('licencia')
+								 ,'marca'         => $this->ajax_post('marca')
+								 ,'modelo'        => $this->ajax_post('modelo')
+								 ,'placas'        => $this->ajax_post('placas')
+								 ,'clave_corta'   => $this->ajax_post('clave_corta')  
+								 ,'descripcion'   => $this->ajax_post('descripcion')  
+								 ,'id_usuario'    => $this->session->userdata('id_usuario')
+								 ,'timestamp'     => $this->timestamp());
+			
+			$insert = $this->db_model->db_insert_data_transportes($data_insert);
+			
+			if($insert)
+			{
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}
+			else
+			{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
+	}
+
+	public function export_xlsx($offset=0)
+	{
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data_transporte($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value)
+			{
+				$set_data[] = array(
+									 $value['empresa'],
+									 $value['clave_corta'],
+									 $value['conductor'],
+									 $value['num_lic'],
+									 $value['marca'],
+									 $value['modelo'],
+									 $value['descripcion']);
+			}
+			$set_heading = array(
+									$this->lang_item("empresa"),
+									$this->lang_item("cvl_corta"),
+									$this->lang_item("conductor"),
+									$this->lang_item("num_lic"),
+									$this->lang_item("marca"),
+									$this->lang_item("modelo"),
+									$this->lang_item("descripcion"));
+	
+		}
+		$params = array(	'title'   => $this->lang_item("Catálogo Trandportes"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
+	}
 }

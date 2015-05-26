@@ -103,7 +103,7 @@ function agregar(){
     var descripcion      = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/areas/insert_puesto",
+		url: path()+"administracion/areas/insert_area",
 		dataType: "json",
 		data: {incomplete :incomplete, id_area:id_area, area:area, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){

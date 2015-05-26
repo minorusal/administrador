@@ -302,7 +302,10 @@ class catalogos_model extends Base_Model
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (tr.conductor like '%$filtro%' OR 
+		$filtro = ($filtro) ? "AND (tr.conductor like '%$filtro%' OR
+									tr.modelo like '%$filtro%' OR
+									tr.num_lic like '%$filtro%' OR 
+									tr.marca like '%$filtro%' OR  
 									tr.placas like '%$filtro%' OR
 									tr.clave_corta like '%$filtro%' OR
 									tr.descripcion like '%$filtro%')" : "";

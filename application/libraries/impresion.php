@@ -10,16 +10,16 @@ class impresion {
 	private $respuesta; #Respuesta
 	private $impresora; #Nombre de impresora
 	private $contenido, $texto, $formato; #Contenido de documento
-	private $fuente, $font_barras; #Formato de texto
-	private $logo, $codebar, $codeqr; # Imagenes
+	private $fuente; #Formato de texto
+	private $codebar, $codeqr; # Imagenes
+	public  $logo, $footer; #Elementos
 	private $fh, $ph; #Manejadores de Impresora y archivo
 
 	public function __construct(){
 		$this->impresora 	= "\\\\192.168.230.14\\EPSON TM-T20II Receipt";
-		// $this->logo 	 	= "assets/images/logo.bmp";
+		$this->logo 	 	= "assets/images/logo.bmp";
+		$this->footer 		= true;
 		$this->fuente 		= "Arial";
-		$this->font_barras	= 'Code 128';
-		// $this->font_barras	= 'Free 3 of 9';
 		$this->respuesta 	= false;
 		$this->formato 		= false;
 		$this->contenido 	= '';
@@ -68,7 +68,7 @@ class impresion {
 				// Set print mode to RAW and send PDF to printer 
 				printer_set_option($this->ph, PRINTER_MODE, "RAW"); 
 				if($this->formato){
-					// Imagen BMP - Logo
+					// Imagen BMP - Logo	
 					printer_draw_bmp($this->ph, $this->logo, 155, 0, 300, 70);
 					// Crear formato de texto
 					$estilo = printer_create_font($this->fuente, 25, 11, 500, false, false, false, 0);    
@@ -88,23 +88,21 @@ class impresion {
 					printer_delete_font($estilo);
 					// Codigo de Barras
 					if($this->codebar){
-						// printer_draw_bmp($this->ph, $this->logo, 10, $salto_linea, 300, 70);
-						$barras = printer_create_font($this->font_barras, 100, 30, 500, false, false, false, 0);	
-						printer_select_font($this->ph, $barras);
-						printer_draw_text($this->ph, $this->codebar, 100, $salto_linea);
-						printer_delete_font($barras);
-						$salto_linea+=110;
+						printer_draw_bmp($this->ph, $this->codebar, 145, $salto_linea, 300, 70);
+						$salto_linea+=80;
 					}
 					// Codigo QR
 					if($this->codeqr){
 						printer_draw_bmp($this->ph, $this->codeqr, 190, $salto_linea, 200, 200);
-						$salto_linea+=210;						
+						$salto_linea+=200;						
 					}
 					// Footer
-					$estilo = printer_create_font($this->fuente, 17, 8, 500, false, false, false, 0);    
-					printer_select_font($this->ph, $estilo);
-					printer_draw_text($this->ph, date('Y-m-d H:i:s'), 204, $salto_linea);
-					printer_delete_font($estilo);
+					if($this->footer){
+						$estilo = printer_create_font($this->fuente, 17, 8, 500, false, false, false, 0);    
+						printer_select_font($this->ph, $estilo);
+						printer_draw_text($this->ph, date('Y-m-d H:i:s'), 204, $salto_linea);
+						printer_delete_font($estilo);
+					}
 				}else{
 					printer_write($this->ph, $this->texto); #texto sin formato
 				}				

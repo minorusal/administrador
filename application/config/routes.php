@@ -84,6 +84,8 @@ $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 $route['almacen/catalogos/pasillos']			     = 'almacen/pasillos/index';
 /*Catalogo de gavetas*/
 $route['almacen/catalogos/gavetas']			         = 'almacen/gavetas/index';
+/*Catalogo de transportes*/
+$route['almacen/catalogos/transportes']			     = 'almacen/transportes/index';
 
 
 /*ADMINISTRACION*/

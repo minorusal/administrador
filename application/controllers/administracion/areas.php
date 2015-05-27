@@ -277,7 +277,7 @@ class areas extends Base_Controller
 		}
 	}
 
-	public function insert_puesto()
+	public function insert_area()
 	{
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)

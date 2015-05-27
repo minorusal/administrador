@@ -3,16 +3,17 @@ class catalogos_model extends Base_Model
 {
 	private $db1, $db2;
 	private $tbl_almacenes, $tbl_sucursales, $tbl_tipos;
-	private $tbl_pasillos;
+	private $tbl_pasillos, $tbl_transportes;
 	
 	public function __construct()
 	{
 		parent::__construct();
-		$this->db1            = $this->dbinfo[1]['db'];
-		$this->tbl_almacenes  = $this->dbinfo[1]['tbl_almacen_almacenes'];
-		$this->tbl_tipos      = $this->dbinfo[1]['tbl_almacen_tipos'];
-		$this->tbl_pasillos   = $this->dbinfo[1]['tbl_almacen_pasillos'];
-		$this->tbl_gavetas    = $this->dbinfo[1]['tbl_almacen_gavetas'];
+		$this->db1                = $this->dbinfo[1]['db'];
+		$this->tbl_almacenes      = $this->dbinfo[1]['tbl_almacen_almacenes'];
+		$this->tbl_tipos          = $this->dbinfo[1]['tbl_almacen_tipos'];
+		$this->tbl_pasillos       = $this->dbinfo[1]['tbl_almacen_pasillos'];
+		$this->tbl_gavetas        = $this->dbinfo[1]['tbl_almacen_gavetas'];
+		$this->tbl_transportes    = $this->dbinfo[1]['tbl_almacen_transportes'];
 		
 		$this->db2            = $this->dbinfo[0]['db'];
 		$this->tbl_sucursales = $this->dbinfo[0]['tbl_sucursales'];
@@ -290,6 +291,84 @@ class catalogos_model extends Base_Model
 			return false;
 		}
 	}
-}
 
-//WHERE cp.activo = 1 $filtro
+
+	/*TRANSPORTES*/
+
+	public function db_get_data_transporte($data=array())
+	{
+		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$filtro = ($filtro) ? "AND (tr.conductor like '%$filtro%' OR
+									tr.modelo like '%$filtro%' OR
+									tr.num_lic like '%$filtro%' OR 
+									tr.marca like '%$filtro%' OR  
+									tr.placas like '%$filtro%' OR
+									tr.clave_corta like '%$filtro%' OR
+									tr.descripcion like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query = "	SELECT 
+						 *
+					FROM $tbl_transportes tr
+					WHERE tr.activo = 1 $filtro
+					GROUP BY tr.id_almacen_transportes ASC
+					$limit
+					";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1)
+		{
+			return $query->result_array();
+		}	
+	}
+
+	/*Trae la información para el formulario de edición de trensporte*/
+	public function get_orden_unico_transporte($id_almacen_transportes)
+	{
+		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+		$query = "SELECT * FROM $tbl_transportes WHERE id_almacen_transportes = $id_almacen_transportes";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1)
+		{
+			return $query->result_array();
+		}
+	}
+
+	/*Actualliza la información en el formuladio de edición de transportes*/
+	public function db_update_data_transporte($data=array())
+	{
+		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+		$condicion = array('id_almacen_transportes !=' => $data['id_almacen_transportes'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist($tbl_transportes, $condicion);
+		if(!$existe)
+		{
+			$condicion = "id_almacen_transportes = ".$data['id_almacen_transportes']; 
+			$query = $this->db->update_string($tbl_transportes, $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/*Inserta registro de transportes*/
+	public function db_insert_data_transportes($data = array())
+	{
+		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+		$existe = $this->row_exist($tbl_transportes, array('clave_corta'=> $data['clave_corta']));
+		if(!$existe)
+		{
+			$query = $this->db->insert_string($tbl_transportes, $data);
+			$query = $this->db->query($query);
+			return $query;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}

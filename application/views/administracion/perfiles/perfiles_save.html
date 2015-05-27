@@ -1,0 +1,30 @@
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery("#treeview-modules").treeview({
+            animated: "fast",
+            control:"#sidetreecontrol",
+            collapsed: true,
+            unique: false
+          });
+    })
+</script>
+<div id="formulario" class="stdform">
+    <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
+    <p>
+        <label>{lbl_perfil}: (*)</label>
+        <input id="txt_perfil" type="text" name="txt_perfil" class="input-large requerido" value="" />
+    </p>
+     <p>
+        <label>{lbl_descripcion}: (*)</label>
+        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5 requerido" style="resize: vertical; height: 100px;"></textarea>
+    </p>
+
+   {tree_view}
+
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+        {button_reset}
+    </p>
+</div>

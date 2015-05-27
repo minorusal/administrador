@@ -97,7 +97,7 @@ class entidades extends Base_Controller
 		);
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->get_entidades_default($sqlData));
-		$sqlData['aplicar_limit'] = false;
+		$sqlData['aplicar_limit'] = true;
 		$list_content = $this->db_model->get_entidades_default($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));

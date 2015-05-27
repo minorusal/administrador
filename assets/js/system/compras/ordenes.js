@@ -89,11 +89,11 @@ function actualizar(){
 
 function insert(){		
 	var btn   = jQuery("button[name='save']");
-	//btn.attr('disabled','disabled');
+	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
-  	//objData['incomplete'] = values_requeridos();
+  	objData['incomplete'] = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/ordenes/insert",

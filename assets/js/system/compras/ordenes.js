@@ -70,7 +70,6 @@ function actualizar(){
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
   		objData['incomplete'] = values_requeridos();
-  		// alert(dump_var(objData));
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/ordenes/actualizar",

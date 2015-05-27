@@ -160,7 +160,7 @@ class perfiles extends Base_Controller
 
 		$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
 		$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
-		$tab_1['tree_view']   = $this->treeview_perfiles(4);
+		$tab_1['tree_view']        = $this->treeview_perfiles(4);
 
 		$tab_1['button_save']  = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
@@ -172,6 +172,60 @@ class perfiles extends Base_Controller
 		else
 		{
 			return $this->load_view_unique($seccion, $tab_1, true);
+		}
+	}
+
+	public function insert_perfil(){
+		$incomplete  = $this->ajax_post('incomplete');
+		$data  = $this->ajax_post(false);
+		$datos = count($this->ajax_post(false));
+		/*$registro = $data['3'];
+		print_r($registro);*/
+		print_debug($this->ajax_post(false));
+		foreach ($data as $key => $menu)
+		{
+			$cadena = substr($key, 0,-2);
+			$nivel  = substr($key, -1);	
+			$getid = $this->db_model->get_id_menu_1($cadena);
+			if(!$getid)//falso
+			{
+				//echo $getid.',';
+			}
+			else 
+			{
+				if($menu == "false")
+				{
+					
+				}
+			}
+		}	
+		
+		
+
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$id_menu_1 = array();
+			$perfil      = $this->ajax_post('txt_perfil');
+			$descripcion = $this->ajax_post('txt_descripcion');
+			$data_insert = array('perfil'          => $perfil,
+								 'id_menu_1'       => $id_menu_1,
+								 'id_menu_2'       => $id_menu_2,
+								 'id_menu_3'       => $id_menu_3,
+								 'descripcion'     => $descripcion,
+								 'id_usuario'      => $this->session->userdata('id_usuario'),  
+								 'registro'        => $this->timestamp());
+			//print_debug($data_insert);
+			$insert = $this->db_model->db_insert_data($data_insert);
+			
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
 		}
 	}
 

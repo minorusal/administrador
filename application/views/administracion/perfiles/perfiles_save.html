@@ -8,15 +8,15 @@
           });
     })
 </script>
-<div id="formulario" class="stdform">
-    <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
+<div id="form" class="stdform">
+    <!--<input id="id_perfil" type="hidden" name="id_perfil" data-campo="id_perfil" value="{id_perfil}" />-->
     <p>
         <label>{lbl_perfil}: (*)</label>
-        <input id="txt_perfil" type="text" name="txt_perfil" class="input-large requerido" value="" />
+        <input id="txt_perfil" type="text" name="txt_perfil" data-campo="txt_perfil" class="input-large requerido" value="" />
     </p>
      <p>
         <label>{lbl_descripcion}: (*)</label>
-        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5 requerido" style="resize: vertical; height: 100px;"></textarea>
+        <textarea id="txt_descripcion" name="txt_descripcion" data-campo="txt_descripcion"  class="span5 requerido" style="resize: vertical; height: 100px;"></textarea>
     </p>
 
    {tree_view}

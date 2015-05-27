@@ -93,19 +93,18 @@ function actualizar(){
 
 
 function agregar(){
-	var btn          = jQuery("button[name='save_area']");
-	btn.attr('disabled','disabled');
+	var btn          = jQuery("button[name='save_perfil']");
+	//btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-	var incomplete       = values_requeridos();
-	var id_area       = jQuery('#id_area').val();
-    var area          = jQuery('#area').val();
-    var clave_corta      = jQuery('#clave_corta').val();
-    var descripcion      = jQuery('#descripcion').val();
+	var objData = formData('#form');
+	var prueba = jQuery('#txt_perfil').val();
+  	objData['incomplete'] = values_requeridos();
+  	//alert(dump_var(objData));
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/perfiles/insert_area",
+		url: path()+"administracion/perfiles/insert_perfil",
 		dataType: "json",
-		data: {incomplete :incomplete, id_area:id_area, area:area, clave_corta:clave_corta, descripcion:descripcion},
+		data: objData,
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

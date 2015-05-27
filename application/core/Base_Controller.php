@@ -350,7 +350,12 @@ class Base_Controller extends CI_Controller {
     public function timestamp(){
     	return date('Y-m-d H:i:s');
     }
-
+    /**
+    * Devuelve el item del dia con respecto al indice $index,
+    * si el $index no se define devolvera un array con todos los dias
+    * @param int $index
+    * @return array
+    */
     public function days($index = false){
 		$days[0]= $this->lang_item('lunes',false);
 		$days[1]= $this->lang_item('martes',false);
@@ -365,6 +370,12 @@ class Base_Controller extends CI_Controller {
 		}
 		return $days;
     }
+    /**
+    * Devuelve el item del mes con respecto al indice $index,
+    * si el $index no se define devolvera un array con todos los meses
+    * @param int $index
+    * @return array
+    */
     public function months($index = false){
 		$months[0]  = $this->lang_item('enero', false);
 		$months[1]  = $this->lang_item('febrero', false);
@@ -383,11 +394,15 @@ class Base_Controller extends CI_Controller {
 			return $months[ltrim($index,'0')];
 		}
 		return $months;
-		
-		
     }
+    /**
+    * Devuelve la fecha larga de un timestamp determinado
+    * @param string $timestamp
+    * @param bool $time
+    * @return string
+    */
     public function timestamp_complete($timestamp = "" , $time = false){
-	// Crea fecha larga i.e: Miércoles 06 de Mayo del 2015
+		// Crea fecha larga i.e: Miércoles 06 de Mayo del 2015
     	if($timestamp==""){
 			$dia=date("l");
 			if ($dia=="Monday") $dia=$this->lang_item('lunes', false);

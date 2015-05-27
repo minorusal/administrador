@@ -100,6 +100,7 @@ class ordenes extends Base_Controller {
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
+		//echo $this->ajax_post('filtro');
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$buttonTPL 		= '';
 		$sqlData = array(
@@ -109,7 +110,8 @@ class ordenes extends Base_Controller {
 			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
+		//$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
+		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -199,7 +201,7 @@ class ordenes extends Base_Controller {
 		$forma_pago	    = dropdown_tpl($dropArray3);
 		$dropArray4 = array(
 					 'data'		=> $this->creditos_model->db_get_data()
-					 ,'selected' => $detalle[0]['id_administracion_creditos']
+					 ,'selected' => $detalle[0]['id_credito']
 					,'value' 	=> 'id_administracion_creditos'
 					,'text' 	=> array('clave_corta','credito')
 					,'name' 	=> "id_administracion_creditos"
@@ -229,7 +231,11 @@ class ordenes extends Base_Controller {
         $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
         $tabData['observaciones_value']      = $detalle[0]['observaciones'];
+        $tabData['forma_pago']     = $this->lang_item("forma_pago",false);
+        $tabData['creditos']     = $this->lang_item("creditos",false);
 
+        $tabData['list_forma_pago']	= $forma_pago;
+		$tabData['list_creditos']	= $creditos;
 
         if($detalle[0]['id_usuario']){
         	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
@@ -299,6 +305,11 @@ class ordenes extends Base_Controller {
         $tabData['descripcion']     = $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  = $this->lang_item("fecha_registro",false);
         $tabData['timestamp']       = date('Y-m-d H:i');
+        $tabData['orden_fecha']     = $this->lang_item("orden_fecha",false);
+        $tabData['entrega_direccion']     = $this->lang_item("entrega_direccion",false);
+        $tabData['entrega_fecha']     = $this->lang_item("entrega_fecha",false);
+        $tabData['prefactura_num']     = $this->lang_item("prefactura_num",false);
+        $tabData['observaciones']     = $this->lang_item("observaciones",false);        
         //$tabData['registro_por']   	= $this->lang_item("registro_por",false);
         //$tabData['usuario_registro']= $this->session->userdata('name');
         $tabData['button_save']     = $btn_save;

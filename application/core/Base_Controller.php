@@ -268,12 +268,13 @@ class Base_Controller extends CI_Controller {
 	        if(array_key_exists('content', $subitems)){
 	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true, $checado);
 	        }
+	        
 	        $icon      = $subitems['icon'];
 	        $nivel     = $subitems['nivel'];
 	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
 	        if(!$checado)
 	        {
-	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' data-campo='$itemName".'_'."$nivel' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";
 	        }

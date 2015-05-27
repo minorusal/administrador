@@ -93,7 +93,7 @@ function actualizar()
 			jQuery("#mensajes_update").html(data.contenido).show('slow');
 			jQuery("#update_loader").html('');
 		}
-	})
+	});
 }
 
 function agregar()

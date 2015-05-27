@@ -147,8 +147,6 @@ class usuarios extends Base_Controller {
 	public function agregar(){
 		$seccion 		= '';
 		$uri_view   	= $this->view_agregar;
-
-
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		

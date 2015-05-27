@@ -159,11 +159,7 @@ class areas extends Base_Controller
 		$detalle = $this->db_model->get_orden_unico_puesto($id_area);
 		$seccion = $this->tab3;
 		$tab_detalle = $this->tab3;
-		$sqlData = array(
-			 'buscar' => ''
-			,'offset' => 0
-			,'limit' => 0
-			);
+		
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
 		$tabData['id_area'] = $id_area;
@@ -173,10 +169,10 @@ class areas extends Base_Controller
 		$tabData['area'] = $detalle[0]['area'];
 		$tabData['clave_corta'] = $detalle[0]['clave_corta'];
 		$tabData['descripcion'] = $detalle[0]['descripcion'];
-		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro');
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
 
 		$this->load_database('global_system');
         $this->load->model('users_model');

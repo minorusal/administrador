@@ -95,6 +95,8 @@ $route['almacen/catalogos/transportes']			     = 'almacen/transportes/index';
  */
 /*Catalogo de Usuarios*/
 $route['administracion/control_de_usuarios/usuarios']        = 'administracion/usuarios/index';
+/*Catalogo de Usuarios*/
+$route['administracion/control_de_usuarios/perfiles']        = 'administracion/perfiles/index';
 /*Catalogo de Puestos*/
 $route['administracion/control_de_usuarios/puestos']        = 'administracion/puestos/index';
 /*Catalogo de Areas*/

@@ -159,11 +159,7 @@ class entidades extends Base_Controller
 		$detalle = $this->db_model->get_orden_unico_entidad($id_entidad);
 		$seccion = $this->tab3;
 		$tab_detalle = $this->tab3;
-		$sqlData = array(
-			 'buscar' => ''
-			,'offset' => 0
-			,'limit' => 0
-			);
+		
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
 		$tabData['id_entidad'] = $id_entidad;

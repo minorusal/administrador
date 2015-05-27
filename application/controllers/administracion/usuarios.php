@@ -176,7 +176,7 @@ class usuarios extends Base_Controller {
 		$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
 		$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
 
-		$id_niveles   = array(
+		$id_niveles   = array(	
 						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
 						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
 						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
@@ -184,30 +184,12 @@ class usuarios extends Base_Controller {
 		$data_modulos = $this->db_model->search_modules_for_user('', '' , '' , true);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles);
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,true);
 	}
 
-	public function build_array_treeview($navigator){
-		foreach ($navigator as $key => $value) {
-			if(!is_null($value['menu_n2'])){
-				if(!is_null($value['menu_n3'])){
-					$id = $value['id_menu_n3'];
-					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['content'][$value['id_menu_n3'].'-'.$value['menu_n3']] = array( 'menu_n3'=> $value['id_menu_n3'].'-'.$value['menu_n3'] , 'icon' => $value['menu_n3_icon'], 'nivel' => 3);
-					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['icon']  = $value['menu_n2_icon'];
-					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['nivel'] = 2;
-				}else{
-					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']] = array('icon' => $value['menu_n2_icon'],  'nivel' => 2);
-				}
-				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
-				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['nivel'] = 1;
-			}else{
-				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'nivel' => 1);
-			}
-		}
-		return $data_navigator;
-	}
+	
 
-	public function list_tree_view($items, $id_niveles = array(), $sub = false){
+	/*public function list_tree_view($items, $id_niveles = array(), $sub = false){
 
 	    $panel    = "";
 	    $style_ul = "";
@@ -262,6 +244,6 @@ class usuarios extends Base_Controller {
 	    }
 	    if($sub){$panel .= "</ul>";}
 	    return $panel;
-	}
+	}*/
 	
 }

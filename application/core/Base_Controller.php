@@ -216,6 +216,104 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
+	* Prepara un array para la construccion
+	* del treeview 
+	* @param array $array_treeview
+	* @return array
+	*/
+	public function build_array_treeview($navigator){
+		foreach ($navigator as $key => $value) {
+			if(!is_null($value['menu_n2'])){
+				if(!is_null($value['menu_n3'])){
+					$id = $value['id_menu_n3'];
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['content'][$value['id_menu_n3'].'-'.$value['menu_n3']] = array( 'menu_n3'=> $value['id_menu_n3'].'-'.$value['menu_n3'] , 'icon' => $value['menu_n3_icon'], 'nivel' => 3);
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['icon']  = $value['menu_n2_icon'];
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']]['nivel'] = 2;
+				}else{
+					$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['content'][$value['id_menu_n2'].'-'.$value['menu_n2']] = array('icon' => $value['menu_n2_icon'],  'nivel' => 2);
+				}
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']]['nivel'] = 1;
+			}else{
+				$data_navigator[$value['id_menu_n1'].'-'.$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'nivel' => 1);
+			}
+		}
+		return $data_navigator;
+	}
+
+	/**
+    * Contruye el treeview de navegacion
+    * @param array $items
+    * @param array $uri
+    * @param bolean $sub
+    * @return string
+    */
+	public function list_tree_view($items, $id_niveles = array(), $sub = false, $checado = false){
+
+	    $panel    = "";
+	    $style_ul = "";
+	    $style    = "treeview-gray";
+	    if($sub){ 
+	    	$panel .= "<ul>";
+		}else{
+			$panel .= "<ul id = 'treeview-modules' class='treeview-gray'>";
+	    }
+	    foreach ($items as $item => $subitems) {
+	    	$item         = explode('-', $item);
+	    	$itemId       = $item[0]; 
+	    	$itemName     = $item[1];
+	    	$content      = "";	
+			$sub_nivel    = "";
+			$checked      = "";
+	        if(array_key_exists('content', $subitems)){
+	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true, $checado);
+	        }
+	        $icon      = $subitems['icon'];
+	        $nivel     = $subitems['nivel'];
+	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
+	        if(!$checado)
+	        {
+	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= $content;
+	       		$panel    .= "</li>";
+	        }
+	    	else
+	    	{
+		        switch ($nivel) {
+		        	case 1:
+		        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
+		        			$checked = "checked='checked'";
+		        		}else{
+		        			$checked = '';
+		        		}
+		        		break;
+		        	case 2:
+		        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
+		        			$checked = "checked='checked'";
+		        		}else{
+		        			$checked = '';
+		        		}
+		        		break;
+		        	case 3:
+		        		if(in_array($itemId, $id_niveles['id_menu_n3'])){
+		        			$checked = "checked='checked'";
+		        		}else{
+		        			$checked = '';
+		        		}
+		        		break;
+		        	default:
+		        		break;
+		        }
+		    	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= $content;
+	       		$panel    .= "</li>";    
+		    }
+	    }
+	    if($sub){$panel .= "</ul>";}
+	    return $panel;
+	}
+
+	/**
     * Contruye el Panel de navegacion
     * @param array $items
     * @param array $uri

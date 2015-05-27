@@ -43,7 +43,7 @@ class entidades_model extends Base_Model
 	public function get_orden_unico_entidad($id_entidad)
 	{
 		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
-		$query = "SELECT * FROM $tbl WHERE $id_entidad = $id_entidad";
+		$query = "SELECT * FROM $tbl WHERE id_administracion_entidad = $id_entidad";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1)
 		{

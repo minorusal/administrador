@@ -13,7 +13,7 @@
     GoTop();
 });
 function datepicker_regional(){
-    jQuery.datepicker.regional['es'] = {
+    jQuery.datepicker.regionalgit['es'] = {
         monthNames: months_timepicker,
         monthNamesShort: months_timepicker,
         dayNames: days_timepicker,
@@ -247,10 +247,7 @@ function values_requeridos(){
             } 
         }
     });
-<<<<<<< HEAD
-   // alert(ids+'-'+items_vacios);
-=======
->>>>>>> c08d9e3c8b5645400444a5c2a710a75ed46e13f7
+
     return items_vacios;
 }
 

@@ -1,15 +1,11 @@
-<div id="formulario" class="stdform">
-    <div >
-        <div style="float:left">
+<div id="formulario">
+
             <input id="id_perfil" type="hidden" name="id_perfil" value="{id_perfil}" />
             <p>
                 <label>{nombre_perfil}: (*)</label>
                 <input id="txt_perfil" type="text" name="txt_perfil" class="input-xlarge " value="{txt_perfil}" />
             </p>
-        </div>
-        
-    </div>
-    <div style="clear:both">
+
         <p>
             <label>{desc}:</label>
             <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{txt_descripcion}</textarea>
@@ -29,8 +25,7 @@
         {tree_view}
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
-    <p class="stdformbutton"> 
+
        {button_save}
-    </p>
-    </div>
+ 
 </div>

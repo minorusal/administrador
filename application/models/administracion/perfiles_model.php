@@ -41,7 +41,7 @@ class perfiles_model extends Base_Model
 	/*Actualiza la información en el formuladio de edición de la tabla sys_perfiles*/
 	public function db_update_data($data=array())
 	{
-		$tbl       = $this->db1.'.'.$this->tbl1;
+		$tbl = $this->dbinfo[0]['db'].'.'.$this->dbinfo[0]['tbl_perfiles'];
 		$condicion = array('id_perfil !=' => $data['id_perfil'], 'perfil = '=> $data['perfil']); 
 		$existe    = $this->row_exist($tbl, $condicion);
 		if(!$existe)

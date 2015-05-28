@@ -161,8 +161,8 @@ class perfiles extends Base_Controller
 		$tabData['id_perfil']               = $id_perfil;
 		$tabData['nombre_perfil']           = $this->lang_item("nombre_perfil");
 		$tabData['desc']                    = $this->lang_item("descripcion");	
-		$tabData['perfil']                  = $detalle[0]['perfil'];
-		$tabData['descripcion']             = $detalle[0]['descripcion'];
+		$tabData['txt_perfil']                  = $detalle[0]['perfil'];
+		$tabData['txt_descripcion']             = $detalle[0]['descripcion'];
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']      = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
@@ -194,14 +194,63 @@ class perfiles extends Base_Controller
 		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
 	}
 
+
+	public function actualizar()
+	{
+		$incomplete = $this->ajax_post('incomplete');
+		if($incomplete > 0)
+		{
+			$msg = $this->lang_item('msg_campos_obligatorios',false);
+			$json_respuesta = array(
+				 'id' => 0
+				,'contenido' => alertas_tpl('error',$msg, false)
+				,'succes' => false
+				);
+		}
+		else
+		{
+			$sqlData = array(
+				 'id_perfil'       => $this->ajax_post('id_perfil')
+				,'perfil'          => $this->ajax_post('perfil')
+				,'descripcion'     => $this->ajax_post('descripcion')
+				,'id_menu_n1'      => $this->ajax_post('nivel_1')
+				,'id_menu_n2'      => $this->ajax_post('nivel_2')
+				,'id_menu_n3'      => $this->ajax_post('nivel_3')
+				,'edit_timestamp'  => $this->timestamp()
+				,'edit_id_usuario' => $this->session->userdata('id_usuario')
+				);
+				
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert)
+			{
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		     => 1
+						,'contenido'     => alertas_tpl('success', $msg ,false)
+						,'success' 	     => true
+				);
+			}
+			else
+			{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		    => 0
+						,'contenido'    => alertas_tpl('', $msg ,false)
+						,'success'    	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
+	}
+
 	public function agregar()
 	{
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_perfil', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		//$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
-		//$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
+		$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
+		$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
 		$tab_1['tree_view']        = $this->treeview_perfiles();
 
 		$tab_1['button_save']  = $btn_save;
@@ -219,7 +268,6 @@ class perfiles extends Base_Controller
 
 	public function insert_perfil(){
 		$incomplete  = $this->ajax_post('incomplete');
-		print_debug($this->ajax_post(false));
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
@@ -238,7 +286,6 @@ class perfiles extends Base_Controller
 								 'id_usuario'      => $this->session->userdata('id_usuario'),  
 								 'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
-			
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));

@@ -155,7 +155,7 @@ function dump_var(arr,level) {
         dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
     }
     return dumped_text;
-}
+} 
 function live_clock(){
     if (jQuery('#liveclock').length){
 
@@ -230,6 +230,9 @@ function load_content_tab(uri, id_content){
 function clean_formulario(){
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
+    });
+    jQuery("input[type='checkbox']").each(function(){
+        jQuery(this).attr('checked', false);
     });
     jQuery("select").each(function(){ 
         jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');;

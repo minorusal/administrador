@@ -15,16 +15,34 @@
         <tr>
         <tr>
             <td>
-                <label>{proveedor}: (*)</label>
-                {list_proveedores}
+                <label>{orden_tipo}: (*)</label>
+                {list_orden_tipo}
             </td>
-        </tr>    
+        </tr>
         <tr>
             <td>
                 <label>{descripcion}:</label>
                 <textarea id="descripcion" data-campo="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
+                <hr>
             </td>
         </tr>
+        <tr>
+            <td>
+                <div id="proveedores" {style}>
+                    <label>{proveedor}: (*)</label>
+                    {list_proveedores}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="prefactura"  {style}>
+                    <label>{prefactura_num}: (*)</label>
+                    <input id="prefactura_num" data-campo="prefactura_num" type="text" class="input-large {class}" value="{prefactura_num_value}" />
+                    <hr>
+                </div>
+            </td>
+        </tr>    
         <tr>
             <td>
                 <label>{sucursal}:</label>
@@ -41,6 +59,7 @@
             <td>
                 <label>{entrega_fecha}: (*)</label>
                 <input id="entrega_fecha" type="text" data-campo="entrega_fecha" class="input-large requerido" value="{entrega_fecha_value}" />
+                <hr>
             </td>
         </tr>
         <tr>
@@ -56,12 +75,6 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <label>{prefactura_num}: (*)</label>
-                <input id="prefactura_num" data-campo="prefactura_num" type="text" class="input-large requerido" value="{prefactura_num_value}" />
-            </td>
-        </tr>
-          <tr>
             <td>
                 <label>{observaciones}:</label>
                 <textarea id="observaciones" data-campo="observaciones" class="span5" style="resize: vertical; height: 100px;">{observaciones_value}</textarea>

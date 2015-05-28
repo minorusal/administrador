@@ -3,8 +3,6 @@ jQuery(document).ready(function(){
 	Buscar.focus();
 	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
 })
-
-
 function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
@@ -24,7 +22,6 @@ function buscar(){
 		}
 	})
 }
-
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
@@ -46,7 +43,6 @@ function load_content(uri, id_content){
         }
     });
 }
-
 function detalle(id_compras_orden){	
 	jQuery.ajax({
         type: "POST",
@@ -62,7 +58,6 @@ function detalle(id_compras_orden){
         }
     });
 }
-
 function actualizar(){	
 		jQuery('#mensajes_update').hide();		
 		var btn          = jQuery("button[name='update']");
@@ -86,7 +81,6 @@ function actualizar(){
 			}
 		})
 }
-
 function insert(){		
 	var btn   = jQuery("button[name='save']");
 	btn.attr('disabled','disabled');
@@ -112,4 +106,28 @@ function insert(){
 			
 		}
 	})
+}
+function show_proveedor(id_tipo){
+	if(id_tipo==1){
+		jQuery('#proveedores').show('slow');
+		jQuery('#prefactura').show('slow');
+		jQuery('[name=id_proveedor]').addClass('requerido');
+		jQuery('#prefactura_num').addClass('requerido');
+	}else{
+		jQuery('#proveedores').hide('slow');
+		jQuery('#prefactura').hide('slow');
+		jQuery('[name=id_proveedor]').removeClass('requerido');
+		jQuery('#prefactura_num').removeClass('requerido');
+	}
+}
+function show_direccion(id_sucursal){
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/ordenes/show_direccion",
+        dataType: 'json',
+        data: {id_sucursal : id_sucursal},
+        success: function(data){
+          jQuery('#entrega_direccion').html(data);
+        }
+    });
 }

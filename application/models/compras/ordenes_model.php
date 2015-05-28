@@ -75,10 +75,10 @@ class ordenes_model extends Base_Model{
 		// Query
 		//$query = "SELECT * FROM $db1.$tbl1 WHERE id_compras_orden = $id_compras_orden";
 		$query="SELECT 
-					a.id_compras_orden AS id_compras_orden
+					a.id_compras_orden
 					,a.orden_num
-					,a.id_orden_tipo AS orden_tipo
-					,a.descripcion AS descripcion
+					,a.id_orden_tipo 
+					,a.descripcion
 					,a.id_sucursal
 					,a.orden_fecha
 					,a.entrega_direccion
@@ -88,7 +88,7 @@ class ordenes_model extends Base_Model{
 					,a.id_credito
 					,a.prefactura_num
 					,a.observaciones
-					,a.id_proveedor AS id_proveedor
+					,a.id_proveedor
 					,a.id_usuario
 					,a.timestamp
 					from $tbl1 a 
@@ -153,5 +153,18 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}*/
+	public function db_get_tipo_orden(){
+		// DB Info
+		//$db1 	= $this->dbinfo[1]['db'];
+		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes_tipo'];
+		// Query
+		$query = "SELECT * FROM $tbl1 WHERE activo= 1";
+		// dump_var($query);
+      	// Execute querie
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
 }
 ?>

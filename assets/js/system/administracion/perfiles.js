@@ -25,7 +25,8 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
-           		//jQuery('#a-2').html(data);
+           		var chosen  = 'jQuery(".chzn-select").chosen();';
+           		jQuery('#a-'+id_content).html(data+include_script(treeview));
            }
         }
     });
@@ -72,15 +73,36 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();	
 	var incomplete      = values_requeridos();
-	var id_area      = jQuery('#id_area').val();
-    var area         = jQuery('#area').val();
-    var clave_corta     = jQuery('#clave_corta').val();
-    var descripcion     = jQuery('#descripcion').val();
+	var nivel_1 = [];
+	var nivel_2 = [];
+	var nivel_3 = [];
+	var objData = formData('#formulario');
+	objData['incomplete']  = incomplete;
+
+	jQuery("input[name='nivel_1']:checked").each(function(){
+	  nivel_1.push(jQuery(this).val());
+	});
+	
+	jQuery("input[name='nivel_2']:checked").each(function(){
+	  nivel_2.push(jQuery(this).val());
+	});
+	
+	jQuery("input[name='nivel_3']:checked").each(function(){
+	  nivel_3.push(jQuery(this).val());
+	});
+
+	objData['id_perfil']   = jQuery('#id_perfil').val();
+	objData['perfil']      = jQuery('#txt_perfil').val();
+	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+	objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+	objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+	
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/perfiles/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_area:id_area, area:area, clave_corta:clave_corta, descripcion:descripcion},
+		data: objData,
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -94,19 +116,11 @@ function actualizar(){
 
 
 function agregar(){
-	var ids ='';
-	jQuery(".requerido").each(function(){ 
-		ids = jQuery(this).attr("id")+'|'+ids;
-        
-       // items_vacios++
-            
-    });
-    alert( ids);
-	/*var btn          = jQuery("button[name='save_perfil']");
+	var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();*/
-	//var incomplete = values_requeridos();
-	/*var nivel_1 =  [];
+	jQuery('#mensajes').hide();
+	var incomplete = values_requeridos();
+	var nivel_1 =  [];
 	var nivel_2 =  [];
 	var nivel_3 =  [];
 	
@@ -123,7 +137,6 @@ function agregar(){
 	jQuery("input[name='nivel_3']:checked").each(function(){
 	  nivel_3.push(jQuery(this).val());
 	});
-	
 	objData['perfil']      = jQuery('#txt_perfil').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
@@ -147,7 +160,7 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	});*/
+	});
 }
 
 

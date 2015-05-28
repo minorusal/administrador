@@ -42,6 +42,15 @@ function input_keyup(identificador, name_funcion){
     var script = "<script>jQuery('#"+identificador+"').keyup(function(e){if(e.which == '13' || e.which == 8){   "+name_funcion+"(); } });</script>";
         return script;
 }
+function load_treeview(id){
+    jQuery("#"+id).treeview({
+        animated: "fast",
+        control:"#sidetreecontrol",
+        collapsed: true,
+        unique: false
+      });
+}
+
 function include_script(script){
     var functions = "";
     if(jQuery.isArray(script)){

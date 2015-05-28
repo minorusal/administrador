@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 		} 
 	});
 })
+
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
@@ -57,10 +58,10 @@ function detalle(id_perfil){
         dataType: 'json',
         data: {id_perfil : id_perfil},
         success: function(data){
-        	var chosen = 'jQuery(".chzn-select").chosen();';
+        	var treeview = 'load_treeview("treeview-modules")';
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
-        	jQuery('#a-2').html(data+include_script(chosen));
+        	jQuery('#a-2').html(data+include_script(treeview));
         	jQuery('#ui-id-2').show('slow');
         }
     });

@@ -8,11 +8,17 @@
         //jQuery(".maincontent").hide('slow');
     });
     
-
+    datepicker_regional();
     // GoTopIcon
     GoTop();
 });
 function datepicker_regional(){
+    if(typeof  months_timepicker=="undefined"){
+        return false;
+    }
+    if(typeof  days_timepicker=="undefined"){
+        return false;
+    }
     jQuery.datepicker.regionalgit['es'] = {
         monthNames: months_timepicker,
         monthNamesShort: months_timepicker,

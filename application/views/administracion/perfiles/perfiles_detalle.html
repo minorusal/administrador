@@ -1,36 +1,33 @@
 <div id="formulario" class="stdform">
-    <div >
-        <div style="float:left">
-            <input id="id_perfil" type="hidden" name="id_perfil" value="{id_perfil}" />
-            <p>
-                <label>{nombre_perfil}: (*)</label>
-                <input id="txt_perfil" type="text" name="txt_perfil" class="input-xlarge " value="{txt_perfil}" />
-            </p>
-        </div>
-        
-    </div>
-    <div style="clear:both">
-        <p>
-            <label>{desc}:</label>
-            <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{txt_descripcion}</textarea>
-        </p>
-        <p>
-            <label>{lbl_fecha_registro}: </label>
-            <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
-        </p>           
-        <p>
-            <label>{lbl_usuario_registro}: </label>
-            <input id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
-        </p>
-        <p>
-            <label>{lbl_ultima_modificacion}: </label>
-            <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
-        </p>
-        {tree_view}
-        <div id="update_loader"></div>
-        <div id="mensajes_update" style="display:none"></div>
+    <input id="id_perfil" type="hidden" name="id_perfil" value="{id_perfil}" />
+    <p>
+        <label>{lbl_perfil}: (*)</label>
+        <input id="txt_perfil" type="text" name="txt_perfil" class="input-xlarge " value="{txt_perfil}" />
+    </p>  
+    <p>
+        <label>{lbl_clave_corta}: (*)</label>
+        <input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge " value="{txt_clave_corta}" />
+    </p>   
+    <p>
+        <label>{lbl_descripcion}:</label>
+        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{txt_descripcion}</textarea>
+    </p>
+    <p>
+        <label>{lbl_fecha_registro}: </label>
+        <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
+    </p>           
+    <p>
+        <label>{lbl_usuario_registro}: </label>
+        <input id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
+    </p>
+    <p>
+        <label>{lbl_ultima_modificacion}: </label>
+        <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+    </p>
+    {tree_view}
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
     <p class="stdformbutton"> 
        {button_save}
     </p>
-    </div>
 </div>

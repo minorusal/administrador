@@ -72,12 +72,11 @@ function actualizar(){
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();	
-	var incomplete      = values_requeridos();
 	var nivel_1 = [];
 	var nivel_2 = [];
 	var nivel_3 = [];
 	var objData = formData('#formulario');
-	objData['incomplete']  = incomplete;
+	//objData['incomplete']  = incomplete;
 
 	jQuery("input[name='nivel_1']:checked").each(function(){
 	  nivel_1.push(jQuery(this).val());
@@ -91,8 +90,10 @@ function actualizar(){
 	  nivel_3.push(jQuery(this).val());
 	});
 
+	objData['incomplete']  = values_requeridos();
 	objData['id_perfil']   = jQuery('#id_perfil').val();
 	objData['perfil']      = jQuery('#txt_perfil').val();
+	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
 	objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
@@ -139,6 +140,7 @@ function agregar(){
 	});
 	objData['perfil']      = jQuery('#txt_perfil').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
 	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
 	objData['nivel_2'] = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
 	objData['nivel_3'] = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;

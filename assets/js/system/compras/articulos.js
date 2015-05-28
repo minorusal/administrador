@@ -6,9 +6,17 @@ jQuery(document).ready(function(){
 			buscar_articulo();
 		} 
 	});
+	jQuery("#datepicker1").datepicker({
+		numberOfMonths: 1,		
+		showButtonPanel: false;
+		monthNames: months_timepicker
+	});
+
+
 })
 
 function buscar_articulo(){
+	alert(dump_var(lang_timepicker));
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",

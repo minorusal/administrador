@@ -26,9 +26,26 @@
 .inputwrapper button { background: #0096d2; border-color: #0c57a3; }
 .inputwrapper button:hover { background: #0972dd; border-color: #0c57a3; }
 
+/* Timepicker*/
+.ui-datepicker-today a, .ui-datepicker-today a:hover, .ui-datepicker .ui-state-highlight{
+  background: #0096d2 !important;
+}
+.ui-datepicker{
+  border: 5px solid #0096d2;
+}
+.smart-forms .ui-slider .ui-slider-handle{
+  border: 3px solid #0096d2;
+}
+.ui-datepicker:before{
+  border-color: rgba(255,255,255,0) rgba(255,255,255,0) #0096d2 rgba(255,255,255,0);
+}
+
 /* background */
 
 body.loginpage,
+.ui-datepicker-title,
+.ui-timepicker-div .ui-widget-header, .ui-datepicker .ui-datepicker-header,
+.smart-forms .ui-slider .ui-slider-handle:before,
 .header,
 .leftmenu .nav-tabs.nav-stacked > li.active > a,
 .leftmenu .nav-tabs.nav-stacked > li.active > a:hover,

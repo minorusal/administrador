@@ -2,7 +2,7 @@ jQuery(document).ready(function(){
 	var Buscar = jQuery('#search-query');
 	Buscar.focus();
 	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
-})
+});
 
 
 function buscar(){
@@ -22,7 +22,7 @@ function buscar(){
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();
 		}
-	})
+	});
 }
 
 function load_content(uri, id_content){
@@ -84,7 +84,7 @@ function actualizar(){
 				jQuery("#update_loader").html('');
 			    jQuery("#mensajes_update").html(data.contenido).show('slow');
 			}
-		})
+		});
 }
 
 function insert(){		
@@ -111,5 +111,5 @@ function insert(){
 		    jQuery("#mensajes").html(data.contenido).show('slow');
 			
 		}
-	})
+	});
 }

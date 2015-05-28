@@ -22,6 +22,8 @@ $lang['prefactura_num'] 	= "No. prefactura";
 $lang['observaciones'] 	    = "Observaciones";
 $lang['creditos'] 	    	= "Creditos";
 $lang['forma_pago'] 	    = "Forma de pago";
+$lang['orden_tipo'] 	    = "Tipo de orden";
+
 
 
 ?>

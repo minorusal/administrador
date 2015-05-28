@@ -83,7 +83,7 @@ class perfiles extends Base_Controller
 	public function listado($offset=0)
 	{
 	// Crea tabla con listado de elementos capturados 
-		/*$seccion 		= '/listado';
+		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.$seccion;
@@ -107,12 +107,11 @@ class perfiles extends Base_Controller
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_administracion_areas'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_perfil'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_administracion_areas'],
-									'area'      => tool_tips_tpl($value['area'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'   => $value['clave_corta'],
+				$tbl_data[] = array('id'            => $value['id_perfil'],
+									'perfil'      => tool_tips_tpl($value['perfil'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'descripcion'   => $value['descripcion']
 									);
 			}
@@ -120,8 +119,7 @@ class perfiles extends Base_Controller
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("area"),
-										$this->lang_item("clave_corta"),
+										$this->lang_item("perfil"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -149,7 +147,100 @@ class perfiles extends Base_Controller
 		else
 		{
 			return $this->load_view_unique($uri_view , $tabData, true);
-		}*/
+		}
+	}
+
+	public function detalle()
+	{
+		$id_perfil = $this->ajax_post('id_perfil');
+		$detalle = $this->db_model->get_orden_unico_perfil($id_perfil);
+		$seccion = $this->tab3;
+		$tab_detalle = $this->tab3;
+
+		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
+		$tabData['id_perfil']               = $id_perfil;
+		$tabData['nombre_perfil']           = $this->lang_item("nombre_perfil");
+		$tabData['desc']                    = $this->lang_item("descripcion");	
+		$tabData['txt_perfil']                  = $detalle[0]['perfil'];
+		$tabData['txt_descripcion']             = $detalle[0]['descripcion'];
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
+        $tabData['val_fecha_registro']      = $detalle[0]['registro'];
+		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
+		$tabData['tree_view']               = $this->treeview_perfiles($id_perfil);
+
+		$this->load_database('global_system');
+        $this->load->model('users_model');
+
+		$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+		if($detalle[0]['edit_id_usuario'])
+		{
+			$usuario_registro = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
+			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+		}
+		else
+		{
+			$usuario_name = '';
+			$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+		}
+		$tabData['button_save'] = $btn_save;
+		$tabData['registro_por'] = $this->lang_item('registro´_por', false);
+		$tabData['usuario_registro'] = $usuario_name;
+		$uri_view = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
+	}
+
+
+	public function actualizar()
+	{
+		$incomplete = $this->ajax_post('incomplete');
+		if($incomplete > 0)
+		{
+			$msg = $this->lang_item('msg_campos_obligatorios',false);
+			$json_respuesta = array(
+				 'id' => 0
+				,'contenido' => alertas_tpl('error',$msg, false)
+				,'succes' => false
+				);
+		}
+		else
+		{
+			$sqlData = array(
+				 'id_perfil'       => $this->ajax_post('id_perfil')
+				,'perfil'          => $this->ajax_post('perfil')
+				,'descripcion'     => $this->ajax_post('descripcion')
+				,'id_menu_n1'      => $this->ajax_post('nivel_1')
+				,'id_menu_n2'      => $this->ajax_post('nivel_2')
+				,'id_menu_n3'      => $this->ajax_post('nivel_3')
+				,'edit_timestamp'  => $this->timestamp()
+				,'edit_id_usuario' => $this->session->userdata('id_usuario')
+				);
+				
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert)
+			{
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		     => 1
+						,'contenido'     => alertas_tpl('success', $msg ,false)
+						,'success' 	     => true
+				);
+			}
+			else
+			{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		    => 0
+						,'contenido'    => alertas_tpl('', $msg ,false)
+						,'success'    	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
 	}
 
 	public function agregar()
@@ -160,7 +251,7 @@ class perfiles extends Base_Controller
 
 		$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
 		$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
-		$tab_1['tree_view']        = $this->treeview_perfiles(4);
+		$tab_1['tree_view']        = $this->treeview_perfiles();
 
 		$tab_1['button_save']  = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
@@ -177,48 +268,24 @@ class perfiles extends Base_Controller
 
 	public function insert_perfil(){
 		$incomplete  = $this->ajax_post('incomplete');
-		$data  = $this->ajax_post(false);
-		$datos = count($this->ajax_post(false));
-		/*$registro = $data['3'];
-		print_r($registro);*/
-		print_debug($this->ajax_post(false));
-		foreach ($data as $key => $menu)
-		{
-			$cadena = substr($key, 0,-2);
-			$nivel  = substr($key, -1);	
-			$getid = $this->db_model->get_id_menu_1($cadena);
-			if(!$getid)//falso
-			{
-				//echo $getid.',';
-			}
-			else 
-			{
-				if($menu == "false")
-				{
-					
-				}
-			}
-		}	
-		
-		
-
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
 			$id_menu_1 = array();
-			$perfil      = $this->ajax_post('txt_perfil');
-			$descripcion = $this->ajax_post('txt_descripcion');
+			$perfil      = $this->ajax_post('perfil');
+			$descripcion = $this->ajax_post('descripcion');
+			$nivel_1     = $this->ajax_post('nivel_1');
+			$nivel_2     = $this->ajax_post('nivel_2');
+			$nivel_3     = $this->ajax_post('nivel_3');
 			$data_insert = array('perfil'          => $perfil,
-								 'id_menu_1'       => $id_menu_1,
-								 'id_menu_2'       => $id_menu_2,
-								 'id_menu_3'       => $id_menu_3,
+								 'id_menu_n1'       => $nivel_1,
+								 'id_menu_n2'       => $nivel_2,
+								 'id_menu_n3'       => $nivel_3,
 								 'descripcion'     => $descripcion,
 								 'id_usuario'      => $this->session->userdata('id_usuario'),  
 								 'registro'        => $this->timestamp());
-			//print_debug($data_insert);
 			$insert = $this->db_model->db_insert_data($data_insert);
-			
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
@@ -229,22 +296,34 @@ class perfiles extends Base_Controller
 		}
 	}
 
-	public function treeview_perfiles($id_perfil = 2){
+	public function treeview_perfiles($id_perfil=false){
 		$this->load_database('global_system');
 		$this->load->model('users_model');
-		$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
-		$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
-		$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
-		$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
+		if($id_perfil)
+		{
+			$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
+			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
+			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
+			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
 
-		$id_niveles   = array(	
+			$id_niveles   = array(	
 						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
 						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
 						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
 						);
+			$checked = true;
+		}
+		else
+		{
+			$id_niveles = "";
+			$checked = false;
+		}
+		
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
+		//print_debug($data_modulos);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,false);
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked);
 	}
+
 }

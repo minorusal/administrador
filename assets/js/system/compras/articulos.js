@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
 })
 
 function buscar_articulo(){
+	alert(dump_var(lang_timepicker));
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",

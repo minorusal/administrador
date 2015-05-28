@@ -24,6 +24,4 @@ $lang['creditos'] 	    	= "Creditos";
 $lang['forma_pago'] 	    = "Forma de pago";
 $lang['orden_tipo'] 	    = "Tipo de orden";
 
-
-
 ?>

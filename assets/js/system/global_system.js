@@ -9,6 +9,7 @@
     });
     
     config_datepicker();
+    
     // GoTopIcon
     GoTop();
 });
@@ -19,7 +20,7 @@ function config_datepicker(){
     if(typeof  days_timepicker=="undefined"){
         return false;
     }
-    jQuery.datepicker.regionalgit['es'] = {
+    jQuery.datepicker.regional['es'] = {
         monthNames: months_timepicker,
         monthNamesShort: months_timepicker,
         dayNames: days_timepicker,
@@ -33,7 +34,7 @@ function config_datepicker(){
         yearSuffix: ''
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
-}
+ }
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){

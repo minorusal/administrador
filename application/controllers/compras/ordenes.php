@@ -110,7 +110,6 @@ class ordenes extends Base_Controller {
 			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
-		//$total_rows	  = count($this->db_model->db_get_total_rows($sqlData));
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
@@ -126,17 +125,20 @@ class ordenes extends Base_Controller {
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'razon_social'   => $value['razon_social'],
-									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr)
+									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'entrega_fecha'  => $value['entrega_fecha'],
+									'estatus'   	 => $value['estatus']
 									);
 			}
 			// Plantilla
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
-										$this->lang_item("orden_num"),
-										$this->lang_item("proveedor"),
-										$this->lang_item("descripcion"));
+										$this->lang_item("orden_num"),										
+										$this->lang_item("descripcion"),
+										$this->lang_item("entrega_fecha"),
+										$this->lang_item("estatus"),
+										$this->lang_item("pendiente"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -169,6 +171,7 @@ class ordenes extends Base_Controller {
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		$btn_eliminar       	= form_button(array('class'=>"btn btn-primary",'name' => 'eliminar' , 'onclick'=>'eliminar()','content' => $this->lang_item("btn_eliminar") ));
 		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
 		if($detalle[0]['id_orden_tipo']==2){
 			$style='style="display:none"';
@@ -243,6 +246,7 @@ class ordenes extends Base_Controller {
         $tabData['fecha_registro']    		 = $this->lang_item("fecha_registro",false);
         $tabData['timestamp']         		 = $detalle[0]['timestamp'];
         $tabData['button_save']       		 = $btn_save;
+        $tabData['button_delete']       	 = $btn_eliminar;
         $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
 		$tabData['orden_fecha_value']	 	 = $detalle[0]['orden_fecha'];
         $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
@@ -454,19 +458,43 @@ class ordenes extends Base_Controller {
 		}
 		echo json_encode($json_respuesta);
 	}
+	public function eliminar(){
+		$sqlData = array(
+						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
+						,'estatus' 		 =>5
+						);
+			 $insert = $this->db_model->db_update_data($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		echo json_encode($json_respuesta);
+	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$sqlData = array('buscar' => $filtro);
 		$list_content = $this->db_model->db_get_data($sqlData);		
+
 		if($list_content){
 			foreach ($list_content as $value) {
 				$set_data[] = array(
 									 $value['id_compras_orden'],
 									 $value['orden_num'],
-									 $value['descripcion']
+									 $value['descripcion'],
+									 $value['entrega_fecha'],
+									 $value['estatus']
 									 // ,
-									 // $value['id_proveedor'],
-									 // $value['id_sucursal'],
 									 // $value['fecha_registro'],
 									 // $value['timestamp']
 									 );
@@ -475,8 +503,9 @@ class ordenes extends Base_Controller {
 			$set_heading = array(
 									$this->lang_item("ID"),
 									$this->lang_item("orden_num"),
-									$this->lang_item("descripcion")
-									// ,
+									$this->lang_item("descripcion"),
+									$this->lang_item("entrega_fecha"),
+									$this->lang_item("estatus")
 									// $this->lang_item("proveedor"),
 									// $this->lang_item("sucursal"),
 									// $this->lang_item("fecha_registro"),

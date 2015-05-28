@@ -37,6 +37,7 @@ class ordenes_model extends Base_Model{
 		//$db1 	= $this->dbinfo[1]['db'];
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes'];
 		$tbl2 	= $this->dbinfo[1]['tbl_compras_proveedores'];
+		$tbl3 	= $this->dbinfo[1]['tbl_compras_ordenes_estatus'];
 		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
 		$filtro = ($buscar) ? "and (orden_num LIKE '$buscar%' 
@@ -53,11 +54,14 @@ class ordenes_model extends Base_Model{
 		$query="SELECT 
 					a.id_compras_orden AS id_compras_orden
 					,a.orden_num
+					,a.entrega_fecha
 					,a.descripcion AS descripcion
 					,h.razon_social
+					,e.estatus
 				from $tbl1 a 
 				LEFT JOIN $tbl2 h on a.id_proveedor=h.id_compras_proveedor
-				WHERE 1 $filtro
+				LEFT JOIN $tbl3 e on a.estatus=e.id_estatus
+				WHERE a.estatus = 1 AND 1  $filtro
 				GROUP BY orden_num ASC
 				$limit";
 		 //dump_var($query);

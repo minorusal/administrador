@@ -161,7 +161,7 @@ class Base_Controller extends CI_Controller {
 		}
 		$days_timepicker   = "var days_timepicker = ".json_encode($this->days(false, 1)).";";
 		$months_timepicker = "var months_timepicker = ".json_encode($this->months(false, 1)).";";
-		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker."</script>";
+		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker." </script>";
 		$files_css 		   = '';
 		$url_js    		   = base_url().'assets/js/system';
 		$url_css  		   = base_url().'assets/css/system';

@@ -8,12 +8,19 @@
         //jQuery(".maincontent").hide('slow');
     });
     
-
+    config_datepicker();
+    
     // GoTopIcon
     GoTop();
 });
-function datepicker_regional(){
-    jQuery.datepicker.regionalgit['es'] = {
+function config_datepicker(){
+    if(typeof  months_timepicker=="undefined"){
+        return false;
+    }
+    if(typeof  days_timepicker=="undefined"){
+        return false;
+    }
+    jQuery.datepicker.regional['es'] = {
         monthNames: months_timepicker,
         monthNamesShort: months_timepicker,
         dayNames: days_timepicker,
@@ -27,7 +34,7 @@ function datepicker_regional(){
         yearSuffix: ''
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
-}
+ }
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){
@@ -148,7 +155,7 @@ function dump_var(arr,level) {
         dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
     }
     return dumped_text;
-}
+} 
 function live_clock(){
     if (jQuery('#liveclock').length){
 
@@ -223,6 +230,9 @@ function load_content_tab(uri, id_content){
 function clean_formulario(){
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
+    });
+    jQuery("input[type='checkbox']").each(function(){
+        jQuery(this).attr('checked', false);
     });
     jQuery("select").each(function(){ 
         jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');;

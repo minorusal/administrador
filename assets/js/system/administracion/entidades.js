@@ -93,7 +93,7 @@ function actualizar()
 			jQuery("#mensajes_update").html(data.contenido).show('slow');
 			jQuery("#update_loader").html('');
 		}
-	})
+	});
 }
 
 function agregar()
@@ -109,7 +109,7 @@ function agregar()
 		type: 'POST',
 		url: path()+'administracion/entidades/insert_entidad',
 		dataType: 'json',
-		data: {incomplete:incomplete, entidad, clave_corta, abreviatura},
+		data: {incomplete:incomplete, entidad:entidad, clave_corta:clave_corta, abreviatura:abreviatura},
 		beforeSend: function(){
 			jQuery('#update_loader').html('img src="'+path()+'assets/images/loaders/loader.gif />"');
 		},

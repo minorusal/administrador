@@ -169,14 +169,21 @@ class ordenes extends Base_Controller {
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
 		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-
+		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
+		if($detalle[0]['id_orden_tipo']==2){
+			$style='style="display:none"';
+			$class ='';
+		}else{
+			$style='';
+			$class ='requerido';
+		}	
 		$dropArray = array(
 					'data'		=> $this->db_model->db_get_proveedores()
 					,'selected' => $detalle[0]['id_proveedor'] 
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"
-					,'class' 	=> "requerido"
+					,'class' 	=> $class
 					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
@@ -188,8 +195,10 @@ class ordenes extends Base_Controller {
 					,'text' 	=> array('clave_corta','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
+					,'event' 	=> 'onchange="show_direccion(this.value);"'
 				);
 		$sucursales	    = dropdown_tpl($dropArray2);
+
 		$dropArray3 = array(
 					 'data'		=> $this->formas_de_pago_model->db_get_data()
 					 ,'selected' => $detalle[0]['id_forma_pago']
@@ -199,6 +208,7 @@ class ordenes extends Base_Controller {
 					,'class' 	=> "requerido"
 				);
 		$forma_pago	    = dropdown_tpl($dropArray3);
+
 		$dropArray4 = array(
 					 'data'		=> $this->creditos_model->db_get_data()
 					 ,'selected' => $detalle[0]['id_credito']
@@ -208,6 +218,18 @@ class ordenes extends Base_Controller {
 					,'class' 	=> "requerido"
 				);
 		$creditos	    = dropdown_tpl($dropArray4);
+
+		$dropArray5 = array(
+					 'data'		=> $this->db_model->db_get_tipo_orden()
+					 ,'selected' => $detalle[0]['id_orden_tipo']
+					,'value' 	=> 'id_orden_tipo'
+					,'text' 	=> array('orden_tipo')
+					,'name' 	=> "id_orden_tipo"
+					,'class' 	=> "requerido"
+					,'disabled' => 'disabled="disabled"'
+					,'event' 	=> 'onchange="show_proveedor(this.value);"'
+				);
+		$orden_tipo	    = dropdown_tpl($dropArray5);
 		// 
 		$tabData['id_compras_orden']		 = $id_compras_orden;
 		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
@@ -233,10 +255,12 @@ class ordenes extends Base_Controller {
         $tabData['observaciones_value']      = $detalle[0]['observaciones'];
         $tabData['forma_pago']     = $this->lang_item("forma_pago",false);
         $tabData['creditos']     = $this->lang_item("creditos",false);
-
         $tabData['list_forma_pago']	= $forma_pago;
 		$tabData['list_creditos']	= $creditos;
-
+		$tabData['orden_tipo']  = $this->lang_item("orden_tipo",false);
+		$tabData['list_orden_tipo']	= $orden_tipo;
+		$tabData['style']=$style;
+		$tabData['class']=$class;
         if($detalle[0]['id_usuario']){
         	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
@@ -248,7 +272,6 @@ class ordenes extends Base_Controller {
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
-
 	public function agregar(){
 		// Crea formulario para agregar nuevo elemento
 		$seccion 		= '';
@@ -261,18 +284,21 @@ class ordenes extends Base_Controller {
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"
-					,'class' 	=> "requerido"
+					//,'class' 	=> "requerido"
 					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
+
 		$dropArray2 = array(
 					 'data'		=> $this->sucursales_model->db_get_data()
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('clave_corta','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
+					,'event' 	=> 'onchange="show_direccion(this.value);"'
 				);
 		$sucursales	    = dropdown_tpl($dropArray2);
+
 		$dropArray3 = array(
 					 'data'		=> $this->formas_de_pago_model->db_get_data()
 					,'value' 	=> 'id_forma_pago'
@@ -281,6 +307,7 @@ class ordenes extends Base_Controller {
 					,'class' 	=> "requerido"
 				);
 		$forma_pago	    = dropdown_tpl($dropArray3);
+
 		$dropArray4 = array(
 					 'data'		=> $this->creditos_model->db_get_data()
 					,'value' 	=> 'id_administracion_creditos'
@@ -289,6 +316,16 @@ class ordenes extends Base_Controller {
 					,'class' 	=> "requerido"
 				);
 		$creditos	    = dropdown_tpl($dropArray4);
+
+		$dropArray5 = array(
+					 'data'		=> $this->db_model->db_get_tipo_orden()
+					,'value' 	=> 'id_orden_tipo'
+					,'text' 	=> array('orden_tipo')
+					,'name' 	=> "id_orden_tipo"
+					,'class' 	=> "requerido"
+					,'event' 	=> 'onchange="show_proveedor(this.value);"'
+				);
+		$orden_tipo	    = dropdown_tpl($dropArray5);
 		// Botones
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
@@ -310,6 +347,9 @@ class ordenes extends Base_Controller {
         $tabData['entrega_fecha']     = $this->lang_item("entrega_fecha",false);
         $tabData['prefactura_num']     = $this->lang_item("prefactura_num",false);
         $tabData['observaciones']     = $this->lang_item("observaciones",false);        
+        $tabData['orden_tipo']  = $this->lang_item("orden_tipo",false);
+        $tabData['list_orden_tipo']	= $orden_tipo;    
+           
         //$tabData['registro_por']   	= $this->lang_item("registro_por",false);
         //$tabData['usuario_registro']= $this->session->userdata('name');
         $tabData['button_save']     = $btn_save;
@@ -321,7 +361,6 @@ class ordenes extends Base_Controller {
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
-
 	public function insert(){
 		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
@@ -335,6 +374,7 @@ class ordenes extends Base_Controller {
 		}else{
 			$sqlData = array(
 						'orden_num' 		 => $this->ajax_post('orden_num')
+						,'id_orden_tipo' 	 => $this->ajax_post('id_orden_tipo')
 						,'orden_fecha' 		 => $this->ajax_post('orden_fecha')
 						,'id_proveedor' 	 => $this->ajax_post('id_proveedor')
 						,'descripcion'		 => $this->ajax_post('descripcion')
@@ -367,7 +407,6 @@ class ordenes extends Base_Controller {
 		}
 		echo json_encode($json_respuesta);
 	}
-
 	public function actualizar(){
 		// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
@@ -415,7 +454,6 @@ class ordenes extends Base_Controller {
 		}
 		echo json_encode($json_respuesta);
 	}
-
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$sqlData = array('buscar' => $filtro);
@@ -452,5 +490,11 @@ class ordenes extends Base_Controller {
 							'headers' => $set_heading
 						);
 		$this->excel->generate_xlsx($params);
+	}
+	public function show_direccion(){
+		$id_sucursal = $this->ajax_post('id_sucursal');
+		$sucursal= $this->sucursales_model->get_orden_unico_sucursal($id_sucursal);
+		echo json_encode($sucursal[0]['direccion']);
+
 	}
 }

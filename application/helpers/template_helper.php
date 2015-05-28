@@ -113,6 +113,8 @@
 				$text 		= (isset($params['text']))?$params['text']:false;
 				$name 		= (isset($params['name']))?$params['name']:false;
 				$class 		= (isset($params['class']))?$params['class']:'';
+				$event 		= (isset($params['event']))?$params['event']:'';
+				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
 				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
 			}
 			$name         = ($name=="")?"selected": $name;
@@ -133,7 +135,7 @@
 					}					
 					$count++;
 				}
-				$selected = '<span class="formwrapper">'.form_dropdown($name, $options, $selected, "  class='chzn-select $class' data-campo='$name'")."</span>";
+				$selected = "<span class='formwrapper'>".form_dropdown($name, $options, $selected, " class='chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
 			return false;

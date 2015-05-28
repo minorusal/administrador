@@ -8,11 +8,11 @@
         //jQuery(".maincontent").hide('slow');
     });
     
-    datepicker_regional();
+    config_datepicker();
     // GoTopIcon
     GoTop();
 });
-function datepicker_regional(){
+function config_datepicker(){
     if(typeof  months_timepicker=="undefined"){
         return false;
     }

@@ -25,8 +25,7 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
-           		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-2').html(data+include_script(treeview));
+           		//jQuery('#a-2').html(data);
            }
         }
     });
@@ -95,11 +94,19 @@ function actualizar(){
 
 
 function agregar(){
-	var btn          = jQuery("button[name='save_perfil']");
+	var ids ='';
+	jQuery(".requerido").each(function(){ 
+		ids = jQuery(this).attr("id")+'|'+ids;
+        
+       // items_vacios++
+            
+    });
+    alert( ids);
+	/*var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();
-	var incomplete = values_requeridos();
-	var nivel_1 =  [];
+	jQuery('#mensajes').hide();*/
+	//var incomplete = values_requeridos();
+	/*var nivel_1 =  [];
 	var nivel_2 =  [];
 	var nivel_3 =  [];
 	
@@ -116,7 +123,7 @@ function agregar(){
 	jQuery("input[name='nivel_3']:checked").each(function(){
 	  nivel_3.push(jQuery(this).val());
 	});
-	alert(incomplete);
+	
 	objData['perfil']      = jQuery('#txt_perfil').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
@@ -140,7 +147,7 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	});
+	});*/
 }
 
 

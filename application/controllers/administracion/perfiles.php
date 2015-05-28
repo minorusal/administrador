@@ -202,18 +202,18 @@ class perfiles extends Base_Controller
 
 		//$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
 		//$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
-		$tab_1['tree_view']        = $this->treeview_perfiles();
+		//$tab_1['tree_view']        = $this->treeview_perfiles();
 
 		$tab_1['button_save']  = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
 
 		if($this->ajax_post(false))
 		{
-			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
+			echo json_encode($this->load_view_unique('administracion/areas/areas_save',$tab_1,true));
 		}
 		else
 		{
-			return $this->load_view_unique($seccion, $tab_1, true);
+			return $this->load_view_unique('administracion/areas/areas_save', $tab_1, true);
 		}
 	}
 

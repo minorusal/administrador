@@ -7,6 +7,12 @@
         jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         //jQuery(".maincontent").hide('slow');
     });
+    
+
+    // GoTopIcon
+    GoTop();
+});
+function datepicker_regional(){
     jQuery.datepicker.regional['es'] = {
         monthNames: months_timepicker,
         monthNamesShort: months_timepicker,
@@ -21,11 +27,7 @@
         yearSuffix: ''
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
-
-    // GoTopIcon
-    GoTop();
-});
-
+}
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){
@@ -245,7 +247,7 @@ function values_requeridos(){
             } 
         }
     });
-    alert(ids);
+   // alert(ids+'-'+items_vacios);
     return items_vacios;
 }
 

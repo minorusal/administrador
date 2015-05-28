@@ -17,6 +17,7 @@ function load_content(uri, id_content){
         dataType: 'json',
         data: {filtro : filtro, tabs:1},
         success: function(data){
+        	var treeview = 'load_treeview("treeview-modules")';
            if(id_content==1){
            		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
@@ -25,7 +26,7 @@ function load_content(uri, id_content){
            }else{
            		jQuery('#a-'+id_content).html(data);
            		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+           		jQuery('#a-2').html(data+include_script(treeview));
            }
         }
     });
@@ -97,12 +98,13 @@ function agregar(){
 	var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-	
+	var incomplete = values_requeridos();
 	var nivel_1 =  [];
 	var nivel_2 =  [];
 	var nivel_3 =  [];
 	
 	var objData = formData('#formulario');
+	objData['incomplete']  = incomplete;
   	jQuery("input[name='nivel_1']:checked").each(function(){
 	  nivel_1.push(jQuery(this).val());
 	});
@@ -114,13 +116,12 @@ function agregar(){
 	jQuery("input[name='nivel_3']:checked").each(function(){
 	  nivel_3.push(jQuery(this).val());
 	});
-	objData['incomplete']      = values_requeridos();
+	alert(incomplete);
 	objData['perfil']      = jQuery('#txt_perfil').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
 	objData['nivel_2'] = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
 	objData['nivel_3'] = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
-
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/perfiles/insert_perfil",

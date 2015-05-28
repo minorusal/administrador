@@ -230,6 +230,7 @@ function values_requeridos(){
             } 
         }
     });
+    alert(ids);
     return items_vacios;
 }
 

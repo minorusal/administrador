@@ -1,17 +1,14 @@
 
-<div id="form" class="stdform">
-    <!--<input id="id_perfil" type="hidden" name="id_perfil" data-campo="id_perfil" value="{id_perfil}" />-->
+<div  class="stdform">
     <p>
         <label>{lbl_perfil}: (*)</label>
-        <input id="txt_perfil" type="text" name="txt_perfil" class="input-large requerido" value="" />
+        <input id="perf" type="text" name="txt_perfil" class="input-large requerido" value="" />
     </p>
-     <p>
+    <p>
         <label>{lbl_descripcion}: (*)</label>
-        <textarea id="txt_descripcion" name="txt_descripcion" class="span5 requerido" style="resize: vertical; height: 100px;"></textarea>
+        <textarea id="desc" name="txt_descripcion" class="span5 " style="resize: vertical; height: 100px;"></textarea>
     </p>
     {tree_view}
-   
-
     <div id="update_loader"></div>
     <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton"> 

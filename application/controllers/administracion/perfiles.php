@@ -167,7 +167,7 @@ class perfiles extends Base_Controller
         $tabData['val_fecha_registro']      = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
-		$tabData['tree_view']   = $this->treeview_perfiles(4);
+		$tabData['tree_view']               = $this->treeview_perfiles($id_perfil);
 
 		$this->load_database('global_system');
         $this->load->model('users_model');
@@ -200,9 +200,9 @@ class perfiles extends Base_Controller
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_perfil', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
-		$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
-		$tab_1['tree_view']        = $this->treeview_perfiles(4);
+		//$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
+		//$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
+		$tab_1['tree_view']        = $this->treeview_perfiles();
 
 		$tab_1['button_save']  = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
@@ -219,6 +219,7 @@ class perfiles extends Base_Controller
 
 	public function insert_perfil(){
 		$incomplete  = $this->ajax_post('incomplete');
+		print_debug($this->ajax_post(false));
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
@@ -248,22 +249,34 @@ class perfiles extends Base_Controller
 		}
 	}
 
-	public function treeview_perfiles($id_perfil = 2){
+	public function treeview_perfiles($id_perfil=false){
 		$this->load_database('global_system');
 		$this->load->model('users_model');
-		$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
-		$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
-		$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
-		$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
+		if($id_perfil)
+		{
+			$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
+			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
+			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
+			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
 
-		$id_niveles   = array(	
+			$id_niveles   = array(	
 						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
 						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
 						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
 						);
+			$checked = true;
+		}
+		else
+		{
+			$id_niveles = "";
+			$checked = false;
+		}
+		
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
+		//print_debug($data_modulos);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,false);
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked);
 	}
+
 }

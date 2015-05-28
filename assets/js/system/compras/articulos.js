@@ -6,13 +6,6 @@ jQuery(document).ready(function(){
 			buscar_articulo();
 		} 
 	});
-	jQuery("#datepicker1").datepicker({
-		numberOfMonths: 1,		
-		showButtonPanel: false;
-		monthNames: months_timepicker
-	});
-
-
 })
 
 function buscar_articulo(){

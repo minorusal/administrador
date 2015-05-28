@@ -7,6 +7,21 @@
         jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         //jQuery(".maincontent").hide('slow');
     });
+    jQuery.datepicker.regional['es'] = {
+        monthNames: months_timepicker,
+        monthNamesShort: months_timepicker,
+        dayNames: days_timepicker,
+        dayNamesShort: days_timepicker,
+        dayNamesMin: days_timepicker,
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 6,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
+
     // GoTopIcon
     GoTop();
 });

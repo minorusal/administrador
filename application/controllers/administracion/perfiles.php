@@ -111,16 +111,18 @@ class perfiles extends Base_Controller
 						);
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['id_perfil'],
-									'perfil'      => tool_tips_tpl($value['perfil'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'perfil'        => tool_tips_tpl($value['perfil'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
 			}
 			// Plantilla
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("perfil"),
-										$this->lang_item("descripcion"));
+			$this->table->set_heading(	$this->lang_item("lbl_id"),
+										$this->lang_item("lbl_perfil"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -158,11 +160,16 @@ class perfiles extends Base_Controller
 		$tab_detalle = $this->tab3;
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
+		
 		$tabData['id_perfil']               = $id_perfil;
-		$tabData['nombre_perfil']           = $this->lang_item("nombre_perfil");
-		$tabData['desc']                    = $this->lang_item("descripcion");	
-		$tabData['txt_perfil']                  = $detalle[0]['perfil'];
-		$tabData['txt_descripcion']             = $detalle[0]['descripcion'];
+		$tabData['lbl_perfil']              = $this->lang_item("lbl_perfil");
+		$tabData['lbl_clave_corta']         = $this->lang_item("lbl_clave_corta");
+		$tabData['lbl_descripcion']         = $this->lang_item("lbl_descripcion");
+
+		$tabData['txt_perfil']              = $detalle[0]['perfil'];
+		$tabData['txt_clave_corta']         = $detalle[0]['clave_corta'];
+		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
+
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']      = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
@@ -212,6 +219,7 @@ class perfiles extends Base_Controller
 			$sqlData = array(
 				 'id_perfil'       => $this->ajax_post('id_perfil')
 				,'perfil'          => $this->ajax_post('perfil')
+				,'clave_corta'     => $this->ajax_post('clave_corta')
 				,'descripcion'     => $this->ajax_post('descripcion')
 				,'id_menu_n1'      => $this->ajax_post('nivel_1')
 				,'id_menu_n2'      => $this->ajax_post('nivel_2')
@@ -219,7 +227,7 @@ class perfiles extends Base_Controller
 				,'edit_timestamp'  => $this->timestamp()
 				,'edit_id_usuario' => $this->session->userdata('id_usuario')
 				);
-				
+
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)
 			{
@@ -249,7 +257,8 @@ class perfiles extends Base_Controller
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_perfil', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tab_1['lbl_perfil']       = $this->lang_item("nombre_perfil");
+		$tab_1['lbl_perfil']       = $this->lang_item("lbl_perfil");
+		$tab_1['lbl_clave_corta']  = $this->lang_item("lbl_clave_corta");
 		$tab_1['lbl_descripcion']  = $this->lang_item('descripcion');
 		$tab_1['tree_view']        = $this->treeview_perfiles();
 
@@ -274,17 +283,19 @@ class perfiles extends Base_Controller
 		}else{
 			$id_menu_1 = array();
 			$perfil      = $this->ajax_post('perfil');
+			$clave_corta = $this->ajax_post('clave_corta');
 			$descripcion = $this->ajax_post('descripcion');
 			$nivel_1     = $this->ajax_post('nivel_1');
 			$nivel_2     = $this->ajax_post('nivel_2');
 			$nivel_3     = $this->ajax_post('nivel_3');
-			$data_insert = array('perfil'          => $perfil,
-								 'id_menu_n1'       => $nivel_1,
-								 'id_menu_n2'       => $nivel_2,
-								 'id_menu_n3'       => $nivel_3,
-								 'descripcion'     => $descripcion,
-								 'id_usuario'      => $this->session->userdata('id_usuario'),  
-								 'registro'        => $this->timestamp());
+			$data_insert = array('perfil'          => $perfil
+								,'clave_corta'     => $clave_corta
+								,'id_menu_n1'       => $nivel_1
+								,'id_menu_n2'       => $nivel_2
+								,'id_menu_n3'       => $nivel_3
+								,'descripcion'     => $descripcion
+								,'id_usuario'      => $this->session->userdata('id_usuario')
+								,'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
@@ -320,10 +331,43 @@ class perfiles extends Base_Controller
 		}
 		
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
-		//print_debug($data_modulos);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
 		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked);
+	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['perfil'],
+									 $value['clave_corta'],
+									 $value['descripcion']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("lbl_perfil"),
+									$this->lang_item("lbl_clave_corta"),
+									$this->lang_item("lbl_descripcion")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Catálogos Perfiles"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 
 }

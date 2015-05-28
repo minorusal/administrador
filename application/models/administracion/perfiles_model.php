@@ -10,6 +10,7 @@ class perfiles_model extends Base_Model
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 		$filtro = ($filtro) ? "AND (pr.perfil like '%$filtro%' OR
+									pr.clave_corta like '%$filtro%' OR
 									pr.descripcion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
@@ -42,7 +43,7 @@ class perfiles_model extends Base_Model
 	public function db_update_data($data=array())
 	{
 		$tbl = $this->dbinfo[0]['db'].'.'.$this->dbinfo[0]['tbl_perfiles'];
-		$condicion = array('id_perfil !=' => $data['id_perfil'], 'perfil = '=> $data['perfil']); 
+		$condicion = array('id_perfil !=' => $data['id_perfil'], 'clave_corta = '=> $data['clave_corta']); 
 		$existe    = $this->row_exist($tbl, $condicion);
 		if(!$existe)
 		{
@@ -59,7 +60,7 @@ class perfiles_model extends Base_Model
 	public function db_insert_data($data = array())
 	{
 		$tbl = $this->dbinfo[0]['db'].'.'.$this->dbinfo[0]['tbl_perfiles'];
-		$existe = $this->row_exist($tbl, array('perfil'=> $data['perfil']));
+		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
 			$query = $this->db->insert_string($tbl, $data);
 			$query = $this->db->query($query);

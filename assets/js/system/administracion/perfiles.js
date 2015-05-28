@@ -88,18 +88,38 @@ function actualizar(){
 			jQuery("#mensajes_update").html(data.contenido).show('slow');
 			jQuery("#update_loader").html('');
 		}
-	})
+	});
 }
 
 
 function agregar(){
 	var btn          = jQuery("button[name='save_perfil']");
-	//btn.attr('disabled','disabled');
+	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-	var objData = formData('#form');
-	var prueba = jQuery('#txt_perfil').val();
-  	objData['incomplete'] = values_requeridos();
-  	//alert(dump_var(objData));
+	
+	var nivel_1 =  [];
+	var nivel_2 =  [];
+	var nivel_3 =  [];
+	
+	var objData = formData('#formulario');
+  	jQuery("input[name='nivel_1']:checked").each(function(){
+	  nivel_1.push(jQuery(this).val());
+	});
+	
+	jQuery("input[name='nivel_2']:checked").each(function(){
+	  nivel_2.push(jQuery(this).val());
+	});
+	
+	jQuery("input[name='nivel_3']:checked").each(function(){
+	  nivel_3.push(jQuery(this).val());
+	});
+	objData['incomplete']      = values_requeridos();
+	objData['perfil']      = jQuery('#txt_perfil').val();
+	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+	objData['nivel_2'] = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+	objData['nivel_3'] = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/perfiles/insert_perfil",
@@ -110,7 +130,7 @@ function agregar(){
 		},
 		success : function(data){
 			btn.removeAttr('disabled');
-
+			
 			var data = data.split('|');
 			if(data[0]==1){
 				clean_formulario();
@@ -118,7 +138,7 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	})
+	});
 }
 
 

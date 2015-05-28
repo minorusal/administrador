@@ -278,7 +278,8 @@ class Base_Controller extends CI_Controller {
 	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
 	        if(!$checado)
 	        {
-	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+
+	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";
 	        }

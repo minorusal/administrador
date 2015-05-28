@@ -159,10 +159,12 @@ class Base_Controller extends CI_Controller {
 		if(empty($data)){
 			return '';
 		}
-		$files_js  = '';//"<script type='text/javascript' src='".base_url()."/assets/js/template/forms.js'></script>";
-		$files_css = '';
-		$url_js    = base_url().'assets/js/system';
-		$url_css   = base_url().'assets/css/system';
+		$days_timepicker   = "var days_timepicker = ".json_encode($this->days(false, 1)).";";
+		$months_timepicker = "var months_timepicker = ".json_encode($this->months(false, 1)).";";
+		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker."</script>";
+		$files_css 		   = '';
+		$url_js    		   = base_url().'assets/js/system';
+		$url_css  		   = base_url().'assets/css/system';
 		if (array_key_exists('js', $data)) {
 			foreach ($data['js'] as $key => $value) {
 				$js_name  = $value['name'];
@@ -184,13 +186,15 @@ class Base_Controller extends CI_Controller {
 		return $data_load;
 	}
 
+
+
 	/**
 	* Prepara un array para la construccion
 	* del panel de navegacion 
 	* @param array $array_navigator
 	* @return array
 	*/
-	function build_array_navigator($navigator){
+	public function build_array_navigator($navigator){
 		foreach ($navigator as $key => $value) {
 			$route = "";
 			if(!is_null($value['menu_n2'])){
@@ -268,12 +272,14 @@ class Base_Controller extends CI_Controller {
 	        if(array_key_exists('content', $subitems)){
 	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true, $checado);
 	        }
+	        
 	        $icon      = $subitems['icon'];
 	        $nivel     = $subitems['nivel'];
 	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
 	        if(!$checado)
 	        {
-	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' data-campo='$itemName".'_'."$nivel' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+
+	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";
 	        }
@@ -304,7 +310,7 @@ class Base_Controller extends CI_Controller {
 		        	default:
 		        		break;
 		        }
-		    	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+		    	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";    
 		    }
@@ -454,15 +460,24 @@ class Base_Controller extends CI_Controller {
     * @param int $index
     * @return array
     */
-    public function days($index = false){
-		$days[0]= $this->lang_item('lunes',false);
-		$days[1]= $this->lang_item('martes',false);
-		$days[2]= $this->lang_item('miercoles',false);
-		$days[3]= $this->lang_item('jueves',false);
-		$days[4]= $this->lang_item('viernes',false);
-		$days[5]= $this->lang_item('sabado',false);
-		$days[6]= $this->lang_item('domingo',false);
-
+    public function days($index = false, $sub = false){
+		if($sub){
+			$days[0]= substr($this->lang_item('lunes',false), 0, $sub);
+			$days[1]= substr($this->lang_item('martes',false), 0, $sub);
+			$days[2]= substr($this->lang_item('miercoles',false), 0, $sub);
+			$days[3]= substr($this->lang_item('jueves',false), 0, $sub);
+			$days[4]= substr($this->lang_item('viernes',false), 0, $sub);
+			$days[5]= substr($this->lang_item('sabado',false), 0, $sub);
+			$days[6]= substr($this->lang_item('domingo',false), 0, $sub);
+		}else{
+			$days[0]= $this->lang_item('lunes',false);
+			$days[1]= $this->lang_item('martes',false);
+			$days[2]= $this->lang_item('miercoles',false);
+			$days[3]= $this->lang_item('jueves',false);
+			$days[4]= $this->lang_item('viernes',false);
+			$days[5]= $this->lang_item('sabado',false);
+			$days[6]= $this->lang_item('domingo',false);
+		}
 		if($index){
 			return $days[ltrim($index,'0')];
 		}

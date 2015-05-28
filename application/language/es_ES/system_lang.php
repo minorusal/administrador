@@ -11,6 +11,7 @@
 	$lang['jueves']     = 'Jueves';
 	$lang['viernes']    = 'Viernes';
 	$lang['sabado']     = 'Sábado';
+	
 	$lang['domingo']    = 'Domingo';
 	$lang['enero']      = 'Enero';
 	$lang['febrero']    = 'Febrero';

@@ -120,14 +120,13 @@ function agregar(){
 	var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
-	var incomplete = values_requeridos();
-	var nivel_1 =  [];
-	var nivel_2 =  [];
-	var nivel_3 =  [];
-	
+	var nivel_1 = [];
+	var nivel_2 = [];
+	var nivel_3 = [];
 	var objData = formData('#formulario');
-	objData['incomplete']  = incomplete;
-  	jQuery("input[name='nivel_1']:checked").each(function(){
+	//objData['incomplete']  = incomplete;
+
+	jQuery("input[name='nivel_1']:checked").each(function(){
 	  nivel_1.push(jQuery(this).val());
 	});
 	
@@ -138,12 +137,14 @@ function agregar(){
 	jQuery("input[name='nivel_3']:checked").each(function(){
 	  nivel_3.push(jQuery(this).val());
 	});
+
+	objData['incomplete']  = values_requeridos();
 	objData['perfil']      = jQuery('#txt_perfil').val();
-	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
-	objData['nivel_1'] = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
-	objData['nivel_2'] = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
-	objData['nivel_3'] = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+	objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+	objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/perfiles/insert_perfil",

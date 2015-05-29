@@ -22,10 +22,11 @@ function load_content(uri, id_content){
            if(id_content==1){
            		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data+include_script(treeview));
+           		jQuery('#a-'+id_content).html(data+include_script(treeview+treePadre));
            }
         }
     });
@@ -112,8 +113,6 @@ function actualizar(){
 		}
 	});
 }
-
-
 function agregar(){
 	var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');

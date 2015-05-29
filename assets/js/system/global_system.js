@@ -75,9 +75,8 @@ function load_treeview(id){
       });
 }
 function treePadre(){
-    jQuery('.treeview-padre input').click(function(){
-             jQuery('.treeview-padre ul li input:nth-child(2)').attr('checked', true);
-             jQuery('.treeview-padre  input:nth-child(2)').attr('checked', true);
+    jQuery('.list_treeview input').click(function(){
+           jQuery()
     })
 }
 function include_script(script){

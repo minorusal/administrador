@@ -34,7 +34,11 @@ function config_datepicker(){
         yearSuffix: ''
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
- }
+}
+
+function datepicker(id){
+    jQuery('#'+id).datepicker();
+}
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){
@@ -75,9 +79,8 @@ function load_treeview(id){
       });
 }
 function treePadre(){
-    jQuery('.treeview-padre input').click(function(){
-             jQuery('.treeview-padre ul li input:nth-child(2)').attr('checked', true);
-             jQuery('.treeview-padre  input:nth-child(2)').attr('checked', true);
+    jQuery('.list_treeview input').click(function(){
+           jQuery()
     })
 }
 function include_script(script){

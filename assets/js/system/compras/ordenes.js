@@ -2,7 +2,6 @@ jQuery(document).ready(function(){
 	var Buscar = jQuery('#search-query');
 	Buscar.focus();
 	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
-	jQuery('#fecha').datepicker();
 });
 
 function buscar(){
@@ -40,7 +39,8 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
           	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+          	 	var timepicker = 'datepicker(".fecha");';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepicker));
            }
         }
     });

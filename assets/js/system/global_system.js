@@ -37,8 +37,9 @@ function config_datepicker(){
 }
 
 function datepicker(id){
-    jQuery('#'+id).datepicker();
+    jQuery(id).datepicker();
 }
+
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){

@@ -50,7 +50,6 @@ function buscar(){
 		}
 	})
 }
-
 function detalle(id_perfil){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
@@ -59,9 +58,10 @@ function detalle(id_perfil){
         dataType: 'json',
         data: {id_perfil : id_perfil},
         success: function(data){
-        	var treeview = 'load_treeview("treeview-modules")';
+        	var treeview = 'load_treeview("treeview-modules");';
+        	var treeview_childrens = 'treeview_childrens();'; 
         	jQuery('#a-0').html('');
-        	jQuery('#a-2').html(data+include_script(treeview));
+        	jQuery('#a-2').html(data+include_script(treeview+treeview_childrens));
         	jQuery('#ui-id-2').show('slow');
         }
     });

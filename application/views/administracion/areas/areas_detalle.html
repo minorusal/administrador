@@ -19,16 +19,12 @@
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
         <p>
-            <label>{lbl_fecha_registro}: </label>
-            <input id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge " readonly value="{val_fecha_registro}" />
+            <label>{lbl_fecha_registro}:</label>
+            <span id="fecha_registro" type="text" name="fecha_registro" class="input-xlarge uneditable-input" >{val_fecha_registro}</span>
         </p>           
         <p>
-            <label>{lbl_usuario_registro}: </label>
-            <input id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge " readonly value="{val_usuarios_registro}" />
-        </p>
-        <p>
             <label>{lbl_ultima_modificacion}: </label>
-            <textarea id="ultima_modifiacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <textarea id="ultima_modifiacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;  " readonly  >{val_ultima_modificacion}</textarea>
         </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>

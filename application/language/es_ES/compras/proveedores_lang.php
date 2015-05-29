@@ -19,6 +19,10 @@ $lang['lbl_contacto']   = "Contacto";
 $lang['lbl_comentario'] = "Comentario";
 
 
+$lang['lbl_fecha_registro'] = 'Fecha de registro';
+$lang['lbl_usuario_registro'] = 'Registrado por';
+$lang['lbl_ultima_modificacion'] = 'Ultima Modificación';
+
 
 $lang['agregar'] = "nuevo proveedor";
 $lang['listado'] = "listado de proveedores";

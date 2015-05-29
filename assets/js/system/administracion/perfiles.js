@@ -25,8 +25,6 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data);
-
            		jQuery('#a-'+id_content).html(data+include_script(treeview));
            }
         }
@@ -62,7 +60,6 @@ function detalle(id_perfil){
         success: function(data){
         	var treeview = 'load_treeview("treeview-modules")';
         	jQuery('#a-0').html('');
-        	jQuery('#a-2').html(data);
         	jQuery('#a-2').html(data+include_script(treeview));
         	jQuery('#ui-id-2').show('slow');
         }

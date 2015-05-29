@@ -50,7 +50,6 @@ function GoTop(){
         return false;
     });    
 }
-
 function tool_tips(){
     jQuery('a[data-rel]').each(function() {
             jQuery(this).attr('rel', jQuery(this).data('rel'));
@@ -74,7 +73,16 @@ function load_treeview(id){
         unique: false
       });
 }
-
+function treeview_childrens(){
+    jQuery('input[type=checkbox]').click(function () {
+        jQuery(this).parent().find('li input[type=checkbox]').prop('checked', jQuery(this).is(':checked'));
+        var checked = false;
+        jQuery(this).closest('ul').children('li').each(function () {
+            if(jQuery('input[type=checkbox]', this).is(':checked')) checked=true;
+        })
+        jQuery(this).parents('ul').prev().prop('checked', checked);
+    });
+}
 function include_script(script){
     var functions = "";
     if(jQuery.isArray(script)){

@@ -48,6 +48,7 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'test/imprimir_ticket';
 			$sites_availables[] = 'test/barcode';
 			$sites_availables[] = 'test/codeqr';
+			$sites_availables[] = 'test/load_vars';
 			$sites_availables[] = '404_override'; 
 			if(!in_array($uri_string, $sites_availables)){
 				if($uri_string==''){

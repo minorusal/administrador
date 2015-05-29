@@ -258,9 +258,9 @@ class Base_Controller extends CI_Controller {
 	    $style_ul = "";
 	    $style    = "treeview-gray";
 	    if($sub){ 
-	    	$panel .= "<ul>";
+	    	$panel .= "<ul >";
 		}else{
-			$panel .= "<ul id = 'treeview-modules' class='treeview-gray'>";
+			$panel .= "<ul id = 'treeview-modules' class='treeview-gray '>";
 	    }
 	    foreach ($items as $item => $subitems) {
 	    	$item         = explode('-', $item);
@@ -279,7 +279,7 @@ class Base_Controller extends CI_Controller {
 	        if(!$checado)
 	        {
 
-	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= "<li class='treeview-padre'>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";
 	        }
@@ -317,6 +317,40 @@ class Base_Controller extends CI_Controller {
 	    }
 	    if($sub){$panel .= "</ul>";}
 	    return $panel;
+	}
+
+	/**
+    * Contruye el treeview de navegacion de acuerdo al perfil
+    * @param array $id_perfil
+    * @return array
+    */
+	public function treeview_perfiles($id_perfil=false){
+		$this->load_database('global_system');
+		$this->load->model('users_model');
+		if($id_perfil)
+		{
+			$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
+			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
+			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
+			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
+
+			$id_niveles   = array(	
+						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
+						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
+						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
+						);
+			$checked = true;
+		}
+		else
+		{
+			$id_niveles = "";
+			$checked = false;
+		}
+		
+		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
+		$data_modulos = $this->build_array_treeview($data_modulos);
+		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked);
 	}
 
 	/**

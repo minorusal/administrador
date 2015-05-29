@@ -74,7 +74,12 @@ function load_treeview(id){
         unique: false
       });
 }
-
+function treePadre(){
+    jQuery('.treeview-padre input').click(function(){
+             jQuery('.treeview-padre ul li input:nth-child(2)').attr('checked', true);
+             jQuery('.treeview-padre  input:nth-child(2)').attr('checked', true);
+    })
+}
 function include_script(script){
     var functions = "";
     if(jQuery.isArray(script)){

@@ -15,6 +15,8 @@
 
 	/*ALMACENES*/
 
+	//$lang['lbl_almacen']          = 'almacenes';
+
 	$lang['almacenes']            = 'almacenes';
 	$lang['agregar']              = 'nuevo almacen';
 	$lang['lista_sucursales']     = "Presentación";

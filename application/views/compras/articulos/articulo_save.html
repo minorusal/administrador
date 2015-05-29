@@ -1,6 +1,5 @@
 
-<div >
-    <div style="float:left">
+<div class="stdform">
         <p>
             <label>{nombre_articulo}: (*)</label>
             <input id="articulo" type="text" name="articulo" class="input-large requerido" value="" />
@@ -26,18 +25,15 @@
             <label>{um}: (*)</label>
             {list_um}
         </p>
-    </div>
-    
+        <p>
+            <label>{descripcion}:</label>
+            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+        </p>
+
+        <div id="registro_loader"></div>
+        <div id="mensajes" style="display:none"></div>
+        <p class="stdformbutton"> 
+            {button_save}
+            {button_reset}
+        </p>
 </div>
-<div style="clear:both">
-    <p>
-        <label>{descripcion}:</label>
-        <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
-    </p>
-</div>
-    <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>
-    
-    
-    {button_save}
-    {button_reset}

@@ -22,6 +22,12 @@ class Base_Model extends CI_Model {
 			return false;
 		}
     }
+
+    public function update_item($table, $row){
+		$query = $this->db->update_string($table, $row);
+		$query = $this->db->query($query);
+		return $query;
+    }
 }
 
 ?>

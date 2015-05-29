@@ -145,10 +145,11 @@
 		function button_tpl($params=array()){
 			$button = "";
 			if(!empty($params)){
-				$text 		= (isset($params['text']))?$params['text']:false;
-				$iconsweets = (isset($params['iconsweets']))?$params['iconsweets']:'';
-				$onclick 	= (isset($params['onclick']))?$params['onclick']:false;
-				$href    	= (isset($params['href']))?$params['href']:false;
+				$text 		= (array_key_exists('text', $params))?$params['text']:false;
+				$iconsweets = (array_key_exists('iconsweets',$params))?$params['iconsweets']:'';
+				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
+				$href    	= (array_key_exists('href',$params))?$params['href']:false;
+				//style="color:red;"
 			}else{
 				return false;
 			}
@@ -167,16 +168,42 @@
 			}else{
 				$label = $text;
 				$icon  = ($iconsweets) ? $iconsweets: 'iconsweets-link'; 
-				$jsOn  = ($onclick) ? 'onclick="'.$onclick.'"' : ''; 
-				$link  = ($href) ? $href : ''; 
-				$button = "<ul class='list-nostyle list-inline'><li><a href='$link' class='btn btn-rounded'> <i class='$icon'></i> &nbsp; $label</a> </li></ul>";
+				$event  = ($event) ? $event : ''; 
+				$link  = ($href) ? "href='".$href."'" : ''; 
+				$button = "<ul class='list-nostyle list-inline'><li><a $link $event class='btn btn-rounded'> <i class='$icon'></i> &nbsp; $label</a> </li></ul>";
 			}
 
 			return $button;
 		}
 	}
-	if(!function_exists('treeview_tpl')){
-		function treeview_tpl($data = array()){
+	if(!function_exists('data_event_tpl')){
+		function data_event_tpl($data = ''){
+			
+			$var = array();
+			if(is_array($data)){
+				if(!empty($data)){
+					$event    = (array_key_exists('event', $data)) ? $data['event'] : false;
+					$function = (array_key_exists('function', $data)) ? $data['function'] : false;
+					$params   = (array_key_exists('params', $data)) ? $data['params'] : false;
+					if($event){
+						if($function){
+							if(is_array($params)){
+								foreach ($params as $key => $value) {
+									$vars[] = '"'.$value.'"';
+								}
+								$params = implode(',', $vars);
+								$event = $event."='".$function."(".$params.");"."'";
+							}else{
+								$event = $event."='".$function."();'";
+							}
+							return $event;
+						}
+					}
+					return false;
+				}
+				return false;
+			}
+			return false;
 			
 		}
 	}

@@ -10,3 +10,5 @@ application/logs/*
 
 application/config/config.php
 assets/js/system/inc.config.js
+
+assets/tmp/*

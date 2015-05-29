@@ -48,8 +48,9 @@ class test extends Base_Controller {
 
 	public function barcode(){
 	// Prueba de generacion de código de barras
+		$txt = "iSolution.mx";
 		$this->barcode->barcode_img_tipo='jpg';
-		if($this->barcode->create()){
+		if($this->barcode->create($txt)){
 			echo "Codigo de barras creado: ".date('Y-m-d H:i:s');
 		}else{
 			echo "No se creo";

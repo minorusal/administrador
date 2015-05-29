@@ -111,7 +111,7 @@ class ordenes extends Base_Controller {
 			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_data($sqlData));
+		$total_rows   = count($this->db_model->db_get_total_rows($sqlData));
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -127,6 +127,7 @@ class ordenes extends Base_Controller {
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus']
 									);
@@ -137,6 +138,7 @@ class ordenes extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										
 										$this->lang_item("descripcion"),
+										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
 										$this->lang_item("estatus"),
 										$this->lang_item("pendiente"));
@@ -409,7 +411,8 @@ class ordenes extends Base_Controller {
 									);	
 				$insert2 = $this->variables_model->update($sqlData2);	
 				if($insert2){
-					$msg = $this->lang_item("msg_insert_success",false);
+					//$msg = $this->lang_item("msg_insert_success",false);
+					$msg = sprintf($this->lang_item('msg_insert_orden_success', false), $no_orden[0]['valor']+1);
 					$json_respuesta = array(
 						 'id' 		=> 1
 						,'contenido'=> alertas_tpl('success', $msg ,false)

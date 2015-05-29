@@ -30,7 +30,7 @@ class barcode extends config_vars{
         $this->font_size        = $this->cfg['barscode_font_size'];
         $this->barcode_escala   = $this->cfg['barscode_font_scale'];
         $this->barcode_grosor   = $this->cfg['barscode_font_thickness'];
-        $this->barcode_img_tipo = $this->cfg['barscode_type']; #wbmp|png|gif|jpg
+        $this->barcode_img_tipo = 'png'; #wbmp|png|gif|jpg
         $this->archivo          = $this->cfg['path_tmp'].'barcode.'.$this->barcode_img_tipo;
     }
 

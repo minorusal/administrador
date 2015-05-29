@@ -36,7 +36,6 @@ function config_datepicker(){
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
  }
 
-}
 
 function datepicker(id){
     jQuery(id).datepicker();

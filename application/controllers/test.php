@@ -30,7 +30,7 @@ class test extends Base_Controller {
 		$impData = array(
 			 'contenido' 	=> 'assets\tmp\ticket.txt' #Contenido de ticket
 			,'logo' 		=> 'assets/images/logo.bmp' #Logo de empresa en BMP
-			// ,'impresora' 	=> 'PDFCreator' #Nombre de impresora local
+			,'impresora' 	=> 'PDFCreator' #Nombre de impresora local
 			,'formato' 		=> true #Formato de texto
 			,'codebar' 		=> $barrasBmp #Envia BMP
 			,'codeqr' 		=> $qrBmp #Envía BMP
@@ -48,8 +48,9 @@ class test extends Base_Controller {
 
 	public function barcode(){
 	// Prueba de generacion de código de barras
+		$txt = "iSolution.mx";
 		$this->barcode->barcode_img_tipo='jpg';
-		if($this->barcode->create()){
+		if($this->barcode->create($txt)){
 			echo "Codigo de barras creado: ".date('Y-m-d H:i:s');
 		}else{
 			echo "No se creo";
@@ -64,6 +65,11 @@ class test extends Base_Controller {
 		}else{
 			echo "No se creo";
 		}
+	}
+
+	public function load_vars(){
+	// Prueba carga de archivo config.ini
+		echo $this->config_vars->load_file('assets/cfg/config.ini');
 	}
 }
 ?>

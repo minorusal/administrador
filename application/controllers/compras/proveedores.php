@@ -229,9 +229,9 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
 		$tabData['lbl_contacto']           =  $this->lang_item('lbl_contacto', false);
 		$tabData['lbl_comentario']         =  $this->lang_item('lbl_comentario', false);
-		$tabData['lbl_ultima_modiciacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['lbl_ultima_modificacion'] =  $this->lang_item('lbl_ultima_modificacion', false);
 		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
+		$tabData['lbl_usuario_registro']    =  $this->lang_item('lbl_usuario_registro', false);
 		$tabData['id_compras_proveedor']   =  $detalle[0]['id_compras_proveedor'];
 		$tabData['val_rsocial']            =  $detalle[0]['razon_social'];
 		$tabData['val_nombre']             =  $detalle[0]['nombre_comercial'];

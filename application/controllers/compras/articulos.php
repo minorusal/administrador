@@ -240,8 +240,12 @@ class articulos extends Base_Controller {
         $data_tab_3['linea']             = $this->lang_item("linea",false);
         $data_tab_3['um']                = $this->lang_item("um",false);
         $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
-        $data_tab_3["registro_por"]    	 = $this->lang_item("registro_por");
-		$data_tab_3["fecha_registro"]    = $this->lang_item("fecha_registro");
+
+        $data_tab_3["lbl_usuario_registro"]    	     = $this->lang_item("lbl_usuario_registro");
+		$data_tab_3["lbl_fecha_registro"]        = $this->lang_item("lbl_fecha_registro");
+		$data_tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
+
+
         $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
         $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_marca']        = $marcas;
@@ -254,8 +258,25 @@ class articulos extends Base_Controller {
         $this->load_database('global_system');
         $this->load->model('users_model');
         
-        $usuario_registro               = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
-        $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");
+/*        $usuario_registro               = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
+        $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");*/
+
+        $usuario_registro                     = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
+	    $usuario_name	                      = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $data_tab_3['val_usuarios_registro']  = $usuario_name;
+
+	    if($detalle_articulo[0]['edit_id_usuario'])
+		{
+			$usuario_registro = $this->users_model->search_user_for_id($detalle_articulo[0]['edit_id_usuario']);
+			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
+			$data_tab_3['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($detalle_articulo[0]['edit_timestamp']), $usuario_name);
+		}
+		else
+		{
+			$usuario_name = '';
+			$data_tab_3['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+		}
+        
 		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/articulo_edit';
 
 		
@@ -314,6 +335,8 @@ class articulos extends Base_Controller {
 								 'id_compras_linea'=> $linea,
 								 'id_compras_marca'=> $marca,
 								 'id_compras_presentacion'=> $presentacion,
+								 'edit_timestamp' => $this->timestamp(),
+								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
 								 'id_compras_um'=> $um);
 
 	

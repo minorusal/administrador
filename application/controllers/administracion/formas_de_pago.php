@@ -170,10 +170,10 @@ class formas_de_pago extends Base_Controller
 		$tabData["desc"]                   = $this->lang_item("descripcion");
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
-        $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
         $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
         
         $this->load_database('global_system');
         $this->load->model('users_model');

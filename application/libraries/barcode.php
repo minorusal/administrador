@@ -9,23 +9,29 @@ require_once(APPPATH.'third_party/barcode/class/BCGFontFile.php');
 require_once(APPPATH.'third_party/barcode/class/BCGColor.php');
 require_once(APPPATH.'third_party/barcode/class/BCGDrawing.php');
 // Codificacion de barcode
-// require_once(APPPATH.'third_party/barcode/class/BCGcode39.barcode.php');
+require_once(APPPATH.'third_party/barcode/class/BCGcode39.barcode.php');
+require_once(APPPATH.'third_party/barcode/class/BCGcode93.barcode.php');
 require_once(APPPATH.'third_party/barcode/class/BCGcode128.barcode.php');
+require_once(APPPATH.'third_party/barcode/class/BCGean8.barcode.php');
+require_once(APPPATH.'third_party/barcode/class/BCGean13.barcode.php');
 
-class barcode{
+class barcode extends config_vars{
 
+    protected $barcode_encode; #Codificacion
     protected $font_name, $font_size; #Fuente
     protected $barcode_escala, $barcode_grosor; #Imagen
     public $barcode_img_tipo; #Formato de imagen
     protected $archivo;
     
     function __construct(){
+        $this->load_vars();
+        $this->barcode_encode   = $this->cfg['barscode_encode'];
         $this->font_name        = APPPATH.'third_party/barcode/font/Arial.ttf';
-        $this->font_size        = 13;
-        $this->barcode_escala   = 2;
-        $this->barcode_grosor   = 20;
+        $this->font_size        = $this->cfg['barscode_font_size'];
+        $this->barcode_escala   = $this->cfg['barscode_font_scale'];
+        $this->barcode_grosor   = $this->cfg['barscode_font_thickness'];
         $this->barcode_img_tipo = 'png'; #wbmp|png|gif|jpg
-        $this->archivo          = 'assets\tmp\barcode.'.$this->barcode_img_tipo;
+        $this->archivo          = $this->cfg['path_tmp'].'barcode.'.$this->barcode_img_tipo;
     }
 
     public function create($texto=''){
@@ -45,7 +51,15 @@ class barcode{
 
             $drawException = null;
             try {
-                $code = new BCGcode128();
+                switch ($this->barcode_encode) {
+                    case 'code39':  $code = new BCGcode39();    break;
+                    case 'code93':  $code = new BCGcode93();    break;
+                    case 'code128': $code = new BCGcode128();   break;
+                    case 'ean8':    $code = new BCGean8();      break;
+                    case 'ean13':   $code = new BCGean13();     break;
+                    default:        $code = new BCGcode128();   break;
+                }
+                // $code = new BCGcode128();
                 $code->setScale($escala); // Resolucion
                 $code->setThickness($grosor); // grosor
                 $code->setForegroundColor($color_black); // Color de barras

@@ -5,6 +5,10 @@ $lang['agregar'] 			= "Nuevo impuesto";
 $lang['listado'] 			= "Listado de impuestos";
 $lang['detalle'] 			= "Detalle";
 
+$lang['lbl_fecha_registro'] = 'Fecha de registro';
+$lang['lbl_usuario_registro'] = 'Registrado por';
+$lang['lbl_ultima_modificacion'] = 'Ultima Modificación';
+
 $lang['nombre_impuesto'] 	= "impuesto";
 $lang['clave_corta'] 		= "clave corta";
 $lang['descripcion']        = "descripción";

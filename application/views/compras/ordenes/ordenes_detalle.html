@@ -82,14 +82,20 @@
         </tr>
         <tr>
             <td>
-                <label>{fecha_registro}:</label>
-                <span id="timestamp" type="text" data-campo="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+                <label>{lbl_fecha_registro}: </label>
+                <span id="timestamp" type="text" data-campo="timestamp" class="input-xlarge uneditable-input" readonly >{timestamp} </span>
             </td>
         </tr>
         <tr>
             <td>
-                <label>{registro_por}:</label>
-                <span readonly id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+               <label>{lbl_usuario_registro}: </label>
+            <span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{usuario_registro}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>{lbl_ultima_modificacion}: </label>
+            <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
             </td>
         </tr>
         <tr>

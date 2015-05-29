@@ -9,26 +9,23 @@
             <p>
                 <label>{cvl_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
-            </p>
-            <p>
-                <label>{fecha_registro}:</label>
-                <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
-            </p>
-            <p>
-                <label>{registro_por}:</label>
-                <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
-            </p>
-            
-
-
+            </p>       
         <p>
             <label>{descrip}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
    
         <p>
-            <label>{lbl_ultima_modiciacion}: </label>
-            <textarea id="ultima_modiciacion" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <label>{lbl_fecha_registro}: </label>
+            <span id="timestamp" type="text" data-campo="timestamp" class="input-xlarge uneditable-input" readonly >{timestamp} </span>
+        </p>           
+        <p>
+            <label>{lbl_usuario_registro}: </label>
+            <span id="usuario_registro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{usuario_registro}</span>
+        </p>
+        <p>
+            <label>{lbl_ultima_modificacion}: </label>
+            <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
         </p>
         <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>

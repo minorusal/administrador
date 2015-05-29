@@ -119,9 +119,9 @@ class presentaciones extends Base_Controller {
         $data_tab_3["nombre_presentaciones"] = $this->lang_item("nombre_presentaciones");
 		$data_tab_3["cvl_corta"]        	 = $this->lang_item("cvl_corta");
 		$data_tab_3["descrip"]         	     = $this->lang_item("descripcion");
-		$data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
-		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
-		$data_tab_3["lbl_ultima_modiciacion"]= $this->lang_item('lbl_ultima_modificacion', false);
+		$data_tab_3['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro');
+		$data_tab_3['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
+		$data_tab_3["lbl_ultima_modificacion"]= $this->lang_item('lbl_ultima_modificacion', false);
         $data_tab_3['presentaciones']        = $detalle_presentacion[0]['presentacion'];
 		$data_tab_3['clave_corta']           = $detalle_presentacion[0]['clave_corta'];
         $data_tab_3['descripcion']           = $detalle_presentacion[0]['descripcion'];

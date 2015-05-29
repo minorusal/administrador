@@ -39,7 +39,8 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
           	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+          	 	var timepicker = 'datepicker(".fecha");';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepicker));
            }
         }
     });

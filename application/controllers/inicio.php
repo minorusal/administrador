@@ -33,7 +33,6 @@ class inicio extends Base_Controller {
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$path  	= $this->path;
-		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array( $this->titulo ); 
 		// Href de tabs
@@ -46,16 +45,14 @@ class inicio extends Base_Controller {
 	}
 
 	public function index(){
-		$tabl_inicial 			  = 1;	
+
+		$tabl_inicial 			  = 1;
 		$contenidos_tab           = $this->mensaje;
 		$data['titulo_seccion']   = $this->titulo;
 		$data['titulo_submodulo'] = 'Bienvenido';
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => '', 'dirname' => '');
-		$this->load_view($this->template, $data, $js);
-
-	
+		$this->load_view($this->template, $data);	
 	}
 }

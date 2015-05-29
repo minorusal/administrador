@@ -6,6 +6,7 @@ $lang['agregar']            = 'nuevo perfil';
 $lang['listado']            = 'listado de perfiles';
 $lang['detalle']            = 'detalle';
 
+//Links para expandir y contraes albol de perfiles
 $lang['collapse']            = 'Contraer lista';
 $lang['expand']              = 'Expander Lista';
 

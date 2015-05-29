@@ -9,7 +9,7 @@
 */
 class config_vars {
 	public $cfg, $db, $var;
-	public function load_file($filename='assets/cfg/config.ini') {
+	public function load_vars($filename='assets/cfg/config.ini') {
 	#Carga información de configuración de un archivo config.ini.
 		try {			
 			if (file_exists($filename)) {

@@ -56,6 +56,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_ordenes'				=>	'av_compras_ordenes'
 					 	,'tbl_compras_ordenes_tipo'			=>	'av_compras_orden_tipo'
 					 	,'tbl_compras_ordenes_articulos'	=>	'av_compras_ordenes_articulos'
+					 	,'tbl_compras_ordenes_estatus'	    =>	'av_compras_ordenes_estatus'
 					 	,'tbl_compras_presentaciones'		=>	'av_compras_presentaciones'
 					 	,'tbl_compras_proveedores'			=>	'av_compras_proveedores'
 					 	,'tbl_compras_proveedores_articulos'=>	'av_compras_proveedores_articulos'

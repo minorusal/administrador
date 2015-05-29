@@ -24,9 +24,9 @@
 .scrollToTop:hover{
   text-decoration:none;
 }
-/*.textareaUneditable
+.textareaUneditable
 {
   background:#fff; 
   color:#a0a0a0; 
-  border:solid 1px orange;
-}*/
+  border:solid 2px red;
+}

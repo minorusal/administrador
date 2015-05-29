@@ -1,6 +1,6 @@
 
-<div >
-    <div style="float:left">
+<div id="formulario" class="stdform">
+    
     <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" />
         <p>
             <label>{nombre_articulo}: (*)</label>
@@ -27,7 +27,10 @@
             <label>{um}: (*)</label>
             {list_um}
         </p>
-
+        <p>
+        <label>{descripcion}:</label>
+        <textarea id="descripcion" name="descripcion"  class="span5 " style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
+    </p>
         <p>
             <label>{fecha_registro}:</label>
             <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
@@ -36,15 +39,15 @@
             <label>{registro_por}:</label>
             <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
         </p>
-    </div>
     
-</div>
-<div style="clear:both">
+    
+
     <p>
-        <label>{descripcion}:</label>
-        <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
-    </p>
-</div>
+            <label>{lbl_ultima_modificacion}: </label>
+            <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        </p>
+
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>
     {button_save}
+</div>

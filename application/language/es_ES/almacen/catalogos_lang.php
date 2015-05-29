@@ -14,7 +14,9 @@
 	$lang['modificado_por']       = 'modificado por';
 
 	/*ALMACENES*/
-
+$lang['lbl_fecha_registro'] = 'Fecha de registro';
+$lang['lbl_usuario_registro'] = 'Registrado por';
+$lang['lbl_ultima_modificacion'] = 'Ultima Modificación';
 	//$lang['lbl_almacen']          = 'almacenes';
 
 	$lang['almacenes']            = 'almacenes';

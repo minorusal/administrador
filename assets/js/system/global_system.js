@@ -34,7 +34,11 @@ function config_datepicker(){
         yearSuffix: ''
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
- }
+}
+
+function datepicker(id){
+    jQuery('#'+id).datepicker();
+}
 function GoTop(){    
     //Check to see if the window is top if not then display button
     jQuery(window).scroll(function(){

@@ -2,7 +2,9 @@ jQuery(document).ready(function(){
 	var Buscar = jQuery('#search-query');
 	Buscar.focus();
 	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
-})
+	jQuery('#fecha').datepicker();
+});
+
 function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({

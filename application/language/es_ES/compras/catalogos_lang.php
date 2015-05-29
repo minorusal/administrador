@@ -13,6 +13,10 @@
 
 	/*PRESENTACIONESS*/
 
+	$lang['lbl_fecha_registro'] = 'Fecha de registro';
+	$lang['lbl_usuario_registro'] = 'Registrado por';
+	$lang['lbl_ultima_modificacion'] = 'Ultima Modificación';
+
 	$lang['presentaciones']         = 'presentaciones';
 	$lang['nuevo_presentaciones']   = 'Nueva Presentacion';
 	$lang['listado_presentaciones'] = 'presentaciones';

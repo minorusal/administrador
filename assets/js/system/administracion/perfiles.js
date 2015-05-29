@@ -17,8 +17,8 @@ function load_content(uri, id_content){
         dataType: 'json',
         data: {filtro : filtro, tabs:1},
         success: function(data){
-        	var treeview  = 'load_treeview("treeview-modules");';
-        	var treePadre = 'treePadre();'; 
+        	var treeview           = 'load_treeview("treeview-modules");';
+        	var treeview_childrens = 'treeview_childrens();'; 
            if(id_content==1){
            		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
@@ -26,7 +26,7 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data+include_script(treeview+treePadre));
+           		jQuery('#a-'+id_content).html(data+include_script(treeview+treeview_childrens));
            }
         }
     });

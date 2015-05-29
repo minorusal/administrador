@@ -258,9 +258,9 @@ class Base_Controller extends CI_Controller {
 	    $style_ul = "";
 	    $style    = "treeview-gray";
 	    if($sub){ 
-	    	$panel .= "<ul>";
+	    	$panel .= "<ul >";
 		}else{
-			$panel .= "<ul id = 'treeview-modules' class='treeview-gray'>";
+			$panel .= "<ul id = 'treeview-modules' class='treeview-gray '>";
 	    }
 	    foreach ($items as $item => $subitems) {
 	    	$item         = explode('-', $item);
@@ -279,7 +279,7 @@ class Base_Controller extends CI_Controller {
 	        if(!$checado)
 	        {
 
-	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= "<li class='list_treeview'>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";
 	        }
@@ -310,7 +310,7 @@ class Base_Controller extends CI_Controller {
 		        	default:
 		        		break;
 		        }
-		    	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+		    	$panel    .= "<li class='list_treeview'>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";    
 		    }

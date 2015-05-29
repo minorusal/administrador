@@ -17,15 +17,16 @@ function load_content(uri, id_content){
         dataType: 'json',
         data: {filtro : filtro, tabs:1},
         success: function(data){
-        	var treeview = 'load_treeview("treeview-modules")';
+        	var treeview  = 'load_treeview("treeview-modules");';
+        	var treePadre = 'treePadre();'; 
            if(id_content==1){
            		var funcion = 'buscar';
            		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data);
-           		jQuery('#a-'+id_content).html(data+include_script(treeview));
+           		jQuery('#a-'+id_content).html(data+include_script(treeview+treePadre));
            }
         }
     });
@@ -60,7 +61,6 @@ function detalle(id_perfil){
         success: function(data){
         	var treeview = 'load_treeview("treeview-modules")';
         	jQuery('#a-0').html('');
-        	jQuery('#a-2').html(data);
         	jQuery('#a-2').html(data+include_script(treeview));
         	jQuery('#ui-id-2').show('slow');
         }
@@ -113,8 +113,6 @@ function actualizar(){
 		}
 	});
 }
-
-
 function agregar(){
 	var btn          = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');

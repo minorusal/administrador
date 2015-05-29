@@ -2,7 +2,8 @@ jQuery(document).ready(function(){
 	var Buscar = jQuery('#search-query');
 	Buscar.focus();
 	Buscar.keyup(function(e) { if(e.which == 13) buscar(); });
-})
+});
+
 function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
@@ -20,7 +21,7 @@ function buscar(){
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();
 		}
-	})
+	});
 }
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
@@ -38,7 +39,8 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
           	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+          	 	var timepicker = 'datepicker(".fecha");';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepicker));
            }
         }
     });
@@ -79,7 +81,7 @@ function actualizar(){
 				jQuery("#update_loader").html('');
 			    jQuery("#mensajes_update").html(data.contenido).show('slow');
 			}
-		})
+		});
 }
 function eliminar(){	
 		jQuery('#mensajes_update').hide();		
@@ -128,7 +130,7 @@ function insert(){
 		    jQuery("#mensajes").html(data.contenido).show('slow');
 			
 		}
-	})
+	});
 }
 function show_proveedor(id_tipo){
 	if(id_tipo==1){

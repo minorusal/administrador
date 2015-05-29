@@ -68,6 +68,9 @@ class articulos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	
+	public function enabled_item($id){
+		$execute = $this->update_item('av_compras_articulos', $id);
+		return $execute;
+	}
 }
 ?>

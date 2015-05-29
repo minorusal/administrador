@@ -218,10 +218,18 @@ class articulos extends Base_Controller {
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_marca']
 					);
-		$marcas         = dropdown_tpl($dropArray4);
+		$marcas            = dropdown_tpl($dropArray4);
 		// 
 		$btn_save          = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
 		
+		$btn_enabled       = button_tpl(array( 'text'       => $this->lang_item("delete"), 
+											   'iconsweets' => 'iconfa-trash',
+											   'event'      => array('event' => 'onclick',
+											   						 'function'=> 'enabled_item',
+							   										 'params' => array('e')
+							   										)
+											  					
+												));
 		$data_tab_3['id_articulo']       = $id_articulo;
 		$data_tab_3['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
 		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulo'];
@@ -232,8 +240,8 @@ class articulos extends Base_Controller {
         $data_tab_3['linea']             = $this->lang_item("linea",false);
         $data_tab_3['um']                = $this->lang_item("um",false);
         $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
-        $data_tab_3["registro_por"]    	     = $this->lang_item("registro_por");
-		$data_tab_3["fecha_registro"]        = $this->lang_item("fecha_registro");
+        $data_tab_3["registro_por"]    	 = $this->lang_item("registro_por");
+		$data_tab_3["fecha_registro"]    = $this->lang_item("fecha_registro");
         $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
         $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_marca']        = $marcas;
@@ -241,6 +249,7 @@ class articulos extends Base_Controller {
         $data_tab_3['list_linea']        = $lineas;
         $data_tab_3['list_um']           = $um;
         $data_tab_3['button_save']       = $btn_save;
+        $data_tab_3['button_enabled']    = $btn_enabled;
         
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -319,7 +328,6 @@ class articulos extends Base_Controller {
 			}
 		}
 	}
-
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);

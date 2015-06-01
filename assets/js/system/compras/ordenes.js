@@ -26,6 +26,7 @@ function buscar(){
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
+	var functions = [];
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -38,9 +39,9 @@ function load_content(uri, id_content){
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
-          	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-          	 	var timepiker='jQuery(".fecha").datepicker();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepiker));
+          	 	functions.push('jQuery(".chzn-select").chosen();');
+          	 	functions.push('calendar_dual("orden_fecha", "entrega_fecha");');
+           		jQuery('#a-'+id_content).html(data+include_script(functions));
            }
         }
     });

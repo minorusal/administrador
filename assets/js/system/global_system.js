@@ -265,6 +265,7 @@ function load_content_tab(uri, id_content){
 }
 
 function clean_formulario(){
+    jQuery("#dualselect").multiselect('refresh');
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
     });
@@ -272,7 +273,7 @@ function clean_formulario(){
         jQuery(this).attr('checked', false);
     });
     jQuery("select").each(function(){ 
-        jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');;
+        jQuery(".requerido  :nth(1)").prop("selected","selected").trigger('change');
     });
     jQuery('.chzn-select').val('').trigger('liszt:updated');
 }

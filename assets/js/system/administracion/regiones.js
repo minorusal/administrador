@@ -52,3 +52,42 @@ function load_content(uri, id_content){
         }
     });
 }
+
+function agregar(){
+	var btn     = jQuery("button[name='save_region']");
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+	var entidades = [];
+	
+	var objData = formData('#formulario');
+
+	jQuery("[name='list'] option").each(function(){
+	  entidades.push(jQuery(this).val());
+	});
+	
+	objData['incomplete']  = values_requeridos();
+	objData['region']      = jQuery('#txt_region').val();
+	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
+	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	objData['entidades']   = entidades;
+	
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"administracion/regiones/insert_region",
+		dataType: "json",
+		data: objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			
+			var data = data.split('|');
+			if(data[0]==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data[1]).show('slow');
+		}
+	});
+}

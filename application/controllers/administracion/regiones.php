@@ -92,15 +92,19 @@ class regiones extends Base_Controller
 		$entidades_array = array(
 					 'data'		=> $this->db_model2->get_entidades_default()
 					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('entidad')
+					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
 					,'class' 	=> "requerido"
 					);
-		$entidades = dropdownList_tpl($entidades_array);
+		$entidades = dropMultiselect_tpl($entidades_array);
 
-		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_region', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 		
+		$tab_1['lbl_region'] = $this->lang_item("lbl_region");
+		$tab_1['lbl_clave_corta'] = $this->lang_item("lbl_clave_corta");
+		$tab_1['lbl_descripcion'] = $this->lang_item("lbl_descripcion");
+		$tab_1['lbl_entidades'] = $this->lang_item("lbl_entidades");
 		$tab_1["list_entidad"] = $entidades;	
 		$tab_1['nombre_area'] = $this->lang_item("nombre_area");
 		$tab_1['area'] = $this->lang_item('area');
@@ -117,6 +121,40 @@ class regiones extends Base_Controller
 		else
 		{
 			return $this->load_view_unique($seccion, $tab_1, true);
+		}
+	}
+
+	public function insert_region(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$region      = $this->ajax_post('region');
+			$clave_corta = $this->ajax_post('clave_corta');
+			$descripcion = $this->ajax_post('descripcion');
+			$entidades   = $this->ajax_post('entidades');
+			$data_insert = array('region'          => $region
+								,'clave_corta'     => $clave_corta
+								,'descripcion'     => $descripcion
+								,'id_usuario'      => $this->session->userdata('id_usuario')
+								,'registro'        => $this->timestamp());
+			$insert = $this->db_model->db_insert_data($data_insert);
+			$region = $this->db->insert_id($insert);
+			foreach($entidades as $item => $valor)
+			{
+				$insertar = array('id_entidad' => $valor,
+								  'id_region'  => $region );
+				$insert2 = $this->db_model->db_insert_entidades($insertar);
+			}
+			
+			if($insert && $insert2){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
 		}
 	}
 }

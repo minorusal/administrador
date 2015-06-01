@@ -114,7 +114,7 @@ function actualizar(){
 	});
 }
 function agregar(){
-	var btn          = jQuery("button[name='save_perfil']");
+	var btn     = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var nivel_1 = [];

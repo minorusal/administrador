@@ -1,14 +1,18 @@
 <div id="formulario" class="stdform">
 	<p>
 		<label>{lbl_region}: (*)</label>
-		<input type="text" id="txt_region" name="txt_region" class="input-xlarge requerido" value="" />
+		<input type="text" id="txt_region" name="txt_region" class="input-xlarge " value="" />
 	</p>
 	<p>
 		<label>{lbl_clave_corta}: (*)</label>
-		<input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlarge requerido" value="" />
+		<input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlarge " value="" />
 	</p>
     <p>
-        <label>{entidades}: (*)</label>
+        <label>{lbl_descripcion}: </label>
+        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+    </p>
+    <p>
+        <label>{lbl_entidades}: (*)</label>
         {list_entidad}
     </p>
 	<div id="registro_loader"></div>

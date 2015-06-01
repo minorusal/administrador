@@ -32,6 +32,7 @@ class usuarios extends Base_Controller {
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
 		}
 		$this->load->model('users_model','db_model');
+		$this->load->model($this->modulo.'/perfiles_model','perfiles');
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
@@ -150,15 +151,12 @@ class usuarios extends Base_Controller {
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
-		
-		
-		$tabData['base_url']               =  base_url();
-
-		$tabData['lbl_nombre']             =  $this->lang_item('lbl_nombre', false);
-		$tabData['lbl_paterno']            =  $this->lang_item('lbl_paterno', false);
-		$tabData['lbl_materno']            =  $this->lang_item('lbl_materno', false);
-		$tabData['lbl_perfil']             =  $this->lang_item('lbl_perfil', false);
-		$tabData['tree_view']              =  $this->treeview_perfiles(4);
+		$tabData['base_url']    =  base_url();
+		$tabData['lbl_nombre']  =  $this->lang_item('lbl_nombre', false);
+		$tabData['lbl_paterno'] =  $this->lang_item('lbl_paterno', false);
+		$tabData['lbl_materno'] =  $this->lang_item('lbl_materno', false);
+		$tabData['lbl_perfil']  =  $this->lang_item('lbl_perfil', false);
+		$tabData['tree_view']   =  $this->treeview_perfiles(4);
 		
 		
 

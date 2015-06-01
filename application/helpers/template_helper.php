@@ -141,6 +141,57 @@
 			return false;
 		}
 	}
+
+	if(!function_exists('dropMultiselect_tpl')){
+		// Crea una lista <multiselect> 
+		function dropMultiselect_tpl($params=array()){			
+			if(!empty($params)){
+				$data 		= (isset($params['data']))?$params['data']:false;
+				$selected 	= (isset($params['selected']))?$params['selected']:'';
+				$value 		= (isset($params['value']))?$params['value']:false;
+				$text 		= (isset($params['text']))?$params['text']:false;
+				$name 		= (isset($params['name']))?$params['name']:false;
+				$class 		= (isset($params['class']))?$params['class']:'';
+				$event 		= (isset($params['event']))?$params['event']:'';
+				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+			}
+			$name         = ($name=="")?"selected": $name;
+			$count        = 0;
+			if($data && $name && $value && $text){
+				foreach ($data as $option => $item) {
+					$option_value = "";
+					if(is_array($text)){
+						foreach ($text as $string) {
+							$option_value .= $item[$string].'-';
+						}
+						$options[$item[$value]] = trim($option_value, '-');
+					}else{
+						$options[$item[$value]]= $item[$text];
+					}					
+					$count++;
+				}$nameDestino = 'list';
+				$selected = "<span id='dualselect' class='dualselect'>"
+								.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
+				                ."<span class='ds_arrow'>
+				                	<button class='btn ds_prev'>
+								    	<i class='iconfa-chevron-left'>
+								    	</i>
+								    </button>
+								    <br>
+								    <button class='btn ds_next'>
+								    	<i class='iconfa-chevron-right'>
+								        </i>
+								    </button>
+				              		</span>"
+				              	.form_multiselect($nameDestino,$options,$selected,"multiple='multiple' class='$class' size='10'")
+				            ."</span>";
+				return $selected;
+			}
+			return false;
+		}
+	}
+
+	
 	if(!function_exists('button_tpl')){
 		function button_tpl($params=array()){
 			$button = "";

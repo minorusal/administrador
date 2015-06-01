@@ -238,7 +238,7 @@ class clientes extends Base_Controller {
 		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
 		$data_tab_3['email'] 		   = $this->lang_item("email");
 		$data_tab_3['timestamp'] 	   = $this->lang_item("fecha_registro");
-		$data_tab_3['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$data_tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
 		$data_tab_3['button_save']     = form_button(array('class'=>"btn btn-primary",'name' => 'update_cliente','onclick'=>'update()' , 'content' => $this->lang_item("btn_guardar") ));
 		//DATA
 		$data_tab_3['id_cliente']    = $detalle[0]['id_ventas_clientes'];

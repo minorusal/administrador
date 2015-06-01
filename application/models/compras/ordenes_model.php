@@ -55,7 +55,8 @@ class ordenes_model extends Base_Model{
 					a.id_compras_orden AS id_compras_orden
 					,a.orden_num
 					,a.entrega_fecha
-					,a.descripcion AS descripcion
+					,a.descripcion AS descripcion,
+					a.timestamp
 					,h.razon_social
 					,e.estatus
 				from $tbl1 a 
@@ -78,25 +79,9 @@ class ordenes_model extends Base_Model{
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes'];
 		// Query
 		//$query = "SELECT * FROM $db1.$tbl1 WHERE id_compras_orden = $id_compras_orden";
-		$query="SELECT 
-					a.id_compras_orden
-					,a.orden_num
-					,a.id_orden_tipo 
-					,a.descripcion
-					,a.id_sucursal
-					,a.orden_fecha
-					,a.entrega_direccion
-					,a.entrega_fecha
-					,a.observaciones
-					,a.id_forma_pago
-					,a.id_credito
-					,a.prefactura_num
-					,a.observaciones
-					,a.id_proveedor
-					,a.id_usuario
-					,a.timestamp
-					from $tbl1 a 
-					WHERE id_compras_orden = $id_compras_orden;";
+		$query="SELECT *
+				from $tbl1 a 
+				WHERE id_compras_orden = $id_compras_orden;";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -133,7 +118,7 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-	/*public function db_get_total_rows($data=array()){
+	public function db_get_total_rows($data=array()){
 		// DB Info
 		$db1 	= $this->dbinfo[1]['db'];
 		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
@@ -156,7 +141,7 @@ class ordenes_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
 	public function db_get_tipo_orden(){
 		// DB Info
 		//$db1 	= $this->dbinfo[1]['db'];

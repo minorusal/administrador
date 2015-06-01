@@ -9,7 +9,6 @@
     });
     
     config_datepicker();
-    
     // GoTopIcon
     GoTop();
 });
@@ -35,12 +34,21 @@ function config_datepicker(){
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
 }
-
 function datepicker(id){
     jQuery(id).datepicker();
 }
 function enabled_item(uri, id){
-    
+    //alert(uri+' '+id);
+    jQuery.ajax({
+        type: "POST",
+        url: path()+uri,
+        dataType: 'json',
+        data: {item: id},
+        success: function(data){
+           alert('registro eliminiado');
+           location.reload();
+        }
+    });
 }
 function GoTop(){    
     //Check to see if the window is top if not then display button
@@ -137,15 +145,14 @@ function send_form_ajax(uri, content, form){
 }
 
 function remove_tr(id){
-     $("#"+id).click(function() {
+    jQuery("#"+id).click(function() {
  
         // get handle to the current image (trashcan)
-        var img = $(this);
+        var img = jQuery(this);
         // gradually hide the parent row
         img.parents("tr").fadeOut(function()  {
             img.data("tooltip").hide();
         });
- 
     });
 }
 function dump_var(arr,level) {

@@ -49,6 +49,12 @@ function calendar_dual(inicio, fin){
         }
     });
 } 
+function calendar_dual_detalle(inicio, fin){
+    var Datemin = jQuery('#'+inicio).val();
+    jQuery('#'+fin).datepicker({
+        minDate: Datemin,
+        });
+} 
 function clearEndDate(fin) {          
     jQuery('#'+fin).val('');      
 }

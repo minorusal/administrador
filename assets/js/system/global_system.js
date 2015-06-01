@@ -11,6 +11,8 @@
     config_datepicker();
     // GoTopIcon
     GoTop();
+
+
 });
 
 function config_datepicker(){
@@ -40,21 +42,17 @@ function calendar(clase){
 }
 function calendar_dual(inicio, fin){
     jQuery('#'+inicio).datepicker({ 
-            onSelect: function(dateText, inst){
-                jQuery('#entrega_fecha').val('')
+            onSelect: function(date){
+                jQuery( "#"+fin ).datepicker( "option", "minDate", date );
+                clearEndDate(fin);
             }
         }); 
     jQuery('#'+fin).datepicker({
-        beforeShow: setMinDateForEndDate(jQuery('#'+inicio).datepicker('getDate')), 
         onSelect: function(date){
+            jQuery( "#"+fin ).datepicker( "option", "minDate", date );
         }
     });
-}
-function setMinDateForEndDate(inicio){ 
-    alert(inicio);
-    var d = inicio;
-    if(d) return {autoSize:false, minDate:d }
-}  
+} 
 function clearEndDate(fin) {          
     jQuery('#'+fin).val('');      
 }

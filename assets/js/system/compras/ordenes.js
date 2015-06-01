@@ -23,10 +23,20 @@ function buscar(){
 		}
 	})
 }
+function ImprimirObjeto(o) {
+  var salida = '';
+  for (var p in o) {
+    salida += p + ': ' + o[p] + '\n';
+  }
+  alert(salida);
+}
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
+	var fecha1 = "jQuery('#orden_fecha').datepicker();"; 
+	var fecha2 = "jQuery('#entrega_fecha').datepicker({ minDate: jQuery('#orden_fecha').datepicker('getDate') });";
+
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -40,8 +50,10 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
           	 	functions.push('jQuery(".chzn-select").chosen();');
-          	 	functions.push('calendar_dual("orden_fecha", "entrega_fecha");');
+          	 	functions.push('calendar_dual("orden_fecha","entrega_fecha")');
+          	 	//functions.push(fecha2);
            		jQuery('#a-'+id_content).html(data+include_script(functions));
+           		
            }
         }
     });

@@ -46,6 +46,10 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	outline: none;
 }
 
+td.ui-datepicker-unselectable.ui-state-disabled{ 
+	background-color: #F5F5F5;
+}
+
 ::selection { background: #ccc; color: #fff; text-shadow: none; } /* Safari */
 ::-moz-selection { background: #ccc; color: #fff; text-shadow: none; } /* Firefox */
 :-moz-placeholder { color: #bbb; }

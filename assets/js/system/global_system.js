@@ -7,12 +7,9 @@
         jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         //jQuery(".maincontent").hide('slow');
     });
-    
     config_datepicker();
     // GoTopIcon
     GoTop();
-
-
 });
 
 function config_datepicker(){

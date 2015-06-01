@@ -176,9 +176,9 @@ class users_model extends Base_Model{
 		$query = "SELECT * FROM $db1.$tbl1 WHERE id_perfil = $id_perfil";
 		$query = $this->db->query($query);
 		return $query->result_array();
-	}	
-
-	function db_get_data($data = array()){
+	}
+	
+	public function db_get_data($data = array()){
 
 		$db1 	= $this->dbinfo[0]['db'];
 		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
@@ -262,44 +262,7 @@ class users_model extends Base_Model{
 		return $query->num_rows;
 	}
 
-	/*
-	function get_usuario_unico($id_usuario){
-		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
-		$tbl2 	= $this->dbinfo[0]['tbl_personales'];
-		$tbl3 	= $this->dbinfo[0]['tbl_perfiles'];
-		$tbl4 	= $this->dbinfo[0]['tbl_paises'];
-		$tbl5 	= $this->dbinfo[0]['tbl_empresas'];
-		$tbl6 	= $this->dbinfo[0]['tbl_sucursales'];
-		$bd 	= $this->dbinfo[0]['db'];
-
-		$query = "SELECT 
-						su.id_usuario,
-						su.id_empresa,
-						su.id_sucursal,
-						su.registro,
-						sp.nombre,
-						sp.paterno,
-						sp.materno,
-						sp.telefono,
-						sp.mail,
-						spl.perfil,
-						spa.pais,
-						ss.sucursal,
-						se.empresa
-					FROM 
-						$bd.$tbl1 su
-					LEFT JOIN $bd.$tbl2 sp on su.id_personal = sp.id_personal
-					LEFT JOIN $bd.$tbl3 spl on su.id_perfil  = spl.id_perfil
-					LEFT JOIN $bd.$tbl4 spa on su.id_pais    = spa.id_pais
-					LEFT JOIN $bd.$tbl5 se on su.id_empresa  = se.id_empresa
-					LEFT JOIN $bd.$tbl6 ss on su.id_sucursal = ss.id_sucursal
-					WHERE su.id_usuario = $id_usuario;";
-
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}
-	}*/
+	
 
 }
 

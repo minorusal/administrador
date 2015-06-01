@@ -49,7 +49,6 @@ function calendar_dual(inicio, fin){
         }); 
     jQuery('#'+fin).datepicker({
         onSelect: function(date){
-            jQuery( "#"+fin ).datepicker( "option", "minDate", date );
         }
     });
 } 

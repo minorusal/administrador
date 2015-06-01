@@ -34,9 +34,8 @@ function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
-	var fecha1 = "jQuery('#orden_fecha').datepicker();"; 
-	var fecha2 = "jQuery('#entrega_fecha').datepicker({ minDate: jQuery('#orden_fecha').datepicker('getDate') });";
-
+	//var fecha1 = "jQuery('#orden_fecha').datepicker();"; 
+	//var fecha2 = "jQuery('#entrega_fecha').datepicker({ minDate: jQuery('#orden_fecha').datepicker('getDate') });";
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -59,16 +58,19 @@ function load_content(uri, id_content){
     });
 }
 function detalle(id_compras_orden){	
+	var functions = [];
 	jQuery.ajax({
         type: "POST",
         url: path()+"compras/ordenes/detalle",
         dataType: 'json',
         data: {id_compras_orden : id_compras_orden},
         success: function(data){
-        	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
-        	var timepiker='jQuery(".fecha").datepicker();';
-        	jQuery('#a-2').html(data+include_script(chosen+timepiker));
+        	//var chosen = 'jQuery(".chzn-select").chosen();';
+        	//var timepiker='jQuery(".fecha").datepicker();';
+        	functions.push('jQuery(".chzn-select").chosen();');
+          	functions.push('calendar_dual("orden_fecha","entrega_fecha")');
+        	jQuery('#a-2').html(data+include_script(functions));
         	jQuery('#ui-id-2').show('slow');
         	jQuery('#ui-id-2').click();
         }

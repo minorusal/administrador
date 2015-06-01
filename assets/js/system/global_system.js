@@ -265,7 +265,14 @@ function load_content_tab(uri, id_content){
 }
 
 function clean_formulario(){
-    jQuery("#dualselect").multiselect('refresh');
+    var selected_2 = jQuery('#dualselect select:last-child'); 
+    var selected_1 = jQuery('#dualselect select:first-child');
+    selected_2.find('option').each(function(){
+        jQuery(this).attr('selected',false);
+        var op = selected_1.find('option:first-child');
+        selected_1.append(jQuery(this));
+    }); 
+
     jQuery(":text,textarea").each(function(){ 
         jQuery(jQuery(this)).val('');
     });

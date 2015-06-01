@@ -24,7 +24,7 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
-           		var db = jQuery('#dualselect').find('.ds_arrow button');	//get arrows of dual select
+           		var db   = jQuery('#dualselect').find('.ds_arrow button');	//get arrows of dual select
 				var sel1 = jQuery('#dualselect select:first-child');		//get first select element
 				var sel2 = jQuery('#dualselect select:last-child');			//get second select element
 				sel2.empty(); //empty it first from dom.
@@ -90,4 +90,6 @@ function agregar(){
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
 	});
+	
+	//clean_formulario();
 }

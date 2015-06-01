@@ -234,6 +234,11 @@ class ordenes extends Base_Controller {
 				);
 		$orden_tipo	    = dropdown_tpl($dropArray5);
 		// 
+
+		$fec=explode('-',$detalle[0]['entrega_fecha']);
+		$entrega_fecha=$fec[2].'/'.$fec[1].'/'.$fec[0];
+		$fec2=explode('-',$detalle[0]['orden_fecha']);
+		$orden_fecha=$fec2[2].'/'.$fec2[1].'/'.$fec2[0];
 		$tabData['id_compras_orden']		 = $id_compras_orden;
 		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
@@ -248,11 +253,11 @@ class ordenes extends Base_Controller {
         $tabData['button_save']       		 = $btn_save;
         $tabData['button_delete']       	 = $btn_eliminar;
         $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
-		$tabData['orden_fecha_value']	 	 = $detalle[0]['orden_fecha'];
+		$tabData['orden_fecha_value']	 	 = $orden_fecha;
         $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
         $tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
 		$tabData['entrega_fecha']            = $this->lang_item("entrega_fecha",false);
-        $tabData['entrega_fecha_value']	     = $detalle[0]['entrega_fecha'];
+        $tabData['entrega_fecha_value']	     = $entrega_fecha;
         $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
         $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
@@ -447,10 +452,6 @@ class ordenes extends Base_Controller {
 		echo json_encode($json_respuesta);
 	}
 	public function actualizar(){
-		$fec=explode('/',$this->ajax_post('entrega_fecha'));
-		$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
-		$fec2=explode('/',$this->ajax_post('orden_fecha'));
-		$orden_fecha=$fec2[2].'-'.$fec2[1].'-'.$fec2[0];
 		// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
@@ -460,8 +461,11 @@ class ordenes extends Base_Controller {
 						,'contenido'=> alertas_tpl('error', $msg ,false)
 						,'success' 	=> false
 				);
-
 		}else{
+			$fec=explode('/',$this->ajax_post('entrega_fecha'));
+			$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
+			$fec2=explode('/',$this->ajax_post('orden_fecha'));
+			$orden_fecha=$fec2[2].'-'.$fec2[1].'-'.$fec2[0];
 			$sqlData = array(
 						 'id_compras_orden'	 => $this->ajax_post('id_compras_orden')
 						,'orden_fecha' 		 => $orden_fecha

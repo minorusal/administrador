@@ -117,7 +117,8 @@ $route['administracion/catalogos_generales/formas_de_pago']  = 'administracion/f
 /*Catalogo de Creditos*/
 $route['administracion/catalogos_generales/creditos']        = 'administracion/creditos/index';
 /*Catálogo de Entidades*/
-$route['administracion/catalogos_generales/entidades']       = 'administracion/entidades/index'; 
+$route['administracion/catalogos_generales/entidades']       = 'administracion/entidades/index';
+/*Catálogo de Regiones*/ 
 $route['administracion/catalogos_generales/regiones']        = 'administracion/regiones/index'; 
 
 /*VENTAS*/

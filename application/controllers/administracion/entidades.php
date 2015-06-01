@@ -18,7 +18,7 @@ class entidades extends Base_Controller
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'entidades';
-		$this->icon 			= 'fa fa-map-marker'; 
+		$this->icon 			= 'fa fa-bookmark'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/entidades
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;

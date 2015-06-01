@@ -1,27 +1,20 @@
 <div id="formulario" class="stdform">
-    <div>
-        <div style="float:left">
-			<p>
-				<label>{nombre_entidad}: (*)</label>
-				<input type="text" id="entidad" name="entidad" class="input-xlarge requerido" value="" />
-			</p>
-			<p>
-				<label>{cvl_corta}: (*)</label>
-				<input type="text" id="clave_corta" name="clave_corta" class="input-xlarge requerido" value="" />
-			</p>
-			<p>
-				<label>{abreviatura}: (*)</label>
-				<input type="text" id="abrev" name="abrev" class="input-xlarge requerido" value="" />
-			</p>
-			</div>
-    </div>
-    <div style="clear:both">
-        <div id="registro_loader"></div>
-        <div id="mensajes" style="display:none"></div>
-     <p class="stdformbutton">
-        {button_save}
+	<p>
+		<label>{nombre_entidad}: (*)</label>
+		<input type="text" id="entidad" name="entidad" class="input-xlarge requerido" value="" />
+	</p>
+	<p>
+		<label>{cvl_corta}: (*)</label>
+		<input type="text" id="clave_corta" name="clave_corta" class="input-xlarge requerido" value="" />
+	</p>
+	<p>
+		<label>{abreviatura}: (*)</label>
+		<input type="text" id="abrev" name="abrev" class="input-xlarge requerido" value="" />
+	</p>
+	<div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+    <p class="stdformbutton">
+    	{button_save}
         {button_reset}
     </p>
-
-    </div>
 </div>

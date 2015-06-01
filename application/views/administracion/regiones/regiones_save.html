@@ -1,0 +1,31 @@
+<div id="formulario" class="stdform">
+	<p>
+		<label>{lbl_region}: (*)</label>
+		<input type="text" id="txt_region" name="txt_region" class="input-xlarge requerido" value="" />
+	</p>
+	<p>
+		<label>{lbl_clave_corta}: (*)</label>
+		<input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlarge requerido" value="" />
+	</p>
+	<p>
+		<label>{lbl_entidades}: (*)</label>
+    	<span id="dualselect" class="dualselect">
+    		<select class="uniformselect" name="select3" multiple="multiple" size="10">
+    			<option value>opción uno</option>
+    		</select>
+    		<span class="ds_arrow">
+    			<button class="btn ds_prev"><i class="iconfa-chevron-left"></i></button><br />
+    			<button class="btn ds_next"><i class="iconfa-chevron-right"></i></button>
+    		</span>
+    		<select name="select4" multiple="multiple" size="10">
+    			<option value=""></option>
+    		</select>
+    	</span>
+    </p>
+	<div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+    <p class="stdformbutton">
+    	{button_save}
+        {button_reset}
+    </p>
+</div>

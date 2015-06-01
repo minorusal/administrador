@@ -43,6 +43,7 @@ class ordenes extends Base_Controller {
 		$this->load->model('administracion/sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
+		$this->load->model('administracion/variables_model','variables_model');
 		// $this->load->model($this->uri_modulo.'articulos_model','articulos_model');
 		// $this->load->model($this->uri_modulo.'catalogos_model','catalogos_model');
 		// Diccionario
@@ -110,7 +111,7 @@ class ordenes extends Base_Controller {
 			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_data($sqlData));
+		$total_rows   = count($this->db_model->db_get_total_rows($sqlData));
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -126,6 +127,7 @@ class ordenes extends Base_Controller {
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus']
 									);
@@ -136,6 +138,7 @@ class ordenes extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										
 										$this->lang_item("descripcion"),
+										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
 										$this->lang_item("estatus"),
 										$this->lang_item("pendiente"));
@@ -334,7 +337,8 @@ class ordenes extends Base_Controller {
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		// Etiquetas
-		$tabData['orden_num']   	= $this->lang_item("orden_num",false);
+		/*$tabData['orden_num']   	= $this->lang_item("orden_num",false);
+		$tabData['orden_num_val']  	= $no_orden[0]['valor']+1;*/
 		$tabData['proveedor'] 		= $this->lang_item("proveedor",false);
         $tabData['list_proveedores']= $proveedores;
         $tabData['sucursal']     	= $this->lang_item("sucursal",false);
@@ -376,15 +380,22 @@ class ordenes extends Base_Controller {
 						,'success' 	=> false
 				);
 		}else{
+			$fec=explode('/',$this->ajax_post('entrega_fecha'));
+			$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
+			$fec2=explode('/',$this->ajax_post('orden_fecha'));
+			$orden_fecha=$fec2[2].'-'.$fec2[1].'-'.$fec2[0];
+			$filtro=1;
+				$sqlData = array('buscar'=> $filtro);
+				$no_orden=$this->variables_model->db_get_data($sqlData);
 			$sqlData = array(
-						'orden_num' 		 => $this->ajax_post('orden_num')
+						'orden_num' 		 => $no_orden[0]['valor']+1
 						,'id_orden_tipo' 	 => $this->ajax_post('id_orden_tipo')
-						,'orden_fecha' 		 => $this->ajax_post('orden_fecha')
+						,'orden_fecha' 		 => $orden_fecha
 						,'id_proveedor' 	 => $this->ajax_post('id_proveedor')
 						,'descripcion'		 => $this->ajax_post('descripcion')
 						,'id_sucursal'  	 => $this->ajax_post('id_sucursal')
 						,'entrega_direccion' => $this->ajax_post('entrega_direccion')
-						,'entrega_fecha'     => $this->ajax_post('entrega_fecha')
+						,'entrega_fecha'     => $entrega_fecha
 						,'id_forma_pago'     => $this->ajax_post('id_forma_pago')
 						,'id_credito' 		 => $this->ajax_post('id_administracion_creditos')
 						,'prefactura_num' 	 => $this->ajax_post('prefactura_num')
@@ -394,12 +405,27 @@ class ordenes extends Base_Controller {
 						);
 			$insert = $this->db_model->insert($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
+				$sqlData2 = array(
+							'valor' 	=> $no_orden[0]['valor']+1,
+							'id_vars'	=> 1
+									);	
+				$insert2 = $this->variables_model->update($sqlData2);	
+				if($insert2){
+					//$msg = $this->lang_item("msg_insert_success",false);
+					$msg = sprintf($this->lang_item('msg_insert_orden_success', false), $no_orden[0]['valor']+1);
+					$json_respuesta = array(
 						 'id' 		=> 1
 						,'contenido'=> alertas_tpl('success', $msg ,false)
 						,'success' 	=> true
-				);
+					);
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					$json_respuesta = array(
+							 'id' 		=> 0
+							,'contenido'=> alertas_tpl('', $msg ,false)
+							,'success' 	=> false
+					);
+				}
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				$json_respuesta = array(

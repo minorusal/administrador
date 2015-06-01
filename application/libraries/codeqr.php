@@ -13,11 +13,12 @@ class codeqr extends QRcode{
     protected $errorCorrectionLevel, $matrixPointSize, $margin; #Formato
     
     function __construct(){
-        config_vars::load_vars();
-        $this->archivo              = $this->cfg['path_tmp'].'qrcode.png';
-        $this->errorCorrectionLevel = $this->cfg['qrcode_error_correction_level']; #'L','M','Q','H'
-        $this->matrixPointSize      = $this->cfg['qrcode_point_size']; # 1-10
-        $this->margin               = $this->cfg['qrcode_margin'];
+        $vars = new config_vars();
+        $vars->load_vars();
+        $this->archivo              = $vars->cfg['path_tmp'].'qrcode.png';
+        $this->errorCorrectionLevel = $vars->cfg['qrcode_error_correction_level']; #'L','M','Q','H'
+        $this->matrixPointSize      = $vars->cfg['qrcode_point_size']; # 1-10
+        $this->margin               = $vars->cfg['qrcode_margin'];
     }
 
     public function create($texto=''){

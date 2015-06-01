@@ -21,7 +21,7 @@ function buscar(){
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();
 		}
-	});
+	})
 }
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
@@ -39,8 +39,8 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
           	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-          	 	var timepicker = 'datepicker(".fecha");';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepicker));
+          	 	var timepiker='jQuery(".fecha").datepicker();';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen+timepiker));
            }
         }
     });
@@ -54,6 +54,7 @@ function detalle(id_compras_orden){
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
+        	//var timepiker='jQuery(".fecha").datepicker();';
         	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
         	jQuery('#ui-id-2').click();
@@ -81,7 +82,7 @@ function actualizar(){
 				jQuery("#update_loader").html('');
 			    jQuery("#mensajes_update").html(data.contenido).show('slow');
 			}
-		});
+		})
 }
 function eliminar(){	
 		jQuery('#mensajes_update').hide();		
@@ -108,7 +109,7 @@ function eliminar(){
 }
 function insert(){		
 	var btn   = jQuery("button[name='save']");
-	btn.attr('disabled','disabled');
+	//btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -130,7 +131,7 @@ function insert(){
 		    jQuery("#mensajes").html(data.contenido).show('slow');
 			
 		}
-	});
+	})
 }
 function show_proveedor(id_tipo){
 	if(id_tipo==1){

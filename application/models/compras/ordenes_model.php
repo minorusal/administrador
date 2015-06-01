@@ -55,7 +55,8 @@ class ordenes_model extends Base_Model{
 					a.id_compras_orden AS id_compras_orden
 					,a.orden_num
 					,a.entrega_fecha
-					,a.descripcion AS descripcion
+					,a.descripcion AS descripcion,
+					a.timestamp
 					,h.razon_social
 					,e.estatus
 				from $tbl1 a 
@@ -133,7 +134,7 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-	/*public function db_get_total_rows($data=array()){
+	public function db_get_total_rows($data=array()){
 		// DB Info
 		$db1 	= $this->dbinfo[1]['db'];
 		$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
@@ -156,7 +157,7 @@ class ordenes_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
 	public function db_get_tipo_orden(){
 		// DB Info
 		//$db1 	= $this->dbinfo[1]['db'];

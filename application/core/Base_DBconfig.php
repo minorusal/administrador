@@ -44,6 +44,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_administracion_forma_pago'	=>	'av_administracion_forma_pago'
 					 	,'tbl_administracion_impuestos'  	=>	'av_administracion_impuestos'
 					 	,'tbl_administracion_puestos'   	=>	'av_administracion_puestos'
+					 	,'tbl_administracion_variables'   	=>	'av_administracion_variables'
 					 	,'tbl_almacen_almacenes' 			=>	'av_almacen_almacenes'
 					 	,'tbl_almacen_tipos'				=>	'av_almacen_tipos'
 					 	,'tbl_almacen_transportes'			=>	'av_almacen_transportes'

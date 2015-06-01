@@ -141,6 +141,61 @@
 			return false;
 		}
 	}
+
+	if(!function_exists('dropdownList_tpl')){
+		// Crea una lista <select> que muestra varios elementos al mismo tiempo
+		function dropdownList_tpl($params=array()){			
+			if(!empty($params)){
+				$data 		= (isset($params['data']))?$params['data']:false;
+				$selected 	= (isset($params['selected']))?$params['selected']:'';
+				$value 		= (isset($params['value']))?$params['value']:false;
+				$text 		= (isset($params['text']))?$params['text']:false;
+				$name 		= (isset($params['name']))?$params['name']:false;
+				$class 		= (isset($params['class']))?$params['class']:'';
+				$event 		= (isset($params['event']))?$params['event']:'';
+				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
+			}
+			$name         = ($name=="")?"selected": $name;
+			$count        = 0;
+			if($data && $name && $value && $text){
+				foreach ($data as $option => $item) {
+					$option_value = "";
+					if($count==0){
+						$options[0]= $leyenda;
+					}
+					if(is_array($text)){
+						foreach ($text as $string) {
+							$option_value .= $item[$string].'-';
+						}
+						$options[$item[$value]] = trim($option_value, '-');
+					}else{
+						$options[$item[$value]]= $item[$text];
+					}					
+					$count++;
+				}
+				$selected = "<span id='dualselect' class='dualselect'>"
+								.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
+				                ."<span class='ds_arrow'>
+				                	<button class='btn ds_prev'>
+								    	<i class='iconfa-chevron-left'>
+								    	</i>
+								    </button>
+								    <br>
+								    <button class='btn ds_next'>
+								    	<i class='iconfa-chevron-right'>
+								        </i>
+								    </button>
+				              		</span>"
+				              	.form_multiselect("multiple='multiple' class='$class' size='10'")
+				            ."</span>";
+				return $selected;
+			}
+			return false;
+		}
+	}
+
+	
 	if(!function_exists('button_tpl')){
 		function button_tpl($params=array()){
 			$button = "";

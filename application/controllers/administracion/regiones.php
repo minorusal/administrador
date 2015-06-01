@@ -29,6 +29,7 @@ class regiones extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model($this->modulo.'/entidades_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -88,14 +89,19 @@ class regiones extends Base_Controller
 	public function agregar()
 	{
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
-		$sqlData = array(
-			 'buscar' => ''
-			,'offset' => 0
-			,'limit' => 0
-			);
+		$entidades_array = array(
+					 'data'		=> $this->db_model2->get_entidades_default()
+					,'value' 	=> 'id_administracion_entidad'
+					,'text' 	=> array('entidad')
+					,'name' 	=> "lts_entidades"
+					,'class' 	=> "requerido"
+					);
+		$entidades = dropdownList_tpl($entidades_array);
+
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
-
+		
+		$tab_1["list_entidad"] = $entidades;	
 		$tab_1['nombre_area'] = $this->lang_item("nombre_area");
 		$tab_1['area'] = $this->lang_item('area');
 		$tab_1['cvl_corta'] = $this->lang_item('clave_corta');

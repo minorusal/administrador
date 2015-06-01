@@ -35,12 +35,8 @@ class articulos extends Base_Controller {
 		return $this->uri_modulo.$this->view_content;
 	}
 	public function index($offset = 0){
-		
-		
 		$view_listado_articulo    = $this->listado_articulos($offset);
-		
 		$contenidos_tab           = $view_listado_articulo;
-
 		$data['titulo_seccion']   = $this->lang_item("articulos");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = 'fa fa-cubes';
@@ -72,7 +68,6 @@ class articulos extends Base_Controller {
 									'articulos'      => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
 									'marca'          => $value['marca'],
-									'presentacione'  => $value['presentacion'],
 									'linea'          => $value['linea'],
 									'um'             => $value['um'],
 									'descripcion'    => $value['descripcion']);
@@ -84,7 +79,6 @@ class articulos extends Base_Controller {
 										$this->lang_item("articulos"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("marca"),
-										$this->lang_item("presentacion"),
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
 										$this->lang_item("descripcion"));
@@ -118,19 +112,18 @@ class articulos extends Base_Controller {
 			return $this->load_view_unique($uri_view , $data_tab_2, true);
 		}
 	}
-
 	public function agregar_articulo(){
 		
 		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/articulo_save';
 		// listas
-		$dropArray = array(
+		/*$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta', 'presentacion')
 					,'name' 	=> "lts_presentaciones"
 					,'class' 	=>  "requerido"
 				);
-		$presentaciones = dropdown_tpl($dropArray);
+		$presentaciones = dropdown_tpl($dropArray);*/
 		$dropArray2 = array(
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
@@ -162,12 +155,12 @@ class articulos extends Base_Controller {
         $data_tab_1['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
         $data_tab_1['cvl_corta']         = $this->lang_item("cvl_corta",false);
         $data_tab_1['marca']             = $this->lang_item("marca",false);
-        $data_tab_1['presentacion']      = $this->lang_item("presentacion",false);
+        //$data_tab_1['presentacion']      = $this->lang_item("presentacion",false);
         $data_tab_1['linea']             = $this->lang_item("linea",false);
         $data_tab_1['um']                = $this->lang_item("um",false);
         $data_tab_1['descripcion']       = $this->lang_item("descripcion",false);
         $data_tab_1['list_marca']        = $marcas;
-        $data_tab_1['list_presentacion'] = $presentaciones;
+        //$data_tab_1['list_presentacion'] = $presentaciones;
         $data_tab_1['list_linea']        = $lineas;
         $data_tab_1['list_um']           = $um;
         $data_tab_1['button_save']       = $btn_save;
@@ -183,7 +176,7 @@ class articulos extends Base_Controller {
 		$id_articulo       = $this->ajax_post('id_articulo');
 		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
 		// listas
-		$dropArray = array(
+		/*$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta', 'presentacion')
@@ -191,7 +184,7 @@ class articulos extends Base_Controller {
 					,'class' 	=>  "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_presentacion']
 				);
-		$presentaciones = dropdown_tpl($dropArray);
+		$presentaciones = dropdown_tpl($dropArray);*/
 		$dropArray2 = array(
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
@@ -224,11 +217,12 @@ class articulos extends Base_Controller {
 		
 		$btn_enabled       = button_tpl(array( 'text'       => $this->lang_item("delete"), 
 											   'iconsweets' => 'iconfa-trash',
-											   'event'      => array('event' => 'onclick',
-											   						 'function'=> 'enabled_item',
-							   										 'params' => array('e')
+											   'event'      => array('event'    => 'onclick',
+											   						 'function' => 'enabled_item',
+							   										 'params'   => array($this->uri_modulo.$this->uri_submodulo.'/enabled', $id_articulo)
 							   										)
-											  					
+											  			
+		
 												));
 		$data_tab_3['id_articulo']       = $id_articulo;
 		$data_tab_3['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
@@ -236,7 +230,7 @@ class articulos extends Base_Controller {
         $data_tab_3['cvl_corta']         = $this->lang_item("cvl_corta",false);
         $data_tab_3['cvl_value']         = $detalle_articulo[0]['clave_corta'];
         $data_tab_3['marca']             = $this->lang_item("marca",false);
-        $data_tab_3['presentacion']      = $this->lang_item("presentacion",false);
+        //$data_tab_3['presentacion']      = $this->lang_item("presentacion",false);
         $data_tab_3['linea']             = $this->lang_item("linea",false);
         $data_tab_3['um']                = $this->lang_item("um",false);
         $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
@@ -249,11 +243,11 @@ class articulos extends Base_Controller {
         $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
         $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_marca']        = $marcas;
-        $data_tab_3['list_presentacion'] = $presentaciones;
+        //$data_tab_3['list_presentacion'] = $presentaciones;
         $data_tab_3['list_linea']        = $lineas;
         $data_tab_3['list_um']           = $um;
         $data_tab_3['button_save']       = $btn_save;
-        $data_tab_3['button_enabled']    = $btn_enabled;
+        $data_tab_3['button_enabled']    = '';//$btn_enabled;
         
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -300,7 +294,7 @@ class articulos extends Base_Controller {
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
 								 'id_compras_marca'=> $marca,
-								 'id_compras_presentacion'=> $presentacion,
+								 //'id_compras_presentacion'=> $presentacion,
 								 'id_compras_um'=> $um,
 								 'id_usuario' => $this->session->userdata('id_usuario'),
 								 'timestamp'  => $this->timestamp());
@@ -334,7 +328,7 @@ class articulos extends Base_Controller {
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
 								 'id_compras_marca'=> $marca,
-								 'id_compras_presentacion'=> $presentacion,
+								 //'id_compras_presentacion'=> $presentacion,
 								 'edit_timestamp' => $this->timestamp(),
 								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
 								 'id_compras_um'=> $um);
@@ -351,6 +345,10 @@ class articulos extends Base_Controller {
 			}
 		}
 	}
+	public function enabled(){
+		$item     =  array('id_compras_articulo=' => $this->ajax_post('item'));
+		$enabled  = $this->articulos_model->enabled_item('av_compras_articulos', $item);
+	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
@@ -360,7 +358,7 @@ class articulos extends Base_Controller {
 									 $value['articulo'],
 									 $value['clave_corta'],
 									 $value['marca'],
-									 $value['presentacion'],
+									 //$value['presentacion'],
 									 $value['linea'],
 									 $value['um'],
 									 $value['descripcion']);
@@ -370,7 +368,7 @@ class articulos extends Base_Controller {
 									$this->lang_item("articulos"),
 									$this->lang_item("cvl_corta"),
 									$this->lang_item("marca"),
-									$this->lang_item("presentacion"),
+									//$this->lang_item("presentacion"),
 									$this->lang_item("lineas"),
 									$this->lang_item("u.m."),
 									$this->lang_item("descripcion"));
@@ -384,4 +382,5 @@ class articulos extends Base_Controller {
 		
 		$this->excel->generate_xlsx($params);
 	}
+
 }

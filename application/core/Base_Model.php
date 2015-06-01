@@ -23,8 +23,10 @@ class Base_Model extends CI_Model {
 		}
     }
 
-    public function update_item($table, $row){
-		$query = $this->db->update_string($table, $row);
+    public function enabled_item($table, $clauses){
+    	   	
+    	$item  = array('activo' => 0);
+		$query = $this->db->update_string($table, $item, $clauses);
 		$query = $this->db->query($query);
 		return $query;
     }

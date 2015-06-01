@@ -79,25 +79,9 @@ class ordenes_model extends Base_Model{
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes'];
 		// Query
 		//$query = "SELECT * FROM $db1.$tbl1 WHERE id_compras_orden = $id_compras_orden";
-		$query="SELECT 
-					a.id_compras_orden
-					,a.orden_num
-					,a.id_orden_tipo 
-					,a.descripcion
-					,a.id_sucursal
-					,a.orden_fecha
-					,a.entrega_direccion
-					,a.entrega_fecha
-					,a.observaciones
-					,a.id_forma_pago
-					,a.id_credito
-					,a.prefactura_num
-					,a.observaciones
-					,a.id_proveedor
-					,a.id_usuario
-					,a.timestamp
-					from $tbl1 a 
-					WHERE id_compras_orden = $id_compras_orden;";
+		$query="SELECT *
+				from $tbl1 a 
+				WHERE id_compras_orden = $id_compras_orden;";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

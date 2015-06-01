@@ -79,7 +79,6 @@ class ordenes extends Base_Controller {
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 		return $config_tab;
 	}
-
 	public function index(){		
 		// Carga de pagina inicial
 		$tabl_inicial 			  = $this->tab_inicial;
@@ -92,7 +91,6 @@ class ordenes extends Base_Controller {
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal, $data, $js);
 	}
-
 	public function listado($offset=0){
 		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '';
@@ -166,7 +164,6 @@ class ordenes extends Base_Controller {
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
-
 	public function detalle(){
 		// Crea formulario de detalle y edición
 		$seccion 			= '';
@@ -246,7 +243,7 @@ class ordenes extends Base_Controller {
         $tabData['list_sucursales']			 = $sucursales;
         $tabData['descripcion']       		 = $this->lang_item("descripcion",false);
         $tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
-        $tabData['fecha_registro']    		 = $this->lang_item("fecha_registro",false);
+        $tabData['lbl_fecha_registro']    	 = $this->lang_item("lbl_fecha_registro",false);
         $tabData['timestamp']         		 = $detalle[0]['timestamp'];
         $tabData['button_save']       		 = $btn_save;
         $tabData['button_delete']       	 = $btn_eliminar;
@@ -268,14 +265,26 @@ class ordenes extends Base_Controller {
 		$tabData['list_orden_tipo']	= $orden_tipo;
 		$tabData['style']=$style;
 		$tabData['class']=$class;
-        if($detalle[0]['id_usuario']){
-        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+
+
+		$this->load->model('users_model');
+    	
+    	$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+    	$usuario_name 				       = text_format_tpl($usuario_registro[0]['name'],"u");
+    	$tabData['val_usuarios_registro']  = $usuario_name ;
+
+    	if($detalle[0]['edit_id_usuario']){
+        	$usuario_registro           = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				= text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion']= sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
     	}else{
     		$usuario_name = '';
+    		$tabData['val_ultima_modificacion']= $this->lang_item('lbl_sin_modificacion', false);
     	}
-        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-        $tabData['usuario_registro']	= $usuario_name;
+    	$tabData['registro_por']    	= $this->lang_item("registro_por",false);
+      	$tabData['usuario_registro']	= $usuario_name;
+
 		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
@@ -438,6 +447,10 @@ class ordenes extends Base_Controller {
 		echo json_encode($json_respuesta);
 	}
 	public function actualizar(){
+		$fec=explode('/',$this->ajax_post('entrega_fecha'));
+		$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
+		$fec2=explode('/',$this->ajax_post('orden_fecha'));
+		$orden_fecha=$fec2[2].'-'.$fec2[1].'-'.$fec2[0];
 		// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
@@ -450,19 +463,20 @@ class ordenes extends Base_Controller {
 
 		}else{
 			$sqlData = array(
-						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
-						,'orden_fecha' 		 => $this->ajax_post('orden_fecha')
-						,'id_proveedor' 	=> $this->ajax_post('id_proveedor')
-						,'descripcion'		=> $this->ajax_post('descripcion')
-						,'id_sucursal'  	=> $this->ajax_post('id_sucursal')
+						 'id_compras_orden'	 => $this->ajax_post('id_compras_orden')
+						,'orden_fecha' 		 => $orden_fecha
+						,'id_proveedor' 	 => $this->ajax_post('id_proveedor')
+						,'descripcion'		 => $this->ajax_post('descripcion')
+						,'id_sucursal'  	 => $this->ajax_post('id_sucursal')
 						,'entrega_direccion' => $this->ajax_post('entrega_direccion')
-						,'entrega_fecha'     => $this->ajax_post('entrega_fecha')
+						,'entrega_fecha'     => $entrega_fecha
 						,'id_forma_pago'     => $this->ajax_post('id_forma_pago')
 						,'id_credito' 		 => $this->ajax_post('id_administracion_creditos')
 						,'prefactura_num' 	 => $this->ajax_post('prefactura_num')
 						,'observaciones' 	 => $this->ajax_post('observaciones')
-						,'id_usuario' 		=> $this->session->userdata('id_usuario')
-						,'timestamp'  		=> $this->timestamp()
+						,'id_usuario' 		 => $this->session->userdata('id_usuario')
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
 						);
 
 			$insert = $this->db_model->db_update_data($sqlData);

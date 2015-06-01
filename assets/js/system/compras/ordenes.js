@@ -54,8 +54,8 @@ function detalle(id_compras_orden){
         success: function(data){
         	var chosen = 'jQuery(".chzn-select").chosen();';
         	jQuery('#a-0').html('');
-        	//var timepiker='jQuery(".fecha").datepicker();';
-        	jQuery('#a-2').html(data+include_script(chosen));
+        	var timepiker='jQuery(".fecha").datepicker();';
+        	jQuery('#a-2').html(data+include_script(chosen+timepiker));
         	jQuery('#ui-id-2').show('slow');
         	jQuery('#ui-id-2').click();
         }

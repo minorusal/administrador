@@ -11,7 +11,10 @@
     config_datepicker();
     // GoTopIcon
     GoTop();
+
+
 });
+
 function config_datepicker(){
     if(typeof  months_timepicker=="undefined"){
         return false;
@@ -34,11 +37,26 @@ function config_datepicker(){
     };
     jQuery.datepicker.setDefaults(jQuery.datepicker.regional['es']);
 }
-function datepicker(id){
-    jQuery(id).datepicker();
+function calendar(clase){
+    jQuery('.'+clase).datepicker();
 }
+function calendar_dual(inicio, fin){
+    jQuery('#'+inicio).datepicker({ 
+            onSelect: function(date){
+                jQuery( "#"+fin ).datepicker( "option", "minDate", date );
+                clearEndDate(fin);
+            }
+        }); 
+    jQuery('#'+fin).datepicker({
+        onSelect: function(date){
+        }
+    });
+} 
+function clearEndDate(fin) {          
+    jQuery('#'+fin).val('');      
+}
+
 function enabled_item(uri, id){
-    //alert(uri+' '+id);
     jQuery.ajax({
         type: "POST",
         url: path()+uri,

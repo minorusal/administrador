@@ -1,9 +1,7 @@
-/*!
- * FullCalendar v1.6.0 Stylesheet
- * Docs & License: http://arshaw.com/fullcalendar/
- * (c) 2013 Adam Shaw
- */
+/*** CALENDAR ***/
 
+
+/*** FULL CALENDAR ***/
 
 .fc {
 	direction: ltr;
@@ -134,7 +132,7 @@ html .fc,
 	}
 	
 .fc-widget-header {
-	background: #0866c6;
+	background: #0096d2;
 	color: #fff;
 	border-color: rgba(255,255,255,0.1);
 }
@@ -152,7 +150,7 @@ html .fc,
 }
 
 .fc-widget-header.fc-agenda-gutter.fc-last {
-	background: #0866c6;
+	background: #0096d2;
 }
 
 	

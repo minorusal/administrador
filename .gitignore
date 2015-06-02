@@ -9,5 +9,6 @@ application/logs/*
 !application/logs/.htaccess
 
 assets/js/system/inc.config.js
+assets/cfg/codeigniter.cfg
 
 assets/tmp/*

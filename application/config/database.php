@@ -1,4 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once(APPPATH.'libraries/config_vars.php');
+$vars = new config_vars();
+$vars->load_vars();
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -48,37 +51,38 @@
 $active_group = 'global_system';
 $active_record = TRUE;
 
-$db['global_system']['hostname'] = '192.168.230.28';
-$db['global_system']['username'] = 'admincontrol2';
-$db['global_system']['password'] = '12345';
-$db['global_system']['database'] = '00_av_system';
-$db['global_system']['dbdriver'] = 'mysql';
-$db['global_system']['dbprefix'] = '';
-$db['global_system']['pconnect'] = TRUE;
-$db['global_system']['db_debug'] = TRUE;
-$db['global_system']['cache_on'] = FALSE;
-$db['global_system']['cachedir'] = '';
-$db['global_system']['char_set'] = 'utf8';
-$db['global_system']['dbcollat'] = 'utf8_general_ci';
-$db['global_system']['swap_pre'] = '';
-$db['global_system']['autoinit'] = TRUE;
-$db['global_system']['stricton'] = FALSE;
+// $db['global_system']['hostname'] = '192.168.230.28';
+$db['global_system']['hostname'] = $vars->db['db_mysql_host'];
+$db['global_system']['username'] = $vars->db['db_mysql_user'];
+$db['global_system']['password'] = $vars->db['db_mysql_pass'];
+$db['global_system']['database'] = $vars->db['db_mysql_db1'];
+$db['global_system']['dbdriver'] = $vars->db['db_engine'];
+$db['global_system']['dbprefix'] = $vars->db['db_dbprefix'];
+$db['global_system']['pconnect'] = $vars->db['db_pconnect'];
+$db['global_system']['db_debug'] = $vars->db['db_debug'];
+$db['global_system']['cache_on'] = $vars->db['db_cache_on'];
+$db['global_system']['cachedir'] = $vars->db['db_cachedir'];
+$db['global_system']['char_set'] = $vars->db['db_char_set'];
+$db['global_system']['dbcollat'] = $vars->db['db_dbcollat'];
+$db['global_system']['swap_pre'] = $vars->db['db_swap_pre'];
+$db['global_system']['autoinit'] = $vars->db['db_autoinit'];
+$db['global_system']['stricton'] = $vars->db['db_stricton'];
 
-$db['mx']['hostname'] = '192.168.230.28';
-$db['mx']['username'] = 'admincontrol2';
-$db['mx']['password'] = '12345';
-$db['mx']['database'] = '00_av_mx';
-$db['mx']['dbdriver'] = 'mysql';
-$db['mx']['dbprefix'] = '';
-$db['mx']['pconnect'] = TRUE;
-$db['mx']['db_debug'] = TRUE;
-$db['mx']['cache_on'] = FALSE;
-$db['mx']['cachedir'] = '';
-$db['mx']['char_set'] = 'utf8';
-$db['mx']['dbcollat'] = 'utf8_general_ci';
-$db['mx']['swap_pre'] = '';
-$db['mx']['autoinit'] = TRUE;
-$db['mx']['stricton'] = FALSE;
+$db['mx']['hostname'] = $vars->db['db_mysql_host'];
+$db['mx']['username'] = $vars->db['db_mysql_user'];
+$db['mx']['password'] = $vars->db['db_mysql_pass'];
+$db['mx']['database'] = $vars->db['db_mysql_db2'];
+$db['mx']['dbdriver'] = $vars->db['db_engine'];
+$db['mx']['dbprefix'] = $vars->db['db_dbprefix'];
+$db['mx']['pconnect'] = $vars->db['db_pconnect'];
+$db['mx']['db_debug'] = $vars->db['db_debug'];
+$db['mx']['cache_on'] = $vars->db['db_cache_on'];
+$db['mx']['cachedir'] = $vars->db['db_cachedir'];
+$db['mx']['char_set'] = $vars->db['db_char_set'];
+$db['mx']['dbcollat'] = $vars->db['db_dbcollat'];
+$db['mx']['swap_pre'] = $vars->db['db_swap_pre'];
+$db['mx']['autoinit'] = $vars->db['db_autoinit'];
+$db['mx']['stricton'] = $vars->db['db_stricton'];
 
 
 /* End of file database.php */

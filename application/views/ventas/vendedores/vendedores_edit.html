@@ -60,14 +60,17 @@
         </p>
         <p>
             <label>{registro_por}: </label>
-            <input id="contacto" type="text" data-campo="contacto" class="input-xlarge " readonly value="{val_usuarios_registro}" />
+            <span id="user" type="text" name="timestamp" class="input-xlarge uneditable-input" >{val_usuarios_registro}</span>
         </p>
         <p>
             <label>{lbl_ultima_modificacion}: </label>
-            <textarea id="contacto" class="span5" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <textarea id="contacto" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
         </p>
 
-</div>
+
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
     {button_save}
+    </p>
+</div>

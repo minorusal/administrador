@@ -56,10 +56,10 @@ class areas_model extends Base_Model
 		$existe    = $this->row_exist($tbl, $condicion);
 		if(!$existe)
 		{
-			$condicion = "id_administracion_areas = ".$data['id_administracion_areas']; 
-			$query = $this->db->update_string($tbl, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$condicion = "id_administracion_areas = ".$data['id_administracion_areas'];
+			
+			$update = $this->update_item($tbl, $data, 'id_administracion_areas', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -71,9 +71,10 @@ class areas_model extends Base_Model
 		$tbl    = $this->db1.'.'.$this->tbl1;
 		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl, $data);
+			/*$query = $this->db->insert_string($tbl, $data);
+			$query = $this->db->query($query);*/
+			return $insert;
 		}else{
 			return false;
 		}

@@ -48,9 +48,8 @@ class perfiles_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_perfil = ".$data['id_perfil']; 
-			$query = $this->db->update_string($tbl, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl, $data, 'id_perfil', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -62,9 +61,8 @@ class perfiles_model extends Base_Model
 		$tbl = $this->dbinfo[0]['db'].'.'.$this->dbinfo[0]['tbl_perfiles'];
 		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl, $data);
+			return $insert;
 		}else{
 			return false;
 		}

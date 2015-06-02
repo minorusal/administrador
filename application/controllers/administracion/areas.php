@@ -214,7 +214,7 @@ class areas extends Base_Controller
 		else
 		{
 			$sqlData = array(
-				 'id_administracion_areas' => $this->ajax_post('id_area')
+				'id_administracion_areas' => $this->ajax_post('id_area')
 				,'area' => $this->ajax_post('area')
 				,'clave_corta' => $this->ajax_post('clave_corta')
 				,'descripcion' => $this->ajax_post('descripcion')

@@ -3,10 +3,8 @@ class clientes_model extends Base_Model{
 
 	function insert_cliente($data){	
 		$tbl1 	= $this->dbinfo[1]['tbl_ventas_clientes'];	
-		$query = $this->db->insert_string($tbl1, $data);
-		$query = $this->db->query($query);
-
-			return $query;
+		$insert = $this->insert_item($tbl1, $data);
+		return $insert;
 	}
 	function consulta_clientes($limit, $offset, $filtro="", $aplicar_limit = true){
 		
@@ -61,9 +59,9 @@ class clientes_model extends Base_Model{
 		$existe = $this->row_exist($tbl1, $condicion);
 		if(!$existe){
 			$condicion = "id_ventas_clientes = $id_cliente"; 
-			$query = $this->db->update_string($tbl1, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$data['id_ventas_clientes'] = $id_cliente;
+			$update    = $this->update_item($tbl1, $data, 'id_ventas_clientes', $condicion);
+			return $update;
 		}else{
 			return false;
 		}

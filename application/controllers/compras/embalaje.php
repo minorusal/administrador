@@ -18,7 +18,7 @@ class embalaje extends Base_Controller {
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'embalaje';
 		$this->icon 			= 'fa fa-road'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #almacen/pasillos/
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #compras/embalaje/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -60,7 +60,7 @@ class embalaje extends Base_Controller {
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->modulo.'/'.$this->view_content; #almacen/content
+		return $this->modulo.'/'.$this->view_content; #compras/content
 	}
 
 	public function index(){

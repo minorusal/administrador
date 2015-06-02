@@ -3,12 +3,12 @@
 class articulos extends Base_Controller { 
 	
 	var $uri_modulo     = 'compras/';
-	var $uri_submodulo  = 'articulos';
+	var $uri_submodulo  = 'catalogos/';
 	var $view_content   = 'content';
+	var $uri_seccion   = 'articulos';
 	
 	public function __construct(){
 		parent::__construct();
-		$this->load->model($this->uri_modulo.'articulos_model');
 		$this->load->model($this->uri_modulo.'catalogos_model');
 		$this->lang->load("compras/articulos","es_ES");
 	}
@@ -46,15 +46,14 @@ class articulos extends Base_Controller {
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado_articulos($offset = 0){
-
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$uri_view    = $this->uri_modulo.'/listado';
-		$limit       = 5;
+		$limit       = 10;
 		$uri_segment = $this->uri_segment(); 
-		$lts_content = $this->articulos_model->get_articulos($limit, $offset, $filtro);
-		$total_rows  = count($this->articulos_model->get_articulos($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'/listado_articulos');
+		$lts_content = $this->catalogos_model->get_articulos($limit, $offset, $filtro);
+		$total_rows  = count($this->catalogos_model->get_articulos($limit, $offset, $filtro, false));
+		$url         = base_url($this->uri_modulo.$this->uri_seccion.'/listado_articulos');
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows>0){
@@ -67,7 +66,6 @@ class articulos extends Base_Controller {
 				$tbl_data[] = array('id'             => $value['articulo'],
 									'articulos'      => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
-									'marca'          => $value['marca'],
 									'linea'          => $value['linea'],
 									'um'             => $value['um'],
 									'descripcion'    => $value['descripcion']);
@@ -78,7 +76,6 @@ class articulos extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("articulos"),
 										$this->lang_item("articulos"),
 										$this->lang_item("cvl_corta"),
-										$this->lang_item("marca"),
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
 										$this->lang_item("descripcion"));
@@ -88,42 +85,31 @@ class articulos extends Base_Controller {
 			
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'/export_xlsx?filtro='.base64_encode($filtro))
+							'href'       => base_url($this->uri_modulo.$this->uri_seccion.'/export_xlsx?filtro='.base64_encode($filtro))
 							);
-		}else{
-			$buttonTPL = "";
-			$msg   = $this->lang_item("msg_query_null");
-			$tabla = alertas_tpl('', $msg ,false);
 		}
+		else{
+				$buttonTPL = "";
+				$msg   = $this->lang_item("msg_query_null");
+				$tabla = alertas_tpl('', $msg ,false);
+			}	
+				$data_tab_2['filtro']         = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
+				$data_tab_2['tabla']          = $tabla;
+				$data_tab_2['export']         = button_tpl($buttonTPL);
+				$data_tab_2['paginador']      = $paginador;
+				$data_tab_2['item_info']      = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
-
+			if($this->ajax_post(false)){
+				echo json_encode( $this->load_view_unique($uri_view , $data_tab_2, true));
+			}else{
+				return $this->load_view_unique($uri_view , $data_tab_2, true);
+			}
 		
-
-		$data_tab_2['filtro']         = ($filtro!="") ? sprintf($this->lang_item("msg_query_search", false),$total_rows , $filtro) : "";
-		$data_tab_2['tabla']          = $tabla;
-		$data_tab_2['export']         = button_tpl($buttonTPL);
-		$data_tab_2['paginador']      = $paginador;
-		$data_tab_2['item_info']      = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-
-
-		if($this->ajax_post(false)){
-			echo json_encode( $this->load_view_unique($uri_view , $data_tab_2, true));
-		}else{
-			return $this->load_view_unique($uri_view , $data_tab_2, true);
-		}
 	}
 	public function agregar_articulo(){
 		
-		$uri_view       = $this->uri_modulo.$this->uri_submodulo.'/articulo_save';
+		$uri_view       = $this->uri_modulo.$this->uri_submodulo.$this->uri_seccion.'/articulo_save';
 		// listas
-		/*$dropArray = array(
-					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
-					,'value' 	=> 'id_compras_presentacion'
-					,'text' 	=> array('clave_corta', 'presentacion')
-					,'name' 	=> "lts_presentaciones"
-					,'class' 	=>  "requerido"
-				);
-		$presentaciones = dropdown_tpl($dropArray);*/
 		$dropArray2 = array(
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
@@ -140,27 +126,15 @@ class articulos extends Base_Controller {
 					,'class' 	=> "requerido"
 					);
 		$um             = dropdown_tpl($dropArray3);
-		$dropArray4 = array(
-					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
-					,'value' 	=> 'id_compras_marca'
-					,'text' 	=> array('clave_corta','marca')
-					,'name' 	=> "lts_marcas"
-					,'class' 	=> "requerido"
-					);
-		$marcas         = dropdown_tpl($dropArray4);
 		// 
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
         $data_tab_1['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
         $data_tab_1['cvl_corta']         = $this->lang_item("cvl_corta",false);
-        $data_tab_1['marca']             = $this->lang_item("marca",false);
-        //$data_tab_1['presentacion']      = $this->lang_item("presentacion",false);
         $data_tab_1['linea']             = $this->lang_item("linea",false);
         $data_tab_1['um']                = $this->lang_item("um",false);
         $data_tab_1['descripcion']       = $this->lang_item("descripcion",false);
-        $data_tab_1['list_marca']        = $marcas;
-        //$data_tab_1['list_presentacion'] = $presentaciones;
         $data_tab_1['list_linea']        = $lineas;
         $data_tab_1['list_um']           = $um;
         $data_tab_1['button_save']       = $btn_save;
@@ -174,17 +148,8 @@ class articulos extends Base_Controller {
 	}
 	public function detalle_articulo(){
 		$id_articulo       = $this->ajax_post('id_articulo');
-		$detalle_articulo  = $this->articulos_model->get_articulo_unico($id_articulo);
+		$detalle_articulo  = $this->catalogos_model->get_articulo_unico($id_articulo);
 		// listas
-		/*$dropArray = array(
-					 'data'		=> $this->catalogos_model->get_presentaciones('','','',false)
-					,'value' 	=> 'id_compras_presentacion'
-					,'text' 	=> array('clave_corta', 'presentacion')
-					,'name' 	=> "lts_presentaciones_detalle"
-					,'class' 	=>  "requerido"
-					,'selected' => $detalle_articulo[0]['id_compras_presentacion']
-				);
-		$presentaciones = dropdown_tpl($dropArray);*/
 		$dropArray2 = array(
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
@@ -193,6 +158,7 @@ class articulos extends Base_Controller {
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_linea']
 				);
+
 		$lineas         = dropdown_tpl($dropArray2);
 		$dropArray3 = array(
 					 'data'		=> $this->catalogos_model->get_um('','','',false)
@@ -202,59 +168,37 @@ class articulos extends Base_Controller {
 					,'class' 	=> "requerido"
 					,'selected' => $detalle_articulo[0]['id_compras_um']
 					);
+
 		$um             = dropdown_tpl($dropArray3);
-		$dropArray4 = array(
-					 'data'		=> $this->catalogos_model->get_marcas('','','',false)
-					,'value' 	=> 'id_compras_marca'
-					,'text' 	=> array('clave_corta','marca')
-					,'name' 	=> "lts_marcas_detalle"
-					,'class' 	=> "requerido"
-					,'selected' => $detalle_articulo[0]['id_compras_marca']
-					);
-		$marcas            = dropdown_tpl($dropArray4);
-		// 
-		$btn_save          = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
-		
-		$btn_enabled       = button_tpl(array( 'text'       => $this->lang_item("delete"), 
+		$btn_save    = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
+		$btn_enabled = button_tpl(array( 'text'       => $this->lang_item("delete"), 
 											   'iconsweets' => 'iconfa-trash',
 											   'event'      => array('event'    => 'onclick',
 											   						 'function' => 'enabled_item',
-							   										 'params'   => array($this->uri_modulo.$this->uri_submodulo.'/enabled', $id_articulo)
+							   										 'params'   => array($this->uri_modulo.$this->uri_seccion.'/enabled', $id_articulo)
 							   										)
-											  			
-		
 												));
-		$data_tab_3['id_articulo']       = $id_articulo;
-		$data_tab_3['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
-		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulo'];
-        $data_tab_3['cvl_corta']         = $this->lang_item("cvl_corta",false);
-        $data_tab_3['cvl_value']         = $detalle_articulo[0]['clave_corta'];
-        $data_tab_3['marca']             = $this->lang_item("marca",false);
-        //$data_tab_3['presentacion']      = $this->lang_item("presentacion",false);
-        $data_tab_3['linea']             = $this->lang_item("linea",false);
-        $data_tab_3['um']                = $this->lang_item("um",false);
-        $data_tab_3['descripcion']       = $this->lang_item("descripcion",false);
-
-        $data_tab_3["lbl_usuario_registro"]    	     = $this->lang_item("lbl_usuario_registro");
-		$data_tab_3["lbl_fecha_registro"]        = $this->lang_item("lbl_fecha_registro");
+		$data_tab_3['id_articulo']       	   = $id_articulo;
+		$data_tab_3['nombre_articulo']   	   = $this->lang_item("nombre_articulo",false);
+        $data_tab_3['cvl_corta']         	   = $this->lang_item("cvl_corta",false);
+        $data_tab_3['linea']             	   = $this->lang_item("linea",false);
+        $data_tab_3['um']                	   = $this->lang_item("um",false);
+        $data_tab_3['descripcion']       	   = $this->lang_item("descripcion",false);
+        $data_tab_3["lbl_usuario_registro"]    = $this->lang_item("lbl_usuario_registro");
+		$data_tab_3["lbl_fecha_registro"]      = $this->lang_item("lbl_fecha_registro");
 		$data_tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
 
-
-        $data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
-        $data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
-        $data_tab_3['list_marca']        = $marcas;
-        //$data_tab_3['list_presentacion'] = $presentaciones;
+		$data_tab_3['articulo_value']    = $detalle_articulo[0]['articulo'];
+		$data_tab_3['cvl_value']         = $detalle_articulo[0]['clave_corta'];
+		$data_tab_3['descripcion_value'] = $detalle_articulo[0]['descripcion'];
+		$data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_linea']        = $lineas;
         $data_tab_3['list_um']           = $um;
         $data_tab_3['button_save']       = $btn_save;
-        $data_tab_3['button_enabled']    = '';//$btn_enabled;
         
         $this->load_database('global_system');
         $this->load->model('users_model');
         
-/*        $usuario_registro               = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
-        $data_tab_3['usuario_registro'] = text_format_tpl($usuario_registro[0]['name'],"u");*/
-
         $usuario_registro                     = $this->users_model->search_user_for_id($detalle_articulo[0]['id_usuario']);
 	    $usuario_name	                      = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $data_tab_3['val_usuarios_registro']  = $usuario_name;
@@ -270,9 +214,7 @@ class articulos extends Base_Controller {
 			$usuario_name = '';
 			$data_tab_3['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
 		}
-        
-		$uri_view    = $this->uri_modulo.$this->uri_submodulo.'/articulo_edit';
-
+        $uri_view       = $this->uri_modulo.$this->uri_submodulo.$this->uri_seccion.'/articulo_edit';
 		
 		echo json_encode( $this->load_view_unique($uri_view ,$data_tab_3, true));
 	}
@@ -284,21 +226,17 @@ class articulos extends Base_Controller {
 		}else{
 			$articulo     = $this->ajax_post('articulo');
 			$clave_corta  = $this->ajax_post('clave_corta');
-			$presentacion = $this->ajax_post('presentacion');
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
-			$marca        = $this->ajax_post('marca');
 			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
-								 'id_compras_marca'=> $marca,
-								 //'id_compras_presentacion'=> $presentacion,
 								 'id_compras_um'=> $um,
 								 'id_usuario' => $this->session->userdata('id_usuario'),
 								 'timestamp'  => $this->timestamp());
-			$insert = $this->articulos_model->insert_articulo($data_insert);
+			$insert = $this->catalogos_model->insert_articulo($data_insert);
 
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
@@ -318,23 +256,19 @@ class articulos extends Base_Controller {
 			$id_articulo  = $this->ajax_post('id_articulo');
 			$articulo     = $this->ajax_post('articulo');
 			$clave_corta  = $this->ajax_post('clave_corta');
-			$presentacion = $this->ajax_post('presentacion');
 			$linea        = $this->ajax_post('linea');
 			$um           = $this->ajax_post('um');
-			$marca        = $this->ajax_post('marca');
 			$descripcion  = $this->ajax_post('descripcion');
 			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
 								 'id_compras_linea'=> $linea,
-								 'id_compras_marca'=> $marca,
-								 //'id_compras_presentacion'=> $presentacion,
 								 'edit_timestamp' => $this->timestamp(),
 								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
 								 'id_compras_um'=> $um);
 
 	
-			$insert = $this->articulos_model->update_articulo($data_update,$id_articulo);
+			$insert = $this->catalogos_model->update_articulo($data_update,$id_articulo);
 
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
@@ -347,18 +281,16 @@ class articulos extends Base_Controller {
 	}
 	public function enabled(){
 		$item     =  array('id_compras_articulo=' => $this->ajax_post('item'));
-		$enabled  = $this->articulos_model->enabled_item('av_compras_articulos', $item);
+		$enabled  = $this->catalogos_model->enabled_item('av_compras_articulos', $item);
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
-		$lts_content = $this->articulos_model->get_articulos('', '', $filtro , false);
+		$lts_content = $this->catalogos_model->get_articulos('', '', $filtro , false);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
 									 $value['articulo'],
 									 $value['clave_corta'],
-									 $value['marca'],
-									 //$value['presentacion'],
 									 $value['linea'],
 									 $value['um'],
 									 $value['descripcion']);
@@ -367,12 +299,9 @@ class articulos extends Base_Controller {
 			$set_heading = array(
 									$this->lang_item("articulos"),
 									$this->lang_item("cvl_corta"),
-									$this->lang_item("marca"),
-									//$this->lang_item("presentacion"),
 									$this->lang_item("lineas"),
 									$this->lang_item("u.m."),
 									$this->lang_item("descripcion"));
-	
 		}
 
 		$params = array(	'title'   => $this->lang_item("seccion"),

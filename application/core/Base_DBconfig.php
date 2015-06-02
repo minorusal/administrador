@@ -63,7 +63,8 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_presentaciones'		 =>	'av_compras_presentaciones'
 					 	,'tbl_compras_proveedores'			 =>	'av_compras_proveedores'
 					 	,'tbl_compras_proveedores_articulos' =>	'av_compras_proveedores_articulos'
-					 	,'tbl_compras_um'					 =>	'av_compras_um'					 	
+					 	,'tbl_compras_um'					 =>	'av_compras_um'	
+					 	,'tbl_compras_embalaje' 			 => 'av_compras_embalaje'				 	
 					 	,'tbl_ventas_clientes'				 =>	'av_ventas_clientes'
 					 	,'tbl_ventas_vendedores'			 =>	'av_ventas_vendedores'
 					 	

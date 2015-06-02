@@ -32,23 +32,20 @@ class ordenes_model extends Base_Model{
 	}
 	public function db_get_data($data=array()){	
 		// DB Info
-			//$db1 	= $this->dbinfo[1]['db'];
-			//$tbl1 	= $this->dbinfo[1]['vw_compras_orden_proveedores'];
-		//$db1 	= $this->dbinfo[1]['db'];
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_ordenes'];
 		$tbl2 	= $this->dbinfo[1]['tbl_compras_proveedores'];
 		$tbl3 	= $this->dbinfo[1]['tbl_compras_ordenes_estatus'];
 		// Filtro
-		$buscar = (isset($data['buscar']))?$data['buscar']:false;
-		$filtro = ($buscar) ? "and (orden_num LIKE '$buscar%' 
-							   or razon_social LIKE '$buscar%'
-							   or descripcion LIKE '$buscar%'
-							   )" 
-							: "";
-		// Limit
+		$filtro = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+
+		$filtro = ($filtro=="") ? "and (orden_num LIKE '$filtro%' 
+							   or razon_social LIKE '$filtro%'
+							   or descripcion LIKE '$filtro%'
+							   )" 
+							: "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		// Query
 		$query="SELECT 
@@ -65,7 +62,6 @@ class ordenes_model extends Base_Model{
 				WHERE a.estatus = 1 AND 1  $filtro
 				GROUP BY orden_num ASC
 				$limit";
-		 //dump_var($query);
       	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -135,7 +131,7 @@ class ordenes_model extends Base_Model{
 					WHERE 1 $filtro
 					GROUP BY orden_num ASC
 					";
-		// dump_var($query);
+		 dump_var($query);
       	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){

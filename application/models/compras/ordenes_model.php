@@ -8,10 +8,8 @@ class ordenes_model extends Base_Model{
 		// Query
 		$existe = $this->row_exist($db1.'.'.$tbl1,array('orden_num ='=> $data['orden_num']));
 		if(!$existe){
-			$query = $this->db->insert_string($db1.'.'.$tbl1, $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item($db1.'.'.$tbl1, $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -25,8 +23,8 @@ class ordenes_model extends Base_Model{
 		$id_compras_orden   = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
 		$filtro 			= ($id_compras_orden)?"id_compras_orden='$id_compras_orden'":'';
 		if($id_compras_orden){
-			$query 		= $this->db->update_string($db1.'.'.$tbl1, $data, $filtro);
-			$resultado 	= $this->db->query($query);
+			$update    = $this->update_item($db1.'.'.$tbl1, $data, 'id_compras_orden', $filtro);
+			return $update;
 		}
 		return $resultado;
 	}

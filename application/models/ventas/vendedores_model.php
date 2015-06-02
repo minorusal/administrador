@@ -56,11 +56,8 @@ class vendedores_model extends Base_Model{
 	}
 	function insert_vendedor($data){
 		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
-
-		$query = $this->db->insert_string($tbl1, $data);
-		$query = $this->db->query($query);
-
-			return $query;
+		$insert = $this->insert_item($tbl1, $data);
+		return $insert;
 	}
 	function update_vendedor($data, $id_vendedor){
 		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
@@ -69,9 +66,8 @@ class vendedores_model extends Base_Model{
 		$existe = $this->row_exist($tbl1 , $condicion);
 		if(!$existe){
 			$condicion = "id_ventas_vendedores = $id_vendedor"; 
-			$query = $this->db->update_string($tbl1, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl1, $data, 'id_ventas_vendedores', $condicion);
+			return $update;
 		}else{
 			return false;
 		}

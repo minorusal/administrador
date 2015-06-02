@@ -60,9 +60,8 @@ class sucursales_model extends Base_Model
 		$existe = $this->row_exist($tbl_sucursales, $condicion);
 		if(!$existe){
 			$condicion = "id_sucursal = ".$data['id_sucursal']; 
-			$query = $this->db->update_string($tbl_sucursales, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl_sucursales, $data, 'id_sucursal', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -74,9 +73,8 @@ class sucursales_model extends Base_Model
 		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
 		$existe = $this->row_exist($tbl_sucursales, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl_sucursales, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl_sucursales, $data);
+			return $insert;
 		}else{
 			return false;
 		}

@@ -178,7 +178,7 @@ class impuestos extends Base_Controller
         $tabData['descripcion']            = $detalle[0]['descripcion'];
         $tabData["valor"]                  = $detalle[0]['valor'];
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
         
@@ -301,7 +301,7 @@ class impuestos extends Base_Controller
 								 'clave_corta'  => $clave_corta,
 								 'descripcion'  => $descripcion,
 								 'id_usuario'   => $this->session->userdata('id_usuario'),  
-								 'registro'     => $this->timestamp());
+								 'timestamp'     => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
 			if($insert){

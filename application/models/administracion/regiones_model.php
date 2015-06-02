@@ -5,6 +5,8 @@ class regiones_model extends Base_Model
 	public function db_get_data($data=array())
 	{
 		$tbl            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_regiones'];
+		$tb2            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
+		$tb3            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -15,18 +17,48 @@ class regiones_model extends Base_Model
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT 
-						 *
-					FROM $tbl re
+						 re.id_administracion_region,
+						 re.region,
+						 re.clave_corta,
+						 re.descripcion,
+						 en.entidad,
+						 en.id_administracion_entidad
+					FROM   $tb3 er
+					INNER JOIN $tb2 en on en.id_administracion_entidad = er.id_entidad
+					INNER JOIN $tbl re on re.id_administracion_region = er.id_region 
 					WHERE re.activo = 1 $filtro
 					GROUP BY re.id_administracion_region ASC
 					$limit
 					";
+					//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
+			//print_debug($query->result_array());
 			return $query->result_array();
 		}	
 	}
 
+	/*Trae las entidades y regiones relacionadas */
+	public function get_entidades_regiones($id_administracion_region)
+	{
+		$tbl            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_regiones'];
+		$tb2            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
+		$tb3            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
+		$query = "	SELECT 
+						 re.id_administracion_region,
+						 re.region,
+						 en.entidad,
+						 en.id_administracion_entidad
+					FROM   $tb3 er
+					INNER JOIN $tb2 en on en.id_administracion_entidad = er.id_entidad
+					INNER JOIN $tbl re on re.id_administracion_region = er.id_region 
+					WHERE re.activo = 1 
+					GROUP BY re.id_administracion_region ASC";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 	/*Trae la información para el formulario de edición de la tabla av_administracion_areas*/
 	public function get_orden_unico_region($id_administracion_region)
 	{

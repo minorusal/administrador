@@ -53,10 +53,8 @@ class catalogos_model extends Base_Model{
 	public function insert_presentacion($data){
 		$existe = $this->row_exist('av_compras_presentaciones', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_presentaciones', $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item('av_compras_presentaciones', $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -66,9 +64,9 @@ class catalogos_model extends Base_Model{
 		$existe = $this->row_exist('av_compras_presentaciones', $condicion);
 		if(!$existe){
 			$condicion = "id_compras_presentacion = $id_presentacion"; 
-			$query = $this->db->update_string('av_compras_presentaciones', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$data['id_compras_presentacion'] =  $id_presentacion;
+			$update    = $this->update_item('av_compras_presentaciones', $data, 'id_compras_presentacion', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -111,10 +109,8 @@ class catalogos_model extends Base_Model{
 	public function insert_linea($data){
 		$existe = $this->row_exist('av_compras_lineas', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_lineas', $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item('av_compras_lineas', $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -124,9 +120,9 @@ class catalogos_model extends Base_Model{
 		$existe = $this->row_exist('av_compras_lineas', $condicion);
 		if(!$existe){
 			$condicion = "id_compras_linea = $id_linea"; 
-			$query = $this->db->update_string('av_compras_lineas', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$data['id_compras_linea'] =  $id_linea;
+			$update    = $this->update_item('av_compras_lineas', $data, 'id_compras_linea', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -170,10 +166,8 @@ class catalogos_model extends Base_Model{
 	public function insert_marca($data){
 		$existe = $this->row_exist('av_compras_marcas', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_marcas', $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item('av_compras_marcas', $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -183,9 +177,9 @@ class catalogos_model extends Base_Model{
 		$existe = $this->row_exist('av_compras_marcas', $condicion);
 		if(!$existe){
 			$condicion = "id_compras_marca = $id_marca"; 
-			$query = $this->db->update_string('av_compras_marcas', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$data['id_compras_marca'] =  $id_marca;
+			$update    = $this->update_item('av_compras_marcas', $data, 'id_compras_marca', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -229,10 +223,8 @@ class catalogos_model extends Base_Model{
 	public function insert_um($data){
 		$existe = $this->row_exist('av_compras_um', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_um', $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item('av_compras_um', $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -242,9 +234,9 @@ class catalogos_model extends Base_Model{
 		$existe = $this->row_exist('av_compras_um', $condicion);
 		if(!$existe){
 			$condicion = "id_compras_um = $id_um"; 
-			$query = $this->db->update_string('av_compras_um', $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$data['id_compras_um'] =  $id_um;
+			$update    = $this->update_item('av_compras_um', $data, 'id_compras_um', $condicion);
+			return $update;
 		}else{
 			return false;
 		}

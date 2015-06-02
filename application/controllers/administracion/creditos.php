@@ -176,7 +176,7 @@ class creditos extends Base_Controller
         $tabData['descripcion']            = $detalle[0]['descripcion'];
         $tabData["valor_credito"]          = $detalle[0]['valor_credito'];
         $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
         
@@ -299,7 +299,7 @@ class creditos extends Base_Controller
 								 'clave_corta'     => $clave_corta,
 								 'descripcion'     => $descripcion,
 								 'id_usuario'      => $this->session->userdata('id_usuario'),  
-								 'registro'        => $this->timestamp());
+								 'timestamp'        => $this->timestamp());
 			//print_debug($data_insert);
 			$insert = $this->db_model->db_insert_data($data_insert);
 			

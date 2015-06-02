@@ -4,10 +4,8 @@ class articulos_model extends Base_Model{
 	public function insert_articulo($data){
 		$existe = $this->row_exist('av_compras_articulos', array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_articulos', $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item('av_compras_articulos', $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -17,10 +15,8 @@ class articulos_model extends Base_Model{
 		$existe = $this->row_exist('av_compras_articulos', $condicion);
 		if(!$existe){
 			$condicion = "id_compras_articulo = $id_articulo"; 
-			$query = $this->db->update_string('av_compras_articulos', $data, $condicion);
-			//print_debug($query);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item('av_compras_articulos', $data, 'id_compras_articulo', $condicion);
+			return $update;
 		}else{
 			return false;
 		}

@@ -99,6 +99,7 @@ class regiones extends Base_Controller
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content = $this->db_model->db_get_data($sqlData);
+		//print_debug($list_content);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows)
@@ -159,11 +160,13 @@ class regiones extends Base_Controller
 		$detalle     = $this->db_model->get_orden_unico_region($id_region);
 		$seccion     = $this->tab3;
 		$tab_detalle = $this->tab3;
+		$ent_reg     = $this->db_model->get_entidades_regiones($id_region);
 		$entidades_array = array(
 					 'data'		=> $this->db_model2->get_entidades_default()
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
+					,'insert' 	=> true
 					,'class' 	=> "requerido"
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
@@ -179,9 +182,9 @@ class regiones extends Base_Controller
 		$tabData['txt_descripcion'] = $detalle[0]['descripcion'];
 		$tabData['list_entidad'] = $entidades;
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
-        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
-		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro');
-		$tabData['lbl_usuario_registro']   = $this->lang_item('lbl_usuario_registro');
+        $tabData['val_fecha_registro']      = $detalle[0]['registro'];
+		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
 
 		$this->load_database('global_system');
         $this->load->model('users_model');

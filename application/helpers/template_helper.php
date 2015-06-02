@@ -154,9 +154,11 @@
 				$class 		= (isset($params['class']))?$params['class']:'';
 				$event 		= (isset($params['event']))?$params['event']:'';
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+				$insert     = $params['insert'];
 			}
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
+
 			if($data && $name && $value && $text){
 				foreach ($data as $option => $item) {
 					$option_value = "";
@@ -170,20 +172,25 @@
 					}					
 					$count++;
 				}
+				if($insert)
+					print_debug($options);
+					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
+				else
+					$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
 				$selected = "<span id='dualselect' class='dualselect'>"
-								.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
-				                ."<span class='ds_arrow'>
-				                	<button class='btn ds_prev'>
-								    	<i class='iconfa-chevron-left'>
-								    	</i>
-								    </button>
-								    <br>
-								    <button class='btn ds_next'>
-								    	<i class='iconfa-chevron-right'>
-								        </i>
+							.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
+				               ."<span class='ds_arrow'>
+				               	<button class='btn ds_prev'>
+							    	<i class='iconfa-chevron-left'>
+							    	</i>
+							    </button>
+							    <br>
+							    <button class='btn ds_next'>
+							    	<i class='iconfa-chevron-right'>
+							        </i>
 								    </button>
 				              		</span>"
-				              	.form_multiselect('list',array(),$selected,"multiple='multiple' class='requerido' size='10'")
+				              	.$multiple
 				            ."</span>";
 				return $selected;
 			}

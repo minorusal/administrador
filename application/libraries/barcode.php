@@ -24,7 +24,7 @@ class barcode extends config_vars{
     protected $archivo;
     
     function __construct(){
-        $this->load_vars();
+        $this->load_vars('assets/cfg/ticket.cfg');
         $this->barcode_encode   = $this->var['ticket']['barscode_encode'];
         $this->font_name        = APPPATH.'third_party/barcode/font/Arial.ttf';
         $this->font_size        = $this->var['ticket']['barscode_font_size'];

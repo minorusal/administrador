@@ -14,7 +14,7 @@ class codeqr extends QRcode{
     
     function __construct(){
         $vars = new config_vars();
-        $vars->load_vars();
+        $vars->load_vars('assets/cfg/ticket.cfg');
         $this->archivo              = $vars->cfg['path_tmp'].'qrcode.png';
         $this->errorCorrectionLevel = $vars->var['ticket']['qrcode_error_correction_level']; #'L','M','Q','H'
         $this->matrixPointSize      = $vars->var['ticket']['qrcode_point_size']; # 1-10

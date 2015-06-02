@@ -309,7 +309,7 @@ function values_requeridos(){
         }
     });
 
-    return items_vacios;
+    //return items_vacios;
 }
 
 function alertas_tpl(type , mensaje ,close){

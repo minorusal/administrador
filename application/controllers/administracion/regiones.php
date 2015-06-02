@@ -140,15 +140,17 @@ class regiones extends Base_Controller
 								,'id_usuario'      => $this->session->userdata('id_usuario')
 								,'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
+			
 			$region = $this->db->insert_id($insert);
 			foreach($entidades as $item => $valor)
 			{
 				$insertar = array('id_entidad' => $valor,
-								  'id_region'  => $region );
-				$insert2 = $this->db_model->db_insert_entidades($insertar);
+								  'id_region'  => $region);
+				//$insert = (isset($valor))?$this->db_model->db_insert_entidades($insertar):false;
+				$insert = $this->db_model->db_insert_entidades($insertar);
 			}
-			
-			if($insert && $insert2){
+
+			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{

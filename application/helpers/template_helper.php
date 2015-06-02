@@ -183,7 +183,7 @@
 								        </i>
 								    </button>
 				              		</span>"
-				              	.form_multiselect($nameDestino,$options,$selected,"multiple='multiple' class='$class' size='10'")
+				              	.form_multiselect($nameDestino,$options,$selected,"multiple='multiple' class='requerido' size='10'")
 				            ."</span>";
 				return $selected;
 			}

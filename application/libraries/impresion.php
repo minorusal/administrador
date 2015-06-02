@@ -17,8 +17,8 @@ class impresion extends config_vars{
 
 	public function __construct(){
 		$this->load_vars();
-		$this->impresora 	= $this->cfg['path_impresora'];
-		$this->logo 	 	= $this->cfg['path_img'].$this->cfg['ticket_logo_img'];
+		$this->impresora 	= $this->var['ticket']['path_impresora'];
+		$this->logo 	 	= $this->cfg['path_img'].$this->var['ticket']['ticket_logo_img'];
 		$this->footer 		= true;
 		$this->respuesta 	= false;
 		$this->formato 		= false;
@@ -60,39 +60,39 @@ class impresion extends config_vars{
 				if($this->formato){
 					if(file_exists($this->logo)){
 						// Imagen BMP - Logo	
-						printer_draw_bmp($this->ph, $this->logo, $this->cfg['ticket_logo_x'], $this->cfg['ticket_logo_y'], $this->cfg['ticket_logo_w'], $this->cfg['ticket_logo_h']);
-						$salto_linea = $this->cfg['ticket_logo_salto'];
+						printer_draw_bmp($this->ph, $this->logo, $this->var['ticket']['ticket_logo_x'], $this->var['ticket']['ticket_logo_y'], $this->var['ticket']['ticket_logo_w'], $this->var['ticket']['ticket_logo_h']);
+						$salto_linea = $this->var['ticket']['ticket_logo_salto'];
 					}
 					// Crear formato de texto
-					$estilo = printer_create_font($this->cfg['ticket_formato_font'], $this->cfg['ticket_formato_h'], $this->cfg['ticket_formato_w'], $this->cfg['ticket_formato_font_w'], $this->cfg['ticket_formato_font_italic'], $this->cfg['ticket_formato_font_underline'], $this->cfg['ticket_formato_font_strikeout'], $this->cfg['ticket_formato_font_orientation']);    
+					$estilo = printer_create_font($this->var['ticket']['ticket_formato_font'], $this->var['ticket']['ticket_formato_h'], $this->var['ticket']['ticket_formato_w'], $this->var['ticket']['ticket_formato_font_w'], $this->var['ticket']['ticket_formato_font_italic'], $this->var['ticket']['ticket_formato_font_underline'], $this->var['ticket']['ticket_formato_font_strikeout'], $this->var['ticket']['ticket_formato_font_orientation']);    
 					printer_select_font($this->ph, $estilo);
 					// Contenido					
 					if($isfile){
 						$txtArray = $this->texto;
 						for($i=0; $i<count($txtArray); $i++){
-							printer_draw_text($this->ph, $txtArray[$i], $this->cfg['ticket_contenido_x'], $salto_linea); #Izq; Alto
-							$salto_linea+=$this->cfg['ticket_contenido_salto'];
+							printer_draw_text($this->ph, $txtArray[$i], $this->var['ticket']['ticket_contenido_x'], $salto_linea); #Izq; Alto
+							$salto_linea+=$this->var['ticket']['ticket_contenido_salto'];
 						}					
 					}else{						
-						printer_draw_text($this->ph, $this->texto, $this->cfg['ticket_contenido_x'], $salto_linea);						
+						printer_draw_text($this->ph, $this->texto, $this->var['ticket']['ticket_contenido_x'], $salto_linea);						
 					}
 					// Eliminar formato de texto
 					printer_delete_font($estilo);
 					// Codigo de Barras
 					if($this->codebar && file_exists($this->codebar)){
-						printer_draw_bmp($this->ph, $this->codebar, $this->cfg['ticket_barscode_x'], $salto_linea, $this->cfg['ticket_barscode_w'], $this->cfg['ticket_barscode_h']);
-						$salto_linea+=$this->cfg['ticket_barscode_salto'];
+						printer_draw_bmp($this->ph, $this->codebar, $this->var['ticket']['ticket_barscode_x'], $salto_linea, $this->var['ticket']['ticket_barscode_w'], $this->var['ticket']['ticket_barscode_h']);
+						$salto_linea+=$this->var['ticket']['ticket_barscode_salto'];
 					}
 					// Codigo QR
 					if($this->codeqr && file_exists($this->codeqr)){
-						printer_draw_bmp($this->ph, $this->codeqr, $this->cfg['ticket_qrcode_x'], $salto_linea, $this->cfg['ticket_qrcode_w'], $this->cfg['ticket_qrcode_h']);
-						$salto_linea+=$this->cfg['ticket_qrcode_salto'];						
+						printer_draw_bmp($this->ph, $this->codeqr, $this->var['ticket']['ticket_qrcode_x'], $salto_linea, $this->var['ticket']['ticket_qrcode_w'], $this->var['ticket']['ticket_qrcode_h']);
+						$salto_linea+=$this->var['ticket']['ticket_qrcode_salto'];						
 					}
 					// Footer
 					if($this->footer){
-						$estilo = printer_create_font($this->cfg['ticket_formato_footer_font'], $this->cfg['ticket_formato_footer_h'], $this->cfg['ticket_formato_footer_w'], $this->cfg['ticket_formato_footer_font_w'], $this->cfg['ticket_formato_footer_font_italic'], $this->cfg['ticket_formato_footer_font_underline'], $this->cfg['ticket_formato_footer_font_strikeout'], $this->cfg['ticket_formato_footer_font_orientation']);    
+						$estilo = printer_create_font($this->var['ticket']['ticket_formato_footer_font'], $this->var['ticket']['ticket_formato_footer_h'], $this->var['ticket']['ticket_formato_footer_w'], $this->var['ticket']['ticket_formato_footer_font_w'], $this->var['ticket']['ticket_formato_footer_font_italic'], $this->var['ticket']['ticket_formato_footer_font_underline'], $this->var['ticket']['ticket_formato_footer_font_strikeout'], $this->var['ticket']['ticket_formato_footer_font_orientation']);    
 						printer_select_font($this->ph, $estilo);
-						printer_draw_text($this->ph, date('Y-m-d H:i:s'), $this->cfg['ticket_footer_x'], $salto_linea);
+						printer_draw_text($this->ph, date('Y-m-d H:i:s'), $this->var['ticket']['ticket_footer_x'], $salto_linea);
 						printer_delete_font($estilo);
 					}
 				}else{

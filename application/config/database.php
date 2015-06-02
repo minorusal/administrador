@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once(APPPATH.'libraries/config_vars.php');
 $vars = new config_vars();
-$vars->load_vars();
+$vars->load_vars('assets/cfg/db.cfg');
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS

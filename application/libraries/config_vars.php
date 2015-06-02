@@ -9,45 +9,81 @@
 */
 class config_vars {
 	public $cfg, $db, $var;
-	public function load_vars($filename='assets/cfg/config.ini') {
-	#Carga información de configuración de un archivo config.ini.
-		try {			
-			if (file_exists($filename)) {
-		        if ($handle = fopen($filename, 'r')) {
-		        	$varsList = array('cfg','var','db');
-		        	$val = '';
-		            while (!feof($handle)) {
-		                @list($type, $name, $value) = preg_split("/\||=/", fgets($handle), 3);                              
-						$value = utf8_encode($value);
-						if (trim($type)=='cfg') { 
-						#CFG vars
-							$this->cfg[trim($name)] = trim($value);
-						}
-						if (trim($type)=='var') { 
-						#VAR vars
-							$this->var[trim($name)] = trim($value);
-						}
-						if (trim($type)=='db') { 
-						#DB vars
-							$this->db[trim($name)] = trim($value);					
-						}				
-						if (in_array(trim($type),$varsList)) { 
-						#Print for Debug
-						 	$val.=$type.' | '.$name.' = '.$value."<br/>\n\r";
-						}
-		            }	            
-		        }	        
-				return $val;
-			}else{
-				$msj = "¡ERROR CRÍTICO!<br/> No se ha logrado cargar el archivo de configuración, por favor, contacte al administrador del sistema.<br/>";
-		    	throw new Exception($msj, 1);    	
-		    }	
-		} catch (Exception $e) {		
-			print($e->getMessage());
-			return false;
+
+	public function lista_archivos($directorio){
+	// Devuelve arrreglo con los nombres de los archivos contenidos en un directorio
+	   if (is_dir($directorio)) {
+	      if ($dh = opendir($directorio)) {
+	         while (($file = readdir($dh)) !== false) {
+				#if($file!='.' && $file!='..'){
+				if(filetype($directorio . $file)!='dir'){
+	            	$files[]=$file;
+				}            
+	         }
+	      closedir($dh);
+	      }
+	      return $files;
+	   }else
+	      return false;
+	}  
+
+	public function load_vars($cfg_path='assets/cfg/') {
+	#Lee directorio y cargar infomación de archivos contenidos [*.cfg]
+		$val = '';
+		// Deteccion de directorio o archivo
+		if(is_dir($cfg_path)){
+			$filename = $this->lista_archivos($cfg_path);
+			$pathfile = $cfg_path;
+		}else{
+			$filename = array($cfg_path);
+			$pathfile = '';
+		}
+		if($filename){
+			// Recorrido de archivo encontrados
+			for($i=0; $i<count($filename); $i++){
+				$file = $pathfile.$filename[$i];
+				$module = explode('.',$filename[$i]);
+				try {			
+					if (file_exists($file)) {
+				        if ($handle = fopen($file, 'r')) {				        	
+				        	$varsList = array('cfg','var','db');				        	
+				            while (!feof($handle)) {
+				            // Establece valores encontrados en las variables
+				                @list($type, $name, $value) = preg_split("/\||=/", fgets($handle), 3);                              
+								$value = utf8_encode($value);
+								if (trim($type)=='var') { 
+								#VAR vars
+									$this->var[$module[0]][trim($name)] = trim($value);
+									$m = ($module[0])?$module[0].' | ':'';
+								}else{$m='';}
+								if (trim($type)=='cfg') { 
+								#CFG vars
+									$this->cfg[trim($name)] = trim($value);
+								}
+								if (trim($type)=='db') { 
+								#DB vars
+									$this->db[trim($name)] = trim($value);					
+								}				
+								if (in_array(trim($type),$varsList)) { 
+								#Print for Debug									
+								 	$val.=$filename[$i].' | '.$type.' | '.$m.$name.' = '.$value."<br/>\n\r";
+								}
+				            }	            
+				        }	        						
+					}else{
+						$msj = utf8_decode("¡ERROR CRÍTICO!<br/> No se ha logrado cargar el archivo de configuración <".$file.">, por favor, contacte al administrador del sistema.<br/>");
+				    	throw new Exception($msj, 1);    	
+				    	return false;
+				    }	
+				} catch (Exception $e) {		
+					print($e->getMessage());
+					return false;
+				}
+			}
+			return $val;
 		}	   
 	}
 }
-// config_vars::load_file();
+
 /*O3M*/
 ?>

@@ -296,10 +296,16 @@ function values_requeridos(){
     var items_vacios = 0;
     jQuery(".requerido").each(function(){ 
         if(jQuery(this).prop('tagName')=='SELECT'){
-            var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
-            
-            if(select.val()==0){
-                items_vacios++
+            if(jQuery(this).attr('multiple', 'multiple')){
+                if(jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
+                }else{
+                   items_vacios++; 
+                }
+            }else{
+               var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
+                if(select.val()==0){
+                    items_vacios++
+                } 
             }
         }else{
             if(jQuery(this).val() == ''){
@@ -308,8 +314,7 @@ function values_requeridos(){
             } 
         }
     });
-
-    //return items_vacios;
+    return items_vacios;
 }
 
 function alertas_tpl(type , mensaje ,close){

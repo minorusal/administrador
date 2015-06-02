@@ -54,7 +54,7 @@ function load_content(uri, id_content){
 }
 
 function agregar(){
-	var btn     = jQuery("button[name='save_region']");
+	/*var btn     = jQuery("button[name='save_region']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var entidades = [];
@@ -89,7 +89,8 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	});
+	});*/
 	
 	//clean_formulario();
+	values_requeridos();
 }

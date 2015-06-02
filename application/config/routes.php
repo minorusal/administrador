@@ -53,6 +53,9 @@ $route['logout']                   = 'login/logout';
 
 /*COMPRAS*/
 
+/*Catalogo Articulos*/
+$route['compras/catalogos/articulos']                               = 'compras/articulos/index';
+
 /*Catalogo Presentaciones*/
 $route['compras/catalogos/presentaciones']                               = 'compras/presentaciones/index';
 $route['compras/catalogos/presentaciones/listado_presentaciones']        = 'compras/presentaciones/listado_presentaciones';

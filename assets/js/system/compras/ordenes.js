@@ -43,6 +43,7 @@ function load_content(uri, id_content){
            }else{
           	 	functions.push('jQuery(".chzn-select").chosen();');
           	 	functions.push('calendar_dual("orden_fecha","entrega_fecha")');
+          	 	//functions.push('calendar_dual(fecha1,fecha2)');
           	 	//functions.push(fecha2);
            		jQuery('#a-'+id_content).html(data+include_script(functions));
            		

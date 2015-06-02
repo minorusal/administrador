@@ -44,7 +44,7 @@ function buscar(){
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();
 		}
-	})
+	});
 }
 
 function detalle(id_area){

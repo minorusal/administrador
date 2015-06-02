@@ -38,7 +38,7 @@ class areas_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de la tabla av_administracion_areas*/
-	public function get_orden_unico_puesto($id_administracion_areas)
+	public function get_orden_unico_area($id_administracion_areas)
 	{
 		$tbl   = $this->db1.'.'.$this->tbl1;
 		$query = "SELECT * FROM $tbl WHERE id_administracion_areas = $id_administracion_areas";

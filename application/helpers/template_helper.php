@@ -169,7 +169,7 @@
 						$options[$item[$value]]= $item[$text];
 					}					
 					$count++;
-				}$nameDestino = 'list';
+				}
 				$selected = "<span id='dualselect' class='dualselect'>"
 								.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
 				                ."<span class='ds_arrow'>
@@ -183,7 +183,7 @@
 								        </i>
 								    </button>
 				              		</span>"
-				              	.form_multiselect($nameDestino,$options,$selected,"multiple='multiple' class='requerido' size='10'")
+				              	.form_multiselect('list',array(),$selected,"multiple='multiple' class='requerido' size='10'")
 				            ."</span>";
 				return $selected;
 			}

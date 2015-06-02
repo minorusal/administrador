@@ -9,22 +9,8 @@
 		<input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlargue requerido" value="{txt_clave_corta}" />
 	</p>
 	<p>
-    	<label>{lbl_entidades}: </label>
-        <select class="uniformselect" name="select3" multiple="multiple" size="10">
-        </select>
-        <span class="ds_arrow">
-        	<button class="btn ds_prev">
-        		<i class="iconfa-chevron-left">
-        		</i>
-        	</button>
-        	<br/>
-        	<button class="btn ds_next">
-        		<i class="iconfa-chevron-right">
-        		</i>
-        	</button>
-        </span>
-        <select id="select_entidades" class="select4" multiple="multiple" size="10">
-        </select>
+        <label>{lbl_entidades}: (*)</label>
+        {list_entidad}
     </p>
 	<p>
 		<label>{lbl_fecha_registro}: </label>

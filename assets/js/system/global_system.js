@@ -25,9 +25,8 @@ function config_datepicker(){
         dayNames: days_timepicker,
         dayNamesShort: days_timepicker,
         dayNamesMin: days_timepicker,
-        weekHeader: 'Sm',
         dateFormat: 'dd/mm/yy',
-        firstDay: 7,
+        firstDay: 0,
         isRTL: false,
         showMonthAfterYear: false,
         yearSuffix: ''

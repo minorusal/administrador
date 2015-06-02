@@ -24,12 +24,12 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
-           		var db   = jQuery('#dualselect').find('.ds_arrow button');	//get arrows of dual select
-				var sel1 = jQuery('#dualselect select:first-child');		//get first select element
-				var sel2 = jQuery('#dualselect select:last-child');			//get second select element
-				sel2.empty(); //empty it first from dom.
+           		var db   = jQuery('#dualselect').find('.ds_arrow button');	
+				var sel1 = jQuery('#dualselect select:first-child');		
+				var sel2 = jQuery('#dualselect select:last-child');			
+				sel2.empty(); 
 				db.click(function(){
-					var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;	// 0 if arrow prev otherwise arrow next
+					var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;	
 					if(t){
 						sel1.find('option').each(function(){
 						if(jQuery(this).is(':selected')){
@@ -54,7 +54,7 @@ function load_content(uri, id_content){
 }
 
 function agregar(){
-	/*var btn     = jQuery("button[name='save_region']");
+	var btn     = jQuery("button[name='save_region']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var entidades = [];
@@ -89,8 +89,85 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	});*/
-	
-	//clean_formulario();
-	values_requeridos();
+	});
+}
+
+function actualizar(){
+	jQuery('#mensajes_update').hide();
+	var btn             = jQuery("button[name='actualizar']");
+	btn.attr('disabled','disabled');
+
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"administracion/areas/actualizar",
+		dataType: "json",
+		data: objData,
+		beforeSend : function(){
+			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');		
+			jQuery("#mensajes_update").html(data.contenido).show('slow');
+			jQuery("#update_loader").html('');
+		}
+	})
+}
+
+function buscar(){
+	var filtro = jQuery('#search-query').val();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"administracion/regiones/listado",
+		dataType: "json",
+		data: {filtro : filtro},
+		beforeSend : function(){
+			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			var funcion = 'buscar';
+        	jQuery("#loader").html('');
+        	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+			jQuery('#search-query').val(filtro).focus();
+			tool_tips();
+		}
+	})
+}
+
+function detalle(id_region){
+	jQuery('#ui-id-2').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"administracion/regiones/detalle",
+        dataType: 'json',
+        data: {id_region : id_region},
+        success: function(data){
+        	jQuery('#a-0').html('');
+        	jQuery('#a-2').html(data);
+        	jQuery('#ui-id-2').show('slow');
+        	var db   = jQuery('#dualselect').find('.ds_arrow button');	
+				var sel1 = jQuery('#dualselect select:first-child');		
+				var sel2 = jQuery('#dualselect select:last-child');			
+				sel2.empty(); 
+				db.click(function(){
+					var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;	
+					if(t){
+						sel1.find('option').each(function(){
+						if(jQuery(this).is(':selected')){
+							jQuery(this).attr('selected',false);
+							var op = sel2.find('option:first-child');
+							sel2.append(jQuery(this));
+						}
+						});	
+					}else{
+						sel2.find('option').each(function(){
+							if(jQuery(this).is(':selected')){
+								jQuery(this).attr('selected',false);
+								sel1.append(jQuery(this));
+							}
+						});
+					}
+					return false;
+				});
+        }
+    });
 }

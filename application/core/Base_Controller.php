@@ -496,13 +496,14 @@ class Base_Controller extends CI_Controller {
     */
     public function days($index = false, $sub = false){
 		if($sub){
-			$days[0]= substr($this->lang_item('lunes',false), 0, $sub);
-			$days[1]= substr($this->lang_item('martes',false), 0, $sub);
-			$days[2]= substr($this->lang_item('miercoles',false), 0, $sub);
-			$days[3]= substr($this->lang_item('jueves',false), 0, $sub);
-			$days[4]= substr($this->lang_item('viernes',false), 0, $sub);
-			$days[5]= substr($this->lang_item('sabado',false), 0, $sub);
-			$days[6]= substr($this->lang_item('domingo',false), 0, $sub);
+			$days[0]= substr($this->lang_item('domingo',false), 0, $sub);
+			$days[1]= substr($this->lang_item('lunes',false), 0, $sub);
+			$days[2]= substr($this->lang_item('martes',false), 0, $sub);
+			$days[3]= substr($this->lang_item('miercoles',false), 0, $sub);
+			$days[4]= substr($this->lang_item('jueves',false), 0, $sub);
+			$days[5]= substr($this->lang_item('viernes',false), 0, $sub);
+			$days[6]= substr($this->lang_item('sabado',false), 0, $sub);
+			
 		}else{
 			$days[0]= $this->lang_item('lunes',false);
 			$days[1]= $this->lang_item('martes',false);

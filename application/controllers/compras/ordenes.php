@@ -99,17 +99,17 @@ class ordenes extends Base_Controller {
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
-		//echo $this->ajax_post('filtro');
-		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$buttonTPL 		= '';
+
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
-			,'aplicar_limit'=> true
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows   = count($this->db_model->db_get_total_rows($sqlData));
+		$total_rows   = count($this->db_model->db_get_data($sqlData));
+		$sqlData['aplicar_limit'] = false;
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));

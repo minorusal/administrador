@@ -1,5 +1,21 @@
 <?php
 class catalogos_model extends Base_Model{
+
+	private $db1;
+	private $tbl_presentaciones, $tbl_lineas, $tbl_marcas,$tbl_um, $tbl_embalaje;
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->db1                = $this->dbinfo[1]['db'];
+		$this->tbl_presentaciones = $this->dbinfo[1]['tbl_compras_presentaciones'];
+		$this->tbl_lineas         = $this->dbinfo[1]['tbl_compras_lineas'];
+		$this->tbl_marcas         = $this->dbinfo[1]['tbl_compras_marcas'];
+		$this->tbl_um        	  = $this->dbinfo[1]['tbl_compras_um'];
+		$this->tbl_embalaje       = $this->dbinfo[1]['tbl_compras_embalaje'];
+	}
+
+
 	/*PRESENTACIONES*/
 	public function get_presentacion_unico($id_presentacion){
 		$query = "SELECT * FROM av_compras_presentaciones cp WHERE cp.id_compras_presentacion = $id_presentacion";
@@ -174,6 +190,7 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
+
 	/*U.M.*/
 	
 	public function get_um_unico($id_um){
@@ -232,6 +249,72 @@ class catalogos_model extends Base_Model{
 			return false;
 		}
 	}
-	
+
+	/*EMBALAJE*/
+	public function get_embalaje($data=array()){
+
+		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;
+
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+
+
+		$filtro = ($filtro=="") ? "" : "AND (ce.embalaje like '%$filtro%' OR 
+											 ce.clave_corta like '%$filtro%'OR
+										     ce.descripcion like '%$filtro%') ";
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						ce.id_compras_embalaje
+						,ce.embalaje
+						,ce.clave_corta
+						,ce.descripcion
+					FROM
+						$tbl_embalaje ce
+					WHERE ce.activo = 1 $filtro
+					ORDER BY ce.id_compras_embalaje
+					$limit";
+      	
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+	public function get_embalaje_unico($id_embalaje){
+		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;
+		$query = "SELECT * FROM $tbl_embalaje ce WHERE ce.id_compras_embalaje = $id_embalaje";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function insert_embalaje($data=array()){
+		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;		
+		$existe = $this->row_exist($tbl_embalaje, array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$query = $this->db->insert_string($tbl_embalaje, $data);
+			$query = $this->db->query($query);
+
+			return $query;
+		}else{
+			return false;
+		}
+	}
+	public function update_embalaje($data, $id_embalaje){		
+		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;		
+
+		$condicion = array('id_compras_embalaje !=' => $id_embalaje, 'clave_corta = '=> $data['clave_corta']); 
+		$existe = $this->row_exist($tbl_embalaje, $condicion);
+		if(!$existe){
+			$condicion = "id_compras_embalaje = $id_embalaje"; 
+			$query = $this->db->update_string($tbl_embalaje, $data, $condicion);
+			$query = $this->db->query($query);
+			return $query;
+		}else{
+			return false;
+		}
+	}
 } 
 ?>

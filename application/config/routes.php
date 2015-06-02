@@ -73,6 +73,9 @@ $route['compras/catalogos/unidad_de_medida']                   = 'compras/um/ind
 $route['compras/catalogos/unidad_de_medida/listado_um']        = 'compras/um/listado_um';
 $route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
+/*Catalogo de Embalaje*/
+$route['compras/catalogos/embalaje']                               = 'compras/embalaje/index';
+
 /*Catalogo de Ordenes*/
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';
 

@@ -27,7 +27,7 @@ function config_datepicker(){
         dayNamesMin: days_timepicker,
         weekHeader: 'Sm',
         dateFormat: 'dd/mm/yy',
-        firstDay: 6,
+        firstDay: 7,
         isRTL: false,
         showMonthAfterYear: false,
         yearSuffix: ''

@@ -95,10 +95,8 @@ class proveedores_model extends Base_Model{
 		$tbl1 	= $this->dbinfo[1]['tbl_compras_proveedores'];
 		$existe = $this->row_exist($tbl1,array('clave_corta ='=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl1, $data);
-			$query = $this->db->query($query);
-
-			return $query;
+			$insert = $this->insert_item($tbl1, $data);
+			return $insert;
 		}else{
 			return false;
 		}
@@ -110,10 +108,8 @@ class proveedores_model extends Base_Model{
 		
 		if(!$existe){
 			$condicion = "id_compras_proveedor = ".$data['id_compras_proveedor']; 
-			$query = $this->db->update_string($tbl1 , $data, $condicion);
-			
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl1, $data, 'id_compras_proveedor', $condicion);
+			return $update;
 		}else{
 			return false;
 		}

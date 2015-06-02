@@ -82,9 +82,8 @@ class catalogos_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_almacen_almacenes = ".$data['id_almacen_almacenes']; 
-			$query = $this->db->update_string($tbl_almacenes, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl_almacenes, $data, 'id_almacen_almacenes', $condicion);
+			return $update;
 		}
 		else
 		{
@@ -98,9 +97,8 @@ class catalogos_model extends Base_Model
 		$existe = $this->row_exist($tbl_almacenes, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe)
 		{
-			$query = $this->db->insert_string($tbl_almacenes, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl_almacenes, $data);
+			return $insert;
 		}
 		else
 		{
@@ -178,9 +176,8 @@ class catalogos_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
-			$query = $this->db->update_string($tbl_pasillos, $data, $condicion);	
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl_pasillos, $data, 'id_almacen_pasillos', $condicion);
+			return $update;
 		}
 		else
 		{
@@ -194,9 +191,8 @@ class catalogos_model extends Base_Model
 		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
 		$existe = $this->row_exist($tbl_pasillos, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl_pasillos, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl_pasillos, $data);
+			return $insert;
 		}
 		else
 		{
@@ -265,9 +261,8 @@ class catalogos_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
-			$query = $this->db->update_string($tbl_gavetas, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl_gavetas, $data, 'id_almacen_gavetas', $condicion);
+			return $update;
 		}
 		else
 		{
@@ -282,9 +277,8 @@ class catalogos_model extends Base_Model
 		$existe = $this->row_exist($tbl_gavetas, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe)
 		{
-			$query = $this->db->insert_string($tbl_gavetas, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl_gavetas, $data);
+			return $insert;
 		}
 		else
 		{
@@ -345,9 +339,8 @@ class catalogos_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_almacen_transportes = ".$data['id_almacen_transportes']; 
-			$query = $this->db->update_string($tbl_transportes, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl_transportes, $data, 'id_almacen_transportes', $condicion);
+			return $update;
 		}
 		else
 		{
@@ -362,9 +355,8 @@ class catalogos_model extends Base_Model
 		$existe = $this->row_exist($tbl_transportes, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe)
 		{
-			$query = $this->db->insert_string($tbl_transportes, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl_transportes, $data);
+			return $insert;
 		}
 		else
 		{

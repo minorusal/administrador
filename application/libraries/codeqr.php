@@ -16,9 +16,9 @@ class codeqr extends QRcode{
         $vars = new config_vars();
         $vars->load_vars();
         $this->archivo              = $vars->cfg['path_tmp'].'qrcode.png';
-        $this->errorCorrectionLevel = $vars->cfg['qrcode_error_correction_level']; #'L','M','Q','H'
-        $this->matrixPointSize      = $vars->cfg['qrcode_point_size']; # 1-10
-        $this->margin               = $vars->cfg['qrcode_margin'];
+        $this->errorCorrectionLevel = $vars->var['ticket']['qrcode_error_correction_level']; #'L','M','Q','H'
+        $this->matrixPointSize      = $vars->var['ticket']['qrcode_point_size']; # 1-10
+        $this->margin               = $vars->var['ticket']['qrcode_margin'];
     }
 
     public function create($texto=''){

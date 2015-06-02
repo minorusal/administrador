@@ -195,7 +195,7 @@ class sucursales extends Base_Controller
         $tabData['direccion']              = $detalle[0]['direccion'];
         $tabData['telefono']               = $detalle[0]['telefono'];
         $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']     = $detalle[0]['registro'];
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
         
@@ -248,8 +248,8 @@ class sucursales extends Base_Controller
 						,'id_entidad'	 => $this->ajax_post('id_entidad')
 						,'telefono'		 => $this->ajax_post('telefono')
 						,'direccion'	 => $this->ajax_post('direccion')
-						,'edit_timestamp'			=> $this->timestamp()
-						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
+						,'edit_timestamp'	=> $this->timestamp()
+						,'edit_id_usuario'	=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)
@@ -338,7 +338,7 @@ class sucursales extends Base_Controller
 								 'razon_social' => $razon_social,
 								 'rfc'          => $rfc,
 								 'telefono'     => $telefono,  
-								 'registro'    => $this->timestamp());
+								 'timestamp'    => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
 			if($insert){

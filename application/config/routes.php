@@ -53,6 +53,9 @@ $route['logout']                   = 'login/logout';
 
 /*COMPRAS*/
 
+/*Catalogo Articulos*/
+$route['compras/catalogos/articulos']                               = 'compras/articulos/index';
+
 /*Catalogo Presentaciones*/
 $route['compras/catalogos/presentaciones']                               = 'compras/presentaciones/index';
 $route['compras/catalogos/presentaciones/listado_presentaciones']        = 'compras/presentaciones/listado_presentaciones';
@@ -72,6 +75,9 @@ $route['compras/catalogos/marcas/listado_marcas/(:num)'] = 'compras/marcas/lista
 $route['compras/catalogos/unidad_de_medida']                   = 'compras/um/index';
 $route['compras/catalogos/unidad_de_medida/listado_um']        = 'compras/um/listado_um';
 $route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/listado_um/$1';
+
+/*Catalogo de Embalaje*/
+$route['compras/catalogos/embalaje']                               = 'compras/embalaje/index';
 
 /*Catalogo de Ordenes*/
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';

@@ -36,8 +36,8 @@ class variables_model extends Base_Model
 		//$datos['valor'] = $data['valor'];
 		$filtro 		= ($id_vars)?"id_vars='$id_vars'":'';
 		if($id_vars){
-			$query 		= $this->db->update_string($tbl_variables, $data, $filtro);
-			$resultado 	= $this->db->query($query);
+			$update    = $this->update_item($tbl_variables, $data, 'id_vars', $filtro);
+			return $update;
 		}
 		return $resultado;
 	}

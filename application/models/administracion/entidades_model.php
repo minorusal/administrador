@@ -60,9 +60,8 @@ class entidades_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_administracion_entidad = ".$data['id_administracion_entidad']; 
-			$query = $this->db->update_string($tbl,$data,$condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl, $data, 'id_administracion_entidad', $condicion);
+			return $update;
 		}
 		else
 		{
@@ -76,9 +75,8 @@ class entidades_model extends Base_Model
 		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
 		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl, $data);
+			return $insert;
 		}else{
 			return false;
 		}

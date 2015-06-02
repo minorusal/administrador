@@ -56,9 +56,8 @@ class formas_de_pago_model extends Base_Model
 		if(!$existe)
 		{
 			$condicion = "id_forma_pago = ".$data['id_forma_pago']; 
-			$query = $this->db->update_string($tbl, $data, $condicion);
-			$query = $this->db->query($query);
-			return $query;
+			$update    = $this->update_item($tbl, $data, 'id_forma_pago', $condicion);
+			return $update;
 		}else{
 			return false;
 		}
@@ -69,9 +68,8 @@ class formas_de_pago_model extends Base_Model
 		$tbl    = $this->db1.'.'.$this->tbl1;
 		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl, $data);
-			$query = $this->db->query($query);
-			return $query;
+			$insert = $this->insert_item($tbl, $data);
+			return $insert;
 		}else{
 			return false;
 		}

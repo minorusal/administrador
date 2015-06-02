@@ -25,11 +25,11 @@ class barcode extends config_vars{
     
     function __construct(){
         $this->load_vars();
-        $this->barcode_encode   = $this->cfg['barscode_encode'];
+        $this->barcode_encode   = $this->var['ticket']['barscode_encode'];
         $this->font_name        = APPPATH.'third_party/barcode/font/Arial.ttf';
-        $this->font_size        = $this->cfg['barscode_font_size'];
-        $this->barcode_escala   = $this->cfg['barscode_font_scale'];
-        $this->barcode_grosor   = $this->cfg['barscode_font_thickness'];
+        $this->font_size        = $this->var['ticket']['barscode_font_size'];
+        $this->barcode_escala   = $this->var['ticket']['barscode_font_scale'];
+        $this->barcode_grosor   = $this->var['ticket']['barscode_font_thickness'];
         $this->barcode_img_tipo = 'png'; #wbmp|png|gif|jpg
         $this->archivo          = $this->cfg['path_tmp'].'barcode.'.$this->barcode_img_tipo;
     }

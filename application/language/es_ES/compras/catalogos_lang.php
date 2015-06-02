@@ -46,7 +46,9 @@
 	$lang['listado_um'] = 'Unidades de Medida';
 	$lang['detalle_um'] = 'detalle de U.M.';
 
-	
+	/*EMBAJALE*/
+	$lang['embalaje']   	   = 'embalaje';
+	$lang['nombre_embalaje']   = 'nombre del embalaje';
 
 
 ?>

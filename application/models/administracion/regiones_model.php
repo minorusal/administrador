@@ -45,12 +45,12 @@ class regiones_model extends Base_Model
 		$tb2            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
 		$tb3            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
 		$query = "	SELECT 
-
 						 en.entidad,
 						 en.id_administracion_entidad,
 						 en.clave_corta
 					FROM   $tb3 er, $tb2 en, $tbl re
 					WHERE re.activo = 1 
+					AND   er.activo = 1
 					AND   re.id_administracion_region = er.id_region
 					AND   er.id_entidad = en.id_administracion_entidad
 					AND   re.id_administracion_region =". $id_administracion_region;
@@ -60,8 +60,8 @@ class regiones_model extends Base_Model
 			return $query->result_array();
 		}
 	}
-	//AND   re.id_administracion_region = er.id_region
-	/*Trae la información para el formulario de edición de la tabla av_administracion_areas*/
+
+	/*Trae la información para el formulario de edición de la tabla av_administracion_region*/
 	public function get_orden_unico_region($id_administracion_region)
 	{
 		$tbl   = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_regiones'];
@@ -97,4 +97,39 @@ class regiones_model extends Base_Model
 		else
 			return false;
 	}
+
+	/*Actualiza la información en el formuladio de edición de la tabla av_administracion_regiones*/
+	public function db_update_data($data=array())
+	{
+		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_regiones'];
+		$condicion = array('id_administracion_region !=' => $data['id_administracion_region'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe    = $this->row_exist($tbl, $condicion);
+		if(!$existe)
+		{
+			$condicion = "id_administracion_region = ".$data['id_administracion_region'];
+			
+			$update = $this->update_item($tbl, $data, 'id_administracion_region', $condicion);
+			return $update;
+		}else{
+			return false;
+		}
+	}
+
+	public function db_update_entidades($data=array())
+	{
+		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
+		$condicion = array('id_region =' => $data['id_region'], 'id_entidad = '=> $data['id_entidad'], 'activo = '=> 1); 
+		$existe    = $this->row_exist($tbl, $condicion);
+		
+		if(!$existe)
+		{
+			$condicion = "id_region = ".$data['id_region'];
+			
+			$update = $this->update_item($tbl, $data['activo'], 'id_region', $condicion);
+			return $update;
+		}else{
+			return false;
+		}
+	}
+
 }

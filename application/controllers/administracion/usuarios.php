@@ -20,7 +20,7 @@ class usuarios extends Base_Controller {
 		$this->view_agregar     = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
 		$this->view_detalle     = $this->modulo.'/'.$this->seccion.'_detalle';
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 
 		$this->tab_indice 		= array(

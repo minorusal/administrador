@@ -20,7 +20,7 @@ class embalaje extends Base_Controller {
 		$this->icon 			= 'fa fa-road'; #Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #compras/embalaje/
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';

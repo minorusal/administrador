@@ -37,12 +37,13 @@ class config_vars {
 		}else{
 			$filename = array($cfg_path);
 			$pathfile = '';
+			$module[0]= basename($filename[0], '.cfg');
 		}
 		if($filename){
 			// Recorrido de archivo encontrados
 			for($i=0; $i<count($filename); $i++){
 				$file = $pathfile.$filename[$i];
-				$module = explode('.',$filename[$i]);
+				$module = (!isset($module))?explode('.',$filename[$i]):$module;
 				try {			
 					if (file_exists($file)) {
 				        if ($handle = fopen($file, 'r')) {				        	

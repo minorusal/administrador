@@ -88,7 +88,7 @@ class vendedores extends Base_Controller {
 		$data_tab_2  = "";
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$uri_view    = $this->uri_modulo.'listado';
-		$limit       = 5;
+		$limit       = 10;
 		$uri_segment = $this->uri_segment(); 
 
 		$lts_content =$this->vendedores_model->get_vendedores($limit,$offset,$filtro);

@@ -21,7 +21,7 @@ class regiones extends Base_Controller
 		$this->icon 			= 'fa fa-map-marker'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/regiones
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -166,7 +166,7 @@ class regiones extends Base_Controller
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
-					,'insert' 	=> true
+					,'insert' 	=> false
 					,'class' 	=> "requerido"
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);

@@ -17,7 +17,7 @@ class proveedores extends Base_Controller {
 		$this->icon 			= 'fa fa-users'; #Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 
 		$this->tab_indice 		= array(

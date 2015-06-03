@@ -21,7 +21,7 @@ class transportes extends Base_Controller
 		$this->icon 			= 'fa fa-truck'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';

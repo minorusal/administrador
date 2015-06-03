@@ -56,7 +56,7 @@ class presentaciones extends Base_Controller {
 		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		
 		$uri_view    = $this->uri_modulo.'/listado';
-		$limit       = 5;
+		$limit       = 10;
 		$uri_segment = $this->uri_segment(); 
 		$lts_content = $this->catalogos_model->get_presentaciones($limit, $offset, $filtro);
 

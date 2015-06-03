@@ -21,7 +21,7 @@ class sucursales extends Base_Controller
 		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/sucursales
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';

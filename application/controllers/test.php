@@ -30,7 +30,7 @@ class test extends Base_Controller {
 		$impData = array(
 			 'contenido' 	=> 'assets\tmp\ticket.txt' #Contenido de ticket
 			,'logo' 		=> 'assets/images/logo.bmp' #Logo de empresa en BMP
-			// ,'impresora' 	=> 'PDFCreator' #Nombre de impresora local
+			,'impresora' 	=> 'PDFCreator' #Nombre de impresora local
 			,'formato' 		=> true #Formato de texto
 			,'codebar' 		=> $barrasBmp #Envia BMP
 			,'codeqr' 		=> $qrBmp #Envía BMP

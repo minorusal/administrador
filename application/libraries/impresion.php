@@ -16,7 +16,8 @@ class impresion extends config_vars{
 	private $fh, $ph; #Manejadores de Impresora y archivo
 
 	public function __construct(){
-		$this->load_vars();
+		$this->load_vars('assets/cfg/ticket.cfg');
+		
 		$this->impresora 	= $this->var['ticket']['path_impresora'];
 		$this->logo 	 	= $this->cfg['path_img'].$this->var['ticket']['ticket_logo_img'];
 		$this->footer 		= true;

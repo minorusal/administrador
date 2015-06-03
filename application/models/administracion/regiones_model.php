@@ -50,10 +50,10 @@ class regiones_model extends Base_Model
 						 en.clave_corta
 					FROM   $tb3 er, $tb2 en, $tbl re
 					WHERE re.activo = 1 
-					
+					AND   re.id_administracion_region = er.id_region
 					AND   er.id_entidad = en.id_administracion_entidad
 					AND   re.id_administracion_region =". $id_administracion_region;
-					print_debug($query);
+					
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

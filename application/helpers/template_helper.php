@@ -182,38 +182,43 @@
 				foreach ($data as $option => $item) {
 					$option_value = "";
 					if(is_array($text)){
-						foreach ($text as $string) {
-							$option_value .= $item[$string].'-';
+						if(!array_key_exists($item[$value], $options_selected)){
+							foreach ($text as $string) {
+								$option_value .= $item[$string].'-';
+							}
+							$options[$item[$value]] = trim($option_value, '-');
 						}
-						$options[$item[$value]] = trim($option_value, '-');
 					}else{
-						$options[$item[$value]]= $item[$text];
+						if(!array_key_exists($item[$value], $options_selected)){
+							$options[$item[$value]]= $item[$text];
+						}
 					}					
 					$count++;
 				}
 
-				print_debug($options_selected);
+				//print_debug($options);
 
 				/*if($insert)
 					//print_debug($options);
 					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
 				else*/
 
-				$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
+				$multiple =  form_multiselect($name, $options_selected, $selected,"multiple='multiple'  size='10'");
 
+				print_debug($multiple);
 				$selected = "<span id='dualselect' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
 				               ."<span class='ds_arrow'>
-				               	<button class='btn ds_prev'>
-							    	<i class='iconfa-chevron-left'>
-							    	</i>
-							    </button>
-							    <br>
-							    <button class='btn ds_next'>
-							    	<i class='iconfa-chevron-right'>
-							        </i>
+					               	<button class='btn ds_prev'>
+								    	<i class='iconfa-chevron-left'>
+								    	</i>
 								    </button>
-				              		</span>"
+								    <br>
+								    <button class='btn ds_next'>
+								    	<i class='iconfa-chevron-right'>
+								        </i>
+									</button>
+				              	</span>"
 				              	.$multiple
 				            ."</span>";
 				return $selected;

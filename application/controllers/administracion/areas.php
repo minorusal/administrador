@@ -18,7 +18,7 @@ class areas extends Base_Controller
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'areas';
-		$this->icon 			= 'fa fa-circle-o-notch '; 
+		$this->icon 			= 'iconfa-fire'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/areas
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;

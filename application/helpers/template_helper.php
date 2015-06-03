@@ -192,6 +192,7 @@
 					$count++;
 				}
 
+				print_debug($options_selected);
 
 				/*if($insert)
 					//print_debug($options);

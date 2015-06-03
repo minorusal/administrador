@@ -24,13 +24,13 @@ class gavetas extends Base_Controller
 		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar_gaveta';
-		$this->tab2 			= 'listado_gaveta';
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
 	public function config_tabs()
@@ -180,13 +180,13 @@ class gavetas extends Base_Controller
 		$pasillos     = dropdown_tpl($pasillos_array);
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_gaveta']              = $id_almacen_gavetas;
-        $tabData["nombre_gavetas"]         = $this->lang_item("gaveta");
-		$tabData["cvl_corta"]        	   = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	   = $this->lang_item("descripcion");
+        $tabData["lbl_gabetas"]            = $this->lang_item("lbl_gabetas");
+		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
+		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 		$tabData["list_almacen"]           = $almacenes;
-		$tabData["almacen"]                = $this->lang_item("almacen");
+		$tabData["lbl_almacen"]                = $this->lang_item("lbl_almacen");
 		$tabData["list_pasillo"]           = $pasillos;
-		$tabData["pasillo"]                = $this->lang_item("pasillos");
+		$tabData["lbl_pasillo"]                = $this->lang_item("lbl_pasillo");
         $tabData['gaveta']                 = $detalle[0]['gavetas'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
@@ -236,7 +236,6 @@ class gavetas extends Base_Controller
 		}
 		else
 		{
-			//$pasillo  = ($this->ajax_post('id_pasillo')=='')? $this->lang_item("sin_pasillo") : $this->ajax_post('id_pasillo');
 			$sqlData = array(
 						 'id_almacen_gavetas'	    => $this->ajax_post('id_gaveta')
 						,'gavetas' 		            => $this->ajax_post('gavetas')
@@ -269,7 +268,7 @@ class gavetas extends Base_Controller
 		}
 		echo json_encode($json_respuesta);
 	}
-	public function agregar_gaveta()
+	public function agregar()
 	{
 		$seccion         = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/gavetas_save';  #almacen/catalogos/pasillos/pasillos_save
 		$almacenes_array = array(
@@ -290,13 +289,13 @@ class gavetas extends Base_Controller
 		$pasillos     = dropdown_tpl($pasillos_array);
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset    = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
-		$tab_1["nombre_gavetas"]    = $this->lang_item("nombre_gavetas");
-		$tab_1["cvl_corta"]         = $this->lang_item("cvl_corta");
+		$tab_1["lbl_gavetas"]       = $this->lang_item("lbl_gavetas");
+		$tab_1["lbl_clave_corta"]   = $this->lang_item("lbl_clave_corta");
 		$tab_1["list_almacen"]      = $almacenes;
-		$tab_1["almacen"]           = $this->lang_item("almacen");
+		$tab_1["lbl_almacen"]       = $this->lang_item("lbl_almacen");
 		$tab_1["list_pasillo"]      = $pasillos;
-		$tab_1["pasillo"]           = $this->lang_item("pasillo");
-		$tab_1["descrip"]           = $this->lang_item("descripcion");
+		$tab_1["lbl_pasillo"]       = $this->lang_item("lbl_pasillo");
+		$tab_1["lbl_descripcion"]           = $this->lang_item("lbl_descripcion");
         $tab_1['button_save']       = $btn_save;
         $tab_1['button_reset']      = $btn_reset;
         if($this->ajax_post(false))

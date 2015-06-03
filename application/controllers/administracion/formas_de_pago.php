@@ -114,7 +114,8 @@ class formas_de_pago extends Base_Controller
 						);
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['id_forma_pago'],
-									'clave_corta'      => tool_tips_tpl($value['clave_corta'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'forma_pago'      => tool_tips_tpl($value['forma_pago'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
 			}
@@ -122,6 +123,7 @@ class formas_de_pago extends Base_Controller
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
+										$this->lang_item("lbl_forma_pago"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
@@ -166,8 +168,10 @@ class formas_de_pago extends Base_Controller
 		);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_forma_pago']          = $id_forma_pago;
+        $tabData["lbl_forma_pago"]         = $this->lang_item("lbl_forma_pago");
 		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
 		$tabData["desc"]                   = $this->lang_item("descripcion");
+		$tabData['forma_pago']             = $detalle[0]['forma_pago'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
@@ -217,6 +221,7 @@ class formas_de_pago extends Base_Controller
 		{
 			$sqlData = array(
 						 'id_forma_pago'     => $this->ajax_post('id_forma_pago')
+						,'forma_pago'        => $this->ajax_post('forma_pago')
 						,'clave_corta'       => $this->ajax_post('clave_corta')
 						,'descripcion'       => $this->ajax_post('descripcion')
 						,'edit_timestamp'    => $this->timestamp()
@@ -256,6 +261,7 @@ class formas_de_pago extends Base_Controller
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
+		$tab_1["lbl_forma_pago"]   = $this->lang_item("lbl_forma_pago");
 		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
 		$tab_1["desc"]             = $this->lang_item("descripcion");
 
@@ -280,9 +286,11 @@ class formas_de_pago extends Base_Controller
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
+			$forma_pago      = $this->ajax_post('forma_pago');
 			$clave_corta     = $this->ajax_post('clave_corta');
 			$descripcion     = $this->ajax_post('descripcion');
 			$data_insert     = array(
+								 'forma_pago'  => $forma_pago,
 								 'clave_corta'  => $clave_corta,
 								 'descripcion'  => $descripcion,
 								 'id_usuario'   => $this->session->userdata('id_usuario'),  
@@ -311,11 +319,13 @@ class formas_de_pago extends Base_Controller
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
+							 		 $value['forma_pago'],
 									 $value['clave_corta'],
 									 $value['descripcion']);
 			}
 			
 			$set_heading = array(
+									$this->lang_item("lbl_forma_pago"),
 									$this->lang_item("clave_corta"),
 									$this->lang_item("descripcion"));
 	

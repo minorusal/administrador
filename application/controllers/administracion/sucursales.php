@@ -184,6 +184,8 @@ class sucursales extends Base_Controller
 		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
 		$tabData["r_social"]               = $this->lang_item("rs");
 		$tabData["r_f_c"]                  = $this->lang_item("rfc");
+		$tabData["lbl_email"]              = $this->lang_item("lbl_email");
+		$tabData["lbl_encargado"]          = $this->lang_item("lbl_encargado");
 		$tabData["dir"]                    = $this->lang_item("direccion");
 		$tabData["tel"]                    = $this->lang_item("tel");
 		$tabData["list_entidad"]           = $entidades;
@@ -192,12 +194,14 @@ class sucursales extends Base_Controller
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['razon_social']           = $detalle[0]['razon_social'];
         $tabData['rfc']                    = $detalle[0]['rfc'];
+        $tabData['email']                  = $detalle[0]['email'];
+		$tabData['encargado']              = $detalle[0]['encargado'];
         $tabData['direccion']              = $detalle[0]['direccion'];
         $tabData['telefono']               = $detalle[0]['telefono'];
-        $tabData['lbl_ultima_modiciacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
         $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
-		$tabData['lbl_usuario_regitro']    = $this->lang_item('lbl_usuario_regitro', false);
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
         
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -245,6 +249,8 @@ class sucursales extends Base_Controller
 						,'clave_corta' 	 => $this->ajax_post('clave_corta')
 						,'razon_social'	 => $this->ajax_post('razon_social')
 						,'rfc'			 => $this->ajax_post('rfc')
+						,'email'	     => $this->ajax_post('email')
+						,'encargado'	 => $this->ajax_post('encargado')
 						,'id_entidad'	 => $this->ajax_post('id_entidad')
 						,'telefono'		 => $this->ajax_post('telefono')
 						,'direccion'	 => $this->ajax_post('direccion')
@@ -297,6 +303,8 @@ class sucursales extends Base_Controller
 		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
 		$tab_1["r_social"]         = $this->lang_item("rs");
 		$tab_1["r_f_c"]            = $this->lang_item("rfc");
+		$tab_1["lbl_email"]        = $this->lang_item("lbl_email");
+		$tab_1["lbl_encargado"]    = $this->lang_item("lbl_encargado");
 		$tab_1["tel"]              = $this->lang_item("telefono");
 		$tab_1["list_entidad"]     = $entidades;
 		$tab_1["entidad"]          = $this->lang_item("entidad");
@@ -327,6 +335,8 @@ class sucursales extends Base_Controller
 			$clave_corta     = $this->ajax_post('clave_corta');
 			$razon_social    = $this->ajax_post('razon_social');
 			$rfc             = $this->ajax_post('rfc');
+			$email           = $this->ajax_post('email');
+			$encargado       = $this->ajax_post('encargado');
 			$telefono        = $this->ajax_post('tel');
 			$entidad         = $this->ajax_post('id_entidad');
 			$direccion       = $this->ajax_post('direccion');
@@ -337,6 +347,8 @@ class sucursales extends Base_Controller
 								 'id_entidad'   => $entidad,
 								 'razon_social' => $razon_social,
 								 'rfc'          => $rfc,
+								 'email'        => $email,
+								 'encargado'    => $encargado,
 								 'telefono'     => $telefono,  
 								 'timestamp'    => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);

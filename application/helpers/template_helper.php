@@ -173,8 +173,7 @@
 					$count++;
 				}
 				if($insert)
-					print_debug($options);
-					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
+					$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
 				else
 					$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
 				$selected = "<span id='dualselect' class='dualselect'>"

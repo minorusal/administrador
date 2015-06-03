@@ -76,6 +76,8 @@ function actualizar(){
     var clave_corta  = jQuery('#clave_corta').val();
     var razon_social = jQuery('#razon_social').val();
     var rfc          = jQuery('#rfc').val();
+    var email        = jQuery('#email').val();
+    var encargado    = jQuery('#encargado').val();
     var telefono     = jQuery('#telefono').val();
     var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
     var direccion	 = jQuery("#direccion").val();
@@ -83,7 +85,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/sucursales/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
+		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, email:email, encargado:encargado, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -107,13 +109,15 @@ function agregar(){
     var razon_social = jQuery('#razon_social').val();
     var rfc          = jQuery('#rfc').val();
     var tel          = jQuery('#telefono').val();
+    var email        = jQuery('#email').val();
+    var encargado    = jQuery('#encargado').val();
     var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
     var direccion    =jQuery('#direccion').val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/sucursales/insert_sucursal",
 		dataType: "json",
-		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, id_entidad:id_entidad, direccion:direccion },
+		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, id_entidad:id_entidad, direccion:direccion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

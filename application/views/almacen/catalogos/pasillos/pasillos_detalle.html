@@ -3,15 +3,15 @@
         <div style="float:left">
             <input id="id_pasillo" type="hidden" name="id_pasillo" value="{id_pasillo}" />
             <p>
-                <label>{nombre_pasillos}: (*)</label>
+                <label>{lbl_pasillos}: (*)</label>
                 <input id="pasillo" type="text" name="pasillo" class="input-xlarge requerido" value="{pasillo}" />
             </p>
             <p>
-                <label>{cvl_corta}: (*)</label>
+                <label>{lbl_clave_corta}: (*)</label>
                 <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
             </p>
             <p>
-                <label>{almacen}: (*)</label>
+                <label>{lbl_almacen}: (*)</label>
                 {list_almacen}
             </p>
         </div>
@@ -19,7 +19,7 @@
     </div>
     <div style="clear:both">
         <p>
-            <label>{descrip}:</label>
+            <label>{lbl_descripcion}:</label>
             <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
         </p>
         <p>

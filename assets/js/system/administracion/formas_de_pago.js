@@ -68,13 +68,14 @@ function actualizar(){
 	var btn_text        = btn.html();	
 	var incomplete      = values_requeridos();
 	var id_forma_pago   = jQuery('#id_forma_pago').val();
+	var forma_pago      = jQuery('#txt_forma_pago').val();
     var clave_corta     = jQuery('#clave_corta').val();
     var descripcion     = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/formas_de_pago/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_forma_pago:id_forma_pago, clave_corta:clave_corta, descripcion:descripcion},
+		data: {incomplete:incomplete, id_forma_pago:id_forma_pago, forma_pago:forma_pago, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -92,13 +93,14 @@ function agregar(){
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var incomplete       = values_requeridos();
+	var forma_pago      = jQuery('#txt_forma_pago').val();
     var clave_corta      = jQuery('#clave_corta').val();
     var descripcion      = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/formas_de_pago/insert_formapago",
 		dataType: "json",
-		data: {incomplete :incomplete, clave_corta:clave_corta, descripcion:descripcion},
+		data: {incomplete :incomplete, forma_pago:forma_pago, clave_corta:clave_corta, descripcion:descripcion},
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

@@ -5,6 +5,7 @@ $lang['agregar'] 			 = "Nueva forma de pago";
 $lang['listado'] 			 = "Listado de formas de pago";
 $lang['detalle'] 			 = "Detalle";
 
+$lang['lbl_forma_pago'] = 'forma de pago';
 $lang['lbl_fecha_registro'] = 'fecha de registro';
 $lang['lbl_usuario_registro'] = 'registrado por';
 $lang['lbl_ultima_modificacion'] = 'ultima modificación';

@@ -7,7 +7,7 @@
             </p>
             <p>
                 <label>{valor}: (*)</label>
-                <input id="valor_descuento" type="text" name="valor_descuento" class="input-xlarge requerido" value="" />
+                <input id="valor_descuento" type="number" name="valor_descuento" class="input-xlarge requerido" value="" />
             </p>
             <p>
                 <label>{cvl_corta}: (*)</label>
@@ -17,8 +17,8 @@
     </div>
     <div style="clear:both">
         <p>
-            <label>{desc}: (*)</label>
-            <textarea id="descripcion" name="descripcion"  class="span5 requerido" style="resize: vertical; height: 100px;"></textarea>
+            <label>{desc}:</label>
+            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
         </p>
         <div id="registro_loader"></div>
         <div id="mensajes" style="display:none"></div>

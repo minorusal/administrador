@@ -30,24 +30,28 @@ class Base_Model extends CI_Model {
 		return $query;
     }
     public function update_item($tbl, $data, $id_row, $condicion = '') {
-
-    	$route = $this->uri->uri_string();
-    	$log   = array(	 'route'      => $route,
-	    				 'type'       => 'UPDATE',
-	    				 'tabla'      => $tbl,
-	    				 'id_row'     => $data[$id_row],
-	    				 'id_usuario' => $data['edit_id_usuario'],
-	    				 'timestamp'  => $data['edit_timestamp']
-	    			);
-    	$log    = $this->db->insert_string('av_administracion_movimientos', $log);
-    	$log    = $this->db->query($log);
-    	if($log){
-    		$update = $this->db->update_string($tbl, $data, $condicion);
-    		$update = $this->db->query($update);
-    	}else{
-    		$update = false;
-    	}
-    	return $update;
+    	if(array_key_exists($id_row, $data)){
+	    	$route = $this->uri->uri_string();
+	    	$log   = array(	 'route'      => $route,
+		    				 'type'       => 'UPDATE',
+		    				 'tabla'      => $tbl,
+		    				 'id_row'     => $data[$id_row],
+		    				 'data_row'   => array_2_string_format($data,'=',','),
+		    				 'id_usuario' => $data['edit_id_usuario'],
+		    				 'timestamp'  => $data['edit_timestamp']
+		    			);
+	    	$log = $this->db->insert_string('av_administracion_movimientos', $log);
+	    	$log = $this->db->query($log);
+	    	if($log){
+	    		$update = $this->db->update_string($tbl, $data, $condicion);
+	    		$update = $this->db->query($update);
+	    	}else{
+	    		$update = false;
+	    	}
+	    	return $update;
+	    }else{
+	    	return false;
+	    }
     }
     public function insert_item($tbl, $data = array()){
     	$insert  = $this->db->insert_string($tbl, $data);
@@ -59,6 +63,7 @@ class Base_Model extends CI_Model {
 			    				 'type'       => 'INSERT',
 			    				 'tabla'      => $tbl,
 			    				 'id_row'     => $id_row,
+			    				 'data_row'   => array_2_string_format($data,'=',','),
 			    				 'id_usuario' => $data['id_usuario'],
 			    				 'timestamp'  => $data['timestamp']
 			    			);

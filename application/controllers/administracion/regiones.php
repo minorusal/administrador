@@ -220,6 +220,7 @@ class regiones extends Base_Controller
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
+					,'insert' 	=> false
 					,'class' 	=> "requerido"
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);

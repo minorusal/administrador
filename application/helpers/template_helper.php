@@ -172,11 +172,18 @@
 					}					
 					$count++;
 				}
+<<<<<<< HEAD
+				if($insert)
+					$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
+				else
+					$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
+=======
 				/*if($insert)
 					//print_debug($options);
 					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
 				else*/
 				$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
+>>>>>>> 2d9bf2eeecf6873256f457d3ca5c17c55e8fac54
 				$selected = "<span id='dualselect' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
 				               ."<span class='ds_arrow'>

@@ -25,13 +25,13 @@ class pasillos extends Base_Controller
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar_pasillo';
-		$this->tab2 			= 'listado_pasillo';
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
 	public function config_tabs()
@@ -127,7 +127,6 @@ class pasillos extends Base_Controller
 										$this->lang_item("pasillo"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
-										//$this->lang_item("gavetas"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -176,13 +175,13 @@ class pasillos extends Base_Controller
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
                 
         $tabData['id_pasillo']             = $id_almacen_pasillos;
-        $tabData["nombre_pasillos"]        = $this->lang_item("pasillo");
-		$tabData["cvl_corta"]        	   = $this->lang_item("cvl_corta");
-		$tabData["descrip"]         	   = $this->lang_item("descripcion");
+        $tabData["lbl_pasillos"]           = $this->lang_item("lbl_pasillos");
+		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
+		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 		$tabData["registro_por"]    	   = $this->lang_item("registro_por");
 		$tabData["fecha_registro"]         = $this->lang_item("fecha_registro");
 		$tabData["list_almacen"]           = $almacenes;
-		$tabData["almacen"]                = $this->lang_item("almacen");
+		$tabData["lbl_almacen"]                = $this->lang_item("lbl_almacen");
         $tabData['pasillo']                = $detalle[0]['pasillos'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
@@ -262,7 +261,7 @@ class pasillos extends Base_Controller
 		echo json_encode($json_respuesta);
 	}
 
-	public function agregar_pasillo(){
+	public function agregar(){
 
 		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/pasillos_save';  #almacen/catalogos/pasillos/pasillos_save
 		$almacenes_array = array(
@@ -276,11 +275,11 @@ class pasillos extends Base_Controller
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["nombre_pasillos"]      = $this->lang_item("nombre_pasillos");
-		$tab_1["cvl_corta"]            = $this->lang_item("cvl_corta");
+		$tab_1["lbl_pasillo"]          = $this->lang_item("lbl_pasillo");
+		$tab_1["lbl_clave_corta"]      = $this->lang_item("lbl_clave_corta");
 		$tab_1["list_almacen"]         = $almacenes;
-		$tab_1["almacen"]              = $this->lang_item("almacen");
-		$tab_1["descrip"]              = $this->lang_item("descripcion");
+		$tab_1["lbl_almacen"]          = $this->lang_item("lbl_almacen");
+		$tab_1["lbl_descripcion"]      = $this->lang_item("lbl_descripcion");
 
         $tab_1['button_save']       = $btn_save;
         $tab_1['button_reset']      = $btn_reset;

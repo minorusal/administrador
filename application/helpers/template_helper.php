@@ -192,7 +192,7 @@
 					$count++;
 				}
 
-				print_debug($options_selected);
+
 				/*if($insert)
 					//print_debug($options);
 					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");

@@ -154,20 +154,20 @@ class regiones extends Base_Controller
 		}
 	}
 
-	public function detalle()
-	{
+	public function detalle(){
 		$id_region   = $this->ajax_post('id_region');
 		$detalle     = $this->db_model->get_orden_unico_region($id_region);
 		$seccion     = $this->tab3;
 		$tab_detalle = $this->tab3;
 		$ent_reg     = $this->db_model->get_entidades_regiones($id_region);
+
 		$entidades_array = array(
-					 'data'		=> $this->db_model2->get_entidades_default()
-					,'value' 	=> 'id_administracion_entidad'
-					,'text' 	=> array('entidad','clave_corta')
-					,'name' 	=> "lts_entidades"
-					,'insert' 	=> false
-					,'class' 	=> "requerido"
+					 'data'		        => $this->db_model2->get_entidades_default()
+					,'data_seleted' 	=> $ent_reg
+					,'value' 	        => 'id_administracion_entidad'
+					,'text' 	        => array('entidad','clave_corta')
+					,'name' 	        => "lts_entidades"
+					,'class' 	        => "requerido"
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -209,7 +209,6 @@ class regiones extends Base_Controller
 		$tabData['usuario_registro'] = $usuario_name;
 		$uri_view = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
-
 	}
 
 	public function agregar()

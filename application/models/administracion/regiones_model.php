@@ -47,13 +47,15 @@ class regiones_model extends Base_Model
 		$query = "	SELECT 
 						 re.id_administracion_region,
 						 re.region,
+						 en.id_administracion_entidad,
 						 en.entidad,
-						 en.id_administracion_entidad
+						 en.clave_corta
 					FROM   $tb3 er
 					INNER JOIN $tb2 en on en.id_administracion_entidad = er.id_entidad
 					INNER JOIN $tbl re on re.id_administracion_region = er.id_region 
 					WHERE re.activo = 1 
 					GROUP BY re.id_administracion_region ASC";
+		print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

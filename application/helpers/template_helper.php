@@ -146,20 +146,39 @@
 		// Crea una lista <multiselect> 
 		function dropMultiselect_tpl($params=array()){			
 			if(!empty($params)){
-				$data 		= (isset($params['data']))?$params['data']:false;
-				$selected 	= (isset($params['selected']))?$params['selected']:'';
-				$value 		= (isset($params['value']))?$params['value']:false;
-				$text 		= (isset($params['text']))?$params['text']:false;
-				$name 		= (isset($params['name']))?$params['name']:false;
-				$class 		= (isset($params['class']))?$params['class']:'';
-				$event 		= (isset($params['event']))?$params['event']:'';
-				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+				$data 		   = (isset($params['data']))?$params['data']:false;
+				$data_seleted  = (isset($params['data_seleted']))? $params['data_seleted'] : array();
+				$selected 	   = (isset($params['selected']))?$params['selected']:'';
+				$value 		   = (isset($params['value']))?$params['value']:false;
+				$text 		   = (isset($params['text']))?$params['text']:false;
+				$name 		   = (isset($params['name']))?$params['name']:false;
+				$class 		   = (isset($params['class']))?$params['class']:'';
+				$event 		   = (isset($params['event']))?$params['event']:'';
+				$disabled      = (isset($params['disabled']))?$params['disabled']:'';
 				//$insert     = $params['insert'];
 			}
-			$name         = ($name=="") ? "selected" : $name;
-			$count        = 0;
+
+			//print_debug($data);
+
+			$name    = ($name=="") ? "selected" : $name;
+			$count   = 0;
 
 			if($data && $name && $value && $text){
+				if(!empty($data_seleted)){
+					foreach ($data_seleted as $option => $item) {
+						$option_selected = "";
+						if(is_array($text)){
+							foreach ($text as $string) {
+								$option_selected .= $item[$string].'-';
+							}
+							$options_selected[$item[$value]] = trim($option_selected, '-');
+						}else{
+							$options_selected[$item[$value]]= $item[$text];
+						}		
+					}
+					//
+				}
+
 				foreach ($data as $option => $item) {
 					$option_value = "";
 					if(is_array($text)){
@@ -172,18 +191,15 @@
 					}					
 					$count++;
 				}
-<<<<<<< HEAD
-				if($insert)
-					$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
-				else
-					$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
-=======
+
+				print_debug($options_selected);
 				/*if($insert)
 					//print_debug($options);
 					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
 				else*/
+
 				$multiple =  form_multiselect($name, $options, $selected,"multiple='multiple' class='$class' size='10'");
->>>>>>> 2d9bf2eeecf6873256f457d3ca5c17c55e8fac54
+
 				$selected = "<span id='dualselect' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
 				               ."<span class='ds_arrow'>

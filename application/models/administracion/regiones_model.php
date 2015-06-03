@@ -45,20 +45,21 @@ class regiones_model extends Base_Model
 		$tb2            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidades'];
 		$tb3            = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
 		$query = "	SELECT 
-						 re.id_administracion_region,
-						 re.region,
 						 en.entidad,
-						 en.id_administracion_entidad
-					FROM   $tb3 er
-					INNER JOIN $tb2 en on en.id_administracion_entidad = er.id_entidad
-					INNER JOIN $tbl re on re.id_administracion_region = er.id_region 
+						 en.id_administracion_entidad,
+						 en.clave_corta
+					FROM   $tb3 er, $tb2 en, $tbl re
 					WHERE re.activo = 1 
-					GROUP BY re.id_administracion_region ASC";
+					
+					AND   er.id_entidad = en.id_administracion_entidad
+					AND   re.id_administracion_region =". $id_administracion_region;
+					print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
+	//AND   re.id_administracion_region = er.id_region
 	/*Trae la información para el formulario de edición de la tabla av_administracion_areas*/
 	public function get_orden_unico_region($id_administracion_region)
 	{

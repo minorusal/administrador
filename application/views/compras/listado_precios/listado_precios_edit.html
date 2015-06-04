@@ -33,12 +33,14 @@
         <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-xlarge requerido" value="{val_precio_proveedor}" />
     </p>
     <p>
-        <label>{impuesto_aplica}: (*)</label>
-        <input id="impuesto_aplica" type="text" name="impuesto_aplica" class="input-xlarge requerido" value="{val_impuesto_aplica}" />
+        <label>{impuesto_aplica}:</label>
+        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="muestra_impuesto()" {checked}>
     </p>
     <p>
-        <label>{impuesto_porcentaje}: (*)</label>
-        <input id="impuesto_porcentaje" type="text" name="impuesto_porcentaje" class="input-xlarge requerido" value="{val_impuesto_porcentaje}" />
+        <div id="impuesto" {style} >
+            <label>{impuesto_porcentaje}: (*)</label>
+            {lts_impuesto}
+        </div>
     </p>
     <p>
         <label>{lbl_fecha_registro}:</label>
@@ -48,12 +50,12 @@
         <label>{registro_por}:</label>
         <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
     </p>
-    <!--<p>
+    <p>
         <label>{lbl_ultima_modificacion}: </label>
         <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
-    </p>-->
+    </p>
     <div id="registro_loader"></div>
-    <div id="mensajes" style="display:none"></div>
+    <div id="mensajes_update" style="display:none"></div>
      <p class="stdformbutton"> 
         {button_save}
     </p>

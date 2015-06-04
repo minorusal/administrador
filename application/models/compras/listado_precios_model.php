@@ -22,12 +22,12 @@ class listado_precios_model extends Base_Model{
 		$tbl5  = $this->tbl5;
 		$tbl6  = $this->tbl6;
 		// Filtro
+
 		$filtro 		= (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-
-		$filtro = ($filtro=="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
+		$filtro = ($filtro!="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
 										a.cantidad_um_presentacion 		 LIKE '$filtro%' OR
 										b.articulo  	   LIKE '$filtro%' OR
 										c.nombre_comercial LIKE '$filtro%' OR
@@ -45,6 +45,7 @@ class listado_precios_model extends Base_Model{
 					,a.id_embalaje
 					,a.cantidad_presentacion_embalaje
 					,a.cantidad_um_presentacion
+					,a.precio_proveedor
 					,b.articulo
 					,c.nombre_comercial
 					,d.marca

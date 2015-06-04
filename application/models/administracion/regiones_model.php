@@ -17,15 +17,9 @@ class regiones_model extends Base_Model
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT 
-						 re.id_administracion_region,
-						 re.region,
-						 re.clave_corta,
-						 re.descripcion,
-						 en.entidad,
-						 en.id_administracion_entidad
-					FROM   $tb3 er
-					INNER JOIN $tb2 en on en.id_administracion_entidad = er.id_entidad
-					INNER JOIN $tbl re on re.id_administracion_region = er.id_region 
+						 *
+					FROM   $tbl re
+					
 					WHERE re.activo = 1 $filtro
 					GROUP BY re.id_administracion_region ASC
 					$limit
@@ -116,20 +110,27 @@ class regiones_model extends Base_Model
 	}
 
 	public function db_update_entidades($data=array())
-	{
+	{	
 		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
-		$condicion = array('id_region =' => $data['id_region'], 'id_entidad = '=> $data['id_entidad'], 'activo = '=> 1); 
-		$existe    = $this->row_exist($tbl, $condicion);
-		
+		$condicion = array("id_entidad =" => $data['id_entidad'], "id_region = " => $data['id_region']);
+		$existe = $this->row_exist($tbl,$condicion);
 		if(!$existe)
 		{
-			$condicion = "id_region = ".$data['id_region'];
-			
-			$update = $this->update_item($tbl, $data['activo'], 'id_region', $condicion);
-			return $update;
-		}else{
-			return false;
+			$query = $this->db->insert_string($tbl, $data);
+			$query = $this->db->query($query);
+			return $query;	
 		}
+		else
+		{
+			$condicion = array("id_region = " => $data['id_region']);
+			$this->db->where($condicion);
+			$query = $this->db->delete($tbl);
+		}
+		
+		return false;
 	}
 
 }
+/*
+$this->db->where($condicion);
+				$query = $this->db->delete($tbl);*/

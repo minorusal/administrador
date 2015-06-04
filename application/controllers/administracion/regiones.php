@@ -305,14 +305,15 @@ class regiones extends Base_Controller
 				,'edit_id_usuario' 		   => $this->session->userdata('id_usuario')
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
+			
+			
 			$id_region = $this->ajax_post('id_region');
 			$entidades   = $this->ajax_post('entidades');
-			//print_debug($entidades);
+			//print_debug($insertar);
 			foreach($entidades as $item => $valor)
 			{
 				$insertar = array('id_entidad' => $valor,
-								  'id_region'  => $id_region,
-								  'activo'     => 1);
+								  'id_region'  => $id_region);
 				$insert = $this->db_model->db_update_entidades($insertar);
 			}
 			

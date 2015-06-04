@@ -2,7 +2,7 @@
 class listado_precios_model extends Base_Model{
 
 	private $db1;
-	private $tbl1, $tbl2, $tbl3, $tbl4, $tbl5, $tbl6;
+	private $tbl1, $tbl2, $tbl3, $tbl4, $tbl5, $tbl6,$tbl7;
 	
 	public function __construct(){
 		parent::__construct();
@@ -13,6 +13,7 @@ class listado_precios_model extends Base_Model{
 		$this->tbl4   = $this->dbinfo[1]['tbl_compras_marcas'];
 		$this->tbl5   = $this->dbinfo[1]['tbl_compras_presentaciones'];
 		$this->tbl6   = $this->dbinfo[1]['tbl_compras_embalaje'];
+		$this->tbl7   = $this->dbinfo[1]['tbl_compras_um'];
 	}
 	public function db_get_data($data=array()){
 		$tbl1  = $this->tbl1;
@@ -86,6 +87,29 @@ class listado_precios_model extends Base_Model{
 		$update = $this->update_item($tbl1, $data, 'id_compras_articulo_precios', $condicion);
 		return $update;
 	}
-
+	public function get_articulos_um($id_compras_articulos){
+		$tbl2  = $this->tbl2;
+		$tbl7  = $this->tbl7;
+		
+		$query="SELECT 
+					a.id_compras_articulo,
+					a.clave_corta,
+					a.id_compras_um as id_unidad_medida,
+					b.id_compras_um,
+					b.um,
+					b.clave_corta as cv_um
+				FROM 
+					$tbl2 a
+				LEFT JOIN $tbl7 b
+					ON 
+						a.id_compras_um = b.id_compras_um
+				WHERE 
+					a.id_compras_articulo= $id_compras_articulos ";
+		//echo $query;
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 }
 ?>

@@ -168,7 +168,6 @@ class regiones extends Base_Controller
 					,'text' 	        => array('entidad','clave_corta')
 					,'name' 	        => "lts_entidades"
 					,'class' 	        => "requerido"
-					,'insert' 	        => false
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -221,7 +220,6 @@ class regiones extends Base_Controller
 					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
 					,'class' 	=> "requerido"
-					,'insert' 	=> true
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -310,12 +308,15 @@ class regiones extends Base_Controller
 			$id_region = $this->ajax_post('id_region');
 			$entidades   = $this->ajax_post('entidades');
 			//print_debug($insertar);
-			foreach($entidades as $item => $valor)
+			/*foreach($entidades as $item => $valor)
 			{
-				$insertar = array('id_entidad' => $valor,
-								  'id_region'  => $id_region);
-				$insert = $this->db_model->db_update_entidades($insertar);
-			}
+			*/
+
+				
+			$insertar = array('id_entidad' => $entidades,
+							  'id_region'  => $id_region);
+			$insert = $this->db_model->db_update_entidades($insertar);
+			
 			
 			if($insert)
 			{
@@ -337,5 +338,39 @@ class regiones extends Base_Controller
 			}
 		}
 		echo json_encode($json_respuesta);
+	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['region'],
+									 $value['clave_corta'],
+									 $value['descripcion']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("region"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("descripcion")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Catálogos Regiones"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

@@ -151,12 +151,30 @@ class usuarios extends Base_Controller {
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
-		$tabData['base_url']    =  base_url();
-		$tabData['lbl_nombre']  =  $this->lang_item('lbl_nombre', false);
-		$tabData['lbl_paterno'] =  $this->lang_item('lbl_paterno', false);
-		$tabData['lbl_materno'] =  $this->lang_item('lbl_materno', false);
-		$tabData['lbl_perfil']  =  $this->lang_item('lbl_perfil', false);
-		$tabData['tree_view']   =  $this->treeview_perfiles(4);
+		$dropdown_array      = array(
+								 'data'		=> $this->perfiles->db_get_data()
+								,'value' 	=> 'id_perfil'
+								,'text' 	=> array('perfil')
+								,'name' 	=> "lts_perfiles"
+								,'class' 	=> "requerido"
+								,'event'    => array('event'       => 'onchange',
+							   						 'function'    => 'load_tree_view',
+							   						 'params'      => array('this.value'),
+							   						 'params_type' => array(0)
+			   										)
+								);
+		$perfiles                    =  dropdown_tpl($dropdown_array);
+		$tabData['base_url']         =  base_url();
+		$tabData['lbl_nombre']       =  $this->lang_item('lbl_nombre', false);
+		$tabData['lbl_paterno']      =  $this->lang_item('lbl_paterno', false);
+		$tabData['lbl_materno']      =  $this->lang_item('lbl_materno', false);
+		$tabData['lbl_telefono']     =  $this->lang_item('lbl_telefono', false);
+		$tabData['lbl_email']        =  $this->lang_item('lbl_email', false);
+		$tabData['lbl_perfil']       =  $this->lang_item('lbl_perfil', false);
+		$tabData['dropdown_perfil']  =  $perfiles;
+		$tabData['button_save']      =  $btn_save;
+		$tabData['button_reset']     =  $btn_reset;
+		$tabData['tree_view']        =  '';
 		
 		
 
@@ -166,82 +184,14 @@ class usuarios extends Base_Controller {
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
-
-	public function treeview_perfiles($id_perfil = 2){
-		$this->load_database('global_system');
-		$info_perfil  = $this->db_model->search_data_perfil($id_perfil);
-		$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
-		$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
-		$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
-
-		$id_niveles   = array(	
-						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
-						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
-						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
-						);
-		$data_modulos = $this->db_model->search_modules_for_user('', '' , '' , true);
-		$data_modulos = $this->build_array_treeview($data_modulos);
-		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,true);
+	public function load_tree_view_perfil(){
+		$id_perfil         = $this->ajax_post('id_perfil');
+		$treeview_perfiles = $this->treeview_perfiles($id_perfil, true);
+		echo json_encode($treeview_perfiles);
 	}
 
 	
 
-	/*public function list_tree_view($items, $id_niveles = array(), $sub = false){
-
-	    $panel    = "";
-	    $style_ul = "";
-	    $style    = "treeview-gray";
-	    if($sub){ 
-	    	$panel .= "<ul>";
-		}else{
-			$panel .= "<ul id = 'treeview-modules' class='treeview-gray'>";
-	    }
-	    foreach ($items as $item => $subitems) {
-	    	$item         = explode('-', $item);
-	    	$itemId       = $item[0]; 
-	    	$itemName     = $item[1];
-	    	$content      = "";	
-			$sub_nivel    = "";
-			$checked      = "";
-	        if(array_key_exists('content', $subitems)){
-	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true);
-	        }
-	        $icon      = $subitems['icon'];
-	        $nivel     = $subitems['nivel'];
-	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
-
-	        switch ($nivel) {
-	        	case 1:
-	        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
-	        			$checked = "checked='checked'";
-	        		}else{
-	        			$checked = '';
-	        		}
-	        		break;
-	        	case 2:
-	        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
-	        			$checked = "checked='checked'";
-	        		}else{
-	        			$checked = '';
-	        		}
-	        		break;
-	        	case 3:
-	        		if(in_array($itemId, $id_niveles['id_menu_n3'])){
-	        			$checked = "checked='checked'";
-	        		}else{
-	        			$checked = '';
-	        		}
-	        		break;
-	        	default:
-	        		break;
-	        }
-    		$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemName' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
-	        $panel    .= $content;
-	       	$panel    .= "</li>";
-	    }
-	    if($sub){$panel .= "</ul>";}
-	    return $panel;
-	}*/
 	
+
 }

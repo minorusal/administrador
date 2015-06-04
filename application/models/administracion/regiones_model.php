@@ -111,23 +111,20 @@ class regiones_model extends Base_Model
 
 	public function db_update_entidades($data=array())
 	{	
-		$tbl = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
-		$condicion = array("id_entidad =" => $data['id_entidad'], "id_region = " => $data['id_region']);
-		$existe = $this->row_exist($tbl,$condicion);
-		if(!$existe)
-		{
-			$query = $this->db->insert_string($tbl, $data);
-			$query = $this->db->query($query);
-			return $query;	
+		foreach ($data['id_entidad'] as $key => $value) {
+			$new_data[] = array(
+								'id_entidad' => $value,
+							    'id_region'  => $data['id_region']	
+								);
 		}
-		else
-		{
-			$condicion = array("id_region = " => $data['id_region']);
-			$this->db->where($condicion);
-			$query = $this->db->delete($tbl);
-		}
+		$tbl  = $this->dbinfo[1]['db'].'.'.$this->dbinfo[1]['tbl_administracion_entidad_region'];
+		$condicion = array("id_region" => $data['id_region']);
+		$this->db->where($condicion);
+		$query = $this->db->delete($tbl);
+		$query = $this->db->insert_batch($tbl, $new_data);
+		return $query;	
 		
-		return false;
+	
 	}
 
 }

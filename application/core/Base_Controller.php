@@ -252,7 +252,7 @@ class Base_Controller extends CI_Controller {
     * @param bolean $sub
     * @return string
     */
-	public function list_tree_view($items, $id_niveles = array(), $sub = false, $checado = false){
+	public function list_tree_view($items, $id_niveles = array(), $sub = false, $checado = false, $locked = false){
 
 	    $panel    = "";
 	    $style_ul = "";
@@ -262,6 +262,7 @@ class Base_Controller extends CI_Controller {
 		}else{
 			$panel .= "<ul id = 'treeview-modules' class='treeview-gray '>";
 	    }
+	    
 	    foreach ($items as $item => $subitems) {
 	    	$item         = explode('-', $item);
 	    	$itemId       = $item[0]; 
@@ -269,8 +270,9 @@ class Base_Controller extends CI_Controller {
 	    	$content      = "";	
 			$sub_nivel    = "";
 			$checked      = "";
+			$lock         = "";
 	        if(array_key_exists('content', $subitems)){
-	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true, $checado);
+	        	$content .= $this->list_tree_view($subitems['content'],$id_niveles, $sub = true, $checado, $locked);
 	        }
 	        
 	        $icon      = $subitems['icon'];
@@ -289,6 +291,7 @@ class Base_Controller extends CI_Controller {
 		        	case 1:
 		        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
 		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
 		        		}else{
 		        			$checked = '';
 		        		}
@@ -296,6 +299,7 @@ class Base_Controller extends CI_Controller {
 		        	case 2:
 		        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
 		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
 		        		}else{
 		        			$checked = '';
 		        		}
@@ -303,14 +307,16 @@ class Base_Controller extends CI_Controller {
 		        	case 3:
 		        		if(in_array($itemId, $id_niveles['id_menu_n3'])){
 		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
 		        		}else{
 		        			$checked = '';
+		        			$lock = '';
 		        		}
 		        		break;
 		        	default:
 		        		break;
 		        }
-		    	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+		    	$panel    .= "<li>&nbsp;<input $lock name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
 	        	$panel    .= $content;
 	       		$panel    .= "</li>";    
 		    }
@@ -324,7 +330,7 @@ class Base_Controller extends CI_Controller {
     * @param array $id_perfil
     * @return array
     */
-	public function treeview_perfiles($id_perfil=false){
+	public function treeview_perfiles($id_perfil=false, $locked = false){
 		$this->load_database('global_system');
 		$this->load->model('users_model');
 		if($id_perfil)
@@ -350,7 +356,7 @@ class Base_Controller extends CI_Controller {
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked);
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked,$locked);
 	}
 
 	/**

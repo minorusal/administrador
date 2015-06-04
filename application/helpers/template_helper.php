@@ -155,7 +155,6 @@
 				$class 		   = (isset($params['class']))?$params['class']:'';
 				$event 		   = (isset($params['event']))?$params['event']:'';
 				$disabled      = (isset($params['disabled']))?$params['disabled']:'';
-				$insert        = (isset($params['insert']))?$params['insert']:false;
 			}
 
 			$name    = ($name=="") ? "selected" : $name;
@@ -193,10 +192,7 @@
 					}					
 					$count++;
 				}
-				if($insert)
-					$multiple =  form_multiselect('list', array(), $selected,"multiple='multiple'  size='10'");
-				else
-					$multiple =  form_multiselect('list', $options_selected, $selected,"multiple='multiple'  size='10'");
+				$multiple =  form_multiselect('list', $options_selected, $selected,  "multiple='multiple' class='multiple_selected $class'  size='10'");
 
 				$selected = "<span id='dualselected' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' class='uniformselect' size='10'")

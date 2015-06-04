@@ -168,7 +168,6 @@ class regiones extends Base_Controller
 					,'text' 	        => array('entidad','clave_corta')
 					,'name' 	        => "lts_entidades"
 					,'class' 	        => "requerido"
-					,'insert' 	        => false
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -221,7 +220,6 @@ class regiones extends Base_Controller
 					,'text' 	=> array('entidad','clave_corta')
 					,'name' 	=> "lts_entidades"
 					,'class' 	=> "requerido"
-					,'insert' 	=> true
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -310,12 +308,15 @@ class regiones extends Base_Controller
 			$id_region = $this->ajax_post('id_region');
 			$entidades   = $this->ajax_post('entidades');
 			//print_debug($insertar);
-			foreach($entidades as $item => $valor)
+			/*foreach($entidades as $item => $valor)
 			{
-				$insertar = array('id_entidad' => $valor,
-								  'id_region'  => $id_region);
-				$insert = $this->db_model->db_update_entidades($insertar);
-			}
+			*/
+
+				
+			$insertar = array('id_entidad' => $entidades,
+							  'id_region'  => $id_region);
+			$insert = $this->db_model->db_update_entidades($insertar);
+			
 			
 			if($insert)
 			{

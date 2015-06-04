@@ -39,8 +39,7 @@ class descuentos_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de la tabla av_administracion_descuentos*/
-	public function get_orden_unico_descuento($id_administracion_descuentos)
-	{
+	public function get_orden_unico_descuento($id_administracion_descuentos){
 		$tbl   = $this->db1.'.'.$this->tbl1;
 		$query = "SELECT * FROM $tbl WHERE id_administracion_descuentos = $id_administracion_descuentos";
 		$query = $this->db->query($query);

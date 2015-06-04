@@ -29,11 +29,11 @@ function load_content(uri, id_content){
         }
     });
 }
-/*function buscar(){
+function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/almacenes/listado",
+		url: path()+"compras/embalaje/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -48,7 +48,6 @@ function load_content(uri, id_content){
 		}
 	})
 }
-*/
 function agregar(){
 	var btn          = jQuery("button[name='save_almacen']");
 	btn.attr('disabled','disabled');

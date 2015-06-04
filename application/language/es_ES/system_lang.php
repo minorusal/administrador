@@ -64,7 +64,7 @@
 
 
 	$lang['lbl_fecha_registro']  = 'Fecha de Registro';
-	$lang['lbl_usuario_regitro'] = 'Registrado por';
+	$lang['lbl_usuario_registro'] = 'Registrado por';
 
 	$lang['catalogo']        = 'Catalogo de ';
 ?>

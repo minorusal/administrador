@@ -339,4 +339,38 @@ class regiones extends Base_Controller
 		}
 		echo json_encode($json_respuesta);
 	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['region'],
+									 $value['clave_corta'],
+									 $value['descripcion']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("region"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("descripcion")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Catálogos Regiones"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
+	}
 }

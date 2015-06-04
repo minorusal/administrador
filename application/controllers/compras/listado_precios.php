@@ -16,7 +16,7 @@ class listado_precios extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->seccion          = 'listado_precios';
-		$this->icon 			= 'fa fa-road'; #Icono de modulo
+		$this->icon 			= 'fa fa-list-alt'; #Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #compras/listado_precios/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;

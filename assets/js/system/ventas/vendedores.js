@@ -48,7 +48,7 @@ function load_content(uri, id_content){
     });
 }
 function insert(){
- var btn          = jQuery("button[name='save_vendedor']");
+/* var btn          = jQuery("button[name='save_vendedor']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
@@ -89,7 +89,8 @@ function insert(){
         jQuery("#mensajes").html(data[1]).show('slow');
       
     }
-  })
+  })*/
+values_requeridos();
 }
 function detalle(id_vendedor){
   jQuery('#ui-id-2').click();

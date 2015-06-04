@@ -203,7 +203,7 @@
 					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
 				else*/
 
-				$multiple =  form_multiselect($name, $options_selected, $selected,"multiple='multiple' class='multiple_selectect' size='10'");
+				$multiple =  form_multiselect($name, $options_selected, $selected,"multiple='multiple' class='multiple_selected' size='10'");
 
 				print_debug($multiple);
 				$selected = "<span id='dualselect' class='dualselect'>"

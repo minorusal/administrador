@@ -1,5 +1,31 @@
 <?php
 class users_model extends Base_Model{
+
+	private $vars;
+	private $db1,$db2;
+	private $tbl;
+
+	public function __construct(){
+		parent::__construct();		
+		$this->vars		= new config_vars();
+        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
+        $this->db1		= $this->vars->db['db1'];
+        $this->tbl['claves'] = $this->db1.'.'.$this->vars->db['db1_tbl_claves']; 
+		$this->tbl['empresas'] = $this->db1.'.'.$this->vars->db['db1_tbl_empresas']; 
+		$this->tbl['modulos'] = $this->db1.'.'.$this->vars->db['db1_tbl_modulos']; 
+		$this->tbl['paises'] = $this->db1.'.'.$this->vars->db['db1_tbl_paises']; 
+		$this->tbl['perfiles'] = $this->db1.'.'.$this->vars->db['db1_tbl_perfiles']; 
+		$this->tbl['personales'] = $this->db1.'.'.$this->vars->db['db1_tbl_personales']; 
+		$this->tbl['secciones'] = $this->db1.'.'.$this->vars->db['db1_tbl_secciones']; 
+		$this->tbl['submodulos'] = $this->db1.'.'.$this->vars->db['db1_tbl_submodulos']; 
+		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales']; 
+		$this->tbl['usuarios'] = $this->db1.'.'.$this->vars->db['db1_tbl_usuarios']; 
+		$this->tbl['menu1'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n1']; 
+		$this->tbl['menu2'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n2']; 
+		$this->tbl['menu3'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n3']; 
+		$this->tbl['vw_personal'] = $this->db1.'.'.$this->vars->db['db1_vw_personal'];  
+	}
+
 	/**
     * Busca Usuario por usuario y password, funcion principla de login
     * @param string $user
@@ -7,64 +33,8 @@ class users_model extends Base_Model{
     * @return array
     */
 	public function search_user_for_login($user, $pwd){
-		$query  = "	SELECT 
-						U.id_usuario
-						,P.id_personal
-						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
-						,P.telefono
-						,P.mail
-						,P.avatar as avatar_user
-						,Pa.id_pais
-						,Pa.pais
-						,Pa.dominio
-						,Pa.avatar as avatar_pais
-						,E.id_empresa
-						,E.empresa
-						,S.id_sucursal
-						,S.sucursal
-						,N.id_perfil
-						,N.perfil
-						,N.id_menu_n1
-						,N.id_menu_n2
-						,N.id_menu_n3
-						,U.id_menu_n1 as user_id_menu_n1
-						,U.id_menu_n2 as user_id_menu_n2
-						,U.id_menu_n3 as user_id_menu_n3
-						,U.registro
-						,U.activo
-						,C.user
-					FROM 
-						00_av_system.sys_usuarios U
-					left join 00_av_system.sys_personales P on U.id_personal = P.id_personal
-					left join 00_av_system.sys_claves     C on U.id_clave    = C.id_clave
-					left join 00_av_system.sys_perfiles   N on U.id_perfil  = N.id_perfil
-					left join 00_av_system.sys_paises     Pa on U.id_pais    = Pa.id_pais
-					left join 00_av_system.sys_empresas   E on U.id_empresa  = E.id_empresa
-					left join 00_av_system.sys_sucursales S on U.id_sucursal = S.id_sucursal
-					WHERE md5(C.user) = md5('$user') AND C.pwd = '$pwd' AND U.activo = 1
-					ORDER BY 
-						N.id_perfil;
-				";
-		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
-		}		
-	}
-	/**
-    * Busca Usuario por su id unico de registro
-    * @param integer $id_user
-    * @return array
-    */
-	public function search_user_for_id($id_user){
 		// DB Info
-		$db1 	= $this->dbinfo[0]['db'];
-		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
-		$tbl2 	= $this->dbinfo[0]['tbl_personales'];
-		$tbl3 	= $this->dbinfo[0]['tbl_claves'];
-		$tbl4 	= $this->dbinfo[0]['tbl_perfiles'];
-		$tbl5 	= $this->dbinfo[0]['tbl_paises'];
-		$tbl6 	= $this->dbinfo[0]['tbl_empresas'];
-		$tbl7 	= $this->dbinfo[0]['tbl_sucursales'];
+		$tbl = $this->tbl;
 		// Query
 		$query  = "	SELECT 
 						U.id_usuario
@@ -92,14 +62,64 @@ class users_model extends Base_Model{
 						,U.registro
 						,U.activo
 						,C.user
-					FROM 
-						$db1.$tbl1 U
-					left join $db1.$tbl2 P on U.id_personal = P.id_personal
-					left join $db1.$tbl3 C on U.id_clave    = C.id_clave
-					left join $db1.$tbl4 N on U.id_perfil   = N.id_perfil
-					left join $db1.$tbl5 Pa on U.id_pais    = Pa.id_pais
-					left join $db1.$tbl6 E on U.id_empresa  = E.id_empresa
-					left join $db1.$tbl7 S on U.id_sucursal = S.id_sucursal
+					FROM $tbl[usuarios] U
+					left join $tbl[personales] P on U.id_personal = P.id_personal
+					left join $tbl[claves]     C on U.id_clave    = C.id_clave
+					left join $tbl[perfiles]   N on U.id_perfil  = N.id_perfil
+					left join $tbl[paises]     Pa on U.id_pais    = Pa.id_pais
+					left join $tbl[empresas]   E on U.id_empresa  = E.id_empresa
+					left join $tbl[sucursales] S on U.id_sucursal = S.id_sucursal
+					WHERE md5(C.user) = md5('$user') AND C.pwd = '$pwd' AND U.activo = 1
+					ORDER BY 
+						N.id_perfil;
+				";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}		
+	}
+	/**
+    * Busca Usuario por su id unico de registro
+    * @param integer $id_user
+    * @return array
+    */
+	public function search_user_for_id($id_user){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query  = "	SELECT 
+						U.id_usuario
+						,P.id_personal
+						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
+						,P.telefono
+						,P.mail
+						,P.avatar as avatar_user
+						,Pa.id_pais
+						,Pa.pais
+						,Pa.dominio
+						,Pa.avatar as avatar_pais
+						,E.id_empresa
+						,E.empresa
+						,S.id_sucursal
+						,S.sucursal
+						,N.id_perfil
+						,N.perfil
+						,N.id_menu_n1
+						,N.id_menu_n2
+						,N.id_menu_n3
+						,U.id_menu_n1 as user_id_menu_n1
+						,U.id_menu_n2 as user_id_menu_n2
+						,U.id_menu_n3 as user_id_menu_n3
+						,U.registro
+						,U.activo
+						,C.user
+					FROM $tbl[usuarios] U
+					left join $tbl[personales] P on U.id_personal = P.id_personal
+					left join $tbl[claves]     C on U.id_clave    = C.id_clave
+					left join $tbl[perfiles]   N on U.id_perfil  = N.id_perfil
+					left join $tbl[paises]     Pa on U.id_pais    = Pa.id_pais
+					left join $tbl[empresas]   E on U.id_empresa  = E.id_empresa
+					left join $tbl[sucursales] S on U.id_sucursal = S.id_sucursal
 					WHERE U.id_usuario = $id_user  AND U.activo = 1;
 				";
 		$query = $this->db->query($query);
@@ -123,19 +143,16 @@ class users_model extends Base_Model{
 		$id_menu_n3 = ($id_menu_n3=='') ? '0' : $id_menu_n3;
 
 		// DB Info
-		$db1 	= $this->dbinfo[0]['db'];
-		$tbl1 	= $this->dbinfo[0]['tbl_menu_n1'];
-		$tbl2 	= $this->dbinfo[0]['tbl_menu_n2'];
-		$tbl3 	= $this->dbinfo[0]['tbl_menu_n3'];
+		$tbl = $this->tbl;
 		// Query
 		if($root){
 			$sys_navigate_n1 = "n1.activo = 1";
-			$sys_navigate_n2 = "SELECT * FROM sys_menu_n2 WHERE activo = 1";
-			$sys_navigate_n3 = "SELECT * FROM sys_menu_n3 WHERE activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM $tbl[menu2] WHERE activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM $tbl[menu3] WHERE activo = 1";
 		}else{
 			$sys_navigate_n1 = "n1.id_menu_n1 IN ($id_menu_n1) AND n1.activo = 1";
-			$sys_navigate_n2 = "SELECT * FROM $db1.$tbl2 WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";
-			$sys_navigate_n3 = "SELECT * FROM $db1.$tbl3 WHERE id_menu_n3 IN ($id_menu_n3) AND activo = 1";
+			$sys_navigate_n2 = "SELECT * FROM $tbl[menu2] WHERE id_menu_n2 IN ($id_menu_n2) AND activo = 1";
+			$sys_navigate_n3 = "SELECT * FROM $tbl[menu3] WHERE id_menu_n3 IN ($id_menu_n3) AND activo = 1";
 		}
 		$query = "	SELECT 
 						n1.id_menu_n1
@@ -150,8 +167,7 @@ class users_model extends Base_Model{
 						,n3.menu_n3
 						,n3.routes as menu_n3_routes
 						,n3.icon as menu_n3_icon
-					FROM
-						$db1.$tbl1 n1
+					FROM $tbl[menu1] n1
 					LEFT JOIN ($sys_navigate_n2 )  n2 ON n1.id_menu_n1 = n2.id_menu_n1
 					LEFT JOIN ($sys_navigate_n3)  n3 ON n3.id_menu_n2 = n2.id_menu_n2
 					WHERE
@@ -171,24 +187,17 @@ class users_model extends Base_Model{
 	* @return array
 	*/
 	public function search_data_perfil($id_perfil){
-		$db1   = $this->dbinfo[0]['db'];
-		$tbl1  = $this->dbinfo[0]['tbl_perfiles'];
-		$query = "SELECT * FROM $db1.$tbl1 WHERE id_perfil = $id_perfil";
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT * FROM $tbl[perfiles] WHERE id_perfil = $id_perfil";
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
 	
 	public function db_get_data($data = array()){
-
-		$db1 	= $this->dbinfo[0]['db'];
-		$tbl1 	= $this->dbinfo[0]['tbl_usuarios'];
-		$tbl2 	= $this->dbinfo[0]['tbl_personales'];
-		$tbl3 	= $this->dbinfo[0]['tbl_claves'];
-		$tbl4 	= $this->dbinfo[0]['tbl_perfiles'];
-		$tbl5 	= $this->dbinfo[0]['tbl_paises'];
-		$tbl6 	= $this->dbinfo[0]['tbl_empresas'];
-		$tbl7 	= $this->dbinfo[0]['tbl_sucursales'];
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=='') ? "" : "AND ( 	name   LIKE '%$filtro%' 
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
@@ -218,14 +227,13 @@ class users_model extends Base_Model{
 						,U.registro
 						,U.activo
 						,C.user
-					FROM 
-						$db1.$tbl1 U
-					left join $db1.$tbl2 P on U.id_personal = P.id_personal
-					left join $db1.$tbl3 C on U.id_clave    = C.id_clave
-					left join $db1.$tbl4 N on U.id_perfil   = N.id_perfil
-					left join $db1.$tbl5 Pa on U.id_pais    = Pa.id_pais
-					left join $db1.$tbl6 E on U.id_empresa  = E.id_empresa
-					left join $db1.$tbl7 S on U.id_sucursal = S.id_sucursal
+					FROM $tbl[usuarios] U
+					left join $tbl[personales] P on U.id_personal = P.id_personal
+					left join $tbl[claves]     C on U.id_clave    = C.id_clave
+					left join $tbl[perfiles]   N on U.id_perfil  = N.id_perfil
+					left join $tbl[paises]     Pa on U.id_pais    = Pa.id_pais
+					left join $tbl[empresas]   E on U.id_empresa  = E.id_empresa
+					left join $tbl[sucursales] S on U.id_sucursal = S.id_sucursal
 					WHERE U.id_usuario = $id_user  AND U.activo = 1 $filtro $limit";
 		
 		print_debug($query);
@@ -236,9 +244,9 @@ class users_model extends Base_Model{
 		}	
 	}
 	public function db_get_total_rows($data=array()){
-		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];
-		$tbl2 = $this->dbinfo[1]['tbl_administracion_entidades'];
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$buscar = (array_key_exists('buscar',$data))?$data['buscar']:false;
 		$filtro = ($buscar) ? "AND ( 	p.razon_social  LIKE '%$buscar%' OR 
 										p.nombre_comercial  LIKE '%$buscar%' OR
@@ -246,16 +254,14 @@ class users_model extends Base_Model{
 										p.rfc  LIKE '%$buscar%' OR
 										e.entidad LIKE '%$buscar%'
 											)" : "";
-		$query = "SELECT 
-						 *
-					FROM 
-						$db1.$tbl1 U
-					left join $db1.$tbl2 P on U.id_personal = P.id_personal
-					left join $db1.$tbl3 C on U.id_clave    = C.id_clave
-					left join $db1.$tbl4 N on U.id_perfil   = N.id_perfil
-					left join $db1.$tbl5 Pa on U.id_pais    = Pa.id_pais
-					left join $db1.$tbl6 E on U.id_empresa  = E.id_empresa
-					left join $db1.$tbl7 S on U.id_sucursal = S.id_sucursal
+		$query = "SELECT *
+					FROM $tbl[usuarios] U
+					left join $tbl[personales] P on U.id_personal = P.id_personal
+					left join $tbl[claves]     C on U.id_clave    = C.id_clave
+					left join $tbl[perfiles]   N on U.id_perfil  = N.id_perfil
+					left join $tbl[paises]     Pa on U.id_pais    = Pa.id_pais
+					left join $tbl[empresas]   E on U.id_empresa  = E.id_empresa
+					left join $tbl[sucursales] S on U.id_sucursal = S.id_sucursal
 					WHERE U.id_usuario = $id_user  AND U.activo = 1 $filtro";
 
       	$query = $this->db->query($query);

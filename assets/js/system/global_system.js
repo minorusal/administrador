@@ -295,7 +295,7 @@ function values_requeridos(){
     var items_vacios = 0;
     jQuery(".requerido").each(function(){ 
         if(jQuery(this).prop('tagName')=='SELECT'){
-            if(jQuery(this).attr('multiple', 'multiple')){
+            if(jQuery(this).attr('class', 'multiple_selectect')){
                 if(jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
                 }else{
                    items_vacios++; 

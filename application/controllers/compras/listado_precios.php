@@ -324,7 +324,7 @@ class listado_precios extends Base_Controller {
 
 		$dropArray4 = array(
 					 'data'		=> $this->catalogos_model->get_presentaciones($limit="", $offset="", $filtro="", $aplicar_limit = false)
-					 ,'selected' => $detalle[0]['id_presentacion']
+					 ,'selected'=> $detalle[0]['id_presentacion']
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
@@ -382,6 +382,8 @@ class listado_precios extends Base_Controller {
         $data_tab['checked'] 							= $checked;
         $data_tab['button_save']           	 			= $btn_save;
 
+       	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);
+       	$data_tab['pre_emb']						= $presentacion[0]['clave_corta'];
 
         $this->load_database('global_system');
         $this->load->model('users_model');

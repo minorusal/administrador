@@ -155,17 +155,16 @@
 				$class 		   = (isset($params['class']))?$params['class']:'';
 				$event 		   = (isset($params['event']))?$params['event']:'';
 				$disabled      = (isset($params['disabled']))?$params['disabled']:'';
-				//$insert     = $params['insert'];
+				$insert        = (isset($params['insert']))?$params['insert']:false;
 			}
-
-			//print_debug($data);
 
 			$name    = ($name=="") ? "selected" : $name;
 			$count   = 0;
+			$options_selected = array();
 
 			if($data && $name && $value && $text){
 				if(!empty($data_seleted)){
-					foreach ($data_seleted as $option => $item) {
+					foreach($data_seleted as $option => $item){
 						$option_selected = "";
 						if(is_array($text)){
 							foreach ($text as $string) {
@@ -176,10 +175,9 @@
 							$options_selected[$item[$value]]= $item[$text];
 						}		
 					}
-					//
 				}
 
-				foreach ($data as $option => $item) {
+				foreach ($data as $option => $item){
 					$option_value = "";
 					if(is_array($text)){
 						if(!array_key_exists($item[$value], $options_selected)){
@@ -195,19 +193,14 @@
 					}					
 					$count++;
 				}
+				if($insert)
+					$multiple =  form_multiselect('list', array(), $selected,"multiple='multiple'  size='10'");
+				else
+					$multiple =  form_multiselect('list', $options_selected, $selected,"multiple='multiple'  size='10'");
 
-				//print_debug($options);
+				$selected = "<span id='dualselected' class='dualselect'>"
+							.form_multiselect($name, $options, $selected,"multiple='multiple' class='uniformselect' size='10'")
 
-				/*if($insert)
-					//print_debug($options);
-					//$multiple  = form_multiselect('list', array(), $selected,"multiple='multiple' class='$class' size='10'");
-				else*/
-
-				$multiple =  form_multiselect($name, $options_selected, $selected,"multiple='multiple' class='multiple_selected' size='10'");
-
-				print_debug($multiple);
-				$selected = "<span id='dualselect' class='dualselect'>"
-							.form_multiselect($name, $options, $selected,"multiple='multiple' size='10'")
 				               ."<span class='ds_arrow'>
 					               	<button class='btn ds_prev'>
 								    	<i class='iconfa-chevron-left'>

@@ -62,7 +62,7 @@ function detalle(id_puesto){
     });
 }
 function actualizar(){
-	jQuery('#mensajes_update').hide();
+	/*jQuery('#mensajes_update').hide();
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();	
@@ -84,7 +84,8 @@ function actualizar(){
 			jQuery("#mensajes_update").html(data.contenido).show('slow');
 			jQuery("#update_loader").html('');
 		}
-	})
+	})*/
+	values_requeridos();
 }
 
 

@@ -318,12 +318,13 @@ function values_requeridos(){
                 } 
             }
         }else{
-            if(jQuery(this).val().length>0){
+            if(jQuery(this).val()==''){
                 ids = jQuery(this).attr("id")+'|'+ids;
                 items_vacios++
             } 
         }
     });
+    alert(ids);
     return items_vacios;
 }
 

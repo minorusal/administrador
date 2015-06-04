@@ -1,13 +1,4 @@
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery("#treeview-modules").treeview({
-            animated: "fast",
-            control:"#sidetreecontrol",
-            collapsed: true,
-            unique: false
-          });
-    })
-</script>
+
 <div id="formulario" >
     <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
     <p>
@@ -23,11 +14,19 @@
         <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
     </p>
     <p>
+        <label>{lbl_telefono}:</label>
+        <input id="telefono" type="text" name="telefono" class="input-large " value="" />
+    </p>
+    <p>
+        <label>{lbl_email}: (*)</label>
+        <input id="mail" type="text" name="mail" class="input-large requerido" value="" />
+    </p>
+    <p>
         <label>{lbl_perfil}: (*)</label>
         {dropdown_perfil}
     </p>
-    <div id="treeview" style="display:none">
-    {tree_view}
+    <div id="treeview_perfiles" style="display:none">
+        {tree_view}
     </div>
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>

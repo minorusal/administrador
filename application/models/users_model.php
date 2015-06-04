@@ -137,7 +137,6 @@ class users_model extends Base_Model{
 	* @return array
 	*/
 	public function search_modules_for_user($id_menu_n1= '' , $id_menu_n2= '', $id_menu_n3= '', $root = false ){
-
 		$id_menu_n1 = ($id_menu_n1=='') ? '0' : $id_menu_n1;
 		$id_menu_n2 = ($id_menu_n2=='') ? '0' : $id_menu_n2;
 		$id_menu_n3 = ($id_menu_n3=='') ? '0' : $id_menu_n3;
@@ -186,6 +185,8 @@ class users_model extends Base_Model{
 	* @param string $id_perfil
 	* @return array
 	*/
+
+	
 	public function search_data_perfil($id_perfil){
 		// DB Info
 		$tbl = $this->tbl;

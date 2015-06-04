@@ -53,8 +53,11 @@ $route['logout']                   = 'login/logout';
 
 /*COMPRAS*/
 
+/*Listado de precios*/
+$route['compras/listado_precios']    	= 'compras/listado_precios/index';
+
 /*Catalogo Articulos*/
-$route['compras/catalogos/articulos']                               = 'compras/articulos/index';
+$route['compras/catalogos/articulos']   = 'compras/articulos/index';
 
 /*Catalogo Presentaciones*/
 $route['compras/catalogos/presentaciones']                               = 'compras/presentaciones/index';

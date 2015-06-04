@@ -200,6 +200,7 @@
 
 				$selected = "<span id='dualselected' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' class='uniformselect' size='10'")
+
 				               ."<span class='ds_arrow'>
 					               	<button class='btn ds_prev'>
 								    	<i class='iconfa-chevron-left'>

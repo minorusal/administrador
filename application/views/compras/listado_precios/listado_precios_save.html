@@ -1,0 +1,48 @@
+<div id="formulario" class="stdform">    
+    <p>
+        <label>{articulo} (*)</label>
+            {lts_articulos}
+    </p>
+    <p>
+        <label>{proveedores} (*)</label>
+            {lts_proveedores}
+    </p>
+    <p>
+        <label>{marcas} (*)</label>
+            {lts_marcas}
+    </p>
+    <p>
+        <label>{presentaciones} (*)</label>
+            {lts_presentaciones}
+    </p>
+    <p>
+        <label>{embajale} (*)</label>
+            {lts_embalaje}
+    </p>
+    <p>
+        <label>{cantidad_presentacion_embalaje}: (*)</label>
+        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-xlarge requerido" value="" />
+    </p>
+    <p>
+        <label>{cantidad_um_presentacion}: (*)</label>
+        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-xlarge requerido" value="" />
+    </p>
+    <p>
+        <label>{precio_proveedor}: (*)</label>
+        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-xlarge requerido" value="" />
+    </p>
+    <p>
+        <label>{impuesto_aplica}: (*)</label>
+        <input id="impuesto_aplica" type="text" name="impuesto_aplica" class="input-xlarge requerido" value="" />
+    </p>
+    <p>
+        <label>{impuesto_porcentaje}: (*)</label>
+        <input id="impuesto_porcentaje" type="text" name="impuesto_porcentaje" class="input-xlarge requerido" value="" />
+    </p>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+     <p class="stdformbutton"> 
+        {button_save}
+        {button_reset}
+    </p>
+</div>

@@ -39,8 +39,8 @@ class embalaje extends Base_Controller {
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
+										 $this->lang_item('agregar_em') #agregar
+										,$this->lang_item('listado_em') #listado
 										,$this->lang_item($tab_3) #detalle
 								); 
 		// Href de tabs

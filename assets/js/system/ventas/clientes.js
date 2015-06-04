@@ -107,7 +107,7 @@ function detalle(id_cliente){
 
 function update(){
   var btn          = jQuery("button[name='update_cliente']");
-  /*btn.attr('disabled','disabled');*/
+  btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
   var incomplete    = values_requeridos();    

@@ -11,7 +11,12 @@
     // GoTopIcon
     GoTop();
 });
-
+jQuery.fn.hasAttr = function(name,val){
+    if(val){
+        return jQuery(this).attr(name) === val;
+    }
+    return jQuery(this).attr(name) !== undefined;
+};
 function config_datepicker(){
     if(typeof  months_timepicker=="undefined"){
         return false;
@@ -113,9 +118,14 @@ function treeview_childrens(){
         jQuery(this).parent().find('li input[type=checkbox]').prop('checked', jQuery(this).is(':checked'));
         var checked = false;
         jQuery(this).closest('ul').children('li').each(function () {
-            if(jQuery('input[type=checkbox]', this).is(':checked')) checked=true;
+           if(jQuery('input[type=checkbox]', this).is(':checked')) checked=true;
         })
         jQuery(this).parents('ul').prev().prop('checked', checked);
+        jQuery('input[type=checkbox]').each(function(){
+            if(jQuery(this).hasAttr('disabled')){
+                jQuery(this).attr('checked', true);
+            }
+        });
     });
 }
 function include_script(script){
@@ -308,7 +318,7 @@ function values_requeridos(){
                 } 
             }
         }else{
-            if(jQuery(this).val() == ''){
+            if(jQuery(this).val()==''){
                 ids = jQuery(this).attr("id")+'|'+ids;
                 items_vacios++
             } 

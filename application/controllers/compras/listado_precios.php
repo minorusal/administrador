@@ -364,7 +364,7 @@ class listado_precios extends Base_Controller {
 		echo json_encode( $this->load_view_unique($seccion ,$data_tab, true));
 	}
 	public function update(){
-		echo $incomplete  = $this->ajax_post('incomplete');
+		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));

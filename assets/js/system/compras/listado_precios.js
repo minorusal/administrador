@@ -63,8 +63,7 @@ function agregar(){
   var id_marca                    = jQuery("select[name='lts_marcas'] option:selected").val();
   var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
   var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
-  alert(incomplete);
- /* jQuery.ajax({
+  jQuery.ajax({
     type:"POST",
     url: path()+"compras/listado_precios/insert",
     dataType: "json",
@@ -93,7 +92,7 @@ function agregar(){
       jQuery("#registro_loader").html('');
         jQuery("#mensajes").html(data[1]).show('slow');
     }
-  });*/
+  });
 }
 function detalle(id_compras_articulo_precio){
   jQuery('#ui-id-2').click();

@@ -3,6 +3,7 @@ $lang['inventario']             = 'inventario';
 $lang['catalogos']              = 'catalogos';
 //MENU DE COMPRAS
 $lang['proveedores']            = 'proveedores';
+$lang['listado_precios']        = 'Listado de precios';
 $lang['articulos']              = 'articulos';
 $lang['ordenes']                = 'ordenes';	
 $lang['catalogos']              = 'catalogos';

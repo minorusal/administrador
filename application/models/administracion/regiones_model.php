@@ -131,6 +131,3 @@ class regiones_model extends Base_Model
 	}
 
 }
-/*
-$this->db->where($condicion);
-				$query = $this->db->delete($tbl);*/

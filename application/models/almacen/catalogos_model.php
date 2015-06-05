@@ -1,32 +1,30 @@
 <?php
-class catalogos_model extends Base_Model
-{
-	private $db1, $db2;
-	private $tbl_almacenes, $tbl_sucursales, $tbl_tipos;
-	private $tbl_pasillos, $tbl_transportes;
+class catalogos_model extends Base_Model{
 	
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db1                = $this->dbinfo[1]['db'];
-		$this->tbl_almacenes      = $this->dbinfo[1]['tbl_almacen_almacenes'];
-		$this->tbl_tipos          = $this->dbinfo[1]['tbl_almacen_tipos'];
-		$this->tbl_pasillos       = $this->dbinfo[1]['tbl_almacen_pasillos'];
-		$this->tbl_gavetas        = $this->dbinfo[1]['tbl_almacen_gavetas'];
-		$this->tbl_transportes    = $this->dbinfo[1]['tbl_almacen_transportes'];
-		
-		$this->db2            = $this->dbinfo[0]['db'];
-		$this->tbl_sucursales = $this->dbinfo[0]['tbl_sucursales'];
+	private $vars;
+	private $db1,$db2;
+	private $tbl;
+
+	public function __construct(){
+		parent::__construct();		
+		$this->vars		= new config_vars();
+        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
+		$this->db1 = $this->vars->db['db1'];
+		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
+        $this->db2 = $this->vars->db['db2'];		
+		$this->tbl['almacen_almacenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_almacenes'];
+		$this->tbl['almacen_gavetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_gavetas'];
+		$this->tbl['almacen_pasillos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_pasillos'];
+		$this->tbl['almacen_tipos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_tipos'];
+		$this->tbl['almacen_transportes'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_transportes'];
 	}
 	/*ALMACENES*/
 
 	/*Traer información para el listado de los almacenes*/
-	public function db_get_data_almacen($data=array())
-	{
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
-		$tbl_tipos      = $this->db1.'.'.$this->tbl_tipos;
-		$tbl_sucursales = $this->db2.'.'.$this->tbl_sucursales;
-		
+	public function db_get_data_almacen($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -45,87 +43,81 @@ class catalogos_model extends Base_Model
 						,av.id_sucursal
 						,su.sucursal
 						,ti.tipos
-					FROM $tbl_almacenes av
-					
-					LEFT JOIN $tbl_sucursales su on su.id_sucursal = av.id_sucursal
-					LEFT JOIN $tbl_tipos ti on ti.id_almacen_tipos = av.id_almacen_tipos
+					FROM $tbl[almacen_almacenes] av					
+					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = av.id_sucursal
+					LEFT JOIN $tbl[almacen_tipos] ti on ti.id_almacen_tipos = av.id_almacen_tipos
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_almacenes ASC
 					$limit
 					";
       	$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
 	/*Trae la información para el formulario de edición de almacen*/
-	public function get_orden_unico_almacen($id_almacen_almacenes)
-	{
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
-		$query = "SELECT * FROM $tbl_almacenes WHERE id_almacen_almacenes = $id_almacen_almacenes";
+	public function get_orden_unico_almacen($id_almacen_almacenes){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[almacen_almacenes] WHERE id_almacen_almacenes = $id_almacen_almacenes";
 		$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 
 
 	/*Actualliza la información en el formuladio de edición de almacen*/
-	public function db_update_data($data=array())
-	{
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
+	public function db_update_data($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_almacenes, $condicion);
-		if(!$existe)
-		{
+		$existe = $this->row_exist($tbl['almacen_almacenes'], $condicion);
+		if(!$existe){
 			$condicion = "id_almacen_almacenes = ".$data['id_almacen_almacenes']; 
-			$update    = $this->update_item($tbl_almacenes, $data, 'id_almacen_almacenes', $condicion);
+			$update    = $this->update_item($tbl['almacen_almacenes'], $data, 'id_almacen_almacenes', $condicion);
 			return $update;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 	/*Inserta registro de almacenes*/
-	public function db_insert_data($data = array())
-	{
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
-		$existe = $this->row_exist($tbl_almacenes, array('clave_corta'=> $data['clave_corta']));
-		if(!$existe)
-		{
-			$insert = $this->insert_item($tbl_almacenes, $data);
+	public function db_insert_data($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['almacen_almacenes'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['almacen_almacenes'], $data);
 			return $insert;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
-	public function db_get_data_tipos($data=array())
-	{
-		$tbl_tipos      = $this->db1.'.'.$this->tbl_tipos;
+	public function db_get_data_tipos($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 		$limit 	= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		$query  = "SELECT * FROM $tbl_tipos at";
+		$query  = "SELECT * FROM $tbl[almacen_tipos] at";
       	$query  = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
 	/*PASILLOS*/
-	public function db_get_data_pasillo($data=array())
-	{
-		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
+	public function db_get_data_pasillo($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -142,71 +134,66 @@ class catalogos_model extends Base_Model
 						,av.pasillos
 						,al.id_almacen_almacenes
 						,al.almacenes
-					FROM $tbl_pasillos av
-					LEFT JOIN $tbl_almacenes al on al.id_almacen_almacenes = av.id_almacen_almacenes
+					FROM $tbl[almacen_pasillos] av
+					LEFT JOIN $tbl[almacen_almacenes] al on al.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_pasillos ASC
 					$limit
 					";
       	$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
 	/*Trae la información para el formulario de edición de pasillo*/
-	public function get_orden_unico_pasillo($id_almacen_pasillos)
-	{
-		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
-		$query = "SELECT * FROM $tbl_pasillos WHERE id_almacen_pasillos = $id_almacen_pasillos";
+	public function get_orden_unico_pasillo($id_almacen_pasillos){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[almacen_pasillos] WHERE id_almacen_pasillos = $id_almacen_pasillos";
 		$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 
 	/*Actualliza la información en el formuladio de edición de pasillos*/
-	public function db_update_data_pasillo($data=array())
-	{
-		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
+	public function db_update_data_pasillo($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_almacen_pasillos !=' => $data['id_almacen_pasillos'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_pasillos, $condicion);
-		if(!$existe)
-		{
+		$existe = $this->row_exist($tbl['almacen_pasillos'], $condicion);
+		if(!$existe){
 			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
-			$update    = $this->update_item($tbl_pasillos, $data, 'id_almacen_pasillos', $condicion);
+			$update    = $this->update_item($tbl['almacen_pasillos'], $data, 'id_almacen_pasillos', $condicion);
 			return $update;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
 	/*Inserta registro de pasillos*/
-	public function db_insert_data_pasillos($data = array())
-	{
-		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
-		$existe = $this->row_exist($tbl_pasillos, array('clave_corta'=> $data['clave_corta']));
+	public function db_insert_data_pasillos($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['almacen_pasillos'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item($tbl_pasillos, $data);
+			$insert = $this->insert_item($tbl['almacen_pasillos'], $data);
 			return $insert;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
 	/*GAVETAS*/
 
-	public function db_get_data_gaveta($data=array())
-	{
-		$tbl_gavetas    = $this->db1.'.'.$this->tbl_gavetas;
-		$tbl_pasillos   = $this->db1.'.'.$this->tbl_pasillos;
-		$tbl_almacenes  = $this->db1.'.'.$this->tbl_almacenes;
+	public function db_get_data_gaveta($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -226,62 +213,57 @@ class catalogos_model extends Base_Model
 						,av.clave_corta
 						,av.descripcion
 						,av.gavetas
-					FROM $tbl_gavetas av
-					LEFT JOIN $tbl_pasillos al on al.id_almacen_pasillos = av.id_almacen_pasillos
-					LEFT JOIN $tbl_almacenes am on am.id_almacen_almacenes = av.id_almacen_almacenes
+					FROM $tbl[almacen_gavetas] av
+					LEFT JOIN $tbl[almacen_pasillos] al on al.id_almacen_pasillos = av.id_almacen_pasillos
+					LEFT JOIN $tbl[almacen_almacenes] am on am.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
 					GROUP BY av.id_almacen_gavetas ASC
 					$limit
 					";
       	$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
 	/*Trae la información para el formulario de edición de gaveta*/
-	public function get_orden_unico_gaveta($id_almacen_gavetas)
-	{
-		$tbl_gavetas    = $this->db1.'.'.$this->tbl_gavetas;
-		$query = "SELECT * FROM $tbl_gavetas WHERE id_almacen_gavetas = $id_almacen_gavetas";
+	public function get_orden_unico_gaveta($id_almacen_gavetas){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[almacen_gavetas] WHERE id_almacen_gavetas = $id_almacen_gavetas";
 		$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 
 	/*Actualliza la información en el formuladio de edición de gavetas*/
-	public function db_update_data_gaveta($data=array())
-	{
-		$tbl_gavetas    = $this->db1.'.'.$this->tbl_gavetas;
+	public function db_update_data_gaveta($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_almacen_gavetas !=' => $data['id_almacen_gavetas'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_gavetas, $condicion);
-		if(!$existe)
-		{
+		$existe = $this->row_exist($tbl['almacen_gavetas'], $condicion);
+		if(!$existe){
 			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
-			$update    = $this->update_item($tbl_gavetas, $data, 'id_almacen_gavetas', $condicion);
+			$update    = $this->update_item($tbl['almacen_gavetas'], $data, 'id_almacen_gavetas', $condicion);
 			return $update;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
 	/*Inserta registro de gavetas*/
-	public function db_insert_data_gavetas($data = array())
-	{
-		$tbl_gavetas    = $this->db1.'.'.$this->tbl_gavetas;
-		$existe = $this->row_exist($tbl_gavetas, array('clave_corta'=> $data['clave_corta']));
-		if(!$existe)
-		{
-			$insert = $this->insert_item($tbl_gavetas, $data);
+	public function db_insert_data_gavetas($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['almacen_gavetas'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['almacen_gavetas'], $data);
 			return $insert;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
@@ -289,9 +271,10 @@ class catalogos_model extends Base_Model
 
 	/*TRANSPORTES*/
 
-	public function db_get_data_transporte($data=array())
-	{
-		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+	public function db_get_data_transporte($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -304,62 +287,56 @@ class catalogos_model extends Base_Model
 									tr.clave_corta like '%$filtro%' OR
 									tr.descripcion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		$query = "	SELECT 
-						 *
-					FROM $tbl_transportes tr
+		$query = "	SELECT *
+					FROM $tbl[almacen_transportes] tr
 					WHERE tr.activo = 1 $filtro
 					GROUP BY tr.id_almacen_transportes ASC
 					$limit
 					";
       	$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
 
 	/*Trae la información para el formulario de edición de trensporte*/
-	public function get_orden_unico_transporte($id_almacen_transportes)
-	{
-		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
-		$query = "SELECT * FROM $tbl_transportes WHERE id_almacen_transportes = $id_almacen_transportes";
+	public function get_orden_unico_transporte($id_almacen_transportes){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[almacen_transportes] WHERE id_almacen_transportes = $id_almacen_transportes";
 		$query = $this->db->query($query);
-		if($query->num_rows >= 1)
-		{
+		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 
 	/*Actualliza la información en el formuladio de edición de transportes*/
-	public function db_update_data_transporte($data=array())
-	{
-		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
+	public function db_update_data_transporte($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_almacen_transportes !=' => $data['id_almacen_transportes'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_transportes, $condicion);
-		if(!$existe)
-		{
+		$existe = $this->row_exist($tbl['almacen_transportes'], $condicion);
+		if(!$existe){
 			$condicion = "id_almacen_transportes = ".$data['id_almacen_transportes']; 
-			$update    = $this->update_item($tbl_transportes, $data, 'id_almacen_transportes', $condicion);
+			$update    = $this->update_item($tbl['almacen_transportes'], $data, 'id_almacen_transportes', $condicion);
 			return $update;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
 	/*Inserta registro de transportes*/
-	public function db_insert_data_transportes($data = array())
-	{
-		$tbl_transportes    = $this->db1.'.'.$this->tbl_transportes;
-		$existe = $this->row_exist($tbl_transportes, array('clave_corta'=> $data['clave_corta']));
-		if(!$existe)
-		{
-			$insert = $this->insert_item($tbl_transportes, $data);
+	public function db_insert_data_transportes($data = array())	{
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['almacen_transportes'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['almacen_transportes'], $data);
 			return $insert;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}

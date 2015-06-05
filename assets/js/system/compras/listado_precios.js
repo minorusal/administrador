@@ -53,16 +53,21 @@ function agregar(){
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   var incomplete   = values_requeridos();
+  var impuesto_aplica;
+  if( jQuery('#impuesto_aplica').is(':checked') ){
+    impuesto_aplica = 1;
+  }else{
+    impuesto_aplica = 0;    
+  }
   var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
   var cant_um_presentacion        = jQuery('#cantidad_um_presentacion').val();
   var precio_proveedor            = jQuery('#precio_proveedor').val();
-  var impuesto_aplica             = jQuery('#impuesto_aplica').val();
-  var impuesto_porcentaje         = jQuery('#impuesto_porcentaje').val();
   var id_articulo                 = jQuery("select[name='lts_articulos'] option:selected").val();
   var id_proveedor                = jQuery("select[name='lts_proveedores'] option:selected").val();
   var id_marca                    = jQuery("select[name='lts_marcas'] option:selected").val();
   var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
   var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
+  var impuesto_porcentaje         = jQuery("select[name='lts_impuesto'] option:selected").val();
   jQuery.ajax({
     type:"POST",
     url: path()+"compras/listado_precios/insert",
@@ -116,18 +121,22 @@ function update(){
   btn.attr('disabled','disabled');
   var btn_text     = btn.html();  
   var incomplete   = values_requeridos();
-  alert(incomplete);
+  var impuesto_aplica;
+  if( jQuery('#impuesto_aplica').is(':checked') ){
+    impuesto_aplica = 1;
+  }else{
+    impuesto_aplica = 0;    
+  }
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
   var cant_um_presentacion        = jQuery('#cantidad_um_presentacion').val();
   var precio_proveedor            = jQuery('#precio_proveedor').val();
-  var impuesto_aplica             = jQuery('#impuesto_aplica').val();
-  var impuesto_porcentaje         = jQuery('#impuesto_porcentaje').val();
   var id_articulo                 = jQuery("select[name='lts_articulos'] option:selected").val();
   var id_proveedor                = jQuery("select[name='lts_proveedores'] option:selected").val();
   var id_marca                    = jQuery("select[name='lts_marcas'] option:selected").val();
   var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
   var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
+  var impuesto_porcentaje         = jQuery("select[name='lts_impuesto'] option:selected").val();
   jQuery.ajax({
     type:"POST",
     url: path()+"compras/listado_precios/update",
@@ -157,4 +166,37 @@ function update(){
           jQuery("#mensajes_update").html(data[1]).show('slow');
     }
   });
+}
+function muestra_impuesto(){
+  if( jQuery('#impuesto_aplica').is(':checked') ){
+    jQuery('#impuesto').show('slow');
+    jQuery('[name=lts_impuesto]').addClass('requerido');
+  }else{
+    jQuery('#impuesto').hide('slow');
+    jQuery('[name=lts_impuesto]').removeClass('requerido');
+  }
+}
+function load_pre_emb(id_presentacion){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_presentacion_em",
+        dataType: 'json',
+        data: {id_presentacion : id_presentacion},
+        success: function(data){
+          jQuery('#pre_em').show('slow');
+          jQuery('#pre_em').html(data);
+        }
+    });
+}
+function load_pre_um(id_articulo){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_presentacion_um",
+        dataType: 'json',
+        data: {id_articulo : id_articulo},
+        success: function(data){
+          jQuery('#pre_um').show('slow');
+          jQuery('#pre_um').html(data);
+        }
+    });
 }

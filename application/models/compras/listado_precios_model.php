@@ -2,7 +2,7 @@
 class listado_precios_model extends Base_Model{
 
 	private $db1;
-	private $tbl1, $tbl2, $tbl3, $tbl4, $tbl5, $tbl6;
+	private $tbl1, $tbl2, $tbl3, $tbl4, $tbl5, $tbl6,$tbl7;
 	
 	public function __construct(){
 		parent::__construct();
@@ -13,6 +13,7 @@ class listado_precios_model extends Base_Model{
 		$this->tbl4   = $this->dbinfo[1]['tbl_compras_marcas'];
 		$this->tbl5   = $this->dbinfo[1]['tbl_compras_presentaciones'];
 		$this->tbl6   = $this->dbinfo[1]['tbl_compras_embalaje'];
+		$this->tbl7   = $this->dbinfo[1]['tbl_compras_um'];
 	}
 	public function db_get_data($data=array()){
 		$tbl1  = $this->tbl1;
@@ -22,12 +23,12 @@ class listado_precios_model extends Base_Model{
 		$tbl5  = $this->tbl5;
 		$tbl6  = $this->tbl6;
 		// Filtro
+
 		$filtro 		= (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-
-		$filtro = ($filtro=="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
+		$filtro = ($filtro!="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
 										a.cantidad_um_presentacion 		 LIKE '$filtro%' OR
 										b.articulo  	   LIKE '$filtro%' OR
 										c.nombre_comercial LIKE '$filtro%' OR
@@ -45,6 +46,7 @@ class listado_precios_model extends Base_Model{
 					,a.id_embalaje
 					,a.cantidad_presentacion_embalaje
 					,a.cantidad_um_presentacion
+					,a.precio_proveedor
 					,b.articulo
 					,c.nombre_comercial
 					,d.marca
@@ -85,6 +87,29 @@ class listado_precios_model extends Base_Model{
 		$update = $this->update_item($tbl1, $data, 'id_compras_articulo_precios', $condicion);
 		return $update;
 	}
-
+	public function get_articulos_um($id_compras_articulos){
+		$tbl2  = $this->tbl2;
+		$tbl7  = $this->tbl7;
+		
+		$query="SELECT 
+					a.id_compras_articulo,
+					a.clave_corta,
+					a.id_compras_um as id_unidad_medida,
+					b.id_compras_um,
+					b.um,
+					b.clave_corta as cv_um
+				FROM 
+					$tbl2 a
+				LEFT JOIN $tbl7 b
+					ON 
+						a.id_compras_um = b.id_compras_um
+				WHERE 
+					a.id_compras_articulo= $id_compras_articulos ";
+		//echo $query;
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 }
 ?>

@@ -49,6 +49,10 @@
 	/*EMBAJALE*/
 	$lang['embalaje']   	   = 'embalaje';
 	$lang['nombre_embalaje']   = 'nombre del embalaje';
+	$lang['agregar_em']   	   = 'Nuevo embalaje';
+	$lang['listado_em']   	   = 'Listado de embalaje';
+	
+
 
 
 ?>

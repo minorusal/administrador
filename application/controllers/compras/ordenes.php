@@ -262,15 +262,15 @@ class ordenes extends Base_Controller {
         $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
         $tabData['observaciones_value']      = $detalle[0]['observaciones'];
-        $tabData['forma_pago']     = $this->lang_item("forma_pago",false);
-        $tabData['creditos']     = $this->lang_item("creditos",false);
-        $tabData['list_forma_pago']	= $forma_pago;
-		$tabData['list_creditos']	= $creditos;
-		$tabData['orden_tipo']  = $this->lang_item("orden_tipo",false);
-		$tabData['list_orden_tipo']	= $orden_tipo;
-		$tabData['style']=$style;
-		$tabData['class']=$class;
-		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
+        $tabData['creditos']     			 = $this->lang_item("creditos",false);
+        $tabData['list_forma_pago']			 = $forma_pago;
+		$tabData['list_creditos']			 = $creditos;
+		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
+		$tabData['list_orden_tipo']			 = $orden_tipo;
+		$tabData['style']					 = $style;
+		$tabData['class']					 = $class;
+		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 
 
 		$this->load->model('users_model');
@@ -478,7 +478,6 @@ class ordenes extends Base_Controller {
 						,'id_credito' 		 => $this->ajax_post('id_administracion_creditos')
 						,'prefactura_num' 	 => $this->ajax_post('prefactura_num')
 						,'observaciones' 	 => $this->ajax_post('observaciones')
-						,'id_usuario' 		 => $this->session->userdata('id_usuario')
 						,'edit_timestamp'  	 => $this->timestamp()
 						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
 						);

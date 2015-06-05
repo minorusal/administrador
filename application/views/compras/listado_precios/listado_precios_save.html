@@ -21,23 +21,28 @@
     </p>
     <p>
         <label>{cantidad_presentacion_embalaje}: (*)</label>
-        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-xlarge requerido" value="" />
+        <span id="pre_em" style="display:none">{pre_em}</span>
+        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" value="" />
     </p>
     <p>
         <label>{cantidad_um_presentacion}: (*)</label>
-        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-xlarge requerido" value="" />
+        <span id="pre_um" style="display:none">{pre_um}</span>
+        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-small requerido" value="" />
     </p>
     <p>
         <label>{precio_proveedor}: (*)</label>
-        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-xlarge requerido" value="" />
+        &nbsp;&nbsp;&nbsp;<span>$</span>
+        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-small requerido" value="" />
     </p>
     <p>
-        <label>{impuesto_aplica}: (*)</label>
-        <input id="impuesto_aplica" type="text" name="impuesto_aplica" class="input-xlarge requerido" value="" />
+        <label>{impuesto_aplica}:</label>
+        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="muestra_impuesto()">
     </p>
     <p>
-        <label>{impuesto_porcentaje}: (*)</label>
-        <input id="impuesto_porcentaje" type="text" name="impuesto_porcentaje" class="input-xlarge requerido" value="" />
+        <div id="impuesto"  style="display:none" >
+            <label>{impuesto_porcentaje}: (*)</label>
+            {lts_impuesto}
+        </div>
     </p>
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>

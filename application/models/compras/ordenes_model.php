@@ -39,7 +39,7 @@ class ordenes_model extends Base_Model{
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 
-		$filtro = ($filtro=="") ? "and (orden_num LIKE '$filtro%' 
+		$filtro = ($filtro!="") ? "and (orden_num LIKE '$filtro%' 
 							   or razon_social LIKE '$filtro%'
 							   or descripcion LIKE '$filtro%'
 							   )" 

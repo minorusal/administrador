@@ -1,20 +1,11 @@
 <?php
-class descuentos_model extends Base_Model
-{
-	private $db1;
-	private $tbl1;
-	
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db1  = $this->dbinfo[1]['db'];
-		$this->tbl1 = $this->dbinfo[1]['tbl_administracion_descuentos'];
-	}
+class descuentos_model extends Base_Model{
 
 	//Función que obtiene toda la información de la tabla av_administracion_descuentos
-	public function db_get_data($data=array())
-	{
-		$tbl            = $this->db1.'.'.$this->tbl1;
+	public function db_get_data($data=array())	{
+		// DB Info		
+		$tbl = $this->tbl;
+		// Filtro
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -25,9 +16,8 @@ class descuentos_model extends Base_Model
 									de.descuento like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
-		$query = "	SELECT 
-						 *
-					FROM $tbl de
+		$query = "	SELECT *
+					FROM $tbl[administracion_descuentos] de
 					WHERE de.activo = 1 $filtro
 					GROUP BY de.id_administracion_descuentos ASC
 					$limit
@@ -40,8 +30,10 @@ class descuentos_model extends Base_Model
 
 	/*Trae la información para el formulario de edición de la tabla av_administracion_descuentos*/
 	public function get_orden_unico_descuento($id_administracion_descuentos){
-		$tbl   = $this->db1.'.'.$this->tbl1;
-		$query = "SELECT * FROM $tbl WHERE id_administracion_descuentos = $id_administracion_descuentos";
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[administracion_descuentos] WHERE id_administracion_descuentos = $id_administracion_descuentos";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -49,15 +41,15 @@ class descuentos_model extends Base_Model
 	}
 
 	/*Actualiza la información en el formuladio de edición de la tabla av_administracion_descuentos*/
-	public function db_update_data($data=array())
-	{
-		$tbl       = $this->db1.'.'.$this->tbl1;
+	public function db_update_data($data=array())	{
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_administracion_descuentos !=' => $data['id_administracion_descuentos'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe    = $this->row_exist($tbl, $condicion);
-		if(!$existe)
-		{
+		$existe    = $this->row_exist($tbl['administracion_descuentos'], $condicion);
+		if(!$existe){
 			$condicion = "id_administracion_descuentos = ".$data['id_administracion_descuentos']; 
-			$update    = $this->update_item($tbl, $data, 'id_administracion_descuentos', $condicion);
+			$update    = $this->update_item($tbl['administracion_descuentos'], $data, 'id_administracion_descuentos', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -65,12 +57,13 @@ class descuentos_model extends Base_Model
 	}
 
 	/*Inserta registro de la tabla av_administracion_descuentos*/
-	public function db_insert_data($data = array())
-	{
-		$tbl    = $this->db1.'.'.$this->tbl1;
-		$existe = $this->row_exist($tbl, array('clave_corta'=> $data['clave_corta']));
+	public function db_insert_data($data = array())	{
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['administracion_descuentos'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item($tbl, $data);
+			$insert = $this->insert_item($tbl['administracion_descuentos'], $data);
 			return $insert;
 		}else{
 			return false;

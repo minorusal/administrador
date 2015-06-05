@@ -1,19 +1,11 @@
 <?php
-class sucursales_model extends Base_Model
-{
-	private $db1;
-	private $tbl1;
-	
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db1  = $this->dbinfo[0]['db'];
-		$this->tbl1 = $this->dbinfo[0]['tbl_sucursales'];
-	}
+class sucursales_model extends Base_Model{
+
 	//Función que obtiene toda la información de la tabla sys_sucursales
-	public function db_get_data($data=array())
-	{
-		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
+	public function db_get_data($data=array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Filtro
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -30,7 +22,7 @@ class sucursales_model extends Base_Model
 						,su.direccion
 						,su.sucursal
 						,su.razon_social
-					FROM $tbl_sucursales su
+					FROM $tbl[sucursales] su
 					WHERE su.activo = 1 $filtro
 					GROUP BY su.id_sucursal ASC
 					$limit
@@ -42,10 +34,11 @@ class sucursales_model extends Base_Model
 	}
 
 	/*Trae la información para el formulario de edición de sucursales*/
-	public function get_orden_unico_sucursal($id_sucursal)
-	{
-		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
-		$query = "SELECT * FROM $tbl_sucursales WHERE id_sucursal = $id_sucursal";
+	public function get_orden_unico_sucursal($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[sucursales] WHERE id_sucursal = $id_sucursal";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -53,14 +46,15 @@ class sucursales_model extends Base_Model
 	}
 
 	/*Actualliza la información en el formuladio de edición de sucursales*/
-	public function db_update_data($data=array())
-	{
-		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
+	public function db_update_data($data=array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_sucursal !=' => $data['id_sucursal'], 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_sucursales, $condicion);
+		$existe = $this->row_exist($tbl['sucursales'], $condicion);
 		if(!$existe){
 			$condicion = "id_sucursal = ".$data['id_sucursal']; 
-			$update    = $this->update_item($tbl_sucursales, $data, 'id_sucursal', $condicion);
+			$update    = $this->update_item($tbl['sucursales'], $data, 'id_sucursal', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -68,12 +62,13 @@ class sucursales_model extends Base_Model
 	}
 
 	/*Inserta registro de sucursales*/
-	public function db_insert_data($data = array())
-	{
-		$tbl_sucursales = $this->db1.'.'.$this->tbl1;
-		$existe = $this->row_exist($tbl_sucursales, array('clave_corta'=> $data['clave_corta']));
+	public function db_insert_data($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['sucursales'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item($tbl_sucursales, $data);
+			$insert = $this->insert_item($tbl['sucursales'], $data);
 			return $insert;
 		}else{
 			return false;

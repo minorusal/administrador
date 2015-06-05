@@ -112,6 +112,8 @@ $route['administracion/control_de_usuarios/puestos']        = 'administracion/pu
 $route['administracion/control_de_usuarios/areas']        = 'administracion/areas/index';
 /*Catalogo de Perfiles*/
 $route['administracion/control_de_usuarios/perfiles']        = 'administracion/perfiles/index';
+/*Catalogo de Perfiles*/
+$route['administracion/control_de_usuarios/empresa']        = 'administracion/empresa/index';
 /*
  * CATALOGOS GENERALES
  */

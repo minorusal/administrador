@@ -190,8 +190,35 @@ class usuarios extends Base_Controller {
 		echo json_encode($treeview_perfiles);
 	}
 
-	
-
-	
-
+	public function insert()
+	{
+		print_debug($this->ajax_post('nivel_1'));
+		$incomplete = $this->ajax_post('incomplete');
+		if($incomplete > 0)
+		{
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}
+		else
+		{
+			$sqlData = array(
+				,'nombre'          => $this->ajax_post('nombre')
+				,'paterno'     => $this->ajax_post('paterno')
+				,'materno'     => $this->ajax_post('materno')
+				,'id_menu_n1'      => $this->ajax_post('nivel_1')
+				,'id_menu_n2'      => $this->ajax_post('nivel_2')
+				,'id_menu_n3'      => $this->ajax_post('nivel_3')
+				,'id_usuario'      => $this->session->userdata('id_usuario')
+				,'registro'        => $this->timestamp());
+			$insert = $this->db_model->db_insert_data($data_insert);
+			
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
+	}
 }

@@ -70,3 +70,55 @@ function detalle_usuario(id_usuario){
         }
     });
 }
+
+function insert(){
+  var btn          = jQuery("button[name='save_usuario']");
+  btn.attr('disabled','disabled');
+  var nivel_1 = [];
+  var nivel_2 = [];
+  var nivel_3 = [];
+  var objData = formData('#formulario');
+  
+  jQuery("input[name='nivel_1']:enabled:checked").each(function(){
+      nivel_1.push(jQuery(this).val());
+  });
+
+  jQuery("input[name='nivel_2']:enabled:checked").each(function(){
+    nivel_2.push(jQuery(this).val());
+  });
+  
+  jQuery("input[name='nivel_3']:enabled:checked").each(function(){
+    nivel_3.push(jQuery(this).val());
+  });
+
+  objData['incomplete']    = values_requeridos();
+  objData['nivel_1']       = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+  objData['nivel_2']       = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+  objData['nivel_3']       = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+  objData['nombre']        = jQuery('#nombre').val();
+  objData['paterno']       = jQuery('#paterno').val();
+  objData['materno']       = jQuery('#materno').val();
+  objData['telefono']      = jQuery('#telefono').val();
+  objData['mail']          = jQuery('#mail').val();
+  
+
+  jQuery.ajax({
+    type:"POST",
+    url: path()+"administracion/usuarios/insert",
+    dataType: "json",
+    data: objData,
+    beforeSend : function(){
+      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+    },
+    success : function(data){
+      btn.removeAttr('disabled');
+
+      var data = data.split('|');
+      if(data[0]==1){
+        clean_formulario();
+      }
+      jQuery("#registro_loader").html('');
+        jQuery("#mensajes").html(data[1]).show('slow');
+    }
+  });
+}

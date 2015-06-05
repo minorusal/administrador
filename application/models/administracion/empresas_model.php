@@ -32,13 +32,11 @@ class empresas_model extends Base_Model{
 	public function db_update_data($data=array()){
 		$tbl = $this->tbl;
 		$condicion = array('id_empresa = ' => $data['id_empresa']);
-		//print_debug($condicion); 
 		$existe    = $this->row_exist($tbl['empresas'], $condicion);
 		if(!$existe){
 			$insert = $this->insert_item($tbl['empresas'], $data);
 			return $insert;
 		}else if($existe){
-
 			$condicion = "id_empresa =".$data['id_empresa'];
 			$data['edit_timestamp']  =  $data['timestamp'];
 			$data['edit_id_usuario'] = $this->session->userdata('id_usuario');
@@ -51,10 +49,3 @@ class empresas_model extends Base_Model{
 		}
 	}
 }
-// 2015-02-03 17:15:57
-//iSolution
-//Intelligent Solution S.A. de C.V
-//XXX000000X99
-//Insurgentes Sur 1898, Piso 3-4
-//59804817
-//2015-02-03 17:15:57

@@ -13,7 +13,7 @@ class empresas_model extends Base_Model
 	//Función que obtiene toda la información de la tabla sys_sucursales
 	public function db_get_data($data=array())
 	{
-		$tbl_empresas = $this->db1.'.'.$this->tbl1;
+		$tbl_empresas   = $this->db1.'.'.$this->tbl1;
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -35,5 +35,24 @@ class empresas_model extends Base_Model
 			return $query->result_array();
 		}	
 	}
+
+	/*Actualiza la información en el formuladio de edición de la tabla sys_empresas*/
+	public function db_update_data($data=array()){
+		$tbl       = $this->db1.'.'.$this->tbl1;
+		$condicion = array('id_empresa' => $data['id_empresa']); 
+		$existe    = $this->row_exist($tbl, $condicion);
+		if(!$existe){
+			$insert = $this->insert_item($tbl, $data);
+			return $insert;
+		}else if($existe){
+			$condicion = "id_empresa".$data['id_empresa'];
+			$update = $this->update_item($tbl, $data, 'id_empresa', $condicion);
+			return $update;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
-?>
+// 2015-02-03 17:15:57

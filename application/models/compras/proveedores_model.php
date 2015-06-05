@@ -1,19 +1,44 @@
 <?php
 class proveedores_model extends Base_Model{
+
+	private $vars;
+	private $db1,$db2;
+	private $tbl;
+
+	public function __construct(){
+		parent::__construct();		
+		$this->vars		= new config_vars();
+        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
+		$this->db1 = $this->vars->db['db1'];
+		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
+        $this->db2 = $this->vars->db['db2'];	
+        $this->tbl['administracion_entidades'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_entidades'];	
+		$this->tbl['compras_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos'];
+		$this->tbl['compras_articulos_precios'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos_precios'];
+		$this->tbl['compras_lineas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_lineas'];
+		$this->tbl['compras_marcas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_marcas'];
+		$this->tbl['compras_ordenes_tipo'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_tipo'];
+		$this->tbl['compras_ordenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes'];
+		$this->tbl['compras_ordenes_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_articulos'];
+		$this->tbl['compras_ordenes_estatus'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_estatus'];
+		$this->tbl['compras_presentaciones'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_presentaciones'];
+		$this->tbl['compras_proveedores'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores'];
+		$this->tbl['compras_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores_articulos'];
+		$this->tbl['compras_um'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_um'];
+		$this->tbl['compras_embalaje'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_embalaje'];
+	}
 	
 	public function db_get_data($data=array()){
-		
-		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];
-		$tbl2 = $this->dbinfo[1]['tbl_administracion_entidades'];
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$buscar = (array_key_exists('buscar',$data))?$data['buscar']:false;
 		$filtro = ($buscar) ? "AND ( 	p.razon_social  LIKE '%$buscar%' OR 
 										p.nombre_comercial  LIKE '%$buscar%' OR
 										p.clave_corta  LIKE '%$buscar%' OR
 										p.rfc  LIKE '%$buscar%' OR
 										e.entidad LIKE '%$buscar%'
-											)" : "";
-		
+											)" : "";		
 		$limit 			= (array_key_exists('limit',$data)) ?$data['limit']:0;
 		$offset 		= (array_key_exists('offset',$data))?$data['offset']:0;
 		$aplicar_limit 	= (array_key_exists('aplicar_limit',$data)) ? $data['aplicar_limit'] : false;
@@ -41,8 +66,8 @@ class proveedores_model extends Base_Model{
 						,p.timestamp
 						,p.id_usuario
 						,p.activo
-					FROM $tbl1 p 
-					LEFT JOIN $tbl2 e on p.id_administracion_entidad = e.id_administracion_entidad
+					FROM $tbl[compras_proveedores] p 
+					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
 					WHERE p.activo = 1 $filtro
 					$limit
 					";
@@ -52,9 +77,9 @@ class proveedores_model extends Base_Model{
 		}	
 	}
 	public function db_get_total_rows($data=array()){
-		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];
-		$tbl2 = $this->dbinfo[1]['tbl_administracion_entidades'];
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$buscar = (array_key_exists('buscar',$data))?$data['buscar']:false;
 		$filtro = ($buscar) ? "AND ( 	p.razon_social  LIKE '%$buscar%' OR 
 										p.nombre_comercial  LIKE '%$buscar%' OR
@@ -84,31 +109,35 @@ class proveedores_model extends Base_Model{
 						,p.timestamp
 						,p.id_usuario
 						,p.activo
-					FROM $tbl1 p 
-					LEFT JOIN $tbl2 e on p.id_administracion_entidad = e.id_administracion_entidad
+					FROM $tbl[compras_proveedores] p 
+					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
 					WHERE p.activo = 1	$filtro";
 
       	$query = $this->db->query($query);
 		return $query->num_rows;
 	}
 	public function insert($data=array()){
-		$tbl1 	= $this->dbinfo[1]['tbl_compras_proveedores'];
-		$existe = $this->row_exist($tbl1,array('clave_corta ='=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_proveedores'],array('clave_corta ='=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item($tbl1, $data);
+			$insert = $this->insert_item($tbl['compras_proveedores'], $data);
 			return $insert;
 		}else{
 			return false;
 		}
 	}
 	public function db_update_data($data=array()){
-		$tbl1 	   = $this->dbinfo[1]['tbl_compras_proveedores'];
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_proveedor !=' => $data['id_compras_proveedor'], 'clave_corta'=> $data['clave_corta']); 
-		$existe    = $this->row_exist($tbl1, $condicion);
+		$existe    = $this->row_exist($tbl['compras_proveedores'], $condicion);
 		
 		if(!$existe){
 			$condicion = "id_compras_proveedor = ".$data['id_compras_proveedor']; 
-			$update    = $this->update_item($tbl1, $data, 'id_compras_proveedor', $condicion);
+			$update    = $this->update_item($tbl['compras_proveedores'], $data, 'id_compras_proveedor', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -116,8 +145,7 @@ class proveedores_model extends Base_Model{
 	}
 	public function get_proveedor_unico($id_compras_proveedor){
 		// DB Info
-		$tbl1 = $this->dbinfo[1]['tbl_compras_proveedores'];
-		$tbl2 = $this->dbinfo[1]['tbl_administracion_entidades'];
+		$tbl = $this->tbl;
 		// Query
 		$query = "SELECT
 						p.id_compras_proveedor
@@ -141,8 +169,8 @@ class proveedores_model extends Base_Model{
 						,p.timestamp
 						,p.id_usuario
 						,p.activo
-					FROM $tbl1 p 
-					LEFT JOIN $tbl2 e on p.id_administracion_entidad = e.id_administracion_entidad
+					FROM $tbl[compras_proveedores] p 
+					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
 					WHERE id_compras_proveedor = $id_compras_proveedor";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

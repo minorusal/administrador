@@ -19,7 +19,7 @@ class empresa extends Base_Controller {
 		$this->modulo 			= 'administracion';
 		$this->submodulo 		= 'empresa';
 		$this->icon 			= 'fa fa-building-o'; 
-		$this->template 		= 'content';
+		$this->template 		= 'contentInfo';
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; #administracion/entidades
 		$this->view_content 	= 'contentInfo';
 		$this->limit_max		= 5;
@@ -48,12 +48,30 @@ class empresa extends Base_Controller {
 	}
 
 	public function index(){
-
+		
+		$sqlData = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> true
+		);
+		$datos = $this->db_model->db_get_data($sqlData);
 		$tabl_inicial 			  = 1;
 		$contenidos_tab           = $this->mensaje;
 		$data['titulo_seccion']   = $this->titulo;
 		$data['titulo_submodulo'] = 'Bienvenido';
 		$data['icon']             = $this->icon;
+		$data['Titulo']           = $this->titulo;
+		$data['empresa']          = 'Empresa';
+		$data['logotipo']         = 'Logotipo';
+		$data['imagen']           = base_url().'assets/avatar/users/00001.jpg';
+		$data['razon_social']     = 'Razón Social';
+		$data['r_social']         = $datos[0]['razon_social'];
+		$data['r_f_c']            = 'RFC';
+		$data['rfc']              = $datos[0]['rfc'];
+		$data['telefono']         = 'Teléfono';
+		$data['tel']              = $datos[0]['telefono'];
+		$data['direccion']        = 'Dirección';
+		$data['dir']              = $datos[0]['direccion'];
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$this->load_view($this->template, $data);	

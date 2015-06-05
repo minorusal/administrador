@@ -199,6 +199,12 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','embalaje')
 					,'name' 	=> "lts_embalaje"
 					,'class' 	=> "requerido"
+					,'event'    => array('event'       => 'onchange',
+	   						 'function'    => 'load_emb',
+	   						 'params'      => array('this.value'),
+	   						 'params_type' => array(0)
+						)
+					,'class' 	=> "requerido"
 				);
 		$lts_embalaje  = dropdown_tpl($dropArray5);
 
@@ -526,6 +532,11 @@ class listado_precios extends Base_Controller {
 		$id_articulo = $this->ajax_post('id_articulo');
 		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
      	echo json_encode($presentacion_em[0]['cv_um']);
+	}
+	public function load_embalaje_cl(){
+		$id_embalaje = $this->ajax_post('id_embalaje');
+		$embalaje_cl=$this->catalogos_model->get_embalaje_unico($id_embalaje);
+     	echo json_encode($embalaje_cl[0]['clave_corta']);
 	}
 }
 ?>

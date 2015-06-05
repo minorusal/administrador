@@ -187,7 +187,10 @@ function oculta_impuesto(){
   if(jQuery('#impuesto_aplica').is(':checked') ){
     jQuery('#impuesto').show('slow');
     jQuery('[name=lts_impuesto]').addClass('requerido');
+    calcular_precio_final();
   }else{
+    var costo_final = jQuery('#costo_sin_impuesto').val();
+    jQuery('#costo_final').val(costo_final);
     jQuery('#impuesto').hide('slow');
     jQuery('[name=lts_impuesto]').removeClass('requerido');
   }
@@ -209,7 +212,6 @@ function validar_um(id_opcion){
   if(id_opcion==1){    
     jQuery('#um_x_embalaje').attr('readonly', false);
     jQuery('#um_x_embalaje').addClass('requerido');
-
     jQuery('#um_x_presentacion').attr('readonly', true);
     jQuery('#um_x_presentacion').removeClass('requerido');
   }else{
@@ -229,6 +231,9 @@ function load_pre_emb(id_presentacion){
         success: function(data){
           jQuery('#pre_em').show('slow');
           jQuery('#pre_em').html(data);
+          jQuery('#pre_em2').show('slow');
+          jQuery('#pre_em2').html(data);
+          jQuery('#signo').show('slow');
         }
     });
 }
@@ -241,6 +246,21 @@ function load_pre_um(id_articulo){
         success: function(data){
           jQuery('#pre_um').show('slow');
           jQuery('#pre_um').html(data);
+          jQuery('#pre_um2').show('slow');
+          jQuery('#pre_um2').html(data);
+        }
+    });
+}
+function load_emb(id_embalaje){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_embalaje_cl",
+        dataType: 'json',
+        data: {id_embalaje : id_embalaje},
+        success: function(data){
+          jQuery('#embalaje_cl').show('slow');
+          jQuery('#embalaje_cl').html(data);
+          jQuery('#signo2').show('slow');
         }
     });
 }
@@ -249,18 +269,24 @@ function clean_campos(){
   jQuery('#um_x_embalaje').val('');
 }
 function calcula_um_prsentacion(){
+  if(jQuery('#peso_unitario').val()!=""){
+    calula_costos();
+  }
   var presentacion_x_embalaje = jQuery('#presentacion_x_embalaje').val();
   var um_x_embalaje = jQuery('#um_x_embalaje').val();
   var um_x_presentacion= um_x_embalaje/presentacion_x_embalaje;
   jQuery('#um_x_presentacion').val(um_x_presentacion.toFixed(2));
 }
 function calcula_um_embalaje(){
+  if(jQuery('#peso_unitario').val()!=""){
+    calula_costos();
+  }
   var presentacion_x_embalaje = jQuery('#presentacion_x_embalaje').val();
   var um_x_presentacion = jQuery('#um_x_presentacion').val();
   var um_x_embalaje= um_x_presentacion*presentacion_x_embalaje;
   jQuery('#um_x_embalaje').val(um_x_embalaje);
 }
-function cost(){
+function calula_costos(){
   var presentacion_x_embalaje = jQuery('#presentacion_x_embalaje').val();
   var um_x_embalaje = jQuery('#um_x_embalaje').val();
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();
@@ -276,12 +302,21 @@ function cost(){
   jQuery('#costo_unitario').val(costo_unitario.toFixed(3));
   jQuery('#costo_x_um').val(costo_x_um.toFixed(3));
   jQuery('#costo_final').val(costo_final);
+  if(jQuery("select[name='lts_impuesto'] option:selected").val()>0){
+    calcular_precio_final();
+  }
 }
 function calcular_precio_final(){
   var impuesto  = jQuery("select[name='lts_impuesto'] option:selected").text();
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();
   var valor=impuesto.split("-");
   var desglose_impuesto = (costo_sin_impuesto*valor[1])/100;
-  var costo_final = parseFloat(costo_sin_impuesto)+parseFloat(desglose_impuesto);
-  jQuery('#costo_final').val(costo_final.toFixed(3));
+  var resultado = parseFloat(costo_sin_impuesto)+parseFloat(desglose_impuesto);
+  if(costo_sin_impuesto==""){
+      costo_final="";
+  }
+  else{
+    costo_final= resultado.toFixed(3)
+  }
+  jQuery('#costo_final').val(costo_final);
 }

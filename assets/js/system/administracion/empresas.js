@@ -4,6 +4,7 @@ function agregar(){
 	var objData = formData('#formulario');
 	
 	objData['incomplete']   = values_requeridos();
+	objData['id_empresa'] = jQuery('#id_empresa').val();
 	objData['razon_social'] = jQuery('#txt_razon_social').val();
 	objData['rfc']          = jQuery('#txt_rfc').val();
 	objData['telefono']     = jQuery('#txt_telefono').val();
@@ -22,9 +23,9 @@ function agregar(){
 			btn.removeAttr('disabled');
 
 			var data = data.split('|');
-			if(data[0]==1){
+			/*if(data[0]==1){
 				clean_formulario();
-			}
+			}*/
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}

@@ -2,16 +2,11 @@
 class empresas_model extends Base_Model{
 
 	//Función que obtiene toda la información de la tabla sys_sucursales
-<<<<<<< HEAD
-	public function db_get_data($data=array())
-	{
-		$tbl_empresas   = $this->db1.'.'.$this->tbl1;
-=======
 	public function db_get_data($data=array())	{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Filtro
->>>>>>> 9c8051ea43df7d532490e0167754a949fbad24a9
+
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -35,15 +30,19 @@ class empresas_model extends Base_Model{
 
 	/*Actualiza la información en el formuladio de edición de la tabla sys_empresas*/
 	public function db_update_data($data=array()){
-		$tbl       = $this->db1.'.'.$this->tbl1;
-		$condicion = array('id_empresa' => $data['id_empresa']); 
-		$existe    = $this->row_exist($tbl, $condicion);
+		$tbl = $this->tbl;
+		$condicion = array('id_empresa = ' => $data['id_empresa']);
+		//print_debug($condicion); 
+		$existe    = $this->row_exist($tbl['empresas'], $condicion);
 		if(!$existe){
-			$insert = $this->insert_item($tbl, $data);
+			$insert = $this->insert_item($tbl['empresas'], $data);
 			return $insert;
 		}else if($existe){
-			$condicion = "id_empresa".$data['id_empresa'];
-			$update = $this->update_item($tbl, $data, 'id_empresa', $condicion);
+
+			$condicion = "id_empresa =".$data['id_empresa'];
+			$data['edit_timestamp']  =  $data['timestamp'];
+			$data['edit_id_usuario'] = $this->session->userdata('id_usuario');
+			$update = $this->update_item($tbl['empresas'], $data, 'id_empresa', $condicion);
 			return $update;
 		}
 		else
@@ -53,3 +52,9 @@ class empresas_model extends Base_Model{
 	}
 }
 // 2015-02-03 17:15:57
+//iSolution
+//Intelligent Solution S.A. de C.V
+//XXX000000X99
+//Insurgentes Sur 1898, Piso 3-4
+//59804817
+//2015-02-03 17:15:57

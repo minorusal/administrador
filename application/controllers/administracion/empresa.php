@@ -98,9 +98,10 @@ class empresa extends Base_Controller {
 				 ,'rfc'          => $this->ajax_post('rfc')
 				 ,'telefono'     => $this->ajax_post('telefono')
 				 ,'direccion'    => $this->ajax_post('direccion')
-				 ,'id_usuario'   => $this->session->userdata('id_usuario')
+				 //,'id_usuario'   => $this->session->userdata('id_usuario')
 				 ,'timestamp'    => $this->timestamp()
 				);
+
 
 			$insert = $this->db_model->db_update_data($data_insert);
 

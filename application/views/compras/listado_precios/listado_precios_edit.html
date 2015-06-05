@@ -26,14 +26,33 @@
         <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" value="{val_cantidad_presentacion_embalaje}" />
     </p>
     <p>
-        <label>{cantidad_um_presentacion}: (*)</label>
-        <span id="pre_um">{pre_um}</span>
-        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-small requerido" value="{val_cantidad_um_presentacion}" />
+        <label>{um_x_embalaje}: (*)</label>
+        <input type="radio" name="um" value="1" onclick="validar_um(this.value);"  checked="checked">
+        <input id="um_x_embalaje" type="text" name="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();"/>
+        <span id="pre_um2">{pre_um}</span><span id="signo2"> * </span><span id="embalaje_cl">{embalaje_cl}</span>
     </p>
     <p>
-        <label>{precio_proveedor}: (*)</label>
-        &nbsp;&nbsp;&nbsp;<span>$</span>
-        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-small requerido" value="{val_precio_proveedor}" />
+        <label>{um_x_presentacion}: (*)</label>
+        <input type="radio" name="um" value="2" onclick="validar_um(this.value);">
+        <input id="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly />
+        <span id="pre_um">{pre_um}</span><span id="signo"> * </span><span id="pre_em2">{pre_em}</span>
+    </p>
+    <p>
+        <label>{costo_sin_impuesto}: (*)</label>
+        &nbsp;&nbsp;<span>$</span>
+        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calula_costos();" />
+    </p>
+    <p>
+        <label>{peso_unitario}: (*)</label>        
+        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido"/>
+    </p>
+    <p>
+        <label>{costo_unitario}: (*)</label>        
+        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido"/>
+    </p>
+    <p>
+        <label>{costo_x_um}: (*)</label>
+        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido"/>
     </p>
     <p>
         <label>{impuesto_aplica}:</label>

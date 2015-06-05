@@ -1,31 +1,6 @@
 <?php
 class users_model extends Base_Model{
 
-	private $vars;
-	private $db1,$db2;
-	private $tbl;
-
-	public function __construct(){
-		parent::__construct();		
-		$this->vars		= new config_vars();
-        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
-        $this->db1		= $this->vars->db['db1'];
-        $this->tbl['claves'] = $this->db1.'.'.$this->vars->db['db1_tbl_claves']; 
-		$this->tbl['empresas'] = $this->db1.'.'.$this->vars->db['db1_tbl_empresas']; 
-		$this->tbl['modulos'] = $this->db1.'.'.$this->vars->db['db1_tbl_modulos']; 
-		$this->tbl['paises'] = $this->db1.'.'.$this->vars->db['db1_tbl_paises']; 
-		$this->tbl['perfiles'] = $this->db1.'.'.$this->vars->db['db1_tbl_perfiles']; 
-		$this->tbl['personales'] = $this->db1.'.'.$this->vars->db['db1_tbl_personales']; 
-		$this->tbl['secciones'] = $this->db1.'.'.$this->vars->db['db1_tbl_secciones']; 
-		$this->tbl['submodulos'] = $this->db1.'.'.$this->vars->db['db1_tbl_submodulos']; 
-		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales']; 
-		$this->tbl['usuarios'] = $this->db1.'.'.$this->vars->db['db1_tbl_usuarios']; 
-		$this->tbl['menu1'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n1']; 
-		$this->tbl['menu2'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n2']; 
-		$this->tbl['menu3'] = $this->db1.'.'.$this->vars->db['db1_tbl_menu_n3']; 
-		$this->tbl['vw_personal'] = $this->db1.'.'.$this->vars->db['db1_vw_personal'];  
-	}
-
 	/**
     * Busca Usuario por usuario y password, funcion principla de login
     * @param string $user

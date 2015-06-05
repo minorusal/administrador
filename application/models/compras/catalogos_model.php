@@ -1,48 +1,6 @@
 <?php
 class catalogos_model extends Base_Model{
-
-	private $vars;
-	private $db1,$db2;
-	private $tbl;
-
-	public function __construct(){
-		parent::__construct();		
-		$this->vars		= new config_vars();
-        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
-		$this->db1 = $this->vars->db['db1'];
-		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
-        $this->db2 = $this->vars->db['db2'];	
-        $this->tbl['administracion_entidades'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_entidades'];	
-		$this->tbl['compras_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos'];
-		$this->tbl['compras_articulos_precios'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos_precios'];
-		$this->tbl['compras_lineas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_lineas'];
-		$this->tbl['compras_marcas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_marcas'];
-		$this->tbl['compras_ordenes_tipo'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_tipo'];
-		$this->tbl['compras_ordenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes'];
-		$this->tbl['compras_ordenes_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_articulos'];
-		$this->tbl['compras_ordenes_estatus'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_estatus'];
-		$this->tbl['compras_presentaciones'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_presentaciones'];
-		$this->tbl['compras_proveedores'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores'];
-		$this->tbl['compras_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores_articulos'];
-		$this->tbl['compras_um'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_um'];
-		$this->tbl['compras_embalaje'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_embalaje'];
-		$this->tbl['vw_compras_orden_proveedores'] = $this->db2.'.'.$this->vars->db['db2_vw_compras_orden_proveedores'];
-		$this->tbl['vw_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_articulos'];
-		$this->tbl['vw_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_proveedores_articulos'];
-	}
 	
-	// public function __construct()
-	// {
-	// 	parent::__construct();
-	// 	$this->db1                = $this->dbinfo[1]['db'];
-	// 	$this->tbl_presentaciones = $this->dbinfo[1]['tbl_compras_presentaciones'];
-	// 	$this->tbl_lineas         = $this->dbinfo[1]['tbl_compras_lineas'];
-	// 	$this->tbl_marcas         = $this->dbinfo[1]['tbl_compras_marcas'];
-	// 	$this->tbl_um        	  = $this->dbinfo[1]['tbl_compras_um'];
-	// 	$this->tbl_embalaje       = $this->dbinfo[1]['tbl_compras_embalaje'];
-	// }
-
-
 	/*PRESENTACIONES*/
 	public function get_presentacion_unico($id_presentacion){
 		// DB Info

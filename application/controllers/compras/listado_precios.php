@@ -208,6 +208,11 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','valor')
 					,'name' 	=> "lts_impuesto"
 					,'class' 	=> "requerido"
+					,'event'    => array('event'       => 'onchange',
+							   						 'function'    => 'calcular_precio_final',
+							   						 'params'      => array('this.value'),
+							   						 'params_type' => array(0)
+			   										)
 				);		
 
 		$lts_impuesto  = dropdown_tpl($dropArray6);

@@ -167,13 +167,23 @@ function update(){
     }
   });
 }
-function muestra_impuesto(){
-  if( jQuery('#impuesto_aplica').is(':checked') ){
+function oculta_impuesto(){
+  if(jQuery('#impuesto_aplica').is(':checked') ){
     jQuery('#impuesto').show('slow');
     jQuery('[name=lts_impuesto]').addClass('requerido');
   }else{
     jQuery('#impuesto').hide('slow');
     jQuery('[name=lts_impuesto]').removeClass('requerido');
+  }
+}
+function oculta_embalaje(){
+  if(jQuery('#embalaje_aplica').is(':checked') ){
+    jQuery('#embajale').show('slow');
+    jQuery('[name=lts_embalaje]').addClass('requerido');
+  }else{
+    jQuery('#presentacion_x_embalaje').attr('readonly');
+    jQuery('#embajale').hide('slow');
+    jQuery('[name=lts_embalaje]').removeClass('requerido');
   }
 }
 function load_pre_emb(id_presentacion){

@@ -107,7 +107,7 @@ class listado_precios extends Base_Controller {
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
-									'precio_proveedor'   => $value['precio_proveedor']);				
+									'costo_sin_impuesto'   => $value['costo_sin_impuesto']);				
 			}
 			
 			// Plantilla
@@ -207,7 +207,7 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_administracion_impuestos'
 					,'text' 	=> array('clave_corta','valor')
 					,'name' 	=> "lts_impuesto"
-					,'class' 	=> ""
+					,'class' 	=> "requerido"
 				);		
 
 		$lts_impuesto  = dropdown_tpl($dropArray6);
@@ -261,20 +261,28 @@ class listado_precios extends Base_Controller {
 	        $id_marca 					= $this->ajax_post('id_marca');
 	        $id_presentacion 			= $this->ajax_post('id_presentacion');
 	        $id_embalaje 				= $this->ajax_post('id_embalaje');
+	        $um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
+	        $peso_unitario 				= $this->ajax_post('peso_unitario');
+			$costo_unitario 			= $this->ajax_post('costo_unitario');
+			$costo_x_um					= $this->ajax_post('costo_x_um');
 
 	        $data_insert  = array(
-								'id_articulo'  					=> $id_articulo,
-								'id_proveedor'  				=> $id_proveedor,
-								'id_marca'  					=> $id_marca,
-								'id_presentacion'  				=> $id_presentacion,
-								'id_embalaje'  					=> $id_embalaje,
-								'cantidad_presentacion_embalaje'=> $cant_presentacion_embalaje,
-								'cantidad_um_presentacion'  	=> $cant_um_presentacion,
-								'precio_proveedor'  			=> $precio_proveedor,
-								'impuesto_aplica'  				=> $impuesto_aplica,
-								'impuesto_porcentaje'  			=> $impuesto_porcentaje,
-								'timestamp'            			=> $this->timestamp(),
-								'id_usuario'           			=> $this->session->userdata('id_usuario')
+								'id_articulo'  				=> $id_articulo,
+								'id_proveedor'  			=> $id_proveedor,
+								'id_marca'  				=> $id_marca,
+								'id_presentacion'  			=> $id_presentacion,
+								'id_embalaje'  				=> $id_embalaje,
+								'presentacion_x_embalaje'   => $cant_presentacion_embalaje,
+								'um_x_embalaje' 			=> $um_x_embalaje,
+								'um_x_presentacion'  		=> $cant_um_presentacion,
+								'costo_sin_impuesto'  		=> $precio_proveedor,
+								'impuesto_aplica'  			=> $impuesto_aplica,
+								'impuesto_porcentaje'  		=> $impuesto_porcentaje,
+								'peso_unitario' 			=> $peso_unitario,
+								'costo_unitario'			=> $costo_unitario,
+								'costo_x_um'				=> $costo_x_um,
+								'timestamp'            		=> $this->timestamp(),
+								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
@@ -309,6 +317,11 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_articulo'
 					,'text' 	=> array('clave_corta','articulo')
 					,'name' 	=> "lts_articulos"
+					,'event'    => array('event'       => 'onchange',
+	   						 'function'    => 'load_pre_um',
+	   						 'params'      => array('this.value'),
+	   						 'params_type' => array(0)
+						)
 					,'class' 	=> "requerido"
 				);
 		$lts_articulos  = dropdown_tpl($dropArray);
@@ -339,6 +352,11 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
+					,'event'    => array('event'       => 'onchange',
+	   						 'function'    => 'load_pre_emb',
+	   						 'params'      => array('this.value'),
+	   						 'params_type' => array(0)
+						)
 					,'class' 	=> "requerido"
 				);
 		$lts_presentaciones  = dropdown_tpl($dropArray4); 
@@ -394,7 +412,7 @@ class listado_precios extends Base_Controller {
         $data_tab['button_save']           	 			= $btn_save;
 
        	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);
-       	$data_tab['pre_emb']						= $presentacion[0]['clave_corta'];
+       	$data_tab['pre_em']						= $presentacion[0]['clave_corta'];
 
        	$presentacion_um=$this->db_model->get_articulos_um($detalle[0]['id_articulo']);
        	

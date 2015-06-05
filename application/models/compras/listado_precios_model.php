@@ -44,9 +44,9 @@ class listado_precios_model extends Base_Model{
 					,a.id_marca
 					,a.id_presentacion
 					,a.id_embalaje
-					,a.cantidad_presentacion_embalaje
-					,a.cantidad_um_presentacion
-					,a.precio_proveedor
+					,a.presentacion_x_embalaje
+					,a.um_x_presentacion
+					,a.costo_sin_impuesto
 					,b.articulo
 					,c.nombre_comercial
 					,d.marca

@@ -1,24 +1,12 @@
 <?php
 class catalogos_model extends Base_Model{
-
-	private $db1;
-	private $tbl_presentaciones, $tbl_lineas, $tbl_marcas,$tbl_um, $tbl_embalaje;
 	
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db1                = $this->dbinfo[1]['db'];
-		$this->tbl_presentaciones = $this->dbinfo[1]['tbl_compras_presentaciones'];
-		$this->tbl_lineas         = $this->dbinfo[1]['tbl_compras_lineas'];
-		$this->tbl_marcas         = $this->dbinfo[1]['tbl_compras_marcas'];
-		$this->tbl_um        	  = $this->dbinfo[1]['tbl_compras_um'];
-		$this->tbl_embalaje       = $this->dbinfo[1]['tbl_compras_embalaje'];
-	}
-
-
 	/*PRESENTACIONES*/
 	public function get_presentacion_unico($id_presentacion){
-		$query = "SELECT * FROM av_compras_presentaciones cp WHERE cp.id_compras_presentacion = $id_presentacion";
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_presentaciones] cp WHERE cp.id_compras_presentacion = $id_presentacion";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -26,6 +14,9 @@ class catalogos_model extends Base_Model{
 		}
 	}
 	public function get_presentaciones($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=="") ? "" : "AND (
 												cp.presentacion like '%$filtro%'
 											OR 
@@ -39,8 +30,7 @@ class catalogos_model extends Base_Model{
 						,cp.presentacion
 						,cp.clave_corta
 						,cp.descripcion
-					FROM
-						av_compras_presentaciones cp
+					FROM $tbl[compras_presentaciones] cp
 					WHERE cp.activo = 1 $filtro
 					ORDER BY cp.id_compras_presentacion
 					$limit";
@@ -51,21 +41,27 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function insert_presentacion($data){
-		$existe = $this->row_exist('av_compras_presentaciones', array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_presentaciones'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item('av_compras_presentaciones', $data);
+			$insert = $this->insert_item($tbl['compras_presentaciones'], $data);
 			return $insert;
 		}else{
 			return false;
 		}
 	}
 	public function update_presentaciones($data, $id_presentacion){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_presentacion !=' => $id_presentacion, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_compras_presentaciones', $condicion);
+		$existe = $this->row_exist($tbl['compras_presentaciones'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_presentacion = $id_presentacion"; 
 			$data['id_compras_presentacion'] =  $id_presentacion;
-			$update    = $this->update_item('av_compras_presentaciones', $data, 'id_compras_presentacion', $condicion);
+			$update    = $this->update_item($tbl['compras_presentaciones'], $data, 'id_compras_presentacion', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -74,7 +70,10 @@ class catalogos_model extends Base_Model{
 
 	/*LINEAS*/
 	public function get_linea_unico($id_linea){
-		$query = "SELECT * FROM av_compras_lineas cl WHERE cl.id_compras_linea = $id_linea";
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_lineas] cl WHERE cl.id_compras_linea = $id_linea";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -82,6 +81,9 @@ class catalogos_model extends Base_Model{
 		}
 	}
 	public function get_lineas($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=="") ? "" : "AND (
 												cl.linea like '%$filtro%'
 											OR 
@@ -95,8 +97,7 @@ class catalogos_model extends Base_Model{
 						,cl.linea
 						,cl.clave_corta
 						,cl.descripcion
-					FROM
-						av_compras_lineas cl
+					FROM $tbl[compras_lineas] cl
 					WHERE cl.activo = 1 $filtro
 					ORDER BY cl.id_compras_linea
 					$limit";
@@ -107,21 +108,27 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function insert_linea($data){
-		$existe = $this->row_exist('av_compras_lineas', array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_lineas'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item('av_compras_lineas', $data);
+			$insert = $this->insert_item($tbl['compras_lineas'], $data);
 			return $insert;
 		}else{
 			return false;
 		}
 	}
 	public function update_linea($data, $id_linea){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_linea !=' => $id_linea, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_compras_lineas', $condicion);
+		$existe = $this->row_exist($tbl['compras_lineas'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_linea = $id_linea"; 
 			$data['id_compras_linea'] =  $id_linea;
-			$update    = $this->update_item('av_compras_lineas', $data, 'id_compras_linea', $condicion);
+			$update    = $this->update_item($tbl['compras_lineas'], $data, 'id_compras_linea', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -131,14 +138,19 @@ class catalogos_model extends Base_Model{
 	/*MARCAS*/
 
 	public function get_marca_unico($id_marca){
-		$query = "SELECT * FROM av_compras_marcas cm WHERE cm.id_compras_marca = $id_marca";
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_marcas] cm WHERE cm.id_compras_marca = $id_marca";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 	public function get_marcas($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=="") ? "" : "AND (
 												cm.marca like '%$filtro%'
 											OR 
@@ -152,8 +164,7 @@ class catalogos_model extends Base_Model{
 						,cm.marca
 						,cm.clave_corta
 						,cm.descripcion
-					FROM
-						av_compras_marcas cm
+					FROM $tbl[compras_marcas] cm
 					WHERE cm.activo = 1 $filtro
 					ORDER BY cm.id_compras_marca
 					$limit";
@@ -164,21 +175,27 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function insert_marca($data){
-		$existe = $this->row_exist('av_compras_marcas', array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_marcas'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item('av_compras_marcas', $data);
+			$insert = $this->insert_item($tbl['compras_marcas'], $data);
 			return $insert;
 		}else{
 			return false;
 		}
 	}
 	public function update_marca($data, $id_marca){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_marca !=' => $id_marca, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_compras_marcas', $condicion);
+		$existe = $this->row_exist($tbl['compras_marcas'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_marca = $id_marca"; 
 			$data['id_compras_marca'] =  $id_marca;
-			$update    = $this->update_item('av_compras_marcas', $data, 'id_compras_marca', $condicion);
+			$update    = $this->update_item($tbl['compras_marcas'], $data, 'id_compras_marca', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -188,14 +205,19 @@ class catalogos_model extends Base_Model{
 	/*U.M.*/
 	
 	public function get_um_unico($id_um){
-		$query = "SELECT * FROM av_compras_um cu WHERE cu.id_compras_um = $id_um";
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_um] cu WHERE cu.id_compras_um = $id_um";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 	public function get_um($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=="") ? "" : "AND (
 												cu.um like '%$filtro%'
 											OR 
@@ -209,8 +231,7 @@ class catalogos_model extends Base_Model{
 						,cu.um
 						,cu.clave_corta
 						,cu.descripcion
-					FROM
-						av_compras_um cu
+					FROM $tbl[compras_um] cu
 					WHERE cu.activo = 1 $filtro
 					ORDER BY cu.id_compras_um
 					$limit";
@@ -221,21 +242,27 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function insert_um($data){
-		$existe = $this->row_exist('av_compras_um', array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_um'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$insert = $this->insert_item('av_compras_um', $data);
+			$insert = $this->insert_item($tbl['compras_um'], $data);
 			return $insert;
 		}else{
 			return false;
 		}
 	}
 	public function update_um($data, $id_um){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_um !=' => $id_um, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_compras_um', $condicion);
+		$existe = $this->row_exist($tbl['compras_um'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_um = $id_um"; 
 			$data['id_compras_um'] =  $id_um;
-			$update    = $this->update_item('av_compras_um', $data, 'id_compras_um', $condicion);
+			$update    = $this->update_item($tbl['compras_um'], $data, 'id_compras_um', $condicion);
 			return $update;
 		}else{
 			return false;
@@ -244,15 +271,13 @@ class catalogos_model extends Base_Model{
 
 	/*EMBALAJE*/
 	public function get_embalaje($data=array()){
-
-		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-
-
 		$filtro = ($filtro=="") ? "" : "AND (ce.embalaje like '%$filtro%' OR 
 											 ce.clave_corta like '%$filtro%'OR
 										     ce.descripcion like '%$filtro%') ";
@@ -262,8 +287,7 @@ class catalogos_model extends Base_Model{
 						,ce.embalaje
 						,ce.clave_corta
 						,ce.descripcion
-					FROM
-						$tbl_embalaje ce
+					FROM $tbl[compras_embalaje] ce
 					WHERE ce.activo = 1 $filtro
 					ORDER BY ce.id_compras_embalaje
 					$limit";
@@ -274,34 +298,37 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function get_embalaje_unico($id_embalaje){
-		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;
-		$query = "SELECT * FROM $tbl_embalaje ce WHERE ce.id_compras_embalaje = $id_embalaje";
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_embalaje] ce WHERE ce.id_compras_embalaje = $id_embalaje";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 	public function insert_embalaje($data=array()){
-		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;		
-		$existe = $this->row_exist($tbl_embalaje, array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query		
+		$existe = $this->row_exist($tbl['compras_embalaje'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl_embalaje, $data);
+			$query = $this->db->insert_string($tbl['compras_embalaje'], $data);
 			$query = $this->db->query($query);
-
 			return $query;
 		}else{
 			return false;
 		}
 	}
-	public function update_embalaje($data, $id_embalaje){		
-		$tbl_embalaje  = $this->db1.'.'.$this->tbl_embalaje;		
-
+	public function update_embalaje($data, $id_embalaje){	
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_embalaje !=' => $id_embalaje, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl_embalaje, $condicion);
+		$existe = $this->row_exist($tbl['compras_embalaje'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_embalaje = $id_embalaje"; 
-			$query = $this->db->update_string($tbl_embalaje, $data, $condicion);
+			$query = $this->db->update_string($tbl['compras_embalaje'], $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{
@@ -311,23 +338,27 @@ class catalogos_model extends Base_Model{
 
 	/*ARTICULOS*/
 	public function insert_articulo($data){
-		$existe = $this->row_exist('av_compras_articulos', array('clave_corta'=> $data['clave_corta']));
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['compras_articulos'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string('av_compras_articulos', $data);
+			$query = $this->db->insert_string($tbl['compras_articulos'], $data);
 			$query = $this->db->query($query);
-
 			return $query;
 		}else{
 			return false;
 		}
 	}
 	public function update_articulo($data, $id_articulo){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = array('id_compras_articulo !=' => $id_articulo, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist('av_compras_articulos', $condicion);
+		$existe = $this->row_exist($tbl['compras_articulos'], $condicion);
 		if(!$existe){
 			$condicion = "id_compras_articulo = $id_articulo"; 
-			$query = $this->db->update_string('av_compras_articulos', $data, $condicion);
-			//print_debug($query);
+			$query = $this->db->update_string($tbl['compras_articulos'], $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
 		}else{
@@ -335,6 +366,9 @@ class catalogos_model extends Base_Model{
 		}
 	}
 	public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulo  LIKE '%$filtro%' OR 
 												cl.linea  LIKE '%$filtro%' OR 
 												cu.um  LIKE '%$filtro%' OR 
@@ -349,10 +383,9 @@ class catalogos_model extends Base_Model{
 						,cu.um
 						,ca.clave_corta
 						,ca.descripcion
-					FROM
-						av_compras_articulos ca
-					LEFT JOIN av_compras_lineas cl on cl.id_compras_linea = ca.id_compras_linea 
-					LEFT JOIN av_compras_um cu on cu.id_compras_um = ca.id_compras_um
+					FROM $tbl[compras_articulos] ca
+					LEFT JOIN $tbl[compras_lineas] cl on cl.id_compras_linea = ca.id_compras_linea 
+					LEFT JOIN $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
 					WHERE ca.activo = 1 $filtro
 					ORDER BY ca.id_compras_articulo
 				$limit
@@ -364,8 +397,10 @@ class catalogos_model extends Base_Model{
 		}	
 	}
 	public function get_articulo_unico($id_articulo){
-		$query = "SELECT * FROM av_compras_articulos ca WHERE ca.id_compras_articulo = $id_articulo";
-
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_articulos] ca WHERE ca.id_compras_articulo = $id_articulo";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

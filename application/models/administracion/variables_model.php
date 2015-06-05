@@ -1,28 +1,21 @@
 <?php
-class variables_model extends Base_Model
-{
-	private $db1;
-	private $tbl1;
-	
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db1  = $this->dbinfo[1]['db'];
-		$this->tbl1 = $this->dbinfo[1]['tbl_administracion_variables'];
-	}
+class variables_model extends Base_Model{
 
 	//Función que obtiene toda la información de la tabla av_administracion_creditos
 	public function db_get_data($data=array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Filtro
 		$buscar = (isset($data['buscar']))?$data['buscar']:false;
 		$filtro = ($buscar) ? "and id_vars = $buscar " 
 							: "";
-		$tbl_variables = $this->db1.'.'.$this->tbl1;
+		// Query
 		$query = "SELECT 
 						va.nombre,
 						va.valor,
 						va.tabla,
 						va.campo
-					FROM $tbl_variables va
+					FROM $tbl[administracion_variables] va
 					WHERE va.activo = 1 $filtro;";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -30,13 +23,15 @@ class variables_model extends Base_Model
 		}	
 	}
 	public function update($data=array()){	
+		// DB Info		
+		$tbl = $this->tbl;
+		// Filtro
 		$resultado      = false;
-		$tbl_variables  = $this->db1.'.'.$this->tbl1;
 		$id_vars   		= (isset($data['id_vars']))?$data['id_vars']:false;
 		//$datos['valor'] = $data['valor'];
 		$filtro 		= ($id_vars)?"id_vars='$id_vars'":'';
 		if($id_vars){
-			$update    = $this->update_item($tbl_variables, $data, 'id_vars', $filtro);
+			$update    = $this->update_item($tbl['administracion_variables'], $data, 'id_vars', $filtro);
 			return $update;
 		}
 		return $resultado;

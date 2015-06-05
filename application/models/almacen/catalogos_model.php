@@ -1,23 +1,6 @@
 <?php
 class catalogos_model extends Base_Model{
-	
-	private $vars;
-	private $db1,$db2;
-	private $tbl;
 
-	public function __construct(){
-		parent::__construct();		
-		$this->vars		= new config_vars();
-        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
-		$this->db1 = $this->vars->db['db1'];
-		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
-        $this->db2 = $this->vars->db['db2'];		
-		$this->tbl['almacen_almacenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_almacenes'];
-		$this->tbl['almacen_gavetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_gavetas'];
-		$this->tbl['almacen_pasillos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_pasillos'];
-		$this->tbl['almacen_tipos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_tipos'];
-		$this->tbl['almacen_transportes'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_transportes'];
-	}
 	/*ALMACENES*/
 
 	/*Traer información para el listado de los almacenes*/

@@ -176,3 +176,27 @@ function muestra_impuesto(){
     jQuery('[name=lts_impuesto]').removeClass('requerido');
   }
 }
+function load_pre_emb(id_presentacion){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_presentacion_em",
+        dataType: 'json',
+        data: {id_presentacion : id_presentacion},
+        success: function(data){
+          jQuery('#pre_em').show('slow');
+          jQuery('#pre_em').html(data);
+        }
+    });
+}
+function load_pre_um(id_articulo){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_presentacion_um",
+        dataType: 'json',
+        data: {id_articulo : id_articulo},
+        success: function(data){
+          jQuery('#pre_um').show('slow');
+          jQuery('#pre_um').html(data);
+        }
+    });
+}

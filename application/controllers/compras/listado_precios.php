@@ -152,6 +152,11 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_articulo'
 					,'text' 	=> array('clave_corta','articulo')
 					,'name' 	=> "lts_articulos"
+					,'event'    => array('event'       => 'onchange',
+	   						 'function'    => 'load_pre_um',
+	   						 'params'      => array('this.value'),
+	   						 'params_type' => array(0)
+						)
 					,'class' 	=> "requerido"
 				);
 		$lts_articulos  = dropdown_tpl($dropArray);
@@ -179,6 +184,11 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
+					,'event'    => array('event'       => 'onchange',
+	   						 'function'    => 'load_pre_emb',
+	   						 'params'      => array('this.value'),
+	   						 'params_type' => array(0)
+						)
 					,'class' 	=> "requerido"
 				);
 		$lts_presentaciones  = dropdown_tpl($dropArray4); 
@@ -198,7 +208,8 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','valor')
 					,'name' 	=> "lts_impuesto"
 					,'class' 	=> ""
-				);
+				);		
+
 		$lts_impuesto  = dropdown_tpl($dropArray6);
 
 		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_precios_save';
@@ -324,7 +335,7 @@ class listado_precios extends Base_Controller {
 
 		$dropArray4 = array(
 					 'data'		=> $this->catalogos_model->get_presentaciones($limit="", $offset="", $filtro="", $aplicar_limit = false)
-					 ,'selected' => $detalle[0]['id_presentacion']
+					 ,'selected'=> $detalle[0]['id_presentacion']
 					,'value' 	=> 'id_compras_presentacion'
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
@@ -382,6 +393,12 @@ class listado_precios extends Base_Controller {
         $data_tab['checked'] 							= $checked;
         $data_tab['button_save']           	 			= $btn_save;
 
+       	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);
+       	$data_tab['pre_emb']						= $presentacion[0]['clave_corta'];
+
+       	$presentacion_um=$this->db_model->get_articulos_um($detalle[0]['id_articulo']);
+       	
+       	$data_tab['pre_um']						= $presentacion_um[0]['cv_um'];
 
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -476,6 +493,16 @@ class listado_precios extends Base_Controller {
 						);
 		
 		$this->excel->generate_xlsx($params);
+	}
+	public function load_presentacion_em(){
+		$id_presentacion = $this->ajax_post('id_presentacion');
+		$presentacion=$this->catalogos_model->get_presentacion_unico($id_presentacion);
+       	echo json_encode($presentacion[0]['clave_corta']);
+	}
+	public function load_presentacion_um(){
+		$id_articulo = $this->ajax_post('id_articulo');
+		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
+     	echo json_encode($presentacion_em[0]['cv_um']);
 	}
 }
 ?>

@@ -16,33 +16,61 @@
             {lts_presentaciones}
     </p>
     <p>
-        <label>{embajale} (*)</label>
+        <label>{embalaje_aplica}:</label>
+        <input type="checkbox" id="embalaje_aplica" name="embalaje_aplica" onclick="oculta_embalaje();" checked>
+    </p>
+    <p>
+        <div id="embajale">
+            <label>{embajale} (*)</label>
             {lts_embalaje}
+        </div>
     </p>
     <p>
-        <label>{cantidad_presentacion_embalaje}: (*)</label>
+        <label>{presentacion_x_embalaje}: (*)</label>
         <span id="pre_em" style="display:none">{pre_em}</span>
-        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" value="" />
+        <input id="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();" />
     </p>
     <p>
-        <label>{cantidad_um_presentacion}: (*)</label>
+        <label>{um_x_embalaje}: (*)</label>
+        <input type="radio" name="um" value="1" onclick="validar_um(this.value);"  checked="checked">
+        <input id="um_x_embalaje" type="text" name="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();"/>
+    </p>
+    <p>
+        <label>{um_x_presentacion}: (*)</label>
+        <input type="radio" name="um" value="2" onclick="validar_um(this.value);">
         <span id="pre_um" style="display:none">{pre_um}</span>
-        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-small requerido" value="" />
+        <input id="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly />
     </p>
     <p>
-        <label>{precio_proveedor}: (*)</label>
+        <label>{costo_sin_impuesto}: (*)</label>
         &nbsp;&nbsp;&nbsp;<span>$</span>
-        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-small requerido" value="" />
+        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="cost();" />
+    </p>
+    <p>
+        <label>{peso_unitario}: (*)</label>        
+        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido"/>
+    </p>
+    <p>
+        <label>{costo_unitario}: (*)</label>        
+        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido"/>
+    </p>
+    <p>
+        <label>{costo_x_um}: (*)</label>
+        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido"/>
     </p>
     <p>
         <label>{impuesto_aplica}:</label>
-        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="muestra_impuesto()">
+        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="oculta_impuesto()" checked>
     </p>
     <p>
-        <div id="impuesto"  style="display:none" >
+        <div id="impuesto">
             <label>{impuesto_porcentaje}: (*)</label>
             {lts_impuesto}
         </div>
+    </p>
+    <p>
+        <label>{costo_final}: (*)</label>
+        <input id="costo_final" type="text" name="costo_final" class="input-small requerido"/>
     </p>
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>

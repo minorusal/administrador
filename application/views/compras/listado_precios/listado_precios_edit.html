@@ -22,12 +22,12 @@
     </p>
     <p>
         <label>{cantidad_presentacion_embalaje}: (*)</label>
-        <span>{pre_emb}</span>
+        <span id="pre_em">{pre_em}</span>
         <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" value="{val_cantidad_presentacion_embalaje}" />
     </p>
     <p>
         <label>{cantidad_um_presentacion}: (*)</label>
-        <span>{pre_um}</span>
+        <span id="pre_um">{pre_um}</span>
         <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-small requerido" value="{val_cantidad_um_presentacion}" />
     </p>
     <p>
@@ -37,7 +37,7 @@
     </p>
     <p>
         <label>{impuesto_aplica}:</label>
-        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="muestra_impuesto()" {checked}>
+        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="oculta_impuesto()" {checked}>
     </p>
     <p>
         <div id="impuesto" {style} >

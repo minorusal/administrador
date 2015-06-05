@@ -25,15 +25,16 @@ class listado_precios_model extends Base_Model{
 					,a.id_marca
 					,a.id_presentacion
 					,a.id_embalaje
-					,a.cantidad_presentacion_embalaje
-					,a.cantidad_um_presentacion
-					,a.precio_proveedor
+					,a.presentacion_x_embalaje
+					,a.um_x_embalaje
+					,a.um_x_presentacion
+					,a.costo_sin_impuesto
 					,b.articulo
 					,c.nombre_comercial
 					,d.marca
 					,e.presentacion
 					,f.embalaje
-				from $tbl[tbl_compras_articulos_precios] a 
+				from $tbl[compras_articulos_precios] a 
 				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 				LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
 				LEFT JOIN $tbl[compras_marcas] d on a.id_marca			= d.id_compras_marca
@@ -53,14 +54,14 @@ class listado_precios_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$insert = $this->insert_item($tbl['tbl_compras_articulos_precios'], $data);
+		$insert = $this->insert_item($tbl['compras_articulos_precios'], $data);
 		return $insert;
 	}
 	public function get_data_unico($id_compras_articulo_precio){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$query = "SELECT * FROM $tbl[tbl_compras_articulos_precios] WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
+		$query = "SELECT * FROM $tbl[compras_articulos_precios] WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -71,7 +72,7 @@ class listado_precios_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$condicion = "id_compras_articulo_precios = ".$data['id_compras_articulo_precios'];
-		$update = $this->update_item($tbl['tbl_compras_articulos_precios'], $data, 'id_compras_articulo_precios', $condicion);
+		$update = $this->update_item($tbl['compras_articulos_precios'], $data, 'id_compras_articulo_precios', $condicion);
 		return $update;
 	}
 	public function get_articulos_um($id_compras_articulos){
@@ -85,8 +86,8 @@ class listado_precios_model extends Base_Model{
 					b.id_compras_um,
 					b.um,
 					b.clave_corta as cv_um
-				FROM $tbl[tbl_compras_articulos] a
-				LEFT JOIN $tbl[tbl_compras_um] b ON a.id_compras_um = b.id_compras_um
+				FROM $tbl[compras_articulos] a
+				LEFT JOIN $tbl[compras_um] b ON a.id_compras_um = b.id_compras_um
 				WHERE a.id_compras_articulo= $id_compras_articulos ";
 		//echo $query;
 		$query = $this->db->query($query);

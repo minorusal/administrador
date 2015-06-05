@@ -1,29 +1,40 @@
 <?php
 class listado_precios_model extends Base_Model{
 
-	private $db1;
-	private $tbl1, $tbl2, $tbl3, $tbl4, $tbl5, $tbl6,$tbl7;
-	
-	public function __construct(){
-		parent::__construct();
-		$this->db1    = $this->dbinfo[1]['db'];
-		$this->tbl1   = $this->dbinfo[1]['tbl_compras_articulos_precios'];
-		$this->tbl2   = $this->dbinfo[1]['tbl_compras_articulos'];
-		$this->tbl3   = $this->dbinfo[1]['tbl_compras_proveedores'];
-		$this->tbl4   = $this->dbinfo[1]['tbl_compras_marcas'];
-		$this->tbl5   = $this->dbinfo[1]['tbl_compras_presentaciones'];
-		$this->tbl6   = $this->dbinfo[1]['tbl_compras_embalaje'];
-		$this->tbl7   = $this->dbinfo[1]['tbl_compras_um'];
-	}
-	public function db_get_data($data=array()){
-		$tbl1  = $this->tbl1;
-		$tbl2  = $this->tbl2;
-		$tbl3  = $this->tbl3;
-		$tbl4  = $this->tbl4;
-		$tbl5  = $this->tbl5;
-		$tbl6  = $this->tbl6;
-		// Filtro
+	private $vars;
+	private $db1,$db2;
+	private $tbl;
 
+	public function __construct(){
+		parent::__construct();		
+		$this->vars		= new config_vars();
+        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
+		$this->db1 = $this->vars->db['db1'];
+		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
+        $this->db2 = $this->vars->db['db2'];	
+        $this->tbl['administracion_entidades'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_entidades'];	
+		$this->tbl['compras_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos'];
+		$this->tbl['compras_articulos_precios'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos_precios'];
+		$this->tbl['compras_lineas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_lineas'];
+		$this->tbl['compras_marcas'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_marcas'];
+		$this->tbl['compras_ordenes_tipo'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_tipo'];
+		$this->tbl['compras_ordenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes'];
+		$this->tbl['compras_ordenes_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_articulos'];
+		$this->tbl['compras_ordenes_estatus'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_ordenes_estatus'];
+		$this->tbl['compras_presentaciones'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_presentaciones'];
+		$this->tbl['compras_proveedores'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores'];
+		$this->tbl['compras_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores_articulos'];
+		$this->tbl['compras_um'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_um'];
+		$this->tbl['compras_embalaje'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_embalaje'];
+		$this->tbl['vw_compras_orden_proveedores'] = $this->db2.'.'.$this->vars->db['db2_vw_compras_orden_proveedores'];
+		$this->tbl['vw_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_articulos'];
+		$this->tbl['vw_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_proveedores_articulos'];
+	}
+
+	public function db_get_data($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
 		$filtro 		= (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -52,12 +63,12 @@ class listado_precios_model extends Base_Model{
 					,d.marca
 					,e.presentacion
 					,f.embalaje
-				from $tbl1 a 
-				LEFT JOIN $tbl2 b on a.id_articulo  	= b.id_compras_articulo
-				LEFT JOIN $tbl3 c on a.id_proveedor 	= c.id_compras_proveedor
-				LEFT JOIN $tbl4 d on a.id_marca			= d.id_compras_marca
-				LEFT JOIN $tbl5 e on a.id_presentacion	= e.id_compras_presentacion
-				LEFT JOIN $tbl6 f on a.id_embalaje    	= f.id_compras_embalaje
+				from $tbl[tbl_compras_articulos_precios] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
+				LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
+				LEFT JOIN $tbl[compras_marcas] d on a.id_marca			= d.id_compras_marca
+				LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
+				LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
 				WHERE a.activo = 1 AND 1  $filtro
 				GROUP BY a.id_compras_articulo_precios ASC
 				$limit";
@@ -69,28 +80,34 @@ class listado_precios_model extends Base_Model{
 		}	
 	}
 	public function db_insert_data($data = array()){
-		$tbl1  = $this->tbl1;
-		$insert = $this->insert_item($tbl1, $data);
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['tbl_compras_articulos_precios'], $data);
 		return $insert;
 	}
 	public function get_data_unico($id_compras_articulo_precio){
-		$tbl1  = $this->tbl1;
-		$query = "SELECT * FROM $tbl1 WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[tbl_compras_articulos_precios] WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
 	public function db_update_data($data=array()){
-		$tbl1  = $this->tbl1;
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$condicion = "id_compras_articulo_precios = ".$data['id_compras_articulo_precios'];
-		$update = $this->update_item($tbl1, $data, 'id_compras_articulo_precios', $condicion);
+		$update = $this->update_item($tbl['tbl_compras_articulos_precios'], $data, 'id_compras_articulo_precios', $condicion);
 		return $update;
 	}
 	public function get_articulos_um($id_compras_articulos){
-		$tbl2  = $this->tbl2;
-		$tbl7  = $this->tbl7;
-		
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
 		$query="SELECT 
 					a.id_compras_articulo,
 					a.clave_corta,
@@ -98,13 +115,9 @@ class listado_precios_model extends Base_Model{
 					b.id_compras_um,
 					b.um,
 					b.clave_corta as cv_um
-				FROM 
-					$tbl2 a
-				LEFT JOIN $tbl7 b
-					ON 
-						a.id_compras_um = b.id_compras_um
-				WHERE 
-					a.id_compras_articulo= $id_compras_articulos ";
+				FROM $tbl[tbl_compras_articulos] a
+				LEFT JOIN $tbl[tbl_compras_um] b ON a.id_compras_um = b.id_compras_um
+				WHERE a.id_compras_articulo= $id_compras_articulos ";
 		//echo $query;
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

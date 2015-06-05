@@ -1,21 +1,6 @@
 <?php
 class vendedores_model extends Base_Model{
 
-	private $vars;
-	private $db1,$db2;
-	private $tbl;
-
-	public function __construct(){
-		parent::__construct();		
-		$this->vars		= new config_vars();
-        $this->vars->load_vars('assets/cfg/dbmodel.cfg');
-        $this->db2 = $this->vars->db['db2'];		
-		$this->db1 = $this->vars->db['db1'];
-		$this->tbl['sucursales'] = $this->db1.'.'.$this->vars->db['db1_tbl_sucursales'];
-		$this->tbl['ventas_vendedores'] = $this->db2.'.'.$this->vars->db['db2_tbl_ventas_vendedores'];
-		$this->tbl['administracion_entidades'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_entidades'];
-	}
-
 	function get_vendedores($limit, $offset, $filtro="", $aplicar_limit = true){
 		// DB Info
 		$tbl = $this->tbl;

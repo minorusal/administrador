@@ -2,11 +2,11 @@
 <input id="id_compras_articulo_precios" type="hidden" name="id_compras_articulo_precios" value="{id_compras_articulo_precios}" />
     <p>
         <label>{upc}: </label>
-        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{upc_value}" />
+        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{val_upc}" />
     </p>
     <p>
         <label>{sku}: </label>
-        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="{sku_value}" />
+        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="{val_sku}" />
     </p>
     <p>
         <label>{articulo} (*)</label>
@@ -77,6 +77,10 @@
             <label>{impuesto_porcentaje}: (*)</label>
             {lts_impuesto}
         </div>
+    </p>
+    <p>
+        <label>{costo_final}: (*)</label>
+        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido"/>
     </p>
     <p>
         <label>{lbl_fecha_registro}:</label>

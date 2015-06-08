@@ -370,7 +370,6 @@ class catalogos_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulo  LIKE '%$filtro%' OR 
-												ca.upc  LIKE '%$filtro%' OR 
 												cl.linea  LIKE '%$filtro%' OR
 												cu.um  LIKE '%$filtro%' OR 
 												ca.clave_corta  LIKE '%$filtro%' OR 
@@ -379,7 +378,6 @@ class catalogos_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						ca.id_compras_articulo
-						,ca.upc
 						,ca.articulo
 						,cl.linea
 						,cu.um

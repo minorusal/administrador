@@ -3,10 +3,10 @@
         <label>{upc}: </label>
         <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="" />
     </p>
-    <p>
+    <!--<p>
         <label>{sku}: </label>
         <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="" />
-    </p>  
+    </p>  -->
     <p>
         <label>{articulo} (*)</label>
             {lts_articulos}
@@ -53,7 +53,7 @@
     <p>
         <label>{costo_sin_impuesto}: (*)</label>
         &nbsp;&nbsp;<span>$</span>
-        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" data-campo="costo_sin_impuesto" class="input-small requerido" onkeyup="calula_costos();" />
+        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" data-campo="costo_sin_impuesto" class="input-small requerido" onkeyup="calcula_costos();" />
     </p>
     <p>
         <label>{peso_unitario}: (*)</label>        

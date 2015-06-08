@@ -88,11 +88,13 @@ class listado_precios extends Base_Controller {
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
+			,'aplicar_limit' =>true
 		);
 		
 		$uri_segment  = $this->uri_segment(); 
 		$list_content = $this->db_model->db_get_data($sqlData);
-		$sqlData['aplicar_limit'] = false;	
+		$sqlData['aplicar_limit'] = null;	
+		//dump_var($sqlData);
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -268,8 +270,8 @@ class listado_precios extends Base_Controller {
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
 		else{			
+			//$fechadate('y');
 	        $upc						= $this->ajax_post('upc');
-	        $sku						= $this->ajax_post('sku');
 	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
 	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
 	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
@@ -288,7 +290,7 @@ class listado_precios extends Base_Controller {
 	        $data_insert  = array(
 								'id_articulo'  				=> $id_articulo,
 								'upc'  						=> $upc,
-								'sku'  						=> $sku,
+								//'sku'  						=> $sku,
 								'id_proveedor'  			=> $id_proveedor,
 								'id_marca'  				=> $id_marca,
 								'id_presentacion'  			=> $id_presentacion,
@@ -305,18 +307,36 @@ class listado_precios extends Base_Controller {
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
-			$insert = $this->db_model->db_insert_data($data_insert);
-			
-			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			$id = $this->db_model->db_insert_data($data_insert);
+			//dump_var($id);
+			if($id){
+				$año=date('y');
+				$idnum=str_pad($id[0]['id_row'], 7, "0", STR_PAD_LEFT);
+				$articulo=$this->catalogos_model->get_articulo_unico($id_articulo);
+				 
+				$sku= $año.$idnum.$articulo[0]['id_compras_linea'];
+				$data_update_sku = array(
+								'id_compras_articulo_precios'   => $id[0]['id_row'],							
+								'sku'  							=> $sku,
+								'edit_id_usuario'           	=> $this->session->userdata('id_usuario'),
+								'edit_timestamp' 				=>$this->timestamp()
+
+							);
+				$update = $this->db_model->db_update_sku($data_update_sku);
+				if($update){
+					$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				}
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
 	}
-	public function detalle(){
+	public function detalle(){	
 		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_precios_edit';
 		$id_compras_articulo_precio    = $this->ajax_post('id_compras_articulo_precio');
 		$detalle  		= $this->db_model->get_data_unico($id_compras_articulo_precio);
@@ -438,6 +458,10 @@ class listado_precios extends Base_Controller {
         $data_tab['lts_impuesto'] 	  				    = $lts_impuesto;
         $data_tab['val_presentacion_x_embalaje']		= $detalle[0]['presentacion_x_embalaje'];
 
+
+        $data_tab["val_upc"] 							 = $detalle[0]['upc'];
+		$data_tab["val_sku"] 							 = $detalle[0]['sku'];
+
         $data_tab['val_um_x_embalaje']					= $detalle[0]['um_x_embalaje'];
         $data_tab['val_um_x_presentacion']				= $detalle[0]['um_x_presentacion'];
         $data_tab['val_peso_unitario']					= $detalle[0]['peso_unitario'];
@@ -519,9 +543,9 @@ class listado_precios extends Base_Controller {
 								,'edit_timestamp'  	 			=> $this->timestamp()
 								,'edit_id_usuario'   			=> $this->session->userdata('id_usuario')
 							);
-			$insert = $this->db_model->db_update_data($data_update);
+			$update = $this->db_model->db_update_data($data_update);
 
-			if($insert){
+			if($update){
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{

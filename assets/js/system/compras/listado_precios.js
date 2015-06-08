@@ -295,7 +295,7 @@ function calcula_um_embalaje(){
   var um_x_embalaje= um_x_presentacion*presentacion_x_embalaje;
   jQuery('#um_x_embalaje').val(um_x_embalaje);
 }
-function calula_costos(){
+function calcula_costos(){
   var presentacion_x_embalaje = jQuery('#presentacion_x_embalaje').val();
   var um_x_embalaje = jQuery('#um_x_embalaje').val();
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();

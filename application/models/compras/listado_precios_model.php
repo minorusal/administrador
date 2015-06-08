@@ -26,20 +26,26 @@ class listado_precios_model extends Base_Model{
 					,a.id_presentacion
 					,a.id_embalaje
 					,a.presentacion_x_embalaje
+					,a.costo_sin_impuesto
 					,a.um_x_embalaje
 					,a.um_x_presentacion
-					,a.costo_sin_impuesto
+					,a.peso_unitario
+					,a.costo_unitario
+					,a.costo_x_um
+					,a.timestamp
 					,b.articulo
 					,c.nombre_comercial
 					,d.marca
 					,e.presentacion
 					,f.embalaje
+					,g.valor as impuesto
 				from $tbl[compras_articulos_precios] a 
 				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 				LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
 				LEFT JOIN $tbl[compras_marcas] d on a.id_marca			= d.id_compras_marca
 				LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
 				LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
+				LEFT JOIN $tbl[administracion_impuestos] g on a.id_impuesto    	= g.id_administracion_impuestos
 				WHERE a.activo = 1 AND 1  $filtro
 				GROUP BY a.id_compras_articulo_precios ASC
 				$limit";

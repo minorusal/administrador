@@ -55,7 +55,6 @@ class articulos extends Base_Controller {
 		$total_rows  = count($this->catalogos_model->get_articulos($limit, $offset, $filtro, false));
 		$url         = base_url($this->uri_modulo.$this->uri_seccion.'/listado_articulos');
 		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-
 		if($total_rows>0){
 			foreach ($lts_content as $value) {
 				$atrr = array(
@@ -180,7 +179,7 @@ class articulos extends Base_Controller {
 												));
 		$data_tab_3['id_articulo']       	   = $id_articulo;
 		$data_tab_3['nombre_articulo']   	   = $this->lang_item("nombre_articulo",false);
-        $data_tab_3['cvl_corta']         	   = $this->lang_item("cvl_corta",false);
+		$data_tab_3['cvl_corta']         	   = $this->lang_item("cvl_corta",false);
         $data_tab_3['linea']             	   = $this->lang_item("linea",false);
         $data_tab_3['um']                	   = $this->lang_item("um",false);
         $data_tab_3['descripcion']       	   = $this->lang_item("descripcion",false);
@@ -266,7 +265,7 @@ class articulos extends Base_Controller {
 								 'edit_timestamp' => $this->timestamp(),
 								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
 								 'id_compras_um'=> $um);
-
+			// dump_var($data_update);
 	
 			$insert = $this->catalogos_model->update_articulo($data_update,$id_articulo);
 

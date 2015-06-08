@@ -1,12 +1,12 @@
 
-<div class="stdform">
+<div id="formulario" class="stdform">
         <p>
             <label>{nombre_articulo}: (*)</label>
-            <input id="articulo" type="text" name="articulo" class="input-large requerido" value="" />
+            <input id="articulo" type="text" name="articulo" data-campo="articulo" class="input-large requerido" value="" />
         </p>
         <p>
             <label>{cvl_corta}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+            <input id="clave_corta" type="text" name="clave_corta" data-campo="clave_corta" class="input-large requerido" value="" />
         </p>
         <p>
             <label>{linea}: (*)</label>
@@ -18,7 +18,7 @@
         </p>
         <p>
             <label>{descripcion}:</label>
-            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+            <textarea id="descripcion" name="descripcion" data-campo="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
         </p>
 
         <div id="registro_loader"></div>

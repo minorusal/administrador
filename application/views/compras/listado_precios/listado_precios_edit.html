@@ -1,6 +1,14 @@
 <div id="formulario" class="stdform">
 <input id="id_compras_articulo_precios" type="hidden" name="id_compras_articulo_precios" value="{id_compras_articulo_precios}" />
     <p>
+        <label>{upc}: </label>
+        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{upc_value}" />
+    </p>
+    <p>
+        <label>{sku}: </label>
+        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="{sku_value}" />
+    </p>
+    <p>
         <label>{articulo} (*)</label>
             {lts_articulos}
     </p>
@@ -17,24 +25,49 @@
             {lts_presentaciones}
     </p>
     <p>
-        <label>{embajale} (*)</label>
-            {lts_embalaje}
+        <label>{embalaje_aplica}:</label>
+        <input type="checkbox" id="embalaje_aplica" name="embalaje_aplica" onclick="oculta_embalaje();" checked>
     </p>
     <p>
-        <label>{cantidad_presentacion_embalaje}: (*)</label>
+        <div id="embajale">
+            <label>{embajale} (*)</label>
+                {lts_embalaje}
+        </div>
+    </p>
+    <p>
+        <label>{presentacion_x_embalaje}: (*)</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();"value="{val_presentacion_x_embalaje}" />
         <span id="pre_em">{pre_em}</span>
-        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" value="{val_cantidad_presentacion_embalaje}" />
     </p>
     <p>
-        <label>{cantidad_um_presentacion}: (*)</label>
-        <span id="pre_um">{pre_um}</span>
-        <input id="cantidad_um_presentacion" type="text" name="cantidad_um_presentacion" class="input-small requerido" value="{val_cantidad_um_presentacion}" />
+        <label>{um_x_embalaje}: (*)</label>
+        <input type="radio" name="um" value="1" onclick="validar_um(this.value);"  checked="checked">
+        <input id="um_x_embalaje" type="text" name="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();" value="{val_um_x_embalaje}"/>
+        <span id="pre_um2">{pre_um}</span><span id="signo2"> * </span><span id="embalaje_cl">{embalaje_cl}</span>
     </p>
     <p>
-        <label>{precio_proveedor}: (*)</label>
-        &nbsp;&nbsp;&nbsp;<span>$</span>
-        <input id="precio_proveedor" type="text" name="precio_proveedor" class="input-small requerido" value="{val_precio_proveedor}" />
+        <label>{um_x_presentacion}: (*)</label>
+        <input type="radio" name="um" value="2" onclick="validar_um(this.value);">
+        <input id="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly value="{val_um_x_presentacion}"/>
+        <span id="pre_um">{pre_um}</span><span id="signo"> * </span><span id="pre_em2">{pre_em}</span>
     </p>
+    <p>
+        <label>{costo_sin_impuesto}: (*)</label>
+        &nbsp;&nbsp;<span>$</span>
+        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calcula_costos();" value="{val_costo_sin_impuesto}"/>
+    </p>
+    <p>
+        <label>{peso_unitario}: (*)</label>        
+        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido" value="{val_peso_unitario}"/>
+    </p>
+    <p>
+        <label>{costo_unitario}: (*)</label>        
+        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}"/>
+    </p>
+    <p>
+        <label>{costo_x_um}: (*)</label>
+        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}"/>
+   </p>
     <p>
         <label>{impuesto_aplica}:</label>
         <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="oculta_impuesto()" {checked}>

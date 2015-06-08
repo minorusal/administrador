@@ -484,7 +484,7 @@ class ordenes extends Base_Controller {
 
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
+				$msg = $this->lang_item("msg_update_success",false);
 				$json_respuesta = array(
 						 'id' 		=> 1
 						,'contenido'=> alertas_tpl('success', $msg ,false)

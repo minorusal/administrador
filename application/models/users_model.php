@@ -257,10 +257,16 @@ class users_model extends Base_Model{
 				);
 			$insert_clave = $this->insert_item($tbl['claves'], $data);
 			$array_usuarios = array(
-				'id_personal' => $this->db->insert_id($insert)
-				,'id_clave'   => $this->db->insert_id($insert_clave)
-				,'id_perfil'  => $data['id_perfil']
-				,'id_pais'    => $data
+				'id_personal'  => $this->db->insert_id($insert)
+				,'id_clave'    => $this->db->insert_id($insert_clave)
+				,'id_perfil'   => $data['id_perfil']
+				,'id_pais'     => $data['id_pais']
+				,'id_sucursal' => $data['id_sucursal']
+				,'id_puesto'   => $data['id_puesto']
+				,'id_area'     => $data['id_area']
+				,'id_menu_n1'  => $data['id_menu_n1']
+				,'id_menu_n2'  => $data['id_menu_n2']
+				,'id_menu_n3'  => $data['id_menu_n3']
 				);
 			return $insert;
 			if($insert){

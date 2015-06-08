@@ -51,6 +51,11 @@ $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
 /*******/
 
+/*NUTRICION*/
+
+/*Valores nutricionales*/
+$route['compras/listado_precios']    	= 'compras/listado_precios/index';
+
 /*COMPRAS*/
 
 /*Listado de precios*/

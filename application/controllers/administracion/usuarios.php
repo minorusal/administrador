@@ -200,6 +200,7 @@ class usuarios extends Base_Controller {
 		}
 		else
 		{
+			/*print_debug($this->session->userdata('id_sucursal'));*/
 			$sqlData = array(
 				 'nombre'      => $this->ajax_post('nombre')
 				,'paterno'     => $this->ajax_post('paterno')
@@ -209,6 +210,8 @@ class usuarios extends Base_Controller {
 				,'id_menu_n3'  => $this->ajax_post('nivel_3')
 				,'id_perfil'   => $this->ajax_post('id_perfil')
 				,'id_usuario'  => $this->session->userdata('id_usuario')
+				,'id_pais'     => $this->session->userdata('id_pais')
+				,'id_sucursal' => $this->session->userdata('id_sucursal')
 				,'registro'    => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($sqlData);
 			

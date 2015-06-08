@@ -62,9 +62,9 @@ class empresa extends Base_Controller {
 		$data['titulo_submodulo'] = 'Bienvenido';
 		$data['icon']             = $this->icon;
 		$data['Titulo']           = $this->titulo;
-		$data['id_empresa']         = $datos[0]['id_empresa'];
+		$data['id_empresa']       = $datos[0]['id_empresa'];
 		$data['empresa']          = 'Empresa';
-		$data['emp']         = $datos[0]['empresa'];
+		$data['emp']              = $datos[0]['empresa'];
 		$data['logotipo']         = 'Logotipo';
 		$data['imagen']           = base_url().'assets/avatar/users/00001.jpg';
 		$data['razon_social']     = 'Razón Social';

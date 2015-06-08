@@ -1,6 +1,10 @@
 <?php
 $lang['inventario']             = 'inventario';	
 $lang['catalogos']              = 'catalogos';
+
+//VALORES NUTRICIONALES
+$lang['valores_nutricionales']    = 'valores nutricionales';
+
 //MENU DE COMPRAS
 $lang['proveedores']            = 'proveedores';
 $lang['listado_precios']        = 'Listado de precios';

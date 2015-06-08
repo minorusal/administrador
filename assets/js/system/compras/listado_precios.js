@@ -79,6 +79,8 @@ function agregar(){
   var peso_unitario             = jQuery('#peso_unitario').val();
   var costo_unitario            = jQuery('#costo_unitario').val();
   var costo_x_um                = jQuery('#costo_x_um').val();
+  var upc                       = jQuery('#upc').val();
+  var sku                       = jQuery('#sku').val();
 
   jQuery.ajax({
     type:"POST",
@@ -99,7 +101,9 @@ function agregar(){
         id_embalaje : id_embalaje,
         peso_unitario  : peso_unitario,
         costo_unitario : costo_unitario,
-        costo_x_um   :costo_x_um
+        costo_x_um   :costo_x_um,
+        upc : upc,
+        sku : sku
     },
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
@@ -143,6 +147,8 @@ function update(){
   }else{
     impuesto_aplica = 0;    
   }
+  var upc                       = jQuery('#upc').val();
+  var sku                       = jQuery('#sku').val();
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
   var cant_um_presentacion        = jQuery('#cantidad_um_presentacion').val();
@@ -169,7 +175,10 @@ function update(){
         id_proveedor               : id_proveedor,
         id_marca                   : id_marca,
         id_presentacion            : id_presentacion,
-        id_embalaje                : id_embalaje},
+        id_embalaje                : id_embalaje,
+        upc                        : upc,
+        sku                        : sku
+      },
     beforeSend : function(){
       jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },

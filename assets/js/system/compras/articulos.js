@@ -73,20 +73,13 @@ function update_articulo(){
 		var btn          = jQuery("button[name='update_articulo']");
 		btn.attr('disabled','disabled');
 		
-		var incomplete   = values_requeridos();
-		var id_articulo  = jQuery('#id_articulo').val();
-        var articulo     = jQuery('#articulo').val();
-        var clave_corta  = jQuery('#clave_corta').val();
-        var descripcion  = jQuery('#descripcion').val();
-        var linea        = jQuery("select[name='lts_lineas_detalle'] option:selected").val();
-        var um           = jQuery("select[name='lts_um_detalle'] option:selected").val();
-
-      
+		var objData = formData('#formulario');
+  		objData['incomplete'] = values_requeridos();      
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/articulos/update_articulo",
 			dataType: "json",
-			data: {incomplete :incomplete,id_articulo:id_articulo, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,linea:linea,um:um},
+			data: objData,
 			beforeSend : function(){
 				jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
@@ -108,18 +101,14 @@ function insert_articulo(){
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	
-	var incomplete   = values_requeridos();
-    var articulo     = jQuery('#articulo').val();
-    var clave_corta  = jQuery('#clave_corta').val();
-    var descripcion  = jQuery('#descripcion').val();
-    var linea        = jQuery("select[name='lts_lineas'] option:selected").val();
-    var um           = jQuery("select[name='lts_um'] option:selected").val();
+	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
 
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/articulos/insert_articulo",
 		dataType: "json",
-		data: {incomplete :incomplete, articulo:articulo, clave_corta:clave_corta, descripcion:descripcion,linea:linea,um:um},
+		data: objData,
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

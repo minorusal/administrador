@@ -32,7 +32,7 @@ class articulos_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$filtro = ($filtro=="") ? "" : "AND ( 	ca.articulo  LIKE '%$filtro%' OR 
-												cl.linea  LIKE '%$filtro%' OR 
+												cl.linea  LIKE '%$filtro%' OR
 												cm.marca  LIKE '%$filtro%' OR  
 												cu.um  LIKE '%$filtro%' OR 
 												ca.clave_corta  LIKE '%$filtro%' OR 
@@ -55,7 +55,6 @@ class articulos_model extends Base_Model{
 					ORDER BY ca.id_compras_articulo
 				$limit
 					";
-      	//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

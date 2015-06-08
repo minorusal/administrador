@@ -1,13 +1,12 @@
-
-<div class="stdform">
+<div id="formulario" class="stdform">
     <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" />
         <p>
             <label>{nombre_articulo}: (*)</label>
-            <input id="articulo" type="text" name="articulo" class="input-large requerido" value="{articulo_value}" />
+            <input id="articulo" type="text" name="articulo" data-campo="articulo" class="input-large requerido" value="{articulo_value}" />
         </p>
         <p>
             <label>{cvl_corta}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="{cvl_value}" />
+            <input id="clave_corta" type="text" name="clave_corta" data-campo="clave_corta" class="input-large requerido" value="{cvl_value}" />
         </p>
         <p>
             <label>{linea}: (*)</label>
@@ -19,19 +18,19 @@
         </p>
         <p>
             <label>{descripcion}:</label>
-            <textarea id="descripcion" name="descripcion"  class="span5 " style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
+            <textarea id="descripcion" name="descripcion" data-campo="descripcion"  class="span5 " style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
         </p>
         <p>
             <label>{lbl_fecha_registro}:</label>
-            <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+            <span id="timestamp" type="text" name="timestamp" data-campo="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
         </p>
         <p>
             <label>{lbl_usuario_registro}:</label>
-            <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{val_usuarios_registro}</span>
+            <span readonly id="usuario_registro" type="text" name="usuario_registro" data-campo="usuario_registro" class="input-xlarge  uneditable-input " >{val_usuarios_registro}</span>
         </p>
         <p>
             <label>{lbl_ultima_modificacion}: </label>
-            <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <textarea id="ultima_modificacion" class="span5 textareaUneditable" data-campo="ultima_modificacion" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
         </p>
          <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>

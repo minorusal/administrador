@@ -11,6 +11,8 @@ class listado_precios_model extends Base_Model{
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 		$filtro = ($filtro!="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
 										a.cantidad_um_presentacion 		 LIKE '$filtro%' OR
+										a.upc  	   LIKE '$filtro%' OR
+										a.sku  	   LIKE '$filtro%' OR
 										b.articulo  	   LIKE '$filtro%' OR
 										c.nombre_comercial LIKE '$filtro%' OR
 										d.marca 		   LIKE '$filtro%' OR
@@ -20,6 +22,8 @@ class listado_precios_model extends Base_Model{
 		// Query
 		$query="SELECT 
 					a.id_compras_articulo_precios
+					,a.upc
+					,a.sku
 					,a.id_articulo
 					,a.id_proveedor
 					,a.id_marca
@@ -67,7 +71,9 @@ class listado_precios_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$query = "SELECT * FROM $tbl[compras_articulos_precios] WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
+		$query = "SELECT a.*, b.valor as impuesto_porcentaje FROM $tbl[compras_articulos_precios] a
+					LEFT JOIN $tbl[administracion_impuestos] b ON a.id_impuesto=b.id_administracion_impuestos
+					WHERE id_compras_articulo_precios = $id_compras_articulo_precio";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

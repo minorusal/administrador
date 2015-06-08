@@ -255,8 +255,8 @@ class articulos extends Base_Controller {
 			$id_articulo  = $this->ajax_post('id_articulo');
 			$articulo     = $this->ajax_post('articulo');
 			$clave_corta  = $this->ajax_post('clave_corta');
-			$linea        = $this->ajax_post('linea');
-			$um           = $this->ajax_post('um');
+			$linea        = $this->ajax_post('lts_lineas_detalle');
+			$um           = $this->ajax_post('lts_um_detalle');
 			$descripcion  = $this->ajax_post('descripcion');
 			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
@@ -265,12 +265,10 @@ class articulos extends Base_Controller {
 								 'edit_timestamp' => $this->timestamp(),
 								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
 								 'id_compras_um'=> $um);
-			// dump_var($data_update);
-	
 			$insert = $this->catalogos_model->update_articulo($data_update,$id_articulo);
 
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
+				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);

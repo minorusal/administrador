@@ -4,6 +4,7 @@ class listado_precios_model extends Base_Model{
 	public function db_get_data($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
+		
 		// Filtro
 		$filtro 		= (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -65,7 +66,14 @@ class listado_precios_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$insert = $this->insert_item($tbl['compras_articulos_precios'], $data);
-		return $insert;
+		$ultimo_id  = $this->db->insert_id();
+		//ULTIMO ID
+		$query="SELECT id_row FROM av_administracion_movimientos WHERE id_administracion_movimientos=$ultimo_id";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+		//return $insert;
 	}
 	public function get_data_unico($id_compras_articulo_precio){
 		// DB Info
@@ -80,6 +88,14 @@ class listado_precios_model extends Base_Model{
 		}
 	}
 	public function db_update_data($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$condicion = "id_compras_articulo_precios = ".$data['id_compras_articulo_precios'];
+		$update = $this->update_item($tbl['compras_articulos_precios'], $data, 'id_compras_articulo_precios', $condicion);
+		return $update;
+	}
+	public function db_update_sku($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query

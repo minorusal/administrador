@@ -12,7 +12,9 @@ class clientes_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre_cliente LIKE '%$filtro%' OR 
+		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre LIKE '%$filtro%' OR 
+												vc.paterno LIKE '%$filtro%' OR 
+												vc.materno LIKE '%$filtro%' OR 
 												vc.razon_social   LIKE '%$filtro%' OR 
 												vc.clave_corta    LIKE '%$filtro%' OR  
 												vc.rfc            LIKE '%$filtro%' OR 
@@ -22,11 +24,21 @@ class clientes_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 						vc.id_ventas_clientes,
-						vc.nombre_cliente,
+						vc.nombre,
+						vc.paterno,
+						vc.materno,
 						vc.razon_social,
 						vc.clave_corta,
 						vc.rfc,
 						vc.telefonos,
+						vc.calle,
+						vc.num_int,
+						vc.num_ext,
+						vc.colonia,
+						vc.municipio,
+						vc.cp,
+						vc.email,
+						vc.timestamp,
 						e.entidad,
 						su.sucursal
 					FROM $tbl[ventas_clientes] vc

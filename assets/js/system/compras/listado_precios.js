@@ -132,6 +132,7 @@ function detalle(id_compras_articulo_precio){
           jQuery('#a-2').html(data);
           jQuery('#a-2').html(data+include_script(chosen));
           jQuery('#ui-id-2').show('slow');
+          calcula_costos();
         }
     });
 }
@@ -328,6 +329,8 @@ function calcular_precio_final(){
   var impuesto  = jQuery("select[name='lts_impuesto'] option:selected").text();
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();
   var valor=impuesto.split("-");
+  /*alert(impuesto);
+  alert(valor[1]);*/
   var desglose_impuesto = (costo_sin_impuesto*valor[1])/100;
   var resultado = parseFloat(costo_sin_impuesto)+parseFloat(desglose_impuesto);
   if(costo_sin_impuesto==""){

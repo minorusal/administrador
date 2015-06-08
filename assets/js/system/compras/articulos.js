@@ -67,32 +67,28 @@ function detalle_articulo(id_articulo){
 }
 
 function update_articulo(){
-		
-		jQuery('#mensajes_update').hide();
-		
-		var btn          = jQuery("button[name='update_articulo']");
-		btn.attr('disabled','disabled');
-		
-		var objData = formData('#formulario');
-  		objData['incomplete'] = values_requeridos();      
-		jQuery.ajax({
-			type:"POST",
-			url: path()+"compras/articulos/update_articulo",
-			dataType: "json",
-			data: objData,
-			beforeSend : function(){
-				jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-			},
-			success : function(data){
-				btn.removeAttr('disabled');
-				var data = data.split('|');
-				if(data[0]==1){
-				}
-				jQuery("#update_loader").html('');
-			    jQuery("#mensajes_update").html(data[1]).show('slow');
-				
+	jQuery('#mensajes_update').hide();
+	var btn          = jQuery("button[name='update_articulo']");
+	btn.attr('disabled','disabled');
+	var objData = formData('#formulario');
+		objData['incomplete'] = values_requeridos();      
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/articulos/update_articulo",
+		dataType: "json",
+		data: objData,
+		beforeSend : function(){
+			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			var data = data.split('|');
+			if(data[0]==1){
 			}
-		})
+			jQuery("#update_loader").html('');
+		    jQuery("#mensajes_update").html(data[1]).show('slow');
+		}
+	});
 }
 
 function insert_articulo(){

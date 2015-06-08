@@ -60,6 +60,8 @@ class clientes extends Base_Controller {
 		$lts_entidades  = dropdown_tpl($dropArray); 
 		$lts_sucursales  = dropdown_tpl($dropArray2); 
 		$data_1['nombre_cliente'] =	$this->lang_item("nombre_cliente");
+		$data_1['apellido_paterno'] =	$this->lang_item("apellido_paterno");
+		$data_1['apellido_materno'] =	$this->lang_item("apellido_materno");
 		$data_1['rfc'] 			  =	$this->lang_item("rfc_clientes");
 		$data_1['razon_social']   =	$this->lang_item("razon_social");
 		$data_1['clave_corta'] 	  =	$this->lang_item("clave_corta");
@@ -105,8 +107,8 @@ class clientes extends Base_Controller {
 							  	'onclick' => 'detalle('.$value['id_ventas_clientes'].')'
 						);
 
-				$tbl_data[] = array('id'              => $value['nombre_cliente'],
-									'nombre_cliente'  => tool_tips_tpl($value['nombre_cliente'], $this->lang_item("tool_tip"), 'right' , $atrr),
+				$tbl_data[] = array('id'              => $value['nombre'],
+									'nombre_cliente'  => tool_tips_tpl($value['nombre'].' '.$value['paterno'].' '.$value['materno'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'razon_social'    => $value['razon_social'],
 									'clave_corta'     => $value['clave_corta'],
 									'rfc'  			  => $value['rfc'],
@@ -168,7 +170,9 @@ class clientes extends Base_Controller {
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}else{
-				$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
+				$data_insert = array('nombre' 		  => $this->ajax_post('nombre'),
+									 'paterno'	  	  => $this->ajax_post('paterno'),
+									 'materno'	  	  => $this->ajax_post('materno'),
 									 'razon_social'	  => $this->ajax_post('razon_social'),
 									 'clave_corta'	  => $this->ajax_post('clave_corta'),
 									 'rfc'	          => $this->ajax_post('rfc'),
@@ -223,40 +227,44 @@ class clientes extends Base_Controller {
        	$lts_entidades  = dropdown_tpl($dropArray);
        	$lts_sucursal   = dropdown_tpl($dropArray2);
 
-		$data_tab_3['nombre_cliente']= $this->lang_item("nombre_cliente");
-		$data_tab_3['razon_social']  = $this->lang_item("razon_social");
-		$data_tab_3['clave_corta'] 	 = $this->lang_item("clave_corta");
-		$data_tab_3['rfc']           = $this->lang_item("rfc");
-		$data_tab_3['calle'] 	     = $this->lang_item("calle");
-		$data_tab_3['num_int']  	 = $this->lang_item("num_int");
-		$data_tab_3['num_ext'] 	 	 = $this->lang_item("num_ext");
-		$data_tab_3['colonia'] 		 = $this->lang_item("colonia");
-		$data_tab_3['municipio'] 	 = $this->lang_item("municipio");
-		$data_tab_3['entidad'] 		   = $this->lang_item("entidad");
-		$data_tab_3['sucursal'] 	   = $this->lang_item("sucursal");
-		$data_tab_3['cp'] 			   = $this->lang_item("cp");
-		$data_tab_3['telefonos'] 	   = $this->lang_item("telefonos");
-		$data_tab_3['email'] 		   = $this->lang_item("email");
-		$data_tab_3['timestamp'] 	   = $this->lang_item("fecha_registro");
+		$data_tab_3['nombre_cliente']  		   = $this->lang_item("nombre_cliente");
+		$data_tab_3['apellido_paterno']		   = $this->lang_item("apellido_paterno");
+		$data_tab_3['apellido_materno']		   = $this->lang_item("apellido_materno");
+		$data_tab_3['razon_social']    		   = $this->lang_item("razon_social");
+		$data_tab_3['clave_corta'] 	   		   = $this->lang_item("clave_corta");
+		$data_tab_3['rfc']             		   = $this->lang_item("rfc");
+		$data_tab_3['calle'] 	       		   = $this->lang_item("calle");
+		$data_tab_3['num_int']  	   		   = $this->lang_item("num_int");
+		$data_tab_3['num_ext'] 	 	   		   = $this->lang_item("num_ext");
+		$data_tab_3['colonia'] 		   		   = $this->lang_item("colonia");
+		$data_tab_3['municipio'] 	   		   = $this->lang_item("municipio");
+		$data_tab_3['entidad'] 		   		   = $this->lang_item("entidad");
+		$data_tab_3['sucursal'] 	   		   = $this->lang_item("sucursal");
+		$data_tab_3['cp'] 			   		   = $this->lang_item("cp");
+		$data_tab_3['telefonos'] 	   		   = $this->lang_item("telefonos");
+		$data_tab_3['email'] 		   		   = $this->lang_item("email");
+		$data_tab_3['timestamp'] 	   		   = $this->lang_item("fecha_registro");
 		$data_tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-		$data_tab_3['button_save']     = form_button(array('class'=>"btn btn-primary",'name' => 'update_cliente','onclick'=>'update()' , 'content' => $this->lang_item("btn_guardar") ));
+		$data_tab_3['button_save']     		   = form_button(array('class'=>"btn btn-primary",'name' => 'update_cliente','onclick'=>'update()' , 'content' => $this->lang_item("btn_guardar") ));
 		//DATA
-		$data_tab_3['id_cliente']    = $detalle[0]['id_ventas_clientes'];
-		$data_tab_3['cliente_value'] = $detalle[0]['nombre_cliente'];
-		$data_tab_3['rs_value']      = $detalle[0]['razon_social'];
-		$data_tab_3['clave_value']   = $detalle[0]['clave_corta'];
-		$data_tab_3['rfc_value']     = $detalle[0]['rfc'];
-		$data_tab_3['calle_value']   = $detalle[0]['calle'];
-		$data_tab_3['num_int_value'] = $detalle[0]['num_int'];
-		$data_tab_3['num_ext_value'] = $detalle[0]['num_ext'];
-		$data_tab_3['colonia_value'] = $detalle[0]['colonia'];
-		$data_tab_3['municipio_value'] = $detalle[0]['municipio'];
-		$data_tab_3['dropdown_entidad']   = $lts_entidades;
-		$data_tab_3['dropdown_sucursal']   = $lts_sucursal;
-		$data_tab_3['cp_value']    	   = $detalle[0]['cp'];
-		$data_tab_3['telefonos_value'] = $detalle[0]['telefonos'];
-		$data_tab_3['val_email']           = $detalle[0]['email'];
-		$data_tab_3['timestamp_value'] = $detalle[0]['timestamp'];
+		$data_tab_3['id_cliente']    		   = $detalle[0]['id_ventas_clientes'];
+		$data_tab_3['cliente_value'] 		   = $detalle[0]['nombre'];
+		$data_tab_3['paterno_value'] 		   = $detalle[0]['paterno'];
+		$data_tab_3['materno_value'] 		   = $detalle[0]['materno'];
+		$data_tab_3['rs_value']      		   = $detalle[0]['razon_social'];
+		$data_tab_3['clave_value']   		   = $detalle[0]['clave_corta'];
+		$data_tab_3['rfc_value']     		   = $detalle[0]['rfc'];
+		$data_tab_3['calle_value']   		   = $detalle[0]['calle'];
+		$data_tab_3['num_int_value'] 		   = $detalle[0]['num_int'];
+		$data_tab_3['num_ext_value'] 		   = $detalle[0]['num_ext'];
+		$data_tab_3['colonia_value'] 		   = $detalle[0]['colonia'];
+		$data_tab_3['municipio_value'] 		   = $detalle[0]['municipio'];
+		$data_tab_3['dropdown_entidad']   	   = $lts_entidades;
+		$data_tab_3['dropdown_sucursal']   	   = $lts_sucursal;
+		$data_tab_3['cp_value']    	   		   = $detalle[0]['cp'];
+		$data_tab_3['telefonos_value'] 		   = $detalle[0]['telefonos'];
+		$data_tab_3['val_email']           	   = $detalle[0]['email'];
+		$data_tab_3['timestamp_value'] 		   = $detalle[0]['timestamp'];
 
 		$this->load_database('global_system');
         $this->load->model('users_model');
@@ -285,7 +293,9 @@ class clientes extends Base_Controller {
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
 			$id_cliente  = $this->ajax_post('id_cliente');
-			$data_insert = array('nombre_cliente' => $this->ajax_post('nombre'),
+			$data_insert = array('nombre' => $this->ajax_post('nombre'),
+							 'paterno'=> $this->ajax_post('paterno'),
+							 'materno'=> $this->ajax_post('materno'),
 							 'razon_social'=> $this->ajax_post('razon_social'),
 							 'clave_corta'=> $this->ajax_post('clave_corta'),
 							 'rfc'=> $this->ajax_post('rfc'),
@@ -320,23 +330,38 @@ class clientes extends Base_Controller {
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['nombre_cliente'],
+									 $value['nombre'].' '.$value['paterno'].' '.$value['materno'],
 									 $value['razon_social'],
 									 $value['clave_corta'],
 									 $value['rfc'],
-									 $value['telefonos'],
+									 $value['calle'],
+									 $value['num_int'],
+									 $value['num_ext'],
+									 $value['colonia'],
+									 $value['municipio'],
 									 $value['entidad'],
-									 $value['sucursal']);
+									 $value['sucursal'],
+									 $value['cp'],
+									 $value['telefonos'],
+									 $value['email'],
+									 $value['timestamp']);
 			}
 			$set_heading = array(
 									$this->lang_item("nombre_cliente"),
 									$this->lang_item("razon_social"),
 									$this->lang_item("clave_corta"),
 									$this->lang_item("rfc"),
-									$this->lang_item("telefonos"),
+									$this->lang_item("calle"),
+									$this->lang_item("num_int"),
+									$this->lang_item("num_ext"),
+									$this->lang_item("colonia"),
+									$this->lang_item("municipio"),
 									$this->lang_item("entidad"),
-									$this->lang_item("sucursal"));
-	
+									$this->lang_item("sucursal"),
+									$this->lang_item("cp"),
+									$this->lang_item("telefonos"),
+									$this->lang_item("email"),
+									$this->lang_item("fecha_registro"));
 		}
 
 		$params = array(	'title'  => $this->lang_item("seccion"),

@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
 })
 function load_content(uri, id_content){
 	jQuery('#ui-id-1').hide('slow');
+
 	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
         type: "POST",
@@ -28,8 +29,28 @@ function load_content(uri, id_content){
     });
 }
 
+function buscar(){
+  var filtro = jQuery('#search-query').val();
+  jQuery.ajax({
+    type:"POST",
+    url: path()+"nutricion/valores_nutricionales/listado",
+    dataType: "json",
+    data: {filtro : filtro},
+    beforeSend : function(){
+      jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+    },
+    success : function(data){
+      var funcion = 'buscar';
+          jQuery("#loader").html('');
+          jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+      jQuery('#search-query').val(filtro).focus();
+      tool_tips();
+    }
+  });
+}
+
 function detalle(id_articulo){
-  jQuery('#ui-id-2').click();
+  jQuery('#ui-id-1').click();
   jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/valores_nutricionales/detalle",
@@ -37,8 +58,8 @@ function detalle(id_articulo){
         data: {id_articulo : id_articulo},
         success: function(data){
           jQuery('#a-0').html('');
-          jQuery('#a-2').html(data);
-          jQuery('#ui-id-2').show('slow');
+          jQuery('#a-1').html(data);
+          jQuery('#ui-id-1').show('slow');
         }
     });
 }

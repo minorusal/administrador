@@ -54,7 +54,7 @@ $route['logout']                   = 'login/logout';
 /*NUTRICION*/
 
 /*Valores nutricionales*/
-$route['compras/listado_precios']    	= 'compras/listado_precios/index';
+$route['nutricion/valores_nutricionales']    	= 'nutricion/valores_nutricionales/index';
 
 /*COMPRAS*/
 

@@ -377,9 +377,10 @@ class catalogos_model extends Base_Model{
 												ca.descripcion  LIKE '%$filtro%'
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		//,ca.upc
 		$query = "	SELECT 
 						ca.id_compras_articulo
-						,ca.upc
+						
 						,ca.articulo
 						,cl.linea
 						,cu.um

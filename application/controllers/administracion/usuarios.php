@@ -192,7 +192,6 @@ class usuarios extends Base_Controller {
 
 	public function insert()
 	{
-		print_debug($this->ajax_post('nivel_1'));
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
 		{
@@ -201,16 +200,20 @@ class usuarios extends Base_Controller {
 		}
 		else
 		{
+			/*print_debug($this->session->userdata('id_sucursal'));*/
 			$sqlData = array(
-				,'nombre'          => $this->ajax_post('nombre')
+				 'nombre'      => $this->ajax_post('nombre')
 				,'paterno'     => $this->ajax_post('paterno')
 				,'materno'     => $this->ajax_post('materno')
-				,'id_menu_n1'      => $this->ajax_post('nivel_1')
-				,'id_menu_n2'      => $this->ajax_post('nivel_2')
-				,'id_menu_n3'      => $this->ajax_post('nivel_3')
-				,'id_usuario'      => $this->session->userdata('id_usuario')
-				,'registro'        => $this->timestamp());
-			$insert = $this->db_model->db_insert_data($data_insert);
+				,'id_menu_n1'  => $this->ajax_post('nivel_1')
+				,'id_menu_n2'  => $this->ajax_post('nivel_2')
+				,'id_menu_n3'  => $this->ajax_post('nivel_3')
+				,'id_perfil'   => $this->ajax_post('id_perfil')
+				,'id_usuario'  => $this->session->userdata('id_usuario')
+				,'id_pais'     => $this->session->userdata('id_pais')
+				,'id_sucursal' => $this->session->userdata('id_sucursal')
+				,'registro'    => $this->timestamp());
+			$insert = $this->db_model->db_insert_data($sqlData);
 			
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);

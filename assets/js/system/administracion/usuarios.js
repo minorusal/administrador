@@ -91,15 +91,16 @@ function insert(){
     nivel_3.push(jQuery(this).val());
   });
 
-  objData['incomplete']    = values_requeridos();
-  objData['nivel_1']       = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
-  objData['nivel_2']       = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
-  objData['nivel_3']       = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
-  objData['nombre']        = jQuery('#nombre').val();
-  objData['paterno']       = jQuery('#paterno').val();
-  objData['materno']       = jQuery('#materno').val();
-  objData['telefono']      = jQuery('#telefono').val();
-  objData['mail']          = jQuery('#mail').val();
+  objData['incomplete']  = values_requeridos();
+  objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+  objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+  objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+  objData['nombre']      = jQuery('#nombre').val();
+  objData['paterno']     = jQuery('#paterno').val();
+  objData['materno']     = jQuery('#materno').val();
+  objData['telefono']    = jQuery('#telefono').val();
+  objData['mail']        = jQuery('#mail').val();
+  objData['id_perfil']   = jQuery("select[name='lts_perfiles'] option:selected").val();
   
 
   jQuery.ajax({

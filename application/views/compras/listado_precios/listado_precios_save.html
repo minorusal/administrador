@@ -3,10 +3,6 @@
         <label>{upc}: </label>
         <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="" />
     </p>
-    <!--<p>
-        <label>{sku}: </label>
-        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="" />
-    </p>  -->
     <p>
         <label>{articulo} (*)</label>
             {lts_articulos}
@@ -35,19 +31,19 @@
     </p>
     <p>
         <label>{presentacion_x_embalaje}: (*)</label>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" data-campo="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" data-campo="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido numerico" onkeyup="clean_campos();" />
         <span id="pre_em" style="display:none">{pre_em}</span>
     </p>
     <p>
         <label>{um_x_embalaje}: (*)</label>
         <input type="radio" name="um" value="1" onclick="validar_um(this.value);" data-campo="um" checked="checked">
-        <input id="um_x_embalaje" type="text" name="um_x_embalaje" data-campo="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();"/>
+        <input id="um_x_embalaje" type="text" name="um_x_embalaje" data-campo="um_x_embalaje" class="input-small requerido numerico" onkeyup="calcula_um_prsentacion();"/>
         <span id="pre_um2" style="display:none">{pre_um}</span><span id="signo2" style="display:none"> * </span><span id="embalaje_cl" style="display:none">{embalaje_cl}</span>
     </p>
     <p>
         <label>{um_x_presentacion}: (*)</label>
         <input type="radio" name="um" data-campo="um" value="2" onclick="validar_um(this.value);">
-        <input id="um_x_presentacion" data-campo="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly />
+        <input id="um_x_presentacion" data-campo="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido numerico" onkeyup="calcula_um_embalaje();" readonly />
         <span id="pre_um" style="display:none">{pre_um}</span><span id="signo" style="display:none"> * </span><span id="pre_em2" style="display:none">{pre_em}</span>
     </p>
     <p>
@@ -57,15 +53,15 @@
     </p>
     <p>
         <label>{peso_unitario}: (*)</label>        
-        <input id="peso_unitario" type="text" name="peso_unitario" data-campo="peso_unitario" class="input-small requerido"/>
+        <input id="peso_unitario" type="text" name="peso_unitario" data-campo="peso_unitario" class="input-small requerido" readonly/>
     </p>
     <p>
         <label>{costo_unitario}: (*)</label>        
-        <input id="costo_unitario" type="text" name="costo_unitario" data-campo="costo_unitario" class="input-small requerido"/>
+        <input id="costo_unitario" type="text" name="costo_unitario" data-campo="costo_unitario" class="input-small requerido" readonly/>
     </p>
     <p>
         <label>{costo_x_um}: (*)</label>
-        <input id="costo_x_um" type="text" name="costo_x_um" data-campo="costo_x_um" class="input-small requerido"/>
+        <input id="costo_x_um" type="text" name="costo_x_um" data-campo="costo_x_um" class="input-small requerido" readonly/>
     </p>
     <p>
         <label>{impuesto_aplica}:</label>
@@ -78,8 +74,12 @@
         </div>
     </p>
     <p>
+        <label>{desglose_impuesto}: (*)</label>
+        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small requerido" readonly/>
+    </p>
+    <p>
         <label>{costo_final}: (*)</label>
-        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido"/>
+        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido" readonly/>
     </p>
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>

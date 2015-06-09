@@ -58,15 +58,15 @@
     </p>
     <p>
         <label>{peso_unitario}: (*)</label>        
-        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido" value="{val_peso_unitario}"/>
+        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido" value="{val_peso_unitario}" readonly/>
     </p>
     <p>
         <label>{costo_unitario}: (*)</label>        
-        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}"/>
+        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}" readonly/>
     </p>
     <p>
         <label>{costo_x_um}: (*)</label>
-        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}"/>
+        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}" readonly/>
    </p>
     <p>
         <label>{impuesto_aplica}:</label>
@@ -79,8 +79,12 @@
         </div>
     </p>
     <p>
+        <label>{desglose_impuesto}: (*)</label>
+        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small requerido" readonly/>
+    </p>
+    <p>
         <label>{costo_final}: (*)</label>
-        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido"/>
+        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido" readonly/>
     </p>
     <p>
         <label>{lbl_fecha_registro}:</label>

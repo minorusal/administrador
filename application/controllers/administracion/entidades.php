@@ -100,7 +100,10 @@ class entidades extends Base_Controller
 		$sqlData['aplicar_limit'] = true;
 		$list_content = $this->db_model->get_entidades_default($sqlData);
 		$url          = base_url($url_link);
+		$arreglo = array($total_rows, $url, $limit, $uri_segment);
+		//print_debug($arreglo);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		
 		if($total_rows)
 		{
 			foreach ($list_content as $value)

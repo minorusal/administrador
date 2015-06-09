@@ -67,16 +67,10 @@ class clientes_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_ventas_clientes !=' => $id_cliente, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl['ventas_clientes'], $condicion);
-		if(!$existe){
-			$condicion = "id_ventas_clientes = $id_cliente"; 
-			$data['id_ventas_clientes'] = $id_cliente;
-			$update    = $this->update_item($tbl['ventas_clientes'], $data, 'id_ventas_clientes', $condicion);
-			return $update;
-		}else{
-			return false;
-		}
+		$condicion = "id_ventas_clientes = $id_cliente"; 
+		$data['id_ventas_clientes'] = $id_cliente;
+		$update    = $this->update_item($tbl['ventas_clientes'], $data, 'id_ventas_clientes', $condicion);
+		return $update;
 	}
 	function get_existencia_cliente($clave_corta){
 		// DB Info

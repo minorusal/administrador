@@ -314,7 +314,7 @@ class clientes extends Base_Controller {
 
 			$update = $this->clientes_model->update_cliente($data_insert,$id_cliente);
 			if($update){
-				$msg = $this->lang_item("msg_insert_success",false);
+				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);

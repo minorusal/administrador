@@ -5,7 +5,9 @@ class vendedores_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$filtro = ($filtro=="") ? "" : "AND ( 	vv.nombre_vendedor  LIKE '%$filtro%' OR 
+		$filtro = ($filtro=="") ? "" : "AND ( 	vv.nombre  LIKE '%$filtro%' OR 
+												vv.paterno  LIKE '%$filtro%' OR 
+												vv.materno  LIKE '%$filtro%' OR 
 												vv.clave_corta  LIKE '%$filtro%' OR
 												vv.rfc            LIKE '%$filtro%' OR 
 												e.entidad         LIKE '%$filtro%' OR
@@ -14,12 +16,21 @@ class vendedores_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 						vv.id_ventas_vendedores,
-						vv.nombre_vendedor,
+						vv.nombre,
+						vv.paterno,
+						vv.materno,
 						vv.clave_corta,
 						vv.rfc,
-						vv.telefonos,
+						vv.calle,
+						vv.num_int,
+						vv.num_ext,
+						vv.colonia,
+						vv.municipio,
 						e.entidad,
-						su.sucursal
+						su.sucursal,
+						vv.telefonos,
+						vv.email,
+						vv.timestamp
 					FROM $tbl[ventas_vendedores] vv
 					LEFT JOIN $tbl[administracion_entidades]  e on vv.id_entidad = e.id_administracion_entidad
 					LEFT JOIN $tbl[sucursales] su on vv.id_sucursal = su.id_sucursal
@@ -60,16 +71,11 @@ class vendedores_model extends Base_Model{
 		return $insert;
 	}
 	function update_vendedor($data, $id_vendedor){
-		$tbl1 	= $this->dbinfo[1]['tbl_ventas_vendedores'];
-		
-		$condicion = array('id_ventas_vendedores !=' => $id_vendedor, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl1 , $condicion);
-		if(!$existe){
-			$condicion = "id_ventas_vendedores = $id_vendedor"; 
-			$update    = $this->update_item($tbl1, $data, 'id_ventas_vendedores', $condicion);
-			return $update;
-		}else{
-			return false;
-		}
+		$tbl = $this->tbl;
+
+		$data['id_ventas_vendedores'] = $id_vendedor;
+		$condicion = "id_ventas_vendedores = $id_vendedor"; 
+		$update    = $this->update_item($tbl['ventas_vendedores'], $data, 'id_ventas_vendedores', $condicion);
+		return $update;
 	}
 }

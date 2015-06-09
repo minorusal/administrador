@@ -55,6 +55,8 @@ function insert(){
   var incomplete    = values_requeridos();    
 
   var  nombre       = jQuery('#nombre').val();
+  var  paterno      = jQuery('#paterno').val();
+  var  materno      = jQuery('#materno').val();
   var  clave_corta  = jQuery('#clave_corta').val();
   var  rfc          = jQuery('#rfc').val();
   var  calle        = jQuery('#calle').val();
@@ -65,17 +67,15 @@ function insert(){
   var  cp           = jQuery('#cp').val();
   var  telefonos    = jQuery('#telefonos').val();
   var  email        = jQuery('#email').val();
-
-  var id_entidad = jQuery("select[name='lts_entidades'] option:selected").val();
-  var id_sucursal      = jQuery("select[name='lts_sucursales'] option:selected").val();
-
-
+  var id_entidad    = jQuery("select[name='lts_entidades'] option:selected").val();
+  var id_sucursal   = jQuery("select[name='lts_sucursales'] option:selected").val();
+  
   jQuery.ajax({
     type:"POST",
     url: path()+"ventas/vendedores/insert",
     dataType: "json",
     data: {
-            incomplete :incomplete,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete,nombre:nombre,paterno:paterno,materno: materno, clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
@@ -114,6 +114,8 @@ function update(){
   var incomplete    = values_requeridos();    
   var  id_vendedor   = jQuery('#id_vendedor').val();
   var  nombre       = jQuery('#nombre').val();
+  var  paterno      = jQuery('#paterno').val();
+  var  materno      = jQuery('#materno').val();
   var  clave_corta  = jQuery('#clave_corta').val();
   var  rfc          = jQuery('#rfc').val();
   var  calle        = jQuery('#calle').val();
@@ -133,7 +135,7 @@ function update(){
     url: path()+"ventas/vendedores/update",
     dataType: "json",
     data: {
-            incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
+            incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,paterno:paterno,materno: materno,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },

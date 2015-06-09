@@ -378,12 +378,12 @@ class catalogos_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//,ca.upc
 		$query = "	SELECT 
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 						ca.id_compras_articulo
 						
-=======
+=======*/
 						ca.id_compras_articulo	
->>>>>>> e9adb559ff1f6666e1ffacd0619864fa25e77279
+/*>>>>>>> e9adb559ff1f6666e1ffacd0619864fa25e77279*/
 						,ca.articulo
 						,cl.linea
 						,cu.um

@@ -162,13 +162,7 @@ class valores_nutricionales extends Base_Controller {
 		$seccion = $this->tab2;
 		$tab_detalle = $this->tab2;
 		$detalle_nutricional = $this->db_model->get_valores_nutricionales_unico($id_articulo);
-		if(!$detalle_nutricional){
-			$contenido = '';
-		}
-		else
-		{
-			print_debug($detalle);
-		}
+		//print_debug($detalle_nutricional);
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
 		$tabData['id_compras_articulos'] = $id_articulo;
 		$tabData['nombre_articulo'] = $this->lang_item("articulo");
@@ -197,30 +191,30 @@ class valores_nutricionales extends Base_Controller {
 		$tabData['ag_mono'] = $this->lang_item("ag_mono");
 		$tabData['ag_poli'] = $this->lang_item("ag_poli");
 
-		$tabData['cant_sugerida'] = $detalle_nutricional[0]['cantidad_sugerida'];
-		$tabData['p_bruto'] = $detalle_nutricional[0]['peso_bruto'];
-		$tabData['p_neto'] = $detalle_nutricional[0]['peso_neto'];
-		$tabData['ener'] = $detalle_nutricional[0]['energia'];
-		$tabData['prot'] = $detalle_nutricional[0]['proteina'];
-		$tabData['lipids'] = $detalle_nutricional[0]['lipidos'];
-		$tabData['h_carbono'] = $detalle_nutricional[0]['hidratos_carbono'];
-		$tabData['fib'] = $detalle_nutricional[0]['fibra'];
-		$tabData['vit_a'] = $detalle_nutricional[0]['vitamina_a'];
-		$tabData['a_ascorbico'] = $detalle_nutricional[0]['acido_ascorbico'];
-		$tabData['a_folico'] = $detalle_nutricional[0]['acido_folico'];
-		$tabData['h_nohem'] = $detalle_nutricional[0]['hierro_nohem'];
-		$tabData['pot'] = $detalle_nutricional[0]['potasio'];
-		$tabData['azu'] = $detalle_nutricional[0]['azucar'];
-		$tabData['i_glicemico'] = $detalle_nutricional[0]['indice_glicemico'];
-		$tabData['c_glicemica'] = $detalle_nutricional[0]['carga_glicemica'];
-		$tabData['calc'] = $detalle_nutricional[0]['calcio'];
-		$tabData['sod'] = $detalle_nutricional[0]['sodio'];
-		$tabData['sel'] = $detalle_nutricional[0]['selenio'];
-		$tabData['fos'] = $detalle_nutricional[0]['fosforo'];
-		$tabData['coles'] = $detalle_nutricional[0]['colesterol'];
-		$tabData['saturados'] = $detalle_nutricional[0]['ag_saturados'];
-		$tabData['mono'] = $detalle_nutricional[0]['ag_mono'];
-		$tabData['poli'] = $detalle_nutricional[0]['ag_poli'];
+		$tabData['cant_sugerida'] = (isset($detalle_nutricional[0]['cantidad_sugerida']))?$detalle_nutricional[0]['cantidad_sugerida']:0;
+		$tabData['p_bruto'] = (isset($detalle_nutricional[0]['peso_bruto']))?$detalle_nutricional[0]['peso_bruto']:0;
+		$tabData['p_neto'] = (isset($detalle_nutricional[0]['peso_neto']))?$detalle_nutricional[0]['peso_neto']:0;
+		$tabData['ener'] = (isset($detalle_nutricional[0]['energia']))?$detalle_nutricional[0]['energia']:0;
+		$tabData['prot'] = (isset($detalle_nutricional[0]['proteina']))?$detalle_nutricional[0]['proteina']:0;
+		$tabData['lipids'] = (isset($detalle_nutricional[0]['lipidos']))?$detalle_nutricional[0]['lipidos']:0;
+		$tabData['h_carbono'] = (isset($detalle_nutricional[0]['hidratos_carbono']))?$detalle_nutricional[0]['hidratos_carbono']:0;
+		$tabData['fib'] = (isset($detalle_nutricional[0]['fibra']))?$detalle_nutricional[0]['fibra']:0;
+		$tabData['vit_a'] = (isset($detalle_nutricional[0]['vitamina_a']))?$detalle_nutricional[0]['vitamina_a']:0;
+		$tabData['a_ascorbico'] = (isset($detalle_nutricional[0]['acido_ascorbico']))?$detalle_nutricional[0]['acido_ascorbico']:0;
+		$tabData['a_folico'] = (isset($detalle_nutricional[0]['acido_folico']))?$detalle_nutricional[0]['acido_folico']:0;
+		$tabData['h_nohem'] = (isset($detalle_nutricional[0]['hierro_nohem']))?$detalle_nutricional[0]['hierro_nohem']:0;
+		$tabData['pot'] = (isset($detalle_nutricional[0]['potasio']))?$detalle_nutricional[0]['potasio']:0;
+		$tabData['azu'] = (isset($detalle_nutricional[0]['azucar']))?$detalle_nutricional[0]['azucar']:0;
+		$tabData['i_glicemico'] = (isset($detalle_nutricional[0]['indice_glicemico']))?$detalle_nutricional[0]['indice_glicemico']:0;
+		$tabData['c_glicemica'] = (isset($detalle_nutricional[0]['carga_glicemica']))?$detalle_nutricional[0]['carga_glicemica']:0;
+		$tabData['calc'] = (isset($detalle_nutricional[0]['calcio']))?$detalle_nutricional[0]['calcio']:0;
+		$tabData['sod'] = (isset($detalle_nutricional[0]['sodio']))?$detalle_nutricional[0]['sodio']:0;
+		$tabData['sel'] = (isset($detalle_nutricional[0]['selenio']))?$detalle_nutricional[0]['selenio']:0;
+		$tabData['fos'] = (isset($detalle_nutricional[0]['fosforo']))?$detalle_nutricional[0]['fosforo']:0;
+		$tabData['coles'] = (isset($detalle_nutricional[0]['colesterol']))?$detalle_nutricional[0]['colesterol']:0;
+		$tabData['saturados'] = (isset($detalle_nutricional[0]['ag_saturados']))?$detalle_nutricional[0]['ag_saturados']:0;
+		$tabData['mono'] = (isset($detalle_nutricional[0]['ag_mono']))?$detalle_nutricional[0]['ag_mono']:0;
+		$tabData['poli'] = (isset($detalle_nutricional[0]['ag_poli']))?$detalle_nutricional[0]['ag_poli']:0;
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']     = $detalle_nutricional[0]['timestamp'];

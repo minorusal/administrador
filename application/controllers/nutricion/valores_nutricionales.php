@@ -157,46 +157,48 @@ class valores_nutricionales extends Base_Controller {
 
 	public function detalle()
 	{
-		$id_articulo = $this->ajax_post('id_articulo');
-		$detalle = $this->db_model_articulos->get_articulo_unico($id_articulo);
-		$seccion = $this->tab2;
-		$tab_detalle = $this->tab2;
+		$id_articulo         = $this->ajax_post('id_articulo');
+		$detalle             = $this->db_model_articulos->get_articulo_unico($id_articulo);
+		$seccion             = $this->tab2;
 		$detalle_nutricional = $this->db_model->get_valores_nutricionales_unico($id_articulo);
-		//print_debug($detalle_nutricional);
-		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_compras_articulos'] = $id_articulo;
-		$tabData['nombre_articulo'] = $this->lang_item("articulo");
-		$tabData['cantidad_sugerida'] = $this->lang_item("cantidad_sugerida");
-		$tabData['peso_bruto'] = $this->lang_item("peso_bruto");
-		$tabData['peso_neto'] = $this->lang_item("peso_neto");
-		$tabData['energia'] = $this->lang_item("energia");
-		$tabData['proteina'] = $this->lang_item("proteina");
-		$tabData['lipidos'] = $this->lang_item("lipidos");
-		$tabData['hidratos_carbono'] = $this->lang_item("hidratos_carbono");
-		$tabData['fibra'] = $this->lang_item("fibra");
-		$tabData['vitamina_a'] = $this->lang_item("vitamina_a");
-		$tabData['acido_ascorbico'] = $this->lang_item("acido_ascorbico");
-		$tabData['acido_folico'] = $this->lang_item("acido_folico");
-		$tabData['hierro_nohem'] = $this->lang_item("hierro_nohem");
-		$tabData['potasio'] = $this->lang_item("potasio");
-		$tabData['azucar'] = $this->lang_item("azucar");
-		$tabData['indice_glicemico'] = $this->lang_item("indice_glicemico");
-		$tabData['carga_glicemica'] = $this->lang_item("carga_glicemica");
-		$tabData['calcio'] = $this->lang_item("calcio");
-		$tabData['sodio'] = $this->lang_item("sodio");
-		$tabData['selenio'] = $this->lang_item("selenio");
-		$tabData['fosforo'] = $this->lang_item("fosforo");
-		$tabData['colesterol'] = $this->lang_item("colesterol");
-		$tabData['ag_saturados'] = $this->lang_item("ag_saturados");
-		$tabData['ag_mono'] = $this->lang_item("ag_mono");
-		$tabData['ag_poli'] = $this->lang_item("ag_poli");
 
-		$tabData['cant_sugerida'] = (isset($detalle_nutricional[0]['cantidad_sugerida']))?$detalle_nutricional[0]['cantidad_sugerida']:0;
-		$tabData['p_bruto'] = (isset($detalle_nutricional[0]['peso_bruto']))?$detalle_nutricional[0]['peso_bruto']:0;
-		$tabData['p_neto'] = (isset($detalle_nutricional[0]['peso_neto']))?$detalle_nutricional[0]['peso_neto']:0;
-		$tabData['ener'] = (isset($detalle_nutricional[0]['energia']))?$detalle_nutricional[0]['energia']:0;
-		$tabData['prot'] = (isset($detalle_nutricional[0]['proteina']))?$detalle_nutricional[0]['proteina']:0;
-		$tabData['lipids'] = (isset($detalle_nutricional[0]['lipidos']))?$detalle_nutricional[0]['lipidos']:0;
+		//print_debug($detalle_nutricional);
+		$btn_save                        = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
+		$tabData['id_compras_articulos'] = $id_articulo;
+		$tabData['nombre_articulo']      = $this->lang_item("articulo");
+		$tabData['cantidad_sugerida']    = $this->lang_item("cantidad_sugerida");
+		$tabData['peso_bruto']           = $this->lang_item("peso_bruto");
+		$tabData['peso_neto']            = $this->lang_item("peso_neto");
+		$tabData['energia']              = $this->lang_item("energia");
+		$tabData['proteina']             = $this->lang_item("proteina");
+		$tabData['lipidos']              = $this->lang_item("lipidos");
+		$tabData['hidratos_carbono']     = $this->lang_item("hidratos_carbono");
+		$tabData['fibra']                = $this->lang_item("fibra");
+		$tabData['vitamina_a']           = $this->lang_item("vitamina_a");
+		$tabData['acido_ascorbico']      = $this->lang_item("acido_ascorbico");
+		$tabData['acido_folico']         = $this->lang_item("acido_folico");
+		$tabData['hierro_nohem']         = $this->lang_item("hierro_nohem");
+		$tabData['potasio']              = $this->lang_item("potasio");
+		$tabData['azucar']               = $this->lang_item("azucar");
+		$tabData['indice_glicemico']     = $this->lang_item("indice_glicemico");
+		$tabData['carga_glicemica']      = $this->lang_item("carga_glicemica");
+		$tabData['calcio']               = $this->lang_item("calcio");
+		$tabData['sodio']                = $this->lang_item("sodio");
+		$tabData['selenio']              = $this->lang_item("selenio");
+		$tabData['fosforo']              = $this->lang_item("fosforo");
+		$tabData['colesterol']           = $this->lang_item("colesterol");
+		$tabData['ag_saturados']         = $this->lang_item("ag_saturados");
+		$tabData['ag_mono']              = $this->lang_item("ag_mono");
+		$tabData['ag_poli']              = $this->lang_item("ag_poli");
+		$tabData['cant_sugerida'] =	($detalle_nutricional) ?	$detalle_nutricional[0]['cantidad_sugerida' : '';	
+		
+
+		$tabData['cant_sugerida']        = (isset($detalle_nutricional[0]['cantidad_sugerida']))?$detalle_nutricional[0]['cantidad_sugerida']:0;
+		$tabData['p_bruto']              = (isset($detalle_nutricional[0]['peso_bruto']))?$detalle_nutricional[0]['peso_bruto']:0;
+		$tabData['p_neto']               = (isset($detalle_nutricional[0]['peso_neto']))?$detalle_nutricional[0]['peso_neto']:0;
+		$tabData['ener']                 = (isset($detalle_nutricional[0]['energia']))?$detalle_nutricional[0]['energia']:0;
+		$tabData['prot']                 = (isset($detalle_nutricional[0]['proteina']))?$detalle_nutricional[0]['proteina']:0;
+		$tabData['lipids']               = (isset($detalle_nutricional[0]['lipidos']))?$detalle_nutricional[0]['lipidos']:0;
 		$tabData['h_carbono'] = (isset($detalle_nutricional[0]['hidratos_carbono']))?$detalle_nutricional[0]['hidratos_carbono']:0;
 		$tabData['fib'] = (isset($detalle_nutricional[0]['fibra']))?$detalle_nutricional[0]['fibra']:0;
 		$tabData['vit_a'] = (isset($detalle_nutricional[0]['vitamina_a']))?$detalle_nutricional[0]['vitamina_a']:0;
@@ -224,7 +226,7 @@ class valores_nutricionales extends Base_Controller {
 		$this->load_database('global_system');
         $this->load->model('users_model');
 
-		$usuario_registro                  = $this->users_model->search_user_for_id($detalle_nutricional[0]['id_usuario']);
+		$usuario_registro                  = ($detalle_nutricional)? $this->users_model->search_user_for_id($detalle_nutricional[0]['id_usuario']) :'';
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 

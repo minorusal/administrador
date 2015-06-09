@@ -249,11 +249,11 @@ class valores_nutricionales extends Base_Controller {
 
 	public function actualizar()
 	{
-		//print_debug($this->ajax_post(false));
+		$numerico = $this->ajax_post('numerico');
 		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0)
+		if($incomplete > 0 || $numerico > 0)
 		{
-			$msg = $this->lang_item('msg_campos_obligatorios',false);
+			$msg = $this->lang_item('msg_campos_numericos',false);
 			$json_respuesta = array(
 				 'id' => 0
 				,'contenido' => alertas_tpl('error',$msg, false)

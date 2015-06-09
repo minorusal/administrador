@@ -72,6 +72,8 @@ function actualizar(){
   var btn_text        = btn.html(); 
   var objData = formData('#formulario');
   objData['incomplete']    = values_requeridos();
+  objData['numerico']      = values_numericos();
+  /*alert(objData['numerico']);*/
   objData['id_articulo']   = jQuery('#id_articulo').val();
   //alert(objData['id_articulo']);
   objData['cant_sugerida'] = jQuery('#cant_sugerida').val();

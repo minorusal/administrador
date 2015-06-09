@@ -9,7 +9,6 @@ jQuery(document).ready(function(){
 })
 function load_content(uri, id_content){
 	jQuery('#ui-id-1').hide('slow');
-
 	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
         type: "POST",
@@ -17,7 +16,7 @@ function load_content(uri, id_content){
         dataType: 'json',
         data: {filtro : filtro, tabs:0},
         success: function(data){
-           if(id_content==1){
+           if(id_content==0){
            		var funcion = 'buscar';
            		jQuery('#a-0').html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
@@ -42,7 +41,7 @@ function buscar(){
     success : function(data){
       var funcion = 'buscar';
           jQuery("#loader").html('');
-          jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+          jQuery('#a-0').html(data+input_keypress('search-query', funcion));
       jQuery('#search-query').val(filtro).focus();
       tool_tips();
     }
@@ -73,9 +72,9 @@ function actualizar(){
   var objData = formData('#formulario');
   objData['incomplete']    = values_requeridos();
   objData['numerico']      = values_numericos();
-  /*alert(objData['numerico']);*/
+  
   objData['id_articulo']   = jQuery('#id_articulo').val();
-  //alert(objData['id_articulo']);
+  
   objData['cant_sugerida'] = jQuery('#cant_sugerida').val();
   objData['p_bruto']       = jQuery('#p_bruto').val();
   objData['p_neto']        = jQuery('#p_neto').val();

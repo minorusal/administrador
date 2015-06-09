@@ -39,6 +39,7 @@ class articulos_model extends Base_Model{
 												ca.descripcion  LIKE '%$filtro%'
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		print_debug($limit);
 		$query = "	SELECT 
 						ca.id_compras_articulo
 						,ca.articulo

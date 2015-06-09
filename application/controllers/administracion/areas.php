@@ -60,6 +60,7 @@ class areas extends Base_Controller
 								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+
 		return $config_tab;
 	}
 	private function uri_view_principal()

@@ -579,11 +579,12 @@ class listado_precios extends Base_Controller {
 									);
 	
 		}
-		$params = array(	'title'   => 'sda',
+
+		$params = array(	'title'   => $this->lang_item("listado"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		print_debug($params);
+		//dump_var($params);
 		$this->excel->generate_xlsx($params);
 	}
 	public function load_presentacion_em(){

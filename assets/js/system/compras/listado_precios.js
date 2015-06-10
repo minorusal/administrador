@@ -275,6 +275,10 @@ function load_pre_um(id_articulo){
           jQuery('#pre_um').html(data);
           jQuery('#pre_um2').show('slow');
           jQuery('#pre_um2').html(data);
+          jQuery('#lbl_peso').show('slow');
+          jQuery('#lbl_peso').html(data);
+          jQuery('#lbl_unitario').show('slow');
+          jQuery('#lbl_unitario').html('1 '+data);
         }
     });
 }

@@ -57,15 +57,18 @@
         <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calcula_costos();" value="{val_costo_sin_impuesto}"/>
     </p>
     <p>
-        <label>{peso_unitario}: (*)</label>        
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{peso_unitario}: (*)</label>        
         <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido" value="{val_peso_unitario}" readonly/>
+        <span id="lbl_unitario">{pre_um}</span>
     </p>
     <p>
-        <label>{costo_unitario}: (*)</label>        
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{costo_unitario}: (*)</label>        
         <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}" readonly/>
+        <span id="lbl_peso">1 {pre_um}</span>
     </p>
     <p>
         <label>{costo_x_um}: (*)</label>
+        &nbsp;&nbsp;<span>$</span>
         <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}" readonly/>
    </p>
     <p>

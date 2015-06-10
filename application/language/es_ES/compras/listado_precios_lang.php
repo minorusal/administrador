@@ -15,4 +15,5 @@ $lang['peso_unitario']  		 = 'peso unitario';
 $lang['costo_unitario']  		 = 'costo unitario';
 $lang['costo_x_um']  			 = 'costo x u.m';
 $lang['costo_final']  			 = 'costo final';
+$lang['desglose_impuesto']  	 = 'Desglose del impuesto';
 ?>

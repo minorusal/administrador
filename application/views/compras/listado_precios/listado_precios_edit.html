@@ -2,7 +2,7 @@
 <input id="id_compras_articulo_precios" type="hidden" name="id_compras_articulo_precios" value="{id_compras_articulo_precios}" />
     <p>
         <label>{upc}: </label>
-        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{val_upc}" />
+        <input id="upc" type="text" maxlength="13" name="upc" data-campo="upc" class="input-large requerido" value="{val_upc}" onkeyup="validanumero('upc');"/>
     </p>
     <p>
         <label>{sku}: </label>

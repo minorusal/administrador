@@ -1,7 +1,7 @@
 <div id="formulario" class="stdform">  
     <p>
         <label>{upc}: </label>
-        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="" />
+        <input id="upc" maxlength="13" type="text" name="upc" data-campo="upc" class="input-large requerido" onkeyup="validanumero('upc');"/>
     </p>
     <p>
         <label>{articulo} (*)</label>

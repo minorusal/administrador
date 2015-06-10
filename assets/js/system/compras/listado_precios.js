@@ -80,7 +80,6 @@ function agregar(){
   var costo_unitario            = jQuery('#costo_unitario').val();
   var costo_x_um                = jQuery('#costo_x_um').val();
   var upc                       = jQuery('#upc').val();
-  var sku                       = jQuery('#sku').val();
 
   jQuery.ajax({
     type:"POST",
@@ -102,8 +101,7 @@ function agregar(){
         peso_unitario  : peso_unitario,
         costo_unitario : costo_unitario,
         costo_x_um   :costo_x_um,
-        upc : upc,
-        sku : sku
+        upc : upc
     },
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
@@ -143,12 +141,19 @@ function update(){
   var btn_text     = btn.html();  
   var incomplete   = values_requeridos();
   var impuesto_aplica;
+  var id_embalaje;
   if( jQuery('#impuesto_aplica').is(':checked') ){
     impuesto_aplica = 1;
   }else{
     impuesto_aplica = 0;    
   }
-  var upc                       = jQuery('#upc').val();
+  if(!jQuery('#embalaje_aplica').is(':checked') ){
+    id_embalaje = 1;
+  }
+  else{
+    id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
+  }
+/*  var upc                       = jQuery('#upc').val();
   var sku                       = jQuery('#sku').val();
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
@@ -160,6 +165,22 @@ function update(){
   var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
   var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
   var impuesto_porcentaje         = jQuery("select[name='lts_impuesto'] option:selected").val();
+*/
+  var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
+  var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
+  var id_proveedor              = jQuery("select[name='lts_proveedores'] option:selected").val();
+  var id_marca                  = jQuery("select[name='lts_marcas'] option:selected").val();
+  var id_presentacion           = jQuery("select[name='lts_presentaciones'] option:selected").val();
+  var impuesto_porcentaje       = jQuery("select[name='lts_impuesto'] option:selected").val();
+  var presentacion_x_embalaje   = jQuery('#presentacion_x_embalaje').val();
+  var um_x_embalaje             = jQuery('#um_x_embalaje').val();
+  var um_x_presentacion         = jQuery('#um_x_presentacion').val();
+  var costo_sin_impuesto        = jQuery('#costo_sin_impuesto').val();
+  var peso_unitario             = jQuery('#peso_unitario').val();
+  var costo_unitario            = jQuery('#costo_unitario').val();
+  var costo_x_um                = jQuery('#costo_x_um').val();
+  var upc                       = jQuery('#upc').val();
+
   jQuery.ajax({
     type:"POST",
     url: path()+"compras/listado_precios/update",
@@ -167,18 +188,21 @@ function update(){
     data: {
         incomplete                 : incomplete,
         id_compras_articulo_precios : id_compras_articulo_precios,
-        cant_presentacion_embalaje : cant_presentacion_embalaje,
-        cant_um_presentacion       : cant_um_presentacion,
-        precio_proveedor           : precio_proveedor,
-        impuesto_aplica            : impuesto_aplica,
-        impuesto_porcentaje        : impuesto_porcentaje,
-        id_articulo                : id_articulo,
-        id_proveedor               : id_proveedor,
-        id_marca                   : id_marca,
-        id_presentacion            : id_presentacion,
-        id_embalaje                : id_embalaje,
-        upc                        : upc,
-        sku                        : sku
+        presentacion_x_embalaje:presentacion_x_embalaje,
+        um_x_embalaje: um_x_embalaje,
+        um_x_presentacion : um_x_presentacion,
+        costo_sin_impuesto : costo_sin_impuesto,
+        impuesto_aplica : impuesto_aplica,
+        impuesto_porcentaje : impuesto_porcentaje,
+        id_articulo : id_articulo,
+        id_proveedor : id_proveedor,
+        id_marca : id_marca,
+        id_presentacion : id_presentacion,
+        id_embalaje : id_embalaje,
+        peso_unitario  : peso_unitario,
+        costo_unitario : costo_unitario,
+        costo_x_um   :costo_x_um,
+        upc : upc
       },
     beforeSend : function(){
       jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
@@ -241,19 +265,13 @@ function validar_um(id_opcion){
   }
 }
 function load_pre_emb(id_presentacion){
-  jQuery.ajax({
-        type: "POST",
-        url: path()+"compras/listado_precios/load_presentacion_em",
-        dataType: 'json',
-        data: {id_presentacion : id_presentacion},
-        success: function(data){
-          jQuery('#pre_em').show('slow');
-          jQuery('#pre_em').html(data);
-          jQuery('#pre_em2').show('slow');
-          jQuery('#pre_em2').html(data);
-          jQuery('#signo').show('slow');
-        }
-    });
+  var presentaciones  = jQuery("select[name='lts_presentaciones'] option:selected").text();  
+  var clave_corta=presentaciones.split("-");
+  jQuery('#pre_em').show('slow');
+  jQuery('#pre_em').html(clave_corta[0]);
+  jQuery('#pre_em2').show('slow');
+  jQuery('#pre_em2').html(clave_corta[0]);
+  jQuery('#signo').show('slow');
 }
 function load_pre_um(id_articulo){
   jQuery.ajax({
@@ -270,18 +288,12 @@ function load_pre_um(id_articulo){
     });
 }
 function load_emb(id_embalaje){
-  jQuery.ajax({
-        type: "POST",
-        url: path()+"compras/listado_precios/load_embalaje_cl",
-        dataType: 'json',
-        data: {id_embalaje : id_embalaje},
-        success: function(data){
-          jQuery('#embalaje_cl').show('slow');
-          jQuery('#embalaje_cl').html(data);
-          jQuery('#signo2').show('slow');
-          jQuery('#pre_um2').show('slow');
-        }
-    });
+  var embalaje  = jQuery("select[name='lts_embalaje'] option:selected").text(); 
+  var clave_corta=embalaje.split("-");
+  jQuery('#embalaje_cl').show('slow');
+  jQuery('#embalaje_cl').html(clave_corta[0]);
+  jQuery('#signo2').show('slow');
+  jQuery('#pre_um2').show('slow');
 }
 function clean_campos(){
   validanumero('presentacion_x_embalaje');

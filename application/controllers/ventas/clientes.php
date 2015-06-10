@@ -370,7 +370,6 @@ class clientes extends Base_Controller {
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		dump_var($params);
 		$this->excel->generate_xlsx($params);		
 	}
 	/*public function import_xlsx(){

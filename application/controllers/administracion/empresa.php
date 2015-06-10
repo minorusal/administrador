@@ -48,13 +48,15 @@ class empresa extends Base_Controller {
 	}
 
 	public function index(){
-		
 		$sqlData = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
 			,'limit'      	=> true
 		);
+		$this->load_database('global_system');
+        $this->load->model('users_model');
 		$datos = $this->db_model->db_get_data($sqlData);
+		$pais = $this->users_model->search_user_for_id($datos[0]['id_usuario']);
 		$button_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_empresa', 'onclick'=>'agregar()','content'=>'Guardar'));
 		$tabl_inicial 			  = 1;
 		$contenidos_tab           = $this->mensaje;
@@ -71,11 +73,16 @@ class empresa extends Base_Controller {
 		$data['r_social']         = $datos[0]['razon_social'];
 		$data['r_f_c']            = 'RFC';
 		$data['rfc']              = $datos[0]['rfc'];
+		$data['pais']             = 'País';
+		$data['txt_pais']         = base_url().'assets/avatar/'.$pais[0]['avatar_pais'];
+		$data['moneda']           = 'Moneda';
+		$data['txt_moneda']       = $pais[0]['moneda'];
 		$data['telefono']         = 'Teléfono';
 		$data['tel']              = $datos[0]['telefono'];
 		$data['direccion']        = 'Dirección';
 		$data['dir']              = $datos[0]['direccion'];
 		$data['button_save']      = $button_save;
+		//print_debug($datos);
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => 'empresas', 'dirname' => 'administracion');
 		$this->load_view($this->template, $data,$js);	
@@ -98,7 +105,7 @@ class empresa extends Base_Controller {
 				 ,'rfc'          => $this->ajax_post('rfc')
 				 ,'telefono'     => $this->ajax_post('telefono')
 				 ,'direccion'    => $this->ajax_post('direccion')
-				 //,'id_usuario'   => $this->session->userdata('id_usuario')
+				 ,'id_usuario'   => $this->session->userdata('id_usuario')
 				 ,'timestamp'    => $this->timestamp()
 				);
 

@@ -330,6 +330,7 @@ class clientes extends Base_Controller {
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
+									$value['id_ventas_clientes'],
 									 $value['nombre'].' '.$value['paterno'].' '.$value['materno'],
 									 $value['razon_social'],
 									 $value['clave_corta'],
@@ -347,6 +348,7 @@ class clientes extends Base_Controller {
 									 $value['timestamp']);
 			}
 			$set_heading = array(
+									$this->lang_item("ID"),
 									$this->lang_item("nombre_cliente"),
 									$this->lang_item("razon_social"),
 									$this->lang_item("clave_corta"),
@@ -368,7 +370,7 @@ class clientes extends Base_Controller {
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		
+		dump_var($params);
 		$this->excel->generate_xlsx($params);		
 	}
 	/*public function import_xlsx(){

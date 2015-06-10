@@ -71,7 +71,7 @@ function update_articulo(){
 	var btn          = jQuery("button[name='update_articulo']");
 	btn.attr('disabled','disabled');
 	var objData = formData('#formulario');
-		objData['incomplete'] = values_requeridos();      
+		objData['incomplete'] = values_requeridos();    
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/articulos/update_articulo",

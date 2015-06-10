@@ -339,6 +339,31 @@ function values_numericos(){
      return items_numericos;
 }
 
+function allow_only_numeric(){
+    jQuery('#formulario .numerico').each(function(){
+        jQuery(this).keydown(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            
+            if(keycode == 8 || keycode == 9 || keycode == 190 || keycode == 110){
+                return true;
+            }
+            if(keycode >= 97 && keycode <= 105){
+                return true;
+            }
+             if(keycode >= 112 && keycode <= 123){
+                return true;
+            }
+            if(keycode < 48 || keycode > 57){
+                return false;
+            }
+            else{
+                return true;
+            }  
+        });
+    });
+}
+ 
+
 function alertas_tpl(type , mensaje ,close){
     var alert = "";
     var button_close = "";

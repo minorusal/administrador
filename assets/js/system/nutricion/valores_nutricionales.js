@@ -1,6 +1,6 @@
 jQuery(document).ready(function(){
 	jQuery('#search-query').focus();
-	jQuery('#search-query').keypress(function(event){
+  jQuery('#search-query').keypress(function(event){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
 		if(keycode == '13'){  
 			buscar();
@@ -48,7 +48,7 @@ function buscar(){
   });
 }
 
-function detalle(id_articulo){
+function detalle(id_articulo){  
   jQuery('#ui-id-1').click();
   jQuery.ajax({
         type: "POST",
@@ -59,12 +59,17 @@ function detalle(id_articulo){
           jQuery('#a-0').html('');
           jQuery('#a-1').html(data);
           jQuery('#ui-id-1').show('slow');
+          var letra = allow_only_numeric();
+          if(letra){
+            jQuery('#formulario .numerico').prop( "disabled", true );
+          }else{
+            jQuery('#formulario .numerico').prop( "disabled", false );
+          }
         }
     });
 }
 
 function actualizar(){
- //alert();
   jQuery('#mensajes_update').hide();
   var btn             = jQuery("button[name='actualizar']");
   btn.attr('disabled','disabled');

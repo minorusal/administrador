@@ -65,6 +65,7 @@ class articulos extends Base_Controller {
 				$tbl_data[] = array('id'             => $value['articulo'],
 									'articulos'      => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
+									'articulo_tipo'  => $value['articulo_tipo'],
 									'linea'          => $value['linea'],
 									'um'             => $value['um'],
 									'descripcion'    => $value['descripcion']);
@@ -75,6 +76,7 @@ class articulos extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("articulos"),
 										$this->lang_item("articulos"),
 										$this->lang_item("cvl_corta"),
+										$this->lang_item("articulo_tipo"),
 										$this->lang_item("lineas"),
 										$this->lang_item("u.m."),
 										$this->lang_item("descripcion"));
@@ -125,17 +127,27 @@ class articulos extends Base_Controller {
 					,'class' 	=> "requerido"
 					);
 		$um             = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->catalogos_model->get_articulo_tipo('','','',false)
+					,'value' 	=> 'id_articulo_tipo'
+					,'text' 	=> array('clave_corta','articulo_tipo')
+					,'name' 	=> "lst_articulo_tipo"
+					,'class' 	=> "requerido"
+					);
+		$articulo_tipo = dropdown_tpl($dropArray4);
 		// 
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_articulo','onclick'=>'insert_articulo()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
         $data_tab_1['nombre_articulo']   = $this->lang_item("nombre_articulo",false);
+        $data_tab_1['articulo_tipo']	 = $this->lang_item("articulo_tipo",false);
         $data_tab_1['cvl_corta']         = $this->lang_item("cvl_corta",false);
         $data_tab_1['linea']             = $this->lang_item("linea",false);
         $data_tab_1['um']                = $this->lang_item("um",false);
         $data_tab_1['descripcion']       = $this->lang_item("descripcion",false);
         $data_tab_1['list_linea']        = $lineas;
         $data_tab_1['list_um']           = $um;
+        $data_tab_1['list_articulo_tipo']= $articulo_tipo;
         $data_tab_1['button_save']       = $btn_save;
         $data_tab_1['button_reset']      = $btn_reset;
 
@@ -169,6 +181,15 @@ class articulos extends Base_Controller {
 					);
 
 		$um             = dropdown_tpl($dropArray3);
+		$dropArray4 = array(
+					 'data'		=> $this->catalogos_model->get_articulo_tipo('','','',false)
+					,'value' 	=> 'id_articulo_tipo'
+					,'text' 	=> array('clave_corta','articulo_tipo')
+					,'name' 	=> "lst_articulo_tipo"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle_articulo[0]['id_articulo_tipo']
+					);
+		$articulo_tipo = dropdown_tpl($dropArray4);
 		$btn_save    = form_button(array('class'=>"btn btn-primary",'name' => 'update_articulo' , 'onclick'=>'update_articulo()','content' => $this->lang_item("btn_guardar") ));
 		$btn_enabled = button_tpl(array( 'text'       => $this->lang_item("delete"), 
 											   'iconsweets' => 'iconfa-trash',
@@ -179,6 +200,7 @@ class articulos extends Base_Controller {
 												));
 		$data_tab_3['id_articulo']       	   = $id_articulo;
 		$data_tab_3['nombre_articulo']   	   = $this->lang_item("nombre_articulo",false);
+		$data_tab_3['articulo_tipo']		   = $this->lang_item("articulo_tipo",false);
 		$data_tab_3['cvl_corta']         	   = $this->lang_item("cvl_corta",false);
         $data_tab_3['linea']             	   = $this->lang_item("linea",false);
         $data_tab_3['um']                	   = $this->lang_item("um",false);
@@ -193,6 +215,7 @@ class articulos extends Base_Controller {
 		$data_tab_3['timestamp']         = $detalle_articulo[0]['timestamp'];
         $data_tab_3['list_linea']        = $lineas;
         $data_tab_3['list_um']           = $um;
+        $data_tab_3['list_articulo_tipo']= $articulo_tipo;
         $data_tab_3['button_save']       = $btn_save;
         
         $this->load_database('global_system');
@@ -225,12 +248,14 @@ class articulos extends Base_Controller {
 		}else{
 			$articulo     = $this->ajax_post('articulo');
 			$clave_corta  = $this->ajax_post('clave_corta');
-			$linea        = $this->ajax_post('linea');
-			$um           = $this->ajax_post('um');
+			$id_articulo_tipo = $this->ajax_post('lst_articulo_tipo');
+			$linea        = $this->ajax_post('lts_lineas_detalle');
+			$um           = $this->ajax_post('lts_um_detalle');
 			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
+								 'id_articulo_tipo'=> $id_articulo_tipo,
 								 'id_compras_linea'=> $linea,
 								 'id_compras_um'=> $um,
 								 'id_usuario' => $this->session->userdata('id_usuario'),
@@ -251,9 +276,10 @@ class articulos extends Base_Controller {
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}else{
+		}else{			
 			$id_articulo  = $this->ajax_post('id_articulo');
 			$articulo     = $this->ajax_post('articulo');
+			$id_articulo_tipo = $this->ajax_post('lst_articulo_tipo');
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$linea        = $this->ajax_post('lts_lineas_detalle');
 			$um           = $this->ajax_post('lts_um_detalle');
@@ -261,6 +287,7 @@ class articulos extends Base_Controller {
 			$data_update  = array('articulo' => $articulo,
 								 'clave_corta'=> $clave_corta, 
 								 'descripcion'=> $descripcion,
+								 'id_articulo_tipo'=> $id_articulo_tipo,
 								 'id_compras_linea'=> $linea,
 								 'edit_timestamp' => $this->timestamp(),
 								 'edit_id_usuario' => $this->session->userdata('id_usuario'),
@@ -288,6 +315,7 @@ class articulos extends Base_Controller {
 				$set_data[] = array(
 									 $value['articulo'],
 									 $value['clave_corta'],
+									 $value['articulo_tipo'],
 									 $value['linea'],
 									 $value['um'],
 									 $value['descripcion']);
@@ -296,6 +324,7 @@ class articulos extends Base_Controller {
 			$set_heading = array(
 									$this->lang_item("articulos"),
 									$this->lang_item("cvl_corta"),
+									$this->lang_item("articulo_tipo"),
 									$this->lang_item("lineas"),
 									$this->lang_item("u.m."),
 									$this->lang_item("descripcion"));

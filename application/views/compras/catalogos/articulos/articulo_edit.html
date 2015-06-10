@@ -1,6 +1,10 @@
 <div id="formulario" class="stdform">
     <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" data-campo="id_articulo"/>
         <p>
+            <label>{articulo_tipo}: (*)</label>
+           {list_articulo_tipo}
+        </p>
+        <p>
             <label>{nombre_articulo}: (*)</label>
             <input id="articulo" type="text" name="articulo" data-campo="articulo" class="input-large requerido" value="{articulo_value}" />
         </p>

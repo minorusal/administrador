@@ -37,7 +37,7 @@ class login extends Base_Controller {
 		if($id_user==''){
 			$user   = $this->input->post('user');
 			$pwd    = $this->__encript_pwd($this->input->post('pwd'));
-			$data   = $this->users_model->search_user_for_login($user, $pwd);
+			$data   = $this->users_model->search_user_for_login($user, $pwd);			
 		}else{
 			$data   = $this->users_model->search_user_for_id($id_user);
 		}
@@ -78,6 +78,7 @@ class login extends Base_Controller {
 								'pais'        => $value['pais'],
 								'dominio'     => $value['dominio'],
 								'avatar_pais' => $value['avatar_pais'],
+								'moneda' 	  => $value['moneda'],
 								'id_empresa'  => $value['id_empresa'],
 								'empresa'     => $value['empresa'],
 								'id_sucursal' => $value['id_sucursal'],

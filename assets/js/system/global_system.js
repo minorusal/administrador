@@ -343,7 +343,6 @@ function allow_only_numeric(){
     jQuery('#formulario .numerico').each(function(){
         jQuery(this).keydown(function(event){
             var keycode = (event.keyCode ? event.keyCode : event.which);
-
             if(keycode == 8 || keycode == 9 || keycode == 190 || keycode == 110){
                 jQuery(this).removeAttr( 'style' );
                 return true;
@@ -358,8 +357,11 @@ function allow_only_numeric(){
             }
             if(keycode < 48 || keycode > 57){
                 jQuery(this).css({"border-color": "red", 
-             "border-weight":"1px", 
-             "border-style":"solid"});
+                                  "border-weight":"1px", 
+                                  "border-style":"solid"});
+                jQuery(this).blur(function(){
+                     jQuery(this).removeAttr( 'style' );
+                });
                 return false;
             }
             else{

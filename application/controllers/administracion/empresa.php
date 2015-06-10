@@ -82,7 +82,6 @@ class empresa extends Base_Controller {
 		$data['direccion']        = 'Dirección';
 		$data['dir']              = $datos[0]['direccion'];
 		$data['button_save']      = $button_save;
-		//print_debug($datos);
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => 'empresas', 'dirname' => 'administracion');
 		$this->load_view($this->template, $data,$js);	

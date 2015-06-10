@@ -16,8 +16,8 @@ class listado_precios extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->seccion          = 'listado_precios';
-		$this->icon 			= 'fa fa-list-alt'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #compras/listado_precios/
+		$this->icon 			= 'fa fa-list-alt'; //Icono de modulo
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //compras/listado_precios/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -41,15 +41,15 @@ class listado_precios extends Base_Controller {
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) //agregar
+										,$this->lang_item($tab_2) //listado
+										,$this->lang_item($tab_3) //detalle
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #compras/listado_precios/agregar
-										,$path.$tab_2.'/'.$pagina #compras/listado_precios/listado/pagina
-										,$tab_3                   #detalle
+										 $path.$tab_1            //compras/listado_precios/agregar
+										,$path.$tab_2.'/'.$pagina //compras/listado_precios/listado/pagina
+										,$tab_3                   //detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -62,7 +62,7 @@ class listado_precios extends Base_Controller {
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->modulo.'/'.$this->view_content; #compras/content
+		return $this->modulo.'/'.$this->view_content; //compras/content
 	}
 	public function index(){
 		$tabl_inicial 			  = 2;
@@ -515,13 +515,11 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			$upc 						= $this->ajax_post('upc');
-			$sku 						= $this->ajax_post('sku');
-			$id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
-			$cant_presentacion_embalaje = $this->ajax_post('cant_presentacion_embalaje');
-	        $cant_um_presentacion 		= $this->ajax_post('cant_um_presentacion');
-	        $um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
-	        $precio_proveedor 			= $this->ajax_post('precio_proveedor');
+	        $id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
+	        $upc						= $this->ajax_post('upc');
+	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
+	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
+	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
 	        $id_impuesto 				= $this->ajax_post('impuesto_porcentaje');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
@@ -529,26 +527,27 @@ class listado_precios extends Base_Controller {
 	        $id_marca 					= $this->ajax_post('id_marca');
 	        $id_presentacion 			= $this->ajax_post('id_presentacion');
 	        $id_embalaje 				= $this->ajax_post('id_embalaje');
+	        $um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
+	        $peso_unitario 				= $this->ajax_post('peso_unitario');
+			$costo_unitario 			= $this->ajax_post('costo_unitario');
+			$costo_x_um					= $this->ajax_post('costo_x_um');
 			
 			$data_update  = array(
 								'id_compras_articulo_precios'   => $id_compras_articulo_precios,
 								'upc'  							=> $upc,
-								'sku'  							=> $sku,
 								'id_articulo'  					=> $id_articulo,
 								'id_proveedor'  				=> $id_proveedor,
 								'id_marca'  					=> $id_marca,
 								'id_presentacion'  				=> $id_presentacion,
 								'id_embalaje'  					=> $id_embalaje,
-								'presentacion_x_embalaje'		=> $cant_presentacion_embalaje,
+								'presentacion_x_embalaje'		=> $presentacion_x_embalaje,
 								'um_x_embalaje'				  	=> $um_x_embalaje,
-								'um_x_presentacion'			  	=> $cant_um_presentacion,
-								'costo_sin_impuesto'  			=> $precio_proveedor,
+								'um_x_presentacion'			  	=> $um_x_presentacion,
+								'costo_sin_impuesto'  			=> $costo_sin_impuesto,
 								'impuesto_aplica'  				=> $impuesto_aplica,
 								'id_impuesto'  					=> $id_impuesto,
-								'timestamp'            			=> $this->timestamp(),
-								'id_usuario'           			=> $this->session->userdata('id_usuario')
-								,'edit_timestamp'  	 			=> $this->timestamp()
-								,'edit_id_usuario'   			=> $this->session->userdata('id_usuario')
+								'edit_timestamp'  	 			=> $this->timestamp(),
+								'edit_id_usuario'   			=> $this->session->userdata('id_usuario')
 							);
 			$update = $this->db_model->db_update_data($data_update);
 
@@ -615,20 +614,10 @@ class listado_precios extends Base_Controller {
 		//dump_var($params);
 		$this->excel->generate_xlsx($params);
 	}
-	public function load_presentacion_em(){
-		$id_presentacion = $this->ajax_post('id_presentacion');
-		$presentacion=$this->catalogos_model->get_presentacion_unico($id_presentacion);
-       	echo json_encode($presentacion[0]['clave_corta']);
-	}
 	public function load_presentacion_um(){
 		$id_articulo = $this->ajax_post('id_articulo');
 		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
      	echo json_encode($presentacion_em[0]['cv_um']);
-	}
-	public function load_embalaje_cl(){
-		$id_embalaje = $this->ajax_post('id_embalaje');
-		$embalaje_cl=$this->catalogos_model->get_embalaje_unico($id_embalaje);
-     	echo json_encode($embalaje_cl[0]['clave_corta']);
 	}
 }
 ?>

@@ -381,6 +381,7 @@ class catalogos_model extends Base_Model{
 		$query = "	SELECT 
 						ca.id_compras_articulo
 						,ca.articulo
+						,at.articulo_tipo
 						,cl.linea
 						,cu.um
 						,ca.clave_corta
@@ -388,6 +389,7 @@ class catalogos_model extends Base_Model{
 					FROM $tbl[compras_articulos] ca
 					LEFT JOIN $tbl[compras_lineas] cl on cl.id_compras_linea = ca.id_compras_linea 
 					LEFT JOIN $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
+					LEFT JOIN $tbl[compras_articulos_tipo] at on ca.id_articulo_tipo = at.id_articulo_tipo
 					WHERE ca.activo = 1 $filtro
 					ORDER BY ca.id_compras_articulo
 				$limit
@@ -407,6 +409,32 @@ class catalogos_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+
+	/*ARTICULOS TIPO*/
+	public function get_articulo_tipo($limit, $offset, $filtro="", $aplicar_limit = true){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$filtro = ($filtro=="") ? "" : "AND (
+												articulo_tipo like '%$filtro%'
+											OR 
+												clave_corta like '%$filtro%'
+										) ";
+		$limit = ($aplicar_limit) ?  "LIMIT $offset ,$limit " : "";
+		$query = "	SELECT 
+						id_articulo_tipo
+						,articulo_tipo
+						,clave_corta
+					FROM $tbl[compras_articulos_tipo] 
+					WHERE activo = 1 $filtro
+					ORDER BY id_articulo_tipo
+					$limit";
+      	
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 } 
 ?>

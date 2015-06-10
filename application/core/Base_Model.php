@@ -61,6 +61,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['vw_compras_orden_proveedores'] = $this->db2.'.'.$this->vars->db['db2_vw_compras_orden_proveedores'];
 		$this->tbl['vw_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_articulos'];
 		$this->tbl['vw_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_vw_proveedores_articulos'];		
+		$this->tbl['compras_articulos_tipo'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos_tipo'];
 		/*FIN dbmodel*/
 	}
 

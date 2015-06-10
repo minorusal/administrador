@@ -9,7 +9,7 @@ class valores_nutricionales extends Base_Controller {
 	private $icon;
 
 	private $offset, $limit_max;
-	private $tab, $tab1, $tab2, $tab3;
+	private $tab, $tab1, $tab2;
 
 	public function __construct()
 	{
@@ -25,7 +25,7 @@ class valores_nutricionales extends Base_Controller {
 		// Tabs
 		$this->tab1 			= 'listado';
 		$this->tab2 			= 'detalle';
-		//$this->tab3 			= 'detalle';
+		
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('compras/catalogos_model','db_model_articulos');
@@ -37,18 +37,16 @@ class valores_nutricionales extends Base_Controller {
 	{
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
-		//$tab_3 	= $this->tab3;
+		
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) 
-										,$this->lang_item($tab_2) 
-										//,$this->lang_item($tab_3) 
+										,$this->lang_item($tab_2) 	
 								); 
 		// Href de tabs
-		$config_tab['links']    = array(
-										 //$path.$tab_1      
+		$config_tab['links']    = array(      
 										$path.$tab_1.'/'.$pagina #listado
 										,$tab_2                  #detalle
 								); 
@@ -97,12 +95,14 @@ class valores_nutricionales extends Base_Controller {
 			,'limit'      	=> $limit
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model_articulos->get_articulos($sqlData['limit'],$sqlData['offset'],$sqlData['buscar'],true));
-		$sqlData['aplicar_limit'] = false;
+		$total_rows	  = count($this->db_model_articulos->get_articulos($sqlData['limit'],$sqlData['offset'],$sqlData['buscar'],false));
+		$sqlData['aplicar_limit'] = true;
 		$list_content = $this->db_model_articulos->get_articulos($sqlData['limit'],$sqlData['offset'],$sqlData['buscar'],$sqlData['aplicar_limit']);
 		$url          = base_url($url_link);
-		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-
+		$arreglo = array($total_rows, $url, $limit, $uri_segment);
+		
+		$paginador = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'0'));
+		
 		if($total_rows)
 		{
 			foreach ($list_content as $value)
@@ -145,6 +145,7 @@ class valores_nutricionales extends Base_Controller {
 		$tabData['export']    = button_tpl($buttonTPL);
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+
 		if($this->ajax_post(false))
 		{
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
@@ -158,7 +159,6 @@ class valores_nutricionales extends Base_Controller {
 	public function detalle()
 	{
 		$id_articulo         = $this->ajax_post('id_articulo');
-		//print_debug($id_articulo);
 		$detalle             = $this->db_model_articulos->get_articulo_unico($id_articulo);
 		$seccion             = $this->tab2;
 		$detalle_nutricional = $this->db_model->get_valores_nutricionales_unico($id_articulo);
@@ -249,11 +249,11 @@ class valores_nutricionales extends Base_Controller {
 
 	public function actualizar()
 	{
-		//print_debug($this->ajax_post(false));
+		$numerico = $this->ajax_post('numerico');
 		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0)
+		if($incomplete > 0 || $numerico > 0)
 		{
-			$msg = $this->lang_item('msg_campos_obligatorios',false);
+			$msg = $this->lang_item('msg_campos_numericos',false);
 			$json_respuesta = array(
 				 'id' => 0
 				,'contenido' => alertas_tpl('error',$msg, false)
@@ -316,4 +316,83 @@ class valores_nutricionales extends Base_Controller {
 		echo json_encode($json_respuesta);
 	}
 
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->get_valores_nutricionales_default($sqlData);
+
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['articulo'],
+									 $value['cantidad_sugerida']
+									,$value['peso_bruto']
+									,$value['peso_neto']
+									,$value['energia']
+									,$value['proteina']
+									,$value['lipidos']
+									,$value['hidratos_carbono']
+									,$value['fibra']
+									,$value['vitamina_a']
+									,$value['acido_ascorbico']
+									,$value['acido_folico']
+									,$value['hierro_nohem']
+									,$value['potasio']
+									,$value['azucar']
+									,$value['indice_glicemico']
+									,$value['carga_glicemica']
+									,$value['calcio']
+									,$value['sodio']
+									,$value['selenio']
+									,$value['fosforo']
+									,$value['colesterol']
+									,$value['ag_saturados']
+									,$value['ag_mono']
+									,$value['ag_poli']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("articulo")
+									,$this->lang_item("cantidad sugerida")
+									,$this->lang_item("peso bruto")
+									,$this->lang_item("peso neto")
+									,$this->lang_item("energia")
+									,$this->lang_item("proteina")
+									,$this->lang_item("lipidos")
+									,$this->lang_item("hidratos de carbono")
+									,$this->lang_item("fibra")
+									,$this->lang_item("vitamina a")
+									,$this->lang_item("acido ascorbico")
+									,$this->lang_item("acido folico")
+									,$this->lang_item("hierro nohem")
+									,$this->lang_item("potasio")
+									,$this->lang_item("azucar")
+									,$this->lang_item("indice glicemico")
+									,$this->lang_item("carga glicemica")
+									,$this->lang_item("calcio")
+									,$this->lang_item("sodio")
+									,$this->lang_item("selenio")
+									,$this->lang_item("fosforo")
+									,$this->lang_item("colesterol")
+									,$this->lang_item("ag saturados")
+									,$this->lang_item("ag mono")
+									,$this->lang_item("ag poli")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Valores nutricionales"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
+	}
 }

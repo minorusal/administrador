@@ -99,18 +99,18 @@ class ordenes extends Base_Controller {
 		$url_link 		= $this->path.$seccion.$accion;		
 		$buttonTPL 		= '';
 
-		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(
-			 'buscar'      	=> $filtro
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
+			 'buscar' => $filtro
+			,'offset' => $offset
+			,'limit'  => $limit
 		);
-		$uri_segment  = $this->uri_segment(); 
-		$total_rows   = count($this->db_model->db_get_data($sqlData));
+		$uri_segment  			  = $this->uri_segment(); 
+		$total_rows   			  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
-		$list_content = $this->db_model->db_get_data($sqlData);
-		$url          = base_url($url_link);
-		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		$list_content 			  = $this->db_model->db_get_data($sqlData);
+		$url          			  = base_url($url_link);
+		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 
 		if($total_rows){
 			foreach ($list_content as $value) {
@@ -185,13 +185,12 @@ class ordenes extends Base_Controller {
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"
 					,'class' 	=> $class
-					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
 
 		$dropArray2 = array(
 					 'data'		=> $this->sucursales_model->db_get_data()
-					 ,'selected' => $detalle[0]['id_sucursal']
+					 ,'selected'=> $detalle[0]['id_sucursal']
 					,'value' 	=> 'id_sucursal'
 					,'text' 	=> array('clave_corta','sucursal')
 					,'name' 	=> "id_sucursal"
@@ -206,7 +205,7 @@ class ordenes extends Base_Controller {
 
 		$dropArray3 = array(
 					 'data'		=> $this->formas_de_pago_model->db_get_data()
-					 ,'selected' => $detalle[0]['id_forma_pago']
+					 ,'selected'=> $detalle[0]['id_forma_pago']
 					,'value' 	=> 'id_forma_pago'
 					,'text' 	=> array('clave_corta','descripcion')
 					,'name' 	=> "id_forma_pago"
@@ -216,7 +215,7 @@ class ordenes extends Base_Controller {
 
 		$dropArray4 = array(
 					 'data'		=> $this->creditos_model->db_get_data()
-					 ,'selected' => $detalle[0]['id_credito']
+					 ,'selected'=> $detalle[0]['id_credito']
 					,'value' 	=> 'id_administracion_creditos'
 					,'text' 	=> array('clave_corta','credito')
 					,'name' 	=> "id_administracion_creditos"
@@ -226,7 +225,7 @@ class ordenes extends Base_Controller {
 
 		$dropArray5 = array(
 					 'data'		=> $this->db_model->db_get_tipo_orden()
-					 ,'selected' => $detalle[0]['id_orden_tipo']
+					 ,'selected'=> $detalle[0]['id_orden_tipo']
 					,'value' 	=> 'id_orden_tipo'
 					,'text' 	=> array('orden_tipo')
 					,'name' 	=> "id_orden_tipo"
@@ -290,7 +289,7 @@ class ordenes extends Base_Controller {
     		$usuario_name = '';
     		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
     	}
-		$uri_view   					= $this->path.$this->submodulo.'_'.$accion;
+		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function agregar(){
@@ -301,12 +300,9 @@ class ordenes extends Base_Controller {
 		// Listas
 		$dropArray = array(
 					 'data'		=> $this->db_model->db_get_proveedores()
-					// ,'selected' => '' 
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','razon_social')
 					,'name' 	=> "id_proveedor"
-					//,'class' 	=> "requerido"
-					// ,'leyenda' 	=> ''
 				);
 		$proveedores    = dropdown_tpl($dropArray);
 
@@ -536,42 +532,40 @@ class ordenes extends Base_Controller {
 		if($list_content){
 			foreach ($list_content as $value) {
 				$set_data[] = array(
-									 $value['id_compras_orden'],
-									 $value['orden_num'],
-									 $value['orden_tipo'],
-									 $value['orden_fecha'],									 
-									 $value['razon_social'],
-									 $value['descripcion'],
-									 $value['sucursal'],
-									 $value['entrega_direccion'],
-									 $value['entrega_fecha'],
-									 $value['forma_pago'],
-									 $value['credito'],
-									 $value['prefactura_num'],
-									 $value['observaciones'],
-									 $value['timestamp'],
-									 $value['estatus']
-									 );
+									$value['id_compras_orden'],
+									$value['orden_num'],
+									$value['orden_tipo'],
+									$value['orden_fecha'],									 
+									$value['razon_social'],
+									$value['descripcion'],
+									$value['sucursal'],
+									$value['entrega_direccion'],
+									$value['entrega_fecha'],
+									$value['forma_pago'],
+									$value['credito'],
+									$value['prefactura_num'],
+									$value['observaciones'],
+									$value['timestamp'],
+									$value['estatus']
+								);
 			}
-			
 			$set_heading = array(
-									$this->lang_item("ID"),
-									$this->lang_item("orden_num"),
-									$this->lang_item("orden_tipo"),
-									$this->lang_item("orden_fecha"),
-									$this->lang_item("proveedor"),
-									$this->lang_item("descripcion"),
-									$this->lang_item("sucursal"),
-									$this->lang_item("entrega_direccion"),
-									$this->lang_item("entrega_fecha"),
-									$this->lang_item("forma_pago"),
-									$this->lang_item("credito"),
-									$this->lang_item("prefactura_num"),
-									$this->lang_item("observaciones"),
-									$this->lang_item("fecha_registro"),
-									$this->lang_item("estatus")
-									);
-	
+								$this->lang_item("ID"),
+								$this->lang_item("orden_num"),
+								$this->lang_item("orden_tipo"),
+								$this->lang_item("orden_fecha"),
+								$this->lang_item("proveedor"),
+								$this->lang_item("descripcion"),
+								$this->lang_item("sucursal"),
+								$this->lang_item("entrega_direccion"),
+								$this->lang_item("entrega_fecha"),
+								$this->lang_item("forma_pago"),
+								$this->lang_item("credito"),
+								$this->lang_item("prefactura_num"),
+								$this->lang_item("observaciones"),
+								$this->lang_item("fecha_registro"),
+								$this->lang_item("estatus")
+							);
 		}
 
 		$params = array(	'title'   => $this->lang_item("ordenes"),

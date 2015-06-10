@@ -267,9 +267,14 @@ class listado_precios extends Base_Controller {
 		}
 	}
 	public function insert(){
+		$numerico = $this->ajax_post('numerico');
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}
+		elseif($numerico > 0){
+			$msg = $this->lang_item('msg_campos_numericos',false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
 		else{						
@@ -559,56 +564,26 @@ class listado_precios extends Base_Controller {
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$sqlData = array(
-			 'buscar'      	=> $filtro
+			 'buscar'     => $filtro
 		);
-		$list_content = $this->db_model->db_get_data($sqlData);
+		$list_content = $this->db_model->db_get_data();
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
-				
 				$set_data[] = array(
-									$value['id_compras_articulo_precios'],
-									$value['articulo'],
-									$value['upc'],
-									$value['sku'],
-									$value['nombre_comercial'],
-									$value['marca'],
-									$value['presentacion'],
-									$value['presentacion_x_embalaje'],
-									$value['costo_sin_impuesto'],
-									$value['um_x_embalaje'],
-									$value['um_x_presentacion'],
-									$value['peso_unitario'],
-									$value['costo_unitario'],
-									$value['costo_x_um'],
-									$value['timestamp'],
-									$value['impuesto']);
+									$value['marca']
+									);
 			}
 			$set_heading = array(
-									$this->lang_item("id"),
-									$this->lang_item("articulo"),
-									$this->lang_item("upc"),
-									$this->lang_item("sku"),
-									$this->lang_item("proveedor"),
-									$this->lang_item("marca"),
-									$this->lang_item("presentacion"),
-									$this->lang_item("presentacion_x_embalaje"),
-									$this->lang_item("costo_sin_impuesto"),
-									$this->lang_item("um_x_embalaje"),
-									$this->lang_item("um_x_presentacion"),
-									$this->lang_item("peso_unitario"),
-									$this->lang_item("costo_unitario"),
-									$this->lang_item("costo_x_um"),
-									$this->lang_item("fecha_registro"),
-									$this->lang_item("impuesto"));
+									'test'
+									);
 	
 		}
-
-		$params = array(	'title'   => $this->lang_item("listado"),
+		$params = array(	'title'   => 'sda',
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		
+		print_debug($params);
 		$this->excel->generate_xlsx($params);
 	}
 	public function load_presentacion_em(){

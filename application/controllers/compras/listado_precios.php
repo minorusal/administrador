@@ -16,8 +16,8 @@ class listado_precios extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->seccion          = 'listado_precios';
-		$this->icon 			= 'fa fa-list-alt'; #Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #compras/listado_precios/
+		$this->icon 			= 'fa fa-list-alt'; //Icono de modulo
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //compras/listado_precios/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -41,15 +41,15 @@ class listado_precios extends Base_Controller {
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) //agregar
+										,$this->lang_item($tab_2) //listado
+										,$this->lang_item($tab_3) //detalle
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #compras/listado_precios/agregar
-										,$path.$tab_2.'/'.$pagina #compras/listado_precios/listado/pagina
-										,$tab_3                   #detalle
+										 $path.$tab_1            //compras/listado_precios/agregar
+										,$path.$tab_2.'/'.$pagina //compras/listado_precios/listado/pagina
+										,$tab_3                   //detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -62,7 +62,7 @@ class listado_precios extends Base_Controller {
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->modulo.'/'.$this->view_content; #compras/content
+		return $this->modulo.'/'.$this->view_content; //compras/content
 	}
 	public function index(){
 		$tabl_inicial 			  = 2;

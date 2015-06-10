@@ -2,9 +2,6 @@
 $lang['agregar'] 		         = "Nueva lista";
 $lang['listado'] 		         = "Listado de precios";
 $lang['detalle'] 		         = "Detalle";
-/*$lang['cantidad_presentacion_embalaje']	="cant. de presentación en embalaje";
-$lang['cantidad_um_presentacion'] 		="cant. u.m. por presentación";
-$lang['precio_proveedor'] 				="precio de proveedor";*/
 $lang['impuesto_aplica'] 		 ="aplica impuesto";
 $lang['impuesto_porcentaje'] 	 ="porcentaje de impuesto";
 $lang['upc']  			  		 = 'UPC';
@@ -18,14 +15,4 @@ $lang['peso_unitario']  		 = 'peso unitario';
 $lang['costo_unitario']  		 = 'costo unitario';
 $lang['costo_x_um']  			 = 'costo x u.m';
 $lang['costo_final']  			 = 'costo final';
-
 ?>
-
-
-
-
-
-
-
-
-

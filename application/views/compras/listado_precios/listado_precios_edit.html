@@ -1,13 +1,13 @@
 <div id="formulario" class="stdform">
+<input id="id_compras_articulo_precios" type="hidden" name="id_compras_articulo_precios" value="{id_compras_articulo_precios}" />
     <p>
         <label>{upc}: </label>
-        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{upc_value}" />
+        <input id="upc" type="text" name="upc" data-campo="upc" class="input-large requerido" value="{val_upc}" />
     </p>
     <p>
         <label>{sku}: </label>
-        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="{sku_value}" />
+        <input id="sku" type="text" name="sku" data-campo="sku" class="input-large requerido" value="{val_sku}" />
     </p>
-    <input id="id_compras_articulo_precios" type="hidden" name="id_compras_articulo_precios" data-campo="id_compras_articulo_precios" value="{id_compras_articulo_precios}" />
     <p>
         <label>{articulo} (*)</label>
             {lts_articulos}
@@ -25,46 +25,52 @@
             {lts_presentaciones}
     </p>
     <p>
-        <label>{embajale} (*)</label>
-            {lts_embalaje}
-    </p>    
+        <label>{embalaje_aplica}:</label>
+        <input type="checkbox" id="embalaje_aplica" name="embalaje_aplica" onclick="oculta_embalaje();" checked>
+    </p>
     <p>
-        <label>{cantidad_presentacion_embalaje}: (*)</label>
+        <div id="embajale">
+            <label>{embajale} (*)</label>
+                {lts_embalaje}
+        </div>
+    </p>
+    <p>
+        <label>{presentacion_x_embalaje}: (*)</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();"value="{val_presentacion_x_embalaje}" />
         <span id="pre_em">{pre_em}</span>
-        <input id="cantidad_presentacion_embalaje" type="text" name="cantidad_presentacion_embalaje" class="input-small requerido" data-campo="cantidad_presentacion_embalaje" value="{val_cantidad_presentacion_embalaje}" />
     </p>
     <p>
         <label>{um_x_embalaje}: (*)</label>
-        <input type="radio" name="um" data-campo="um" value="1" onclick="validar_um(this.value);"  checked="checked">
-        <input id="um_x_embalaje" type="text" name="um_x_embalaje" data-campo="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();"/>
+        <input type="radio" name="um" value="1" onclick="validar_um(this.value);"  checked="checked">
+        <input id="um_x_embalaje" type="text" name="um_x_embalaje" class="input-small requerido" onkeyup="calcula_um_prsentacion();" value="{val_um_x_embalaje}"/>
         <span id="pre_um2">{pre_um}</span><span id="signo2"> * </span><span id="embalaje_cl">{embalaje_cl}</span>
     </p>
     <p>
         <label>{um_x_presentacion}: (*)</label>
-        <input type="radio" name="um" value="2" data-campo="um" onclick="validar_um(this.value);">
-        <input id="um_x_presentacion" type="text" name="um_x_presentacion" data-campo="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly />
+        <input type="radio" name="um" value="2" onclick="validar_um(this.value);">
+        <input id="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido" onkeyup="calcula_um_embalaje();" readonly value="{val_um_x_presentacion}"/>
         <span id="pre_um">{pre_um}</span><span id="signo"> * </span><span id="pre_em2">{pre_em}</span>
     </p>
     <p>
         <label>{costo_sin_impuesto}: (*)</label>
         &nbsp;&nbsp;<span>$</span>
-        <input id="costo_sin_impuesto" type="text" data-campo="costo_sin_impuesto" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calula_costos();" />
+        <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calcula_costos();" value="{val_costo_sin_impuesto}"/>
     </p>
     <p>
         <label>{peso_unitario}: (*)</label>        
-        <input id="peso_unitario" type="text" name="peso_unitario" data-campo="peso_unitario" class="input-small requerido"/>
+        <input id="peso_unitario" type="text" name="peso_unitario" class="input-small requerido" value="{val_peso_unitario}" readonly/>
     </p>
     <p>
         <label>{costo_unitario}: (*)</label>        
-        <input id="costo_unitario" type="text" data-campo="costo_unitario" name="costo_unitario" class="input-small requerido"/>
+        <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}" readonly/>
     </p>
     <p>
         <label>{costo_x_um}: (*)</label>
-        <input id="costo_x_um" type="text" name="costo_x_um" data-campo="costo_x_um" class="input-small requerido"/>
-    </p>
+        <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}" readonly/>
+   </p>
     <p>
         <label>{impuesto_aplica}:</label>
-        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" data-campo="impuesto_aplica" onclick="oculta_impuesto()" {checked}>
+        <input type="checkbox" id="impuesto_aplica" name="impuesto_aplica" onclick="oculta_impuesto()" {checked}>
     </p>
     <p>
         <div id="impuesto" {style} >
@@ -73,16 +79,24 @@
         </div>
     </p>
     <p>
+        <label>{desglose_impuesto}: (*)</label>
+        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small requerido" readonly/>
+    </p>
+    <p>
+        <label>{costo_final}: (*)</label>
+        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido" readonly/>
+    </p>
+    <p>
         <label>{lbl_fecha_registro}:</label>
-        <span id="timestamp" type="text" name="timestamp" data-campo="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+        <span id="timestamp" type="text" name="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
     </p>
     <p>
         <label>{registro_por}:</label>
-        <span readonly id="usuario_registro" type="text" name="usuario_registro" data-campo="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
+        <span readonly id="usuario_registro" type="text" name="usuario_registro" class="input-xlarge  uneditable-input " >{usuario_registro}</span>
     </p>
     <p>
         <label>{lbl_ultima_modificacion}: </label>
-        <textarea id="ultima_modificacion" class="span5 textareaUneditable" data-campo="ultima_modificacion" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
     </p>
     <div id="registro_loader"></div>
     <div id="mensajes_update" style="display:none"></div>

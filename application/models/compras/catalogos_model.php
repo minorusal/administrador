@@ -354,16 +354,16 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_compras_articulo !=' => $id_articulo, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl['compras_articulos'], $condicion);
-		if(!$existe){
+		//$condicion = array('id_compras_articulo !=' => $id_articulo, 'clave_corta = '=> $data['clave_corta']); 
+		//$existe = $this->row_exist($tbl['compras_articulos'], $condicion);
+		//if(!$existe){
 			$condicion = "id_compras_articulo = $id_articulo"; 
 			$query = $this->db->update_string($tbl['compras_articulos'], $data, $condicion);
 			$query = $this->db->query($query);
 			return $query;
-		}else{
-			return false;
-		}
+		//}else{
+			//return false;
+		//}
 	}
 	public function get_articulos($limit, $offset, $filtro="", $aplicar_limit = true){
 		// DB Info
@@ -376,6 +376,8 @@ class catalogos_model extends Base_Model{
 												ca.descripcion  LIKE '%$filtro%'
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		//print_debug($limit);
+		//,ca.upc
 		$query = "	SELECT 
 						ca.id_compras_articulo
 						,ca.articulo

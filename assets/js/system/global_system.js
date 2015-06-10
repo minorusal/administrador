@@ -326,6 +326,24 @@ function values_requeridos(){
     return items_vacios;
 }
 
+function values_numericos(){
+     var ids = "";
+     var items_numericos = 0;
+     var cadena = jQuery('.numerico').val();
+     jQuery('.numerico').each(function(){
+        if(jQuery(this).attr('type')=='text'){
+            if(jQuery.isNumeric(cadena)){
+            }else{
+                if(!jQuery.isNumeric(cadena)){
+                    ids = jQuery(this).attr("id")+'|'+ids;
+                    items_numericos++;
+                }
+            }
+        }
+     });
+     return items_numericos;
+}
+
 function alertas_tpl(type , mensaje ,close){
     var alert = "";
     var button_close = "";

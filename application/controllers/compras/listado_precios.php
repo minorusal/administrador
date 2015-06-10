@@ -88,11 +88,13 @@ class listado_precios extends Base_Controller {
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
+			,'aplicar_limit' =>true
 		);
 		
 		$uri_segment  = $this->uri_segment(); 
 		$list_content = $this->db_model->db_get_data($sqlData);
-		$sqlData['aplicar_limit'] = false;	
+		$sqlData['aplicar_limit'] = null;	
+		//dump_var($sqlData);
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -109,7 +111,7 @@ class listado_precios extends Base_Controller {
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
-									'costo_sin_impuesto'   => $value['costo_sin_impuesto']);				
+									'costo_sin_impuesto' => $value['costo_sin_impuesto']);				
 			}
 			
 			// Plantilla
@@ -157,10 +159,10 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','articulo')
 					,'name' 	=> "lts_articulos"
 					,'event'    => array('event'       => 'onchange',
-	   						 'function'    => 'load_pre_um',
-	   						 'params'      => array('this.value'),
-	   						 'params_type' => array(0)
-						)
+				   						 'function'    => 'load_pre_um',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
 					,'class' 	=> "requerido"
 				);
 		$lts_articulos  = dropdown_tpl($dropArray);
@@ -189,10 +191,10 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
 					,'event'    => array('event'       => 'onchange',
-	   						 'function'    => 'load_pre_emb',
-	   						 'params'      => array('this.value'),
-	   						 'params_type' => array(0)
-						)
+				   						 'function'    => 'load_pre_emb',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
 					,'class' 	=> "requerido"
 				);
 		$lts_presentaciones  = dropdown_tpl($dropArray4); 
@@ -204,10 +206,10 @@ class listado_precios extends Base_Controller {
 					,'name' 	=> "lts_embalaje"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',
-	   						 'function'    => 'load_emb',
-	   						 'params'      => array('this.value'),
-	   						 'params_type' => array(0)
-						)
+				   						 'function'    => 'load_emb',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
 					,'class' 	=> "requerido"
 				);
 		$lts_embalaje  = dropdown_tpl($dropArray5);
@@ -219,10 +221,10 @@ class listado_precios extends Base_Controller {
 					,'name' 	=> "lts_impuesto"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',
-							   						 'function'    => 'calcular_precio_final',
-							   						 'params'      => array('this.value'),
-							   						 'params_type' => array(0)
-			   										)
+				   						 'function'    => 'calcular_precio_final',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+   									)
 				);		
 
 		$lts_impuesto  = dropdown_tpl($dropArray6);
@@ -231,29 +233,32 @@ class listado_precios extends Base_Controller {
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["upc"] 							 = $this->lang_item("upc");
-		$tab_1["sku"] 							 = $this->lang_item("sku");
-		$tab_1["cantidad_presentacion_embalaje"] = $this->lang_item("cantidad_presentacion_embalaje");
-		$tab_1["cantidad_um_presentacion"]       = $this->lang_item("cantidad_um_presentacion");
-		$tab_1["precio_proveedor"]               = $this->lang_item("precio_proveedor");
-		$tab_1["impuesto_aplica"]              	 = $this->lang_item("impuesto_aplica");
-		$tab_1["impuesto_porcentaje"]            = $this->lang_item("impuesto_porcentaje");
-		$tab_1["articulo"]      				 = $this->lang_item("articulo");
-		$tab_1["proveedores"]                    = $this->lang_item("proveedores");
-		$tab_1["marcas"]                         = $this->lang_item("marcas");
-		$tab_1["presentaciones"]                 = $this->lang_item("presentaciones");
-		$tab_1["embajale"]                       = $this->lang_item("embajale");
-
-		$tab_1['lts_articulos']      = $lts_articulos;
-		$tab_1['lts_proveedores']    = $lts_proveedores;
-		$tab_1['lts_marcas']         = $lts_marcas;
-		$tab_1['lts_presentaciones'] = $lts_presentaciones;
-		$tab_1['lts_embalaje'] 	  	 = $lts_embalaje;
-		$tab_1['lts_impuesto'] 	  	 = $lts_impuesto;
-
-
-        $tab_1['button_save']       = $btn_save;
-        $tab_1['button_reset']      = $btn_reset;
+		$tab_1["upc"] 				      = $this->lang_item("upc");
+		$tab_1["sku"] 				      = $this->lang_item("sku");
+		$tab_1["impuesto_aplica"]         = $this->lang_item("impuesto_aplica");
+		$tab_1["impuesto_porcentaje"]     = $this->lang_item("impuesto_porcentaje");
+		$tab_1["articulo"]      	      = $this->lang_item("articulo");
+		$tab_1["proveedores"]             = $this->lang_item("proveedores");
+		$tab_1["marcas"]                  = $this->lang_item("marcas");
+		$tab_1["presentaciones"]          = $this->lang_item("presentaciones");
+		$tab_1["embajale"]                = $this->lang_item("embajale");
+		$tab_1["embalaje_aplica"]         = $this->lang_item("embalaje_aplica");
+		$tab_1["presentacion_x_embalaje"] = $this->lang_item("presentacion_x_embalaje");
+		$tab_1["um_x_embalaje"]           = $this->lang_item("um_x_embalaje");
+		$tab_1["um_x_presentacion"]       = $this->lang_item("um_x_presentacion");
+		$tab_1["costo_sin_impuesto"]      = $this->lang_item("costo_sin_impuesto");
+		$tab_1["peso_unitario"]           = $this->lang_item("peso_unitario");
+		$tab_1["costo_unitario"]          = $this->lang_item("costo_unitario");
+		$tab_1["costo_x_um"]              = $this->lang_item("costo_x_um");
+		$tab_1["costo_final"]             = $this->lang_item("costo_final");
+		$tab_1['lts_articulos']      	  = $lts_articulos;
+		$tab_1['lts_proveedores']    	  = $lts_proveedores;
+		$tab_1['lts_marcas']         	  = $lts_marcas;
+		$tab_1['lts_presentaciones'] 	  = $lts_presentaciones;
+		$tab_1['lts_embalaje'] 	  	 	  = $lts_embalaje;
+		$tab_1['lts_impuesto'] 	  	 	  = $lts_impuesto;
+        $tab_1['button_save']             = $btn_save;
+        $tab_1['button_reset']            = $btn_reset;
 
         if($this->ajax_post(false)){
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
@@ -262,19 +267,23 @@ class listado_precios extends Base_Controller {
 		}
 	}
 	public function insert(){
+		$numerico = $this->ajax_post('numerico');
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
-		else{			
+		elseif($numerico > 0){
+			$msg = $this->lang_item('msg_campos_numericos',false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}
+		else{						
 	        $upc						= $this->ajax_post('upc');
-	        $sku						= $this->ajax_post('sku');
 	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
 	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
 	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
-	        $impuesto_porcentaje 		= $this->ajax_post('impuesto_porcentaje');
+	        $id_impuesto 				= $this->ajax_post('impuesto_porcentaje');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
 	        $id_marca 					= $this->ajax_post('id_marca');
@@ -288,7 +297,6 @@ class listado_precios extends Base_Controller {
 	        $data_insert  = array(
 								'id_articulo'  				=> $id_articulo,
 								'upc'  						=> $upc,
-								'sku'  						=> $sku,
 								'id_proveedor'  			=> $id_proveedor,
 								'id_marca'  				=> $id_marca,
 								'id_presentacion'  			=> $id_presentacion,
@@ -298,25 +306,42 @@ class listado_precios extends Base_Controller {
 								'um_x_presentacion'  		=> $um_x_presentacion,
 								'costo_sin_impuesto'  		=> $costo_sin_impuesto,
 								'impuesto_aplica'  			=> $impuesto_aplica,
-								'impuesto_porcentaje'  		=> $impuesto_porcentaje,
+								'id_impuesto'  				=> $id_impuesto,
 								'peso_unitario' 			=> $peso_unitario,
 								'costo_unitario'			=> $costo_unitario,
 								'costo_x_um'				=> $costo_x_um,
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
-			$insert = $this->db_model->db_insert_data($data_insert);
-			
-			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			$id = $this->db_model->db_insert_data($data_insert);
+			//dump_var($id);
+			if($id){
+				$año=date('y');
+				$idnum=str_pad($id[0]['id_row'], 7, "0", STR_PAD_LEFT);
+				$articulo=$this->catalogos_model->get_articulo_unico($id_articulo);
+				 
+				$sku= $año.$idnum.$articulo[0]['id_compras_linea'];
+				$data_update_sku = array(
+								'id_compras_articulo_precios'   => $id[0]['id_row'],							
+								'sku'  							=> $sku,
+								'edit_id_usuario'           	=> $this->session->userdata('id_usuario'),
+								'edit_timestamp' 				=>$this->timestamp()
+							);
+				$update = $this->db_model->db_update_sku($data_update_sku);
+				if($update){
+					$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				}
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
 	}
-	public function detalle(){
+	public function detalle(){	
 		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_precios_edit';
 		$id_compras_articulo_precio    = $this->ajax_post('id_compras_articulo_precio');
 		$detalle  		= $this->db_model->get_data_unico($id_compras_articulo_precio);
@@ -331,25 +356,25 @@ class listado_precios extends Base_Controller {
 			$class ='';
 			$checked='';
 		}
-		
+
        	$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_articulos($limit="", $offset="",$filtro="", $aplicar_limit = false )
-					 ,'selected' => $detalle[0]['id_articulo']
+					 ,'selected'=> $detalle[0]['id_articulo']
 					,'value' 	=> 'id_compras_articulo'
 					,'text' 	=> array('clave_corta','articulo')
 					,'name' 	=> "lts_articulos"
 					,'event'    => array('event'       => 'onchange',
-	   						 'function'    => 'load_pre_um',
-	   						 'params'      => array('this.value'),
-	   						 'params_type' => array(0)
-						)
+				   						 'function'    => 'load_pre_um',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
 					,'class' 	=> "requerido"
 				);
 		$lts_articulos  = dropdown_tpl($dropArray);
 
 		$dropArray2 = array(
 					 'data'		=> $this->proveedores_model->db_get_data()
-					 ,'selected' => $detalle[0]['id_proveedor']
+					 ,'selected'=> $detalle[0]['id_proveedor']
 					,'value' 	=> 'id_compras_proveedor'
 					,'text' 	=> array('clave_corta','nombre_comercial')
 					,'name' 	=> "lts_proveedores"
@@ -359,7 +384,7 @@ class listado_precios extends Base_Controller {
 
 		$dropArray3 = array(
 					 'data'		=> $this->catalogos_model->get_marcas($limit="", $offset="", $filtro="", $aplicar_limit = false)
-					 ,'selected' => $detalle[0]['id_marca']
+					 ,'selected'=> $detalle[0]['id_marca']
 					,'value' 	=> 'id_compras_marca'
 					,'text' 	=> array('clave_corta','marca')
 					,'name' 	=> "lts_marcas"
@@ -374,83 +399,89 @@ class listado_precios extends Base_Controller {
 					,'text' 	=> array('clave_corta','presentacion')
 					,'name' 	=> "lts_presentaciones"
 					,'event'    => array('event'       => 'onchange',
-	   						 'function'    => 'load_pre_emb',
-	   						 'params'      => array('this.value'),
-	   						 'params_type' => array(0)
-						)
+				   						 'function'    => 'load_pre_emb',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
 					,'class' 	=> "requerido"
 				);
 		$lts_presentaciones  = dropdown_tpl($dropArray4); 
 		
 		$dropArray5 = array(
 					 'data'		=> $this->catalogos_model->get_embalaje()
-					 ,'selected' => $detalle[0]['id_embalaje']
+					 ,'selected'=> $detalle[0]['id_embalaje']
 					,'value' 	=> 'id_compras_embalaje'
 					,'text' 	=> array('clave_corta','embalaje')
 					,'name' 	=> "lts_embalaje"
 					,'class' 	=> "requerido"
+					,'event'    => array('event'   => 'onchange',
+			   						 'function'    => 'load_emb',
+			   						 'params'      => array('this.value'),
+			   						 'params_type' => array(0)
+								)
+					,'class' 	=> "requerido"
 				);
 		$lts_embalaje  = dropdown_tpl($dropArray5);
+
 		$dropArray6 = array(
-					 'data'		=> $this->impuestos_model->db_get_data()
-					 ,'selected' => $detalle[0]['impuesto_porcentaje']
-					,'value' 	=> 'id_administracion_impuestos'
-					,'text' 	=> array('clave_corta','valor')
-					,'name' 	=> "lts_impuesto"
-					,'class' 	=> $class
+					 'data'		 => $this->impuestos_model->db_get_data()
+					 ,'selected' => $detalle[0]['id_impuesto']
+					 ,'value' 	 => 'id_administracion_impuestos'
+					 ,'text' 	 => array('clave_corta','valor')
+					 ,'name' 	 => "lts_impuesto"
+					 ,'class' 	 => $class
+					 ,'event'    => array('event'       => 'onchange',
+							   						 'function'    => 'calcular_precio_final',
+							   						 'params'      => array('this.value'),
+							   						 'params_type' => array(0)
+			   										)
 				);
 		$lts_impuesto  = dropdown_tpl($dropArray6);
-		 /*$data_insert  = array(
-								'id_articulo'  				=> $id_articulo,
-								'id_proveedor'  			=> $id_proveedor,
-								'id_marca'  				=> $id_marca,
-								'id_presentacion'  			=> $id_presentacion,
-								'id_embalaje'  				=> $id_embalaje,
-								''   => $presentacion_x_embalaje,
-								'um_x_embalaje' 			=> $um_x_embalaje,
-								''  		=> $um_x_presentacion,
-								''  		=> $costo_sin_impuesto,
-								'impuesto_aplica'  			=> $impuesto_aplica,
-								'impuesto_porcentaje'  		=> $impuesto_porcentaje,
-								'peso_unitario' 			=> $peso_unitario,
-								'costo_unitario'			=> $costo_unitario,
-								'costo_x_um'				=> $costo_x_um,
-								'timestamp'            		=> $this->timestamp(),
-								'id_usuario'           		=> $this->session->userdata('id_usuario')
-							);*/
 
-		$data_tab["upc"] 								= $this->lang_item("upc");
-		$data_tab["sku"] 								= $this->lang_item("sku");
-		$data_tab["cantidad_presentacion_embalaje"] 	= $this->lang_item("cantidad_presentacion_embalaje");
-		$data_tab["cantidad_um_presentacion"]      	 	= $this->lang_item("cantidad_um_presentacion");
-		$data_tab["precio_proveedor"]              	 	= $this->lang_item("precio_proveedor");
-		$data_tab["impuesto_aplica"]              		= $this->lang_item("impuesto_aplica");
-		$data_tab["impuesto_porcentaje"]           	 	= $this->lang_item("impuesto_porcentaje");
-		$data_tab["articulo"]      				 		= $this->lang_item("articulo");
-		$data_tab["proveedores"]                    	= $this->lang_item("proveedores");
-		$data_tab["marcas"]                         	= $this->lang_item("marcas");
-		$data_tab["presentaciones"]                 	= $this->lang_item("presentaciones");
-		$data_tab["embajale"]                       	= $this->lang_item("embajale");
-		$data_tab['lbl_fecha_registro']      			= $this->lang_item('lbl_fecha_registro');
-		$data_tab['registro_por']    					= $this->lang_item('lbl_usuario_registro');
-		$data_tab["lbl_ultima_modificacion"] 			= $this->lang_item('lbl_ultima_modificacion', false);
-
-		$data_tab['id_compras_articulo_precios'] 		= $id_compras_articulo_precio;      
-        $data_tab['lts_articulos']        		 		= $lts_articulos;
-		$data_tab['lts_proveedores']           	 		= $lts_proveedores;
-        $data_tab['lts_marcas']           	 			= $lts_marcas;
-        $data_tab['lts_presentaciones']             	= $lts_presentaciones;
-        $data_tab['lts_embalaje']             	 		= $lts_embalaje;
-        $data_tab['lts_impuesto'] 	  				    = $lts_impuesto;
-        $data_tab['val_impuesto_porcentaje']            = $lts_impuesto;
-        $data_tab['val_cantidad_presentacion_embalaje']	= $detalle[0]['presentacion_x_embalaje'];
-        $data_tab['val_cantidad_um_presentacion']       = $detalle[0]['um_x_presentacion'];
-        $data_tab['val_precio_proveedor']             	= $detalle[0]['costo_sin_impuesto'];
-        $data_tab['val_impuesto_aplica']             	= $detalle[0]['impuesto_aplica'];
-        $data_tab['timestamp']             	 			= $detalle[0]['timestamp'];
-        $data_tab['style'] 								= $style;
-        $data_tab['checked'] 							= $checked;
-        $data_tab['button_save']           	 			= $btn_save;
+		$data_tab["upc"] 						 = $this->lang_item("upc");
+		$data_tab["sku"] 						 = $this->lang_item("sku");
+		$data_tab["impuesto_aplica"]             = $this->lang_item("impuesto_aplica");
+		$data_tab["impuesto_porcentaje"]         = $this->lang_item("impuesto_porcentaje");
+		$data_tab["articulo"]      				 = $this->lang_item("articulo");
+		$data_tab["proveedores"]                 = $this->lang_item("proveedores");
+		$data_tab["marcas"]                      = $this->lang_item("marcas");
+		$data_tab["presentaciones"]              = $this->lang_item("presentaciones");
+		$data_tab["embajale"]                    = $this->lang_item("embajale");
+		$data_tab["embalaje_aplica"]             = $this->lang_item("embalaje_aplica");
+		$data_tab["presentacion_x_embalaje"]     = $this->lang_item("presentacion_x_embalaje");
+		$data_tab["um_x_embalaje"]               = $this->lang_item("um_x_embalaje");
+		$data_tab["um_x_presentacion"]           = $this->lang_item("um_x_presentacion");
+		$data_tab["costo_sin_impuesto"]          = $this->lang_item("costo_sin_impuesto");
+		$data_tab["peso_unitario"]               = $this->lang_item("peso_unitario");
+		$data_tab["costo_unitario"]              = $this->lang_item("costo_unitario");
+		$data_tab["costo_x_um"]                  = $this->lang_item("costo_x_um");
+		$data_tab["costo_final"]                 = $this->lang_item("costo_final");
+		$data_tab['lbl_fecha_registro']      	 = $this->lang_item('lbl_fecha_registro');
+		$data_tab['registro_por']    			 = $this->lang_item('lbl_usuario_registro');
+		$data_tab["lbl_ultima_modificacion"] 	 = $this->lang_item('lbl_ultima_modificacion', false);
+		////DATA 
+		$data_tab['id_compras_articulo_precios'] = $id_compras_articulo_precio;      
+        $data_tab['lts_articulos']        		 = $lts_articulos;
+		$data_tab['lts_proveedores']           	 = $lts_proveedores;
+        $data_tab['lts_marcas']           	 	 = $lts_marcas;
+        $data_tab['lts_presentaciones']          = $lts_presentaciones;
+        $data_tab['lts_embalaje']             	 = $lts_embalaje;
+        $data_tab['lts_impuesto'] 	  			 = $lts_impuesto;
+        $data_tab['val_presentacion_x_embalaje'] = $detalle[0]['presentacion_x_embalaje'];
+        $data_tab["val_upc"] 					 = $detalle[0]['upc'];
+		$data_tab["val_sku"] 					 = $detalle[0]['sku'];
+        $data_tab['val_um_x_embalaje']			 = $detalle[0]['um_x_embalaje'];
+        $data_tab['val_um_x_presentacion']		 = $detalle[0]['um_x_presentacion'];
+        $data_tab['val_peso_unitario']			 = $detalle[0]['peso_unitario'];
+        $data_tab['val_costo_unitario']			 = $detalle[0]['costo_unitario'];
+        $data_tab['val_costo_x_um']				 = $detalle[0]['costo_x_um'];
+        $data_tab['va_um_x_presentacion']        = $detalle[0]['um_x_presentacion'];
+        $data_tab['val_costo_sin_impuesto']      = $detalle[0]['costo_sin_impuesto'];
+        $data_tab['val_impuesto_aplica']         = $detalle[0]['impuesto_aplica'];
+        $data_tab['timestamp']             	 	 = $detalle[0]['timestamp'];
+        $data_tab['style'] 						 = $style;
+        $data_tab['checked'] 					 = $checked;
+        $data_tab['button_save']           	 	 = $btn_save;
 
        	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);
        	$data_tab['pre_em']						= $presentacion[0]['clave_corta'];
@@ -458,6 +489,9 @@ class listado_precios extends Base_Controller {
        	$presentacion_um=$this->db_model->get_articulos_um($detalle[0]['id_articulo']);
        	
        	$data_tab['pre_um']						= $presentacion_um[0]['cv_um'];
+       	
+		$embalaje_cl=$this->catalogos_model->get_embalaje_unico($detalle[0]['id_embalaje']);
+		$data_tab['embalaje_cl']		= $embalaje_cl[0]['clave_corta'];
 
         $this->load_database('global_system');
         $this->load->model('users_model');
@@ -489,7 +523,7 @@ class listado_precios extends Base_Controller {
 	        $um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
 	        $precio_proveedor 			= $this->ajax_post('precio_proveedor');
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
-	        $impuesto_porcentaje 		= $this->ajax_post('impuesto_porcentaje');
+	        $id_impuesto 				= $this->ajax_post('impuesto_porcentaje');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
 	        $id_marca 					= $this->ajax_post('id_marca');
@@ -510,15 +544,15 @@ class listado_precios extends Base_Controller {
 								'um_x_presentacion'			  	=> $cant_um_presentacion,
 								'costo_sin_impuesto'  			=> $precio_proveedor,
 								'impuesto_aplica'  				=> $impuesto_aplica,
-								'impuesto_porcentaje'  			=> $impuesto_porcentaje,
+								'id_impuesto'  					=> $id_impuesto,
 								'timestamp'            			=> $this->timestamp(),
 								'id_usuario'           			=> $this->session->userdata('id_usuario')
 								,'edit_timestamp'  	 			=> $this->timestamp()
 								,'edit_id_usuario'   			=> $this->session->userdata('id_usuario')
 							);
-			$insert = $this->db_model->db_update_data($data_update);
+			$update = $this->db_model->db_update_data($data_update);
 
-			if($insert){
+			if($update){
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{
@@ -530,37 +564,27 @@ class listado_precios extends Base_Controller {
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$sqlData = array(
-			 'buscar'      	=> $filtro
+			 'buscar'     => $filtro
 		);
-		$list_content = $this->db_model->db_get_data($sqlData);
+		$list_content = $this->db_model->db_get_data();
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
+				
 				$set_data[] = array(
-									$value['articulo'],
-									$value['upc'],
-									$value['sku'],
-									$value['nombre_comercial'],
-									$value['marca'],
-									$value['presentacion'],
-									$value['precio_proveedor']);
+									$value['marca']
+									);
 			}
 			$set_heading = array(
-									$this->lang_item("articulo"),
-									$this->lang_item("upc"),
-									$this->lang_item("sku"),
-									$this->lang_item("proveedor"),
-									$this->lang_item("marca"),
-									$this->lang_item("presentacion"),
-									$this->lang_item("precio_proveedor"));
+									'test'
+									);
 	
 		}
-
 		$params = array(	'title'   => $this->lang_item("listado"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		
+		//dump_var($params);
 		$this->excel->generate_xlsx($params);
 	}
 	public function load_presentacion_em(){

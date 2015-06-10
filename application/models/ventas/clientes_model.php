@@ -12,7 +12,9 @@ class clientes_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre_cliente LIKE '%$filtro%' OR 
+		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre LIKE '%$filtro%' OR 
+												vc.paterno LIKE '%$filtro%' OR 
+												vc.materno LIKE '%$filtro%' OR 
 												vc.razon_social   LIKE '%$filtro%' OR 
 												vc.clave_corta    LIKE '%$filtro%' OR  
 												vc.rfc            LIKE '%$filtro%' OR 
@@ -22,11 +24,21 @@ class clientes_model extends Base_Model{
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
 						vc.id_ventas_clientes,
-						vc.nombre_cliente,
+						vc.nombre,
+						vc.paterno,
+						vc.materno,
 						vc.razon_social,
 						vc.clave_corta,
 						vc.rfc,
 						vc.telefonos,
+						vc.calle,
+						vc.num_int,
+						vc.num_ext,
+						vc.colonia,
+						vc.municipio,
+						vc.cp,
+						vc.email,
+						vc.timestamp,
 						e.entidad,
 						su.sucursal
 					FROM $tbl[ventas_clientes] vc
@@ -55,16 +67,10 @@ class clientes_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_ventas_clientes !=' => $id_cliente, 'clave_corta = '=> $data['clave_corta']); 
-		$existe = $this->row_exist($tbl['ventas_clientes'], $condicion);
-		if(!$existe){
-			$condicion = "id_ventas_clientes = $id_cliente"; 
-			$data['id_ventas_clientes'] = $id_cliente;
-			$update    = $this->update_item($tbl['ventas_clientes'], $data, 'id_ventas_clientes', $condicion);
-			return $update;
-		}else{
-			return false;
-		}
+		$condicion = "id_ventas_clientes = $id_cliente"; 
+		$data['id_ventas_clientes'] = $id_cliente;
+		$update    = $this->update_item($tbl['ventas_clientes'], $data, 'id_ventas_clientes', $condicion);
+		return $update;
 	}
 	function get_existencia_cliente($clave_corta){
 		// DB Info

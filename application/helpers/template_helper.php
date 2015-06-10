@@ -34,7 +34,6 @@
 							}
 							$onclick  = "onclick='$function($link, $params);'";
 						}
-						//print_debug($action);
 					}else{
 						$onclick  = "onclick='$action($link, $i);'";
 					}

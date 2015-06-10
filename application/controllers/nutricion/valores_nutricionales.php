@@ -264,7 +264,7 @@ class valores_nutricionales extends Base_Controller {
 		{
 			$sqlData = array(
 				'id_compras_articulos' => $this->ajax_post('id_articulo')
-				,'cantidad_sugerida'       => $this->ajax_post('cant_sugerida')
+				,'cantidad_sugerida'   => $this->ajax_post('cant_sugerida')
 				,'peso_bruto'          => $this->ajax_post('p_bruto')
 				,'peso_neto'           => $this->ajax_post('p_neto')
 				,'energia'             => $this->ajax_post('ener')

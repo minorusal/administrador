@@ -49,7 +49,6 @@ class valores_nutricionales_model extends Base_Model{
 
 	/*Actualiza la información en el formuladio de edición de la tabla nutricion_valores_nutricionales*/
 	public function db_update_data($data=array()){
-		//print_debug($data);
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
@@ -59,6 +58,7 @@ class valores_nutricionales_model extends Base_Model{
 			$insert = $this->insert_item($tbl['nutricion_valores_nutricionales'], $data);
 			return $insert;
 		}else{
+			//print_debug($data);
 			$insert = $this->update_item($tbl['nutricion_valores_nutricionales'], $data, 'id_compras_articulos', $condicion);
 			return $insert;
 		}

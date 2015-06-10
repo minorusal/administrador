@@ -250,6 +250,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["peso_unitario"]           = $this->lang_item("peso_unitario");
 		$tab_1["costo_unitario"]          = $this->lang_item("costo_unitario");
 		$tab_1["costo_x_um"]              = $this->lang_item("costo_x_um");
+		$tab_1["desglose_impuesto"]       = $this->lang_item("desglose_impuesto");
 		$tab_1["costo_final"]             = $this->lang_item("costo_final");
 		$tab_1['lts_articulos']      	  = $lts_articulos;
 		$tab_1['lts_proveedores']    	  = $lts_proveedores;
@@ -455,6 +456,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["peso_unitario"]               = $this->lang_item("peso_unitario");
 		$data_tab["costo_unitario"]              = $this->lang_item("costo_unitario");
 		$data_tab["costo_x_um"]                  = $this->lang_item("costo_x_um");
+		$data_tab["desglose_impuesto"]           = $this->lang_item("desglose_impuesto");
 		$data_tab["costo_final"]                 = $this->lang_item("costo_final");
 		$data_tab['lbl_fecha_registro']      	 = $this->lang_item('lbl_fecha_registro');
 		$data_tab['registro_por']    			 = $this->lang_item('lbl_usuario_registro');

@@ -58,7 +58,7 @@
     </p>
     <p>
         <label>{costo_unitario}: (*)</label>        
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="costo_unitario" type="text" name="costo_unitario" data-campo="costo_unitario" class="input-small requerido" readonly/>
+        &nbsp;&nbsp;<span>$</span><input id="costo_unitario" type="text" name="costo_unitario" data-campo="costo_unitario" class="input-small requerido" readonly/>
         <span id="lbl_unitario" style="display:none"></span>
     </p>
     <p>
@@ -77,11 +77,15 @@
         </div>
     </p>
     <p>
-        <label>{desglose_impuesto}:</label>
-        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
+        <span id="desglose">
+            <label>{desglose_impuesto}:</label>
+            &nbsp;&nbsp;<span>$</span>
+            <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
+        </span>
     </p>
     <p>
         <label>{costo_final}:</label>
+        &nbsp;&nbsp;<span>$</span>
         <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/>
     </p>
     <div id="registro_loader"></div>

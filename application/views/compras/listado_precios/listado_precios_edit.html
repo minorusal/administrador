@@ -26,17 +26,17 @@
     </p>
     <p>
         <label>{embalaje_aplica}:</label>
-        <input type="checkbox" id="embalaje_aplica" name="embalaje_aplica" onclick="oculta_embalaje();" checked>
+        <input type="checkbox" id="embalaje_aplica" name="embalaje_aplica" onclick="oculta_embalaje();" {checked_em}>
     </p>
     <p>
-        <div id="embajale">
+        <div id="embajale" {style_em}>
             <label>{embajale} (*)</label>
                 {lts_embalaje}
         </div>
     </p>
     <p>
         <label>{presentacion_x_embalaje}: (*)</label>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();"value="{val_presentacion_x_embalaje}" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="presentacion_x_embalaje" type="text" name="presentacion_x_embalaje" class="input-small requerido" onkeyup="clean_campos();"value="{val_presentacion_x_embalaje}" {readonly}/>
         <span id="pre_em">{pre_em}</span>
     </p>
     <p>
@@ -62,7 +62,8 @@
         <span id="lbl_unitario">{pre_um}</span>
     </p>
     <p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>{costo_unitario}: (*)</label>        
+        &nbsp;&nbsp;<span>$</span>
+        <label>{costo_unitario}: (*)</label>        
         <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}" readonly/>
         <span id="lbl_peso">1 {pre_um}</span>
     </p>
@@ -82,11 +83,15 @@
         </div>
     </p>
     <p>
-        <label>{desglose_impuesto}:</label>
-        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
+        <span id="desglose">
+            <label>{desglose_impuesto}:</label>
+            &nbsp;&nbsp;<span>$</span>
+            <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
+        </span>
     </p>
     <p>
         <label>{costo_final}:</label>
+        &nbsp;&nbsp;<span>$</span>
         <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/>
     </p>
     <p>

@@ -357,7 +357,17 @@ class listado_precios extends Base_Controller {
 			$class ='';
 			$checked='';
 		}
-
+		if($detalle[0]['id_embalaje']==0){
+			$checked_em='';
+			$class_em ='';
+			$style_em='style="display:none"';
+			$readonly='readonly';
+		}else{
+			$checked_em='checked';
+			$class_em ='requerido';
+			$style_em='';
+			$readonly='';
+		}
        	$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_articulos($limit="", $offset="",$filtro="", $aplicar_limit = false )
 					 ,'selected'=> $detalle[0]['id_articulo']
@@ -414,13 +424,12 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_embalaje'
 					,'text' 	=> array('clave_corta','embalaje')
 					,'name' 	=> "lts_embalaje"
-					,'class' 	=> "requerido"
+					,'class' 	=> $class_em
 					,'event'    => array('event'   => 'onchange',
 			   						 'function'    => 'load_emb',
 			   						 'params'      => array('this.value'),
 			   						 'params_type' => array(0)
 								)
-					,'class' 	=> "requerido"
 				);
 		$lts_embalaje  = dropdown_tpl($dropArray5);
 
@@ -483,6 +492,10 @@ class listado_precios extends Base_Controller {
         $data_tab['timestamp']             	 	 = $detalle[0]['timestamp'];
         $data_tab['style'] 						 = $style;
         $data_tab['checked'] 					 = $checked;
+        $data_tab['checked_em'] 				 = $checked_em;
+        $data_tab['style_em'] 				 	 = $style_em;
+        $data_tab['readonly'] 				 	 = $readonly;        
+        
         $data_tab['button_save']           	 	 = $btn_save;
 
        	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);

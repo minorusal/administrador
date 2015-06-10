@@ -53,7 +53,7 @@
     </p>
     <p>
         <label>{costo_sin_impuesto}: (*)</label>
-        &nbsp;&nbsp;<span>$</span>
+        &nbsp;&nbsp;<span>{moneda}</span>
         <input id="costo_sin_impuesto" type="text" name="costo_sin_impuesto" class="input-small requerido" onkeyup="calcula_costos();" value="{val_costo_sin_impuesto}"/>
     </p>
     <p>
@@ -62,14 +62,14 @@
         <span id="lbl_unitario">{pre_um}</span>
     </p>
     <p>
-        &nbsp;&nbsp;<span>$</span>
+        &nbsp;&nbsp;<span>{moneda}</span>
         <label>{costo_unitario}: (*)</label>        
         <input id="costo_unitario" type="text" name="costo_unitario" class="input-small requerido" value="{val_costo_unitario}" readonly/>
         <span id="lbl_peso">1 {pre_um}</span>
     </p>
     <p>
         <label>{costo_x_um}: (*)</label>
-        &nbsp;&nbsp;<span>$</span>
+        &nbsp;&nbsp;<span>{moneda}</span>
         <input id="costo_x_um" type="text" name="costo_x_um" class="input-small requerido" value="{val_costo_x_um}" readonly/>
    </p>
     <p>
@@ -85,13 +85,13 @@
     <p>
         <span id="desglose">
             <label>{desglose_impuesto}:</label>
-            &nbsp;&nbsp;<span>$</span>
+            &nbsp;&nbsp;<span>{moneda}</span>
             <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
         </span>
     </p>
     <p>
         <label>{costo_final}:</label>
-        &nbsp;&nbsp;<span>$</span>
+        &nbsp;&nbsp;<span>{moneda}</span>
         <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/>
     </p>
     <p>

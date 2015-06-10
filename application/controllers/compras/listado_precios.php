@@ -111,7 +111,7 @@ class listado_precios extends Base_Controller {
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
-									'costo_sin_impuesto' => $value['costo_sin_impuesto']);				
+									'costo_sin_impuesto' => $this->session->userdata('moneda').' '.$value['costo_sin_impuesto']);				
 			}
 			
 			// Plantilla
@@ -258,6 +258,7 @@ class listado_precios extends Base_Controller {
 		$tab_1['lts_presentaciones'] 	  = $lts_presentaciones;
 		$tab_1['lts_embalaje'] 	  	 	  = $lts_embalaje;
 		$tab_1['lts_impuesto'] 	  	 	  = $lts_impuesto;
+		$tab_1['moneda'] 	  	 	  	  = $this->session->userdata('moneda');
         $tab_1['button_save']             = $btn_save;
         $tab_1['button_reset']            = $btn_reset;
 
@@ -494,7 +495,8 @@ class listado_precios extends Base_Controller {
         $data_tab['checked'] 					 = $checked;
         $data_tab['checked_em'] 				 = $checked_em;
         $data_tab['style_em'] 				 	 = $style_em;
-        $data_tab['readonly'] 				 	 = $readonly;        
+        $data_tab['readonly'] 				 	 = $readonly;
+        $data_tab['moneda'] 	  	 	  	  		 = $this->session->userdata('moneda');        
         
         $data_tab['button_save']           	 	 = $btn_save;
 

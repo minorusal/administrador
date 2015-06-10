@@ -124,7 +124,7 @@ class listado_precios extends Base_Controller {
 										$this->lang_item("proveedor"),
 										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
-										$this->lang_item("precio_proveedor"));
+										$this->lang_item("costo_sin_impuesto"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);

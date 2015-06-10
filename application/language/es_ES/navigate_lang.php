@@ -4,6 +4,9 @@ $lang['catalogos']              = 'catalogos';
 
 //VALORES NUTRICIONALES
 $lang['valores_nutricionales']    = 'valores nutricionales';
+$lang['recetario']                = 'recetario';
+$lang['conformacion_de_menus']    = 'conformación de menus';
+$lang['programacion_de_menus']    = 'programación de menus';
 
 //MENU DE COMPRAS
 $lang['proveedores']            = 'proveedores';

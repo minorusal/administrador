@@ -379,9 +379,7 @@ class catalogos_model extends Base_Model{
 		//print_debug($limit);
 		//,ca.upc
 		$query = "	SELECT 
-
-						ca.id_compras_articulo	
-
+						ca.id_compras_articulo
 						,ca.articulo
 						,cl.linea
 						,cu.um

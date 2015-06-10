@@ -153,19 +153,6 @@ function update(){
   else{
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
   }
-/*  var upc                       = jQuery('#upc').val();
-  var sku                       = jQuery('#sku').val();
-  var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
-  var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
-  var cant_um_presentacion        = jQuery('#cantidad_um_presentacion').val();
-  var precio_proveedor            = jQuery('#precio_proveedor').val();
-  var id_articulo                 = jQuery("select[name='lts_articulos'] option:selected").val();
-  var id_proveedor                = jQuery("select[name='lts_proveedores'] option:selected").val();
-  var id_marca                    = jQuery("select[name='lts_marcas'] option:selected").val();
-  var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
-  var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
-  var impuesto_porcentaje         = jQuery("select[name='lts_impuesto'] option:selected").val();
-*/
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
   var id_proveedor              = jQuery("select[name='lts_proveedores'] option:selected").val();
@@ -235,12 +222,16 @@ function oculta_embalaje(){
     jQuery('#presentacion_x_embalaje').val("")
     jQuery('#embajale').show('slow');
     jQuery('[name=lts_embalaje]').addClass('requerido');
+    jQuery('#radio_x_embalaje').attr('checked',true)
+    validar_um(1);
     if(jQuery("select[name='lts_embalaje'] option:selected").val()>0){
       jQuery('#embalaje_cl').show('slow');
       jQuery('#pre_um2').show('slow');
       jQuery('#signo2').show('slow');
     }
   }else{
+    validar_um(2);
+    jQuery('#radio_x_presentacion').attr('checked',true)
     jQuery('#presentacion_x_embalaje').attr('readonly',true);
     jQuery('#presentacion_x_embalaje').val(1)
     jQuery('#embajale').hide('slow');

@@ -36,13 +36,13 @@
     </p>
     <p>
         <label>{um_x_embalaje}: (*)</label>
-        <input type="radio" name="um" value="1" onclick="validar_um(this.value);" data-campo="um" checked="checked">
+        <input id="radio_x_embalaje" type="radio" name="um" value="1" onclick="validar_um(this.value);" data-campo="um" checked="checked">
         <input id="um_x_embalaje" type="text" name="um_x_embalaje" data-campo="um_x_embalaje" class="input-small requerido numerico" onkeyup="calcula_um_prsentacion();"/>
         <span id="pre_um2" style="display:none">{pre_um}</span><span id="signo2" style="display:none"> * </span><span id="embalaje_cl" style="display:none">{embalaje_cl}</span>
     </p>
     <p>
         <label>{um_x_presentacion}: (*)</label>
-        <input type="radio" name="um" data-campo="um" value="2" onclick="validar_um(this.value);">
+        <input id="radio_x_presentacion" type="radio" name="um" data-campo="um" value="2" onclick="validar_um(this.value);">
         <input id="um_x_presentacion" data-campo="um_x_presentacion" type="text" name="um_x_presentacion" class="input-small requerido numerico" onkeyup="calcula_um_embalaje();" readonly />
         <span id="pre_um" style="display:none">{pre_um}</span><span id="signo" style="display:none"> * </span><span id="pre_em2" style="display:none">{pre_em}</span>
     </p>
@@ -74,12 +74,12 @@
         </div>
     </p>
     <p>
-        <label>{desglose_impuesto}: (*)</label>
-        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small requerido" readonly/>
+        <label>{desglose_impuesto}:</label>
+        <input id="desglose_impuesto" type="text" name="desglose_impuesto" data-campo="desglose_impuesto" class="input-small" readonly/>
     </p>
     <p>
-        <label>{costo_final}: (*)</label>
-        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small requerido" readonly/>
+        <label>{costo_final}:</label>
+        <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/>
     </p>
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>

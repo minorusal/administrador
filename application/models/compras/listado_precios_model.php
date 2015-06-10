@@ -10,15 +10,15 @@ class listado_precios_model extends Base_Model{
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro!="") ? "AND (a.cantidad_presentacion_embalaje LIKE '$filtro%' OR
-										a.cantidad_um_presentacion 		 LIKE '$filtro%' OR
-										a.upc  	   LIKE '$filtro%' OR
-										a.sku  	   LIKE '$filtro%' OR
-										b.articulo  	   LIKE '$filtro%' OR
-										c.nombre_comercial LIKE '$filtro%' OR
-										d.marca 		   LIKE '$filtro%' OR
-										e.presentacion 	   LIKE '$filtro%' OR
-										f.embalaje 	       LIKE '$filtro%')" : "";
+		$filtro = ($filtro!="") ? "AND (a.presentacion_x_embalaje LIKE '%$filtro%' OR
+										a.um_x_presentacion 	  LIKE '%$filtro%' OR
+										a.upc  	   				  LIKE '%$filtro%' OR
+										a.sku  	   				  LIKE '%$filtro%' OR
+										b.articulo  	   		  LIKE '%$filtro%' OR
+										c.nombre_comercial 		  LIKE '%$filtro%' OR
+										d.marca 		   		  LIKE '%$filtro%' OR
+										e.presentacion 	   		  LIKE '%$filtro%' OR
+										f.embalaje 	       		  LIKE '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		// Query
 		$query="SELECT 

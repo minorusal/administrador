@@ -58,7 +58,7 @@ $route['nutricion/valores_nutricionales']    	= 'nutricion/valores_nutricionales
 /*Familias*/
 $route['nutricion/catalogos/familias']    	            = 'nutricion/familias/index';
 /*ervicios*/
-$route['nutricion/catalogos/servicios']    	            = 'nutricion/servicios/index';
+$route['nutricion/catalogos/tiempos']    	            = 'nutricion/tiempos/index';
 /*COMPRAS*/
 
 /*Listado de precios*/

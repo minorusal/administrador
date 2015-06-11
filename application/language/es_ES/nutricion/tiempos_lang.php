@@ -1,7 +1,7 @@
 <?php
-$lang['servicios']         = 'servicios';
+$lang['tiempos']         = 'tiempos';
 $lang['titulo_submodulo'] = 'catalogos de nutrición';
-$lang['lbl_servicio']      = 'servicio';
+$lang['lbl_tiempo']      = 'tiempo';
 $lang['lbl_clave_corta']  = 'clave corta';
 $lang['lbl_descripcion']  = 'descripción';
 

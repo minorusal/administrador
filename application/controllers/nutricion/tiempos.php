@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class servicios extends Base_Controller{
+class tiempos extends Base_Controller{
 	
 	private $modulo;
 	private $submodulo;
@@ -17,8 +17,8 @@ class servicios extends Base_Controller{
 		parent::__construct();
 		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'catalogos';
-		$this->seccion          = 'servicios';
-		$this->icon 			= 'fa fa-external-link-square'; 
+		$this->seccion          = 'tiempos';
+		$this->icon 			= 'fa fa-clock-o'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -42,15 +42,15 @@ class servicios extends Base_Controller{
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/impuestos/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/impuestos/listado
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -108,11 +108,11 @@ class servicios extends Base_Controller{
 				// Evento de enlace
 				$atrr = array(
 								'href'    => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_servicio'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_tiempo'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_nutricion_servicio'],
-									'servicio'       => tool_tips_tpl($value['servicio'], $this->lang_item("tool_tip"), 'right' , $atrr),
+				$tbl_data[] = array('id'            => $value['id_nutricion_tiempo'],
+									'tiempo'       => tool_tips_tpl($value['tiempo'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
@@ -121,7 +121,7 @@ class servicios extends Base_Controller{
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("servicio"),
+										$this->lang_item("tiempo"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
@@ -154,8 +154,8 @@ class servicios extends Base_Controller{
 	}
 
 	public function detalle(){
-		$id_servicio = $this->ajax_post('id_servicio');
-		$detalle = $this->db_model->get_orden_unico_servicio($id_servicio);
+		$id_tiempo = $this->ajax_post('id_tiempo');
+		$detalle = $this->db_model->get_orden_unico_tiempo($id_tiempo);
 		$seccion = $this->tab3;
 		$tab_detalle = $this->tab3;
 		$sqlData = array(
@@ -165,11 +165,11 @@ class servicios extends Base_Controller{
 			);
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_servicio']             = $id_servicio;
-		$tabData['lbl_servicio']            = $this->lang_item("lbl_servicio");
+		$tabData['id_tiempo']             = $id_tiempo;
+		$tabData['lbl_tiempo']            = $this->lang_item("lbl_tiempo");
 		$tabData['lbl_clave_corta']         = $this->lang_item("lbl_clave_corta");
 		$tabData['lbl_descripcion']         = $this->lang_item("lbl_descripcion");
-		$tabData['txt_servicio']            = $detalle[0]['servicio'];
+		$tabData['txt_tiempo']            = $detalle[0]['tiempo'];
 		$tabData['txt_clave_corta']         = $detalle[0]['clave_corta'];
 		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
@@ -217,8 +217,8 @@ class servicios extends Base_Controller{
 		else
 		{
 			$sqlData = array(
-				 'id_nutricion_servicio' => $this->ajax_post('id_servicio')
-				,'servicio'              => $this->ajax_post('servicio')
+				 'id_nutricion_tiempo' => $this->ajax_post('id_tiempo')
+				,'tiempo'              => $this->ajax_post('tiempo')
 				,'clave_corta'           => $this->ajax_post('clave_corta')
 				,'descripcion'           => $this->ajax_post('descripcion')
 				,'edit_timestamp'        => $this->timestamp()
@@ -258,7 +258,7 @@ class servicios extends Base_Controller{
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tab_1['lbl_servicio']    = $this->lang_item('lbl_servicio');
+		$tab_1['lbl_tiempo']    = $this->lang_item('lbl_tiempo');
 		$tab_1['lbl_clave_corta'] = $this->lang_item('lbl_clave_corta');
 		$tab_1['lbl_descripcion'] = $this->lang_item('lbl_descripcion');
 
@@ -275,7 +275,7 @@ class servicios extends Base_Controller{
 		}
 	}
 
-	public function insert_servicio()
+	public function insert_tiempo()
 	{
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
@@ -286,7 +286,7 @@ class servicios extends Base_Controller{
 		else
 		{
 			$data_insert = array(
-				  'servicio'     => $this->ajax_post('servicio')
+				  'tiempo'     => $this->ajax_post('tiempo')
 				 ,'clave_corta' => $this->ajax_post('clave_corta')
 				 ,'descripcion' => $this->ajax_post('descripcion')
 				 ,'id_usuario'  => $this->session->userdata('id_usuario')
@@ -317,21 +317,21 @@ class servicios extends Base_Controller{
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['servicio'],
+									 $value['tiempo'],
 									 $value['clave_corta'],
 									 $value['descripcion']
 									 );
 			}
 			
 			$set_heading = array(
-									$this->lang_item("lbl_servicio"),
-									$this->lang_item("lbl_servicio"),
+									$this->lang_item("lbl_tiempo"),
+									$this->lang_item("lbl_tiempo"),
 									$this->lang_item("lbl_descripcion")
 									);
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogos Servicios"),
+		$params = array(	'title'   => $this->lang_item("Catálogos tiempos"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

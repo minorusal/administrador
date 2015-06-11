@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class familias extends Base_Controller{
+class servicios extends Base_Controller{
 	
 	private $modulo;
 	private $submodulo;
@@ -17,8 +17,8 @@ class familias extends Base_Controller{
 		parent::__construct();
 		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'catalogos';
-		$this->seccion          = 'familias';
-		$this->icon 			= 'fa fa-sort '; 
+		$this->seccion          = 'servicios';
+		$this->icon 			= 'fa fa-external-link-square'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -108,11 +108,11 @@ class familias extends Base_Controller{
 				// Evento de enlace
 				$atrr = array(
 								'href'    => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_familia'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_servicio'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_nutricion_familia'],
-									'familia'       => tool_tips_tpl($value['familia'], $this->lang_item("tool_tip"), 'right' , $atrr),
+				$tbl_data[] = array('id'            => $value['id_nutricion_servicio'],
+									'servicio'       => tool_tips_tpl($value['servicio'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
@@ -121,7 +121,7 @@ class familias extends Base_Controller{
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("familia"),
+										$this->lang_item("servicio"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
@@ -154,8 +154,8 @@ class familias extends Base_Controller{
 	}
 
 	public function detalle(){
-		$id_familia = $this->ajax_post('id_familia');
-		$detalle = $this->db_model->get_orden_unico_familia($id_familia);
+		$id_servicio = $this->ajax_post('id_servicio');
+		$detalle = $this->db_model->get_orden_unico_servicio($id_servicio);
 		$seccion = $this->tab3;
 		$tab_detalle = $this->tab3;
 		$sqlData = array(
@@ -165,11 +165,11 @@ class familias extends Base_Controller{
 			);
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_familia']              = $id_familia;
-		$tabData['lbl_familia']             = $this->lang_item("lbl_familia");
+		$tabData['id_servicio']             = $id_servicio;
+		$tabData['lbl_servicio']            = $this->lang_item("lbl_servicio");
 		$tabData['lbl_clave_corta']         = $this->lang_item("lbl_clave_corta");
 		$tabData['lbl_descripcion']         = $this->lang_item("lbl_descripcion");
-		$tabData['txt_familia']             = $detalle[0]['familia'];
+		$tabData['txt_servicio']            = $detalle[0]['servicio'];
 		$tabData['txt_clave_corta']         = $detalle[0]['clave_corta'];
 		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
@@ -217,12 +217,12 @@ class familias extends Base_Controller{
 		else
 		{
 			$sqlData = array(
-				 'id_nutricion_familia' => $this->ajax_post('id_familia')
-				,'familia' => $this->ajax_post('familia')
-				,'clave_corta' => $this->ajax_post('clave_corta')
-				,'descripcion' => $this->ajax_post('descripcion')
-				,'edit_timestamp' => $this->timestamp()
-				,'edit_id_usuario' => $this->session->userdata('id_usuario')
+				 'id_nutricion_servicio' => $this->ajax_post('id_servicio')
+				,'servicio'              => $this->ajax_post('servicio')
+				,'clave_corta'           => $this->ajax_post('clave_corta')
+				,'descripcion'           => $this->ajax_post('descripcion')
+				,'edit_timestamp'        => $this->timestamp()
+				,'edit_id_usuario'       => $this->session->userdata('id_usuario')
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert)
@@ -258,7 +258,7 @@ class familias extends Base_Controller{
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tab_1['lbl_familia'] = $this->lang_item('lbl_familia');
+		$tab_1['lbl_servicio']    = $this->lang_item('lbl_servicio');
 		$tab_1['lbl_clave_corta'] = $this->lang_item('lbl_clave_corta');
 		$tab_1['lbl_descripcion'] = $this->lang_item('lbl_descripcion');
 
@@ -275,7 +275,7 @@ class familias extends Base_Controller{
 		}
 	}
 
-	public function insert_familia()
+	public function insert_servicio()
 	{
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
@@ -286,7 +286,7 @@ class familias extends Base_Controller{
 		else
 		{
 			$data_insert = array(
-				  'familia'     => $this->ajax_post('familia')
+				  'servicio'     => $this->ajax_post('servicio')
 				 ,'clave_corta' => $this->ajax_post('clave_corta')
 				 ,'descripcion' => $this->ajax_post('descripcion')
 				 ,'id_usuario'  => $this->session->userdata('id_usuario')
@@ -317,21 +317,21 @@ class familias extends Base_Controller{
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['familia'],
+									 $value['servicio'],
 									 $value['clave_corta'],
 									 $value['descripcion']
 									 );
 			}
 			
 			$set_heading = array(
-									$this->lang_item("lbl_familia"),
-									$this->lang_item("lbl_clave_corta"),
+									$this->lang_item("lbl_servicio"),
+									$this->lang_item("lbl_servicio"),
 									$this->lang_item("lbl_descripcion")
 									);
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogos Familias"),
+		$params = array(	'title'   => $this->lang_item("Catálogos Servicios"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

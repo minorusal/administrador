@@ -33,7 +33,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"nutricion/familias/listado",
+		url: path()+"nutricion/servicios/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -49,13 +49,13 @@ function buscar(){
 	});
 }
 
-function detalle(id_familia){
+function detalle(id_servicio){
 	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
-        url: path()+"nutricion/familias/detalle",
+        url: path()+"nutricion/servicios/detalle",
         dataType: 'json',
-        data: {id_familia : id_familia},
+        data: {id_servicio : id_servicio},
         success: function(data){
         	jQuery('#a-0').html('');
         	jQuery('#a-2').html(data);
@@ -72,14 +72,14 @@ function actualizar(){
   var objData = formData('#formulario');
   
   objData['incomplete']   = values_requeridos();
-  objData['id_familia']   = jQuery('#id_familia').val();
-  objData['familia']      = jQuery('#txt_familia').val();
+  objData['id_servicio']   = jQuery('#id_servicio').val();
+  objData['servicio']      = jQuery('#txt_servicio').val();
   objData['clave_corta']  = jQuery('#txt_clave_corta').val();
   objData['descripcion']  = jQuery('#txt_descripcion').val();
 
   jQuery.ajax({
     type:"POST",
-    url: path()+"nutricion/familias/actualizar",
+    url: path()+"nutricion/servicios/actualizar",
     dataType: "json",
     data: objData,
     beforeSend : function(){
@@ -94,19 +94,19 @@ function actualizar(){
 }
 
 function agregar(){
-  var btn          = jQuery("button[name='save_familia']");
+  var btn          = jQuery("button[name='save_servicio']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
 
   var objData = formData('#formulario');
   objData['incomplete']   = values_requeridos();
-  objData['id_familia']   = jQuery('#id_familia').val();
-  objData['familia']      = jQuery('#txt_familia').val();
+  objData['id_servicio']   = jQuery('#id_servicio').val();
+  objData['servicio']      = jQuery('#txt_servicio').val();
   objData['clave_corta']  = jQuery('#txt_clave_corta').val();
   objData['descripcion']  = jQuery('#txt_descripcion').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"nutricion/familias/insert_familia",
+    url: path()+"nutricion/servicios/insert_servicio",
     dataType: "json",
     data: objData,
     beforeSend : function(){

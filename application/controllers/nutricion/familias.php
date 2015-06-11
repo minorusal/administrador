@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class areas extends Base_Controller
-{
+class familias extends Base_Controller{
+	
 	private $modulo;
 	private $submodulo;
 	private $seccion;
@@ -15,11 +15,11 @@ class areas extends Base_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->modulo 			= 'administracion';
+		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'catalogos';
-		$this->seccion          = 'areas';
-		$this->icon 			= 'iconfa-fire'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/areas
+		$this->seccion          = 'familias';
+		$this->icon 			= 'fa fa-sort '; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -48,8 +48,8 @@ class areas extends Base_Controller
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/areas/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/areas/listado
+										 $path.$tab_1             #administracion/impuestos/agregar
+										,$path.$tab_2.'/'.$pagina #administracion/impuestos/listado
 										,$tab_3                   #detalle
 								); 
 		// Accion de tabs
@@ -60,7 +60,7 @@ class areas extends Base_Controller
 								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
+		
 		return $config_tab;
 	}
 	private function uri_view_principal()
@@ -77,8 +77,7 @@ class areas extends Base_Controller
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
@@ -91,14 +90,14 @@ class areas extends Base_Controller
 		$uri_view 		= $this->modulo.$seccion;
 		$url_link 		= $this->path.'listado';
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$sqlData = array(
+		$sqlData        = array(
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 		);
 		$uri_segment  = $this->uri_segment(); 
 		$total_rows	  = count($this->db_model->db_get_data($sqlData));
-		$sqlData['aplicar_limit'] = true;
+		$sqlData['aplicar_limit'] = false;
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
@@ -108,12 +107,12 @@ class areas extends Base_Controller
 			{
 				// Evento de enlace
 				$atrr = array(
-								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_administracion_areas'].')'
+								'href'    => '#',
+							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_familia'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_administracion_areas'],
-									'area'      => tool_tips_tpl($value['area'], $this->lang_item("tool_tip"), 'right' , $atrr),
+				$tbl_data[] = array('id'            => $value['id_nutricion_familia'],
+									'familia'       => tool_tips_tpl($value['familia'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
 									'descripcion'   => $value['descripcion']
 									);
@@ -122,13 +121,13 @@ class areas extends Base_Controller
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("area"),
+										$this->lang_item("familia"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
-			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
@@ -154,26 +153,29 @@ class areas extends Base_Controller
 		}
 	}
 
-	public function detalle()
-	{
-		$id_area = $this->ajax_post('id_area');
-		$detalle = $this->db_model->get_orden_unico_area($id_area);
+	public function detalle(){
+		$id_familia = $this->ajax_post('id_familia');
+		$detalle = $this->db_model->get_orden_unico_familia($id_familia);
 		$seccion = $this->tab3;
 		$tab_detalle = $this->tab3;
-		
+		$sqlData = array(
+			 'buscar' => ''
+			,'offset' => 0
+			,'limit' => 0
+			);
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_area'] = $id_area;
-		$tabData['nombre_area'] = $this->lang_item("nombre_area");
-		$tabData['cvl_corta'] = $this->lang_item("clave_corta");
-		$tabData['desc'] = $this->lang_item("descripcion");
-		$tabData['area'] = $detalle[0]['area'];
-		$tabData['clave_corta'] = $detalle[0]['clave_corta'];
-		$tabData['descripcion'] = $detalle[0]['descripcion'];
-		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
-        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro');
-		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
+		$tabData['id_familia']              = $id_familia;
+		$tabData['lbl_familia']             = $this->lang_item("lbl_familia");
+		$tabData['lbl_clave_corta']         = $this->lang_item("lbl_clave_corta");
+		$tabData['lbl_descripcion']         = $this->lang_item("lbl_descripcion");
+		$tabData['txt_familia']             = $detalle[0]['familia'];
+		$tabData['txt_clave_corta']         = $detalle[0]['clave_corta'];
+		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
 
 		$this->load_database('global_system');
         $this->load->model('users_model');
@@ -215,8 +217,8 @@ class areas extends Base_Controller
 		else
 		{
 			$sqlData = array(
-				'id_administracion_areas' => $this->ajax_post('id_area')
-				,'area' => $this->ajax_post('area')
+				 'id_nutricion_familia' => $this->ajax_post('id_familia')
+				,'familia' => $this->ajax_post('familia')
 				,'clave_corta' => $this->ajax_post('clave_corta')
 				,'descripcion' => $this->ajax_post('descripcion')
 				,'edit_timestamp' => $this->timestamp()
@@ -256,10 +258,9 @@ class areas extends Base_Controller
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tab_1['nombre_area'] = $this->lang_item("nombre_area");
-		$tab_1['area'] = $this->lang_item('area');
-		$tab_1['cvl_corta'] = $this->lang_item('clave_corta');
-		$tab_1['desc'] = $this->lang_item('descripcion');
+		$tab_1['lbl_familia'] = $this->lang_item('lbl_familia');
+		$tab_1['lbl_clave_corta'] = $this->lang_item('lbl_clave_corta');
+		$tab_1['lbl_descripcion'] = $this->lang_item('lbl_descripcion');
 
 		$tab_1['button_save'] = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
@@ -274,7 +275,7 @@ class areas extends Base_Controller
 		}
 	}
 
-	public function insert_area()
+	public function insert_familia()
 	{
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
@@ -284,15 +285,12 @@ class areas extends Base_Controller
 		}
 		else
 		{
-			$area = $this->ajax_post('area');
-			$clave_corta = $this->ajax_post('clave_corta');
-			$descripcion = $this->ajax_post('descripcion');
 			$data_insert = array(
-				  'area' => $area
-				 ,'clave_corta' => $clave_corta
-				 ,'descripcion' => $descripcion
-				 ,'id_usuario' => $this->session->userdata('id_usuario')
-				 ,'timestamp' => $this->timestamp()
+				  'familia'     => $this->ajax_post('familia')
+				 ,'clave_corta' => $this->ajax_post('clave_corta')
+				 ,'descripcion' => $this->ajax_post('descripcion')
+				 ,'id_usuario'  => $this->session->userdata('id_usuario')
+				 ,'timestamp'   => $this->timestamp()
 				);
 
 			$insert = $this->db_model->db_insert_data($data_insert);
@@ -307,39 +305,4 @@ class areas extends Base_Controller
 		}
 	}
 
-	public function export_xlsx($offset=0){
-		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
-		$limit 		 = $this->limit_max;
-		$sqlData     = array(
-			 'buscar'      	=> $filtro
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
-		);
-		$lts_content = $this->db_model->db_get_data($sqlData);
-		if(count($lts_content)>0){
-			foreach ($lts_content as $value) {
-				$set_data[] = array(
-									 $value['area'],
-									 $value['clave_corta'],
-									 $value['descripcion']
-									 );
-			}
-			
-			$set_heading = array(
-									$this->lang_item("area"),
-									$this->lang_item("clave_corta"),
-									$this->lang_item("descripcion")
-									);
-	
-		}
-
-		$params = array(	'title'   => $this->lang_item("Catálogos Areas"),
-							'items'   => $set_data,
-							'headers' => $set_heading
-						);
-		
-		$this->excel->generate_xlsx($params);
-	}
 }
-
-//72aa05e0d158b2884d4fdcdcc9035d70

@@ -25,6 +25,7 @@ function buscar(){
 }
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
+	jQuery('#ui-id-3').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
 	//var fecha1 = "jQuery('#orden_fecha').datepicker();"; 
@@ -93,13 +94,15 @@ function actualizar(){
 			}
 		})
 }
-function eliminar(){	
+function eliminar(id){	
+		id = (!id)?false:id;
 		jQuery('#mensajes_update').hide();		
 		var btn = jQuery("button[name='eliminar']");
 		btn.attr('disabled','disabled');
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
-  		//objData['incomplete'] = values_requeridos();
+  		objData['id_compras_orden'] = (!objData['id_compras_orden'])?id:objData['id_compras_orden'];
+  		objData['msj_grid'] = (id)?1:0;
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/ordenes/eliminar",
@@ -109,13 +112,18 @@ function eliminar(){
 				imgLoader("#update_loader");
 			},
 			success : function(data){
-				//btn.removeAttr('disabled');
-				// if(data.id==1){	}
-				jQuery("#update_loader").html('');
-			    jQuery("#mensajes_update").html(data.contenido).show('slow');
+				if(data.msj_grid==1){
+			    	jQuery("#mensajes_grid").html(data.contenido).show('slow');
+			    	// location.reload();
+				}else{
+					jQuery("#update_loader").html('');				
+				    jQuery("#mensajes_update").html(data.contenido).show('slow');
+				}
+
 			}
 		})
 }
+
 function insert(){		
 	var btn   = jQuery("button[name='save']");
 	//btn.attr('disabled','disabled');
@@ -163,6 +171,26 @@ function show_direccion(id_sucursal){
         data: {id_sucursal : id_sucursal},
         success: function(data){
           jQuery('#entrega_direccion').html(data);
+        }
+    });
+}
+
+function articulos(id_compras_orden){	
+	var functions = [];
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/ordenes/articulos",
+        dataType: 'json',
+        data: {id_compras_orden : id_compras_orden},
+        success: function(data){
+        	jQuery('#a-0').html('');
+        	//var chosen = 'jQuery(".chzn-select").chosen();';
+        	//var timepiker='jQuery(".fecha").datepicker();';
+        	functions.push('jQuery(".chzn-select").chosen();');
+          	functions.push('calendar_dual_detalle("orden_fecha","entrega_fecha")');
+        	jQuery('#a-3').html(data+include_script(functions));
+        	jQuery('#ui-id-3').show('slow');
+        	jQuery('#ui-id-3').click();
         }
     });
 }

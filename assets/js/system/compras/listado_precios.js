@@ -62,7 +62,7 @@ function agregar(){
   }
 
   if(!jQuery('#embalaje_aplica').is(':checked') ){
-    id_embalaje = 1;
+    id_embalaje = 0;
   }
   else{
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
@@ -148,24 +148,11 @@ function update(){
     impuesto_aplica = 0;    
   }
   if(!jQuery('#embalaje_aplica').is(':checked') ){
-    id_embalaje = 1;
+    id_embalaje = 0;
   }
   else{
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
   }
-/*  var upc                       = jQuery('#upc').val();
-  var sku                       = jQuery('#sku').val();
-  var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
-  var cant_presentacion_embalaje  = jQuery('#cantidad_presentacion_embalaje').val();
-  var cant_um_presentacion        = jQuery('#cantidad_um_presentacion').val();
-  var precio_proveedor            = jQuery('#precio_proveedor').val();
-  var id_articulo                 = jQuery("select[name='lts_articulos'] option:selected").val();
-  var id_proveedor                = jQuery("select[name='lts_proveedores'] option:selected").val();
-  var id_marca                    = jQuery("select[name='lts_marcas'] option:selected").val();
-  var id_presentacion             = jQuery("select[name='lts_presentaciones'] option:selected").val();
-  var id_embalaje                 = jQuery("select[name='lts_embalaje'] option:selected").val();
-  var impuesto_porcentaje         = jQuery("select[name='lts_impuesto'] option:selected").val();
-*/
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
   var id_proveedor              = jQuery("select[name='lts_proveedores'] option:selected").val();
@@ -221,9 +208,12 @@ function oculta_impuesto(){
   if(jQuery('#impuesto_aplica').is(':checked') ){
     jQuery('#impuesto').show('slow');
     jQuery('[name=lts_impuesto]').addClass('requerido');
+    jQuery('#desglose').show('slow');    
     calcular_precio_final();
   }else{
     var costo_final = jQuery('#costo_sin_impuesto').val();
+    jQuery('#desglose_impuesto').val('');
+    jQuery('#desglose').hide('slow');    
     jQuery('#costo_final').val(costo_final);
     jQuery('#impuesto').hide('slow');
     jQuery('[name=lts_impuesto]').removeClass('requerido');
@@ -232,15 +222,21 @@ function oculta_impuesto(){
 function oculta_embalaje(){
   if(jQuery('#embalaje_aplica').is(':checked') ){
     jQuery('#presentacion_x_embalaje').attr('readonly', false);
+    jQuery('#radio_x_embalaje').attr('disabled', false);
     jQuery('#presentacion_x_embalaje').val("")
     jQuery('#embajale').show('slow');
     jQuery('[name=lts_embalaje]').addClass('requerido');
+    jQuery('#radio_x_embalaje').attr('checked',true)
+    validar_um(1);
     if(jQuery("select[name='lts_embalaje'] option:selected").val()>0){
       jQuery('#embalaje_cl').show('slow');
       jQuery('#pre_um2').show('slow');
       jQuery('#signo2').show('slow');
     }
   }else{
+    validar_um(2);
+    jQuery('#radio_x_embalaje').attr('disabled', true);
+    jQuery('#radio_x_presentacion').attr('checked',true)
     jQuery('#presentacion_x_embalaje').attr('readonly',true);
     jQuery('#presentacion_x_embalaje').val(1)
     jQuery('#embajale').hide('slow');
@@ -284,6 +280,10 @@ function load_pre_um(id_articulo){
           jQuery('#pre_um').html(data);
           jQuery('#pre_um2').show('slow');
           jQuery('#pre_um2').html(data);
+          jQuery('#lbl_peso').show('slow');
+          jQuery('#lbl_peso').html(data);
+          jQuery('#lbl_unitario').show('slow');
+          jQuery('#lbl_unitario').html('1 '+data);
         }
     });
 }
@@ -352,9 +352,10 @@ function calcula_costos(){
 }
 function calcular_precio_final(){
   var impuesto  = jQuery("select[name='lts_impuesto'] option:selected").text();
+
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();  
   var valor=impuesto.split("-");
-  var desglose_impuesto = (costo_sin_impuesto*valor[1])/100;
+  var desglose_impuesto = (costo_sin_impuesto*parseFloat(valor[1]))/100;
   var resultado = parseFloat(costo_sin_impuesto)+parseFloat(desglose_impuesto);
   if(costo_sin_impuesto==""){
       costo_final="";

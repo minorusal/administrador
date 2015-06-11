@@ -22,6 +22,7 @@ class users_model extends Base_Model{
 						,Pa.pais
 						,Pa.dominio
 						,Pa.avatar as avatar_pais
+						,Pa.moneda
 						,E.id_empresa
 						,E.empresa
 						,S.id_sucursal
@@ -189,6 +190,7 @@ class users_model extends Base_Model{
 						,Pa.pais
 						,Pa.dominio
 						,Pa.avatar as avatar_pais
+						,Pa.moneda
 						,E.id_empresa
 						,E.empresa
 						,S.id_sucursal

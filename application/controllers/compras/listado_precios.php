@@ -595,15 +595,15 @@ class listado_precios extends Base_Controller {
 									$value['nombre_comercial'],
 									$value['marca'],
 									$value['presentacion'],
-									$value['presentacion_x_embalaje'],
-									$value['costo_sin_impuesto'],
-									$value['um_x_embalaje'],
-									$value['um_x_presentacion'],
-									$value['peso_unitario'],
-									$value['costo_unitario'],
-									$value['costo_x_um'],
+									$value['presentacion_x_embalaje'].' '.$value['cl_presentacion'],
+									$this->session->userdata('moneda').' '.$value['costo_sin_impuesto'],
+									$value['um_x_embalaje'].' '.$value['cl_um'].'*'.$value['cl_embalaje'],
+									$value['um_x_presentacion'].' '.$value['cl_um'].'*'.$value['cl_presentacion'],
+									$value['peso_unitario'].' '.$value['cl_um'],
+									$this->session->userdata('moneda').' '.$value['costo_unitario'].' 1'.$value['cl_um'],
+									$this->session->userdata('moneda').' '.$value['costo_x_um'],
 									$value['timestamp'],
-									$value['impuesto']);
+									$this->session->userdata('moneda').' '.$value['impuesto']);
 			}
 			$set_heading = array(
 									$this->lang_item("id"),

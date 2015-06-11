@@ -222,6 +222,7 @@ function oculta_impuesto(){
 function oculta_embalaje(){
   if(jQuery('#embalaje_aplica').is(':checked') ){
     jQuery('#presentacion_x_embalaje').attr('readonly', false);
+    jQuery('#radio_x_embalaje').attr('disabled', false);
     jQuery('#presentacion_x_embalaje').val("")
     jQuery('#embajale').show('slow');
     jQuery('[name=lts_embalaje]').addClass('requerido');
@@ -234,6 +235,7 @@ function oculta_embalaje(){
     }
   }else{
     validar_um(2);
+    jQuery('#radio_x_embalaje').attr('disabled', true);
     jQuery('#radio_x_presentacion').attr('checked',true)
     jQuery('#presentacion_x_embalaje').attr('readonly',true);
     jQuery('#presentacion_x_embalaje').val(1)

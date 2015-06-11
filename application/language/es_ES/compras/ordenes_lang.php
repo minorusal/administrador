@@ -10,6 +10,7 @@ $lang['id'] 				= "ID";
 $lang['proveedor'] 			= "Proveedor";
 $lang['descripcion'] 		= "Descripción";
 $lang['sucursal'] 			= "Sucursal";
+$lang['acciones'] 			= "Acciones";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";
@@ -23,4 +24,5 @@ $lang['observaciones'] 	    = "Observaciones";
 $lang['creditos'] 	    	= "Creditos";
 $lang['forma_pago'] 	    = "Forma de pago";
 $lang['orden_tipo'] 	    = "Tipo de orden";
+$lang['agregar_articulos']  = "Agregar Artículos";
 ?>

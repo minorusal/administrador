@@ -111,7 +111,7 @@ class listado_precios extends Base_Controller {
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
-									'costo_sin_impuesto' => $value['costo_sin_impuesto']);				
+									'costo_sin_impuesto' => $this->session->userdata('moneda').' '.$value['costo_sin_impuesto']);				
 			}
 			
 			// Plantilla
@@ -124,7 +124,7 @@ class listado_precios extends Base_Controller {
 										$this->lang_item("proveedor"),
 										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
-										$this->lang_item("precio_proveedor"));
+										$this->lang_item("costo_sin_impuesto"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -258,6 +258,7 @@ class listado_precios extends Base_Controller {
 		$tab_1['lts_presentaciones'] 	  = $lts_presentaciones;
 		$tab_1['lts_embalaje'] 	  	 	  = $lts_embalaje;
 		$tab_1['lts_impuesto'] 	  	 	  = $lts_impuesto;
+		$tab_1['moneda'] 	  	 	  	  = $this->session->userdata('moneda');
         $tab_1['button_save']             = $btn_save;
         $tab_1['button_reset']            = $btn_reset;
 
@@ -357,7 +358,17 @@ class listado_precios extends Base_Controller {
 			$class ='';
 			$checked='';
 		}
-
+		if($detalle[0]['id_embalaje']==0){
+			$checked_em='';
+			$class_em ='';
+			$style_em='style="display:none"';
+			$readonly='readonly';
+		}else{
+			$checked_em='checked';
+			$class_em ='requerido';
+			$style_em='';
+			$readonly='';
+		}
        	$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_articulos($limit="", $offset="",$filtro="", $aplicar_limit = false )
 					 ,'selected'=> $detalle[0]['id_articulo']
@@ -414,13 +425,12 @@ class listado_precios extends Base_Controller {
 					,'value' 	=> 'id_compras_embalaje'
 					,'text' 	=> array('clave_corta','embalaje')
 					,'name' 	=> "lts_embalaje"
-					,'class' 	=> "requerido"
+					,'class' 	=> $class_em
 					,'event'    => array('event'   => 'onchange',
 			   						 'function'    => 'load_emb',
 			   						 'params'      => array('this.value'),
 			   						 'params_type' => array(0)
 								)
-					,'class' 	=> "requerido"
 				);
 		$lts_embalaje  = dropdown_tpl($dropArray5);
 
@@ -483,6 +493,11 @@ class listado_precios extends Base_Controller {
         $data_tab['timestamp']             	 	 = $detalle[0]['timestamp'];
         $data_tab['style'] 						 = $style;
         $data_tab['checked'] 					 = $checked;
+        $data_tab['checked_em'] 				 = $checked_em;
+        $data_tab['style_em'] 				 	 = $style_em;
+        $data_tab['readonly'] 				 	 = $readonly;
+        $data_tab['moneda'] 	  	 	  	  		 = $this->session->userdata('moneda');        
+        
         $data_tab['button_save']           	 	 = $btn_save;
 
        	$presentacion=$this->catalogos_model->get_presentacion_unico($detalle[0]['id_presentacion']);
@@ -581,14 +596,19 @@ class listado_precios extends Base_Controller {
 									$value['marca'],
 									$value['presentacion'],
 									$value['presentacion_x_embalaje'],
-									$value['costo_sin_impuesto'],
+									$value['cl_presentacion'],
+									$this->session->userdata('moneda').' '.$value['costo_sin_impuesto'],
 									$value['um_x_embalaje'],
+									$value['cl_um'].'*'.$value['cl_embalaje'],
 									$value['um_x_presentacion'],
+									$value['cl_um'].'*'.$value['cl_presentacion'],
 									$value['peso_unitario'],
-									$value['costo_unitario'],
-									$value['costo_x_um'],
+									$value['cl_um'],
+									$this->session->userdata('moneda').' '.$value['costo_unitario'],
+									' 1'.$value['cl_um'],
+									$this->session->userdata('moneda').' '.$value['costo_x_um'],
 									$value['timestamp'],
-									$value['impuesto']);
+									$this->session->userdata('moneda').' '.$value['impuesto']);
 			}
 			$set_heading = array(
 									$this->lang_item("id"),
@@ -599,11 +619,16 @@ class listado_precios extends Base_Controller {
 									$this->lang_item("marca"),
 									$this->lang_item("presentacion"),
 									$this->lang_item("presentacion_x_embalaje"),
+									$this->lang_item("presentacion_x_embalaje_tipo"),
 									$this->lang_item("costo_sin_impuesto"),
 									$this->lang_item("um_x_embalaje"),
+									$this->lang_item("um_x_embalaje_tipo"),
 									$this->lang_item("um_x_presentacion"),
+									$this->lang_item("um_x_presentacion_tipo"),
 									$this->lang_item("peso_unitario"),
+									$this->lang_item("peso_unitario_tipo"),
 									$this->lang_item("costo_unitario"),
+									$this->lang_item("costo_unitario_tipo"),
 									$this->lang_item("costo_x_um"),
 									$this->lang_item("fecha_registro"),
 									$this->lang_item("impuesto"));

@@ -4,7 +4,7 @@
 	$lang['lbl_ultima_modificacion']   = 'Ultima modificacion';
 	$lang['lbl_sin_modificacion']      = 'Sin moficiaciones desde su creacion';
 	$lang['val_ultima_modificacion']   = 'Realizada el %s por %s';
-
+// Días y meses
 	$lang['lunes']      = 'Lunes';
 	$lang['martes']     = 'Martes';
 	$lang['miercoles']  = 'Miércoles';
@@ -27,7 +27,7 @@
 	$lang['diciembre']  = 'Diciembre';
 
 
-
+// Mensajes
 	$lang['msg_searh_fail']          		   = '<strong>Atencion!</strong><br>No se encontraron coincidencias.';
 	$lang['msg_query_null']          		   = '<strong>Atencion!</strong><br>No se encontraron registros.';
 	$lang['msg_insert_success']      		   = '<strong>Exito!</strong><br>El registro se dio de alta correctamente';
@@ -40,14 +40,14 @@
 	$lang['msg_err_clv']             		   = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
 	$lang['msg_insert_orden_success']      = '<strong>Exito!</strong><br>El registro se dio de alta correctamente. Con el numero de orden %s';
-
+// Botones
 	$lang['btn_xlsx']     = 'Generar Excel';
 	$lang['btn_import_xlsx']     = 'Importar Excel';
 	$lang['btn_guardar']  = 'guardar cambios';
 	$lang['btn_eliminar']  = 'Eliminar registro';
 	$lang['btn_limpiar']  = 'limpiar';
 	$lang['btn_search']   = 'buscar';
-
+// Paginador
 	$lang['pag_first_link'] = '&laquo; Primero';
 	$lang['pag_next_link']  = 'Siguiente &raquo;';
 	$lang['pag_prev_link']  = '&laquo; Anterior';
@@ -57,15 +57,23 @@
 	$lang['pag_resultado']  = 'Resultado ';
 	$lang['pag_de']         = ' de ';
 
+// Tooltip
 	$lang['tool_tip']       = 'Ver Detalle';
-
+// Etiquetas
 	$lang['fecha_registro']  = 'Fecha de Registro';
 	$lang['registro_por']    = 'Registrado por';
-
-
 
 	$lang['lbl_fecha_registro']  = 'Fecha de Registro';
 	$lang['lbl_usuario_registro'] = 'Registrado por';
 
 	$lang['catalogo']        = 'Catalogo de ';
+
+// Acciones
+	$lang['eliminar']		= 'Eliminar';
+	$lang['editar']			= 'Editar';
+	$lang['agregar']		= 'Agregar';
+	$lang['habilitar']		= 'Habilitar';
+	$lang['deshabilitar']	= 'Deshabilitar';
+	$lang['imprimir']		= 'Imprimir';
+	$lang['ver']			= 'Ver';
 ?>

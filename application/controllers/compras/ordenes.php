@@ -33,6 +33,7 @@ class ordenes extends Base_Controller {
 									 'agregar'
 									,'listado'
 									,'detalle'
+									,'articulos'
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -60,21 +61,24 @@ class ordenes extends Base_Controller {
 										 $this->lang_item($tab_1)
 										,$this->lang_item($tab_2)
 										,$this->lang_item($tab_3)
+										,$this->lang_item($tab_4)
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $path.$tab_1
 										,$path.$tab_2.'/'.$pagina
 										,$tab_3
+										,$tab_4
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
 										,'load_content'
 										,''
+										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+		$config_tab['attr']     = array('','', array('style' => 'display:none'),array('style' => 'display:none'));
 		return $config_tab;
 	}
 	public function index(){		
@@ -119,13 +123,22 @@ class ordenes extends Base_Controller {
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_compras_orden'].')'
 						);
+				/*ToDo*/
+				// Agregar articulos
+				// Eliminar orden
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle" style="cursor:pointer;" onclick="detalle('.$value['id_compras_orden'].')"><i class="fa fa-search-plus" style="color:blue;" title="'.$this->lang_item("detalle").'"></i></span>';
+				$btn_acciones['agregar'] 		= '<span id="ico-articulos" style="cursor:pointer;" onclick="articulos('.$value['id_compras_orden'].')"><i class="fa fa-cart-plus" style="color:green;" title="'.$this->lang_item("agregar_articulos").'"></i></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar" style="cursor:pointer;" onclick="eliminar('.$value['id_compras_orden'].')"><i class="fa fa-times" style="color:red;" title="'.$this->lang_item("eliminar").'"></i></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				/*Fin-ToDo*/
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
-									'estatus'   	 => $value['estatus']
+									'estatus'   	 => $value['estatus'],
+									'acciones' 		 => $acciones
 									);
 			}
 			// Plantilla
@@ -137,7 +150,8 @@ class ordenes extends Base_Controller {
 										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
 										$this->lang_item("estatus"),
-										$this->lang_item("pendiente"));
+										$this->lang_item("acciones")
+									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -502,9 +516,13 @@ class ordenes extends Base_Controller {
 		echo json_encode($json_respuesta);
 	}
 	public function eliminar(){
+		$msj_grid = $this->ajax_post('msj_grid');
 		$sqlData = array(
 						 'id_compras_orden'	=> $this->ajax_post('id_compras_orden')
-						,'estatus' 		 =>5
+						,'estatus' 		 =>6
+						,'activo' 		 =>0
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
 						);
 			 $insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
@@ -513,6 +531,7 @@ class ordenes extends Base_Controller {
 						 'id' 		=> 1
 						,'contenido'=> alertas_tpl('success', $msg ,false)
 						,'success' 	=> true
+						,'msj_grid'	=> $msj_grid
 				);
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
@@ -520,9 +539,140 @@ class ordenes extends Base_Controller {
 						 'id' 		=> 0
 						,'contenido'=> alertas_tpl('', $msg ,false)
 						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
 				);
 			}
 		echo json_encode($json_respuesta);
+	}
+	public function articulos(){
+		// Agregar articulos a una orden de compra
+		$seccion 			= '';
+		$accion 			= $this->tab['articulos'];
+		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
+		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
+		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		$btn_eliminar       = form_button(array('class'=>"btn btn-primary",'name' => 'eliminar' , 'onclick'=>'eliminar()','content' => $this->lang_item("btn_eliminar") ));
+		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
+		if($detalle[0]['id_orden_tipo']==2){
+			$style='style="display:none"';
+			$class ='';
+		}else{
+			$style='';
+			$class ='requerido';
+		}	
+		$dropArray = array(
+					'data'		=> $this->db_model->db_get_proveedores()
+					,'selected' => $detalle[0]['id_proveedor'] 
+					,'value' 	=> 'id_compras_proveedor'
+					,'text' 	=> array('clave_corta','razon_social')
+					,'name' 	=> "id_proveedor"
+					,'class' 	=> $class
+				);
+		$proveedores    = dropdown_tpl($dropArray);
+
+		$dropArray2 = array(
+					 'data'		=> $this->sucursales_model->db_get_data()
+					 ,'selected'=> $detalle[0]['id_sucursal']
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('clave_corta','sucursal')
+					,'name' 	=> "id_sucursal"
+					,'class' 	=> "requerido"
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'show_direccion',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
+				);
+		$sucursales	    = dropdown_tpl($dropArray2);
+
+		$dropArray3 = array(
+					 'data'		=> $this->formas_de_pago_model->db_get_data()
+					 ,'selected'=> $detalle[0]['id_forma_pago']
+					,'value' 	=> 'id_forma_pago'
+					,'text' 	=> array('clave_corta','descripcion')
+					,'name' 	=> "id_forma_pago"
+					,'class' 	=> "requerido"
+				);
+		$forma_pago	    = dropdown_tpl($dropArray3);
+
+		$dropArray4 = array(
+					 'data'		=> $this->creditos_model->db_get_data()
+					 ,'selected'=> $detalle[0]['id_credito']
+					,'value' 	=> 'id_administracion_creditos'
+					,'text' 	=> array('clave_corta','credito')
+					,'name' 	=> "id_administracion_creditos"
+					,'class' 	=> "requerido"
+				);
+		$creditos	    = dropdown_tpl($dropArray4);
+
+		$dropArray5 = array(
+					 'data'		=> $this->db_model->db_get_tipo_orden()
+					 ,'selected'=> $detalle[0]['id_orden_tipo']
+					,'value' 	=> 'id_orden_tipo'
+					,'text' 	=> array('orden_tipo')
+					,'name' 	=> "id_orden_tipo"
+					,'class' 	=> "requerido"
+					,'disabled' => 'disabled="disabled"'
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'show_proveedor',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
+				);
+		$orden_tipo	    = dropdown_tpl($dropArray5);
+		// 
+
+		$fec=explode('-',$detalle[0]['entrega_fecha']);
+		$entrega_fecha=$fec[2].'/'.$fec[1].'/'.$fec[0];
+		$fec2=explode('-',$detalle[0]['orden_fecha']);
+		$orden_fecha=$fec2[2].'/'.$fec2[1].'/'.$fec2[0];
+		$tabData['id_compras_orden']		 = $id_compras_orden;
+		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
+		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
+        $tabData['proveedor'] 	 			 = $this->lang_item("proveedor",false);
+		$tabData['list_proveedores']		 = $proveedores;
+		$tabData['sucursal']     			 = $this->lang_item("sucursal",false);
+        $tabData['list_sucursales']			 = $sucursales;
+        $tabData['descripcion']       		 = $this->lang_item("descripcion",false);
+        $tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
+        $tabData['lbl_fecha_registro']    	 = $this->lang_item("lbl_fecha_registro",false);
+        $tabData['timestamp']         		 = $detalle[0]['timestamp'];
+        $tabData['button_save']       		 = $btn_save;
+        $tabData['button_delete']       	 = $btn_eliminar;
+        $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
+		$tabData['orden_fecha_value']	 	 = $orden_fecha;
+        $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
+        $tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
+		$tabData['entrega_fecha']            = $this->lang_item("entrega_fecha",false);
+        $tabData['entrega_fecha_value']	     = $entrega_fecha;
+        $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
+        $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
+        $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
+        $tabData['observaciones_value']      = $detalle[0]['observaciones'];
+        $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
+        $tabData['creditos']     			 = $this->lang_item("creditos",false);
+        $tabData['list_forma_pago']			 = $forma_pago;
+		$tabData['list_creditos']			 = $creditos;
+		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
+		$tabData['list_orden_tipo']			 = $orden_tipo;
+		$tabData['style']					 = $style;
+		$tabData['class']					 = $class;
+		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+
+		$this->load->model('users_model');
+    	$usuario_registro              = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+        $tabData['usuario_registro']   = text_format_tpl($usuario_registro[0]['name'],"u");
+
+       if($detalle[0]['edit_id_usuario']){
+        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
+        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+    	}else{
+    		$usuario_name = '';
+    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+    	}
+		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

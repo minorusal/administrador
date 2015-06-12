@@ -94,7 +94,8 @@ $route['compras/catalogos/embalaje']                               = 'compras/em
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';
 
 /*ALMACEN*/
-
+/*ENtradas Recepcion*/
+$route['almacen/entradas_recepcion']			     = 'almacen/entradas_recepcion/index';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/

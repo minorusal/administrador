@@ -1,0 +1,14 @@
+/*Iconos-Acciones-Grid*/
+.ico_detalle{
+	cursor: pointer;
+	color:blue;
+}
+.ico_articulos{
+	cursor: pointer;
+	color:green;
+}
+.ico_eliminar{
+	cursor: pointer;
+	color:red;
+}
+/*---*/

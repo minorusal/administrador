@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
 			buscar();
 		} 
 	});
-})
+});
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();

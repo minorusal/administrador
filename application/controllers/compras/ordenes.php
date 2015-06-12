@@ -126,9 +126,9 @@ class ordenes extends Base_Controller {
 				/*ToDo*/
 				// Agregar articulos
 				// Eliminar orden
-				$btn_acciones['detalle'] 		= '<span id="ico-detalle" style="cursor:pointer;" onclick="detalle('.$value['id_compras_orden'].')"><i class="fa fa-search-plus" style="color:blue;" title="'.$this->lang_item("detalle").'"></i></span>';
-				$btn_acciones['agregar'] 		= '<span id="ico-articulos" style="cursor:pointer;" onclick="articulos('.$value['id_compras_orden'].')"><i class="fa fa-cart-plus" style="color:green;" title="'.$this->lang_item("agregar_articulos").'"></i></span>';
-				$btn_acciones['eliminar']       = '<span id="ico-eliminar" style="cursor:pointer;" onclick="eliminar('.$value['id_compras_orden'].')"><i class="fa fa-times" style="color:red;" title="'.$this->lang_item("eliminar").'"></i></span>';
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$value['id_compras_orden'].'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$value['id_compras_orden'].')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$value['id_compras_orden'].'" class="ico_articulos fa fa-cart-plus" onclick="articulos('.$value['id_compras_orden'].')" title="'.$this->lang_item("agregar_articulos").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$value['id_compras_orden'].'" class="ico_eliminar fa fa-times" onclick="eliminar('.$value['id_compras_orden'].')" title="'.$this->lang_item("eliminar").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				/*Fin-ToDo*/
 				// Datos para tabla
@@ -142,7 +142,7 @@ class ordenes extends Base_Controller {
 									);
 			}
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										

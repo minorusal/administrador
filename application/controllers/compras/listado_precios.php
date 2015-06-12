@@ -104,6 +104,10 @@ class listado_precios extends Base_Controller {
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_compras_articulo_precios'].')'
 						);
+				// Acciones
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$value['id_compras_articulo_precios'].'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$value['id_compras_articulo_precios'].')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$value['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="eliminar('.$value['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				$tbl_data[] = array('id'             	 => $value['id_compras_articulo_precios'],
 									'upc'   		 	=> tool_tips_tpl($value['upc'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'sku'   		 	=> tool_tips_tpl($value['sku'], $this->lang_item("tool_tip"), 'right' , $atrr),
@@ -111,7 +115,10 @@ class listado_precios extends Base_Controller {
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
-									'costo_sin_impuesto' => $this->session->userdata('moneda').' '.$value['costo_sin_impuesto']);				
+									'costo_sin_impuesto' => $this->session->userdata('moneda').' '.$value['costo_sin_impuesto'],
+									'acciones'	 		 => $acciones
+									);
+
 			}
 			
 			// Plantilla
@@ -124,7 +131,9 @@ class listado_precios extends Base_Controller {
 										$this->lang_item("proveedor"),
 										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
-										$this->lang_item("costo_sin_impuesto"));
+										$this->lang_item("costo"),
+										$this->lang_item("acciones")
+									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -645,6 +654,35 @@ class listado_precios extends Base_Controller {
 		$id_articulo = $this->ajax_post('id_articulo');
 		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
      	echo json_encode($presentacion_em[0]['cv_um']);
+	}
+
+	public function eliminar(){
+		$msj_grid = $this->ajax_post('msj_grid');
+		$sqlData = array(
+						 'id_compras_articulo_precios'	=> $this->ajax_post('id_compras_articulo_precios')
+						,'activo' 		 =>0
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+						);
+			 $insert = $this->db_model->db_update_data($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+						,'msj_grid'	=> $msj_grid
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
+				);
+			}
+		echo json_encode($json_respuesta);
 	}
 }
 ?>

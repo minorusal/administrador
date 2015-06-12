@@ -117,3 +117,34 @@ function actualizar(){
 			}
 		})
 }
+
+function eliminar(id){	
+		id = (!id)?false:id;
+		if(id)if(!confirm('Esta seguro de eliminar el registro: '+id)) return false; 
+		jQuery('#mensajes_update').hide();		
+		var btn = jQuery("button[name='eliminar']");
+		btn.attr('disabled','disabled');
+  		// Obtiene campos en formulario
+  		var objData = formData('#formulario');
+  		objData['id_compras_proveedor'] = (!objData['id_compras_proveedor'])?id:objData['id_compras_proveedor'];
+  		objData['msj_grid'] = (id)?1:0;
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/proveedores/eliminar",
+			dataType: "json",			
+			data : objData,
+			beforeSend : function(){
+				imgLoader("#update_loader");
+			},
+			success : function(data){
+				if(data.msj_grid==1){
+			    	jQuery("#mensajes_grid").html(data.contenido).show('slow');
+			    	// location.reload();
+				}else{
+					jQuery("#update_loader").html('');				
+				    jQuery("#mensajes_update").html(data.contenido).show('slow');
+				}
+
+			}
+		})
+}

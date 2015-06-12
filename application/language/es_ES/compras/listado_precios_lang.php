@@ -11,6 +11,7 @@ $lang['presentacion_x_embalaje'] = 'presentación x embalaje';
 $lang['um_x_embalaje']  	  	 = 'u.m. x embalaje';
 $lang['um_x_presentacion']  	 = 'u.m. x presentación';
 $lang['costo_sin_impuesto']  	 = 'costo sin impuesto';
+$lang['costo']  	 			 = 'Costo';
 $lang['peso_unitario']  		 = 'peso unitario';
 $lang['costo_unitario']  		 = 'costo unitario';
 $lang['costo_x_um']  			 = 'costo x u.m';

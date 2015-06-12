@@ -28,8 +28,6 @@ function load_content(uri, id_content){
 	jQuery('#ui-id-3').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
-	//var fecha1 = "jQuery('#orden_fecha').datepicker();"; 
-	//var fecha2 = "jQuery('#entrega_fecha').datepicker({ minDate: jQuery('#orden_fecha').datepicker('getDate') });";
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -44,10 +42,7 @@ function load_content(uri, id_content){
            }else{
           	 	functions.push('jQuery(".chzn-select").chosen();');
           	 	functions.push('calendar_dual("orden_fecha","entrega_fecha")');
-          	 	//functions.push('calendar_dual(fecha1,fecha2)');
-          	 	//functions.push(fecha2);
            		jQuery('#a-'+id_content).html(data+include_script(functions));
-           		
            }
         }
     });
@@ -123,7 +118,6 @@ function eliminar(id){
 			}
 		})
 }
-
 function insert(){		
 	var btn   = jQuery("button[name='save']");
 	//btn.attr('disabled','disabled');
@@ -148,7 +142,7 @@ function insert(){
 		    jQuery("#mensajes").html(data.contenido).show('slow');
 			
 		}
-	})
+	});
 }
 function show_proveedor(id_tipo){
 	if(id_tipo==1){
@@ -191,6 +185,78 @@ function articulos(id_compras_orden){
         	jQuery('#a-3').html(data+include_script(functions));
         	jQuery('#ui-id-3').show('slow');
         	jQuery('#ui-id-3').click();
+        	var db   = jQuery('#dualselected').find('.ds_arrow button');	
+				var sel1 = jQuery('#dualselected select:first-child');		
+				var sel2 = jQuery('#dualselected select:last-child');			
+				//sel2.empty(); 
+				db.click(function(){
+					var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;	
+					if(t){
+						sel1.find('option').each(function(){
+						if(jQuery(this).is(':selected')){
+							jQuery(this).attr('selected',false);
+							var op = sel2.find('option:first-child');
+							sel2.append(jQuery(this));
+						}
+						});	
+					}else{
+						sel2.find('option').each(function(){
+							if(jQuery(this).is(':selected')){
+								jQuery(this).attr('selected',false);
+								sel1.append(jQuery(this));
+							}
+						});
+					}
+					return false;
+				});
         }
     });
+}
+function test(id_articulo){
+	if(jQuery('#'+id_articulo).is(":visible")){
+		jQuery('#'+id_articulo).hide();
+	}else{
+		jQuery('#'+id_articulo).show();
+	}
+	jQuery('#dyntable2').show();
+}
+function agregar_articulos(){
+	var btn   = jQuery("button[name='save']");
+	//btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/ordenes/registrar_articulos",
+		dataType: "json",
+		data : objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			if(data.id==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
+			
+		}
+	});
+	/*var array= new Array();
+	var array2= new Array();
+	var arrayfinal= new Array();
+		jQuery('input[name="id_compras_articulo_precios[]"]').each(function(index,valor) {
+			array=valor;
+		});
+		jQuery('input[name="text1[]"]').each(function() {
+			array2.push(jQuery(this).val());
+		});
+		jQuery(array).each(function(index,value){
+			arrayfinal[index]=value;
+		});
+		alert(dump_var(array));*/
+	
 }

@@ -94,7 +94,8 @@ $route['compras/catalogos/embalaje']                               = 'compras/em
 $route['compras/ordenes']                   	 = 'compras/ordenes/index';
 
 /*ALMACEN*/
-
+/*ENtradas Recepcion*/
+$route['almacen/entradas_recepcion']			     = 'almacen/entradas_recepcion/index';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/
@@ -139,6 +140,8 @@ $route['administracion/catalogos_generales/creditos']        = 'administracion/c
 $route['administracion/catalogos_generales/entidades']       = 'administracion/entidades/index';
 /*Catálogo de Regiones*/ 
 $route['administracion/catalogos_generales/regiones']        = 'administracion/regiones/index'; 
+/*Catálogo de Servicios*/ 
+$route['administracion/catalogos_generales/servicios']       = 'administracion/servicios/index';
 
 /*VENTAS*/
 

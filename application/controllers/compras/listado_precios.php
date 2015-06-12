@@ -269,14 +269,9 @@ class listado_precios extends Base_Controller {
 		}
 	}
 	public function insert(){
-		$numerico = $this->ajax_post('numerico');
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		elseif($numerico > 0){
-			$msg = $this->lang_item('msg_campos_numericos',false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
 		else{						

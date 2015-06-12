@@ -18,7 +18,7 @@ class familias extends Base_Controller{
 		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'familias';
-		$this->icon 			= 'fa fa-female fa-spin'; 
+		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -177,7 +177,7 @@ class familias extends Base_Controller{
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
 
-		$this->load_database('global_system');
+		$this->load_database('global_system');	
         $this->load->model('users_model');
 
 		$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);

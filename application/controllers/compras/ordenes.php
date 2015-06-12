@@ -575,7 +575,7 @@ class ordenes extends Base_Controller {
 				   						 'params'      => array('this.value'),
 				   						 'params_type' => array(0)
 									)
-					,'class' 	=> "requerido"
+					,'class' 	=> "articulos_lista"
 				);
 		$list_articulos  = dropdown_tpl($dropArray4);
 
@@ -634,6 +634,7 @@ class ordenes extends Base_Controller {
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
         $tabData['creditos']     			 = $this->lang_item("creditos",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
+		$tabData['lst_articulos_label'] 	 = $this->lang_item("lst_articulos_label",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];

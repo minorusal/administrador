@@ -1,5 +1,5 @@
 <div id="formulario" class="stdform">
-    <div id="tbl1" class="span6">
+    <div id="tbl1" class="span6" style="height:100%;">
         <table width="100%" heigth="100%" border="0" class="table table-bordered table-invoice"> 
             <tr>
                 <td class="width30">
@@ -91,8 +91,14 @@
             </tr>
        </table>
    </div>
-    <br>
-    {list_arti}
+    <div style="clear:both; width:100%; text-align:center;">
+        <table style="margin: 0 auto; text-align: left;" >
+            <tr>
+                <td >{lst_articulos_label}</td>
+                <td >{list_arti}</td>
+            </tr>
+        </table>        
+    </div>
     <table class="table table-bordered table-invoice-full" id="dyntable2" aria-describedby="dyntable2_info" style="margin-left: 0px; width: 100%; display:none">
     <colgroup>
                     <col class="con0 width10">

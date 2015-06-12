@@ -583,7 +583,7 @@ class Base_Controller extends CI_Controller {
 			$anio=date("Y");
 
 			if($time){
-				$time = date('H:m:s');
+				$time = date('H:i:s');
 				return "$dia $dia2 ". sprintf($this->lang_item('timestamp_string', false),$mes, $anio, $time);
 			}
 			return "$dia $dia2 ". sprintf($this->lang_item('fecha_actual', false),$mes, $anio);

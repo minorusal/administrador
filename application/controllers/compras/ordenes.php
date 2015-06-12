@@ -568,7 +568,7 @@ class ordenes extends Base_Controller {
 		$dropArray4 = array(
 					 'data'		=> $get_data
 					,'value' 	=> 'id_compras_articulo_precios'
-					,'text' 	=> array('cl_presentacion','articulo')
+					,'text' 	=> array('articulo','presentacion','embalaje','peso_unitario','cl_um')
 					,'name' 	=> "lts_articulos"
 					,'event'    => array('event'       => 'onchange',
 				   						 'function'    => 'test',

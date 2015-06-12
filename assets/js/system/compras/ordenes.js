@@ -185,7 +185,7 @@ function articulos(id_compras_orden){
         	jQuery('#a-3').html(data+include_script(functions));
         	jQuery('#ui-id-3').show('slow');
         	jQuery('#ui-id-3').click();
-        	var db   = jQuery('#dualselected').find('.ds_arrow button');	
+        	/*var db   = jQuery('#dualselected').find('.ds_arrow button');	
 				var sel1 = jQuery('#dualselected select:first-child');		
 				var sel2 = jQuery('#dualselected select:last-child');			
 				//sel2.empty(); 
@@ -208,17 +208,41 @@ function articulos(id_compras_orden){
 						});
 					}
 					return false;
-				});
+				});*/
         }
     });
 }
-function test(id_articulo){
-	if(jQuery('#'+id_articulo).is(":visible")){
-		jQuery('#'+id_articulo).hide();
+function test(id_compras_articulo_precios){
+	id_dentificador=jQuery('#idarticuloprecios_'+id_compras_articulo_precios).val();
+	
+	if(typeof  id_dentificador =="undefined"){
+		id_dentificador=0;
+		//alert(id_dentificador);
 	}else{
-		jQuery('#'+id_articulo).show();
+		id_dentificador=id_dentificador.split('_');
+		//alert(id_dentificador+'1');
 	}
-	jQuery('#dyntable2').show();
+	if(id_dentificador==id_compras_articulo_precios){
+		jQuery("#"+id_compras_articulo_precios).val('');
+		alert();
+	}
+	else{
+		jQuery('#dyntable2').show();
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/ordenes/get_data_articulo",
+			dataType: "json",
+			data : {id_compras_articulo_precios:id_compras_articulo_precios},
+			beforeSend : function(){
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			},
+			success : function(data){
+				jQuery("#dyntable2 > tbody").append(data);
+			    
+				
+			}
+		});
+	}
 }
 function agregar_articulos(){
 	var btn   = jQuery("button[name='save']");
@@ -245,18 +269,10 @@ function agregar_articulos(){
 			
 		}
 	});
-	/*var array= new Array();
-	var array2= new Array();
-	var arrayfinal= new Array();
-		jQuery('input[name="id_compras_articulo_precios[]"]').each(function(index,valor) {
-			array=valor;
-		});
-		jQuery('input[name="text1[]"]').each(function() {
-			array2.push(jQuery(this).val());
-		});
-		jQuery(array).each(function(index,value){
-			arrayfinal[index]=value;
-		});
-		alert(dump_var(array));*/
-	
+}
+function calcula_costo2(){
+	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto').val());
+	var cantidad = parseFloat(jQuery('#cantidad').val());
+	costo_2=costo_sin_impuesto*cantidad;
+	jQuery('#costo_2').html(costo_2);
 }

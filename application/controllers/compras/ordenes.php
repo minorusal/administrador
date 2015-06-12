@@ -124,14 +124,12 @@ class ordenes extends Base_Controller {
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_compras_orden'].')'
 						);
-				/*ToDo*/
-				// Agregar articulos
-				// Eliminar orden
-				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$value['id_compras_orden'].'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$value['id_compras_orden'].')" title="'.$this->lang_item("detalle").'"></span>';
-				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$value['id_compras_orden'].'" class="ico_articulos fa fa-cart-plus" onclick="articulos('.$value['id_compras_orden'].')" title="'.$this->lang_item("agregar_articulos").'"></span>';
-				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$value['id_compras_orden'].'" class="ico_eliminar fa fa-times" onclick="eliminar('.$value['id_compras_orden'].')" title="'.$this->lang_item("eliminar").'"></span>';
+				// Acciones
+				$accion_id 						= $value['id_compras_orden'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_articulos fa fa-cart-plus" onclick="articulos('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$accion_id.'" class="ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
-				/*Fin-ToDo*/
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),

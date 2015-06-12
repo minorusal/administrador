@@ -105,8 +105,9 @@ class listado_precios extends Base_Controller {
 							  	'onclick' => 'detalle('.$value['id_compras_articulo_precios'].')'
 						);
 				// Acciones
-				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$value['id_compras_articulo_precios'].'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$value['id_compras_articulo_precios'].')" title="'.$this->lang_item("detalle").'"></span>';
-				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$value['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="eliminar('.$value['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
+				$accion_id 						= $value['id_compras_articulo_precios'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$accion_id.'" class="ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				$tbl_data[] = array('id'             	 => $value['id_compras_articulo_precios'],
 									'upc'   		 	=> tool_tips_tpl($value['upc'], $this->lang_item("tool_tip"), 'right' , $atrr),

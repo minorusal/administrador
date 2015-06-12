@@ -161,6 +161,7 @@ class Base_Controller extends CI_Controller {
 		}
 		$days_timepicker   = "var days_timepicker = ".json_encode($this->days(false, 1)).";";
 		$months_timepicker = "var months_timepicker = ".json_encode($this->months(false, 1)).";";
+		//$lang_datepicker   = "var lang_datepicker = ".json_encode($this->months(false, 1)).";";
 		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker." </script>";
 		$files_css 		   = '';
 		$url_js    		   = base_url().'assets/js/system';
@@ -583,7 +584,7 @@ class Base_Controller extends CI_Controller {
 			$anio=date("Y");
 
 			if($time){
-				$time = date('H:m:s');
+				$time = date('H:i:s');
 				return "$dia $dia2 ". sprintf($this->lang_item('timestamp_string', false),$mes, $anio, $time);
 			}
 			return "$dia $dia2 ". sprintf($this->lang_item('fecha_actual', false),$mes, $anio);

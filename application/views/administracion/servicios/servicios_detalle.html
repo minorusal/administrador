@@ -1,0 +1,43 @@
+<div id="formulario" class="stdform">
+    <input id="id_servicio" type="hidden" name="id_servicio" value="{id_servicio}" />
+    <p>
+        <label>{lbl_servicio}: (*)</label>
+        <input id="txt_servicio" type="text" name="txt_servicio" class="input-xlarge requerido" value="{txt_servicio}" />
+    </p>
+    <p>
+        <label>{lbl_clave_corta}: (*)</label>
+        <input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="{txt_clave_corta}" />
+    </p>
+    <p>
+       <label>{lbl_inicio}: (*)</label>
+        <label for="timepicker1" class="field prepend-icon">
+            <input type="text" id="timepicker1" name="timepicker1" class="gui-input">
+            <label class="field-icon"><i class="fa fa-clock-o"></i></label>  
+        </label>
+    </p>
+    <p>
+        <label>{lbl_final}: (*)</label>
+        <input id="txt_final" type="time" name="txt_final" class="input-xlarge requerido" value="{txt_final}" />
+    </p>
+    <p>
+        <label>{lbl_descripcion}:</label>
+        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{txt_descripcion}</textarea>
+    </p>
+    <p>
+        <label>{lbl_usuario_registro}: </label>
+        <span id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro} </span>
+    </p>
+    <p>
+        <label>{lbl_fecha_registro}:</label>
+        <span id="fecha_registro" type="text" name="fecha_registro" class="input-xlarge uneditable-input" >{val_fecha_registro}</span>
+    </p>           
+    <p>
+        <label>{lbl_ultima_modificacion}: </label>
+        <textarea id="ultima_modifiacion" class=" span5 textareaUneditable" style="resize: vertical; height: 100px;  " readonly  >{val_ultima_modificacion}</textarea>
+    </p>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+    </p>
+</div>

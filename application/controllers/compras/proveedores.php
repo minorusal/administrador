@@ -99,13 +99,18 @@ class proveedores extends Base_Controller {
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_compras_proveedor'].')'
 						);
+				// Acciones
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle" style="cursor:pointer;" onclick="detalle('.$value['id_compras_proveedor'].')"><i class="fa fa-search-plus" style="color:blue;" title="'.$this->lang_item("detalle").'"></i></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar" style="cursor:pointer;" onclick="eliminar('.$value['id_compras_proveedor'].')"><i class="fa fa-times" style="color:red;" title="'.$this->lang_item("eliminar").'"></i></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
 				$tbl_data[] = array('id'                => $value['razon_social'],
 									'razon_social'      => tool_tips_tpl($value['razon_social'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'nombre_comercial'  => $value['nombre_comercial'],
 									'rfc'               => $value['rfc'],
 									'clave_corta'       => $value['clave_corta'],
-									'entidad'           => $value['entidad']
+									'entidad'           => $value['entidad'],
+									'acciones'	 		 => $acciones
 									);
 			}
 
@@ -116,8 +121,8 @@ class proveedores extends Base_Controller {
 										$this->lang_item("lbl_nombre"),
 										$this->lang_item("lbl_rfc"),
 										$this->lang_item("lbl_clv"),
-										$this->lang_item("lbl_entidad")
-
+										$this->lang_item("lbl_entidad"),
+										$this->lang_item("acciones")
 									);
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
@@ -421,6 +426,35 @@ class proveedores extends Base_Controller {
 				);
 			}
 		}
+		echo json_encode($json_respuesta);
+	}
+
+	public function eliminar(){
+		$msj_grid = $this->ajax_post('msj_grid');
+		$sqlData = array(
+						 'id_compras_proveedor'	=> $this->ajax_post('id_compras_proveedor')
+						,'activo' 		 =>0
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+						);
+			 $insert = $this->db_model->db_update_data($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+						,'msj_grid'	=> $msj_grid
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
+				);
+			}
 		echo json_encode($json_respuesta);
 	}
 }

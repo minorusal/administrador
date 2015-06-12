@@ -85,7 +85,8 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function db_get_proveedores($data=array()){
+	public function db_get_proveedores($data=array(),$id_compras_proveedor=false){
+		$condicion =($id_compras_proveedor)?"AND id_compras_proveedor= '$id_compras_proveedor'":"";
 		// DB Info
 		$tbl = $this->tbl;
 		// Filtro
@@ -103,7 +104,7 @@ class ordenes_model extends Base_Model{
 						,nombre_comercial
 						,clave_corta
 					FROM $tbl[compras_proveedores]
-					WHERE 1 AND activo=1 $filtro
+					WHERE 1 AND activo=1 $filtro $condicion
 					GROUP BY clave_corta ASC
 					$limit
 					";
@@ -137,11 +138,12 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-	public function db_get_tipo_orden(){
+	public function db_get_tipo_orden($id_orden_tipo=false){
+		$condicion =($id_orden_tipo)?"AND id_orden_tipo= '$id_orden_tipo'":"";
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$query = "SELECT * FROM $tbl[compras_ordenes_tipo] WHERE activo= 1";
+		$query = "SELECT * FROM $tbl[compras_ordenes_tipo] WHERE activo= 1 $condicion";
       	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){

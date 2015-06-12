@@ -1,116 +1,125 @@
 <div id="formulario" class="stdform">
-    <div id="tbl1" class="div_primary" style="border: 1px solid #333; width:49.9%;">
-        <table width="100%" heigth="100%" border="0" > 
+    <div id="tbl1" class="span6">
+        <table width="100%" heigth="100%" border="0" class="table table-bordered table-invoice"> 
             <tr>
-                <td>
+                <td class="width30">
                 <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
-                    <label>{orden_num}: (*)</label>
-                    <span id="orden_num" type="text" data-campo="orden_num" class="input-xlarge uneditable-input" >{orden_num_value}</span>
+                    <label><strong>{orden_num}:</strong></label>
                 </td>
+                <td>{orden_num_value}</td>
             </tr>
             <tr>
-                <td>
-                    <label>{orden_fecha}: (*)</label>
-                    <input id="orden_fecha" type="text" data-campo="orden_fecha" class="input-large fecha uneditable-input" disabled="disabled" value="{orden_fecha_value}" />
+                <td class="width30">
+                    <label><strong>{orden_tipo}:</strong></label>
                 </td>
+                <td>{list_orden_tipo}</td>
+            </tr>
+            <tbody  id="proveedores" {style}>
+                <tr>
+                    <td class="width30">
+                        <!--<div id="proveedores" {style}>-->
+                            <label><strong>{proveedor}:</strong></label>
+                        <!--</div>-->
+                    </td>
+                    <td>{list_proveedores}</td>
+                </tr>
+            </tbody>
             <tr>
-            <tr>
-                <td>
-                    <label>{orden_tipo}: (*)</label>
-                    {list_orden_tipo}
+                <td class="width30">
+                    <label><strong>{sucursal}:</strong></label>
                 </td>
+                <td>{list_sucursales}</td>
             </tr>
             <tr>
-                <td>
-                    <label>{descripcion}:</label>
-                    <textarea id="descripcion" data-campo="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
-                    <hr>
+                <td class="width30">
+                    <label><strong>{entrega_fecha}:</strong></label>
                 </td>
+                <td>{entrega_fecha_value}</td>
             </tr>
             <tr>
-                <td>
-                    <div id="proveedores" {style}>
-                        <label>{proveedor}: (*)</label>
-                        {list_proveedores}
-                    </div>
+                <td class="width30">
+                    <label><strong>{creditos}</strong></label>
                 </td>
-            </tr>
-            <tr>
-                <td>
-                    <div id="prefactura"  {style}>
-                        <label>{prefactura_num}: (*)</label>
-                        <input id="prefactura_num" data-campo="prefactura_num" type="text" class="input-large {class}" value="{prefactura_num_value}" />
-                        <hr>
-                    </div>
-                </td>
-            </tr>    
-            <tr>
-                <td>
-                    <label>{sucursal}:</label>
-                    {list_sucursales}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{entrega_direccion}:</label>
-                    <textarea id="entrega_direccion" data-campo="entrega_direccion" class="span5" style="resize: vertical; height: 100px;">{entrega_direccion_value}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{entrega_fecha}: (*)</label>
-                    <input id="entrega_fecha" type="text" data-campo="entrega_fecha" class="input-large requerido fecha" value="{entrega_fecha_value}" />
-                    <hr>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{forma_pago}: (*)</label>
-                    {list_forma_pago}
-                </td>
-            </tr>
-            <tr>        
-                <td>
-                    <label>{creditos}:</label>
-                    {list_creditos}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{observaciones}:</label>
-                    <textarea id="observaciones" data-campo="observaciones" class="span5" style="resize: vertical; height: 100px;">{observaciones_value}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{lbl_fecha_registro}: </label>
-                    <span id="timestamp" type="text" data-campo="timestamp" class="input-xlarge uneditable-input" readonly >{timestamp} </span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                   <label>{registro_por}: </label>
-                <span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{usuario_registro}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>{lbl_ultima_modificacion}: </label>
-                <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div id="update_loader"></div>
-                    <div id="mensajes_update" style="display:none"></div>
-                    <p class="stdformbutton"> 
-                        {button_save}
-                        {button_delete}
-                    </p>
-                </td>
+                <td>{list_creditos}</td>
             </tr>
         </table>
-    </div>
-    <div id="tbl2" class="div_second" style="border: 1px solid blue; width:49.9%;">
-    </div>
+        <br>
+        <br>
+        <br>
+   </div>
+   <div class="span6">
+       <table class="table table-bordered table-invoice">
+            <tr>
+                <td class="width30">
+                    <label><strong>{orden_fecha}:</strong></label>
+                </td>
+                <td>{orden_fecha_value}</td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label><strong>{descripcion}:</strong></label>
+                </td>
+                <td>{descripcion_value}</td>
+            </tr>
+            <tbody id="prefactura"  {style}>
+                <tr>
+                    <td class="width30">
+                        <!--<div id="prefactura"  {style}>-->
+                            <label><strong>{prefactura_num}:</strong></label>
+                        <!--</div>-->
+                    </td>
+                    <td>{prefactura_num_value}</td>
+                </tr>
+            </tbody>
+            <tr>
+                <td class="width30">
+                    <label><strong>{entrega_direccion}:</strong></label>
+                </td>
+                <td>{entrega_direccion_value}</td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label><strong>{forma_pago}:</strong></label>
+                </td>
+                <td>{list_forma_pago}</td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label><strong>{observaciones}:</strong></label>
+                </td>
+                <td>{observaciones_value}</td>
+            </tr>
+       </table>
+   </div>
+    <br>
+    {list_arti}
+    <table class="table table-bordered table-invoice-full" id="dyntable2" aria-describedby="dyntable2_info" style="margin-left: 0px; width: 100%; display:none">
+    <colgroup>
+                    <col class="con0 width10">
+                    <col class="con1 width10">
+                    <col class="con0 width10">
+                    <col class="con1 width10">
+                    <col class="con0 width10">
+                    <col class="con0 width10">
+                    <col class="con0 width5">
+                </colgroup>
+        <tr>
+            <th>proveedor</th>
+            <th>articulo</th>
+            <th>clave corta</th>
+            <th>Costo sin impuesto</th>
+            <th>cantidad</th>
+            <th>descuento</th>
+            <th>iva</th>
+        </tr>
+        <tr>
+            {list_articulos}
+        </tr>
+    </table>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+    </p>
+    <!--</div>-->
 </div>

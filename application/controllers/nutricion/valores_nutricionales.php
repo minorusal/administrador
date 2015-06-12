@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class valores_nutricionales extends Base_Controller {
+class valores_nutricionales extends Base_Controller{
 	private $modulo;
 	private $submodulo;
 	private $seccion;

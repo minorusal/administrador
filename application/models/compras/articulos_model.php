@@ -39,7 +39,6 @@ class articulos_model extends Base_Model{
 												ca.descripcion  LIKE '%$filtro%'
 											)";
 		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		print_debug($limit);
 		$query = "	SELECT 
 						ca.id_compras_articulo
 						,ca.articulo
@@ -54,8 +53,7 @@ class articulos_model extends Base_Model{
 					LEFT JOIN $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
 					WHERE ca.activo = 1 $filtro
 					ORDER BY ca.id_compras_articulo
-				$limit
-					";
+				$limit";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

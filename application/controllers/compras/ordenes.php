@@ -45,6 +45,7 @@ class ordenes extends Base_Controller {
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		$this->load->model('administracion/variables_model','variables_model');
+		$this->load->model('compras/listado_precios_model','listado_precios_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
@@ -550,8 +551,7 @@ class ordenes extends Base_Controller {
 		$accion 			= $this->tab['articulos'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
-		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-		$btn_eliminar       = form_button(array('class'=>"btn btn-primary",'name' => 'eliminar' , 'onclick'=>'eliminar()','content' => $this->lang_item("btn_eliminar") ));
+		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'agregar_articulos()','content' => $this->lang_item("btn_guardar") ));
 		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
 		if($detalle[0]['id_orden_tipo']==2){
 			$style='style="display:none"';
@@ -560,101 +560,99 @@ class ordenes extends Base_Controller {
 			$style='';
 			$class ='requerido';
 		}	
-		$dropArray = array(
-					'data'		=> $this->db_model->db_get_proveedores()
-					,'selected' => $detalle[0]['id_proveedor'] 
-					,'value' 	=> 'id_compras_proveedor'
-					,'text' 	=> array('clave_corta','razon_social')
-					,'name' 	=> "id_proveedor"
-					,'class' 	=> $class
-				);
-		$proveedores    = dropdown_tpl($dropArray);
-
-		$dropArray2 = array(
-					 'data'		=> $this->sucursales_model->db_get_data()
-					 ,'selected'=> $detalle[0]['id_sucursal']
-					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
-					,'name' 	=> "id_sucursal"
-					,'class' 	=> "requerido"
-					,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'show_direccion',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-									)
-				);
-		$sucursales	    = dropdown_tpl($dropArray2);
-
-		$dropArray3 = array(
-					 'data'		=> $this->formas_de_pago_model->db_get_data()
-					 ,'selected'=> $detalle[0]['id_forma_pago']
-					,'value' 	=> 'id_forma_pago'
-					,'text' 	=> array('clave_corta','descripcion')
-					,'name' 	=> "id_forma_pago"
-					,'class' 	=> "requerido"
-				);
-		$forma_pago	    = dropdown_tpl($dropArray3);
-
+		if($detalle[0]['id_proveedor']>0){
+			//dump_var($detalle[0]['id_proveedor']);
+			$get_data=$this->listado_precios_model->db_get_data_x_proveedor($detalle[0]['id_proveedor']);
+		}else{
+			$get_data=$this->listado_precios_model->db_get_data_x_proveedor();
+		}
+		//dump_var($get_data);
 		$dropArray4 = array(
-					 'data'		=> $this->creditos_model->db_get_data()
-					 ,'selected'=> $detalle[0]['id_credito']
-					,'value' 	=> 'id_administracion_creditos'
-					,'text' 	=> array('clave_corta','credito')
-					,'name' 	=> "id_administracion_creditos"
-					,'class' 	=> "requerido"
-				);
-		$creditos	    = dropdown_tpl($dropArray4);
-
-		$dropArray5 = array(
-					 'data'		=> $this->db_model->db_get_tipo_orden()
-					 ,'selected'=> $detalle[0]['id_orden_tipo']
-					,'value' 	=> 'id_orden_tipo'
-					,'text' 	=> array('orden_tipo')
-					,'name' 	=> "id_orden_tipo"
-					,'class' 	=> "requerido"
-					,'disabled' => 'disabled="disabled"'
+					 'data'		=> $get_data
+					,'value' 	=> 'id_compras_articulo_precios'
+					,'text' 	=> array('cl_presentacion','articulo')
+					,'name' 	=> "lts_articulos"
 					,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'show_proveedor',
+				   						 'function'    => 'test',
 				   						 'params'      => array('this.value'),
 				   						 'params_type' => array(0)
 									)
+					,'class' 	=> "requerido"
 				);
-		$orden_tipo	    = dropdown_tpl($dropArray5);
-		// 
+		$list_articulos  = dropdown_tpl($dropArray4);
 
+		$data='';
+		$proveedores    = $this->db_model->db_get_proveedores($data,$detalle[0]['id_proveedor']);
+		$sucursales	    = $this->sucursales_model->get_orden_unico_sucursal($detalle[0]['id_sucursal']);
+		$forma_pago	    = $this->formas_de_pago_model->get_orden_unico_formapago($detalle[0]['id_forma_pago']);
+		$creditos	    = $this->creditos_model->get_orden_unico_credito($detalle[0]['id_credito']);
+		$orden_tipo	    = $this->db_model->db_get_tipo_orden($detalle[0]['id_orden_tipo']);
+		
+		$articulos = $get_data;
+		$table = "";
+		foreach ($articulos as $key => $value) {
+			$table .='<tbody style="display:none" id="'.$value['id_compras_articulo_precios'].'" name="filas[]">
+						<tr>
+							<td>
+								<span name="proveedor">'.$value['nombre_comercial'].'</span>
+								<input type="hidden" value="'.$value['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$key.']" id="id_compras_articulo_precios[]">
+							</td>
+							<td>
+								<span name="articulo">'.$value['articulo'].'</span>
+							</td>
+							<td>
+								<span name="cl_presentacion">'.$value['cl_presentacion'].'</span>
+							</td>
+							<td class="right">
+								<span name="costo_sin_impuesto">'.$value['costo_sin_impuesto'].'</span>
+							</td>
+							<td>
+								<input type="text" id="cantidad" data-campo="cantidad['.$value['id_compras_articulo_precios'].']" class="input-small">
+							</td>
+							<td>
+								<input type="text" id="descuento" data-campo="descuento['.$value['id_compras_articulo_precios'].']" class="input-small">
+							</td>
+							<td>
+								<input type="text" id="iva" data-campo="iva['.$value['id_compras_articulo_precios'].']" class="input-small">
+							</td>
+						</tr>
+					</tbody>';
+		}
 		$fec=explode('-',$detalle[0]['entrega_fecha']);
 		$entrega_fecha=$fec[2].'/'.$fec[1].'/'.$fec[0];
 		$fec2=explode('-',$detalle[0]['orden_fecha']);
 		$orden_fecha=$fec2[2].'/'.$fec2[1].'/'.$fec2[0];
 		$tabData['id_compras_orden']		 = $id_compras_orden;
 		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
-		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
         $tabData['proveedor'] 	 			 = $this->lang_item("proveedor",false);
-		$tabData['list_proveedores']		 = $proveedores;
 		$tabData['sucursal']     			 = $this->lang_item("sucursal",false);
-        $tabData['list_sucursales']			 = $sucursales;
         $tabData['descripcion']       		 = $this->lang_item("descripcion",false);
-        $tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
         $tabData['lbl_fecha_registro']    	 = $this->lang_item("lbl_fecha_registro",false);
-        $tabData['timestamp']         		 = $detalle[0]['timestamp'];
-        $tabData['button_save']       		 = $btn_save;
-        $tabData['button_delete']       	 = $btn_eliminar;
         $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
-		$tabData['orden_fecha_value']	 	 = $orden_fecha;
         $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
-        $tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
 		$tabData['entrega_fecha']            = $this->lang_item("entrega_fecha",false);
-        $tabData['entrega_fecha_value']	     = $entrega_fecha;
         $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
-        $tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
-        $tabData['observaciones_value']      = $detalle[0]['observaciones'];
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
         $tabData['creditos']     			 = $this->lang_item("creditos",false);
-        $tabData['list_forma_pago']			 = $forma_pago;
-		$tabData['list_creditos']			 = $creditos;
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
-		$tabData['list_orden_tipo']			 = $orden_tipo;
+		//DATA
+		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
+		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
+		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
+		$tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
+		$tabData['timestamp']         		 = $detalle[0]['timestamp'];
+		$tabData['button_save']       		 = $btn_save;
+		$tabData['orden_fecha_value']	 	 = $orden_fecha;
+		$tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
+		$tabData['entrega_fecha_value']	     = $entrega_fecha;
+		$tabData['prefactura_num_value'] 	 = $detalle[0]['prefactura_num'];
+		$tabData['observaciones_value']      = $detalle[0]['observaciones'];
+		$tabData['list_forma_pago']			 = $forma_pago[0]['forma_pago'];
+		$tabData['list_creditos']			 = $creditos[0]['credito'];
+		$tabData['list_orden_tipo']			 = $orden_tipo[0]['descripcion'];
+		$tabData['list_arti']			     = $list_articulos ;
+		$tabData['list_articulos']			 = $table;
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
@@ -673,6 +671,25 @@ class ordenes extends Base_Controller {
     	}
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
+	public function registrar_articulos(){
+		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
+		$cantidad 	= $this->ajax_post('cantidad');
+		$descuento 	= $this->ajax_post('descuento');
+		$iva 	= $this->ajax_post('iva');
+		/*var_dump($cantidad);
+		echo '<br>';
+		var_dump($descuento);
+		echo '<br>';
+		var_dump($iva);
+		echo '<br>';
+		dump_var($id_compras_articulo_precios);*/
+		$array =array();
+		$array=$id_compras_articulo_precios;
+		$array[]=array(0 => $cantidad, 1 => $descuento,2 => $iva);
+		/*$array[]=$descuento;
+		$array[]=$iva;*/
+		dump_var($array);
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

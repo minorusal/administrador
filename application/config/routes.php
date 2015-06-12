@@ -139,6 +139,8 @@ $route['administracion/catalogos_generales/creditos']        = 'administracion/c
 $route['administracion/catalogos_generales/entidades']       = 'administracion/entidades/index';
 /*Catálogo de Regiones*/ 
 $route['administracion/catalogos_generales/regiones']        = 'administracion/regiones/index'; 
+/*Catálogo de Servicios*/ 
+$route['administracion/catalogos_generales/servicios']       = 'administracion/servicios/index';
 
 /*VENTAS*/
 

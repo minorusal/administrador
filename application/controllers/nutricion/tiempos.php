@@ -121,9 +121,9 @@ class tiempos extends Base_Controller{
 			$tbl_plantilla = array('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("tiempo"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("descripcion"));
+										$this->lang_item("lbl_tiempo"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);

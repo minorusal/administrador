@@ -220,14 +220,11 @@ function test(id_compras_articulo_precios){
 	
 	if(typeof  id_dentificador =="undefined"){
 		id_dentificador=0;
-		//alert(id_dentificador);
 	}else{
 		id_dentificador=id_dentificador.split('_');
-		//alert(id_dentificador+'1');
 	}
 	if(id_dentificador==id_compras_articulo_precios){
-		jQuery("#"+id_compras_articulo_precios).val('');
-		alert();
+		jQuery("#"+id_compras_articulo_precios).remove();
 	}
 	else{
 		jQuery('#dyntable2').show();
@@ -273,9 +270,19 @@ function agregar_articulos(){
 		}
 	});
 }
-function calcula_costo2(){
-	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto').val());
-	var cantidad = parseFloat(jQuery('#cantidad').val());
-	costo_2=costo_sin_impuesto*cantidad;
-	jQuery('#costo_2').html(costo_2);
+function calcula_costo2(id_compras_articulo_precios){
+	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto_'+id_compras_articulo_precios).val());
+	var cantidad = parseFloat(jQuery('#cantidad_'+id_compras_articulo_precios).val());
+	var costo_2=costo_sin_impuesto*cantidad;
+	jQuery('#costo_2_'+id_compras_articulo_precios).html(costo_2);
+	jQuery('#costo_2'+id_compras_articulo_precios).html(costo_2);
+}
+function calcula_subtotal(id){
+	var costo_2 = parseFloat(jQuery('#costo_2'+id).val());
+	var descuento = parseFloat(jQuery('#descuento_'+id).val());
+	alert(costo_2);
+	var subtotal=costo_2-descuento;
+	//alert(subtotal);
+	jQuery('#subtotal_'+id).html(subtotal);
+
 }

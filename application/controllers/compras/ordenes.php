@@ -586,36 +586,48 @@ class ordenes extends Base_Controller {
 		$creditos	    = $this->creditos_model->get_orden_unico_credito($detalle[0]['id_credito']);
 		$orden_tipo	    = $this->db_model->db_get_tipo_orden($detalle[0]['id_orden_tipo']);
 		
-		$articulos = $get_data;
+		/*$articulos = $get_data;
 		$table = "";
 		foreach ($articulos as $key => $value) {
-			$table .='<tbody style="display:none" id="'.$value['id_compras_articulo_precios'].'" name="filas[]">
+			$table .='<tbody style="display:none" id="'.$value['id_compras_articulo_precios'].'">
 						<tr>
 							<td>
 								<span name="proveedor">'.$value['nombre_comercial'].'</span>
 								<input type="hidden" value="'.$value['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$key.']" id="id_compras_articulo_precios[]">
 							</td>
 							<td>
-								<span name="articulo">'.$value['articulo'].'</span>
+								'.$value['articulo'].'
 							</td>
 							<td>
-								<span name="cl_presentacion">'.$value['cl_presentacion'].'</span>
+								'.$value['cl_presentacion'].'
 							</td>
 							<td class="right">
-								<span name="costo_sin_impuesto">'.$value['costo_sin_impuesto'].'</span>
+								<input type="hidden" id="costo_sin_impuesto" value="'.$value['costo_sin_impuesto'].'">
+								'.$value['costo_sin_impuesto'].'
 							</td>
 							<td>
-								<input type="text" id="cantidad" data-campo="cantidad['.$value['id_compras_articulo_precios'].']" class="input-small">
+								<input type="text" id="cantidad" data-campo="cantidad['.$value['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$value['id_compras_articulo_precios'].')">
 							</td>
 							<td>
-								<input type="text" id="descuento" data-campo="descuento['.$value['id_compras_articulo_precios'].']" class="input-small">
+								<!--<input type="text" id="costo2" data-campo="costo2['.$value['id_compras_articulo_precios'].']" class="input-small">-->
+								<span id="costo_2_'.$value['id_compras_articulo_precios'].'"></span>
 							</td>
 							<td>
-								<input type="text" id="iva" data-campo="iva['.$value['id_compras_articulo_precios'].']" class="input-small">
+								<input type="text" id="iva" data-campo="descuento['.$value['id_compras_articulo_precios'].']" class="input-small">
+							</td>
+							<td>
+								<input type="hidden" value="'.$value['id_impuesto'].'" name="impuesto['.$value['id_compras_articulo_precios'].']">
+								'.$value['impuesto'].'
+							</td>
+							<td>
+								<input type="text" id="iva" data-campo="valor_imp['.$value['id_compras_articulo_precios'].']" class="input-small">
+							</td>
+							<td>
+								<input type="text" id="iva" data-campo="total['.$value['id_compras_articulo_precios'].']" class="input-small">
 							</td>
 						</tr>
 					</tbody>';
-		}
+		}*/
 		$fec=explode('-',$detalle[0]['entrega_fecha']);
 		$entrega_fecha=$fec[2].'/'.$fec[1].'/'.$fec[0];
 		$fec2=explode('-',$detalle[0]['orden_fecha']);
@@ -651,7 +663,6 @@ class ordenes extends Base_Controller {
 		$tabData['list_creditos']			 = $creditos[0]['credito'];
 		$tabData['list_orden_tipo']			 = $orden_tipo[0]['descripcion'];
 		$tabData['list_arti']			     = $list_articulos ;
-		$tabData['list_articulos']			 = $table;
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
@@ -671,23 +682,63 @@ class ordenes extends Base_Controller {
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
+	public function get_data_articulo(){
+		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
+		/////¨PASAR LA CONSULTA A RREGLO PARA SOLO TENER UNA *******************************************************************************************************
+		$get_data=$this->listado_precios_model->db_get_data_x_articulos($id_compras_articulo_precios);
+		$table='<tr id="'.$get_data[0]['id_compras_articulo_precios'].'">
+				<td>
+					<span name="proveedor">'.$get_data[0]['nombre_comercial'].'</span>
+					<input type="hidden" value="'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$get_data[0]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$get_data[0]['id_compras_articulo_precios'].'">
+				</td>
+				<td>
+					'.$get_data[0]['articulo'].'
+				</td>
+				<td>
+					'.$get_data[0]['cl_presentacion'].'
+				</td>
+				<td class="right">
+					<input type="hidden" id="costo_sin_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" value="'.$get_data[0]['costo_sin_impuesto'].'">
+					'.$get_data[0]['costo_sin_impuesto'].'
+				</td>
+				<td>
+					<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')">
+				</td>
+				<td>
+					<input type="hidden" id="costo_2'.$get_data[0]['id_compras_articulo_precios'].'" value="">
+					<span id="costo_2_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+				</td>
+				<td>
+					<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')">
+				</td>
+				<td>
+					<!--<input type="text" id="costo2" data-campo="costo2['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small">-->
+					<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+				</td>
+				<td>
+					<input type="hidden" value="'.$get_data[0]['impuesto'].'" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+					'.$get_data[0]['impuesto'].'
+				</td>
+				<td>
+					<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'">
+					<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+				</td>
+				<td>
+					<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'">
+					<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+				</td>
+				</tr>';
+		 echo json_encode($table);
+	}
 	public function registrar_articulos(){
 		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
 		$cantidad 	= $this->ajax_post('cantidad');
+		$costo2 	= $this->ajax_post('costo2');
 		$descuento 	= $this->ajax_post('descuento');
-		$iva 	= $this->ajax_post('iva');
-		/*var_dump($cantidad);
-		echo '<br>';
-		var_dump($descuento);
-		echo '<br>';
-		var_dump($iva);
-		echo '<br>';
-		dump_var($id_compras_articulo_precios);*/
-		$array =array();
-		$array=$id_compras_articulo_precios;
-		$array[]=array(0 => $cantidad, 1 => $descuento,2 => $iva);
-		/*$array[]=$descuento;
-		$array[]=$iva;*/
+		$imp 	= $this->ajax_post('imp');
+		$valor_imp 	= $this->ajax_post('valor_imp');
+		$total 	= $this->ajax_post('total');
+		$array=array(0 => $cantidad, 1 => $descuento,2 => $imp);
 		dump_var($array);
 	}
 	public function export_xlsx(){

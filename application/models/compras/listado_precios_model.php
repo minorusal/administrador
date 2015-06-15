@@ -60,6 +60,7 @@ class listado_precios_model extends Base_Model{
 				$limit";
       	// Execute querie
 				//echo $query;
+		//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

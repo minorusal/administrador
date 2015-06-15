@@ -591,7 +591,6 @@ class listado_precios extends Base_Controller {
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
-				
 				$set_data[] = array(
 									$value['id_compras_articulo_precios'],
 									$value['articulo'],
@@ -639,6 +638,7 @@ class listado_precios extends Base_Controller {
 									$this->lang_item("impuesto"));
 	
 		}
+
 		$params = array(	'title'   => $this->lang_item("listado"),
 							'items'   => $set_data,
 							'headers' => $set_heading

@@ -715,14 +715,16 @@ class ordenes extends Base_Controller {
 					<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 				</td>
 				<td>
-					<input type="hidden" value="'.$get_data[0]['id_impuesto'].'" name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+					<input type="hidden" value="'.$get_data[0]['impuesto'].'" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
 					'.$get_data[0]['impuesto'].'
 				</td>
 				<td>
-					<input type="text" id="iva" data-campo="valor_imp['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small">
+					<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'">
+					<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 				</td>
 				<td>
-					<input type="text" id="iva" data-campo="total['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small">
+					<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'">
+					<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 				</td>
 				</tr>';
 		 echo json_encode($table);

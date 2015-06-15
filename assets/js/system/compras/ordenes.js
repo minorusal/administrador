@@ -275,14 +275,23 @@ function calcula_costo2(id_compras_articulo_precios){
 	var cantidad = parseFloat(jQuery('#cantidad_'+id_compras_articulo_precios).val());
 	var costo_2=costo_sin_impuesto*cantidad;
 	jQuery('#costo_2_'+id_compras_articulo_precios).html(costo_2);
-	jQuery('#costo_2'+id_compras_articulo_precios).html(costo_2);
+	jQuery('#costo_2'+id_compras_articulo_precios).val(costo_2);
 }
 function calcula_subtotal(id){
+	var	valor_hidden_impuesto;
+	var valor_impuesto;	
+	var total;
 	var costo_2 = parseFloat(jQuery('#costo_2'+id).val());
 	var descuento = parseFloat(jQuery('#descuento_'+id).val());
-	alert(costo_2);
+	var impuesto = parseFloat(jQuery('#impuesto_'+id).val());
+	//SE CALCULA SUBTOTAL
 	var subtotal=costo_2-descuento;
-	//alert(subtotal);
 	jQuery('#subtotal_'+id).html(subtotal);
-
+	// SE CALCULA EL VALOR DEL IMPUESTO
+	valor_impuesto=(subtotal*impuesto)/100;
+	jQuery('#valor_hidden_impuesto_'+id).val(valor_impuesto);
+	jQuery('#valor_impuesto_'+id).html(valor_impuesto);
+	// SE CALCULA EL TOTAL
+	total = subtotal+valor_impuesto;
+	jQuery('#total_'+id).html(total);
 }

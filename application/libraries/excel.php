@@ -14,7 +14,9 @@ class excel extends PHPExcel{
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
 		$items   = (array_key_exists('items',$params)) ? $params['items'] : false;
 
+
 		if($headers && $items){
+
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
 									->setLastModifiedBy("IS Intelligent Solution")
@@ -50,18 +52,20 @@ class excel extends PHPExcel{
 			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
 	      	
-	      	$objPHPExcel->getActiveSheet()->fromArray($params['items'], null, 'A4'); 
+	      	$items = $objPHPExcel->getActiveSheet()->fromArray($params['items'], null, 'A4'); 
 	      	
 		
 			$objPHPExcel->setActiveSheetIndex(0);
 			if($debug==false){
+				//ob_end_clean();
 				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save('php://output');
+				//ob_end_clean();
 				exit;
 			}
-				
+			
 			
 		}else{
 			redirect('override_404');

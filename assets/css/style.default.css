@@ -220,6 +220,12 @@ h1,h2,h3,h4,h5 { font-weight: normal; line-height: normal; }
 	font-size: 12px;
 }
 
+.onclock { position: absolute; top: 33%; right: 20px; }
+.onclock input {
+	width: 220px; padding: 8px 10px; background: #fff url(../images/icons/reloj.png) no-repeat 215px 10px;
+	font-size: 12px;
+}
+
 .maincontent { float: left; width: 100%; }
 .maincontentinner { padding: 20px; }
 .subtitle { text-transform: uppercase; font-size: 11px; color: #999; margin-bottom: 5px; }

@@ -215,35 +215,6 @@ function articulos(id_compras_orden){
         }
     });
 }
-function test(id_compras_articulo_precios){
-	id_dentificador=jQuery('#idarticuloprecios_'+id_compras_articulo_precios).val();
-	
-	if(typeof  id_dentificador =="undefined"){
-		id_dentificador=0;
-	}else{
-		id_dentificador=id_dentificador.split('_');
-	}
-	if(id_dentificador==id_compras_articulo_precios){
-		jQuery("#"+id_compras_articulo_precios).remove();
-	}
-	else{
-		jQuery('#dyntable2').show();
-		jQuery.ajax({
-			type:"POST",
-			url: path()+"compras/ordenes/get_data_articulo",
-			dataType: "json",
-			data : {id_compras_articulo_precios:id_compras_articulo_precios},
-			beforeSend : function(){
-				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-			},
-			success : function(data){
-				jQuery("#dyntable2 > tbody").append(data);
-			    
-				
-			}
-		});
-	}
-}
 function agregar_articulos(){
 	var btn   = jQuery("button[name='save']");
 	//btn.attr('disabled','disabled');
@@ -270,28 +241,144 @@ function agregar_articulos(){
 		}
 	});
 }
+function get_orden_listado_articulo(id_compras_articulo_precios){
+	id_dentificador=jQuery('#idarticuloprecios_'+id_compras_articulo_precios).val();
+	if(typeof  id_dentificador =="undefined"){
+		id_dentificador=0;
+	}else{
+		id_dentificador=id_dentificador.split('_');
+	}
+	if(id_dentificador==id_compras_articulo_precios){
+		jQuery("#"+id_compras_articulo_precios).remove();
+	}
+	else{
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/ordenes/get_data_articulo",
+			dataType: "json",
+			data : {id_compras_articulo_precios:id_compras_articulo_precios},
+			beforeSend : function(){
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			},
+			success : function(data){
+					var validar_data = validar_exist_listado(id_compras_articulo_precios);
+					if(validar_data.id==1){
+						jQuery("#mensajes_update").html(validar_data.contenido).show('slow');
+					}else{
+						jQuery('#dyntable2').show('slow');
+						jQuery("#mensajes_update").html('').hide('slow');
+						jQuery("#dyntable2 > tbody").append(data);
+						//insert_orden_listado_articulo(id_compras_articulo_precios);
+					}					
+			}
+		});
+	}
+}
+function validar_exist_listado(id){
+	var id_compras_orden = jQuery('#id_compras_orden').val();
+	var validar;
+	jQuery.ajax({
+			type:"POST",
+			url: path()+"compras/ordenes/validar_exist_listado",
+			dataType: "json",
+			async:false,
+			data : {id_compras_articulo_precios:id,id_compras_orden:id_compras_orden},
+			beforeSend : function(){
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			},
+			success : function(data){
+					 validar= data;
+			}
+		});
+	return validar;
+}
+function insert_orden_listado_articulo(id_compras_articulo_precios){
+	var btn   = jQuery("button[name='save']");
+	var id_compras_orden = jQuery('#id_compras_orden').val();
+	//btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/ordenes/insert_orden_listado_articulos",
+		dataType: "json",
+		data : {id_compras_articulo_precios:id_compras_articulo_precios,id_compras_orden:id_compras_orden},
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			if(data.id==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
+			
+		}
+	});
+}
 function calcula_costo2(id_compras_articulo_precios){
 	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto_'+id_compras_articulo_precios).val());
 	var cantidad = parseFloat(jQuery('#cantidad_'+id_compras_articulo_precios).val());
-	var costo_2=costo_sin_impuesto*cantidad;
-	jQuery('#costo_2_'+id_compras_articulo_precios).html(costo_2);
-	jQuery('#costo_2'+id_compras_articulo_precios).val(costo_2);
+	var costo_x_cantidad=costo_sin_impuesto*cantidad;
+	jQuery('#costo_x_cantidad'+id_compras_articulo_precios).html(costo_x_cantidad);
+	jQuery('#costo_x_cantidad_hidden'+id_compras_articulo_precios).val(costo_x_cantidad);
+	calcula_subtotal(id_compras_articulo_precios);
+	update_orden_listado();
 }
 function calcula_subtotal(id){
 	var	valor_hidden_impuesto;
+	var valor_1;
+	var valor_2;
 	var valor_impuesto;	
 	var total;
-	var costo_2 = parseFloat(jQuery('#costo_2'+id).val());
+	var costo_x_cantidad_hidden = parseFloat(jQuery('#costo_x_cantidad_hidden'+id).val());
+	var descuento_hidden;
 	var descuento = parseFloat(jQuery('#descuento_'+id).val());
 	var impuesto = parseFloat(jQuery('#impuesto_'+id).val());
+	if(isNaN(descuento)){descuento=parseFloat(jQuery('#descuento_hidden_'+id).val());}	
+
 	//SE CALCULA SUBTOTAL
-	var subtotal=costo_2-descuento;
+	var subtotal=costo_x_cantidad_hidden-descuento;
 	jQuery('#subtotal_'+id).html(subtotal);
+	jQuery('#subtotal__hidden'+id).val(subtotal);
 	// SE CALCULA EL VALOR DEL IMPUESTO
-	valor_impuesto=(subtotal*impuesto)/100;
+	valor_1=((subtotal*impuesto)/100);
+	valor_impuesto = parseFloat(valor_1.toFixed(3));
 	jQuery('#valor_hidden_impuesto_'+id).val(valor_impuesto);
 	jQuery('#valor_impuesto_'+id).html(valor_impuesto);
 	// SE CALCULA EL TOTAL
-	total = subtotal+valor_impuesto;
+	valor_2 = subtotal+valor_impuesto;
+	total = parseFloat(valor_2.toFixed(3));
+	jQuery('#total_hidden_'+id).val(total);
 	jQuery('#total_'+id).html(total);
+	update_orden_listado();
+}
+function update_orden_listado(){
+	var btn   = jQuery("button[name='save']");
+	//btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/ordenes/update_orden_listado_precios",
+		dataType: "json",
+		data : objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			/*if(data.id==1){
+				clean_formulario();
+			}*/
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
+			
+		}
+	});
 }

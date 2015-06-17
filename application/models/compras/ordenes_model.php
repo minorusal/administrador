@@ -182,7 +182,7 @@ class ordenes_model extends Base_Model{
 		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
 
 		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
-		$update    					  = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_articulo_precios', $filtro);
+		$update    					  = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
 		return $update;
 	}
 	public function db_get_data_orden_listado_registrado($data = array()){
@@ -216,6 +216,16 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
+	public function db_update_activo_orden_listado($data=array()){
+		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
+		
+		$tbl = $this->tbl;
+
+		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
+		return $update;
+	}
 	public function db_update_estatus_orden_listado($data=array()){
 		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
 		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
@@ -223,7 +233,7 @@ class ordenes_model extends Base_Model{
 		
 		$tbl = $this->tbl;
 
-		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_articulo_precios', $filtro);
+		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
 		return $update;
 	}
 }

@@ -171,7 +171,6 @@ function show_direccion(id_sucursal){
         }
     });
 }
-
 function articulos(id_compras_orden){	
 	var functions=[];
 	jQuery.ajax({
@@ -188,32 +187,6 @@ function articulos(id_compras_orden){
         	jQuery('#ui-id-3').click();
         }
     });
-}
-function agregar_articulos(){
-	var btn   = jQuery("button[name='save']");
-	//btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();	
-	// Obtiene campos en formulario
-  	var objData = formData('#formulario');
-  	objData['incomplete'] = values_requeridos();
-	jQuery.ajax({
-		type:"POST",
-		url: path()+"compras/ordenes/registrar_articulos",
-		dataType: "json",
-		data : objData,
-		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-		},
-		success : function(data){
-			btn.removeAttr('disabled');
-			if(data.id==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data.contenido).show('slow');
-			
-		}
-	});
 }
 function get_orden_listado_articulo(id_compras_articulo_precios){
 	id_dentificador=jQuery('#idarticuloprecios_'+id_compras_articulo_precios).val();
@@ -236,13 +209,11 @@ function get_orden_listado_articulo(id_compras_articulo_precios){
 			},
 			success : function(data){
 					var validar_data = validar_exist_listado(id_compras_articulo_precios);
-					if(validar_data.id==1){
-						//jQuery("#mensajes_update").html(validar_data.contenido).show('slow');
-					}else{
+					if(validar_data.id==1){}else{
 						jQuery('#dyntable2').show('slow');
 						jQuery("#mensajes_update").html('').hide('slow');
 						jQuery("#dyntable2 > tbody").append(data);
-						//insert_orden_listado_articulo(id_compras_articulo_precios);
+						insert_orden_listado_articulo(id_compras_articulo_precios);
 					}					
 			}
 		});
@@ -267,13 +238,9 @@ function validar_exist_listado(id){
 	return validar;
 }
 function insert_orden_listado_articulo(id_compras_articulo_precios){
-	var btn   = jQuery("button[name='save']");
 	var id_compras_orden = jQuery('#id_compras_orden').val();
-	//btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
-  	objData['incomplete'] = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/ordenes/insert_orden_listado_articulos",
@@ -282,15 +249,7 @@ function insert_orden_listado_articulo(id_compras_articulo_precios){
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
-		success : function(data){
-			btn.removeAttr('disabled');
-			if(data.id==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data.contenido).show('slow');
-			
-		}
+		success : function(data){}
 	});
 }
 function calcula_costo2(id_compras_articulo_precios){
@@ -312,12 +271,6 @@ function calcula_subtotal(id){
 	var descuento_hidden;
 	var descuento = parseFloat(jQuery('#descuento_'+id).val());
 	var impuesto = parseFloat(jQuery('#impuesto_'+id).val());
-	/*alert(descuento);
-	if(isNaN(descuento)){
-		descuento=parseFloat(jQuery('#descuento_hidden_'+id).html());
-		jQuery('#descuento_hidden_'+id).val(descuento);
-	}	
-	alert(descuento);*/
 	//SE CALCULA SUBTOTAL
 	var subtotal=costo_x_cantidad_hidden-descuento;
 	jQuery('#subtotal_'+id).html(subtotal);
@@ -335,12 +288,8 @@ function calcula_subtotal(id){
 	update_orden_listado();
 }
 function update_orden_listado(){
-	var btn   = jQuery("button[name='save']");
-	//btn.attr('disabled','disabled');
-	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
-  	objData['incomplete'] = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/ordenes/update_orden_listado_precios",
@@ -349,28 +298,55 @@ function update_orden_listado(){
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
-		success : function(data){
-			btn.removeAttr('disabled');
-			/*if(data.id==1){
-				clean_formulario();
-			}*/
-			//jQuery("#registro_loader").html('');
-		   // jQuery("#mensajes").html(data.contenido).show('slow');
-			
-		}
+		success : function(data){}
 	});
 }
 function deshabilitar_orden_lisatdo(id){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
+
+	id = (!id)?false:id;
+	if(id)if(!confirm('Esta seguro de eliminar el registro: '+id)) return false;
+	
 	jQuery.ajax({
         type: "POST",
         url: path()+"compras/ordenes/deshabilitar_orden_lisatdo",
         dataType: 'json',
         data: {id_compras_orden:id_compras_orden,id_compras_articulo_precios : id},
         success: function(data){
-        	jQuery('#a-0').html('');
-        	jQuery('#ui-id-3').show('slow');
-        	jQuery('#ui-id-3').click();
+        	if(data.id==1){
+		    	jQuery("#mensajes_grid").html(data.contenido).show('slow');
+		    	jQuery("#"+id).closest('tr').fadeOut(function(){
+		    		jQuery("#"+id).remove();
+				});
+				jQuery("#mensajes").html(data.contenido).show('slow');
+			}else{
+				jQuery("#update_loader").html('');				
+			    jQuery("#mensajes").html(data.contenido).show('slow');
+			}
         }
     });
+}
+function guardar_cambios_orden_listado(){
+	var btn   = jQuery("button[name='save']");
+	//btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"compras/ordenes/guardar_cambios_orden_listado",
+		dataType: "json",
+		data : objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			if(data.id==1){}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
+			
+		}
+	});
 }

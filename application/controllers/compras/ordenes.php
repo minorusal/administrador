@@ -439,7 +439,6 @@ class ordenes extends Base_Controller {
 									);	
 				$insert2 = $this->variables_model->update($sqlData2);	
 				if($insert2){
-					//$msg = $this->lang_item("msg_insert_success",false);
 					$msg = sprintf($this->lang_item('msg_insert_orden_success', false), $no_orden[0]['valor']+1);
 					$json_respuesta = array(
 						 'id' 		=> 1
@@ -550,7 +549,7 @@ class ordenes extends Base_Controller {
 		$accion 			= $this->tab['articulos'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
-		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'agregar_articulos()','content' => $this->lang_item("btn_guardar") ));
+		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'guardar_cambios_orden_listado()','content' => $this->lang_item("btn_guardar") ));
 		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
 		if($detalle[0]['id_orden_tipo']==2){
 			$style='style="display:none"';
@@ -779,36 +778,6 @@ class ordenes extends Base_Controller {
 		 }
 		 echo json_encode($json_respuesta);
 	}
-	public function registrar_articulos(){
-		//UTILIZAR PARA CAMBIAR ESTATUS AL PRESIONAR EN GUARDAR CAMBIOS YA QUE NO SE UTILIZA
-		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
-		$costo_x_cantidad_hidden= $this->ajax_post('costo_x_cantidad_hidden');
-		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
-		$cantidad 	= $this->ajax_post('cantidad');
-		$costo2 	= $this->ajax_post('costo2');
-		$descuento 	= $this->ajax_post('descuento');
-		$subtotal__hidden 	= $this->ajax_post('subtotal__hidden');
-		$valor_hidden_impuesto 	= $this->ajax_post('valor_hidden_impuesto');
-		$total_hidden 	= $this->ajax_post('total_hidden');
-		$impuesto 	= $this->ajax_post('impuesto');
-		
-		
-		
-		$imp 	= $this->ajax_post('imp');
-		$valor_imp 	= $this->ajax_post('valor_imp');
-		$total 	= $this->ajax_post('total');
-		//dump_var($costo_x_cantidad_hidden);
-		$array=array(
-					'orden'=> $id_compras_orden,
-						0  => $cantidad, 
-						1  => $costo_x_cantidad_hidden,
-						2  => $descuento,
-						3  => $impuesto,
-						4  => $subtotal__hidden,
-						5  => $valor_hidden_impuesto,
-						6  => $total_hidden);
-		dump_var($cantidad);
-	}
 	public function insert_orden_listado_articulos(){
 		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
 		//echo $id_compras_articulo_precios[$id_compras_articulo_precios].'<br>';
@@ -833,8 +802,6 @@ class ordenes extends Base_Controller {
 		$valor_hidden_impuesto 	= $this->ajax_post('valor_hidden_impuesto');
 		$total_hidden 	= $this->ajax_post('total_hidden');
 		$impuesto 	= $this->ajax_post('impuesto');
-		
-		$keys=array_keys($cantidad);
 		
 		$array=array(	
 					0  	=> $cantidad, 
@@ -879,7 +846,54 @@ class ordenes extends Base_Controller {
 						'edit_timestamp'  	 		   	=> $this->timestamp(),
 						'edit_id_usuario'   		  	=> $this->session->userdata('id_usuario')
 					);
-		$update = $this->db_model->db_update_estatus_orden_listado($sqldata);
+		$update = $this->db_model->db_update_activo_orden_listado($sqldata);
+		if($update){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		echo json_encode($json_respuesta);
+	}
+	public function guardar_cambios_orden_listado(){
+		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
+		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
+		$keys=array_keys($id_compras_articulo_precios);
+		for($i=0;count($id_compras_articulo_precios)>$i;$i++){
+			$sqldata= array(
+						'id_compras_orden' 			   =>$id_compras_orden,
+						'id_compras_articulo_precios'  =>$keys[$i],
+						'estatus' 					   => 2,
+						'edit_timestamp'  	 		   => $this->timestamp(),
+						'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+						);
+			$update = $this->db_model->db_update_estatus_orden_listado($sqldata);
+		}
+		if($update){
+			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$json_respuesta = array(
+				 'id' 		=> 1
+				,'contenido'=> alertas_tpl('success', $msg ,false)
+				,'success' 	=> true
+			);
+		}else{
+			$msg = $this->lang_item("msg_err_clv",false);
+			$json_respuesta = array(
+					 'id' 		=> 0
+					,'contenido'=> alertas_tpl('', $msg ,false)
+					,'success' 	=> false
+			);
+		}
+		echo json_encode($json_respuesta);
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

@@ -208,13 +208,23 @@ class ordenes_model extends Base_Model{
 					LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 					LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
 					LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
-				WHERE 1 $condicion";
+				WHERE 1 AND l.activo = 1 $condicion";
 		//echo $query;
       	// Execute querie
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+	public function db_update_estatus_orden_listado($data=array()){
+		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
+		
+		$tbl = $this->tbl;
+
+		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_articulo_precios', $filtro);
+		return $update;
 	}
 }
 ?>

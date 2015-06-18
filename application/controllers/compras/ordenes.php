@@ -675,6 +675,19 @@ class ordenes extends Base_Controller {
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
         $tabData['creditos']     			 = $this->lang_item("creditos",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
+		$tabData['proveedor']  			 	 = $this->lang_item("proveedor",false);
+		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
+		$tabData['clave_corta']  			 = $this->lang_item("clave_corta",false);
+		$tabData['Costo']  			 		 = $this->lang_item("Costo",false);
+		$tabData['unitario']  			 	 = $this->lang_item("unitario",false);
+		$tabData['cantidad']  			 	 = $this->lang_item("cantidad",false);
+		$tabData['costo_cantidad']  	     = $this->lang_item("costo_cantidad",false);
+		$tabData['descuento']  			 	 = $this->lang_item("descuento",false);
+		$tabData['subtotal']  			 	 = $this->lang_item("subtotal",false);
+		$tabData['imp']  			 		 = $this->lang_item("imp",false);
+		$tabData['valor_imp']  			 	 = $this->lang_item("valor_imp",false);
+		$tabData['total']  			 		 = $this->lang_item("total",false);
+		$tabData['accion']  				 = $this->lang_item("accion",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];

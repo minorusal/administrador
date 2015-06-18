@@ -602,7 +602,21 @@ class ordenes extends Base_Controller {
 							'.$data_listado[$i]['costo_sin_impuesto'].'
 						</td>
 						<td>
-							<input type="text" id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+							<!--<input type="text" id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')"/>-->
+							
+							<input type="text" id="spinner" name="" class="input-small input-spinner" maxlength="3" style="width: 84px; margin-right: 16px; text-align: right;">
+							<span class="ui-spinner ui-widget">
+								<div class="ui-spinner-buttons" style="height: 32px; left: -16px; top: -13px; width: 16px;">
+									<div class="ui-spinner-up ui-spinner-button ui-state-default ui-corner-tr" style="width: 15px; height: 15px;">
+										<span class="ui-icon ui-icon-triangle-1-n" style="margin-left: 6px; margin-top: 0.5px;">&nbsp;
+										</span>
+									</div>
+									<div class="ui-spinner-down ui-spinner-button ui-state-default ui-corner-br" style="width: 15px; height: 15px;">
+										<span class="ui-icon ui-icon-triangle-1-s" style="margin-left: 6px; margin-top: 0.5px;">&nbsp;
+										</span>
+									</div>
+								</div>
+							</span>
 						</td>
 						<td>
 							<input type="hidden" id="costo_x_cantidad_hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
@@ -610,10 +624,16 @@ class ordenes extends Base_Controller {
 						</td>
 						<td>
 							<input type="hidden" value="'.$data_listado[$i]['descuento'].'" id="descuento_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'">
-							<input type="text" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+							<div class="input-prepend input-append">
+                              <span class="add-on">$</span>
+                              <input type="text" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+                            </div>
 						</td>
 						<td>
 							<input type="hidden" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+							<div class="input-prepend input-append">
+                              <span class="add-on">$</span>
+							</div>
 							<span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['subtotal'].'</span>
 						</td>
 						<td>

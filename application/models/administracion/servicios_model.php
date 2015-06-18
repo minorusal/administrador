@@ -37,4 +37,40 @@ class servicios_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
+
+	/*Actualiza la información en el formuladio de edición de la tabla av_administracion_areas*/
+	public function db_update_data($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query1 = "SELECT *
+		          FROM $tbl[administracion_servicios] sr
+		          WHERE sr.activo = 1
+		          AND   sr.inicio < '$data[inicio]'
+		          AND   sr.final  > '$data[final]'
+		          AND   sr.id_sucursal = $data[id_sucursal]
+		          AND   sr.id_administracion_servicio != $data[id_administracion_servicio]";
+		$query2 = "SELECT *
+		          FROM $tbl[administracion_servicios] sr
+		          WHERE sr.activo = 1
+		          AND   sr.inicio > '$data[inicio]'
+		          AND   sr.final  < '$data[final]'
+		          AND   sr.id_sucursal = $data[id_sucursal]
+		          AND   sr.id_administracion_servicio != $data[id_administracion_servicio]";
+		$query1 = $this->db->query($query1);
+		$query2 = $this->db->query($query2);
+		if($query1->num_rows >= 1 || $query2->num_rows >= 1){
+			return false;
+		}else{
+			$condicion = array('id_administracion_servicio !=' => $data['id_administracion_servicio']); 
+			$existe    = $this->row_exist($tbl['administracion_servicios'], $condicion);
+			if($existe){
+				$condicion = "id_administracion_servicio = ".$data['id_administracion_servicio'];			
+				$update = $this->update_item($tbl['administracion_servicios'], $data, 'id_administracion_servicio', $condicion);
+				return $update;
+			}else{
+				return false;
+			}
+		}
+	}
 }

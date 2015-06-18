@@ -252,7 +252,13 @@ function insert_orden_listado_articulo(id_compras_articulo_precios){
 		success : function(data){}
 	});
 }
+function validanumero(input,id){
+   jQuery(input+id).keyup(function () {
+    this.value = this.value.replace(/[^0-9.]/g,''); 
+  }); 
+}
 function calcula_costo2(id_compras_articulo_precios){
+	validanumero('#cantidad_',id_compras_articulo_precios);
 	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto_'+id_compras_articulo_precios).val());
 	var cantidad = parseFloat(jQuery('#cantidad_'+id_compras_articulo_precios).val());
 	var costo_x_cantidad=costo_sin_impuesto*cantidad;
@@ -262,30 +268,44 @@ function calcula_costo2(id_compras_articulo_precios){
 	update_orden_listado();
 }
 function calcula_subtotal(id){
+	validanumero('#descuento_',id);
 	var	valor_hidden_impuesto;
 	var valor_1;
 	var valor_2;
 	var valor_impuesto;	
 	var total;
+	var subtotal;
 	var costo_x_cantidad_hidden = parseFloat(jQuery('#costo_x_cantidad_hidden'+id).val());
-	var descuento_hidden;
-	var descuento = parseFloat(jQuery('#descuento_'+id).val());
+	var desc = parseFloat(jQuery('#descuento_'+id).val());
 	var impuesto = parseFloat(jQuery('#impuesto_'+id).val());
-	//SE CALCULA SUBTOTAL
-	var subtotal=costo_x_cantidad_hidden-descuento;
-	jQuery('#subtotal_'+id).html(subtotal);
-	jQuery('#subtotal__hidden'+id).val(subtotal);
-	// SE CALCULA EL VALOR DEL IMPUESTO
-	valor_1=((subtotal*impuesto)/100);
-	valor_impuesto = parseFloat(valor_1.toFixed(3));
-	jQuery('#valor_hidden_impuesto_'+id).val(valor_impuesto);
-	jQuery('#valor_impuesto_'+id).html(valor_impuesto);
-	// SE CALCULA EL TOTAL
-	valor_2 = subtotal+valor_impuesto;
-	total = parseFloat(valor_2.toFixed(3));
-	jQuery('#total_hidden_'+id).val(total);
-	jQuery('#total_'+id).html(total);
-	update_orden_listado();
+	if(desc>=101){
+		jQuery('#descuento_'+id).val('');
+		descuento=0;
+	}
+	else{
+		//return false
+		var descuento =parseFloat(desc/100);
+		//SE CALCULA SUBTOTAL
+		if(descuento==0 || isNaN(descuento)){
+			subtotal=costo_x_cantidad_hidden;
+		}else{
+			descuento=costo_x_cantidad_hidden*descuento;
+			subtotal=costo_x_cantidad_hidden-descuento;
+		}
+		jQuery('#subtotal_'+id).html(subtotal);
+		jQuery('#subtotal__hidden'+id).val(subtotal);
+		// SE CALCULA EL VALOR DEL IMPUESTO
+		valor_1=((subtotal*impuesto)/100);
+		valor_impuesto = parseFloat(valor_1.toFixed(3));
+		jQuery('#valor_hidden_impuesto_'+id).val(valor_impuesto);
+		jQuery('#valor_impuesto_'+id).html(valor_impuesto);
+		// SE CALCULA EL TOTAL
+		valor_2 = subtotal+valor_impuesto;
+		total = parseFloat(valor_2.toFixed(3));
+		jQuery('#total_hidden_'+id).val(total);
+		jQuery('#total_'+id).html(total);
+		update_orden_listado();
+	}
 }
 function update_orden_listado(){
 	// Obtiene campos en formulario

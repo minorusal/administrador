@@ -150,5 +150,91 @@ class ordenes_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	public function db_get_data_orde_listado_precio($data = array()){
+		$id_compras_orden 			 = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+		$condicion = ($id_compras_orden)?("AND id_compras_orden = '$id_compras_orden'"):false;
+		$condicion2 = ($id_compras_articulo_precios)?("AND id_compras_articulo_precios = '$id_compras_articulo_precios'"):false;
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[compras_ordenes_articulos] WHERE activo= 1 $condicion $condicion2";
+		//echo $query;
+
+      	// Execute querie
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function db_insert_orde_listado_articulos($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['compras_ordenes_articulos'], $data);
+		return $insert;
+	}
+	public function db_update_orden_listado_articulos($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$id_compras_orden   		  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+
+		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
+		$update    					  = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
+		return $update;
+	}
+	public function db_get_data_orden_listado_registrado($data = array()){
+		$id_compras_orden 			 = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$condicion = ($id_compras_orden)?("AND id_compras_orden = '$id_compras_orden'"):false;
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT 
+					l.id_compras_articulo_precios,
+					l.cantidad,
+					l.costo_x_cantidad,
+					l.descuento,
+					l.impuesto_porcentaje,
+					l.subtotal,
+					l.valor_impuesto,
+					l.total,
+					a.costo_sin_impuesto,
+					c.nombre_comercial,
+					b.articulo,
+					e.clave_corta as cl_presentacion
+					FROM $tbl[compras_ordenes_articulos] l
+					LEFT JOIN $tbl[compras_articulos_precios] a on l.id_compras_articulo_precios = a.id_compras_articulo_precios
+					LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
+					LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
+					LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
+				WHERE 1 AND l.activo = 1 $condicion";
+		//echo $query;
+      	// Execute querie
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function db_update_activo_orden_listado($data=array()){
+		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
+		
+		$tbl = $this->tbl;
+
+		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
+		return $update;
+	}
+	public function db_update_estatus_orden_listado($data=array()){
+		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
+		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
+		
+		$tbl = $this->tbl;
+
+		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
+		return $update;
+	}
 }
 ?>

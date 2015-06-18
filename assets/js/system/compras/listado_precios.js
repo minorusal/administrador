@@ -373,7 +373,6 @@ function validanumero(id){
     this.value = this.value.replace(/[^0-9.]/g,''); 
   }); 
 }
-
 function eliminar(id){  
     id = (!id)?false:id;
     if(id)if(!confirm('Esta seguro de eliminar el registro: '+id)) return false;    

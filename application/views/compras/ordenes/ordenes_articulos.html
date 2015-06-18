@@ -93,31 +93,40 @@
    </div>
     <br>
     {list_arti}
-    <table class="table table-bordered table-invoice-full" id="dyntable2" aria-describedby="dyntable2_info" style="margin-left: 0px; width: 100%; display:none">
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <table class="table table-bordered table-invoice-full" id="dyntable2" aria-describedby="dyntable2_info" style="margin-left: 0px; width: 100%; {style_table}">
     <colgroup>
-                    <col class="con0 width10">
-                    <col class="con1 width10">
-                    <col class="con0 width10">
-                    <col class="con1 width10">
-                    <col class="con0 width10">
-                    <col class="con0 width10">
-                    <col class="con0 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
+                    <col class="con1 width5">
                 </colgroup>
         <tr>
             <th>proveedor</th>
             <th>articulo</th>
             <th>clave corta</th>
-            <th>Costo sin impuesto</th>
+            <th>Costo<br>unitario</th>
             <th>cantidad</th>
+            <th>costo * cantidad</th>
             <th>descuento</th>
-            <th>iva</th>
+            <th>subtotal</th>
+            <th>imp%</th>
+            <th>valor/imp</th>
+            <th>total</th>
+            <th>Accion</th>
         </tr>
-        <tr>
-            {list_articulos}
-        </tr>
+        {table}
     </table>
-    <div id="update_loader"></div>
-    <div id="mensajes_update" style="display:none"></div>
+    <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton"> 
         {button_save}
     </p>

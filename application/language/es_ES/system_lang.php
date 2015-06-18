@@ -42,6 +42,9 @@
 	$lang['msg_err_clv']             		   = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 
 	$lang['msg_insert_orden_success']      = '<strong>Exito!</strong><br>El registro se dio de alta correctamente. Con el numero de orden %s';
+
+	$lang['msg_existencia_listado']            = '<strong>Atencion!</strong><br>El articulo ya se encuentra registrado, por favor seleccione otro, gracias.';
+
 // Botones
 	$lang['btn_xlsx']     = 'Generar Excel';
 	$lang['btn_import_xlsx']     = 'Importar Excel';

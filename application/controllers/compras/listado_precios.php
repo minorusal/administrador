@@ -543,13 +543,19 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
+			
+			$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			if($id_impuesto==0){
+					$id_impuesto ="";
+			}else{
+				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			}
 	        $id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
 	        $upc						= $this->ajax_post('upc');
 	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
 	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
 	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
-	        $id_impuesto 				= $this->ajax_post('impuesto_porcentaje');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
 	        $id_marca 					= $this->ajax_post('id_marca');

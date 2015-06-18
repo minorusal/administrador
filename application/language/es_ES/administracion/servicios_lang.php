@@ -9,6 +9,7 @@ $lang['lbl_servicio'] 	    = "servicio";
 $lang['lbl_clave_corta']    = "clave corta";
 $lang['lbl_inicio']         = "inicio";
 $lang['lbl_final']          = "final";
+$lang['lbl_sucursal'] 	    = "sucursal";
 $lang['lbl_clave_corta']    = "clave corta";
 $lang['lbl_descripcion']    = "descripción";
 

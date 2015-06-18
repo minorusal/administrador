@@ -26,6 +26,15 @@
 		}
 	}
 
+
+	if(!function_exists('time_to_decimal')){
+		function time_to_decimal($time){
+			$horaArray = split(":",$time);
+			$horaDecimal = $horaArray[0]+($horaArray[1]/60);
+			return $horaDecimal;
+		}
+	}
+
 	if(!function_exists('dump_var')){
 		function dump_var($variable,$tipo=0){
 			echo "<pre>";

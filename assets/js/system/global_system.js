@@ -58,6 +58,25 @@ function calendar_dual_detalle(inicio, fin){
     jQuery('#'+fin).datepicker({
         minDate: Datemin,
         });
+}
+
+function time_dual(inicio,fin){
+    var horaStrIn = inicio;
+    var horaStrEnd = fin;
+    var horaArrIn = horaStrIn.split(':');
+    var horaArrEnd = horaStrEnd.split(':');
+    var horasIn = parseInt(horaArrIn[0]);
+    var horasEnd = parseInt(horaArrEnd[0]);
+    var minutosIn = parseInt(horaArrIn[1]);
+    var minutosEnd = parseInt(horaArrEnd[1]);
+    var horaDecimalInicio = horasIn + (minutosIn / 60);
+    var horaDecimalEnd = horasEnd + (minutosEnd / 60);
+    if(horaDecimalInicio > horaDecimalEnd || horaDecimalInicio == horaDecimalEnd){
+        return false;
+    }else{
+        return true;
+    }
+    
 } 
 function clearEndDate(fin) {          
     jQuery('#'+fin).val('');      

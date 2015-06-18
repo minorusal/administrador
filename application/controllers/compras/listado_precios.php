@@ -284,13 +284,18 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
-		else{						
+		else{	
+			$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			if($id_impuesto==0){
+					$id_impuesto ="";
+			}else{
+				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			}
 	        $upc						= $this->ajax_post('upc');
 	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
 	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
 	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
-	        $id_impuesto 				= $this->ajax_post('impuesto_porcentaje');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
 	        $id_marca 					= $this->ajax_post('id_marca');
@@ -320,8 +325,9 @@ class listado_precios extends Base_Controller {
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
+	        dump_var($data_insert);
 			$id = $this->db_model->db_insert_data($data_insert);
-			//dump_var($id);
+			
 			if($id){
 				$año=date('y');
 				$idnum=str_pad($id[0]['id_row'], 7, "0", STR_PAD_LEFT);
@@ -651,7 +657,6 @@ class listado_precios extends Base_Controller {
 		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
      	echo json_encode($presentacion_em[0]['cv_um']);
 	}
-
 	public function eliminar(){
 		$msj_grid = $this->ajax_post('msj_grid');
 		$sqlData = array(

@@ -543,7 +543,6 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			
 			$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
 			if($id_impuesto==0){
 					$id_impuesto ="";

@@ -11,7 +11,6 @@
 			return $output ;
 		}
 	}
-
     /**
 	* imprime un arreglo formateado para debug
 	* y detiene la ejecucion del script

@@ -571,7 +571,7 @@ class ordenes extends Base_Controller {
 				   						 'params'      => array('this.value'),
 				   						 'params_type' => array(0)
 									)
-					,'class' 	=> "requerido"
+					,'class' 	=> "articulos_lista"
 				);
 		if($detalle[0]['estatus']==7){
 			$list_articulos  = "";
@@ -680,6 +680,7 @@ class ordenes extends Base_Controller {
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
         $tabData['creditos']     			 = $this->lang_item("creditos",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
+		$tabData['lst_articulos_label'] 	 = $this->lang_item("lst_articulos_label",false);
 		$tabData['proveedor']  			 	 = $this->lang_item("proveedor",false);
 		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
 		$tabData['clave_corta']  			 = $this->lang_item("clave_corta",false);

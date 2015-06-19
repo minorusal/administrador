@@ -233,7 +233,7 @@ class servicios extends Base_Controller
 		$incomplete  = $this->ajax_post('incomplete');
 		$mayor  = $this->ajax_post('mayor');
 		
-		if($incomplete>0 ||  $mayor == 'false')
+		if($incomplete>0)
 		{
 			$msg            = $this->lang_item("msg_campos_obligatorios",false);
 
@@ -288,4 +288,86 @@ class servicios extends Base_Controller
 		}
 		echo json_encode($json_respuesta);
 	}
+
+	public function agregar()
+	{
+		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+
+		$sqlData = array(
+			 'buscar'      	 => ''
+			,'offset' 		 => 0
+			,'limit'      	 => 0
+		);
+		$sucursales_array     = array(
+					 'data'     => $this->db_model2->db_get_data($sqlData)
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('sucursal')
+					,'name' 	=> "lts_sucursales"
+					,'class' 	=> "requerido"
+					);
+		$sucursales                      = dropdown_tpl($sucursales_array);
+		$tab_1["lbl_servicio"]           = $this->lang_item("lbl_servicio");
+		$tab_1["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
+		$tab_1["lbl_inicio"]             = $this->lang_item("lbl_inicio");
+		$tab_1["lbl_final"]              = $this->lang_item("lbl_final");
+		$tab_1["lbl_sucursal"]           = $this->lang_item("lbl_sucursal");
+		$tab_1["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
+
+		$tab_1["list_sucursal"]          = $sucursales;
+
+		$tab_1['button_save'] = $btn_save;
+		$tab_1['button_reset'] = $btn_reset;
+
+		if($this->ajax_post(false))
+		{
+			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion, $tab_1, true);
+		}
+	}
+
+	public function insert_servicio(){
+		//print_debug($this->ajax_post(false));
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			
+		}else{
+			$id_sucursal = 	 $this->ajax_post('id_sucursal');
+			$ajax_inicio  =  $this->ajax_post('inicio');
+			$ajax_termino =  $this->ajax_post('termino');
+			
+			$servicios = $this->db_model->db_get_data_x_sucursal($id_sucursal);
+			
+			$check_times = $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
+			if($check_times['response']){
+				$SQLinsert = array(
+					 'servicio'    => $this->ajax_post('servicio')
+					,'clave_corta' => $this->ajax_post('clave_corta')
+					,'descripcion' => $this->ajax_post('descripcion')
+					,'inicio'      => $ajax_inicio
+					,'final'       => $ajax_termino
+					,'id_sucursal' => $id_sucursal
+					,'id_usuario'  => $this->session->userdata('id_usuario')
+				 	,'timestamp'   => $this->timestamp()
+ 					);
+				$insert = $this->db_model->db_insert_data($SQLinsert);
+				if($insert){
+					$msg = $this->lang_item($check_times['msg'],false);
+					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				}
+			}else{
+				$msg = $this->lang_item($check_times['msg'],false);
+				echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			}
+		}
+	}
+
+
+	
 }

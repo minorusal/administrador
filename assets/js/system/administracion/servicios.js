@@ -121,10 +121,13 @@ function agregar(){
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	var objData = formData('#formulario');
-	var inicio = objData['inicio']  = jQuery('#timepicker1').val();
-	var end    = objData['final']   = jQuery('#timepicker2').val();
-	objData['mayor']  = time_dual(inicio,end);
-	alert(objData['mayor']);
+	
+	objData['inicio']    = jQuery('#timepicker1').val();
+	objData['termino']   = jQuery('#timepicker2').val();
+	
+	//objData['mayor']  = time_dual(inicio,end);
+	//alert(objData['mayor']);
+
 	objData['incomplete']  = values_requeridos();
 	objData['id_sucursal'] = jQuery("select[name='lts_sucursales'] option:selected").val();
 	objData['servicio']    = jQuery('#txt_servicio').val();
@@ -139,13 +142,15 @@ function agregar(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data).show('slow');
+			/*btn.removeAttr('disabled');
 			var data = data.split('|');
 			if(data[0]==1){
 				clean_formulario();
 			}
 			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+		    jQuery("#mensajes").html(data[1]).show('slow');*/
 		}
 	});
 }

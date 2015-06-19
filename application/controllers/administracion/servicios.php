@@ -330,46 +330,80 @@ class servicios extends Base_Controller
 		}
 	}
 
-	public function insert_servicio()
-	{
+	public function insert_servicio(){
 		//print_debug($this->ajax_post(false));
 		$incomplete  = $this->ajax_post('incomplete');
-		$mayor  = $this->ajax_post('mayor');
 		
-		if($incomplete>0)
-		{
+		
+		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		if($mayor == 'false'){
-			$msg = $this->lang_item("msg_horainicio_mayor",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		else
-		{
-			$data_insert = array(
-						 'servicio'      => $this->ajax_post('servicio')
-						,'inicio'	     => $this->ajax_post('inicio')
-						,'final'	     => $this->ajax_post('final')
-						,'id_sucursal'	 => $this->ajax_post('id_sucursal')
-						,'clave_corta' 	 => $this->ajax_post('clave_corta')
-						,'descripcion'	 => $this->ajax_post('descripcion')
-						,'timestamp'	 => $this->timestamp()
-						,'id_usuario'	 => $this->session->userdata('id_usuario')
-						);
+			echo json_encode(alertas_tpl('error', $msg ,false));
 			
-			$insert = $this->db_model->db_insert_data($data_insert);
+		}else{
+			$id_sucursal = 	 $this->ajax_post('id_sucursal');
+			$ajax_inicio  =  $this->ajax_post('inicio');
+			$ajax_termino =  $this->ajax_post('termino');
 			
-			if($insert)
-			{
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			$servicios = $this->db_model->db_get_data_x_sucursal($id_sucursal);
+			
+			$check_times = $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
+			if($check_times['response']){
+				'insert'
+			}else{
+				
 			}
-			else
-			{
-				$msg = $this->lang_item("msg_horario_empalmado",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			echo json_encode($check_times['msg']);
+
+		}
+	}
+
+
+	public function check_times_ranges($incio, $termino, $times = array()){
+
+
+		$mk_inicio       =  explode(':', $incio);
+		$mk_termino      =  explode(':', $termino);
+		$mk_inicio       =  mktime($mk_inicio[0],  $mk_inicio[1],  0,0,0,0);
+		$mk_termino      =  mktime($mk_termino[0], $mk_termino[1],0,0,0,0);
+
+		if($mk_inicio==$mk_termino){
+				$msg = 'La hora de inicio no puede ser igual a la de terminbo';
+				$response = false;
+		}else{
+			if($mk_inicio>$mk_termino){
+				$msg = 'La hora de inicio no puede ser mayor a la de termibno';
+				$response = false;
+			}else{
+				$contador = 0;
+				if(is_array($times)){
+					foreach ($times as $item) {
+						if($this->validar_rango( $item['inicio'] , $item['final'], $incio)){
+							$contador++;
+						}
+						if($this->validar_rango( $item['inicio'] , $item['final'], $termino)){
+							$contador++;
+						}
+					}
+					if($contador>0){
+						$msg = 'el horario se empalma';
+						$response = false;
+					}else{
+						$msg = 'exito se registra horario';
+						$response = true;
+					}
+				}else{
+					$msg = 'exito se registra horario fgd';
+					$response = true;
+				}
 			}
 		}
+
+		return array('response'=> $response, 'msg' =>  $msg);
+	}
+	public function validar_rango($inicio, $fin, $value){
+	    $inicio  = strtotime($inicio);
+	    $fin     = strtotime($fin);
+	    $value   = strtotime($value);
+	    return (($value >= $inicio) && ($value <= $fin));
 	}
 }

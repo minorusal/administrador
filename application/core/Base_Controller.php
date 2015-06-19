@@ -691,8 +691,21 @@ class Base_Controller extends CI_Controller {
 						$msg = 'msg_horario_empalmado';
 						$response = false;
 					}else{
-						$msg = 'msg_insert_success';
-						$response = true;
+						foreach ($times as $item) {
+							if($this->validar_rango( $incio , $termino, $item['inicio'])){
+								$contador++;
+							}
+							if($this->validar_rango( $incio , $termino, $item['final'])){
+								$contador++;
+							}
+						}
+						if($contador>0){
+							$msg = 'msg_horario_empalmado';
+							$response = false;
+						}else{
+							$msg = 'msg_insert_success';
+							$response = true;
+						}
 					}
 				}else{
 					$msg = 'msg_insert_success';
@@ -700,7 +713,6 @@ class Base_Controller extends CI_Controller {
 				}
 			}
 		}
-
 		return array('response'=> $response, 'msg' =>  $msg);
 	}
 

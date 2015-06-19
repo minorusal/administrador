@@ -1049,4 +1049,35 @@ class ordenes extends Base_Controller {
 		$sucursal= $this->sucursales_model->get_orden_unico_sucursal($id_sucursal);
 		echo json_encode($sucursal[0]['direccion']);
 	}
+
+	// public function imprimir(){
+	// // Genera PDF para impresion
+	// 	// $html = file_get_contents("assets/tmp/t.html");
+	// 	$html = '<table border="1" cellspacing="3" width="100%"><tbody>';
+	// 	for($i=0; $i<=50; $i++){
+	// 		$html .= '<tr>
+	// 					<td>'.$i.'</td>
+	// 					<td>'.rand($i,$i*date('s')).'</td>
+	// 					<td>'.date('Y-m-d H:i:s').'</td>
+	// 					<td>'.md5(str_shuffle('wefFDSFeiwihñygyuuyGu97t')).'</td>
+	// 					<td>'.str_shuffle('pi8ybDdtfhjhUg5dtiLJ8FrvIUgRxc').'</td>
+	// 				</tr>';
+	// 	}
+	// 	$html .= '</tbody></table>';
+	// 	// dump_var($html);
+	// 	$arrayPDF = array(
+	// 					 'html' 	=> $html
+	// 					,'output'	=> 'F'
+	// 					,'archivo' 	=> false
+	// 				);
+	// 	echo 'Proceso iniciado a las: '.date('Y-m-d H:i:s').'<hr/>';
+	// 	ob_start();
+	// 	if(!$pdfFile=$this->html2pdf->crear($arrayPDF)){
+	// 		echo "Error al crear documento PDF.";
+	// 	}else{echo "Archivo Creado a las ".date('Y-m-d H:i:s').' -> '.'<a href="'.$pdfFile['uri'].'">'.$pdfFile['uri'].'</a>';}
+	// 	$respuesta = ob_get_contents();
+	// 	ob_end_clean();
+	// 	echo $respuesta;
+	// 	echo '<hr/>Proceso terminado a las: '.date('Y-m-d H:i:s');		
+	// }
 }

@@ -700,7 +700,6 @@ class Base_Controller extends CI_Controller {
 				}
 			}
 		}
-
 		return array('response'=> $response, 'msg' =>  $msg);
 	}
 

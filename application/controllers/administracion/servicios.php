@@ -12,8 +12,7 @@ class servicios extends Base_Controller
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'catalogos';
@@ -34,8 +33,7 @@ class servicios extends Base_Controller
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
-	public function config_tabs()
-	{
+	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		$tab_3 	= $this->tab3;
@@ -64,13 +62,11 @@ class servicios extends Base_Controller
 		return $config_tab;
 	}
 
-	private function uri_view_principal()
-	{
+	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index()
-	{
+	public function index(){
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
@@ -83,8 +79,7 @@ class servicios extends Base_Controller
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function listado($offset=0)
-	{
+	public function listado($offset=0){
 		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
@@ -111,23 +106,23 @@ class servicios extends Base_Controller
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_administracion_servicio'].')'
 						);
-
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['id_administracion_servicio'],
 									'servicio'      => tool_tips_tpl($value['servicio'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'   => $value['clave_corta'],
+									'clave_corta'   => $value['cv_servicio'],
+									'sucursal'      => $value['sucursal'],
 									'descripcion'   => $value['descripcion'],
 									'inicio'        => $value['inicio'],
 									'final'         => $value['final']
 									);
 			}
-
 			// Plantilla
 			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("lbl_servicio"),
 										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_sucursal"),
 										$this->lang_item("lbl_descripcion"),
 										$this->lang_item("lbl_inicio"),
 										$this->lang_item("lbl_final"));
@@ -158,8 +153,7 @@ class servicios extends Base_Controller
 		}
 	}
 
-	public function detalle()
-	{
+	public function detalle(){
 		$id_servicio                 = $this->ajax_post('id_servicio');
 		$detalle  	                 = $this->db_model->get_orden_unico_servicio($id_servicio);
 		//print_debug(substr($detalle[0]['inicio'], 0,5));
@@ -228,13 +222,10 @@ class servicios extends Base_Controller
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
-	public function actualizar()
-	{	//print_debug(time_to_decimal($this->ajax_post('inicio')));
+	public function actualizar(){
 		$incomplete  = $this->ajax_post('incomplete');
-		$mayor  = $this->ajax_post('mayor');
 		
-		if($incomplete>0)
-		{
+		if($incomplete>0){
 			$msg            = $this->lang_item("msg_campos_obligatorios",false);
 
 			$json_respuesta = array(
@@ -243,54 +234,51 @@ class servicios extends Base_Controller
 						,'success' 	=> false
 				);
 		}
-		if($mayor == 'false'){
-			$msg            = $this->lang_item("msg_horainicio_mayor",false);
-
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
-		}
-		else
-		{
-			$sqlData = array(
-						 'id_administracion_servicio' => $this->ajax_post('id_servicio')
-						,'servicio' 		          => $this->ajax_post('servicio')
-						,'inicio'			          => $this->ajax_post('inicio')
-						,'final'			          => $this->ajax_post('final')
-						,'id_sucursal'				  => $this->ajax_post('id_sucursal')
-						,'clave_corta' 				  => $this->ajax_post('clave_corta')
-						,'descripcion'				  => $this->ajax_post('descripcion')
-						,'edit_timestamp'			  => $this->timestamp()
-						,'edit_id_usuario'			  => $this->session->userdata('id_usuario')
-						);
-			$insert = $this->db_model->db_update_data($sqlData);
+		else{
+			$id_servicio  = $this->ajax_post('id_servicio');
+			$id_sucursal  =  $this->ajax_post('id_sucursal');
+			$ajax_inicio  =  $this->ajax_post('inicio');
+			$ajax_termino =  $this->ajax_post('termino');
+			$servicios    =  $this->db_model->db_get_data_x_sucursal($id_sucursal,$id_servicio);
+			$check_times  =  $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
 			
-			if($insert)
-			{
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
+			if($check_times['response']){
+				$sqlData = array(
+					 'id_administracion_servicio'  => $id_servicio
+					,'servicio'        				=> $this->ajax_post('servicio')
+					,'clave_corta'     				=> $this->ajax_post('clave_corta')
+					,'descripcion'     				=> $this->ajax_post('descripcion')
+					,'inicio'          				=> $ajax_inicio
+					,'final'           				=> $ajax_termino
+					,'id_sucursal'     				=> $id_sucursal
+					,'edit_timestamp'  				=> $this->timestamp()
+					,'edit_id_usuario' 				=> $this->session->userdata('id_usuario')
+ 					);
+				
+				$insert = $this->db_model->db_update_data($sqlData);
+
+				if($insert){
+					$msg = $this->lang_item($check_times['msg'],false);
+					$json_respuesta = array(
+						'id' 		=> 1
 						,'contenido'=> alertas_tpl('success', $msg ,false)
 						,'success' 	=> true
-				);
-			}
-			else
-			{
-				$msg = $this->lang_item("msg_horario_empalmado",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
+						);
+				}
+				else{
+					$msg = $this->lang_item($check_times['msg'],false);
+					$json_respuesta = array(
+						'id' 		=> 0
 						,'contenido'=> alertas_tpl('', $msg ,false)
 						,'success' 	=> false
-				);
+						);
+				}
 			}
 		}
 		echo json_encode($json_respuesta);
 	}
 
-	public function agregar()
-	{
+	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
@@ -331,7 +319,6 @@ class servicios extends Base_Controller
 	}
 
 	public function insert_servicio(){
-		//print_debug($this->ajax_post(false));
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -341,12 +328,15 @@ class servicios extends Base_Controller
 			$id_sucursal = 	 $this->ajax_post('id_sucursal');
 			$ajax_inicio  =  $this->ajax_post('inicio');
 			$ajax_termino =  $this->ajax_post('termino');
-			
 			$servicios = $this->db_model->db_get_data_x_sucursal($id_sucursal);
-			
+
 			$check_times = $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
+			print_debug($check_times);
+			$msg = $this->lang_item($check_times['msg'],false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			/*
 			if($check_times['response']){
-				$SQLinsert = array(
+				$sqlData = array(
 					 'servicio'    => $this->ajax_post('servicio')
 					,'clave_corta' => $this->ajax_post('clave_corta')
 					,'descripcion' => $this->ajax_post('descripcion')
@@ -356,7 +346,7 @@ class servicios extends Base_Controller
 					,'id_usuario'  => $this->session->userdata('id_usuario')
 				 	,'timestamp'   => $this->timestamp()
  					);
-				$insert = $this->db_model->db_insert_data($SQLinsert);
+				$insert = $this->db_model->db_insert_data($sqlData);
 				if($insert){
 					$msg = $this->lang_item($check_times['msg'],false);
 					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
@@ -364,10 +354,7 @@ class servicios extends Base_Controller
 			}else{
 				$msg = $this->lang_item($check_times['msg'],false);
 				echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-			}
+			}*/
 		}
 	}
-
-
-	
 }

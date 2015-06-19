@@ -50,9 +50,11 @@ class Base_Controller extends CI_Controller {
 		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
 		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 		
+		//print_debug($data_modulos);
 		if((is_array($data_modulos))){
 			$data_modulos   = $this->build_array_navigator($data_modulos);
 			$navigate_items =  $data_modulos[1];
+
 			$this->session->set_userdata('sites_availables', $data_modulos[0]);
 			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri );
 		}else{

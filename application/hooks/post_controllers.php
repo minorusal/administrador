@@ -52,6 +52,8 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'test/directorio'; #tmp
 			$sites_availables[] = 'test/html2pdf'; #tmp
 			$sites_availables[] = '404_override'; 
+
+			//print_debug($sites_availables);
 			if(!in_array($uri_string, $sites_availables)){
 				if($uri_string==''){
 					redirect(base_url('inicio'));

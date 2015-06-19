@@ -56,9 +56,13 @@ $route['logout']                   = 'login/logout';
 /*Valores nutricionales*/
 $route['nutricion/valores_nutricionales']    	= 'nutricion/valores_nutricionales/index';
 /*Familias*/
-$route['nutricion/catalogos/familias']    	            = 'nutricion/familias/index';
-/*ervicios*/
-$route['nutricion/catalogos/tiempos']    	            = 'nutricion/tiempos/index';
+$route['nutricion/catalogos/familias']    	    = 'nutricion/familias/index';
+/*Servicios*/
+$route['nutricion/catalogos/tiempos']    	    = 'nutricion/tiempos/index';
+
+/*Recetario*/
+$route['nutricion/recetario'] = 'nutricion/recetario/index';
+
 /*COMPRAS*/
 
 /*Listado de precios*/
@@ -150,6 +154,7 @@ $route['administracion/catalogos_generales/servicios']       = 'administracion/s
 $route['ventas/catalogos/clientes']				= 'ventas/clientes/index';
 /*Catalogo de vendedores*/
 $route['ventas/catalogos/vendedores']			= 'ventas/vendedores/index';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

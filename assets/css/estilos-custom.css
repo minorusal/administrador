@@ -1,4 +1,8 @@
 /*Iconos-Acciones-Grid*/
+.ico_acciones{
+	font-size: 1.1em;
+	font-weight: lighter;
+}
 .ico_detalle{
 	cursor: pointer;
 	color:blue;
@@ -10,6 +14,10 @@
 .ico_eliminar{
 	cursor: pointer;
 	color:red;
+}
+.ico_imprimir{
+	cursor: pointer;
+	color: black;
 }
 .stdform .formwrapper{
 	padding-top: 0px;

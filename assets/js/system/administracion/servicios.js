@@ -90,9 +90,8 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();	
 	var objData = formData('#formulario');
-	var inicio = objData['inicio']  = jQuery('#timepicker1').val();
-	var end    = objData['final']   = jQuery('#timepicker2').val();
-	objData['mayor']  = time_dual(inicio,end);
+	objData['inicio']      = jQuery('#timepicker1').val();
+	objData['termino']     = jQuery('#timepicker2').val();
 	objData['incomplete']  = values_requeridos();
 	objData['id_servicio'] = jQuery('#id_servicio').val();
 	objData['id_sucursal'] = jQuery("select[name='lts_sucursales'] option:selected").val();
@@ -142,15 +141,13 @@ function agregar(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data).show('slow');
-			/*btn.removeAttr('disabled');
+			btn.removeAttr('disabled');
 			var data = data.split('|');
 			if(data[0]==1){
 				clean_formulario();
 			}
 			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');*/
+		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
 	});
 }

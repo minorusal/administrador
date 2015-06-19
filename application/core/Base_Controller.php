@@ -649,12 +649,70 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
-    * Devuelve lavariable de session con respecto al indice $index
+    * Devuelve la variable de session con respecto al indice $index
     * @param int $index
     * @return string
     */
 	public function item_session($index){
 		return $this->session->userdata($index);
+	}
+
+
+	/**
+    * Devuelve un arreglo con mensaje y respuesta true o false
+    * @param time $inicio, time $termino, array $times
+    * @return array
+    */
+	public function check_times_ranges($incio, $termino, $times = array()){
+		$mk_inicio       =  explode(':', $incio);
+		$mk_termino      =  explode(':', $termino);
+		$mk_inicio       =  mktime($mk_inicio[0],  $mk_inicio[1],  0,0,0,0);
+		$mk_termino      =  mktime($mk_termino[0], $mk_termino[1],0,0,0,0);
+
+		if($mk_inicio==$mk_termino){
+				$msg = 'msg_hora_igual';
+				$response = false;
+		}else{
+			if($mk_inicio>$mk_termino){
+				$msg = 'msg_horainicio_mayor';
+				$response = false;
+			}else{
+				$contador = 0;
+				if(is_array($times)){
+					foreach ($times as $item) {
+						if($this->validar_rango( $item['inicio'] , $item['final'], $incio)){
+							$contador++;
+						}
+						if($this->validar_rango( $item['inicio'] , $item['final'], $termino)){
+							$contador++;
+						}
+					}
+					if($contador>0){
+						$msg = 'msg_horario_empalmado';
+						$response = false;
+					}else{
+						$msg = 'msg_insert_success';
+						$response = true;
+					}
+				}else{
+					$msg = 'msg_insert_success';
+					$response = true;
+				}
+			}
+		}
+		return array('response'=> $response, 'msg' =>  $msg);
+	}
+
+	/**
+    * Devuelve respuesta true o false
+    * @param time $inicio, time $termino, time $values
+    * @return boolean
+    */
+	public function validar_rango($inicio, $fin, $value){
+	    $inicio  = strtotime($inicio);
+	    $fin     = strtotime($fin);
+	    $value   = strtotime($value);
+	    return (($value >= $inicio) && ($value <= $fin));
 	}
 }
 ?>

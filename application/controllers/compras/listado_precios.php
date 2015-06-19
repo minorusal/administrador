@@ -262,6 +262,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["costo_x_um"]              = $this->lang_item("costo_x_um");
 		$tab_1["desglose_impuesto"]       = $this->lang_item("desglose_impuesto");
 		$tab_1["costo_final"]             = $this->lang_item("costo_final");
+		$tab_1["rendimiento"]             = $this->lang_item("rendimiento");
 		$tab_1['lts_articulos']      	  = $lts_articulos;
 		$tab_1['lts_proveedores']    	  = $lts_proveedores;
 		$tab_1['lts_marcas']         	  = $lts_marcas;
@@ -305,6 +306,7 @@ class listado_precios extends Base_Controller {
 	        $peso_unitario 				= $this->ajax_post('peso_unitario');
 			$costo_unitario 			= $this->ajax_post('costo_unitario');
 			$costo_x_um					= $this->ajax_post('costo_x_um');
+			$rendimiento				= $this->ajax_post('rendimiento');
 
 	        $data_insert  = array(
 								'id_articulo'  				=> $id_articulo,
@@ -322,6 +324,7 @@ class listado_precios extends Base_Controller {
 								'peso_unitario' 			=> $peso_unitario,
 								'costo_unitario'			=> $costo_unitario,
 								'costo_x_um'				=> $costo_x_um,
+								'rendimiento' 				=> $$rendimiento,
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
@@ -479,6 +482,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["costo_x_um"]                  = $this->lang_item("costo_x_um");
 		$data_tab["desglose_impuesto"]           = $this->lang_item("desglose_impuesto");
 		$data_tab["costo_final"]                 = $this->lang_item("costo_final");
+		$data_tab["rendimiento"]                 = $this->lang_item("rendimiento");
 		$data_tab['lbl_fecha_registro']      	 = $this->lang_item('lbl_fecha_registro');
 		$data_tab['registro_por']    			 = $this->lang_item('lbl_usuario_registro');
 		$data_tab["lbl_ultima_modificacion"] 	 = $this->lang_item('lbl_ultima_modificacion', false);
@@ -500,6 +504,7 @@ class listado_precios extends Base_Controller {
         $data_tab['val_costo_x_um']				 = $detalle[0]['costo_x_um'];
         $data_tab['va_um_x_presentacion']        = $detalle[0]['um_x_presentacion'];
         $data_tab['val_costo_sin_impuesto']      = $detalle[0]['costo_sin_impuesto'];
+        $data_tab['val_rendimiento']      	     = $detalle[0]['rendimiento'];
         $data_tab['val_impuesto_aplica']         = $detalle[0]['impuesto_aplica'];
         $data_tab['timestamp']             	 	 = $detalle[0]['timestamp'];
         $data_tab['style'] 						 = $style;
@@ -550,20 +555,21 @@ class listado_precios extends Base_Controller {
 				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
 			}
 	        $id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
-	        $upc						= $this->ajax_post('upc');
-	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
-	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
-	        $costo_sin_impuesto 		= $this->ajax_post('costo_sin_impuesto');
-	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
-	        $id_articulo 				= $this->ajax_post('id_articulo');
-	        $id_proveedor 				= $this->ajax_post('id_proveedor');
-	        $id_marca 					= $this->ajax_post('id_marca');
-	        $id_presentacion 			= $this->ajax_post('id_presentacion');
-	        $id_embalaje 				= $this->ajax_post('id_embalaje');
-	        $um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
-	        $peso_unitario 				= $this->ajax_post('peso_unitario');
-			$costo_unitario 			= $this->ajax_post('costo_unitario');
-			$costo_x_um					= $this->ajax_post('costo_x_um');
+	        $upc						 = $this->ajax_post('upc');
+	        $presentacion_x_embalaje	 = $this->ajax_post('presentacion_x_embalaje');
+	        $um_x_presentacion 			 = $this->ajax_post('um_x_presentacion');
+	        $costo_sin_impuesto 		 = $this->ajax_post('costo_sin_impuesto');
+	        $impuesto_aplica 			 = $this->ajax_post('impuesto_aplica');
+	        $id_articulo 				 = $this->ajax_post('id_articulo');
+	        $id_proveedor 				 = $this->ajax_post('id_proveedor');
+	        $id_marca 					 = $this->ajax_post('id_marca');
+	        $id_presentacion 			 = $this->ajax_post('id_presentacion');
+	        $id_embalaje 				 = $this->ajax_post('id_embalaje');
+	        $um_x_embalaje 				 = $this->ajax_post('um_x_embalaje');
+	        $peso_unitario 				 = $this->ajax_post('peso_unitario');
+			$costo_unitario 			 = $this->ajax_post('costo_unitario');
+			$costo_x_um					 = $this->ajax_post('costo_x_um');
+			$rendimiento				 = $this->ajax_post('rendimiento');
 			
 			$data_update  = array(
 								'id_compras_articulo_precios'   => $id_compras_articulo_precios,
@@ -579,6 +585,7 @@ class listado_precios extends Base_Controller {
 								'costo_sin_impuesto'  			=> $costo_sin_impuesto,
 								'impuesto_aplica'  				=> $impuesto_aplica,
 								'id_impuesto'  					=> $id_impuesto,
+								'rendimiento' 					=> $rendimiento,
 								'edit_timestamp'  	 			=> $this->timestamp(),
 								'edit_id_usuario'   			=> $this->session->userdata('id_usuario')
 							);

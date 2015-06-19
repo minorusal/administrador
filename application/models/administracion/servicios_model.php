@@ -14,8 +14,21 @@ class servicios_model extends Base_Model{
 									sr.descripcion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
-		$query = "	SELECT *
+		$query = "	SELECT 
+						 sr.id_administracion_servicio
+						,sr.clave_corta cv_servicio
+						,su.clave_corta cv_sucursal
+						,sr.descripcion
+						,sr.servicio
+						,sr.inicio
+						,sr.final
+						,su.id_sucursal
+						,su.sucursal
+						,sr.id_usuario
+						,sr.timestamp
+						,sr.edit_timestamp
 					FROM $tbl[administracion_servicios] sr
+					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = sr.id_sucursal
 					WHERE sr.activo = 1 $filtro
 					GROUP BY sr.id_administracion_servicio ASC
 					$limit
@@ -26,12 +39,14 @@ class servicios_model extends Base_Model{
 		}	
 	}
 
-	public function db_get_data_x_sucursal($id_sucursal)	{		
+	public function db_get_data_x_sucursal($id_sucursal,$id_servicio = false){		
 		// DB Info		
 		$tbl = $this->tbl;
+		$id_servicio = ($id_servicio)?" AND sr.id_administracion_servicio <> $id_servicio ":'';
 		$query = "	SELECT *
 					FROM $tbl[administracion_servicios] sr
 					WHERE sr.activo = 1 AND sr.id_sucursal = $id_sucursal
+					$id_servicio
 					GROUP BY sr.id_administracion_servicio ASC";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -51,5 +66,33 @@ class servicios_model extends Base_Model{
 		}
 	}
 
+	public function db_update_data($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$condicion = array('id_administracion_servicio !=' => $data['id_administracion_servicio'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe    = $this->row_exist($tbl['administracion_servicios'], $condicion);
+		if(!$existe){
+			$condicion = "id_administracion_servicio = ".$data['id_administracion_servicio'];			
+			$update = $this->update_item($tbl['administracion_servicios'], $data, 'id_administracion_servicio', $condicion);
+			return $update;
+		}else{
+			return false;
+		}
+	}
+
+	/*Inserta registro de la tabla ac_administracion_servicios*/
+	public function db_insert_data($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['administracion_servicios'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['administracion_servicios'], $data);
+			return $insert;
+		}else{
+			return false;
+		}
+	}
 	
 }

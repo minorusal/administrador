@@ -62,7 +62,9 @@ $autoload['libraries'] = array(	'database',
 								,'config_vars'
 								,'impresion'
 								,'barcode'
-								,'codeqr');
+								,'codeqr'
+								,'html2pdf'
+								);
 
 
 /*

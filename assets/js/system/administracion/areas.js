@@ -115,7 +115,7 @@ function agregar(){
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
-	})
+	});
 }
 
 

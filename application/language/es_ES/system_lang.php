@@ -46,12 +46,16 @@
 	$lang['msg_existencia_listado']            = '<strong>Atencion!</strong><br>El articulo ya se encuentra registrado, por favor seleccione otro, gracias.';
 
 // Botones
-	$lang['btn_xlsx']     = 'Generar Excel';
-	$lang['btn_import_xlsx']     = 'Importar Excel';
-	$lang['btn_guardar']  = 'guardar cambios';
-	$lang['btn_eliminar']  = 'Eliminar registro';
-	$lang['btn_limpiar']  = 'limpiar';
-	$lang['btn_search']   = 'buscar';
+	$lang['btn_xlsx']     		= 'Generar Excel';
+	$lang['btn_import_xlsx']    = 'Importar Excel';
+	$lang['btn_guardar']  		= 'guardar cambios';
+	$lang['btn_eliminar']  		= 'Eliminar registro';
+	$lang['btn_limpiar']  		= 'limpiar';
+	$lang['btn_search']   		= 'buscar';
+	$lang['btn_cerrar']  		= 'Cerrar';
+	$lang['btn_cancelar']  		= 'cancelar';
+	$lang['btn_aprobar']  		= 'aprobar';
+	$lang['btn_rechazar']  		= 'rechazar';
 // Paginador
 	$lang['pag_first_link'] = '&laquo; Primero';
 	$lang['pag_next_link']  = 'Siguiente &raquo;';

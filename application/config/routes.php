@@ -91,7 +91,8 @@ $route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/lis
 $route['compras/catalogos/embalaje']                               = 'compras/embalaje/index';
 
 /*Catalogo de Ordenes*/
-$route['compras/ordenes']                   	 = 'compras/ordenes/index';
+$route['compras/catalogos/ordenes']                   	 = 'compras/ordenes/index';
+$route['compras/catalogos/aprobar_ordenes']                = 'compras/aprobar_ordenes/index';
 
 /*ALMACEN*/
 /*ENtradas Recepcion*/

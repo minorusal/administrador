@@ -20,9 +20,10 @@ class ordenes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 				= 'compras';
+		$this->seccion 				= 'catalogos';
 		$this->submodulo			= 'ordenes';
 		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
-		$this->path 				= $this->modulo.'/'.$this->submodulo.'/';
+		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
 		$this->view_content 		= 'content';
 		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;
 		$this->limit_max			= 10;
@@ -66,7 +67,7 @@ class ordenes extends Base_Controller {
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1
+										 $this->modulo.'/'.$this->submodulo.'/'.$tab_1
 										,$path.$tab_2.'/'.$pagina
 										,$tab_3
 										,$tab_4
@@ -96,12 +97,11 @@ class ordenes extends Base_Controller {
 	}
 	public function listado($offset=0){
 		// Crea tabla con listado de elementos capturados 
-		$seccion 		= '';
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$seccion.$accion;		
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;		
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -157,7 +157,7 @@ class ordenes extends Base_Controller {
 			// XLS
 			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
 							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->path.$seccion).'/export_xlsx?filtro='.base64_encode($filtro)
+							'href'       => base_url($this->modulo.'/'.$this->submodulo).'/export_xlsx?filtro='.base64_encode($filtro)
 							);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
@@ -177,12 +177,11 @@ class ordenes extends Base_Controller {
 	}
 	public function detalle(){
 		// Crea formulario de detalle y edición
-		$seccion 			= '';
 		$accion 			= $this->tab['detalle'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
-		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-		$btn_eliminar       = form_button(array('class'=>"btn btn-primary",'name' => 'eliminar' , 'onclick'=>'eliminar()','content' => $this->lang_item("btn_eliminar") ));
+		$button_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		//$button_clean       = form_button(array('class'=>"btn btn-primary",'name' => 'limpiar' , 'onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar") ));
 		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
 		if($detalle[0]['id_orden_tipo']==2){
 			$style='style="display:none"';
@@ -268,8 +267,7 @@ class ordenes extends Base_Controller {
         $tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
         $tabData['lbl_fecha_registro']    	 = $this->lang_item("lbl_fecha_registro",false);
         $tabData['timestamp']         		 = $detalle[0]['timestamp'];
-        $tabData['button_save']       		 = $btn_save;
-        $tabData['button_delete']       	 = $btn_eliminar;
+        $tabData['button_save']       		 = $button_save;
         $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
 		$tabData['orden_fecha_value']	 	 = $orden_fecha;
         $tabData['entrega_direccion']        = $this->lang_item("entrega_direccion",false);
@@ -307,7 +305,6 @@ class ordenes extends Base_Controller {
 	}
 	public function agregar(){
 		// Crea formulario para agregar nuevo elemento
-		$seccion 		= '';
 		$accion 		= $this->tab['agregar'];
 		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
 		// Listas
@@ -544,12 +541,13 @@ class ordenes extends Base_Controller {
 	}
 	public function articulos(){
 		// Agregar articulos a una orden de compra
-		$seccion 			= '';
-		$table 			= '';
+		$table 				= '';
 		$accion 			= $this->tab['articulos'];
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$detalle  			= $this->db_model->get_orden_unico($id_compras_orden);
-		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'guardar_cambios_orden_listado()','content' => $this->lang_item("btn_guardar") ));
+		//dump_var($detalle);
+		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'save' , 'onclick'=>'cerrar_orden_listado()','content' => $this->lang_item("btn_cerrar") ));
+		$btn_canceled       = form_button(array('class'=>"btn btn-primary",'name' => 'canceled' , 'onclick'=>'cancelar_orden_listado()','content' => $this->lang_item("btn_cancelar") ));
 		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
 		if($detalle[0]['id_orden_tipo']==2){
 			$style='style="display:none"';
@@ -575,74 +573,81 @@ class ordenes extends Base_Controller {
 									)
 					,'class' 	=> "requerido"
 				);
-		$list_articulos  = dropdown_tpl($dropArray4);
+		if($detalle[0]['estatus']==7){
+			$list_articulos  = "";
+			$readonly="readonly";
+		}else{
+			$list_articulos  = dropdown_tpl($dropArray4);
+			$readonly="";
+		}
 
 		$data_sql = array('id_compras_orden'=>$id_compras_orden);
 		$data_listado=$this->db_model->db_get_data_orden_listado_registrado($data_sql);
 		$moneda = $this->session->userdata('moneda');
+
 		if(count($data_listado)>0){
 				$style_table='display:block';
 			for($i=0;count($data_listado)>$i;$i++){
-			$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
-			$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
-			$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
-						<td>
-							<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
-							<input type="hidden" value="'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_articulo_precios'].'"/>
-						</td>
-						<td>
-							<ul class="tooltips">
-								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'</a>
-							</ul>
-						</td>
-						<td>
-							'.$data_listado[$i]['cl_presentacion'].'
-						</td>
-						<td class="right">
-							<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
-							<span class="add-on">'.$moneda.'</span> '.$data_listado[$i]['costo_sin_impuesto'].'
-						</td>
-						<td>
-							<div class="input-prepend input-append">
-								<input type="text" id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
-								<span class="add-on">Pz</span>
-							</div>
-						</td>
-						<td>
-							<input type="hidden" id="costo_x_cantidad_hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-							<span class="add-on">'.$moneda.'</span> 
-							<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['costo_x_cantidad'].'</span>
-						</td>
-						<td>
-							<input type="hidden" value="'.$data_listado[$i]['descuento'].'" id="descuento_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'">
-							<div class="input-prepend input-append">
-                              <input type="text" maxlength="3" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
-                              <span class="add-on">%</span>
-                            </div>
-						</td>
-						<td>
-							<input type="hidden" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-                              <span class="add-on">'.$moneda.'</span> 
-                              <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['subtotal'].'</span>
-						</td>
-						<td>
-							<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-							'.$data_listado[$i]['impuesto_porcentaje'].'
-							<span class="add-on">%</span>
-						</td>
-						<td>
-							<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-							<span class="add-on">'.$moneda.'</span> 
-							<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['valor_impuesto'].'</span>
-						</td>
-						<td>
-							<input type="hidden" value="'.$data_listado[$i]['total'].'" id="total_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-							<span class="add-on">'.$moneda.'</span> 
-							<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['total'].'</span>
-						</td>
-						<td>'.$acciones.'
-						</td>
-					</tr>';
+					$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
+					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+					$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+								<td>
+									<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
+									<input type="hidden" value="'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_articulo_precios'].'"/>
+								</td>
+								<td>
+									<ul class="tooltips">
+										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'</a>
+									</ul>
+								</td>
+								<td>
+									'.$data_listado[$i]['cl_presentacion'].'
+								</td>
+								<td class="right">
+									<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
+									<span class="add-on">'.$moneda.'</span> '.$data_listado[$i]['costo_sin_impuesto'].'
+								</td>
+								<td>
+									<div class="input-prepend input-append">
+										<input type="text" '.$readonly.' id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+										<span class="add-on">Pz</span>
+									</div>
+								</td>
+								<td>
+									<input type="hidden" id="costo_x_cantidad_hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<span class="add-on">'.$moneda.'</span> 
+									<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['costo_x_cantidad'].'</span>
+								</td>
+								<td>
+									<input type="hidden" value="'.$data_listado[$i]['descuento'].'" id="descuento_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'">
+									<div class="input-prepend input-append">
+		                              <input type="text" '.$readonly.' maxlength="3" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+		                              <span class="add-on">%</span>
+		                            </div>
+								</td>
+								<td>
+									<input type="hidden" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+		                              <span class="add-on">'.$moneda.'</span> 
+		                              <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['subtotal'].'</span>
+								</td>
+								<td>
+									<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									'.$data_listado[$i]['impuesto_porcentaje'].'
+									<span class="add-on">%</span>
+								</td>
+								<td>
+									<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<span class="add-on">'.$moneda.'</span> 
+									<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['valor_impuesto'].'</span>
+								</td>
+								<td>
+									<input type="hidden" value="'.$data_listado[$i]['total'].'" id="total_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<span class="add-on">'.$moneda.'</span> 
+									<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['total'].'</span>
+								</td>
+								<td>'.$acciones.'
+								</td>
+							</tr>';
 			}
 		}
 		else{
@@ -690,11 +695,13 @@ class ordenes extends Base_Controller {
 		$tabData['accion']  				 = $this->lang_item("accion",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
+		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
 		$tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
 		$tabData['timestamp']         		 = $detalle[0]['timestamp'];
 		$tabData['button_save']       		 = $btn_save;
+		$tabData['btn_canceled']       		 = $btn_canceled;
 		$tabData['orden_fecha_value']	 	 = $orden_fecha;
 		$tabData['entrega_direccion_value']	 = $detalle[0]['entrega_direccion'];
 		$tabData['entrega_fecha_value']	     = $entrega_fecha;
@@ -710,91 +717,92 @@ class ordenes extends Base_Controller {
 		$tabData['style_table']				= $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 
-		$this->load->model('users_model');
-    	$usuario_registro              = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
-        $tabData['usuario_registro']   = text_format_tpl($usuario_registro[0]['name'],"u");
-
-       if($detalle[0]['edit_id_usuario']){
-        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
-        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
-        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
-    	}else{
-    		$usuario_name = '';
-    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
-    	}
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function get_data_articulo(){
 		$moneda = $this->session->userdata('moneda');
 		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
-		/////¨PASAR LA CONSULTA A RREGLO PARA SOLO TENER UNA *******************************************************************************************************
-		$get_data=$this->listado_precios_model->db_get_data_x_articulos($id_compras_articulo_precios);
-		if($get_data[0]['id_impuesto']==''){
-			$impuesto=0;
-		}else{
-			$impuesto=$get_data[0]['impuesto'];
-		}
-		$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$get_data[0]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$get_data[0]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
-		$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
-		$table='<tr id="'.$get_data[0]['id_compras_articulo_precios'].'">
-					<td>
-						<span name="proveedor">'.$get_data[0]['nombre_comercial'].'</span>
-						<input type="hidden" value="'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$get_data[0]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$get_data[0]['id_compras_articulo_precios'].'">
-					</td>
-					<td>
-						'.$get_data[0]['articulo'].'
-					</td>
-					<td>
-						'.$get_data[0]['cl_presentacion'].'
-					</td>
-					<td class="right">
-						<input type="hidden" id="costo_sin_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" value="'.$get_data[0]['costo_sin_impuesto'].'">
-						<span class="add-on">'.$moneda.'</span>
-						'.$get_data[0]['costo_sin_impuesto'].'
-					</td>
-					<td>
-						<div class="input-prepend input-append">
-							<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')">
-							<span class="add-on">Pz</span>
-						</div>
-					</td>
-					<td>
-						<input type="hidden" id="costo_x_cantidad_hidden'.$get_data[0]['id_compras_articulo_precios'].'" value="" data-campo="costo_x_cantidad_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
-						<span class="add-on">'.$moneda.'</span>
-						<span id="costo_x_cantidad'.$get_data[0]['id_compras_articulo_precios'].'"></span>
-					</td>
-					<td>
-						<div class="input-prepend input-append">
-							<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0">
+		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
+		$sqlData =	array(
+					'id_compras_orden' 			   => $id_compras_orden,
+					'id_compras_articulo_precios'  => $id_compras_articulo_precios,
+					'activo'					   =>1,
+					'edit_timestamp'  	 		   => $this->timestamp(),
+					'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+					); 
+		$update=$this->db_model->db_update_orden_listado_articulos($sqlData);
+
+		if($update){
+			/////¨PASAR LA CONSULTA A RREGLO PARA SOLO TENER UNA *******************************************************************************************************
+			$get_data=$this->listado_precios_model->db_get_data_x_articulos($id_compras_articulo_precios);
+			if($get_data[0]['id_impuesto']==''){
+				$impuesto=0;
+			}else{
+				$impuesto=$get_data[0]['impuesto'];
+			}
+			$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$get_data[0]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$get_data[0]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
+			$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+			$table='<tr id="'.$get_data[0]['id_compras_articulo_precios'].'">
+						<td>
+							<span name="proveedor">'.$get_data[0]['nombre_comercial'].'</span>
+							<input type="hidden" value="'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$get_data[0]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$get_data[0]['id_compras_articulo_precios'].'">
+						</td>
+						<td>
+							'.$get_data[0]['articulo'].'
+						</td>
+						<td>
+							'.$get_data[0]['cl_presentacion'].'
+						</td>
+						<td class="right">
+							<input type="hidden" id="costo_sin_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" value="'.$get_data[0]['costo_sin_impuesto'].'">
+							<span class="add-on">'.$moneda.'</span>
+							'.$get_data[0]['costo_sin_impuesto'].'
+						</td>
+						<td>
+							<div class="input-prepend input-append">
+								<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')">
+								<span class="add-on">Pz</span>
+							</div>
+						</td>
+						<td>
+							<input type="hidden" id="costo_x_cantidad_hidden'.$get_data[0]['id_compras_articulo_precios'].'" value="" data-campo="costo_x_cantidad_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
+							<span class="add-on">'.$moneda.'</span>
+							<span id="costo_x_cantidad'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+						</td>
+						<td>
+							<div class="input-prepend input-append">
+								<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0">
+								<span class="add-on">%</span>
+							</div>
+						</td>
+						<td>
+							<input type="hidden" id="subtotal__hidden'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="subtotal__hidden['.$get_data[0]['id_compras_articulo_precios'].']">
+							<span class="add-on">'.$moneda.'</span>
+							<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+						</td>
+						<td>
+							<input type="hidden" value="'.$impuesto.'" data-campo="impuesto['.$get_data[0]['id_compras_articulo_precios'].']" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+							'.$impuesto.'
 							<span class="add-on">%</span>
-						</div>
-					</td>
-					<td>
-						<input type="hidden" id="subtotal__hidden'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="subtotal__hidden['.$get_data[0]['id_compras_articulo_precios'].']">
-						<span class="add-on">'.$moneda.'</span>
-						<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
-					</td>
-					<td>
-						<input type="hidden" value="'.$impuesto.'" data-campo="impuesto['.$get_data[0]['id_compras_articulo_precios'].']" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
-						'.$impuesto.'
-						<span class="add-on">%</span>
-					</td>
-					<td>
-						<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
-						<span class="add-on">'.$moneda.'</span>
-						<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
-					</td>
-					<td>
-						<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
-						<span class="add-on">'.$moneda.'</span>
-						<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
-					</td>
-					<td>
-						'.$acciones.'
-					</td>
-				</tr>';
-		 echo json_encode($table);
+						</td>
+						<td>
+							<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+							<span class="add-on">'.$moneda.'</span>
+							<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+						</td>
+						<td>
+							<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
+							<span class="add-on">'.$moneda.'</span>
+							<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+						</td>
+						<td>
+							'.$acciones.'
+						</td>
+					</tr>';
+			 echo json_encode($table);
+
+		}else{}
 	}
 	public function validar_exist_listado(){
 		$id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
@@ -924,21 +932,49 @@ class ordenes extends Base_Controller {
 			}
 		echo json_encode($json_respuesta);
 	}
-	public function guardar_cambios_orden_listado(){
-		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
+	public function cerrar_orden_listado(){
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
-		$keys=array_keys($id_compras_articulo_precios);
-		for($i=0;count($id_compras_articulo_precios)>$i;$i++){
-			$sqldata= array(
-						'id_compras_orden' 			   =>$id_compras_orden,
-						'id_compras_articulo_precios'  =>$keys[$i],
-						'estatus' 					   => 2,
-						'activo' 					   => 1,
-						'edit_timestamp'  	 		   => $this->timestamp(),
-						'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
-						);
-			$update = $this->db_model->db_update_estatus_orden_listado($sqldata);
+		$estatus 	= $this->ajax_post('estatus');
+		if($estatus==3){
+			$valor_etsatus=4;
 		}
+		else{
+			$valor_etsatus=7;
+		}	
+		$sqldata= array(
+					'id_compras_orden' 			   =>$id_compras_orden,
+					'estatus' 					   => $valor_etsatus,
+					'edit_timestamp'  	 		   => $this->timestamp(),
+					'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+					);
+		$update = $this->db_model->db_update_data($sqldata);
+		if($update){
+			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$json_respuesta = array(
+				 'id' 		=> 1
+				,'contenido'=> alertas_tpl('success', $msg ,false)
+				,'success' 	=> true
+			);
+		}else{
+			$msg = $this->lang_item("msg_err_clv",false);
+			$json_respuesta = array(
+					 'id' 		=> 0
+					,'contenido'=> alertas_tpl('', $msg ,false)
+					,'success' 	=> false
+			);
+		}
+		echo json_encode($json_respuesta);
+	}
+	public function cancelar_orden_listado(){
+		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
+		$sqldata= array(
+					'id_compras_orden' 			   => $id_compras_orden,
+					'estatus'					   => 5,
+					'edit_timestamp'  	 		   => $this->timestamp(),
+					'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+					);
+		$update = $this->db_model->db_update_data($sqldata);
+		
 		if($update){
 			$msg = sprintf($this->lang_item('msg_insert_success', false));
 			$json_respuesta = array(

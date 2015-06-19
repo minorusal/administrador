@@ -54,12 +54,9 @@ class Base_Controller extends CI_Controller {
 		if((is_array($data_modulos))){
 			$data_modulos   = $this->build_array_navigator($data_modulos);
 			$navigate_items =  $data_modulos[1];
-<<<<<<< HEAD
-			$this->session->set_userdata('sites_availables', $data_modulos[0]);			
-=======
 
 			$this->session->set_userdata('sites_availables', $data_modulos[0]);
->>>>>>> e24b2f410058ec4f4dd18af6fd4e2eecb5eb65ca
+
 			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri );
 		}else{
 			$data_modulos   = "";

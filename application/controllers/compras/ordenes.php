@@ -559,7 +559,6 @@ class ordenes extends Base_Controller {
 			$class ='requerido';
 		}	
 		if($detalle[0]['id_proveedor']>0){
-			//dump_var($detalle[0]['id_proveedor']);
 			$get_data=$this->listado_precios_model->db_get_data_x_proveedor($detalle[0]['id_proveedor']);
 		}else{
 			$get_data=$this->listado_precios_model->db_get_data_x_proveedor();
@@ -581,7 +580,6 @@ class ordenes extends Base_Controller {
 		$data_sql = array('id_compras_orden'=>$id_compras_orden);
 		$data_listado=$this->db_model->db_get_data_orden_listado_registrado($data_sql);
 		$moneda = $this->session->userdata('moneda');
-
 		if(count($data_listado)>0){
 				$style_table='display:block';
 			for($i=0;count($data_listado)>$i;$i++){
@@ -593,7 +591,9 @@ class ordenes extends Base_Controller {
 							<input type="hidden" value="'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_articulo_precios'].'"/>
 						</td>
 						<td>
-							'.$data_listado[$i]['articulo'].'
+							<ul class="tooltips">
+								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'</a>
+							</ul>
 						</td>
 						<td>
 							'.$data_listado[$i]['cl_presentacion'].'
@@ -676,6 +676,19 @@ class ordenes extends Base_Controller {
         $tabData['creditos']     			 = $this->lang_item("creditos",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
 		$tabData['lst_articulos_label'] 	 = $this->lang_item("lst_articulos_label",false);
+		$tabData['proveedor']  			 	 = $this->lang_item("proveedor",false);
+		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
+		$tabData['clave_corta']  			 = $this->lang_item("clave_corta",false);
+		$tabData['Costo']  			 		 = $this->lang_item("Costo",false);
+		$tabData['unitario']  			 	 = $this->lang_item("unitario",false);
+		$tabData['cantidad']  			 	 = $this->lang_item("cantidad",false);
+		$tabData['costo_cantidad']  	     = $this->lang_item("costo_cantidad",false);
+		$tabData['descuento']  			 	 = $this->lang_item("descuento",false);
+		$tabData['subtotal']  			 	 = $this->lang_item("subtotal",false);
+		$tabData['imp']  			 		 = $this->lang_item("imp",false);
+		$tabData['valor_imp']  			 	 = $this->lang_item("valor_imp",false);
+		$tabData['total']  			 		 = $this->lang_item("total",false);
+		$tabData['accion']  				 = $this->lang_item("accion",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
@@ -718,6 +731,11 @@ class ordenes extends Base_Controller {
 		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
 		/////¨PASAR LA CONSULTA A RREGLO PARA SOLO TENER UNA *******************************************************************************************************
 		$get_data=$this->listado_precios_model->db_get_data_x_articulos($id_compras_articulo_precios);
+		if($get_data[0]['id_impuesto']==''){
+			$impuesto=0;
+		}else{
+			$impuesto=$get_data[0]['impuesto'];
+		}
 		$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$get_data[0]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$get_data[0]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 		$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 		$table='<tr id="'.$get_data[0]['id_compras_articulo_precios'].'">
@@ -759,8 +777,8 @@ class ordenes extends Base_Controller {
 						<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 					</td>
 					<td>
-						<input type="hidden" value="'.$get_data[0]['impuesto'].'" data-campo="impuesto['.$get_data[0]['id_compras_articulo_precios'].']" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
-						'.$get_data[0]['impuesto'].'
+						<input type="hidden" value="'.$impuesto.'" data-campo="impuesto['.$get_data[0]['id_compras_articulo_precios'].']" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+						'.$impuesto.'
 						<span class="add-on">%</span>
 					</td>
 					<td>

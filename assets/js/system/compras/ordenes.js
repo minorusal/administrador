@@ -370,3 +370,20 @@ function guardar_cambios_orden_listado(){
 		}
 	});
 }
+function detalle_articulos_precio(id_compras_articulo_precio){
+  jQuery('#ui-id-2').click();
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/detalle",
+        dataType: 'json',
+        data: {id_compras_articulo_precio : id_compras_articulo_precio},
+        success: function(data){
+          var chosen = 'jQuery(".chzn-select").chosen();';
+          jQuery('#a-0').html('');
+          jQuery('#a-2').html(data);
+          jQuery('#a-2').html(data+include_script(chosen));
+          jQuery('#ui-id-2').show('slow');
+          //calcula_costos();
+        }
+    });
+}

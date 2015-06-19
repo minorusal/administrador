@@ -29,7 +29,7 @@ class servicios extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		//$this->load->model('administracion/entidades_model','db_model2');
+		$this->load->model('administracion/sucursales_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -162,21 +162,38 @@ class servicios extends Base_Controller
 	{
 		$id_servicio                 = $this->ajax_post('id_servicio');
 		$detalle  	                 = $this->db_model->get_orden_unico_servicio($id_servicio);
+		//print_debug(substr($detalle[0]['inicio'], 0,5));
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
-		
+		$sqlData = array(
+			 'buscar'      	 => ''
+			,'offset' 		 => 0
+			,'limit'      	 => 0
+		);
+		$sucursales_array     = array(
+					 'data'     => $this->db_model2->db_get_data($sqlData)
+					,'value' 	=> 'id_sucursal'
+					,'text' 	=> array('sucursal')
+					,'name' 	=> "lts_sucursales"
+					,'class' 	=> "requerido"
+					,'selected' => $detalle[0]['id_sucursal']
+					);
+		$sucursales                        = dropdown_tpl($sucursales_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_servicio']            = $id_servicio;
         $tabData["lbl_servicio"]           = $this->lang_item("lbl_servicio");
 		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
 		$tabData["lbl_final"]              = $this->lang_item("lbl_final");
+		$tabData["lbl_sucursal"]           = $this->lang_item("lbl_sucursal");
 		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 
 		$tabData['txt_servicio']           = $detalle[0]['servicio'];
 		$tabData['txt_clave_corta']        = $detalle[0]['clave_corta'];
-        $tabData['txt_inicio']             = $detalle[0]['inicio'];
-        $tabData['txt_final']              = $detalle[0]['final'];
+        $tabData['timepicker1']            = substr($detalle[0]['inicio'], 0,5);
+        $tabData['timepicker2']            = substr($detalle[0]['final'], 0,5);
+        $tabData["list_sucursal"]          = $sucursales;
+
         $tabData['txt_descripcion']        = $detalle[0]['descripcion'];
 		
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
@@ -209,5 +226,66 @@ class servicios extends Base_Controller
         									   #administracion/catalogos/sucursales/sucursales_detalle	
 		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
+
+	public function actualizar()
+	{	//print_debug(time_to_decimal($this->ajax_post('inicio')));
+		$incomplete  = $this->ajax_post('incomplete');
+		$mayor  = $this->ajax_post('mayor');
+		
+		if($incomplete>0 ||  $mayor == 'false')
+		{
+			$msg            = $this->lang_item("msg_campos_obligatorios",false);
+
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+		}
+		if($mayor == 'false'){
+			$msg            = $this->lang_item("msg_horainicio_mayor",false);
+
+			$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+		}
+		else
+		{
+			$sqlData = array(
+						 'id_administracion_servicio' => $this->ajax_post('id_servicio')
+						,'servicio' 		          => $this->ajax_post('servicio')
+						,'inicio'			          => $this->ajax_post('inicio')
+						,'final'			          => $this->ajax_post('final')
+						,'id_sucursal'				  => $this->ajax_post('id_sucursal')
+						,'clave_corta' 				  => $this->ajax_post('clave_corta')
+						,'descripcion'				  => $this->ajax_post('descripcion')
+						,'edit_timestamp'			  => $this->timestamp()
+						,'edit_id_usuario'			  => $this->session->userdata('id_usuario')
+						);
+			$insert = $this->db_model->db_update_data($sqlData);
+			
+			if($insert)
+			{
+				$msg = $this->lang_item("msg_insert_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+				);
+			}
+			else
+			{
+				$msg = $this->lang_item("msg_horario_empalmado",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+				);
+			}
+		}
+		echo json_encode($json_respuesta);
 	}
 }

@@ -50,6 +50,7 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'test/codeqr'; #tmp
 			$sites_availables[] = 'test/load_vars'; #tmp
 			$sites_availables[] = 'test/directorio'; #tmp
+			$sites_availables[] = 'test/html2pdf'; #tmp
 			$sites_availables[] = '404_override'; 
 			if(!in_array($uri_string, $sites_availables)){
 				if($uri_string==''){

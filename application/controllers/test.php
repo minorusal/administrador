@@ -76,5 +76,18 @@ class test extends Base_Controller {
 	// Lee contenido de directorio
 		print_r($this->config_vars->lee_directorio('assets/cfg/'));
 	}
+
+	public function html2pdf(){
+	// Lee contenido de directorio
+		$contenido = false;
+		$arrayPDF = array(
+						 'html' 	=> 'Este es un contenido de prueba - Creado a las: '.date('Y-m-d H:i:s')
+						,'output'	=> 'I'
+						,'archivo' 	=> 'nuevo_archivo'
+					);
+		if(!$pdfFile=$this->html2pdf->crear($arrayPDF)){
+			echo "Error al crear documento PDF.";
+		}else{echo "Archivo Creado a las ".date('Y-m-d H:i:s').' - '.'<a href="'.$pdfFile['uri'].'">'.$pdfFile['uri'].'</a>';}
+	}
 }
 ?>

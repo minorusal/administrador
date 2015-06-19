@@ -64,7 +64,6 @@ class html2pdf extends config_vars{
 		$tmp_path = realpath($this->cfg['path_tmp']).'/';
 		$tmp_dir = ($output=='FD' || $output=='F')?$tmp_path:'';
 		$archivo = (empty($data['archivo']))?date('Ymd-His').'.pdf':$data['archivo'].'.pdf';
-		$archivo = $tmp_dir.$archivo;
 		#Atributos
 		$this->pdf->SetCreator($this->creador);
 		$this->pdf->SetAuthor($this->autor);
@@ -75,15 +74,21 @@ class html2pdf extends config_vars{
 		$this->pdf->setPrintHeader($this->var['pdf']['pdf_print_header']);
 		$this->pdf->setPrintFooter($this->var['pdf']['pdf_print_footer']);
 		#Fuente monospaced
-		$this->pdf->SetDefaultMonospacedFont($this->var['pdf']['pdf_monospaced_font']);
+		if($this->var['pdf']['pdf_monospaced_font']){
+			$this->pdf->SetDefaultMonospacedFont($this->var['pdf']['pdf_monospaced_font']);
+		}
 		#Margenes
 		$this->pdf->SetMargins($this->var['pdf']['pdf_margin_left'], $this->var['pdf']['pdf_margin_top'], $this->var['pdf']['pdf_margin_right']); #left,top,right,keepmargins=false
 		#Salto de pagina automatico
 		$this->pdf->SetAutoPageBreak($this->var['pdf']['pdf_autopagebreak'], $this->var['pdf']['pdf_margin_bottom']);
 		#Factor de escalado de imagenes
-		$this->pdf->setImageScale($this->var['pdf']['pdf_image_scale']);
+		if($this->var['pdf']['pdf_image_scale']){
+			$this->pdf->setImageScale($this->var['pdf']['pdf_image_scale']);
+		}
 		#Set default font subsetting mode
-		$this->pdf->setFontSubsetting($this->var['pdf']['pdf_font_subsetting']);
+		if($this->var['pdf']['pdf_font_subsetting']){
+			$this->pdf->setFontSubsetting($this->var['pdf']['pdf_font_subsetting']);
+		}
 		#Establecer fuente
 		$this->pdf->SetFont($this->var['pdf']['pdf_font_name'], '', $this->var['pdf']['pdf_font_size'], '', true);
 		#Agrega pagina
@@ -95,10 +100,10 @@ class html2pdf extends config_vars{
 		#Imprime contenido
 		$this->pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 		#Cierra y crea documento
-		if($PDFFile=$this->pdf->Output($archivo, $output)){$this->respuesta = true;}
+		if($PDFFile=$this->pdf->Output($tmp_dir.$archivo, $output)){$this->respuesta = true;}
 		$respuesta ['pdf'] 		= $PDFFile;
-		$respuesta ['path'] 	= $archivo;
-		$respuesta ['uri'] 		= $this->cfg['base_url'].$this->cfg['path_tmp'].$data['archivo'].'.pdf';
+		$respuesta ['path'] 	= $tmp_dir.$archivo;
+		$respuesta ['uri'] 		= $this->cfg['base_url'].$this->cfg['path_tmp'].$archivo;
 		$respuesta ['success'] 	= $this->respuesta;
 		return $respuesta;
 	}

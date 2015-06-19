@@ -1,9 +1,10 @@
 <div id="formulario" class="stdform">
-    <div id="tbl1" class="span6">
-        <table width="100%" heigth="100%" border="0" class="table table-bordered table-invoice"> 
+    <div id="tbl1" class="span6" style="height:100%;">
+        <table width="100%" heigth="100%" border="1" class="table table-bordered table-invoice"> 
             <tr>
                 <td class="width30">
                 <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
+                <input id="estatus" type="hidden" data-campo="estatus" value="{estatus}" />
                     <label><strong>{orden_num}:</strong></label>
                 </td>
                 <td>{orden_num_value}</td>
@@ -43,9 +44,6 @@
                 <td>{list_creditos}</td>
             </tr>
         </table>
-        <br>
-        <br>
-        <br>
    </div>
    <div class="span6">
        <table class="table table-bordered table-invoice">
@@ -91,8 +89,14 @@
             </tr>
        </table>
    </div>
-    <br>
-    {list_arti}
+    <div style="clear:both; width:100%; text-align:center; padding: 20px;">
+        <table style="margin: 0 auto; text-align: left;" >
+            <tr>
+                <td >{lst_articulos_label}</td>
+                <td >{list_arti}</td>
+            </tr>
+        </table>        
+    </div>
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>
     <table class="table table-bordered table-invoice-full" id="dyntable2" aria-describedby="dyntable2_info" style="margin-left: 0px; width: 100%; {style_table}">
@@ -129,6 +133,7 @@
     <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton"> 
         {button_save}
+        {btn_canceled}
     </p>
     <!--</div>-->
 </div>

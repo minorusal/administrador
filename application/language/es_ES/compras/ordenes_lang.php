@@ -11,6 +11,8 @@ $lang['proveedor'] 			= "Proveedor";
 $lang['descripcion'] 		= "Descripción";
 $lang['sucursal'] 			= "Sucursal";
 $lang['acciones'] 			= "Acciones";
+$lang['lst_articulos_label']= "Seleccione un articulo:";
+
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

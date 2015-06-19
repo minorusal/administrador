@@ -11,4 +11,8 @@
 	cursor: pointer;
 	color:red;
 }
+.stdform .formwrapper{
+	padding-top: 0px;
+	margin-left: 0px;
+}
 /*---*/

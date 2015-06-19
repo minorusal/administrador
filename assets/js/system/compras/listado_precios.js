@@ -80,6 +80,7 @@ function agregar(){
   var costo_unitario            = jQuery('#costo_unitario').val();
   var costo_x_um                = jQuery('#costo_x_um').val();
   var upc                       = jQuery('#upc').val();
+  var rendimiento               = jQuery('#rendimiento').val();
 
   jQuery.ajax({
     type:"POST",
@@ -101,7 +102,8 @@ function agregar(){
         peso_unitario  : peso_unitario,
         costo_unitario : costo_unitario,
         costo_x_um   :costo_x_um,
-        upc : upc
+        upc : upc,
+        rendimiento : rendimiento
     },
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
@@ -167,6 +169,7 @@ function update(){
   var costo_unitario            = jQuery('#costo_unitario').val();
   var costo_x_um                = jQuery('#costo_x_um').val();
   var upc                       = jQuery('#upc').val();
+  var rendimiento               = jQuery('#rendimiento').val();
 
   jQuery.ajax({
     type:"POST",
@@ -189,7 +192,8 @@ function update(){
         peso_unitario  : peso_unitario,
         costo_unitario : costo_unitario,
         costo_x_um   :costo_x_um,
-        upc : upc
+        upc : upc,
+        rendimiento : rendimiento
       },
     beforeSend : function(){
       jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');

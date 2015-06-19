@@ -31,9 +31,10 @@ class ordenes_model extends Base_Model{
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 
-		$filtro = ($filtro!="") ? "and (a.orden_num LIKE '$filtro%' 
-							   or b.razon_social LIKE '$filtro%'
-							   or a.descripcion LIKE '$filtro%'
+		$filtro = ($filtro!="") ? "and (a.orden_num LIKE '%$filtro%' 
+							   or b.razon_social LIKE '%$filtro%'
+							   or a.descripcion LIKE '%$filtro%'
+							   or c.estatus LIKE '%$filtro%'
 							   )" 
 							: "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
@@ -61,9 +62,11 @@ class ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[sucursales] e on a.id_sucursal=e.id_sucursal
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
-				WHERE a.activo=1 AND 1  $filtro
+				WHERE a.activo=1 AND a.estatus IN (1,3) AND 1  $filtro
 				GROUP BY orden_num ASC
 				$limit";
+				//echo $query;
+
       	// Execute querie
 
       	$query = $this->db->query($query);
@@ -217,16 +220,6 @@ class ordenes_model extends Base_Model{
 		}
 	}
 	public function db_update_activo_orden_listado($data=array()){
-		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
-		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
-		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';
-		
-		$tbl = $this->tbl;
-
-		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
-		return $update;
-	}
-	public function db_update_estatus_orden_listado($data=array()){
 		$id_compras_orden  			  = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
 		$id_compras_articulo_precios  = (isset($data['id_compras_articulo_precios']))?$data['id_compras_articulo_precios']:false;
 		$filtro 					  = ($id_compras_articulo_precios)?"id_compras_articulo_precios='$id_compras_articulo_precios' AND id_compras_orden ='$id_compras_orden'":'';

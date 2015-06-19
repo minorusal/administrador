@@ -331,10 +331,7 @@ class servicios extends Base_Controller
 			$servicios = $this->db_model->db_get_data_x_sucursal($id_sucursal);
 
 			$check_times = $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
-			print_debug($check_times);
-			$msg = $this->lang_item($check_times['msg'],false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-			/*
+			
 			if($check_times['response']){
 				$sqlData = array(
 					 'servicio'    => $this->ajax_post('servicio')
@@ -354,7 +351,7 @@ class servicios extends Base_Controller
 			}else{
 				$msg = $this->lang_item($check_times['msg'],false);
 				echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-			}*/
+			}
 		}
 	}
 }

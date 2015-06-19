@@ -142,15 +142,13 @@ function agregar(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data).show('slow');
-			/*btn.removeAttr('disabled');
+			btn.removeAttr('disabled');
 			var data = data.split('|');
 			if(data[0]==1){
 				clean_formulario();
 			}
 			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');*/
+		    jQuery("#mensajes").html(data[1]).show('slow');
 		}
 	});
 }

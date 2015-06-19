@@ -333,11 +333,9 @@ class servicios extends Base_Controller
 	public function insert_servicio(){
 		//print_debug($this->ajax_post(false));
 		$incomplete  = $this->ajax_post('incomplete');
-		
-		
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode(alertas_tpl('error', $msg ,false));
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 			
 		}else{
 			$id_sucursal = 	 $this->ajax_post('id_sucursal');
@@ -348,62 +346,28 @@ class servicios extends Base_Controller
 			
 			$check_times = $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
 			if($check_times['response']){
-				'insert'
-			}else{
-				
-			}
-			echo json_encode($check_times['msg']);
-
-		}
-	}
-
-
-	public function check_times_ranges($incio, $termino, $times = array()){
-
-
-		$mk_inicio       =  explode(':', $incio);
-		$mk_termino      =  explode(':', $termino);
-		$mk_inicio       =  mktime($mk_inicio[0],  $mk_inicio[1],  0,0,0,0);
-		$mk_termino      =  mktime($mk_termino[0], $mk_termino[1],0,0,0,0);
-
-		if($mk_inicio==$mk_termino){
-				$msg = 'La hora de inicio no puede ser igual a la de terminbo';
-				$response = false;
-		}else{
-			if($mk_inicio>$mk_termino){
-				$msg = 'La hora de inicio no puede ser mayor a la de termibno';
-				$response = false;
-			}else{
-				$contador = 0;
-				if(is_array($times)){
-					foreach ($times as $item) {
-						if($this->validar_rango( $item['inicio'] , $item['final'], $incio)){
-							$contador++;
-						}
-						if($this->validar_rango( $item['inicio'] , $item['final'], $termino)){
-							$contador++;
-						}
-					}
-					if($contador>0){
-						$msg = 'el horario se empalma';
-						$response = false;
-					}else{
-						$msg = 'exito se registra horario';
-						$response = true;
-					}
-				}else{
-					$msg = 'exito se registra horario fgd';
-					$response = true;
+				$SQLinsert = array(
+					 'servicio'    => $this->ajax_post('servicio')
+					,'clave_corta' => $this->ajax_post('clave_corta')
+					,'descripcion' => $this->ajax_post('descripcion')
+					,'inicio'      => $ajax_inicio
+					,'final'       => $ajax_termino
+					,'id_sucursal' => $id_sucursal
+					,'id_usuario'  => $this->session->userdata('id_usuario')
+				 	,'timestamp'   => $this->timestamp()
+ 					);
+				$insert = $this->db_model->db_insert_data($SQLinsert);
+				if($insert){
+					$msg = $this->lang_item($check_times['msg'],false);
+					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 				}
+			}else{
+				$msg = $this->lang_item($check_times['msg'],false);
+				echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 			}
 		}
+	}
 
-		return array('response'=> $response, 'msg' =>  $msg);
-	}
-	public function validar_rango($inicio, $fin, $value){
-	    $inicio  = strtotime($inicio);
-	    $fin     = strtotime($fin);
-	    $value   = strtotime($value);
-	    return (($value >= $inicio) && ($value <= $fin));
-	}
+
+	
 }

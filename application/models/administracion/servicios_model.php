@@ -51,5 +51,18 @@ class servicios_model extends Base_Model{
 		}
 	}
 
+	/*Inserta registro de la tabla ac_administracion_servicios*/
+	public function db_insert_data($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['administracion_servicios'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['administracion_servicios'], $data);
+			return $insert;
+		}else{
+			return false;
+		}
+	}
 	
 }

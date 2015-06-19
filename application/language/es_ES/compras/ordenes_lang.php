@@ -25,4 +25,8 @@ $lang['creditos'] 	    	= "Creditos";
 $lang['forma_pago'] 	    = "Forma de pago";
 $lang['orden_tipo'] 	    = "Tipo de orden";
 $lang['agregar_articulos']  = "Agregar Artículos";
+$lang['clave_corta']  		= "Clave corta";
+$lang['valor_imp']  		= "valor/imp";
+$lang['costo_cantidad']  	= "costo * cantidad";
+
 ?>

@@ -24,6 +24,15 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
+           		jQuery('#timepicker1,#timepicker2').timepicker({
+				beforeShow: function(input, inst) {
+					var newclass = 'smart-forms'; 
+					var smartpikr = inst.dpDiv.parent();
+					if (!smartpikr.hasClass('smart-forms')){
+						inst.dpDiv.wrap('<div class="'+newclass+'"></div>');
+					}
+				}					
+			});
 
            }
         }
@@ -105,4 +114,38 @@ function actualizar(){
 			jQuery("#update_loader").html('');
 		}
 	})
+}
+
+function agregar(){
+	var btn          = jQuery("button[name='save_servicio']");
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+	var objData = formData('#formulario');
+	var inicio = objData['inicio']  = jQuery('#timepicker1').val();
+	var end    = objData['final']   = jQuery('#timepicker2').val();
+	objData['mayor']  = time_dual(inicio,end);
+	alert(objData['mayor']);
+	objData['incomplete']  = values_requeridos();
+	objData['id_sucursal'] = jQuery("select[name='lts_sucursales'] option:selected").val();
+	objData['servicio']    = jQuery('#txt_servicio').val();
+	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
+	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"administracion/servicios/insert_servicio",
+		dataType: "json",
+		data: objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			btn.removeAttr('disabled');
+			var data = data.split('|');
+			if(data[0]==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data[1]).show('slow');
+		}
+	});
 }

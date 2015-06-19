@@ -38,7 +38,7 @@ class servicios_model extends Base_Model{
 		}
 	}
 
-	/*Actualiza la información en el formuladio de edición de la tabla av_administracion_areas*/
+	/*Actualiza la información en el formuladio de edición de la tabla av_administracion_servicios*/
 	public function db_update_data($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
@@ -68,6 +68,55 @@ class servicios_model extends Base_Model{
 				$condicion = "id_administracion_servicio = ".$data['id_administracion_servicio'];			
 				$update = $this->update_item($tbl['administracion_servicios'], $data, 'id_administracion_servicio', $condicion);
 				return $update;
+			}else{
+				return false;
+			}
+		}
+	}
+
+	/*Inserta registro de la tabla ac_administracion_servicios*/
+	public function db_insert_data($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		//Validar si existe el mismo horario de servicio en la misma sucursal
+		$query = "SELECT 
+	sr.inicio as fecha_1
+  FROM 
+  	00_av_mx.av_administracion_servicios sr
+  WHERE 
+		sr.activo = 1
+ 	AND 
+		sr.id_sucursal = $data[id_sucursal]
+  	OR 
+  		sr.inicio IN(
+  					SELECT fe.inicio FROM 00_av_mx.av_administracion_servicios fe
+  						WHERE fe.inicio < '$data[inicio]' AND  fe.final  > '$data[final]' AND fe.id_sucursal=$data[id_sucursal]
+  						) 
+  	OR 
+  		sr.inicio IN(
+  					SELECT fe.inicio FROM 00_av_mx.av_administracion_servicios fe
+  						WHERE fe.inicio > '$data[inicio]' AND  fe.final  > '$data[final]' AND fe.inicio  < '$data[final]' AND fe.id_sucursal=$data[id_sucursal]
+  						) 
+  	OR 
+  		sr.inicio IN(
+  					SELECT fe.inicio FROM 00_av_mx.av_administracion_servicios fe
+  						WHERE fe.inicio < '$data[inicio]' AND  fe.final > '$data[inicio]' AND fe.final  < '$data[final]' AND fe.id_sucursal=$data[id_sucursal] 
+  						) 
+  	OR 
+  		sr.inicio IN(
+  					SELECT fe.inicio FROM 00_av_mx.av_administracion_servicios fe
+  						WHERE fe.inicio > '$data[inicio]' AND  fe.final < '$data[final]' AND fe.id_sucursal=$data[id_sucursal]
+  						)";
+		 print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return false;
+		}else{
+			// Query
+			$existe = $this->row_exist($tbl['administracion_servicios'], array('clave_corta'=> $data['clave_corta']));
+			if(!$existe){
+				$insert = $this->insert_item($tbl['administracion_servicios'], $data);
+				return $insert;
 			}else{
 				return false;
 			}

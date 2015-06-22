@@ -16,14 +16,14 @@ class servicios_model extends Base_Model{
 		//Query
 		$query = "	SELECT 
 						 sr.id_administracion_servicio
-						,sr.clave_corta cv_servicio
-						,su.clave_corta cv_sucursal
-						,sr.descripcion
-						,sr.servicio
+						,sr.clave_corta as cv_servicio
+						,su.clave_corta as cv_sucursal
+						,sr.descripcion as descripcion
+						,sr.servicio 
 						,sr.inicio
 						,sr.final
 						,su.id_sucursal
-						,su.sucursal
+						,su.sucursal 
 						,sr.id_usuario
 						,sr.timestamp
 						,sr.edit_timestamp
@@ -33,6 +33,7 @@ class servicios_model extends Base_Model{
 					GROUP BY sr.id_administracion_servicio ASC
 					$limit
 					";
+					//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

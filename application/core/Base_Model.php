@@ -125,6 +125,9 @@ class Base_Model extends CI_Model {
 	    }
     }
     public function insert_item($tbl, $data = array()){
+    	//$id_usuario = $data['id_usuario'];
+   		if(isset($data['id_usuario_reg'],$data)){unset($data['id_usuario']);}else{$data['id_usuario'];}
+   		//print_debug($tbusuario);
     	$insert  = $this->db->insert_string($tbl, $data);
     	$insert  = $this->db->query($insert);
     	if($insert){
@@ -135,10 +138,9 @@ class Base_Model extends CI_Model {
 			    				 'tabla'      => $tbl,
 			    				 'id_row'     => $id_row,
 			    				 'data_row'   => array_2_string_format($data,'=',','),
-			    				 'id_usuario' => $data['id_usuario'],
+			    				 'id_usuario' => (isset($data['id_usuario']))?$data['id_usuario']:$data['id_usuario_reg'],
 			    				 'timestamp'  => $data['timestamp']
 			    			);
-
 	    	$log   = $this->db->insert_string('av_administracion_movimientos', $log);
 	    	$log   = $this->db->query($log);
     	}else{

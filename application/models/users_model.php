@@ -248,42 +248,42 @@ class users_model extends Base_Model{
 	}
 	/*Inserta registro de usuarios*/
 		public function db_insert_data($data = array()){
-			//print_debug($data);
 			// DB Info		
 			$tbl = $this->tbl;
 			// Query
 			$personal = array(
-								 'nombre'     => $data['nombre']
-								,'paterno'    => $data['paterno']
-								,'materno'    => $data['paterno']
-								,'telefono'   => $data['telefono']
-								,'mail'       => $data['mail']
-								,'id_usuario' => $data['id_usuario']
-								,'timestamp'  => $data['timestamp']
+					 'nombre'     => $data['nombre']
+					,'paterno'    => $data['paterno']
+					,'materno'    => $data['paterno']
+					,'telefono'   => $data['telefono']
+					,'mail'       => $data['mail']
+					,'id_usuario' => $data['id_usuario']
+					,'timestamp'  => $data['timestamp']
 							 );
-			//$personal['avatar']   = $data['avatar'];
 			$insert_personal = $this->insert_item($tbl['personales'], $personal);
 			$id_personal = $this->last_id();
 			$array_clave = array(
-				 'user'     => ''
-				,'pwd'      => ''
-				,'registro' => ''
+				 'user'       => ''
+				,'pwd'        => ''
+				,'id_usuario' => $data['id_usuario']
+				,'timestamp'  => $data['timestamp']
 				);
 			$insert_clave = $this->insert_item($tbl['claves'], $array_clave);
 			$id_clave = $this->last_id();
 			$array_usuarios = array(
-				'id_personal'  => $id_personal
-				,'id_clave'    => $id_clave
-				,'id_perfil'   => $data['id_perfil']
-				,'id_empresa'  => $data['id_empresa']
-				,'id_pais'     => $data['id_pais']
-				,'id_sucursal' => $data['id_sucursal']
-				,'id_puesto'   => $data['id_puesto']
-				,'id_area'     => $data['id_area']
-				,'id_menu_n1'  => $data['id_menu_n1']
-				,'id_menu_n2'  => $data['id_menu_n2']
-				,'id_menu_n3'  => $data['id_menu_n3']
-				,'timestamp'   => $data['timestamp']
+				'id_personal'  	   => $id_personal
+				,'id_clave'    	   => $id_clave
+				,'id_perfil'   	   => $data['id_perfil']
+				,'id_empresa'  	   => $data['id_empresa']
+				,'id_pais'     	   => $data['id_pais']
+				,'id_sucursal' 	   => $data['id_sucursal']
+				,'id_puesto'   	   => $data['id_puesto']
+				,'id_area'     	   => $data['id_area']
+				,'id_menu_n1'  	   => $data['id_menu_n1']
+				,'id_menu_n2'      => $data['id_menu_n2']
+				,'id_menu_n3'      => $data['id_menu_n3']
+				,'id_usuario_reg'  => $data['id_usuario']
+				,'timestamp'       => $data['timestamp']
 				);
 			$insert_usuario = $this->insert_item($tbl['usuarios'], $array_usuarios);
 			if($insert_usuario){

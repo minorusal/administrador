@@ -77,14 +77,14 @@ class usuarios extends Base_Controller {
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset = 0){
-		/*$seccion 		= '';
+		$seccion 		= '';
 		$filtro         = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
-		$sqlData = array(
+		/*$sqlData = array(
 						 'buscar'      	=> $filtro
 						,'offset' 		=> $offset
 						,'limit'      	=>  $limit
@@ -150,7 +150,7 @@ class usuarios extends Base_Controller {
 	public function agregar(){
 		$seccion 		= '';
 		$uri_view   	= $this->view_agregar;
-		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save_usuario','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
 		$areas_array      = array(
@@ -239,7 +239,7 @@ class usuarios extends Base_Controller {
 				,'id_sucursal' => $this->session->userdata('id_sucursal')
 				,'timestamp'   => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($sqlData);
-			
+					
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));

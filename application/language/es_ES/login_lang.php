@@ -8,10 +8,4 @@
 	
 	$lang['row_pais']      = 'Pais:';
 	$lang['row_perfil']    = 'Perfil:';
-
-
-
-	
-
-	
 ?>

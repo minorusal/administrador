@@ -2,12 +2,12 @@
 
 class historial_ordenes extends Base_Controller {
 		/**
-* Nombre:		Historial Ordenes
-* Ubicación:	Compras>Ordenes/historial ordenes
-* Descripción:	Funcionamiento para la sección de ordenes de compra
-* @author:		Alejandro Enciso
-* Creación: 	2015-05-19
-*/
+	* Nombre:		Historial Ordenes
+	* Ubicación:	Compras>Ordenes/historial ordenes
+	* Descripción:	Funcionamiento para la sección de ordenes de compra
+	* @author:		Alejandro Enciso
+	* Creación: 	2015-05-19
+	*/
 	private $modulo;
 	private $submodulo;
 	private $seccion;
@@ -41,12 +41,12 @@ class historial_ordenes extends Base_Controller {
 		}
 		// DB Model
 		$this->load->model($this->modulo.'/ordenes_model','ordenes_model');
-		$this->load->model('users_model','users_model');
+		/*$this->load->model('users_model','users_model');
 		$this->load->model('administracion/sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		$this->load->model('administracion/variables_model','variables_model');
-		$this->load->model('compras/listado_precios_model','listado_precios_model');
+		$this->load->model('compras/listado_precios_model','listado_precios_model');*/
 		// Diccionario
 		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
@@ -95,12 +95,14 @@ class historial_ordenes extends Base_Controller {
 		$this->load_view($this->uri_view_principal, $data, $js);
 	}
 	public function listado($offset=0){
+		/*echo '??'
+		die();*/
 		// Crea tabla con listado de ordenes aprobadas 
 		$accion 		= $this->tab['listado'];
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$accion;		
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -113,8 +115,8 @@ class historial_ordenes extends Base_Controller {
 		$total_rows   			  = count($this->ordenes_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content 			  = $this->ordenes_model->db_get_data($sqlData);
-		$url          			  = base_url($url_link);
-		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		$url          			  = base_url($uri_view);
+		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url_link, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value) {
 				// Evento de enlace

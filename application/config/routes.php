@@ -93,6 +93,7 @@ $route['compras/catalogos/embalaje']                               = 'compras/em
 /*Catalogo de Ordenes*/
 $route['compras/catalogos/ordenes']                   	 = 'compras/ordenes/index';
 $route['compras/catalogos/aprobar_ordenes']                = 'compras/aprobar_ordenes/index';
+$route['compras/catalogos/historial_ordenes']                = 'compras/historial_ordenes/index';
 
 /*ALMACEN*/
 /*ENtradas Recepcion*/

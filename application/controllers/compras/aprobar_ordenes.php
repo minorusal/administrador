@@ -101,7 +101,7 @@ class aprobar_ordenes extends Base_Controller {
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$accion;		
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";

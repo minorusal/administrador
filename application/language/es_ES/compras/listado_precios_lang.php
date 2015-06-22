@@ -17,11 +17,10 @@ $lang['costo_unitario']  		 = 'costo unitario';
 $lang['costo_x_um']  			 = 'costo x u.m';
 $lang['costo_final']  			 = 'costo final';
 $lang['desglose_impuesto']  	 = 'Desglose del impuesto';
-
 $lang['presentacion_x_embalaje_tipo'] = 'pre. x emb. tipo';
 $lang['um_x_embalaje_tipo']  	 	  = 'u.m. x emb. tipo';
 $lang['um_x_presentacion_tipo']  	  = 'u.m. x pre. tipo';
 $lang['peso_unitario_tipo']  	 	  = 'peso uni. tipo';
 $lang['costo_unitario_tipo']  	 	  = 'costo uni. tipo';
-$lang['rendimiento']  	 	  = 'rendimiento';
+$lang['rendimiento']  	 	  		  = 'rendimiento';
 ?>

@@ -20,7 +20,7 @@ class ordenes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 				= 'compras';
-		$this->seccion 				= 'catalogos';
+		$this->seccion 				= 'ordenes';
 		$this->submodulo			= 'ordenes';
 		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
 		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
@@ -588,7 +588,14 @@ class ordenes extends Base_Controller {
 
 		if(count($data_listado)>0){
 				$style_table='display:block';
+				$subtotal_value 	= 0;
+				$descuento_value 	= 0;
+				$impuesto_value 	= 0;
 			for($i=0;count($data_listado)>$i;$i++){
+					// Totales
+					$subtotal_value += $data_listado[$i]['subtotal'];
+					$impuesto_value += $data_listado[$i]['valor_impuesto'];
+					// Lineas
 					$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 					$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
@@ -606,47 +613,49 @@ class ordenes extends Base_Controller {
 								</td>
 								<td class="right">
 									<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
-									<span class="add-on">'.$moneda.'</span> '.$data_listado[$i]['costo_sin_impuesto'].'
+									<span class="add-on">'.$moneda.'</span> '.number_format($data_listado[$i]['costo_sin_impuesto'],2).'
 								</td>
-								<td>
+								<td class="right">
 									<div class="input-prepend input-append">
-										<input type="text" '.$readonly.' id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+										<input type="text" '.$readonly.' id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 40px;"/>
 										<span class="add-on">Pz</span>
 									</div>
 								</td>
-								<td>
+								<td class="right">
 									<input type="hidden" id="costo_x_cantidad_hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 									<span class="add-on">'.$moneda.'</span> 
-									<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['costo_x_cantidad'].'</span>
+									<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['costo_x_cantidad'],2).'</span>
 								</td>
-								<td>
+								<td class="right">
 									<input type="hidden" value="'.$data_listado[$i]['descuento'].'" id="descuento_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'">
 									<div class="input-prepend input-append">
-		                              <input type="text" '.$readonly.' maxlength="3" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')"/>
+		                              <input type="text" '.$readonly.' maxlength="3" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 25px;"/>
 		                              <span class="add-on">%</span>
 		                            </div>
 								</td>
-								<td>
+								<td class="right">
 									<input type="hidden" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 		                              <span class="add-on">'.$moneda.'</span> 
-		                              <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['subtotal'].'</span>
+		                              <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['subtotal'],2).'</span>
 								</td>
-								<td>
-									<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+								<td class="right">
+									<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" />
 									'.$data_listado[$i]['impuesto_porcentaje'].'
 									<span class="add-on">%</span>
 								</td>
-								<td>
+								<td class="right">
 									<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 									<span class="add-on">'.$moneda.'</span> 
-									<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['valor_impuesto'].'</span>
+									<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['valor_impuesto'],2).'</span>
 								</td>
-								<td>
+								<td class="right">
+									<strong>
 									<input type="hidden" value="'.$data_listado[$i]['total'].'" id="total_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 									<span class="add-on">'.$moneda.'</span> 
-									<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.$data_listado[$i]['total'].'</span>
+									<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['total'],2).'</span>
+									</strong>
 								</td>
-								<td>'.$acciones.'
+								<td class="center">'.$acciones.'
 								</td>
 							</tr>';
 			}
@@ -679,14 +688,13 @@ class ordenes extends Base_Controller {
         $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
-        $tabData['creditos']     			 = $this->lang_item("creditos",false);
+        $tabData['credito']     			 = $this->lang_item("credito",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
 		$tabData['lst_articulos_label'] 	 = $this->lang_item("lst_articulos_label",false);
 		$tabData['proveedor']  			 	 = $this->lang_item("proveedor",false);
 		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
 		$tabData['clave_corta']  			 = $this->lang_item("clave_corta",false);
-		$tabData['Costo']  			 		 = $this->lang_item("Costo",false);
-		$tabData['unitario']  			 	 = $this->lang_item("unitario",false);
+		$tabData['costo_unitario']	 		 = $this->lang_item("costo_unitario",false);
 		$tabData['cantidad']  			 	 = $this->lang_item("cantidad",false);
 		$tabData['costo_cantidad']  	     = $this->lang_item("costo_cantidad",false);
 		$tabData['descuento']  			 	 = $this->lang_item("descuento",false);
@@ -695,6 +703,11 @@ class ordenes extends Base_Controller {
 		$tabData['valor_imp']  			 	 = $this->lang_item("valor_imp",false);
 		$tabData['total']  			 		 = $this->lang_item("total",false);
 		$tabData['accion']  				 = $this->lang_item("accion",false);
+		$tabData['subtotal']  				 = $this->lang_item("subtotal",false);
+		$tabData['impuesto']  				 = $this->lang_item("impuesto",false);
+		$tabData['a_pagar']  				 = $this->lang_item("a_pagar",false);
+		$tabData['cerrar_orden']  		 	 = $this->lang_item("cerrar_orden",false);
+		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
@@ -716,8 +729,13 @@ class ordenes extends Base_Controller {
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['table']					 = $table;
-		$tabData['style_table']				= $style_table;
+		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		// Totales
+		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
+		$tabData['descuento_value']			 = $moneda.' '.number_format($descuento_value,2);
+		$tabData['impuesto_value']			 = $moneda.' '.number_format($impuesto_value,2);
+		$tabData['total_value']				 = $moneda.' '.number_format(($subtotal_value-$subtotal_value)+$impuesto_value,2);
 
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -751,7 +769,9 @@ class ordenes extends Base_Controller {
 							<input type="hidden" value="'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$get_data[0]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$get_data[0]['id_compras_articulo_precios'].'">
 						</td>
 						<td>
-							'.$get_data[0]['articulo'].'
+							<ul class="tooltips">
+								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$get_data[0]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$get_data[0]['articulo'].'</a>
+							</ul>
 						</td>
 						<td>
 							'.$get_data[0]['cl_presentacion'].'
@@ -761,44 +781,44 @@ class ordenes extends Base_Controller {
 							<span class="add-on">'.$moneda.'</span>
 							'.$get_data[0]['costo_sin_impuesto'].'
 						</td>
-						<td>
+						<td class="right">
 							<div class="input-prepend input-append">
-								<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')">
+								<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')" style="width: 40px;">
 								<span class="add-on">Pz</span>
 							</div>
 						</td>
-						<td>
+						<td class="right">
 							<input type="hidden" id="costo_x_cantidad_hidden'.$get_data[0]['id_compras_articulo_precios'].'" value="" data-campo="costo_x_cantidad_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="costo_x_cantidad'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
-						<td>
+						<td class="right">
 							<div class="input-prepend input-append">
-								<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0">
+								<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0" style="width: 40px;">
 								<span class="add-on">%</span>
 							</div>
 						</td>
-						<td>
+						<td class="right">
 							<input type="hidden" id="subtotal__hidden'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="subtotal__hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
-						<td>
+						<td class="right">
 							<input type="hidden" value="'.$impuesto.'" data-campo="impuesto['.$get_data[0]['id_compras_articulo_precios'].']" id="impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"name="impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
 							'.$impuesto.'
 							<span class="add-on">%</span>
 						</td>
-						<td>
+						<td class="right">
 							<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
-						<td>
+						<td class="right">
 							<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
-						<td>
+						<td class="center">
 							'.$acciones.'
 						</td>
 					</tr>';

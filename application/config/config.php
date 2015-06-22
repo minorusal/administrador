@@ -264,7 +264,6 @@ $config['sess_match_ip']                            = ($vars->cfg['sess_match_ip
 $config['sess_match_useragent']           = ($vars->cfg['sess_match_useragent'])?$vars->cfg['sess_match_useragent']:TRUE;
 $config['sess_time_to_update']             = ($vars->cfg['sess_time_to_update'])?$vars->cfg['sess_time_to_update']:300;
 
-
 /*
 |--------------------------------------------------------------------------
 | Cookie Related Variables

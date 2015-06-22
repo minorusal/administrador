@@ -328,7 +328,6 @@ class listado_precios extends Base_Controller {
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);
-	        dump_var($data_insert);
 			$id = $this->db_model->db_insert_data($data_insert);
 			
 			if($id){

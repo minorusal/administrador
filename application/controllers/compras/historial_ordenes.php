@@ -20,7 +20,7 @@ class historial_ordenes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 				= 'compras';
-		$this->seccion 				= 'catalogos';
+		$this->seccion 				= 'ordenes';
 		$this->submodulo			= 'historial_ordenes';
 		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
 		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';

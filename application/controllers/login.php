@@ -153,6 +153,7 @@ class login extends Base_Controller {
 	* @return void
 	*/
 	function logout(){
+		$this->load_database('global_system');
 		$this->session->sess_destroy();
 		redirect('login');
 	}

@@ -35,4 +35,6 @@ $lang['descuento']  		= "Descuento";
 $lang['a_pagar']  			= "Total a Pagar";
 $lang['cerrar_orden'] 		= "Cerrar Orden";
 $lang['cancelar_orden']  	= "Cancelar Orden";
+$lang['historial_ordenes']  = "Historial ordenes";
+$lang['aprobar_ordenes']  	= "Aprobar ordenes";
 ?>

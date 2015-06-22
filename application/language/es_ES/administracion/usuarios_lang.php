@@ -14,9 +14,7 @@ $lang['lbl_materno'] 	= "Apellido materno";
 $lang['lbl_telefono'] 	= "Telefono";
 $lang['lbl_email'] 	    = "Correo electronico";
 $lang['lbl_perfil'] 	= "Perfil de Acceso";
-
-
-
-
+$lang['lbl_area'] 	    = "Area";
+$lang['lbl_puesto'] 	= "Puesto";
 
 ?>

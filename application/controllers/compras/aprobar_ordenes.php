@@ -49,7 +49,7 @@ class aprobar_ordenes extends Base_Controller {
 		$this->load->model('administracion/variables_model','variables_model');
 		$this->load->model('compras/listado_precios_model','listado_precios_model');
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
 		// Creación de tabs en el contenedor principal
@@ -88,7 +88,7 @@ class aprobar_ordenes extends Base_Controller {
 		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+		$data['titulo_seccion']   = $this->lang_item("aprobar_ordenes");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	

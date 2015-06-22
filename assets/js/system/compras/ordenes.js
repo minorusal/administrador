@@ -28,6 +28,7 @@ function load_content(uri, id_content){
 	jQuery('#ui-id-3').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
+	alert(uri);
     jQuery.ajax({
         type: "POST",
         url: uri,

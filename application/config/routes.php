@@ -132,7 +132,7 @@ $route['administracion/control_de_usuarios/empresa']        = 'administracion/em
  * CATALOGOS GENERALES
  */
 /*Catalogo de Sucursales*/
-$route['administracion/catalogos_generales/sucursales']      = 'administracion/sucursales/index';
+$route['administracion/sucursales/sucursales']             = 'administracion/sucursales/index';
 /*Catalogo de Impuestos*/
 $route['administracion/catalogos_generales/impuestos']       = 'administracion/impuestos/index';
 /*Catalogo de Descuentos*/
@@ -146,7 +146,7 @@ $route['administracion/catalogos_generales/entidades']       = 'administracion/e
 /*Catálogo de Regiones*/ 
 $route['administracion/catalogos_generales/regiones']        = 'administracion/regiones/index'; 
 /*Catálogo de Servicios*/ 
-$route['administracion/catalogos_generales/servicios']       = 'administracion/servicios/index';
+$route['administracion/sucursales/servicios']       = 'administracion/servicios/index';
 
 /*VENTAS*/
 

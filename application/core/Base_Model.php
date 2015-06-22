@@ -33,6 +33,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['administracion_entidades'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_entidades'];
 		$this->tbl['administracion_forma_pago'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_forma_pago'];
 		$this->tbl['administracion_impuestos'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_impuestos'];
+		$this->tbl['administracion_movimientos'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_movimientos'];
 		$this->tbl['administracion_puestos'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_puestos'];
 		$this->tbl['administracion_regiones'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_regiones'];
 		$this->tbl['administracion_servicios'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_servicios'];
@@ -68,6 +69,16 @@ class Base_Model extends CI_Model {
 		/*FIN dbmodel*/
 	}
 
+
+	public function last_id(){
+		$last_id = $this->db->insert_id();
+		$query = "SELECT id_row 
+		          FROM ".$this->tbl['administracion_movimientos']."
+		          WHERE id_administracion_movimientos=$last_id";
+		$query = $this->db->query($query);
+		$result =  $query->result_array();
+		return $result[0]['id_row'];
+	}
 	public function row_exist($table, $row, $debug=false){
     	$this->db->select();
 		$this->db->from($table);

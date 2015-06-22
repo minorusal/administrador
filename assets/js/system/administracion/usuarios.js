@@ -100,9 +100,10 @@ function insert(){
   objData['materno']     = jQuery('#materno').val();
   objData['telefono']    = jQuery('#telefono').val();
   objData['mail']        = jQuery('#mail').val();
+  objData['id_area']     = jQuery("select[name='lts_areas'] option:selected").val();
+  objData['id_puesto']   = jQuery("select[name='lts_puestos'] option:selected").val();
   objData['id_perfil']   = jQuery("select[name='lts_perfiles'] option:selected").val();
   
-
   jQuery.ajax({
     type:"POST",
     url: path()+"administracion/usuarios/insert",

@@ -33,6 +33,8 @@ class usuarios extends Base_Controller {
 		}
 		$this->load->model('users_model','db_model');
 		$this->load->model($this->modulo.'/perfiles_model','perfiles');
+		$this->load->model($this->modulo.'/areas_model','areas');
+		$this->load->model($this->modulo.'/puestos_model','puestos');
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
@@ -151,7 +153,21 @@ class usuarios extends Base_Controller {
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
-		$dropdown_array      = array(
+		$areas_array      = array(
+								 'data'		=> $this->areas->db_get_data()
+								,'value' 	=> 'id_administracion_areas'
+								,'text' 	=> array('area')
+								,'name' 	=> "lts_areas"
+								,'class' 	=> "requerido");
+		$areas            =  dropdown_tpl($areas_array);
+		$puestos_array      = array(
+								 'data'		=> $this->puestos->db_get_data()
+								,'value' 	=> 'id_administracion_puestos'
+								,'text' 	=> array('puesto')
+								,'name' 	=> "lts_puestos"
+								,'class' 	=> "requerido");
+		$puestos            =  dropdown_tpl($puestos_array);
+		$perfiles_array   = array(
 								 'data'		=> $this->perfiles->db_get_data()
 								,'value' 	=> 'id_perfil'
 								,'text' 	=> array('perfil')
@@ -163,14 +179,18 @@ class usuarios extends Base_Controller {
 							   						 'params_type' => array(0)
 			   										)
 								);
-		$perfiles                    =  dropdown_tpl($dropdown_array);
+		$perfiles                    =  dropdown_tpl($perfiles_array);
 		$tabData['base_url']         =  base_url();
 		$tabData['lbl_nombre']       =  $this->lang_item('lbl_nombre', false);
 		$tabData['lbl_paterno']      =  $this->lang_item('lbl_paterno', false);
 		$tabData['lbl_materno']      =  $this->lang_item('lbl_materno', false);
 		$tabData['lbl_telefono']     =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']        =  $this->lang_item('lbl_email', false);
+		$tabData['lbl_area']         =  $this->lang_item('lbl_area', false);
+		$tabData['lbl_puesto']       =  $this->lang_item('lbl_puesto', false);
 		$tabData['lbl_perfil']       =  $this->lang_item('lbl_perfil', false);
+		$tabData['dropdown_area']    =  $areas;
+		$tabData['dropdown_puesto']  =  $puestos;
 		$tabData['dropdown_perfil']  =  $perfiles;
 		$tabData['button_save']      =  $btn_save;
 		$tabData['button_reset']     =  $btn_reset;
@@ -200,19 +220,24 @@ class usuarios extends Base_Controller {
 		}
 		else
 		{
-			/*print_debug($this->session->userdata('id_sucursal'));*/
 			$sqlData = array(
 				 'nombre'      => $this->ajax_post('nombre')
 				,'paterno'     => $this->ajax_post('paterno')
 				,'materno'     => $this->ajax_post('materno')
+				,'telefono'    => $this->ajax_post('telefono')
+				,'mail'        => $this->ajax_post('mail')
+				,'id_puesto'   => $this->ajax_post('id_puesto')
+				,'id_area'     => $this->ajax_post('id_area')
+				//,'avatar'      => $this->ajax_post('avatar')
 				,'id_menu_n1'  => $this->ajax_post('nivel_1')
 				,'id_menu_n2'  => $this->ajax_post('nivel_2')
 				,'id_menu_n3'  => $this->ajax_post('nivel_3')
 				,'id_perfil'   => $this->ajax_post('id_perfil')
+				,'id_empresa'  => $this->session->userdata('id_empresa')
 				,'id_usuario'  => $this->session->userdata('id_usuario')
 				,'id_pais'     => $this->session->userdata('id_pais')
 				,'id_sucursal' => $this->session->userdata('id_sucursal')
-				,'registro'    => $this->timestamp());
+				,'timestamp'   => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($sqlData);
 			
 			if($insert){

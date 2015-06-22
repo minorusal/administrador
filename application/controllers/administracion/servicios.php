@@ -15,7 +15,7 @@ class servicios extends Base_Controller
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'catalogos';
+		$this->submodulo		= 'sucursales';
 		$this->seccion          = 'servicios';
 		$this->icon 			= 'fa fa-phone-square'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
@@ -367,12 +367,12 @@ class servicios extends Base_Controller
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['servicio'],
-									 $value['cv_servicio'],
-									 $value['sucursal'],
-									 $value['descripcion'],
-									 $value['inicio'],
-									 $value['final']);
+									 $value['servicio']
+								 	,$value['cv_servicio']
+								 	,$value['sucursal']
+								 	,$value['descripcion']
+								 	,$value['inicio']
+								 	,$value['final']);
 			}
 			
 			$set_heading = array(

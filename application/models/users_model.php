@@ -35,7 +35,7 @@ class users_model extends Base_Model{
 						,U.id_menu_n1 as user_id_menu_n1
 						,U.id_menu_n2 as user_id_menu_n2
 						,U.id_menu_n3 as user_id_menu_n3
-						,U.registro
+						,U.timestamp
 						,U.activo
 						,C.user
 					FROM $tbl[usuarios] U
@@ -87,7 +87,7 @@ class users_model extends Base_Model{
 						,U.id_menu_n1 as user_id_menu_n1
 						,U.id_menu_n2 as user_id_menu_n2
 						,U.id_menu_n3 as user_id_menu_n3
-						,U.registro
+						,U.timestamp
 						,U.activo
 						,C.user
 					FROM $tbl[usuarios] U
@@ -203,7 +203,7 @@ class users_model extends Base_Model{
 						,U.id_menu_n1 as user_id_menu_n1
 						,U.id_menu_n2 as user_id_menu_n2
 						,U.id_menu_n3 as user_id_menu_n3
-						,U.registro
+						,U.timestamp
 						,U.activo
 						,C.user
 					FROM $tbl[usuarios] U
@@ -248,21 +248,34 @@ class users_model extends Base_Model{
 	}
 	/*Inserta registro de usuarios*/
 		public function db_insert_data($data = array()){
-			print_debug($data);
+			//print_debug($data);
 			// DB Info		
 			$tbl = $this->tbl;
 			// Query
-			$insert_personal = $this->insert_item($tbl['usuarios'], $data);
+			$personal = array(
+								 'nombre'     => $data['nombre']
+								,'paterno'    => $data['paterno']
+								,'materno'    => $data['paterno']
+								,'telefono'   => $data['telefono']
+								,'mail'       => $data['mail']
+								,'id_usuario' => $data['id_usuario']
+								,'timestamp'  => $data['timestamp']
+							 );
+			//$personal['avatar']   = $data['avatar'];
+			$insert_personal = $this->insert_item($tbl['personales'], $personal);
+			$id_personal = $this->last_id();
 			$array_clave = array(
 				 'user'     => ''
 				,'pwd'      => ''
 				,'registro' => ''
 				);
-			$insert_clave = $this->insert_item($tbl['claves'], $data);
+			$insert_clave = $this->insert_item($tbl['claves'], $array_clave);
+			$id_clave = $this->last_id();
 			$array_usuarios = array(
-				'id_personal'  => $this->db->insert_id($insert)
-				,'id_clave'    => $this->db->insert_id($insert_clave)
+				'id_personal'  => $id_personal
+				,'id_clave'    => $id_clave
 				,'id_perfil'   => $data['id_perfil']
+				,'id_empresa'  => $data['id_empresa']
 				,'id_pais'     => $data['id_pais']
 				,'id_sucursal' => $data['id_sucursal']
 				,'id_puesto'   => $data['id_puesto']
@@ -270,10 +283,11 @@ class users_model extends Base_Model{
 				,'id_menu_n1'  => $data['id_menu_n1']
 				,'id_menu_n2'  => $data['id_menu_n2']
 				,'id_menu_n3'  => $data['id_menu_n3']
+				,'timestamp'   => $data['timestamp']
 				);
-			return $insert;
-			if($insert){
-				return $insert;
+			$insert_usuario = $this->insert_item($tbl['usuarios'], $array_usuarios);
+			if($insert_usuario){
+				return $insert_usuario;
 			}else{
 				return false;
 			}

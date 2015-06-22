@@ -16,7 +16,7 @@ class sucursales extends Base_Controller
 	{
 		parent::__construct();
 		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'catalogos';
+		$this->submodulo		= 'sucursales';
 		$this->seccion          = 'sucursales';
 		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/sucursales

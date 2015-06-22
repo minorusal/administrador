@@ -50,10 +50,13 @@ class Base_Controller extends CI_Controller {
 		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
 		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 		
+		//print_debug($data_modulos);
 		if((is_array($data_modulos))){
 			$data_modulos   = $this->build_array_navigator($data_modulos);
 			$navigate_items =  $data_modulos[1];
+
 			$this->session->set_userdata('sites_availables', $data_modulos[0]);
+
 			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri );
 		}else{
 			$data_modulos   = "";
@@ -200,18 +203,18 @@ class Base_Controller extends CI_Controller {
 			$route = "";
 			if(!is_null($value['menu_n2'])){
 				if(!is_null($value['menu_n3'])){
-					$route = $value['menu_n3_routes'];
-					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['content'][$value['menu_n3']] = array( 'menu_n3'=> $value['menu_n3'] , 'icon' => $value['menu_n3_icon'],'routes'=> $route);
-					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['icon'] = $value['menu_n2_icon'];
-					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
+					$route = utf8_encode($value['menu_n3_routes']);
+					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])]['content'][utf8_encode($value['menu_n3'])] = array( 'menu_n3'=> utf8_encode($value['menu_n3']) , 'icon' => utf8_encode($value['menu_n3_icon']),'routes'=> $route);
+					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])]['icon'] = utf8_encode($value['menu_n2_icon']);
+					$data_navigator[utf8_encode($value['menu_n1'])]['icon'] = $value['menu_n1_icon'];
 				}else{
-					$route = $value['menu_n2_routes'];
-					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']] = array('icon' => $value['menu_n2_icon'] , 'routes' => $route);
-					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
+					$route = utf8_encode($value['menu_n2_routes']);
+					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])] = array('icon' => utf8_encode($value['menu_n2_icon']) , 'routes' => $route);
+					$data_navigator[utf8_encode($value['menu_n1'])]['icon'] = utf8_encode($value['menu_n1_icon']);
 				}
 			}else{
-				$route = $value['menu_n1_routes'];
-				$data_navigator[$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'routes' => $route);
+				$route = utf8_encode($value['menu_n1_routes']);
+				$data_navigator[utf8_encode($value['menu_n1'])] = array('icon'=>utf8_encode($value['menu_n1_icon']), 'routes' => $route);
 			}
 			$sites_availables[] = $route;
 		}

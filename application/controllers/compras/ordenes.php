@@ -288,6 +288,7 @@ class ordenes extends Base_Controller {
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['registro_por']  		= $this->lang_item("registro_por",false);
 
 		$this->load->model('users_model');
     	$usuario_registro              = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
@@ -376,6 +377,7 @@ class ordenes extends Base_Controller {
         $tabData['list_creditos']		= $creditos;
         $tabData['descripcion']     	= $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  	= $this->lang_item("fecha_registro",false);
+        $tabData['registro_por']  		= $this->lang_item("registro_por",false);
         $tabData['timestamp']       	= date('Y-m-d H:i');
         $tabData['orden_fecha']     	= $this->lang_item("orden_fecha",false);
         $tabData['entrega_direccion']   = $this->lang_item("entrega_direccion",false);
@@ -966,17 +968,25 @@ class ordenes extends Base_Controller {
 	public function cerrar_orden_listado(){
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$estatus 	= $this->ajax_post('estatus');
+		$subtotal 	= $this->ajax_post('subtotal');
+		$descuento 	= $this->ajax_post('descuento');
+		$impuesto 	= $this->ajax_post('impuesto');
+		$total 		= $this->ajax_post('total');
 		if($estatus==3){
-			$valor_etsatus=4;
+			$valor_estatus=4;
 		}
 		else{
-			$valor_etsatus=7;
+			$valor_estatus=7;
 		}	
 		$sqldata= array(
-					'id_compras_orden' 			   =>$id_compras_orden,
-					'estatus' 					   => $valor_etsatus,
-					'edit_timestamp'  	 		   => $this->timestamp(),
-					'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+					'id_compras_orden' 			=> $id_compras_orden,
+					'estatus' 					=> $valor_estatus,
+					'subtotal'					=> $subtotal,
+					'descuento'					=> $descuento,
+					'impuesto'					=> $subtotal,
+					'total'						=> $total,
+					'edit_timestamp'  	 		=> $this->timestamp(),
+					'edit_id_usuario'   		=> $this->session->userdata('id_usuario')
 					);
 		$update = $this->db_model->db_update_data($sqldata);
 		if($update){

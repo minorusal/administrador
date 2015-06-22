@@ -72,8 +72,9 @@ function detalle_usuario(id_usuario){
 }
 
 function insert(){
-  var btn          = jQuery("button[name='save_usuario']");
+  var btn = jQuery("button[name='save_usuario']");
   btn.attr('disabled','disabled');
+  jQuery('#mensajes').hide();
   var nivel_1 = [];
   var nivel_2 = [];
   var nivel_3 = [];
@@ -103,7 +104,7 @@ function insert(){
   objData['id_area']     = jQuery("select[name='lts_areas'] option:selected").val();
   objData['id_puesto']   = jQuery("select[name='lts_puestos'] option:selected").val();
   objData['id_perfil']   = jQuery("select[name='lts_perfiles'] option:selected").val();
-  
+
   jQuery.ajax({
     type:"POST",
     url: path()+"administracion/usuarios/insert",
@@ -117,10 +118,12 @@ function insert(){
 
       var data = data.split('|');
       if(data[0]==1){
-        clean_formulario();
+      clean_formulario();
+      alert();
       }
       jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
+      jQuery("#mensajes").html(data[1]).show('slow');
     }
   });
 }
+//emartinez@hyundai-universidad.mx

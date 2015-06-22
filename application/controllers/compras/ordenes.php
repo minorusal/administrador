@@ -586,15 +586,17 @@ class ordenes extends Base_Controller {
 		$data_listado=$this->db_model->db_get_data_orden_listado_registrado($data_sql);
 		$moneda = $this->session->userdata('moneda');
 
+		$subtotal_value 	= 0;
+		$descuento_value 	= 0;
+		$impuesto_value 	= 0;
+		$total_value	 	= 0;
 		if(count($data_listado)>0){
-				$style_table='display:block';
-				$subtotal_value 	= 0;
-				$descuento_value 	= 0;
-				$impuesto_value 	= 0;
+				$style_table='display:block';				
 			for($i=0;count($data_listado)>$i;$i++){
 					// Totales
-					$subtotal_value += $data_listado[$i]['subtotal'];
-					$impuesto_value += $data_listado[$i]['valor_impuesto'];
+					$subtotal_value 	+= $data_listado[$i]['subtotal'];
+					$descuento_value 	+= $data_listado[$i]['costo_x_cantidad']*($data_listado[$i]['descuento']/100);
+					$impuesto_value 	+= $data_listado[$i]['valor_impuesto'];
 					// Lineas
 					$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
@@ -605,7 +607,7 @@ class ordenes extends Base_Controller {
 								</td>
 								<td>
 									<ul class="tooltips">
-										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'</a>
+										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'<br/>'.$data_listado[$i]['upc'].'</a>
 									</ul>
 								</td>
 								<td>
@@ -708,6 +710,7 @@ class ordenes extends Base_Controller {
 		$tabData['a_pagar']  				 = $this->lang_item("a_pagar",false);
 		$tabData['cerrar_orden']  		 	 = $this->lang_item("cerrar_orden",false);
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
+		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
@@ -733,9 +736,13 @@ class ordenes extends Base_Controller {
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
-		$tabData['descuento_value']			 = $moneda.' '.number_format($descuento_value,2);
+		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);
 		$tabData['impuesto_value']			 = $moneda.' '.number_format($impuesto_value,2);
-		$tabData['total_value']				 = $moneda.' '.number_format(($subtotal_value-$subtotal_value)+$impuesto_value,2);
+		$tabData['total_value']				 = $moneda.' '.number_format(($subtotal_value-$descuento_value)+$impuesto_value,2);
+		$tabData['subtotal_data']			 = $subtotal_value;
+		$tabData['descuento_data']			 = $descuento_value*-1;
+		$tabData['impuesto_data']			 = $impuesto_value;
+		$tabData['total_data']				 = ($subtotal_value-$descuento_value)+$impuesto_value;
 
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -770,7 +777,7 @@ class ordenes extends Base_Controller {
 						</td>
 						<td>
 							<ul class="tooltips">
-								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$get_data[0]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$get_data[0]['articulo'].'</a>
+								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$get_data[0]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$get_data[0]['articulo'].'<br/>'.$get_data[0]['upc'].'</a>
 							</ul>
 						</td>
 						<td>
@@ -814,9 +821,11 @@ class ordenes extends Base_Controller {
 							<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
 						<td class="right">
+							<strong>
 							<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+							<strong>
 						</td>
 						<td class="center">
 							'.$acciones.'

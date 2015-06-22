@@ -205,6 +205,8 @@ class ordenes_model extends Base_Model{
 					a.costo_sin_impuesto,
 					c.nombre_comercial,
 					b.articulo,
+					a.upc,
+					a.sku,
 					e.clave_corta as cl_presentacion
 					FROM $tbl[compras_ordenes_articulos] l
 					LEFT JOIN $tbl[compras_articulos_precios] a on l.id_compras_articulo_precios = a.id_compras_articulo_precios

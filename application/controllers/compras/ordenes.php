@@ -288,6 +288,7 @@ class ordenes extends Base_Controller {
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['registro_por']  		= $this->lang_item("registro_por",false);
 
 		$this->load->model('users_model');
     	$usuario_registro              = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
@@ -376,6 +377,7 @@ class ordenes extends Base_Controller {
         $tabData['list_creditos']		= $creditos;
         $tabData['descripcion']     	= $this->lang_item("descripcion",false);
         $tabData['fecha_registro']  	= $this->lang_item("fecha_registro",false);
+        $tabData['registro_por']  		= $this->lang_item("registro_por",false);
         $tabData['timestamp']       	= date('Y-m-d H:i');
         $tabData['orden_fecha']     	= $this->lang_item("orden_fecha",false);
         $tabData['entrega_direccion']   = $this->lang_item("entrega_direccion",false);
@@ -586,15 +588,17 @@ class ordenes extends Base_Controller {
 		$data_listado=$this->db_model->db_get_data_orden_listado_registrado($data_sql);
 		$moneda = $this->session->userdata('moneda');
 
+		$subtotal_value 	= 0;
+		$descuento_value 	= 0;
+		$impuesto_value 	= 0;
+		$total_value	 	= 0;
 		if(count($data_listado)>0){
-				$style_table='display:block';
-				$subtotal_value 	= 0;
-				$descuento_value 	= 0;
-				$impuesto_value 	= 0;
+				$style_table='display:block';				
 			for($i=0;count($data_listado)>$i;$i++){
 					// Totales
-					$subtotal_value += $data_listado[$i]['subtotal'];
-					$impuesto_value += $data_listado[$i]['valor_impuesto'];
+					$subtotal_value 	+= $data_listado[$i]['subtotal'];
+					$descuento_value 	+= $data_listado[$i]['costo_x_cantidad']*($data_listado[$i]['descuento']/100);
+					$impuesto_value 	+= $data_listado[$i]['valor_impuesto'];
 					// Lineas
 					$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
@@ -605,7 +609,7 @@ class ordenes extends Base_Controller {
 								</td>
 								<td>
 									<ul class="tooltips">
-										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'</a>
+										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'<br/>'.$data_listado[$i]['upc'].'</a>
 									</ul>
 								</td>
 								<td>
@@ -708,6 +712,7 @@ class ordenes extends Base_Controller {
 		$tabData['a_pagar']  				 = $this->lang_item("a_pagar",false);
 		$tabData['cerrar_orden']  		 	 = $this->lang_item("cerrar_orden",false);
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
+		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
@@ -733,9 +738,13 @@ class ordenes extends Base_Controller {
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
-		$tabData['descuento_value']			 = $moneda.' '.number_format($descuento_value,2);
+		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);
 		$tabData['impuesto_value']			 = $moneda.' '.number_format($impuesto_value,2);
-		$tabData['total_value']				 = $moneda.' '.number_format(($subtotal_value-$subtotal_value)+$impuesto_value,2);
+		$tabData['total_value']				 = $moneda.' '.number_format(($subtotal_value-$descuento_value)+$impuesto_value,2);
+		$tabData['subtotal_data']			 = $subtotal_value;
+		$tabData['descuento_data']			 = $descuento_value*-1;
+		$tabData['impuesto_data']			 = $impuesto_value;
+		$tabData['total_data']				 = ($subtotal_value-$descuento_value)+$impuesto_value;
 
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -770,7 +779,7 @@ class ordenes extends Base_Controller {
 						</td>
 						<td>
 							<ul class="tooltips">
-								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$get_data[0]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$get_data[0]['articulo'].'</a>
+								<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$get_data[0]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$get_data[0]['articulo'].'<br/>'.$get_data[0]['upc'].'</a>
 							</ul>
 						</td>
 						<td>
@@ -814,9 +823,11 @@ class ordenes extends Base_Controller {
 							<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
 						<td class="right">
+							<strong>
 							<input type="hidden" value="" id="total_hidden_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="total_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
+							<strong>
 						</td>
 						<td class="center">
 							'.$acciones.'
@@ -957,17 +968,25 @@ class ordenes extends Base_Controller {
 	public function cerrar_orden_listado(){
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$estatus 	= $this->ajax_post('estatus');
+		$subtotal 	= $this->ajax_post('subtotal');
+		$descuento 	= $this->ajax_post('descuento');
+		$impuesto 	= $this->ajax_post('impuesto');
+		$total 		= $this->ajax_post('total');
 		if($estatus==3){
-			$valor_etsatus=4;
+			$valor_estatus=4;
 		}
 		else{
-			$valor_etsatus=7;
+			$valor_estatus=7;
 		}	
 		$sqldata= array(
-					'id_compras_orden' 			   =>$id_compras_orden,
-					'estatus' 					   => $valor_etsatus,
-					'edit_timestamp'  	 		   => $this->timestamp(),
-					'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+					'id_compras_orden' 			=> $id_compras_orden,
+					'estatus' 					=> $valor_estatus,
+					'subtotal'					=> $subtotal,
+					'descuento'					=> $descuento,
+					'impuesto'					=> $subtotal,
+					'total'						=> $total,
+					'edit_timestamp'  	 		=> $this->timestamp(),
+					'edit_id_usuario'   		=> $this->session->userdata('id_usuario')
 					);
 		$update = $this->db_model->db_update_data($sqldata);
 		if($update){

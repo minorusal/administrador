@@ -1,92 +1,86 @@
 <div id="formulario" class="stdform">
-    <div id="tbl1" class="span6" style="height:100%;">
-        <table width="100%" heigth="100%" border="1" class="table table-bordered table-invoice"> 
+    <div id="tbl1" class="span5" >
+        <table  class="table table-bordered table-invoice"> 
             <tr>
                 <td class="width30">
                 <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
                 <input id="estatus" type="hidden" data-campo="estatus" value="{estatus}" />
-                    <label><strong>{orden_num}:</strong></label>
-                </td>
-                <td>{orden_num_value}</td>
+                    <label>{orden_num}:</label>
+                </td >
+                <td><strong>{orden_num_value}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label><strong>{orden_tipo}:</strong></label>
+                    <label>{orden_tipo}:</label>
                 </td>
-                <td>{list_orden_tipo}</td>
+                <td><strong>{list_orden_tipo}</strong></td>
             </tr>
             <tbody  id="proveedores" {style}>
                 <tr>
                     <td class="width30">
                         <!--<div id="proveedores" {style}>-->
-                            <label><strong>{proveedor}:</strong></label>
+                            <label>{proveedor}:</label>
                         <!--</div>-->
                     </td>
-                    <td>{list_proveedores}</td>
+                    <td><strong>{list_proveedores}</strong></td>
                 </tr>
             </tbody>
             <tr>
                 <td class="width30">
-                    <label><strong>{sucursal}:</strong></label>
+                    <label>{sucursal}:</label>
                 </td>
-                <td>{list_sucursales}</td>
+                <td><strong>{list_sucursales}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label><strong>{entrega_fecha}:</strong></label>
+                    <label>{entrega_fecha}:</label>
                 </td>
-                <td>{entrega_fecha_value}</td>
+                <td><strong>{entrega_fecha_value}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label><strong>{creditos}</strong></label>
+                    <label>{credito}</label>
                 </td>
-                <td>{list_creditos}</td>
+                <td><strong>{list_creditos}</strong></td>
             </tr>
         </table>
    </div>
-   <div class="span6">
+   <div class="span5">
        <table class="table table-bordered table-invoice">
             <tr>
                 <td class="width30">
-                    <label><strong>{orden_fecha}:</strong></label>
+                    <label>{orden_fecha}:</label>
                 </td>
-                <td>{orden_fecha_value}</td>
+                <td><strong>{orden_fecha_value}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label><strong>{descripcion}:</strong></label>
+                    <label>{descripcion}:</label>
                 </td>
-                <td>{descripcion_value}</td>
+                <td><strong>{descripcion_value}</strong></td>
             </tr>
             <tbody id="prefactura"  {style}>
                 <tr>
                     <td class="width30">
                         <!--<div id="prefactura"  {style}>-->
-                            <label><strong>{prefactura_num}:</strong></label>
+                            <label>{prefactura_num}:</label>
                         <!--</div>-->
                     </td>
-                    <td>{prefactura_num_value}</td>
+                    <td><strong>{prefactura_num_value}</strong></td>
                 </tr>
             </tbody>
             <tr>
                 <td class="width30">
-                    <label><strong>{entrega_direccion}:</strong></label>
+                    <label>{entrega_direccion}:</label>
                 </td>
-                <td>{entrega_direccion_value}</td>
+                <td><strong>{entrega_direccion_value}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label><strong>{forma_pago}:</strong></label>
+                    <label>{forma_pago}:</label>
                 </td>
-                <td>{list_forma_pago}</td>
-            </tr>
-            <tr>
-                <td class="width30">
-                    <label><strong>{observaciones}:</strong></label>
-                </td>
-                <td>{observaciones_value}</td>
-            </tr>
+                <td><strong>{list_forma_pago}</strong></td>
+            </tr>            
        </table>
    </div>
     <div style="clear:both; width:100%; text-align:center; padding: 20px;">
@@ -115,25 +109,47 @@
                     <col class="con1 width5">
                 </colgroup>
         <tr>
-            <th>{proveedor}</th>
-            <th>{articulo}</th>
-            <th>{clave_corta}</th>
-            <th>{Costo}<br>{unitario}</th>
-            <th>{cantidad}</th>
-            <th>{costo_cantidad}</th>
-            <th>{descuento}</th>
-            <th>{subtotal}</th>
-            <th>{imp}%</th>
-            <th>{valor_imp}</th>
-            <th>{total}</th>
-            <th>{accion}</th>
+            <th class="head0">{proveedor}</th>
+            <th class="head0">{articulo}</th>
+            <th class="head0">{clave_corta}</th>
+            <th class="head0 right">{costo_unitario}</th>
+            <th class="head0 center">{cantidad}</th>
+            <th class="head0 right">{costo_cantidad}</th>
+            <th class="head0 center">{descuento}</th>
+            <th class="head0 right">{subtotal}</th>
+            <th class="head0 right">{imp}</th>
+            <th class="head0 right">{valor_imp}</th>
+            <th class="head0 right">{total}</th>
+            <th class="head0 center">{accion}</th>
         </tr>
         {table}
     </table>
+
+    <table class="table invoice-table">
+        <tbody>
+            <tr>
+                <td class="width65 msg-invoice">
+                    <h4><strong>{observaciones}:</strong></h4>
+                    <p>{observaciones_value} </p>
+                </td>
+                <td class="width15 right numlist">
+                      <strong>{subtotal}</strong>
+                    <strong>{impuesto}</strong>
+                    <strong>{descuento}</strong>
+                </td>
+                <td class="width20 right numlist">
+                    <strong>{subtotal_value}</strong>
+                    <strong>{descuento_value}</strong>
+                    <strong>{impuesto_value}</strong>
+                </td>
+            </tr>
+        </tbody>
+      </table>        
+      <div class="amountdue" >
+        <h1><span>{a_pagar}:</span>{total_value}</h1> <br />
+        <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();">{cerrar_orden}</a>
+        <br/>
+        <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();">{cancelar_orden}</a>
+      </div>
     <div id="mensajes" style="display:none"></div>
-    <p class="stdformbutton"> 
-        {button_save}
-        {btn_canceled}
-    </p>
-    <!--</div>-->
 </div>

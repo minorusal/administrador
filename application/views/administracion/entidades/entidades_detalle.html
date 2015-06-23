@@ -1,28 +1,28 @@
-<div id="formulario" class="stdform">
+<div id="formulario" class="stdform stdform2">
 	<input type="hidden" id="id_entidad" name="id_entidad" value="{id_entidad}">
 	<p>
 		<label>{nombre_entidad} (*)</label>
-		<input type="text" id="entidad" name="entidad" class="input-xlarge requerido" value="{entidad}" /> 
+		<span class="field"><input type="text" id="entidad" name="entidad" class="input-xlarge requerido" value="{entidad}" /></span>
 	</p>
 	<p>
 		<label>{cvl_corta} (*)</label>
-		<input type="text" id="clave_corta" name="clave_corta" class="input-xlargue requerido" value="{clave_corta}" />
+		<span class="field"><input type="text" id="clave_corta" name="clave_corta" class="input-xlargue requerido" value="{clave_corta}" /></span>
 	</p>
 	<p>
 		<label>{abreviatura} (*)</label>
-		<input type="text" id="abrev" name="abrev" class="input_xlarge requerido" value="{abrev}" />
+		<span class="field"><input type="text" id="abrev" name="abrev" class="input_xlarge requerido" value="{abrev}" /></span>
 	</p>
 	<p>
 		<label>{lbl_fecha_registro}: </label>
-        <span id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge uneditable-input" readonly >{val_fecha_registro} </span>
+        <span class="field"><span id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge uneditable-input" readonly >{val_fecha_registro} </span></span>
     </p>           
     <p>
     	<label>{lbl_usuario_registro}: </label>
-        <span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro}</span>
+        <span class="field"><span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro}</span></span>
     </p>
     <p>
     	<label>{lbl_ultima_modificacion}: </label>
-        <textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+        <span class="field"><textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea></span>
     </p>
 	<div id="update_loader"></div>
 	<div id="mensajes_update" style="display:none"></div>

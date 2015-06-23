@@ -1,3 +1,4 @@
+{data_css}
 <div id="formulario" class="stdform">
     <div id="tbl1" class="span5" >
         <table  class="table table-bordered table-invoice"> 
@@ -151,9 +152,9 @@
       </table>        
       <div class="amountdue" >
         <h1><span>{a_pagar}:</span><span id="value_total">{total_value}<span></h1> <br />
-        <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();">{cerrar_orden}</a>
+        <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{cerrar_orden}</a>
         <br/>
-        <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;">{cancelar_orden}</a>
+        <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{cancelar_orden}</a>
       </div>
     <div id="mensajes" style="display:none"></div>
 </div>

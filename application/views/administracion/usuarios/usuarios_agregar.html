@@ -1,44 +1,44 @@
 
-<div id="formulario" >
+<div id="formulario" class="stdform stdform2">
     <input id="id_usuario" type="hidden" name="id_usuario" value="{id_usuario}" />
     <p>
         <label>{lbl_nombre}: (*)</label>
-        <input id="nombre" type="text" name="nombre" class="input-large requerido" value="" />
+        <span class="field"><input id="nombre" type="text" name="nombre" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_paterno}: (*)</label>
-        <input id="paterno" type="text" name="paterno" class="input-large requerido" value="" />
+        <span class="field"><input id="paterno" type="text" name="paterno" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_materno}: (*)</label>
-        <input id="materno" type="text" name="materno" class="input-large requerido" value="" />
+        <span class="field"><input id="materno" type="text" name="materno" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_telefono}:</label>
-        <input id="telefono" type="text" name="telefono" class="input-large " value="" />
+        <span class="field"><input id="telefono" type="text" name="telefono" class="input-large " value="" /></span>
     </p>
     <p>
         <label>{lbl_email}: (*)</label>
-        <input id="mail" type="text" name="mail" class="input-large requerido" value="" />
+        <span class="field"><input id="mail" type="text" name="mail" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_area}: (*)</label>
-        {dropdown_area}
+        <span class="field">{dropdown_area}</span>
     </p>
     <p>
         <label>{lbl_puesto}: (*)</label>
-        {dropdown_puesto}
+        <span class="field">{dropdown_puesto}</span>
     </p>
     <p>
         <label>{lbl_perfil}: (*)</label>
-        {dropdown_perfil}
+        <span class="field">{dropdown_perfil}</span>
     </p>
-    <div id="treeview_perfiles" style="display:none">
-        {tree_view}
-    </div>
+     <span class="field"><div id="treeview_perfiles" style="display:none">
+       {tree_view}
+    </div></span>
     <br>
-    <div id="update_loader"></div>
-    <div id="mensajes_update" style="display:none"></div>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
     
     {button_save}
     {button_reset}

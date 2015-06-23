@@ -38,4 +38,8 @@ $lang['cancelar_orden']  	= "Cancelar Orden";
 $lang['presentacion']  		= "Embalaje";
 $lang['historial_ordenes']  = "Historial ordenes";
 $lang['aprobar_ordenes']  	= "Aprobar ordenes";
+$lang['aprobar_orden']  	= "Aprobar orden";
+$lang['rechazar_orden']  	= "Rechazar orden";
+$lang['estatus']  			= "Estatus";
+$lang['impreso_el']  		= "Consultado el";
 ?>

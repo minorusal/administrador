@@ -1,42 +1,42 @@
-<div id="formulario" class="stdform">
+<div id="formulario" class="stdform stdform2">
     <input id="id_articulo" type="hidden" name="id_articulo" value="{id_articulo}" data-campo="id_articulo"/>
         <p>
             <label>{articulo_tipo}: (*)</label>
-           {list_articulo_tipo}
+            <span class="field">{list_articulo_tipo}</span>
         </p>
         <p>
             <label>{nombre_articulo}: (*)</label>
-            <input id="articulo" type="text" name="articulo" data-campo="articulo" class="input-large requerido" value="{articulo_value}" />
+            <span class="field"><input id="articulo" type="text" name="articulo" data-campo="articulo" class="input-large requerido" value="{articulo_value}" /></span>
         </p>
         <p>
             <label>{cvl_corta}: (*)</label>
-            <input id="clave_corta" type="text" name="clave_corta" data-campo="clave_corta" class="input-large requerido" value="{cvl_value}" />
+            <span class="field"><input id="clave_corta" type="text" name="clave_corta" data-campo="clave_corta" class="input-large requerido" value="{cvl_value}" /></span>
         </p>
         <p>
-            <label>{linea}: (*)</label>
-           {list_linea}
+           <label>{linea}: (*)</label>
+           <span class="field">{list_linea}</span>
         </p>
         <p>
             <label>{um}: (*)</label>
-            {list_um}
+            <span class="field">{list_um}</span>
         </p>
         <p>
             <label>{descripcion}:</label>
-            <textarea id="descripcion" name="descripcion" data-campo="descripcion"  class="span5 " style="resize: vertical; height: 100px;">{descripcion_value}</textarea>
+            <span class="field"><textarea id="descripcion" name="descripcion" data-campo="descripcion"  class="span5 " style="resize: vertical; height: 100px;">{descripcion_value}</textarea></span>
         </p>
         <p>
             <label>{lbl_fecha_registro}:</label>
-            <span id="timestamp" type="text" name="timestamp" data-campo="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span>
+            <span class="field"><span id="timestamp" type="text" name="timestamp" data-campo="timestamp" class="input-xlarge uneditable-input" >{timestamp}</span></span>
         </p>
         <p>
             <label>{lbl_usuario_registro}:</label>
-            <span readonly id="usuario_registro" type="text" name="usuario_registro" data-campo="usuario_registro" class="input-xlarge  uneditable-input " >{val_usuarios_registro}</span>
+            <span class="field"><span readonly id="usuario_registro" type="text" name="usuario_registro" data-campo="usuario_registro" class="input-xlarge  uneditable-input " >{val_usuarios_registro}</span></span>
         </p>
         <p>
             <label>{lbl_ultima_modificacion}: </label>
-            <textarea id="ultima_modificacion" class="span5 textareaUneditable" data-campo="ultima_modificacion" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
+            <span class="field"><textarea id="ultima_modificacion" class="span5 textareaUneditable" data-campo="ultima_modificacion" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>/
         </p>
-         <div id="update_loader"></div>
+        <div id="update_loader"></div>
         <div id="mensajes_update" style="display:none"></div>
     <p class="stdformbutton">
         {button_save}

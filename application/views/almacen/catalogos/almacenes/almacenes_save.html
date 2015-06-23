@@ -1,34 +1,28 @@
-<div id="formulario" class="stdform">   
-    <div >
-        <div style="float:left">
-            <p>
-                <label>{nombre_almacenes}: (*)</label>
-                <input id="almacenes" type="text" name="almacenes" class="input-xlarge requerido" value="" />
-            </p>
-            <p>
-                <label>{cvl_corta}: (*)</label>
-                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" />
-            </p>
-             <p>
-                <label>{sucursal}: (*)</label>
-                {list_sucursal}
-            </p>
-            <p>
-                <label>{tipo}: (*)</label>
-                {list_tipo}
-            </p>
-        </div>  
-    </div>
-    <div style="clear:both">
-        <p>
-            <label>{descrip}:</label>
-            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
-        </p>
-        <div id="registro_loader"></div>
-        <div id="mensajes" style="display:none"></div>
-         <p class="stdformbutton"> 
-            {button_save}
-            {button_reset}
-        </p>   
-    </div>
+<div id="formulario" class="stdform stdform2">   
+    <p>
+        <label>{nombre_almacenes}: (*)</label>
+        <span class="field"><input id="almacenes" type="text" name="almacenes" class="input-xlarge requerido" value="" /></span>
+    </p>
+    <p>
+        <label>{cvl_corta}: (*)</label>
+        <span class="field"><input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" /></span>
+    </p>
+    <p>
+        <label>{sucursal}: (*)</label>
+        <span class="field">{list_sucursal}</span>
+    </p>
+    <p>
+        <label>{tipo}: (*)</label>
+        <span class="field">{list_tipo}</span>
+    </p>
+    <p>
+        <label>{descrip}:</label>
+        <span class="field"><textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea></span>
+    </p>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+        {button_reset}
+    </p>   
 </div>

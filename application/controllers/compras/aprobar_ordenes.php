@@ -327,32 +327,35 @@ class aprobar_ordenes extends Base_Controller {
 		if(count($data_listado)>0){
 				$style_table='display:block';
 			for($i=0;count($data_listado)>$i;$i++){
+			
+			$presentacion_x_embalaje = (substr($data_listado[$i]['presentacion_x_embalaje'], strpos($data_listado[$i]['presentacion_x_embalaje'], "." ))=='.000')?number_format($data_listado[$i]['presentacion_x_embalaje'],0):$data_listado[$i]['presentacion_x_embalaje'];
+			$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
 			$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
 						<td>
 							<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
 						</td>
 						<td>
-							<span name="proveedor">'.$data_listado[$i]['articulo'].'</span>
+							<span name="articulo">'.$data_listado[$i]['articulo'].' - '.$data_listado[$i]['peso_unitario'].' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</span>
 						</td>
 						<td>
-							'.$data_listado[$i]['cl_presentacion'].'
+							'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'
 						</td>
 						<td class="right">
-							<span class="add-on">'.$moneda.'</span> '.$data_listado[$i]['costo_sin_impuesto'].'
+							<span class="add-on">'.$moneda.'</span> '.number_format($data_listado[$i]['costo_sin_impuesto'],2).'
 						</td>
 						<td class="right">
 							'.$data_listado[$i]['cantidad'].' <span class="add-on">Pz</span>
 						</td>
 						<td class="right">
 							<span class="add-on">'.$moneda.'</span> 
-							'.$data_listado[$i]['costo_x_cantidad'].'
+							'.number_format($data_listado[$i]['costo_x_cantidad'],2).'
 						</td>
 						<td class="right">
                               '.$data_listado[$i]['descuento'].' <span class="add-on">%</span>
 						</td>
 						<td class="right">
                               <span class="add-on">'.$moneda.'</span> 
-                              '.$data_listado[$i]['subtotal'].'
+                              '.number_format($data_listado[$i]['subtotal'],2).'
 						</td>
 						<td class="right">
 							'.$data_listado[$i]['impuesto_porcentaje'].'
@@ -360,11 +363,11 @@ class aprobar_ordenes extends Base_Controller {
 						</td>
 						<td class="right">
 							<span class="add-on">'.$moneda.'</span> 
-							'.$data_listado[$i]['valor_impuesto'].'
+							'.number_format($data_listado[$i]['valor_impuesto'],2).'
 						</td>
 						<td class="right">
 							<span class="add-on">'.$moneda.'</span> 
-							'.$data_listado[$i]['total'].'</span>
+							'.number_format($data_listado[$i]['total'],2).'</span>
 						</td>
 					</tr>';
 			}
@@ -397,7 +400,7 @@ class aprobar_ordenes extends Base_Controller {
         $tabData['prefactura_num']       	 = $this->lang_item("prefactura_num",false);
         $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
         $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
-        $tabData['creditos']     			 = $this->lang_item("creditos",false);
+        $tabData['credito']     			 = $this->lang_item("credito",false);
 		$tabData['orden_tipo']  			 = $this->lang_item("orden_tipo",false);
 		$tabData['proveedor']  			 	 = $this->lang_item("proveedor",false);
 		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
@@ -412,6 +415,14 @@ class aprobar_ordenes extends Base_Controller {
 		$tabData['valor_imp']  			 	 = $this->lang_item("valor_imp",false);
 		$tabData['total']  			 		 = $this->lang_item("total",false);
 		$tabData['accion']  				 = $this->lang_item("accion",false);
+		$tabData['aprobar_orden']  		 	 = $this->lang_item("aprobar_orden",false);
+		$tabData['rechazar_orden']			 = $this->lang_item("rechazar_orden",false);
+		$tabData['subtotal']  				 = $this->lang_item("subtotal",false);
+		$tabData['impuesto']  				 = $this->lang_item("impuesto",false);
+		$tabData['a_pagar']  				 = $this->lang_item("a_pagar",false);
+		$tabData['costo_unitario']	 		 = $this->lang_item("costo_unitario",false);
+		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
+		$tabData['estatus']			 		 = $this->lang_item("estatus",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
@@ -431,8 +442,15 @@ class aprobar_ordenes extends Base_Controller {
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['table']					 = $table;
-		$tabData['style_table']				= $style_table;
+		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['estatus_value']  			 = $detalle[0]['estatus'].' - '.$detalle[0]['edit_timestamp'];
+		$tabData['fecha_hoy']				 = $this->lang_item('impreso_el', false).': '.date('Y-m-d H:i:s');
+		// Totales
+		$tabData['subtotal_value']			 = $moneda.' '.number_format($detalle[0]['subtotal'],2);
+		$tabData['descuento_value']			 = $moneda.' '.number_format($detalle[0]['descuento'],2);
+		$tabData['impuesto_value']			 = $moneda.' '.number_format($detalle[0]['impuesto'],2);
+		$tabData['total_value']				 = $moneda.' '.number_format($detalle[0]['total'],2);
 
 		$uri_view  = $this->path.$this->submodulo.'_'.$accion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));

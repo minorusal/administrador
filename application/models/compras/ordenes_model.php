@@ -79,8 +79,9 @@ class ordenes_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		//$query = "SELECT * FROM $tbl[compras_ordenes] WHERE id_compras_orden = $id_compras_orden";
-		$query="SELECT *
+		$query="SELECT a.*, b.estatus
 				from $tbl[compras_ordenes] a 
+				LEFT JOIN $tbl[compras_ordenes_estatus] b ON a.estatus=b.id_estatus
 				WHERE a.activo=1 AND id_compras_orden = $id_compras_orden;";
 
 		$query = $this->db->query($query);
@@ -208,11 +209,19 @@ class ordenes_model extends Base_Model{
 					a.upc,
 					a.sku,
 					e.clave_corta as cl_presentacion
+					,f.embalaje
+					,h.clave_corta as cl_um
+					,a.peso_unitario
+					,e.presentacion
+					,a.presentacion_x_embalaje
+					,a.edit_timestamp
 					FROM $tbl[compras_ordenes_articulos] l
 					LEFT JOIN $tbl[compras_articulos_precios] a on l.id_compras_articulo_precios = a.id_compras_articulo_precios
 					LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 					LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
 					LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
+					LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
+					LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
 				WHERE 1 AND l.activo = 1 $condicion";
 		//echo $query;
       	// Execute querie

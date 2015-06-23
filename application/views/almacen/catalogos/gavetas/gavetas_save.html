@@ -1,35 +1,28 @@
-<div id="formulario" class="stdform">
-    <div >
-        <div style="float:left">
-            <p>
-                <label>{lbl_gavetas}: (*)</label>
-                <input id="gavetas" type="text" name="gavetas" class="input-xlarge requerido" value="" />
-            </p>
-            <p>
-                <label>{lbl_clave_corta}: (*)</label>
-                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" />
-            </p>
-             <p>
-                <label>{lbl_almacen}: (*)</label>
-                {list_almacen}
-            </p>
-            <p>
-                <label>{lbl_pasillo}:</label>
-                {list_pasillo}
-            </p>
-        </div>
-        
-    </div>
-    <div style="clear:both">
-        <p>
-            <label>{lbl_descripcion}:</label>
-            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
-        </p>
-        <div id="registro_loader"></div>
-        <div id="mensajes" style="display:none"></div>
+<div id="formulario" class="stdform stdform2">
+    <p>
+        <label>{lbl_gavetas}: (*)</label>
+        <span class="field"><input id="gavetas" type="text" name="gavetas" class="input-xlarge requerido" value="" /></span>
+    </p>
+    <p>
+        <label>{lbl_clave_corta}: (*)</label>
+        <span class="field"><input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="" /></span>
+    </p>
+    <p>
+        <label>{lbl_almacen}: (*)</label>
+        <span class="field">{list_almacen}</span>
+    </p>
+    <p>
+        <label>{lbl_pasillo}:</label>
+        <span class="field">{list_pasillo}</span>
+    </p>
+    <p>
+        <label>{lbl_descripcion}:</label>
+        <span class="field"><textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea></span>
+    </p>
+    <div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton">
         {button_save}
         {button_reset}
     </p>
-    </div>
 </div>

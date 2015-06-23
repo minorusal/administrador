@@ -1,11 +1,17 @@
 jQuery(document).ready(function(){
-
-})
+  jQuery('#search-query').focus();
+  jQuery('#search-query').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){  
+      buscar_usuario();
+    } 
+  });
+});
 function buscar_usuario(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"administracion/usuarios/listado_usuarios",
+    url: path()+"administracion/usuarios/listado",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
@@ -18,7 +24,7 @@ function buscar_usuario(){
       jQuery('#search-query').val(filtro).focus();
       tool_tips();
     }
-  })
+  });
 }
 function load_content(uri, id_content){
   jQuery('#ui-id-2').hide('slow');
@@ -72,8 +78,9 @@ function detalle_usuario(id_usuario){
 }
 
 function insert(){
-  var btn          = jQuery("button[name='save_usuario']");
+  var btn = jQuery("button[name='save_usuario']");
   btn.attr('disabled','disabled');
+  jQuery('#mensajes').hide();
   var nivel_1 = [];
   var nivel_2 = [];
   var nivel_3 = [];
@@ -103,7 +110,7 @@ function insert(){
   objData['id_area']     = jQuery("select[name='lts_areas'] option:selected").val();
   objData['id_puesto']   = jQuery("select[name='lts_puestos'] option:selected").val();
   objData['id_perfil']   = jQuery("select[name='lts_perfiles'] option:selected").val();
-  
+
   jQuery.ajax({
     type:"POST",
     url: path()+"administracion/usuarios/insert",
@@ -117,10 +124,11 @@ function insert(){
 
       var data = data.split('|');
       if(data[0]==1){
-        clean_formulario();
+      clean_formulario();
       }
       jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
+      jQuery("#mensajes").html(data[1]).show('slow');
     }
   });
 }
+//emartinez@hyundai-universidad.mx

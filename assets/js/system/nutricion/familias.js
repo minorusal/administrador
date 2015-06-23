@@ -18,12 +18,12 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar';
-           		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
-           		jQuery('#search-query').val(filtro).focus();
-           		tool_tips();
+              var funcion = 'buscar';
+              jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+              jQuery('#search-query').val(filtro).focus();
+              tool_tips();
            }else{
-           		jQuery('#a-'+id_content).html(data);
+              jQuery('#a-'+id_content).html(data);
            }
         }
     });
@@ -48,27 +48,26 @@ function buscar(){
 		}
 	});
 }
-
 function detalle(id_familia){
-	jQuery('#ui-id-2').click();
-	jQuery.ajax({
+  jQuery('#ui-id-2').click();
+  jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/familias/detalle",
         dataType: 'json',
         data: {id_familia : id_familia},
         success: function(data){
-        	jQuery('#a-0').html('');
-        	jQuery('#a-2').html(data);
-        	jQuery('#ui-id-2').show('slow');
+          jQuery('#a-0').html('');
+          jQuery('#a-2').html(data);
+          jQuery('#ui-id-2').show('slow');
         }
     });
 }
 
 function actualizar(){
-  jQuery('#mensajes_update').hide();
-  var btn             = jQuery("button[name='aactualizr']");
+ jQuery('#mensajes_update').hide();
+  var btn             = jQuery("button[name='actualizar']");
   btn.attr('disabled','disabled');
-  var btn_text        = btn.html(); 
+  var btn_text        = btn.html()
   var objData = formData('#formulario');
   
   objData['incomplete']   = values_requeridos();

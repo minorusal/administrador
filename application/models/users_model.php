@@ -247,21 +247,23 @@ class users_model extends Base_Model{
 		return $query->num_rows;
 	}
 	/*Consultar usuarios para enlistar*/
-	public function get_users(){
+	public function get_users($data=array()){
 		$tbl = $this->tbl;
 		// Query
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (av.almacenes like '%$filtro%' OR 
-												  av.clave_corta like '%$filtro%' OR
-												  av.descripcion like '%$filtro%' OR
-												  su.sucursal like '%$filtro%' OR
-												  ti.tipos like '%$filtro%')" : "";
+		$filtro = ($filtro) ? "AND (pr.nombre like '%$filtro%' OR 
+									pr.paterno like '%$filtro%' OR
+									pr.materno like '%$filtro%' OR
+									ar.area like '%$filtro%' OR
+									pu.puesto like '%$filtro%' OR
+									cv.user like '%$filtro%' OR
+									pe.perfil like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT
-						 su.id_usuario
+						 su.id_usuario as id
 						,CONCAT(pr.nombre,' ',pr.paterno,' ',pr.materno) as nombre
 						,pr.telefono
 						,pr.mail as email_persona
@@ -308,7 +310,6 @@ class users_model extends Base_Model{
 					GROUP BY pr.nombre ASC
 					$limit
 					";
-					//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

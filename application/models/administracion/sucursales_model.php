@@ -24,7 +24,7 @@ class sucursales_model extends Base_Model{
 						,su.razon_social
 					FROM $tbl[sucursales] su
 					WHERE su.activo = 1 $filtro
-					GROUP BY su.id_sucursal ASC
+					ORDER BY su.id_sucursal ASC
 					$limit
 					";
       	$query = $this->db->query($query);

@@ -30,7 +30,7 @@ class catalogos_model extends Base_Model{
 					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = av.id_sucursal
 					LEFT JOIN $tbl[almacen_tipos] ti on ti.id_almacen_tipos = av.id_almacen_tipos
 					WHERE av.activo = 1 $filtro
-					GROUP BY av.id_almacen_almacenes ASC
+					ORDER BY av.id_almacen_almacenes ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -120,7 +120,7 @@ class catalogos_model extends Base_Model{
 					FROM $tbl[almacen_pasillos] av
 					LEFT JOIN $tbl[almacen_almacenes] al on al.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
-					GROUP BY av.id_almacen_pasillos ASC
+					ORDER BY av.id_almacen_pasillos ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -200,7 +200,7 @@ class catalogos_model extends Base_Model{
 					LEFT JOIN $tbl[almacen_pasillos] al on al.id_almacen_pasillos = av.id_almacen_pasillos
 					LEFT JOIN $tbl[almacen_almacenes] am on am.id_almacen_almacenes = av.id_almacen_almacenes
 					WHERE av.activo = 1 $filtro
-					GROUP BY av.id_almacen_gavetas ASC
+					ORDER BY av.id_almacen_gavetas ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -273,7 +273,7 @@ class catalogos_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[almacen_transportes] tr
 					WHERE tr.activo = 1 $filtro
-					GROUP BY tr.id_almacen_transportes ASC
+					ORDER BY tr.id_almacen_transportes ASC
 					$limit
 					";
       	$query = $this->db->query($query);

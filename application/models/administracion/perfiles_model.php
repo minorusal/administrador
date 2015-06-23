@@ -18,7 +18,7 @@ class perfiles_model extends Base_Model{
 					FROM $tbl[perfiles] pr
 					WHERE pr.activo = 1 $filtro
 					AND pr.perfil NOT LIKE 'ROOT'
-					GROUP BY pr.id_perfil ASC
+					ORDER BY pr.id_perfil ASC
 					$limit
 					";
       	$query = $this->db->query($query);

@@ -18,7 +18,7 @@ class puestos_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_puestos] ps
 					WHERE ps.activo = 1 $filtro
-					GROUP BY ps.id_administracion_puestos ASC
+					ORDER BY ps.id_administracion_puestos ASC
 					$limit
 					";
       	$query = $this->db->query($query);

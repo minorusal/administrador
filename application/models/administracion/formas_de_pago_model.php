@@ -18,7 +18,7 @@ class formas_de_pago_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_forma_pago] fp
 					WHERE fp.activo = 1 $filtro
-					GROUP BY fp.id_forma_pago ASC
+					OREDER BY fp.id_forma_pago ASC
 					$limit
 					";
       	$query = $this->db->query($query);

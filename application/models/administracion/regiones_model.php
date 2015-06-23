@@ -17,7 +17,7 @@ class regiones_model extends Base_Model{
 		$query = "	SELECT *
 					FROM   $tbl[administracion_regiones] re					
 					WHERE re.activo = 1 $filtro
-					GROUP BY re.id_administracion_region ASC
+					ORDER BY re.id_administracion_region ASC
 					$limit
 					";
 					//print_debug($query);

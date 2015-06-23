@@ -218,7 +218,7 @@ function get_orden_listado_articulo(id_compras_articulo_precios){
 						jQuery('#dyntable2').show('slow');
 						jQuery("#mensajes_update").html('').hide('slow');
 						jQuery("#dyntable2 > tbody").append(data);
-						//insert_orden_listado_articulo(id_compras_articulo_precios);
+						insert_orden_listado_articulo(id_compras_articulo_precios);
 					}			
 					calcula_costo2(id_compras_articulo_precios);		
 			}
@@ -483,7 +483,7 @@ function detalle_articulos_precio(id_compras_articulo_precio){
           jQuery('#a-2').html(data);
           jQuery('#a-2').html(data+include_script(chosen));
           jQuery('#ui-id-2').show('slow');
-          //calcula_costos();
+          calcula_costos();
         }
     });
 }

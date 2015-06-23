@@ -168,7 +168,7 @@ class Base_Controller extends CI_Controller {
 		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker." </script>";
 		$files_css 		   = '';
 		$url_js    		   = base_url().'assets/js/system';
-		$url_css  		   = base_url().'assets/css/system';
+		$url_css  		   = base_url().'assets/css';
 		if (array_key_exists('js', $data)) {
 			foreach ($data['js'] as $key => $value) {
 				$js_name  = $value['name'];
@@ -180,10 +180,9 @@ class Base_Controller extends CI_Controller {
 			foreach ($data['css'] as $key => $value) {
 				$css_name  = $value['name'];
 				$css_dir   = $value['dirname'];
-				$files_css.= "<link rel='stylesheet' href='$url_css/$css_dir/$css_name.css' type='text/css'  />";
+				$files_css.= '<link rel="stylesheet" href="'.$url_css.'/'.$css_name.'.css" type="text/css" />';
 			}
 		}
-
 		$data_load['js']  = $files_js;
 		$data_load['css'] = $files_css;
 

@@ -28,7 +28,6 @@ function load_content(uri, id_content){
 	jQuery('#ui-id-3').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
-	alert(uri);
     jQuery.ajax({
         type: "POST",
         url: uri,
@@ -220,7 +219,8 @@ function get_orden_listado_articulo(id_compras_articulo_precios){
 						jQuery("#mensajes_update").html('').hide('slow');
 						jQuery("#dyntable2 > tbody").append(data);
 						insert_orden_listado_articulo(id_compras_articulo_precios);
-					}					
+					}			
+					calcula_costo2(id_compras_articulo_precios);		
 			}
 		});
 	}
@@ -272,6 +272,78 @@ function calcula_costo2(id_compras_articulo_precios){
 	jQuery('#costo_x_cantidad_hidden'+id_compras_articulo_precios).val(costo_x_cantidad);
 	calcula_subtotal(id_compras_articulo_precios);
 	update_orden_listado();
+	calcula_valores_finales(id_compras_articulo_precios);
+}
+function calcula_valores_finales(id){
+	var valor=[];
+	var valor_2=[];
+	var valor_3=[];
+	var valor_4=[];
+	var result;
+	var result_2;
+	var result_3;
+	var total=0;
+	var subtotal=0;
+	var descuento=0;
+	var impuesto=0;
+	//CALCULA EL SUBTOTAL
+	jQuery('[name^=subtotal__hidden').each(function(){
+		valor.push(parseFloat(jQuery(this).val()));
+	});
+	jQuery(valor).each(function(index,value){
+		result=parseFloat(value);
+		subtotal= subtotal+result;
+	});
+	//CALCULA EL DESCUENTO
+	jQuery('[name^=descuento').each(function(){
+		valor_2.push(parseFloat(jQuery(this).val()));
+	});
+	jQuery('[name^=costo_x_cantidad_hidden').each(function(){
+		valor_4.push(parseFloat(jQuery(this).val()));
+	});
+	jQuery('[name^=subtotal__hidden').each(function(index){
+		result_2=parseFloat((parseFloat(valor_4[index])*parseFloat(valor_2[index]))/100);
+		if(result_2==0){
+
+		}else{
+		descuento=descuento+result_2;
+		}
+	});
+	//CALCULA EL IMPUESTO
+	jQuery('[name^=valor_hidden_impuesto').each(function(){
+		valor_3.push(parseFloat(jQuery(this).val()));
+	});
+	jQuery(valor_3).each(function(index,value){
+		result_3=parseFloat(value);
+		if(result_3==0){
+
+		}else{
+			impuesto= parseFloat(impuesto)+parseFloat(result_3);
+		}
+	});
+	/////////////////////////////////////////////
+	if(isNaN(subtotal)){
+		subtotal=0;
+	}
+	if(isNaN(descuento)){
+		descuento=0;
+	}
+	if(isNaN(impuesto)){
+		impuesto=0;
+	}
+	jQuery('#subtotal').val(subtotal);
+	jQuery('#value_subtotal').html('<strong>'+subtotal.toFixed(2)+'<strong>');
+
+	jQuery('#descuento_total').val(descuento);
+	jQuery('#value_descuento').html('<strong> - '+descuento.toFixed(2)+'<strong>');
+
+	jQuery('#impuesto_total').val(impuesto);
+	jQuery('#value_impuesto').html('<strong>'+impuesto.toFixed(2)+'<strong>');
+
+	total=(subtotal-descuento)+impuesto;
+	jQuery('#total_data').val(total);
+	jQuery('#value_total').html('<strong>'+total.toFixed(2)+'<strong>');
+	
 }
 function calcula_subtotal(id){
 	validanumero('#descuento_',id);
@@ -310,8 +382,9 @@ function calcula_subtotal(id){
 		total = parseFloat(valor_2.toFixed(3));
 		jQuery('#total_hidden_'+id).val(total);
 		jQuery('#total_'+id).html(total);
-		update_orden_listado();
+		update_orden_listado();		
 	}
+	calcula_valores_finales(id);
 }
 function update_orden_listado(){
 	// Obtiene campos en formulario
@@ -410,35 +483,7 @@ function detalle_articulos_precio(id_compras_articulo_precio){
           jQuery('#a-2').html(data);
           jQuery('#a-2').html(data+include_script(chosen));
           jQuery('#ui-id-2').show('slow');
-          //calcula_costos();
+          calcula_costos();
         }
     });
-}
-
-function imrpimir(id){
-	jQuery('#mensajes_update').hide();		
-	btn.attr('disabled','disabled');
-		// Obtiene campos en formulario
-		var objData = formData('#formulario');
-		objData['id_compras_orden'] = (!objData['id_compras_orden'])?id:objData['id_compras_orden'];
-	jQuery.ajax({
-		type:"POST",
-		url: path()+"compras/ordenes/imprimir",
-		dataType: "json",			
-		data : objData,
-		// beforeSend : function(){
-		// 	imgLoader("#update_loader");
-		// },
-		success : function(data){
-			// if(data.msj_grid==1){
-		 //    	jQuery("#mensajes_grid").html(data.contenido).show('slow');
-		 //    	jQuery('#ico-imprimir_'+id).closest('tr').fadeOut(function(){
-			// 		jQuery(this).remove();
-			// 	});
-			// }else{
-			// 	jQuery("#update_loader").html('');				
-			//     jQuery("#mensajes_update").html(data.contenido).show('slow');
-			// }
-		}
-	});
 }

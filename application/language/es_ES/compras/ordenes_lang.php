@@ -42,4 +42,5 @@ $lang['aprobar_orden']  	= "Aprobar orden";
 $lang['rechazar_orden']  	= "Rechazar orden";
 $lang['estatus']  			= "Estatus";
 $lang['impreso_el']  		= "Consultado el";
+$lang['consecutivo']  		= "#";
 ?>

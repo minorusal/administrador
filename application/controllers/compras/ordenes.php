@@ -603,18 +603,24 @@ class ordenes extends Base_Controller {
 					// Lineas
 					$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$data_listado[$i]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$data_listado[$i]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+					$peso_unitario = (substr($data_listado[$i]['peso_unitario'], strpos($data_listado[$i]['peso_unitario'], "." ))=='.000')?number_format($data_listado[$i]['peso_unitario'],0):$data_listado[$i]['peso_unitario'];
+					$presentacion_x_embalaje = (substr($data_listado[$i]['presentacion_x_embalaje'], strpos($data_listado[$i]['presentacion_x_embalaje'], "." ))=='.000')?number_format($data_listado[$i]['presentacion_x_embalaje'],0):$data_listado[$i]['presentacion_x_embalaje'];
+					$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
 					$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+								<td class="center">
+									<span name="consecutivo">'.($i+1).'</span>
+								</td>
 								<td>
 									<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
 									<input type="hidden" value="'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_articulo_precios'].'"/>
 								</td>
 								<td>
 									<ul class="tooltips">
-										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].'<br/>'.$data_listado[$i]['upc'].'</a>
+										<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</a>
 									</ul>
 								</td>
 								<td>
-									'.$data_listado[$i]['cl_presentacion'].'
+									'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'
 								</td>
 								<td class="right">
 									<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
@@ -644,7 +650,7 @@ class ordenes extends Base_Controller {
 								</td>
 								<td class="right">
 									<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" />
-									'.$data_listado[$i]['impuesto_porcentaje'].'
+									'.number_format($data_listado[$i]['impuesto_porcentaje'],0).'
 									<span class="add-on">%</span>
 								</td>
 								<td class="right">
@@ -713,6 +719,7 @@ class ordenes extends Base_Controller {
 		$tabData['cerrar_orden']  		 	 = $this->lang_item("cerrar_orden",false);
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
+		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];

@@ -64,6 +64,7 @@ $autoload['libraries'] = array(	'database',
 								,'barcode'
 								,'codeqr'
 								,'html2pdf'
+								,'jcrop'
 								);
 
 

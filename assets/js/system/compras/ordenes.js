@@ -287,7 +287,7 @@ function calcula_valores_finales(id){
 	var descuento=0;
 	var impuesto=0;
 	//CALCULA EL SUBTOTAL
-	jQuery('[name^=subtotal__hidden').each(function(){
+	jQuery('[name^=subtotal__hidden]').each(function(){
 		valor.push(parseFloat(jQuery(this).val()));
 	});
 	jQuery(valor).each(function(index,value){
@@ -295,13 +295,13 @@ function calcula_valores_finales(id){
 		subtotal= subtotal+result;
 	});
 	//CALCULA EL DESCUENTO
-	jQuery('[name^=descuento').each(function(){
+	jQuery('[name^=descuento]').each(function(){
 		valor_2.push(parseFloat(jQuery(this).val()));
 	});
-	jQuery('[name^=costo_x_cantidad_hidden').each(function(){
+	jQuery('[name^=costo_x_cantidad_hidden]').each(function(){
 		valor_4.push(parseFloat(jQuery(this).val()));
 	});
-	jQuery('[name^=subtotal__hidden').each(function(index){
+	jQuery('[name^=subtotal__hidden]').each(function(index){
 		result_2=parseFloat((parseFloat(valor_4[index])*parseFloat(valor_2[index]))/100);
 		if(result_2==0){
 
@@ -310,7 +310,7 @@ function calcula_valores_finales(id){
 		}
 	});
 	//CALCULA EL IMPUESTO
-	jQuery('[name^=valor_hidden_impuesto').each(function(){
+	jQuery('[name^=valor_hidden_impuesto]').each(function(){
 		valor_3.push(parseFloat(jQuery(this).val()));
 	});
 	jQuery(valor_3).each(function(index,value){

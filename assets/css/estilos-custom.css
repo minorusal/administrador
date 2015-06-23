@@ -23,4 +23,16 @@
 	padding-top: 0px;
 	margin-left: 0px;
 }
+
+.ico_blanco{color: white;}
+
+.btn_rojo{
+	background-color:#9D0000; 
+	border-color:#9D0000;
+}
+
+.btn_verde{
+	background-color:#006F00; 
+	border-color:#006F00;
+}
 /*---*/

@@ -983,7 +983,7 @@ class ordenes extends Base_Controller {
 					'estatus' 					=> $valor_estatus,
 					'subtotal'					=> $subtotal,
 					'descuento'					=> $descuento,
-					'impuesto'					=> $subtotal,
+					'impuesto'					=> $impuesto,
 					'total'						=> $total,
 					'edit_timestamp'  	 		=> $this->timestamp(),
 					'edit_id_usuario'   		=> $this->session->userdata('id_usuario')

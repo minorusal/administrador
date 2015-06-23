@@ -328,14 +328,18 @@ class aprobar_ordenes extends Base_Controller {
 				$style_table='display:block';
 			for($i=0;count($data_listado)>$i;$i++){
 			
+			$peso_unitario = (substr($data_listado[$i]['peso_unitario'], strpos($data_listado[$i]['peso_unitario'], "." ))=='.000')?number_format($data_listado[$i]['peso_unitario'],0):$data_listado[$i]['peso_unitario'];
 			$presentacion_x_embalaje = (substr($data_listado[$i]['presentacion_x_embalaje'], strpos($data_listado[$i]['presentacion_x_embalaje'], "." ))=='.000')?number_format($data_listado[$i]['presentacion_x_embalaje'],0):$data_listado[$i]['presentacion_x_embalaje'];
 			$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
 			$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+						<td class="center">
+							<span name="consecutivo">'.($i+1).'</span>
+						</td>
 						<td>
 							<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
 						</td>
 						<td>
-							<span name="articulo">'.$data_listado[$i]['articulo'].' - '.$data_listado[$i]['peso_unitario'].' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</span>
+							<span name="articulo">'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</span>
 						</td>
 						<td>
 							'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'
@@ -358,7 +362,7 @@ class aprobar_ordenes extends Base_Controller {
                               '.number_format($data_listado[$i]['subtotal'],2).'
 						</td>
 						<td class="right">
-							'.$data_listado[$i]['impuesto_porcentaje'].'
+							'.number_format($data_listado[$i]['impuesto_porcentaje'],0).'
 							<span class="add-on">%</span>
 						</td>
 						<td class="right">
@@ -423,6 +427,7 @@ class aprobar_ordenes extends Base_Controller {
 		$tabData['costo_unitario']	 		 = $this->lang_item("costo_unitario",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		$tabData['estatus']			 		 = $this->lang_item("estatus",false);
+		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];

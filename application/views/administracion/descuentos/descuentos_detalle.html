@@ -1,43 +1,36 @@
-<div id="formulario" class="stdform">
-    <div >
-        <div style="float:left">
-            <input id="id_descuento" type="hidden" name="id_descuento" value="{id_descuento}" />
-            <p>
-                <label>{nombre_descuento}: (*)</label>
-                <input id="descuento" type="text" name="descuento" class="input-xlarge requerido" value="{descuento}" />
-            </p>
-            <p>
-                <label>{val}: (*)</label>
-                <input id="valor_descuento" type="number" name="valor_descuento" class="input-xlarge requerido" value="{valor_descuento}" />
-            </p>
-            <p>
-                <label>{cvl_corta}: (*)</label>
-                <input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" />
-            </p>
-        </div>
-        
-    </div>
-    <div style="clear:both">
-        <p>
-            <label>{desc}:</label>
-            <textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea>
-        </p>
-        <p>
-            <label>{lbl_fecha_registro}: </label>
-            <span id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge uneditable-input" readonly >{val_fecha_registro} </span>
-        </p>           
-        <p>
-            <label>{lbl_usuario_regitro}: </label>
-            <span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro}</span>
-        </p>
-        <p>
-            <label>{lbl_ultima_modiciacion}: </label>
-            <textarea id="ultima_modiciacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea>
-        </p>
-        <div id="update_loader"></div>
-        <div id="mensajes_update" style="display:none"></div>
-    <p class="stdformbutton"> 
-       {button_save}
+<div id="formulario" class="stdform stdform2">
+    <input id="id_descuento" type="hidden" name="id_descuento" value="{id_descuento}" />
+    <p>
+        <label>{nombre_descuento}: (*)</label>
+        <span class="field"><input id="descuento" type="text" name="descuento" class="input-xlarge requerido" value="{descuento}" /></span>
     </p>
-    </div>
+    <p>
+        <label>{val}: (*)</label>
+        <span class="field"><input id="valor_descuento" type="number" name="valor_descuento" class="input-xlarge requerido" value="{valor_descuento}" /></span>
+    </p>
+    <p>
+        <label>{cvl_corta}: (*)</label>
+        <span class="field"><input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" /></span>
+    </p>
+    <p>
+        <label>{desc}:</label>
+        <span class="field"><textarea id="descripcion" name="descripcion"  class="span5" style="resize: vertical; height: 100px;">{descripcion}</textarea></span>
+    </p>
+    <p>
+        <label>{lbl_fecha_registro}: </label>
+        <span class="field"><span id="fecha_registro" type="text" data-campo="fecha_registro" class="input-xlarge uneditable-input" readonly >{val_fecha_registro} </span></span>
+    </p>           
+    <p>
+        <label>{lbl_usuario_regitro}: </label>
+        <span class="field"><span id="usuario_regitro" type="text" data-campo="usuario_regitro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro}</span></span>
+    </p>
+    <p>
+        <label>{lbl_ultima_modiciacion}: </label>
+        <span class="field"><textarea id="ultima_modiciacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea></span>
+    </p>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>
+    <p class="stdformbutton"> 
+        {button_save}
+    </p>
 </div>

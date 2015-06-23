@@ -42,15 +42,15 @@ class familias extends Base_Controller{
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/impuestos/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/impuestos/listado
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(

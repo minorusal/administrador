@@ -207,15 +207,15 @@ class users_model extends Base_Model{
 						,U.activo
 						,C.user
 					FROM $tbl[usuarios] U
-					left join $tbl[personales] P on U.id_personal = P.id_personal
-					left join $tbl[claves]     C on U.id_clave    = C.id_clave
-					left join $tbl[perfiles]   N on U.id_perfil  = N.id_perfil
-					left join $tbl[paises]     Pa on U.id_pais    = Pa.id_pais
-					left join $tbl[empresas]   E on U.id_empresa  = E.id_empresa
-					left join $tbl[sucursales] S on U.id_sucursal = S.id_sucursal
-					WHERE U.id_usuario = $id_user  AND U.activo = 1 $filtro $limit";
+					left join $tbl[personales] P  on U.id_personal = P.id_personal
+					left join $tbl[claves]     C  on U.id_clave    = C.id_clave
+					left join $tbl[perfiles]   N  on U.id_perfil   = N.id_perfil
+					left join $tbl[paises]     Pa on U.id_pais     = Pa.id_pais
+					left join $tbl[empresas]   E  on U.id_empresa  = E.id_empresa
+					left join $tbl[sucursales] S  on U.id_sucursal = S.id_sucursal
+					WHERE U.id_usuario = $id_user AND U.activo     = 1 $filtro $limit";
 		
-		print_debug($query);
+		//print_debug($query);
 		$query = $this->db->query($query);
 
 		if($query->num_rows >= 1){
@@ -246,54 +246,121 @@ class users_model extends Base_Model{
       	$query = $this->db->query($query);
 		return $query->num_rows;
 	}
+	/*Consultar usuarios para enlistar*/
+	public function get_users($data=array()){
+		$tbl = $this->tbl;
+		// Query
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$filtro = ($filtro) ? "AND (pr.nombre like '%$filtro%' OR 
+									pr.paterno like '%$filtro%' OR
+									pr.materno like '%$filtro%' OR
+									ar.area like '%$filtro%' OR
+									pu.puesto like '%$filtro%' OR
+									cv.user like '%$filtro%' OR
+									pe.perfil like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query = "	SELECT
+						 su.id_usuario as id
+						,CONCAT(pr.nombre,' ',pr.paterno,' ',pr.materno) as nombre
+						,pr.telefono
+						,pr.mail as email_persona
+						,pr.avatar
+						,cv.user as usuario
+						,pe.perfil
+						,pe.clave_corta as clave_perfil
+						,pe.descripcion as desc_perfil
+						,pa.pais
+						,pa.dominio
+						,pa.moneda
+						,pa.moneda_desc as desc_moneda
+						,pa.avatar as avatar_pais
+						,em.empresa
+						,em.razon_social as rsocial_empresa
+						,em.rfc as rfc_empresa
+						,em.direccion as direccion_empresa
+						,em.telefono as tel_empresa
+						,em.image as imagen_empresa
+						,su.sucursal
+						,su.clave_corta as clave_sucursal
+						,su.razon_social as rsocial_sucursal
+						,su.rfc as rfc_sucursal
+						,su.email as email_sucursal
+						,su.encargado
+						,su.direccion as direccion_sucursal
+						,su.telefono as tel_sucursal
+						,pu.puesto
+						,pu.clave_corta as clave_puesto
+						,pu.descripcion as desc_puesto
+						,ar.area
+						,ar.clave_corta as clave_area
+						,ar.descripcion as desc_area
+					FROM $tbl[usuarios] us					
+					LEFT JOIN $tbl[personales] pr on pr.id_personal = us.id_personal
+					LEFT JOIN $tbl[claves] cv on cv.id_clave = us.id_clave
+					LEFT JOIN $tbl[perfiles] pe on pe.id_perfil = us.id_perfil
+					LEFT JOIN $tbl[paises] pa on pa.id_pais = us.id_pais
+					LEFT JOIN $tbl[empresas] em on em.id_empresa = us.id_empresa
+					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = us.id_sucursal
+					LEFT JOIN $tbl[administracion_puestos] pu on pu.id_administracion_puestos = us.id_puesto
+					LEFT JOIN $tbl[administracion_areas] ar on ar.id_administracion_areas = us.id_area
+					WHERE su.activo = 1 $filtro
+					GROUP BY pr.nombre ASC
+					$limit
+					";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
 	/*Inserta registro de usuarios*/
-		public function db_insert_data($data = array()){
-			// DB Info		
-			$tbl = $this->tbl;
-			// Query
-			$personal = array(
-					 'nombre'     => $data['nombre']
-					,'paterno'    => $data['paterno']
-					,'materno'    => $data['paterno']
-					,'telefono'   => $data['telefono']
-					,'mail'       => $data['mail']
-					,'id_usuario' => $data['id_usuario']
-					,'timestamp'  => $data['timestamp']
-							 );
-			$insert_personal = $this->insert_item($tbl['personales'], $personal);
-			$id_personal = $this->last_id();
-			$array_clave = array(
-				 'user'       => ''
-				,'pwd'        => ''
+	public function db_insert_data($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$personal = array(
+				 'nombre'     => $data['nombre']
+				,'paterno'    => $data['paterno']
+				,'materno'    => $data['paterno']
+				,'telefono'   => $data['telefono']
+				,'mail'       => $data['mail']
 				,'id_usuario' => $data['id_usuario']
 				,'timestamp'  => $data['timestamp']
-				);
-			$insert_clave = $this->insert_item($tbl['claves'], $array_clave);
-			$id_clave = $this->last_id();
-			$array_usuarios = array(
-				'id_personal'  	   => $id_personal
-				,'id_clave'    	   => $id_clave
-				,'id_perfil'   	   => $data['id_perfil']
-				,'id_empresa'  	   => $data['id_empresa']
-				,'id_pais'     	   => $data['id_pais']
-				,'id_sucursal' 	   => $data['id_sucursal']
-				,'id_puesto'   	   => $data['id_puesto']
-				,'id_area'     	   => $data['id_area']
-				,'id_menu_n1'  	   => $data['id_menu_n1']
-				,'id_menu_n2'      => $data['id_menu_n2']
-				,'id_menu_n3'      => $data['id_menu_n3']
-				,'id_usuario_reg'  => $data['id_usuario']
-				,'timestamp'       => $data['timestamp']
-				);
-			$insert_usuario = $this->insert_item($tbl['usuarios'], $array_usuarios);
-			if($insert_usuario){
-				return $insert_usuario;
-			}else{
-				return false;
-			}
-	}
-	
-
+						 );
+		$insert_personal = $this->insert_item($tbl['personales'], $personal);
+		$id_personal = $this->last_id();
+		$array_clave = array(
+			 'user'       => ''
+			,'pwd'        => ''
+			,'id_usuario' => $data['id_usuario']
+			,'timestamp'  => $data['timestamp']
+			);
+		$insert_clave = $this->insert_item($tbl['claves'], $array_clave);
+		$id_clave = $this->last_id();
+		$array_usuarios = array(
+			'id_personal'  	   => $id_personal
+			,'id_clave'    	   => $id_clave
+			,'id_perfil'   	   => $data['id_perfil']
+			,'id_empresa'  	   => $data['id_empresa']
+			,'id_pais'     	   => $data['id_pais']
+			,'id_sucursal' 	   => $data['id_sucursal']
+			,'id_puesto'   	   => $data['id_puesto']
+			,'id_area'     	   => $data['id_area']
+			,'id_menu_n1'  	   => $data['id_menu_n1']
+			,'id_menu_n2'      => $data['id_menu_n2']
+			,'id_menu_n3'      => $data['id_menu_n3']
+			,'id_usuario_reg'  => $data['id_usuario']
+			,'timestamp'       => $data['timestamp']
+			);
+		$insert_usuario = $this->insert_item($tbl['usuarios'], $array_usuarios);
+		if($insert_usuario){
+			return $insert_usuario;
+		}else{
+			return false;
+		}
+    }
 }
 
 ?>

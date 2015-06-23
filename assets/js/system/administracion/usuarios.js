@@ -1,11 +1,17 @@
 jQuery(document).ready(function(){
-
-})
+  jQuery('#search-query').focus();
+  jQuery('#search-query').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){  
+      buscar_usuario();
+    } 
+  });
+});
 function buscar_usuario(){
   var filtro = jQuery('#search-query').val();
   jQuery.ajax({
     type:"POST",
-    url: path()+"administracion/usuarios/listado_usuarios",
+    url: path()+"administracion/usuarios/listado",
     dataType: "json",
     data: {filtro : filtro},
     beforeSend : function(){
@@ -18,7 +24,7 @@ function buscar_usuario(){
       jQuery('#search-query').val(filtro).focus();
       tool_tips();
     }
-  })
+  });
 }
 function load_content(uri, id_content){
   jQuery('#ui-id-2').hide('slow');
@@ -119,7 +125,6 @@ function insert(){
       var data = data.split('|');
       if(data[0]==1){
       clean_formulario();
-      alert();
       }
       jQuery("#registro_loader").html('');
       jQuery("#mensajes").html(data[1]).show('slow');

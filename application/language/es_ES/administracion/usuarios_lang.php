@@ -11,6 +11,7 @@ $lang['collapse'] 	= "Contraer Lista";
 $lang['lbl_nombre'] 	= "Nombres";
 $lang['lbl_paterno'] 	= "Apellido paterno";
 $lang['lbl_materno'] 	= "Apellido materno";
+$lang['lbl_user'] 	    = "Nombre de usuario";
 $lang['lbl_telefono'] 	= "Telefono";
 $lang['lbl_email'] 	    = "Correo electronico";
 $lang['lbl_perfil'] 	= "Perfil de Acceso";

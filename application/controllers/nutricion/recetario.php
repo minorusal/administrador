@@ -75,6 +75,21 @@ class recetario extends Base_Controller{
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
+
+	public function agregar(){
+		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
+		
+		$data['img_receta'] = base_url().'assets/images/recetario/sin_foto.png';
+		//$data['modal_crop'] = $this->load_view_unique($this->view_modal,'', true);
+		if($this->ajax_post(false)){
+			echo json_encode($this->load_view_unique($seccion,$data ,true));
+		}
+		else{
+			return $this->load_view_unique($seccion, $data, true);
+		}
+	}
+
+
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');
@@ -86,16 +101,5 @@ class recetario extends Base_Controller{
        echo json_encode($response);
     }
 
-	public function agregar(){
-		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
-		
-		$data['img_receta'] = base_url().'assets/images/recetario/sin_foto.png';
-		$data['modal_crop'] = $this->load_view_unique($this->view_modal,'', true);
-		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($seccion,$data ,true));
-		}
-		else{
-			return $this->load_view_unique($seccion, $data, true);
-		}
-	}
 }
+

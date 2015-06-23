@@ -501,3 +501,14 @@ function imgLoader_clean(idDiv){
     var idDiv = ((idDiv=='') || (idDiv==undefined)) ? '#loader' : idDiv;
     jQuery(idDiv).html('');
 }
+
+function ver_pdf(URi, titulo){   
+    titulo = (!titulo)?'PDF':titulo;
+    var iframe = '<div class="iframe-container"><iframe src="'+URi+'"></iframe></div>'
+    jQuery.createModal({
+        title:titulo,
+        message: iframe,
+        closeButton:true,
+        scrollable:false
+    });   
+}

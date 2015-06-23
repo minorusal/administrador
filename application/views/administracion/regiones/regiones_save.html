@@ -1,19 +1,19 @@
-<div id="formulario" class="stdform">
+<div id="formulario" class="stdform stdform2">
 	<p>
 		<label>{lbl_region}: (*)</label>
-		<input type="text" id="txt_region" name="txt_region" class="input-xlarge requerido" value="" />
+		<span class="field"><input type="text" id="txt_region" name="txt_region" class="input-xlarge requerido" value="" /></span>
 	</p>
 	<p>
 		<label>{lbl_clave_corta}: (*)</label>
-		<input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlarge requerido" value="" />
+		<span class="field"><input type="text" id="txt_clave_corta" name="txt_clave_corta" class="input-xlarge requerido" value="" /></span>
 	</p>
     <p>
         <label>{lbl_descripcion}: </label>
-        <textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea>
+        <span class="field"><textarea id="txt_descripcion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea></span>
     </p>
     <p>
         <label>{lbl_entidades}: (*)</label>
-        {list_entidad}
+       {list_entidad}
     </p>
 	<div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>

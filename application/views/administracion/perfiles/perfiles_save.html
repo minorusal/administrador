@@ -1,18 +1,18 @@
 
-<div  id="formulario">
+<div  id="formulario" class="stdform stdform2">
     <p>
         <label>{lbl_perfil}: (*)</label>
-        <input id="txt_perfil" type="text" name="txt_perfil" class="input-large requerido" value="" />
+        <span class="field"><input id="txt_perfil" type="text" name="txt_perfil" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_clave_corta}: (*)</label>
-        <input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-large requerido" value="" />
+        <span class="field"><input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-large requerido" value="" /></span>
     </p>
     <p>
         <label>{lbl_descripcion}: </label>
-        <textarea id="txt_descripcion" name="txt_descripcion" class="span5 " style="resize: vertical; height: 100px;"></textarea>
+        <span class="field"><textarea id="txt_descripcion" name="txt_descripcion" class="span5 " style="resize: vertical; height: 100px;"></textarea></span>
     </p>
-    {tree_view}
+    <span class="field">{tree_view}</span>
     <div id="update_loader"></div>
     <div id="mensajes" style="display:none"></div>
         {button_save}

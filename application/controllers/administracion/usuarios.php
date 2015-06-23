@@ -91,20 +91,19 @@ class usuarios extends Base_Controller {
 						,'aplicar_limit'=> true
 					);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = $this->db_model->get_users($sqlData);
+		$total_rows	  = count($this->db_model->get_users($sqlData));
 		$list_content = $this->db_model->get_users($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-		
 		if($total_rows>0){
 			foreach ($list_content as $value) {
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_usuario'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'               => $value['id_usuario'],
+				$tbl_data[] = array('id'               => $value['id'],
 									'nombre'           => tool_tips_tpl($value['nombre'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'nombre_de_usuario'=> $value['usuario'],
 									'perfil'           => $value['perfil'],
@@ -146,6 +145,9 @@ class usuarios extends Base_Controller {
 		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
+	}
+	public function detalle(){
+		
 	}
 	public function agregar(){
 		$seccion 		= '';
@@ -209,9 +211,7 @@ class usuarios extends Base_Controller {
 		$treeview_perfiles = $this->treeview_perfiles($id_perfil, true);
 		echo json_encode($treeview_perfiles);
 	}
-
-	public function insert()
-	{
+	public function insert(){
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
 		{
@@ -248,5 +248,42 @@ class usuarios extends Base_Controller {
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
 		}
+	}
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->get_users($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['nombre'],
+									 $value['usuario'],
+									 $value['perfil'],
+									 $value['area'],
+									 $value['puesto']
+									 );
+			}
+			
+			$set_heading = array(
+									$this->lang_item("lbl_nombre"),
+									$this->lang_item("lbl_user"),
+									$this->lang_item("lbl_perfil"),
+									$this->lang_item("lbl_area"),
+									$this->lang_item("lbl_puesto")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("Catálogos Usuarios"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

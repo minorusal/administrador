@@ -1,59 +1,43 @@
-<div class="stdform ">
+<div id="formulario" class="stdform stdform2">
     <p>
-        <label>{nombre_cliente}: (*)</label>
-        <input id="nombre" type="text" name="nombre" class="input-large requerido" value="" />
+        <label>{lbl_nombre}: (*)</label>
+        <span class="field"><input id="txt_nombre" type="text" name="txt_nombre" class="input-large requerido" value="{txt_nombre}" /></span>
     </p>
     <p>
-        <label>{razon_social}: (*)</label>
-        <input id="razon_social" type="text" name="razon_social" class="input-large requerido" value="" />
+        <label>{lbl_paterno}: (*)</label>
+        <span class="field"><input id="txt_paterno" type="text" name="txt_paterno" class="input-large requerido" value="{txt_paterno}" /></span>
     </p>
     <p>
-        <label>{clave_corta}: (*)</label>
-        <input id="clave_corta" type="text" name="clave_corta" class="input-large requerido" value="" />
+        <label>{lbl_materno}: (*)</label>
+        <span class="field"><input id="txt_materno" type="text" name="txt_materno" class="input-large requerido" value="{txt_materno}" /></span>
     </p>
     <p>
-        <label>{rfc}: (*)</label>
-        <input id="rfc" type="text" name="rfc" class="input-large requerido" value="" />
+        <label>{lbl_telefono}: (*)</label>
+        <span class="field"><input id="txt_telefono" type="text" name="txt_telefono" class="input-large requerido" value="{txt_telefono}" /></span>
     </p>
     <p>
-        <label>{calle}:</label>
-        <input id="calle" type="text" name="calle" class="input-large" value="" />
+        <label>{lbl_email}:</label>
+        <span class="field"><input id="txt_email" type="text" name="txt_email" class="input-large" value="{txt_email}" /></span>
     </p>
     <p>
-        <label>{num_int}:</label>
-        <input id="num_int" type="text" name="num_int" class="input-large" value="" />
+        <label>{lbl_area} (*)</label>
+        <span class="field">{dropdown_area}</span>
     </p>
     <p>
-        <label>{num_ext}:</label>
-        <input id="num_ext" type="text" name="num_ext" class="input-large" value="" />
+        <label>{lbl_puesto} (*)</label>
+        <span class="field">{dropdown_puesto}</span>
     </p>
     <p>
-        <label>{colonia}:</label>
-        <input id="colonia" type="text" name="colonia" class="input-large" value="" />
+        <label>{lbl_usuario_registro}: </label>
+        <span class="field"><span id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro} </span></span>
     </p>
     <p>
-        <label>{municipio}:</label>
-        <input id="municipio" type="text" name="municipio" class="input-large" value="" />
-    </p>
+        <label>{lbl_fecha_registro}:</label>
+        <span class="field"><span id="fecha_registro" type="text" name="fecha_registro" class="input-xlarge uneditable-input" >{val_fecha_registro}</span></span>
+    </p>           
     <p>
-        <label>{entidad} (*)</label>
-            {dropdown_entidad}
-    </p>
-    <p>
-        <label>{sucursal} (*)</label>
-            {dropdown_sucursal}
-    </p>
-    <p>
-        <label>{cp}:</label>
-        <input id="cp" type="text" name="cp" class="input-large" value="" />
-    </p>
-    <p>
-        <label>{telefonos}:</label>
-        <input id="telefonos" type="text" name="telefonos" class="input-large" value="" />
-    </p>
-    <p>
-        <label>{email}:</label>
-        <input id="email" type="text" name="email" class="input-large" value="" />
+        <label>{lbl_ultima_modificacion}: </label>
+        <span class="field"><textarea id="ultima_modifiacion" class=" span5 textareaUneditable" style="resize: vertical; height: 100px;  " readonly  >{val_ultima_modificacion}</textarea></span>
     </p>
     
     <div id="registro_loader"></div>

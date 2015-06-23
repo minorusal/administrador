@@ -138,19 +138,19 @@
                     <strong>{impuesto}</strong>
                 </td>
                 <td class="width20 right numlist">
-                    <strong>{subtotal_value}</strong>
-                    <strong>{descuento_value}</strong>
-                    <strong>{impuesto_value}</strong>
+                    <span id="value_subtotal"><strong>{subtotal_value}</strong></span>
+                    <span id="value_descuento"><strong>{descuento_value}</strong></span>
+                    <span id="value_impuesto"><strong>{impuesto_value}</strong></span>
                     <input id="subtotal" type="hidden" data-campo="subtotal" value="{subtotal_data}" />
-                    <input id="descuento" type="hidden" data-campo="descuento" value="{descuento_data}" />
-                    <input id="impuesto" type="hidden" data-campo="impuesto" value="{impuesto_data}" />
+                    <input id="descuento_total" type="hidden" data-campo="descuento_total" value="{descuento_data}" />
+                    <input id="impuesto_total" type="hidden" data-campo="impuesto_total" value="{impuesto_data}" />
                     <input id="total" type="hidden" data-campo="total" value="{total_data}" />
                 </td>
             </tr>
         </tbody>
       </table>        
       <div class="amountdue" >
-        <h1><span>{a_pagar}:</span>{total_value}</h1> <br />
+        <h1><span>{a_pagar}:</span><span id="value_total">{total_value}<span></h1> <br />
         <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();">{cerrar_orden}</a>
         <br/>
         <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;">{cancelar_orden}</a>

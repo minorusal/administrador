@@ -626,21 +626,20 @@ class ordenes extends Base_Controller {
 									</div>
 								</td>
 								<td class="right">
-									<input type="hidden" id="costo_x_cantidad_hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<input type="hidden" name="costo_x_cantidad_hidden[]" id="costo_x_cantidad_hidden' .$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 									<span class="add-on">'.$moneda.'</span> 
 									<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['costo_x_cantidad'],2).'</span>
 								</td>
 								<td class="right">
-									<input type="hidden" value="'.$data_listado[$i]['descuento'].'" id="descuento_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'">
 									<div class="input-prepend input-append">
-		                              <input type="text" '.$readonly.' maxlength="3" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 25px;"/>
-		                              <span class="add-on">%</span>
-		                            </div>
+					                  	<input type="text" '.$readonly.' name="descuento[]" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 25px;"  maxlength="3"/>
+					                 	<span class="add-on">%</span>
+					                </div>
 								</td>
 								<td class="right">
-									<input type="hidden" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
-		                              <span class="add-on">'.$moneda.'</span> 
-		                              <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['subtotal'],2).'</span>
+									<input type="hidden" class="subtotal" name="subtotal__hidden[]" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+					                  <span class="add-on">'.$moneda.'</span> 
+					                  <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['subtotal'],2).'</span>
 								</td>
 								<td class="right">
 									<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" />
@@ -648,7 +647,7 @@ class ordenes extends Base_Controller {
 									<span class="add-on">%</span>
 								</td>
 								<td class="right">
-									<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" name="valor_hidden_impuesto[]" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
 									<span class="add-on">'.$moneda.'</span> 
 									<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['valor_impuesto'],2).'</span>
 								</td>
@@ -792,23 +791,23 @@ class ordenes extends Base_Controller {
 						</td>
 						<td class="right">
 							<div class="input-prepend input-append">
-								<input type="text" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')" style="width: 40px;">
+								<input type="text"  value ="1" id="cantidad_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="cantidad['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$get_data[0]['id_compras_articulo_precios'].')" style="width: 40px;">
 								<span class="add-on">Pz</span>
 							</div>
 						</td>
 						<td class="right">
-							<input type="hidden" id="costo_x_cantidad_hidden'.$get_data[0]['id_compras_articulo_precios'].'" value="" data-campo="costo_x_cantidad_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
+							<input type="hidden" name="costo_x_cantidad_hidden[]" id="costo_x_cantidad_hidden'.$get_data[0]['id_compras_articulo_precios'].'" value="" data-campo="costo_x_cantidad_hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="costo_x_cantidad'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
 						<td class="right">
 							<div class="input-prepend input-append">
-								<input type="text" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0" style="width: 40px;">
+								<input type="text"  name="descuento[]" id="descuento_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="descuento['.$get_data[0]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$get_data[0]['id_compras_articulo_precios'].')" value="0" style="width: 40px;">
 								<span class="add-on">%</span>
 							</div>
 						</td>
 						<td class="right">
-							<input type="hidden" id="subtotal__hidden'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="subtotal__hidden['.$get_data[0]['id_compras_articulo_precios'].']">
+							<input type="hidden" name="subtotal__hidden[]" id="subtotal__hidden'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="subtotal__hidden['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="subtotal_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
@@ -818,7 +817,7 @@ class ordenes extends Base_Controller {
 							<span class="add-on">%</span>
 						</td>
 						<td class="right">
-							<input type="hidden" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
+							<input type="hidden" name="valor_hidden_impuesto[]" value="" id="valor_hidden_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$get_data[0]['id_compras_articulo_precios'].']">
 							<span class="add-on">'.$moneda.'</span>
 							<span id="valor_impuesto_'.$get_data[0]['id_compras_articulo_precios'].'"></span>
 						</td>
@@ -903,7 +902,6 @@ class ordenes extends Base_Controller {
 		$valor_hidden_impuesto 	= $this->ajax_post('valor_hidden_impuesto');
 		$total_hidden 	= $this->ajax_post('total_hidden');
 		$impuesto 	= $this->ajax_post('impuesto');
-		
 		$array=array(	
 					0  	=> $cantidad, 
 					1   => $costo_x_cantidad_hidden,
@@ -921,7 +919,7 @@ class ordenes extends Base_Controller {
 			}
 		}
 		for($d=0;count($data)>$d;$d++){
-			$sqldata = array(
+			$sqldata= array(
 						'id_compras_orden' 			   =>$id_compras_orden,
 						'id_compras_articulo_precios'  =>$keys[$d],
 						'cantidad'					   =>$data[$d][0],
@@ -969,8 +967,8 @@ class ordenes extends Base_Controller {
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$estatus 	= $this->ajax_post('estatus');
 		$subtotal 	= $this->ajax_post('subtotal');
-		$descuento 	= $this->ajax_post('descuento');
-		$impuesto 	= $this->ajax_post('impuesto');
+		$descuento 	= $this->ajax_post('descuento_total');
+		$impuesto 	= $this->ajax_post('impuesto_total');
 		$total 		= $this->ajax_post('total');
 		if($estatus==3){
 			$valor_estatus=4;

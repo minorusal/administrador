@@ -414,31 +414,3 @@ function detalle_articulos_precio(id_compras_articulo_precio){
         }
     });
 }
-
-function imrpimir(id){
-	jQuery('#mensajes_update').hide();		
-	btn.attr('disabled','disabled');
-		// Obtiene campos en formulario
-		var objData = formData('#formulario');
-		objData['id_compras_orden'] = (!objData['id_compras_orden'])?id:objData['id_compras_orden'];
-	jQuery.ajax({
-		type:"POST",
-		url: path()+"compras/ordenes/imprimir",
-		dataType: "json",			
-		data : objData,
-		// beforeSend : function(){
-		// 	imgLoader("#update_loader");
-		// },
-		success : function(data){
-			// if(data.msj_grid==1){
-		 //    	jQuery("#mensajes_grid").html(data.contenido).show('slow');
-		 //    	jQuery('#ico-imprimir_'+id).closest('tr').fadeOut(function(){
-			// 		jQuery(this).remove();
-			// 	});
-			// }else{
-			// 	jQuery("#update_loader").html('');				
-			//     jQuery("#mensajes_update").html(data.contenido).show('slow');
-			// }
-		}
-	});
-}

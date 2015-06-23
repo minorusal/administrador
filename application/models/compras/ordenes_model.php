@@ -79,8 +79,9 @@ class ordenes_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		//$query = "SELECT * FROM $tbl[compras_ordenes] WHERE id_compras_orden = $id_compras_orden";
-		$query="SELECT *
+		$query="SELECT a.*, b.estatus
 				from $tbl[compras_ordenes] a 
+				LEFT JOIN $tbl[compras_ordenes_estatus] b ON a.estatus=b.id_estatus
 				WHERE a.activo=1 AND id_compras_orden = $id_compras_orden;";
 
 		$query = $this->db->query($query);
@@ -205,12 +206,22 @@ class ordenes_model extends Base_Model{
 					a.costo_sin_impuesto,
 					c.nombre_comercial,
 					b.articulo,
+					a.upc,
+					a.sku,
 					e.clave_corta as cl_presentacion
+					,f.embalaje
+					,h.clave_corta as cl_um
+					,a.peso_unitario
+					,e.presentacion
+					,a.presentacion_x_embalaje
+					,a.edit_timestamp
 					FROM $tbl[compras_ordenes_articulos] l
 					LEFT JOIN $tbl[compras_articulos_precios] a on l.id_compras_articulo_precios = a.id_compras_articulo_precios
 					LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 					LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
 					LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
+					LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
+					LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
 				WHERE 1 AND l.activo = 1 $condicion";
 		//echo $query;
       	// Execute querie
@@ -228,6 +239,58 @@ class ordenes_model extends Base_Model{
 
 		 $update    = $this->update_item($tbl['compras_ordenes_articulos'], $data, 'id_compras_orden', $filtro);
 		return $update;
+	}
+	public function db_get_data_historial($data=array()){	
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$filtro = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+
+		$filtro = ($filtro!="") ? "and (a.orden_num LIKE '%$filtro%' 
+							   or b.razon_social LIKE '%$filtro%'
+							   or a.descripcion LIKE '%$filtro%'
+							   or c.estatus LIKE '%$filtro%'
+							   )" 
+							: "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		// Query
+		$query="SELECT 
+					a.id_compras_orden 
+					,a.orden_num
+					,a.orden_fecha
+					,a.descripcion
+					,a.entrega_direccion
+					,a.entrega_fecha
+					,a.observaciones
+					,a.prefactura_num
+					,a.timestamp
+					,b.razon_social
+					,c.estatus
+					,d.orden_tipo
+					,e.sucursal
+					,f.forma_pago
+					,g.credito
+				from $tbl[compras_ordenes] a 
+				LEFT JOIN $tbl[compras_proveedores] b on a.id_proveedor=b.id_compras_proveedor
+				LEFT JOIN $tbl[compras_ordenes_estatus] c on a.estatus=c.id_estatus
+				LEFT JOIN $tbl[compras_ordenes_tipo] d on a.id_orden_tipo=d.id_orden_tipo
+				LEFT JOIN $tbl[sucursales] e on a.id_sucursal=e.id_sucursal
+				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
+				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
+				WHERE a.activo=1 AND 1  $filtro
+				GROUP BY orden_num ASC
+				$limit";
+				//echo $query;
+
+      	// Execute querie
+
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 }
 ?>

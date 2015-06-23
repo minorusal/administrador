@@ -2,12 +2,12 @@
 
 class historial_ordenes extends Base_Controller {
 		/**
-* Nombre:		Historial Ordenes
-* Ubicación:	Compras>Ordenes/historial ordenes
-* Descripción:	Funcionamiento para la sección de ordenes de compra
-* @author:		Alejandro Enciso
-* Creación: 	2015-05-19
-*/
+	* Nombre:		Historial Ordenes
+	* Ubicación:	Compras>Ordenes/historial ordenes
+	* Descripción:	Funcionamiento para la sección de ordenes de compra
+	* @author:		Alejandro Enciso
+	* Creación: 	2015-05-19
+	*/
 	private $modulo;
 	private $submodulo;
 	private $seccion;
@@ -20,7 +20,7 @@ class historial_ordenes extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 				= 'compras';
-		$this->seccion 				= 'catalogos';
+		$this->seccion 				= 'ordenes';
 		$this->submodulo			= 'historial_ordenes';
 		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
 		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
@@ -41,14 +41,8 @@ class historial_ordenes extends Base_Controller {
 		}
 		// DB Model
 		$this->load->model($this->modulo.'/ordenes_model','ordenes_model');
-		$this->load->model('users_model','users_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
-		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
-		$this->load->model('administracion/creditos_model','creditos_model');
-		$this->load->model('administracion/variables_model','variables_model');
-		$this->load->model('compras/listado_precios_model','listado_precios_model');
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
 		// Creación de tabs en el contenedor principal
@@ -87,7 +81,7 @@ class historial_ordenes extends Base_Controller {
 		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();		
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item("titulo_seccion");
+		$data['titulo_seccion']   = $this->lang_item("historial_ordenes");
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
@@ -100,7 +94,7 @@ class historial_ordenes extends Base_Controller {
 		$tab_detalle	= $this->tab['detalle'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$accion;		
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -110,9 +104,9 @@ class historial_ordenes extends Base_Controller {
 			,'limit'  => $limit
 		);
 		$uri_segment  			  = $this->uri_segment(); 
-		$total_rows   			  = count($this->ordenes_model->db_get_data($sqlData));
+		$total_rows   			  = count($this->ordenes_model->db_get_data_historial($sqlData));
 		$sqlData['aplicar_limit'] = false;
-		$list_content 			  = $this->ordenes_model->db_get_data($sqlData);
+		$list_content 			  = $this->ordenes_model->db_get_data_historial($sqlData);
 		$url          			  = base_url($url_link);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
@@ -124,16 +118,15 @@ class historial_ordenes extends Base_Controller {
 						);
 				// Acciones
 				$accion_id 						= $value['id_compras_orden'];
-				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="articulos('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
+				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
-									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'orden_num'      => $value['orden_num'],
+									'descripcion'    => $value['descripcion'],
 									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus'],
-									'acciones' 		 => $acciones
 									);
 			}
 			// Plantilla
@@ -144,8 +137,7 @@ class historial_ordenes extends Base_Controller {
 										$this->lang_item("descripcion"),
 										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
-										$this->lang_item("estatus"),
-										$this->lang_item("acciones")
+										$this->lang_item("estatus")
 									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -170,5 +162,55 @@ class historial_ordenes extends Base_Controller {
 		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
+	}
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array('buscar' => $filtro);
+		$list_content = $this->ordenes_model->db_get_data_historial($sqlData);		
+
+		if($list_content){
+			foreach ($list_content as $value) {
+				$set_data[] = array(
+									$value['id_compras_orden'],
+									$value['orden_num'],
+									$value['orden_tipo'],
+									$value['orden_fecha'],									 
+									$value['razon_social'],
+									$value['descripcion'],
+									$value['sucursal'],
+									$value['entrega_direccion'],
+									$value['entrega_fecha'],
+									$value['forma_pago'],
+									$value['credito'],
+									$value['prefactura_num'],
+									$value['observaciones'],
+									$value['timestamp'],
+									$value['estatus']
+								);
+			}
+			$set_heading = array(
+								$this->lang_item("ID"),
+								$this->lang_item("orden_num"),
+								$this->lang_item("orden_tipo"),
+								$this->lang_item("orden_fecha"),
+								$this->lang_item("proveedor"),
+								$this->lang_item("descripcion"),
+								$this->lang_item("sucursal"),
+								$this->lang_item("entrega_direccion"),
+								$this->lang_item("entrega_fecha"),
+								$this->lang_item("forma_pago"),
+								$this->lang_item("credito"),
+								$this->lang_item("prefactura_num"),
+								$this->lang_item("observaciones"),
+								$this->lang_item("fecha_registro"),
+								$this->lang_item("estatus")
+							);
+		}
+
+		$params = array(	'title'   => $this->lang_item("historial_ordenes"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
 	}
 }

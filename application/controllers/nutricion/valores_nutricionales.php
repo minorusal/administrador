@@ -326,12 +326,12 @@ class valores_nutricionales extends Base_Controller{
 			,'limit'      	=> $limit
 		);
 		$lts_content = $this->db_model->get_valores_nutricionales_default($sqlData);
-
+		
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['articulo'],
-									 $value['cantidad_sugerida']
+									 $value['articulo']
+									,$value['cantidad_sugerida']
 									,$value['peso_bruto']
 									,$value['peso_neto']
 									,$value['energia']
@@ -357,9 +357,8 @@ class valores_nutricionales extends Base_Controller{
 									,$value['ag_poli']
 									 );
 			}
-			
 			$set_heading = array(
-									$this->lang_item("articulo")
+									 $this->lang_item("articulo")
 									,$this->lang_item("cantidad sugerida")
 									,$this->lang_item("peso bruto")
 									,$this->lang_item("peso neto")

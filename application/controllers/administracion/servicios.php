@@ -15,7 +15,7 @@ class servicios extends Base_Controller
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'catalogos';
+		$this->submodulo		= 'sucursales';
 		$this->seccion          = 'servicios';
 		$this->icon 			= 'fa fa-phone-square'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
@@ -87,6 +87,7 @@ class servicios extends Base_Controller
 		$uri_view 		= $this->modulo.$seccion;
 		$url_link 		= $this->path.'listado';
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+
 		$sqlData = array(
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
@@ -129,10 +130,10 @@ class servicios extends Base_Controller
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
-			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
-								);					
+								);				
 		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
@@ -156,7 +157,6 @@ class servicios extends Base_Controller
 	public function detalle(){
 		$id_servicio                 = $this->ajax_post('id_servicio');
 		$detalle  	                 = $this->db_model->get_orden_unico_servicio($id_servicio);
-		//print_debug(substr($detalle[0]['inicio'], 0,5));
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData = array(
@@ -217,7 +217,7 @@ class servicios extends Base_Controller
         $tabData['button_save']           = $btn_save;
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
       	$tabData['usuario_registro']	= $usuario_name;
-        									   #administracion/catalogos/sucursales/sucursales_detalle	
+        									   
 		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
@@ -353,5 +353,42 @@ class servicios extends Base_Controller
 				echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 			}
 		}
+	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		if(count($lts_content)>0){
+			foreach ($lts_content as $value) {
+				$set_data[] = array(
+									 $value['servicio']
+								 	,$value['cv_servicio']
+								 	,$value['sucursal']
+								 	,$value['descripcion']
+								 	,$value['inicio']
+								 	,$value['final']);
+			}
+			
+			$set_heading = array(
+									$this->lang_item("lbl_servicio"),
+									$this->lang_item("lbl_clave_corta"),
+									$this->lang_item("lbl_sucursal"),
+									$this->lang_item("lbl_descripcion"),
+									$this->lang_item("lbl_inicio"),
+									$this->lang_item("lbl_final"));
+		}
+
+		$params = array(	'title'   => $this->lang_item("Servicios"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
 	}
 }

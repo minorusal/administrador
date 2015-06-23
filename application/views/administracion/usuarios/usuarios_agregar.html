@@ -22,6 +22,14 @@
         <input id="mail" type="text" name="mail" class="input-large requerido" value="" />
     </p>
     <p>
+        <label>{lbl_area}: (*)</label>
+        {dropdown_area}
+    </p>
+    <p>
+        <label>{lbl_puesto}: (*)</label>
+        {dropdown_puesto}
+    </p>
+    <p>
         <label>{lbl_perfil}: (*)</label>
         {dropdown_perfil}
     </p>
@@ -29,8 +37,8 @@
         {tree_view}
     </div>
     <br>
-    <div id="update_loader"></div>
-    <div id="mensajes_update" style="display:none"></div>
+     <div id="registro_loader"></div>
+        <div id="mensajes" style="display:none"></div>
     
     {button_save}
     {button_reset}

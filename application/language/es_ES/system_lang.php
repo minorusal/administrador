@@ -86,4 +86,12 @@
 	$lang['deshabilitar']	= 'Deshabilitar';
 	$lang['imprimir']		= 'Imprimir';
 	$lang['ver']			= 'Ver';
+
+	$lang['ID']			= 'ID';
+	$lang['listado']   = 'listado';
+	$lang['detalle']   = 'detalle';
+
+
+
+	
 ?>

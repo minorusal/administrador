@@ -32,7 +32,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"nutricion/familias/listado",
+		url: path()+"nutricion/recetario/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){

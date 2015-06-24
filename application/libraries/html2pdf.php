@@ -6,7 +6,8 @@
 * Modificación:	2015-06-19_OM
 */
 // Clases requeridas
-require_once (APPPATH.'third_party/tcpdf/tcpdf.php'); 
+// require_once (APPPATH.'third_party/tcpdf/tcpdf.php'); 
+require_once(APPPATH.'third_party/html2pdf/html2pdf.class.php');
 
 class html2pdf extends config_vars{
 
@@ -32,7 +33,7 @@ class html2pdf extends config_vars{
 		$this->encoding 		= (isset($encoding))?$this->var['pdf']['pdf_encoding']:$encoding;
 		$this->diskcache 		= (isset($diskcache))?$this->var['pdf']['pdf_diskcache']:$diskcache;
 		$this->pdfa 			= (isset($pdfa))?$this->var['pdf']['pdf_pdfa']:$pdfa;
-		$this->pdf = new TCPDF($this->orientation, $this->unit, $this->format, $this->unicode, $this->encoding, $this->diskcache, $this->pdfa);
+		$this->pdf = new TCPDF($this->orientation, $this->unit, $this->format, $this->unicode, $this->encoding, $this->diskcache, $this->pdfa);		
 		// Atributos
 		$this->creador 			= (isset($this->var['pdf']['pdf_creador']))?$this->var['pdf']['pdf_creador']:'';
 		$this->autor 			= (isset($this->var['pdf']['pdf_autor']))?$this->var['pdf']['pdf_autor']:'';

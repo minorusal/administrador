@@ -1113,10 +1113,11 @@ class ordenes extends Base_Controller {
 						 'html' 	=> $html
 						,'output'	=> 'I'
 						,'archivo' 	=> false
+						,'debug' 	=> false
 					);
 		$p_inicio = 'Proceso iniciado a las: '.date('Y-m-d H:i:s');
 		ob_start();
-		if(!$pdfFile=$this->html2pdf->crear($arrayPDF)){
+		if(!$pdfFile=$this->html_pdf->crear($arrayPDF)){
 			echo "Error al crear documento PDF.";
 		}else{
 			echo "Archivo Creado a las ".date('Y-m-d H:i:s').' -> '.'<a href="'.$pdfFile['uri'].'">'.$pdfFile['uri'].'</a>';

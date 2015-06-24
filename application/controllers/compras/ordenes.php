@@ -721,9 +721,9 @@ class ordenes extends Base_Controller {
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
+		$tabData['estatus']	 		 		 = $this->lang_item("estatus",false);;
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
-		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
 		$tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
@@ -745,6 +745,7 @@ class ordenes extends Base_Controller {
 		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 		$tabData['moneda']					 = $moneda;
+		$tabData['estatus_value']  			 = $detalle[0]['estatus'].' - '.$detalle[0]['edit_timestamp'];
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
 		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);

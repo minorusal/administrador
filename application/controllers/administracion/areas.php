@@ -257,11 +257,11 @@ class areas extends Base_Controller
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
 		$tab_1['nombre_area'] = $this->lang_item("nombre_area");
-		$tab_1['area'] = $this->lang_item('area');
-		$tab_1['cvl_corta'] = $this->lang_item('clave_corta');
-		$tab_1['desc'] = $this->lang_item('descripcion');
+		$tab_1['area']        = $this->lang_item('area');
+		$tab_1['cvl_corta']   = $this->lang_item('clave_corta');
+		$tab_1['desc']        = $this->lang_item('descripcion');
 
-		$tab_1['button_save'] = $btn_save;
+		$tab_1['button_save']  = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
 
 		if($this->ajax_post(false))

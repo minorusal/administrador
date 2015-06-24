@@ -47,7 +47,7 @@ function articulos(id_compras_orden){
   var functions=[];
   jQuery.ajax({
         type: "POST",
-        url: path()+"compras/aprobar_ordenes/articulos_listado",
+        url: path()+"compras/historial_ordenes/articulos_listado",
         dataType: 'json',
         data: {id_compras_orden : id_compras_orden},
         success: function(data){

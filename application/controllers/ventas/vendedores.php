@@ -111,7 +111,7 @@ class vendedores extends Base_Controller {
 									'sucursal'        => $value['sucursal']);
 			}
 
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 		
 			$this->table->set_heading(	$this->lang_item("nombre_vendedor"),
 										$this->lang_item("nombre_vendedor"),

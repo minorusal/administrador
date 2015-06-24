@@ -46,12 +46,12 @@
 								</a>
 							</li>";
 
-				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='overflo $display'>
+				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style=' $display'>
         							$data
     								</div>";
 			}
 
-			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:visible;'>";
+			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:scroll;'>";
     		$tabbed .= "<ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all' role='tablist'>";
     		$tabbed .= $tabs_li;
     		$tabbed .= "</ul>";
@@ -142,7 +142,6 @@
 			return false;
 		}
 	}
-
 	if(!function_exists('dropMultiselect_tpl')){
 		// Crea una lista <multiselect> 
 		function dropMultiselect_tpl($params=array()){			
@@ -216,8 +215,6 @@
 			return false;
 		}
 	}
-
-	
 	if(!function_exists('button_tpl')){
 		function button_tpl($params=array()){
 			$button = "";
@@ -291,5 +288,30 @@
 		}
 	}
 
+	if(!function_exists('plantilla_table_tpl')){
+		function set_table_tpl(){
+			return  array (
+		                    'table_open'          => '<table class="table table-bordered responsive dataTable" >',
+
+		                    'heading_row_start'   => '<tr>',
+		                    'heading_row_end'     => '</tr>',
+		                    'heading_cell_start'  => '<th>',
+		                    'heading_cell_end'    => '</th>',
+
+		                    'row_start'           => '<tr>',
+		                    'row_end'             => '</tr>',
+		                    'cell_start'          => '<td style="max-width:80px;text-align:left;word-wrap:break-word;"><p style="white-space: pre">',
+		                    'cell_end'            => '</td></p>',
+
+		                    'row_alt_start'       => '<tr>',
+		                    'row_alt_end'         => '</tr>',
+		                    'cell_alt_start'      => '<td style="max-width:80px;text-align:left;word-wrap:break-word;background: #eee;"><p style="white-space: pre">',
+		                    'cell_alt_end'        => '</td></p>',
+
+		                    'table_close'         => '</table>'
+		              );
+		}
+	}
+	
 		
 ?>

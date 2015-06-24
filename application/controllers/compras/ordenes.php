@@ -142,7 +142,7 @@ class ordenes extends Base_Controller {
 									);
 			}
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										
@@ -1114,10 +1114,11 @@ class ordenes extends Base_Controller {
 						 'html' 	=> $html
 						,'output'	=> 'I'
 						,'archivo' 	=> false
+						,'debug' 	=> false
 					);
 		$p_inicio = 'Proceso iniciado a las: '.date('Y-m-d H:i:s');
 		ob_start();
-		if(!$pdfFile=$this->html2pdf->crear($arrayPDF)){
+		if(!$pdfFile=$this->html_pdf->crear($arrayPDF)){
 			echo "Error al crear documento PDF.";
 		}else{
 			echo "Archivo Creado a las ".date('Y-m-d H:i:s').' -> '.'<a href="'.$pdfFile['uri'].'">'.$pdfFile['uri'].'</a>';

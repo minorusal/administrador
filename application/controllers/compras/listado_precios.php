@@ -122,7 +122,7 @@ class listado_precios extends Base_Controller {
 			}
 			
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("listado_precios"),
 										$this->lang_item("upc"),

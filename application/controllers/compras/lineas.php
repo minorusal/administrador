@@ -75,7 +75,7 @@ class lineas extends Base_Controller {
 									'descripcion'    => $value['descripcion']);
 			}
 
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 		
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("linea"),

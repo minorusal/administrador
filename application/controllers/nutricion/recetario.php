@@ -64,8 +64,8 @@ class recetario extends Base_Controller{
 		return $this->modulo.'/'.$this->view_content;
 	}
 	public function index(){
-		$tabl_inicial 			  = 1;
-		$view_listado    		  = $this->agregar();	
+		$tabl_inicial 			  = 2;
+		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
@@ -74,18 +74,102 @@ class recetario extends Base_Controller{
 		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
+	
+	public function listado($offset=0){
+		// Crea tabla con listado de elementos capturados 
+		$seccion 		= '/listado';
+		$tab_detalle	= $this->tab2;	
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'listado';
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = count($this->db_model->get_data($sqlData));
+		
+		$sqlData['aplicar_limit'] = true;
+		
+		$list_content = $this->db_model->get_data($sqlData);
+		$url          = base_url($url_link);
+		$arreglo      = array($total_rows, $url, $limit, $uri_segment);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		
+		if($total_rows){
+			foreach ($list_content as $value){
+				// Evento de enlace
+				$atrr = array(
+								'href' => '#',
+							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_receta'].')'
+						);
+				// Datos para tabla
+				$tbl_data[] = array('id'           => $value['id_nutricion_receta'],
+									'receta'       => tool_tips_tpl($value['receta'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'  => $value['clave_corta'],
+									'porciones'    => $value['porciones'],
+									'familia'      => $value['familia'],
+									'preparacion'  => $value['preparacion']
+									
+									);
+			}
+			// Plantilla
+			$tbl_plantilla = set_table_tpl();
+			// Titulos de tabla
+			$this->table->set_heading(	$this->lang_item("ID"),
+										$this->lang_item("lbl_receta"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_porciones"),
+										$this->lang_item("lbl_familia"),
+										$this->lang_item("lbl_preparacion")
+										);
+			// Generar tabla
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
+			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
+		}else{
+			$buttonTPL = "";
+			$msg   = $this->lang_item("msg_query_null");
+			$tabla = alertas_tpl('', $msg ,false);
+		}
+		$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search",false),$total_rows , $filtro) : "";
+		$tabData['tabla']     = $tabla;
+		$tabData['export']    = button_tpl($buttonTPL);
+		$tabData['paginador'] = $paginador;
+		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
+		if($this->ajax_post(false)){
+			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+		}else{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
 
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
 		
-		$data['img_receta'] = base_url().'assets/images/recetario/sin_foto.png';
-		//$data['modal_crop'] = $this->load_view_unique($this->view_modal,'', true);
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+
+		
+
+		$tab_1['lbl_receta']       = $this->lang_item('lbl_receta');
+		$tab_1['lbl_clave_corta']  = $this->lang_item('lbl_clave_corta');
+		$tab_1['lbl_porciones']    = $this->lang_item('lbl_porciones');
+		$tab_1['lbl_preparacion']  = $this->lang_item('lbl_preparacion');
+
+		$tab_1['button_save'] = $btn_save;
+		$tab_1['button_reset'] = $btn_reset;
 		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($seccion,$data ,true));
+			echo json_encode($this->load_view_unique($seccion,$tab_1 ,true));
 		}
 		else{
-			return $this->load_view_unique($seccion, $data, true);
+			return $this->load_view_unique($seccion, $tab_1, true);
 		}
 	}
 
@@ -93,10 +177,11 @@ class recetario extends Base_Controller{
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');
-       
-      	$file = $_FILES['avatar_file'];
+     
 
-      	$response = $this->jcrop->initialize_crop($src,$data,$file);
+
+
+      	$response = $this->jcrop->initialize_crop($src,$tab_1,$file);
 
        echo json_encode($response);
     }

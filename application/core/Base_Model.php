@@ -56,6 +56,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['compras_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores_articulos'];
 		$this->tbl['compras_um'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_um'];
 		$this->tbl['compras_embalaje'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_embalaje'];
+		$this->tbl['nutricion_ciclos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_ciclos'];
 		$this->tbl['nutricion_familias'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_familias'];
 		
 		$this->tbl['nutricion_recetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas'];

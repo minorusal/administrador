@@ -66,6 +66,7 @@ class Base_DBconfig extends Base_Controller {
 					 	,'tbl_compras_proveedores'			   =>	'av_compras_proveedores'
 					 	,'tbl_compras_proveedores_articulos'   =>	'av_compras_proveedores_articulos'
 					 	,'tbl_compras_um'					   =>	'av_compras_um'
+					 	,'tbl_nutricion_ciclos'                =>	'av_nutricion_ciclos'
 					 	,'tbl_nutricion_familias'              =>	'av_nutricion_familias'
 					 	,'tbl_nutricion_tiempos'               =>	'av_nutricion_tiempos'	
 					 	,'tbl_nutricion_valores_nutricionales' =>	'av_nutricion_valores_nutricionales'	

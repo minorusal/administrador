@@ -1004,7 +1004,7 @@ class ordenes extends Base_Controller {
 					);
 		$update = $this->db_model->db_update_data($sqldata);
 		if($update){
-			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$msg = sprintf($this->lang_item('orden_cerrada', false));
 			$json_respuesta = array(
 				 'id' 		=> 1
 				,'contenido'=> alertas_tpl('success', $msg ,false)
@@ -1031,7 +1031,7 @@ class ordenes extends Base_Controller {
 		$update = $this->db_model->db_update_data($sqldata);
 		
 		if($update){
-			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$msg = sprintf($this->lang_item('orden_cancelada', false));
 			$json_respuesta = array(
 				 'id' 		=> 1
 				,'contenido'=> alertas_tpl('success', $msg ,false)

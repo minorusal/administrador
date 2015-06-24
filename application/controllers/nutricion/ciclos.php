@@ -26,6 +26,7 @@ class ciclos extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model('administracion/sucursales_model','sucursales');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -85,12 +86,57 @@ class ciclos extends Base_Controller{
 		$uri_view 		= $this->modulo.$seccion;
 		$url_link 		= $this->path.'listado';
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+	}
+
+	public function agregar(){
+		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		//print_debug($seccion);
 		$sqlData = array(
-			 'buscar'      	=> $filtro
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
-		);
-		$uri_segment  = $this->uri_segment(); 
-		//$total_rows	  = count($this->db_model->db_get_data($sqlData));
+			 'buscar' => ''
+			,'offset' => 0
+			,'limit' => 0
+			);
+		$dropdown_sucursales = array(
+						 'data'		=> $this->sucursales->db_get_data($sqlData)
+						,'value' 	=> 'id_sucursal'
+						,'text' 	=> array('clave_corta','sucursal')
+						,'name' 	=> "lts_sucursales"
+						,'event'    => array('event'      => 'onchange', 
+											'function'    => 'load_menus', 
+											'params'      => array('this.value'), 
+											'params_type' => array(false))
+					);
+		$sucursales = dropdown_tpl($dropdown_sucursales);
+		$tab_1['list_sucursales']  = $sucursales;
+		if($this->ajax_post(false))
+		{
+			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion, $tab_1, true);
+		}
+	}
+
+	public function cargar_parametros_menu(){
+		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		if($this->ajax_post('id_sucursal')){
+			$widget    = '<h4 class="widgettitle">Conformacion de Ciclos</h4>';
+			$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+			$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+			
+			$data['title']     = $widget;
+			$data['btn_save']  = $btn_save;
+			$data['btn_reset'] = $btn_reset;
+		}
+		
+		if($this->ajax_post(false))
+		{
+			echo json_encode($this->load_view_unique($seccion,$data,true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion, $data, true);
+		}
 	}
 }

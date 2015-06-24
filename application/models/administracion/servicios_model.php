@@ -30,7 +30,7 @@ class servicios_model extends Base_Model{
 					FROM $tbl[administracion_servicios] sr
 					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = sr.id_sucursal
 					WHERE sr.activo = 1 $filtro
-					GROUP BY sr.id_administracion_servicio ASC
+					ORDER BY sr.id_administracion_servicio ASC
 					$limit
 					";
 					//print_debug($query);

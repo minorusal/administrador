@@ -19,7 +19,7 @@ class descuentos_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_descuentos] de
 					WHERE de.activo = 1 $filtro
-					GROUP BY de.id_administracion_descuentos ASC
+					ORDER BY de.id_administracion_descuentos ASC
 					$limit
 					";
       	$query = $this->db->query($query);

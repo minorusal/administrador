@@ -13,23 +13,32 @@ class menus extends Base_Controller{
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'nutricion';
-		$this->seccion		    = 'menus';
+		$this->submodulo		= 'menus';
 		$this->icon 			= 'fa fa-cutlery'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->view_modal       = 'modal_cropper';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
-		// Tabs
-		$this->tab1 			= 'agregar';
-		$this->tab2 			= 'listado';
-		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
+	public function config_tabs(){
+		$tab_1 	= $this->tab1;
+		$path  	= $this->path;
+		// Nombre de Tabs
+		$config_tab['names']    = array( $this->titulo ); 
+		// Href de tabs
+		$config_tab['links']    = array($path.$tab_1 ); 
+		// Accion de tabs
+		$config_tab['action']   = array('');
+		// Atributos 
+		$config_tab['attr']     = array('');
+		return $config_tab;
+	}
+	
 	public function index(){
 		return 'exito';
 	}

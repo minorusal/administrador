@@ -43,3 +43,20 @@ function load_content(uri, id_content){
         }
     });
 }
+function articulos(id_compras_orden){ 
+  var functions=[];
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/aprobar_ordenes/articulos_listado",
+        dataType: 'json',
+        data: {id_compras_orden : id_compras_orden},
+        success: function(data){
+          jQuery('#a-0').html('');
+          functions.push('jQuery(".chzn-select").chosen();');
+            functions.push('calendar_dual_detalle("orden_fecha","entrega_fecha")');
+          jQuery('#a-3').html(data+include_script(functions));
+          jQuery('#ui-id-3').show('slow');
+          jQuery('#ui-id-3').click();
+        }
+    });
+}

@@ -118,7 +118,7 @@ class historial_ordenes extends Base_Controller {
 						);
 				// Acciones
 				$accion_id 						= $value['id_compras_orden'];
-				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" title="'.$this->lang_item("agregar_articulos").'"></span>';
+				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="articulos('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
@@ -127,17 +127,19 @@ class historial_ordenes extends Base_Controller {
 									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus'],
+									'acciones' 		 => $acciones
 									);
 			}
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										
 										$this->lang_item("descripcion"),
 										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
-										$this->lang_item("estatus")
+										$this->lang_item("estatus"),
+										$this->lang_item("acciones")
 									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

@@ -61,8 +61,8 @@ $route['nutricion/catalogos/familias']    	    = 'nutricion/familias/index';
 $route['nutricion/catalogos/tiempos']    	    = 'nutricion/tiempos/index';
 
 /*Recetario*/
-$route['nutricion/recetario']             = 'nutricion/recetario/index';
-$route['nutricion/conformacion_de_menus'] = 'nutricion/menus/index';
+$route['nutricion/recetario']              = 'nutricion/recetario/index';
+$route['nutricion/conformacion_de_ciclos'] = 'nutricion/ciclos/index';
 
 /*COMPRAS*/
 
@@ -102,7 +102,7 @@ $route['compras/ordenes/historial_ordenes']                = 'compras/historial_
 
 /*ALMACEN*/
 /*ENtradas Recepcion*/
-$route['almacen/entradas_recepcion']			     = 'almacen/entradas_recepcion/index';
+$route['almacen/entradas/entradas_recepcion']		 = 'almacen/entradas_recepcion/index';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/

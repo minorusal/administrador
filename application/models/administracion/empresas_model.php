@@ -19,7 +19,7 @@ class empresas_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[empresas] em
 					WHERE em.activo = 1 $filtro
-					GROUP BY em.id_empresa ASC
+					ORDER BY em.id_empresa ASC
 					$limit
 					";
       	$query = $this->db->query($query);

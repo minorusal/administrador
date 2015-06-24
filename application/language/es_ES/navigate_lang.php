@@ -5,10 +5,11 @@ $lang['catalogos']              = 'catalogos';
 //VALORES NUTRICIONALES
 $lang['valores_nutricionales']    = 'valores nutricionales';
 $lang['recetario']                = 'recetario';
-$lang['conformacion_de_menus']    = 'conformación de menus';
+$lang['conformacion_de_ciclos']   = 'conformación de ciclos';
 $lang['programacion_de_menus']    = 'programación de menus';
 
 //MENU DE COMPRAS
+$lang['historial_ordenes']      = 'Historial de ordenes';
 $lang['proveedores']            = 'proveedores';
 $lang['listado_precios']        = 'Listado de precios';
 $lang['articulos']              = 'articulos';

@@ -27,7 +27,7 @@ class entidades_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_entidades] e
 					WHERE e.activo = 1 $filtro
-					GROUP BY e.id_administracion_entidad ASC
+					ORDER BY e.id_administracion_entidad ASC
 					$limit
 					";
 		//print_debug($query);

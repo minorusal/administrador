@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 		} 
 	});
 });
+
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
@@ -17,12 +18,12 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:1},
         success: function(data){
            if(id_content==1){
-              var funcion = 'buscar';
-              jQuery('#a-1').html(data+input_keypress('search-query', funcion));
-              jQuery('#search-query').val(filtro).focus();
-              tool_tips();
+           		var funcion = 'buscar';
+           		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+           		jQuery('#search-query').val(filtro).focus();
+           		tool_tips();
            }else{
-              jQuery('#a-'+id_content).html(data);
+           		jQuery('#a-'+id_content).html(data);
            }
         }
     });
@@ -32,7 +33,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"nutricion/recetario/listado",
+		url: path()+"nutricion/ciclos/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){

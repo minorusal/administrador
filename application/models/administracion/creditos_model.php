@@ -19,7 +19,7 @@ class creditos_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_creditos] cr
 					WHERE cr.activo = 1 $filtro
-					GROUP BY cr.id_administracion_creditos ASC
+					ORDER BY cr.id_administracion_creditos ASC
 					$limit
 					";
       	$query = $this->db->query($query);

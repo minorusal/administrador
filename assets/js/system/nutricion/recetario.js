@@ -15,15 +15,23 @@ function load_content(uri, id_content){
         url: uri,
         dataType: 'json',
         data: {filtro : filtro, tabs:1},
+        beforeSend : function(){
+        	if(id_content!==1){
+        		imgLoader('#a-'+id_content);
+        	}
+		},
         success: function(data){
-           if(id_content==1){
-              var funcion = 'buscar';
-              jQuery('#a-1').html(data+input_keypress('search-query', funcion));
-              jQuery('#search-query').val(filtro).focus();
-              tool_tips();
-           }else{
-              jQuery('#a-'+id_content).html(data);
-           }
+			if(id_content==1){
+			  var funcion = 'buscar';
+			  jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+			  jQuery('#search-query').val(filtro).focus();
+			  tool_tips();
+			}else{
+				var chosen  = 'jQuery(".chzn-select").chosen();';
+				
+				jQuery('#a-'+id_content).html(data+include_script(chosen));
+
+			}
         }
     });
 }
@@ -36,11 +44,11 @@ function buscar(){
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
-			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			imgLoader("#loader");
 		},
 		success : function(data){
 			var funcion = 'buscar';
-        	jQuery("#loader").html('');
+        	imgLoader_clean("#loader");
         	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
 			jQuery('#search-query').val(filtro).focus();
 			tool_tips();

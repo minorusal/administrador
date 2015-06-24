@@ -29,6 +29,29 @@ class recetario_model extends Base_Model{
 		}	
 	}
 
+	public function get_insumos($data = array()){
+		$tbl = $this->tbl;
+		$filtro = (empty($data)) ? '' : ' AND '.array_2_string_format($data);
+
+
+
+		$query = "	SELECT 
+						 ca.id_compras_articulo
+						,ca.articulo
+						,cl.linea
+						,cu.um
+						,ca.clave_corta
+						,ca.descripcion
+					FROM $tbl[compras_articulos] ca
+					LEFT JOIN $tbl[compras_lineas] cl on cl.id_compras_linea = ca.id_compras_linea 
+					LEFT JOIN $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
+					WHERE ca.activo = 1 AND ca.id_articulo_tipo = 2 $filtro
+					ORDER BY ca.id_compras_articulo";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}	
 }
 
 ?>

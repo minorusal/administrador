@@ -53,7 +53,6 @@ class valores_nutricionales extends Base_Controller{
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
-										//,'load_content'
 										,''
 								);
 		// Atributos 

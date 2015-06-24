@@ -27,6 +27,8 @@ class recetario extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model($this->modulo.'/familias_model','familias');
+		$this->load->model('compras/catalogos_model','compras');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -152,19 +154,45 @@ class recetario extends Base_Controller{
 
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
+
+		$familias = array(
+						 'data'		=> $this->familias->db_get_data(array())
+						,'value' 	=> 'id_nutricion_familia'
+						,'text' 	=> array('clave_corta','familia')
+						,'name' 	=> "lts_familias_insert"
+						,'class' 	=> "requerido"
+					);
+
+		$list_familias  = dropdown_tpl($familias);
+
 		
+
+		$insumos  = array(
+						 'data'		=> $insumos  = $this->db_model->get_insumos()
+						,'value' 	=> 'id_compras_articulo'
+						,'text' 	=> array('clave_corta','articulo')
+						,'name' 	=> "lts_insumos_insert"
+						,'class' 	=> "requerido chosen-rtl"
+					);
+
+		$list_insumos  = multi_dropdown_tpl($insumos);
+
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
 		
-
-		$tab_1['lbl_receta']       = $this->lang_item('lbl_receta');
-		$tab_1['lbl_clave_corta']  = $this->lang_item('lbl_clave_corta');
-		$tab_1['lbl_porciones']    = $this->lang_item('lbl_porciones');
-		$tab_1['lbl_preparacion']  = $this->lang_item('lbl_preparacion');
-
-		$tab_1['button_save'] = $btn_save;
-		$tab_1['button_reset'] = $btn_reset;
+		$tab_1['lbl_receta']               = $this->lang_item('lbl_receta');
+		$tab_1['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
+		$tab_1['lbl_porciones']            = $this->lang_item('lbl_porciones');
+		$tab_1['lbl_preparacion']          = $this->lang_item('lbl_preparacion');
+		$tab_1['lbl_familia']              = $this->lang_item('lbl_familia');
+		$tab_1['lbl_asignar_insumos']      = $this->lang_item('lbl_asignar_insumos');
+		$tab_1['select_insumos']            = $this->lang_item('select_insumos');
+		
+		$tab_1['multiselect_insumos']      = $list_insumos;
+		$tab_1['select_familias']          = $list_familias;
+		$tab_1['button_save']              = $btn_save;
+		$tab_1['button_reset']             = $btn_reset;
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1 ,true));
 		}
@@ -173,13 +201,12 @@ class recetario extends Base_Controller{
 		}
 	}
 
+	
 
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');
      
-
-
 
       	$response = $this->jcrop->initialize_crop($src,$tab_1,$file);
 

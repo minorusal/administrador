@@ -64,7 +64,7 @@ class recetario extends Base_Controller{
 		return $this->modulo.'/'.$this->view_content;
 	}
 	public function index(){
-		$tabl_inicial 			  = 1;
+		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
@@ -96,7 +96,7 @@ class recetario extends Base_Controller{
 		$list_content = $this->db_model->get_data($sqlData);
 		$url          = base_url($url_link);
 		$arreglo      = array($total_rows, $url, $limit, $uri_segment);
-		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'0'));
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		
 		if($total_rows){
 			foreach ($list_content as $value){
@@ -119,11 +119,11 @@ class recetario extends Base_Controller{
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("receta"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("porciones"),
-										$this->lang_item("familia"),
-										$this->lang_item("preparacion")
+										$this->lang_item("lbl_receta"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_porciones"),
+										$this->lang_item("lbl_familia"),
+										$this->lang_item("lbl_preparacion")
 										);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -143,12 +143,9 @@ class recetario extends Base_Controller{
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
@@ -156,13 +153,23 @@ class recetario extends Base_Controller{
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
 		
-		$data['img_receta'] = base_url().'assets/images/recetario/sin_foto.png';
-		//$data['modal_crop'] = $this->load_view_unique($this->view_modal,'', true);
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+
+		
+
+		$tab_1['lbl_receta']       = $this->lang_item('lbl_receta');
+		$tab_1['lbl_clave_corta']  = $this->lang_item('lbl_clave_corta');
+		$tab_1['lbl_porciones']    = $this->lang_item('lbl_porciones');
+		$tab_1['lbl_preparacion']  = $this->lang_item('lbl_preparacion');
+
+		$tab_1['button_save'] = $btn_save;
+		$tab_1['button_reset'] = $btn_reset;
 		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($seccion,$data ,true));
+			echo json_encode($this->load_view_unique($seccion,$tab_1 ,true));
 		}
 		else{
-			return $this->load_view_unique($seccion, $data, true);
+			return $this->load_view_unique($seccion, $tab_1, true);
 		}
 	}
 
@@ -170,10 +177,11 @@ class recetario extends Base_Controller{
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');
-       
-      	$file = $_FILES['avatar_file'];
+     
 
-      	$response = $this->jcrop->initialize_crop($src,$data,$file);
+
+
+      	$response = $this->jcrop->initialize_crop($src,$tab_1,$file);
 
        echo json_encode($response);
     }

@@ -40,7 +40,7 @@ class entradas_recepcion_model extends Base_Model{
 				LEFT JOIN $tbl[sucursales] e on a.id_sucursal=e.id_sucursal
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
-				WHERE a.activo=1 AND a.estatus IN (1,3) AND 1  $filtro
+				WHERE a.activo=1 AND a.estatus = 2 AND 1  $filtro
 				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;

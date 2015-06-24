@@ -30,9 +30,15 @@ class entradas_recepcion extends Base_Controller{
 		$this->tab1 			= 'entradas_recepcion_save';
 		$this->tab2 			= 'listado';
 		$this->tab3 			= 'entradas_recepcion_edit';
+		$this->tab4 			= 'articulos';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('compras/ordenes_model','ordenes_model');
+		$this->load->model('compras/listado_precios_model','listado_precios_model');
+		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
+		$this->load->model('administracion/creditos_model','creditos_model');
+
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 		// Tabs
@@ -41,6 +47,7 @@ class entradas_recepcion extends Base_Controller{
 									 'entradas_recepcion_save'
 									,'listado'
 									,'entradas_recepcion_edit'
+									,'articulos'
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -51,6 +58,7 @@ class entradas_recepcion extends Base_Controller{
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		$tab_3 	= $this->tab3;
+		$tab_4 	= $this->tab4;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
@@ -58,21 +66,24 @@ class entradas_recepcion extends Base_Controller{
 										 $this->lang_item($tab_1) //agregar
 										,$this->lang_item($tab_2) //listado
 										,$this->lang_item($tab_3) //detalle
+										,$this->lang_item($tab_4) //articulos
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $path.$tab_1            //almacen/entradas_recepcion/agregar
 										,$path.$tab_2.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
 										,$tab_3                   //detalle
+										,$tab_4                   //articulos
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
 										,'load_content'
 										,''
+										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+		$config_tab['attr']     = array('','', array('style' => 'display:none'), array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -80,14 +91,14 @@ class entradas_recepcion extends Base_Controller{
 	}
 	public function index(){
 		$tabl_inicial 			  = 2;
-		$view_listado    		  = $this->listado();	
+		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
 		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset=0){
@@ -106,9 +117,9 @@ class entradas_recepcion extends Base_Controller{
 			,'limit'  => $limit
 		);
 		$uri_segment  			  = $this->uri_segment(); 
-		$total_rows   			  = count($this->ordenes_model->db_get_data_historial($sqlData));
+		$total_rows   			  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
-		$list_content 			  = $this->ordenes_model->db_get_data_historial($sqlData);
+		$list_content 			  = $this->db_model->db_get_data($sqlData);
 		$url          			  = base_url($url_link);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
@@ -122,11 +133,15 @@ class entradas_recepcion extends Base_Controller{
 				$accion_id 						= $value['id_compras_orden'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="articulos('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				
+
+
+
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => $value['orden_num'],
 									'descripcion'    => $value['descripcion'],
-									'timestamp'      => $value['timestamp'],
+									'timestamp'  	 => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus'],
 									'acciones' 		 => $acciones
@@ -165,6 +180,184 @@ class entradas_recepcion extends Base_Controller{
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
 		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
+	public function articulos($id_compras_orden=false){
+		// Agregar articulos a una orden de compra
+		$table 				= '';
+		$accion 			= $this->tab['articulos'];
+		$uso_interno		= (!$id_compras_orden)?false:true;
+		$id_compras_orden 	= (!$id_compras_orden)?$this->ajax_post('id_compras_orden'):$id_compras_orden;
+		$detalle  			= $this->ordenes_model->get_orden_unico($id_compras_orden);
+		//dump_var($detalle);
+		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'save' , 'onclick'=>'cerrar_orden_listado()','content' => $this->lang_item("btn_cerrar") ));
+		$btn_canceled       = form_button(array('class'=>"btn btn-primary",'name' => 'canceled' , 'onclick'=>'cancelar_orden_listado()','content' => $this->lang_item("btn_cancelar") ));
+		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
+		if($detalle[0]['id_orden_tipo']==2){
+			$style='style="display:none"';
+			$class ='';
+		}else{
+			$style='';
+			$class ='requerido';
+		}	
+		if($detalle[0]['id_proveedor']>0){
+			$get_data=$this->listado_precios_model->db_get_data_x_proveedor($detalle[0]['id_proveedor']);
+		}else{
+			$get_data=$this->listado_precios_model->db_get_data_x_proveedor();
+		}
+		$dropArray4 = array(
+					 'data'		=> $get_data
+					,'value' 	=> 'id_compras_articulo_precios'
+					,'text' 	=> array('articulo','presentacion','embalaje','peso_unitario','cl_um')
+					,'name' 	=> "lts_articulos"
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'get_orden_listado_articulo',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
+					,'class' 	=> "articulos_lista"
+				);
+		if($detalle[0]['estatus']==7){
+			$readonly="readonly";
+		}else{
+			$readonly="";
+		}
+
+		$data_sql = array('id_compras_orden'=>$id_compras_orden);
+		$data_listado=$this->ordenes_model->db_get_data_orden_listado_registrado($data_sql);
+		$moneda = $this->session->userdata('moneda');
+		if(count($data_listado)>0){
+				$style_table='display:block';				
+			for($i=0;count($data_listado)>$i;$i++){
+				// Lineas
+				$peso_unitario = (substr($data_listado[$i]['peso_unitario'], strpos($data_listado[$i]['peso_unitario'], "." ))=='.000')?number_format($data_listado[$i]['peso_unitario'],0):$data_listado[$i]['peso_unitario'];
+				$presentacion_x_embalaje = (substr($data_listado[$i]['presentacion_x_embalaje'], strpos($data_listado[$i]['presentacion_x_embalaje'], "." ))=='.000')?number_format($data_listado[$i]['presentacion_x_embalaje'],0):$data_listado[$i]['presentacion_x_embalaje'];
+				$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
+				$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+							<td class="center">
+								<span name="consecutivo">'.($i+1).'</span>
+							</td>
+							<td>
+								<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
+								<input type="hidden" value="'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_articulo_precios'].'"/>
+							</td>
+							<td>
+								<ul class="tooltips">
+									<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_articulo_precios'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</a>
+								</ul>
+							</td>
+							<td>
+								'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'
+							</td>
+							<td class="right">
+								<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
+								<span class="add-on">'.$moneda.'</span> '.number_format($data_listado[$i]['costo_sin_impuesto'],2).'
+							</td>
+							<td class="right">
+								<div class="input-prepend input-append">
+									<input type="text" '.$readonly.' id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 40px;"/>
+									<span class="add-on">Pz</span>
+								</div>
+							</td>
+							<td class="right">
+								<input type="hidden" name="costo_x_cantidad_hidden[]" id="costo_x_cantidad_hidden' .$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+								<span class="add-on">'.$moneda.'</span> 
+								<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['costo_x_cantidad'],2).'</span>
+							</td>
+							<td class="right">
+								<div class="input-prepend input-append">
+				                  	<input type="text" '.$readonly.' name="descuento[]" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 25px;"  maxlength="3"/>
+				                 	<span class="add-on">%</span>
+				                </div>
+							</td>
+							<td class="right">
+								<input type="hidden" class="subtotal" name="subtotal__hidden[]" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+				                  <span class="add-on">'.$moneda.'</span> 
+				                  <span id="subtotal_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['subtotal'],2).'</span>
+							</td>
+							<td class="right">
+								<input type="hidden" value ="'.$data_listado[$i]['impuesto_porcentaje'].'" data-campo="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" id="impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'"name="impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']" />
+								'.number_format($data_listado[$i]['impuesto_porcentaje'],0).'
+								<span class="add-on">%</span>
+							</td>
+							<td class="right">
+								<input type="hidden" value="'.$data_listado[$i]['valor_impuesto'].'" name="valor_hidden_impuesto[]" id="valor_hidden_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="valor_hidden_impuesto['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+								<span class="add-on">'.$moneda.'</span> 
+								<span id="valor_impuesto_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['valor_impuesto'],2).'</span>
+							</td>
+							<td class="right">
+								<strong>
+								<input type="hidden" value="'.$data_listado[$i]['total'].'" id="total_hidden_'.$data_listado[$i]['id_compras_articulo_precios'].'" data-campo="total_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+								<span class="add-on">'.$moneda.'</span> 
+								<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['total'],2).'</span>
+								</strong>
+							</td>
+							<td class="center"><input type="checkbox" name="aceptar" value="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+							</td>
+						</tr>';
+			}
+		}
+		else{
+			$style_table='display:none';
+			$table='';
+		}
+		$data='';
+		$proveedores    = $this->ordenes_model->db_get_proveedores($data,$detalle[0]['id_proveedor']);
+		$sucursales	    = $this->sucursales_model->get_orden_unico_sucursal($detalle[0]['id_sucursal']);
+		$forma_pago	    = $this->formas_de_pago_model->get_orden_unico_formapago($detalle[0]['id_forma_pago']);
+		$creditos	    = $this->creditos_model->get_orden_unico_credito($detalle[0]['id_credito']);
+		$orden_tipo	    = $this->ordenes_model->db_get_tipo_orden($detalle[0]['id_orden_tipo']);
+		
+		$fec=explode('-',$detalle[0]['entrega_fecha']);
+		$entrega_fecha=$fec[2].'/'.$fec[1].'/'.$fec[0];
+		$fec2=explode('-',$detalle[0]['orden_fecha']);
+		$orden_fecha=$fec2[2].'/'.$fec2[1].'/'.$fec2[0];
+		$tabData['id_compras_orden']		 = $id_compras_orden;
+		$tabData['orden_num']   			 = $this->lang_item("orden_num",false);
+        $tabData['proveedor'] 	 			 = $this->lang_item("proveedor",false);
+		$tabData['sucursal']     			 = $this->lang_item("sucursal",false);
+        $tabData['orden_fecha']   		     = $this->lang_item("orden_fecha",false);
+		$tabData['entrega_fecha']            = $this->lang_item("entrega_fecha",false);
+        $tabData['observaciones']    	     = $this->lang_item("observaciones",false);
+        $tabData['forma_pago']     			 = $this->lang_item("forma_pago",false);
+		$tabData['articulo']  			 	 = $this->lang_item("articulo",false);
+		$tabData['costo_unitario']	 		 = $this->lang_item("costo_unitario",false);
+		$tabData['cantidad']  			 	 = $this->lang_item("cantidad",false);
+		$tabData['costo_cantidad']  	     = $this->lang_item("costo_cantidad",false);
+		$tabData['descuento']  			 	 = $this->lang_item("descuento",false);
+		$tabData['subtotal']  			 	 = $this->lang_item("subtotal",false);
+		$tabData['imp']  			 		 = $this->lang_item("imp",false);
+		$tabData['valor_imp']  			 	 = $this->lang_item("valor_imp",false);
+		$tabData['total']  			 		 = $this->lang_item("total",false);
+		$tabData['accion']  				 = $this->lang_item("accion",false);
+		$tabData['impuesto']  				 = $this->lang_item("impuesto",false);
+		$tabData['a_pagar']  				 = $this->lang_item("a_pagar",false);
+		$tabData['cerrar_orden']  		 	 = $this->lang_item("cerrar_orden",false);
+		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
+		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
+		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
+		//DATA
+		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
+		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
+		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
+		$tabData['button_save']       		 = $btn_save;
+		$tabData['btn_canceled']       		 = $btn_canceled;
+		$tabData['orden_fecha_value']	 	 = $orden_fecha;
+		$tabData['entrega_fecha_value']	     = $entrega_fecha;
+		$tabData['list_forma_pago']			 = $forma_pago[0]['forma_pago'];
+		$tabData['style']					 = $style;
+		$tabData['class']					 = $class;
+		$tabData['table']					 = $table;
+		$tabData['style_table']				 = $style_table;
+		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+
+		$uri_view  = $this->path.$this->submodulo.'/'.$accion;
+		if(!$uso_interno){
+			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+		}else{
+			$includes['css'][]  = array('name' => 'style.default', 'dirname' => '');
+			$includes['css'][]  = array('name' => 'estilos-custom', 'dirname' => '');
+			return $this->load_view_unique($uri_view ,$tabData, true, $includes);
 		}
 	}
 }

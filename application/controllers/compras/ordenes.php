@@ -93,6 +93,7 @@ class ordenes extends Base_Controller {
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
 		$this->load_view($this->uri_view_principal, $data, $js);
 	}
 	public function listado($offset=0){
@@ -743,6 +744,7 @@ class ordenes extends Base_Controller {
 		$tabData['table']					 = $table;
 		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['moneda']					 = $moneda;
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
 		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);
@@ -1113,10 +1115,11 @@ class ordenes extends Base_Controller {
 						 'html' 	=> $html
 						,'output'	=> 'I'
 						,'archivo' 	=> false
+						,'debug' 	=> false
 					);
 		$p_inicio = 'Proceso iniciado a las: '.date('Y-m-d H:i:s');
 		ob_start();
-		if(!$pdfFile=$this->html2pdf->crear($arrayPDF)){
+		if(!$pdfFile=$this->html_pdf->crear($arrayPDF)){
 			echo "Error al crear documento PDF.";
 		}else{
 			echo "Archivo Creado a las ".date('Y-m-d H:i:s').' -> '.'<a href="'.$pdfFile['uri'].'">'.$pdfFile['uri'].'</a>';

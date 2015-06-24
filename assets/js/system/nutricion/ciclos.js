@@ -29,6 +29,21 @@ function load_content(uri, id_content){
     });
 }
 
+function load_menus(id_sucursal){
+	jQuery.ajax({
+        type: "POST",
+        url: path(),
+        dataType: 'json',
+        data: {callback : 'cargar_parametros_menu', id_sucursal : id_sucursal },
+        beforeSend : function(){
+        	imgLoader('#contenido_menus');
+        },
+        success: function(data){
+        	jQuery('#contenido_menus').html(data);
+        }
+    });
+}
+
 function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({

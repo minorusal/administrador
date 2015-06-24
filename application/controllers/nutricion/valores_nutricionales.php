@@ -16,9 +16,8 @@ class valores_nutricionales extends Base_Controller{
 		parent::__construct();
 		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'valores_nutricionales';
-		//$this->seccion          = 'areas';
 		$this->icon 			= 'fa fa-sort-amount-asc'; 
-		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; #administracion/areas
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -52,8 +51,8 @@ class valores_nutricionales extends Base_Controller{
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 'load_content'
-										//,'load_content'
+										'load_content'
+										,'load_content'
 										,''
 								);
 		// Atributos 

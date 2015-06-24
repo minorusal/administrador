@@ -115,7 +115,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_lineas('','','',false)
 					,'value' 	=> 'id_compras_linea'
 					,'text' 	=> array('clave_corta','linea')
-					,'name' 	=> "lts_lineas"
+					,'name' 	=> "lts_lineas_detalle"
 					,'class' 	=> "requerido"
 				);
 		$lineas         = dropdown_tpl($dropArray2);
@@ -123,7 +123,7 @@ class articulos extends Base_Controller {
 					 'data'		=> $this->catalogos_model->get_um('','','',false)
 					,'value' 	=> 'id_compras_um'
 					,'text' 	=> array('clave_corta','um')
-					,'name' 	=> "lts_um"
+					,'name' 	=> "lts_um_detalle"
 					,'class' 	=> "requerido"
 					);
 		$um             = dropdown_tpl($dropArray3);

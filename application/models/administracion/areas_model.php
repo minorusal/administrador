@@ -22,7 +22,7 @@ class areas_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_areas] ar
 					WHERE ar.activo = 1 $filtro
-					GROUP BY ar.id_administracion_areas ASC
+					ORDER BY ar.id_administracion_areas ASC
 					$limit
 					";
       	$query = $this->db->query($query);

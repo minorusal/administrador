@@ -18,7 +18,7 @@ class impuestos_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[administracion_impuestos] im
 					WHERE im.activo = 1 $filtro
-					GROUP BY im.id_administracion_impuestos ASC
+					ORDER BY im.id_administracion_impuestos ASC
 					$limit
 					";
       	$query = $this->db->query($query);

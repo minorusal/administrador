@@ -427,8 +427,8 @@ function deshabilitar_orden_lisatdo(id){
     });
 }
 function cerrar_orden_listado(){
-	var btn   = jQuery("button[name='save']");
-	btn.attr('disabled','disabled');
+	jQuery("#cerrar").hide();
+  	jQuery("#cancelar").hide();
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -442,7 +442,6 @@ function cerrar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');
@@ -452,8 +451,8 @@ function cerrar_orden_listado(){
 }
 function cancelar_orden_listado(){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
-	var btn   = jQuery("button[name='canceled']");
-	btn.attr('disabled','disabled');
+	jQuery("#cancelar").hide();
+	jQuery('#mensajes').hide();
 	jQuery('#mensajes').hide();	
 	jQuery.ajax({
 		type:"POST",
@@ -464,7 +463,6 @@ function cancelar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');

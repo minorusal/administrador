@@ -1,5 +1,4 @@
 function agregar(){
-	alert();
 	var btn          = jQuery("button[name='save_entreda']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
@@ -53,4 +52,15 @@ function calcula_totla_pagar(){
 	var impuesto 	= jQuery('#impuesto_final').val();
 	total=parseFloat((subtotal-descuento))+parseFloat(impuesto);
 	jQuery('#value_total').html(total);
+}
+function aceptar_orden(){
+	alert();
+	jQuery('input[name="aceptar[]"]:checked').each(function() {
+		//$(this).val() es el valor del checkbox correspondiente
+		//checkboxValues.push(jQuery(this).val());
+		alert(jQuery(this).val());
+	});
+}
+function volver_orden(){
+	
 }

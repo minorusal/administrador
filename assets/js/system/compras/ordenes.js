@@ -187,6 +187,13 @@ function articulos(id_compras_orden){
     });
 }
 function get_orden_listado_articulo(id_compras_articulo_precios){
+	// Obtener el total de lineas
+	arrayTable = [];
+	jQuery('#dyntable2 td.consecutivo').each(function() {
+	    arrayTable.push(jQuery(this).html());
+	});
+	var consecutivo = arrayTable.length;
+	// Enviar datos
 	var id_compras_orden = jQuery('#id_compras_orden').val();
 	id_dentificador=jQuery('#idarticuloprecios_'+id_compras_articulo_precios).val();
 	if(typeof  id_dentificador =="undefined"){
@@ -202,7 +209,7 @@ function get_orden_listado_articulo(id_compras_articulo_precios){
 			type:"POST",
 			url: path()+"compras/ordenes/get_data_articulo",
 			dataType: "json",
-			data : {id_compras_articulo_precios:id_compras_articulo_precios,id_compras_orden:id_compras_orden},
+			data : {id_compras_articulo_precios:id_compras_articulo_precios,id_compras_orden:id_compras_orden, consecutivo:consecutivo},
 			beforeSend : function(){
 				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
@@ -403,10 +410,12 @@ function update_orden_listado(){
 }
 function deshabilitar_orden_lisatdo(id){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
-
+	// Obtener el consecutivo de la linea
+	var consecutivo = jQuery("#"+id).find('span[name="consecutivo"]').html();
+	// Pregunta 
 	id = (!id)?false:id;
-	if(id)if(!confirm('Esta seguro de eliminar el registro: '+id)) return false;
-	
+	if(id)if(!confirm('Esta seguro de eliminar la linea: # '+consecutivo)) return false;
+	// Ejecuta
 	jQuery.ajax({
         type: "POST",
         url: path()+"compras/ordenes/deshabilitar_orden_lisatdo",
@@ -427,8 +436,8 @@ function deshabilitar_orden_lisatdo(id){
     });
 }
 function cerrar_orden_listado(){
-	var btn   = jQuery("button[name='save']");
-	btn.attr('disabled','disabled');
+	jQuery("#cerrar").hide();
+  	jQuery("#cancelar").hide();
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -442,7 +451,6 @@ function cerrar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');
@@ -452,8 +460,8 @@ function cerrar_orden_listado(){
 }
 function cancelar_orden_listado(){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
-	var btn   = jQuery("button[name='canceled']");
-	btn.attr('disabled','disabled');
+	jQuery("#cancelar").hide();
+	jQuery('#cerrar').hide();
 	jQuery('#mensajes').hide();	
 	jQuery.ajax({
 		type:"POST",
@@ -464,7 +472,6 @@ function cancelar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');

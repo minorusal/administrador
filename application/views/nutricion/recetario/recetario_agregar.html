@@ -8,14 +8,28 @@
         <span class="field"><input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="" /></span>
     </p>
     <p>
+        <label>{lbl_familia}: (*)</label>
+        <span class="field">{select_familias}</span>
+    </p>
+    <p>
         <label>{lbl_porciones}: (*)</label>
          <span class="field"><input id="txt_porciones" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="" /></span>
     </p>
+   
     <p>
+        <label>{lbl_asignar_insumos}: </label>
+        <span class="field">
+        	<label>{select_insumos}</label>
+        	<span class="field">
+        		{multiselect_insumos}
+        	</span>
+        </span>
+    </p>
+
+     <p>
         <label>{lbl_preparacion}: </label>
         <span class="field"><textarea id="txt_preparacion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;"></textarea></span>
     </p>
-
 
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>
@@ -24,8 +38,3 @@
         {button_reset}
     </p>   
 </div>
-
-<!-- receta
-clave_corta
-porciones
-preparacion -->

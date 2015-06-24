@@ -8,6 +8,7 @@ jQuery(document).ready(function(){
 	});
 })
 function load_content(uri, id_content){
+
 	jQuery('#ui-id-1').hide('slow');
 	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
@@ -56,7 +57,6 @@ function detalle(id_articulo){
         dataType: 'json',
         data: {id_articulo : id_articulo},
         success: function(data){
-          jQuery('#a-0').html('');
           jQuery('#a-1').html(data);
           jQuery('#ui-id-1').show('slow');
           var letra = allow_only_numeric();

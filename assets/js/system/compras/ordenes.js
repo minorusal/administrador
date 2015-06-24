@@ -267,8 +267,8 @@ function calcula_costo2(id_compras_articulo_precios){
 	validanumero('#cantidad_',id_compras_articulo_precios);
 	var costo_sin_impuesto = parseFloat(jQuery('#costo_sin_impuesto_'+id_compras_articulo_precios).val());
 	var cantidad = parseFloat(jQuery('#cantidad_'+id_compras_articulo_precios).val());
-	var costo_x_cantidad=costo_sin_impuesto*cantidad;
-	jQuery('#costo_x_cantidad'+id_compras_articulo_precios).html(costo_x_cantidad);
+	var costo_x_cantidad=costo_sin_impuesto*cantidad;	
+	jQuery('#costo_x_cantidad'+id_compras_articulo_precios).html(numeral(costo_x_cantidad).format('0,0.00'));
 	jQuery('#costo_x_cantidad_hidden'+id_compras_articulo_precios).val(costo_x_cantidad);
 	calcula_subtotal(id_compras_articulo_precios);
 	update_orden_listado();
@@ -333,17 +333,17 @@ function calcula_valores_finales(id){
 		impuesto=0;
 	}
 	jQuery('#subtotal').val(subtotal);
-	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ subtotal.toFixed(2)+'</strong>');
+	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ numeral(subtotal).format('0,0.00') +'</strong>');
 
 	jQuery('#descuento_total').val(descuento);
-	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+descuento.toFixed(2)+'</strong>');
+	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+numeral(descuento).format('0,0.00')+'</strong>');
 
 	jQuery('#impuesto_total').val(impuesto);
-	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ impuesto.toFixed(2)+'</strong>');
+	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ numeral(impuesto).format('0,0.00')+'</strong>');
 
 	total=(subtotal-descuento)+impuesto;
 	jQuery('#total_data').val(total);
-	jQuery('#value_total').html('<strong>'+ moneda+' '+ total.toFixed(2)+'</strong>');
+	jQuery('#value_total').html('<strong>'+ moneda+' '+ numeral(total).format('0,0.00')+'</strong>');
 	
 }
 function calcula_subtotal(id){
@@ -371,18 +371,18 @@ function calcula_subtotal(id){
 			descuento=costo_x_cantidad_hidden*descuento;
 			subtotal=costo_x_cantidad_hidden-descuento;
 		}
-		jQuery('#subtotal_'+id).html(subtotal);
+		jQuery('#subtotal_'+id).html(numeral(subtotal).format('0,0.00'));
 		jQuery('#subtotal__hidden'+id).val(subtotal);
 		// SE CALCULA EL VALOR DEL IMPUESTO
 		valor_1=((subtotal*impuesto)/100);
 		valor_impuesto = parseFloat(valor_1.toFixed(3));
 		jQuery('#valor_hidden_impuesto_'+id).val(valor_impuesto);
-		jQuery('#valor_impuesto_'+id).html(valor_impuesto);
+		jQuery('#valor_impuesto_'+id).html(numeral(valor_impuesto).format('0,0.00'));
 		// SE CALCULA EL TOTAL
 		valor_2 = subtotal+valor_impuesto;
 		total = parseFloat(valor_2.toFixed(3));
 		jQuery('#total_hidden_'+id).val(total);
-		jQuery('#total_'+id).html(total);
+		jQuery('#total_'+id).html(numeral(total).format('0,0.00'));
 		update_orden_listado();		
 	}
 	calcula_valores_finales(id);
@@ -427,8 +427,8 @@ function deshabilitar_orden_lisatdo(id){
     });
 }
 function cerrar_orden_listado(){
-	var btn   = jQuery("button[name='save']");
-	btn.attr('disabled','disabled');
+	jQuery("#cerrar").hide();
+  	jQuery("#cancelar").hide();
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -442,7 +442,6 @@ function cerrar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');
@@ -452,8 +451,8 @@ function cerrar_orden_listado(){
 }
 function cancelar_orden_listado(){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
-	var btn   = jQuery("button[name='canceled']");
-	btn.attr('disabled','disabled');
+	jQuery("#cancelar").hide();
+	jQuery('#mensajes').hide();
 	jQuery('#mensajes').hide();	
 	jQuery.ajax({
 		type:"POST",
@@ -464,7 +463,6 @@ function cancelar_orden_listado(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
 			if(data.id==1){}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');

@@ -46,12 +46,12 @@
 								</a>
 							</li>";
 
-				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style=' $display'>
+				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='overflow-x:auto; $display'>
         							$data
     								</div>";
 			}
 
-			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:scroll;'>";
+			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:visible;'>";
     		$tabbed .= "<ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all' role='tablist'>";
     		$tabbed .= $tabs_li;
     		$tabbed .= "</ul>";
@@ -140,6 +140,47 @@
 				return $selected;
 			}
 			return false;
+		}
+	}
+	if(!function_exists('multi_dropdown_tpl')){
+		// Crea una lista <select>
+		function multi_dropdown_tpl($params=array()){			
+			if(!empty($params)){
+				$data 		= (isset($params['data']))?$params['data']:false;
+				$selected 	= (isset($params['selected']))?$params['selected']:'';
+				$value 		= (isset($params['value']))?$params['value']:false;
+				$text 		= (isset($params['text']))?$params['text']:false;
+				$name 		= (isset($params['name']))?$params['name']:false;
+				$class 		= (isset($params['class']))?$params['class']:'';
+				//$event 		= (isset($params['event']))?$params['event']:'';
+				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
+				$event      = ($event) ? $event : ''; 
+				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
+			}
+			$name         = ($name=="")?"selected": $name;
+			$count        = 0;
+			if($data && $name && $value && $text){
+				foreach ($data as $option => $item) {
+					$option_value = "";
+					if($count==0){
+						$options[0]= $leyenda;
+					}
+					if(is_array($text)){
+						foreach ($text as $string) {
+							$option_value .= $item[$string].'-';
+						}
+						$options[$item[$value]] = trim($option_value, '-');
+					}else{
+						$options[$item[$value]]= $item[$text];
+					}					
+					$count++;
+				}
+				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+				return $selected;
+			}
+			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class='input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+			return $selected;
 		}
 	}
 	if(!function_exists('dropMultiselect_tpl')){

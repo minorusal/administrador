@@ -78,8 +78,10 @@ function articulos(id_compras_orden){
 }
 function aprobar_orden_listado(){
   var id_compras_orden = jQuery('#id_compras_orden').val();
-  var btn   = jQuery("button[name='canceled']");
-  btn.attr('disabled','disabled');
+  // var btn   = jQuery("button[name='canceled']");
+  // btn.attr('disabled','disabled');
+  jQuery("#aprobar").hide();
+  jQuery("#rechazar").hide();
   jQuery('#mensajes').hide(); 
   jQuery.ajax({
     type:"POST",
@@ -90,7 +92,6 @@ function aprobar_orden_listado(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      btn.removeAttr('disabled');
       if(data.id==1){}
       jQuery("#registro_loader").html('');
         jQuery("#mensajes").html(data.contenido).show('slow');
@@ -98,9 +99,9 @@ function aprobar_orden_listado(){
   });
 }
 function rechazar_orden_listado(){
+  jQuery("#aprobar").hide();
+  jQuery("#rechazar").hide();
   var id_compras_orden = jQuery('#id_compras_orden').val();
-  var btn   = jQuery("button[name='canceled']");
-  btn.attr('disabled','disabled');
   jQuery('#mensajes').hide(); 
   jQuery.ajax({
     type:"POST",
@@ -111,7 +112,6 @@ function rechazar_orden_listado(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      btn.removeAttr('disabled');
       if(data.id==1){}
       jQuery("#registro_loader").html('');
         jQuery("#mensajes").html(data.contenido).show('slow');

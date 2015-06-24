@@ -140,9 +140,9 @@
       </table>        
       <div class="amountdue" >
         <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;"><strong>{total_value}</strong></span></h1> <br/>
-        <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{cerrar_orden}</a>
+        <span id="cerrar" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{cerrar_orden}</span>
         <br/>
-        <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{cancelar_orden}</a>
+        <span id="cancelar" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{cancelar_orden}</span>
       </div>
     <div id="mensajes" style="display:none"></div>
 </div>

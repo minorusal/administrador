@@ -93,6 +93,7 @@ class ordenes extends Base_Controller {
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
 		$this->load_view($this->uri_view_principal, $data, $js);
 	}
 	public function listado($offset=0){

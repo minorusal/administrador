@@ -24,6 +24,7 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		jQuery('#a-'+id_content).html(data);
+           		jQuery('#contenido_menus').hide();
            }
         }
     });
@@ -32,14 +33,15 @@ function load_content(uri, id_content){
 function load_menus(id_sucursal){
 	jQuery.ajax({
         type: "POST",
-        url: path(),
+        url: path()+"nutricion/ciclos/cargar_parametros_menu",
         dataType: 'json',
-        data: {callback : 'cargar_parametros_menu', id_sucursal : id_sucursal },
+        data: {id_sucursal:id_sucursal},
         beforeSend : function(){
-        	imgLoader('#contenido_menus');
+        	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
         	jQuery('#contenido_menus').html(data);
+        	jQuery('#contenido_menus').show('slow');
         }
     });
 }

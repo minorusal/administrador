@@ -91,8 +91,6 @@ class ciclos extends Base_Controller{
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
 		//print_debug($seccion);
-		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
-		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 		$sqlData = array(
 			 'buscar' => ''
 			,'offset' => 0
@@ -121,6 +119,24 @@ class ciclos extends Base_Controller{
 	}
 
 	public function cargar_parametros_menu(){
+		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		if($this->ajax_post('id_sucursal')){
+			$widget    = '<h4 class="widgettitle">Conformacion de Ciclos</h4>';
+			$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+			$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+			
+			$data['title']     = $widget;
+			$data['btn_save']  = $btn_save;
+			$data['btn_reset'] = $btn_reset;
+		}
 		
+		if($this->ajax_post(false))
+		{
+			echo json_encode($this->load_view_unique($seccion,$data,true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion, $data, true);
+		}
 	}
 }

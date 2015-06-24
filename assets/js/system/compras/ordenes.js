@@ -452,7 +452,7 @@ function cerrar_orden_listado(){
 function cancelar_orden_listado(){
 	var id_compras_orden = jQuery('#id_compras_orden').val();
 	jQuery("#cancelar").hide();
-	jQuery('#mensajes').hide();
+	jQuery('#cerrar').hide();
 	jQuery('#mensajes').hide();	
 	jQuery.ajax({
 		type:"POST",

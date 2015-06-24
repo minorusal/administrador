@@ -49,27 +49,35 @@ class config_vars {
 				        if ($handle = fopen($file, 'r')) {				        	
 				        	$varsList = array('cfg','var','db');				        	
 				            while (!feof($handle)) {
-				            // Establece valores encontrados en las variables
-				                @list($type, $name, $value) = preg_split("/\||=/", fgets($handle), 3);                              
-								$value = utf8_encode($value);
-								if (trim($type)=='var') { 
-								#VAR vars
-									$this->var[$module[0]][trim($name)] = trim($value);
-									$m = ($module[0])?$module[0].' | ':'';
-								}else{$m='';}
-								if (trim($type)=='cfg') { 
-								#CFG vars
-									$this->cfg[trim($name)] = trim($value);
+					        // Establece valores encontrados en las variables
+				            	$contenido = fgets($handle);
+				            	if($contenido[0]!='#' && trim($contenido[0])!=''){
+					                $linea = explode('|',$contenido);
+					                $campovalor = explode('=',$linea [1]);
+					                $type = $linea [0];
+					                $name = $campovalor[0];
+					                $value = (!empty($campovalor[1]))?$campovalor[1]:false;
+
+									$value = utf8_encode($value);
+									if (trim($type)=='var') { 
+									#VAR vars
+										$this->var[$module[0]][trim($name)] = trim($value);
+										$m = ($module[0])?$module[0].' | ':'';
+									}else{$m='';}
+									if (trim($type)=='cfg') { 
+									#CFG vars
+										$this->cfg[trim($name)] = trim($value);
+									}
+									if (trim($type)=='db') { 
+									#DB vars
+										$this->db[trim($name)] = trim($value);					
+									}				
+									if (in_array(trim($type),$varsList)) { 
+									#Print for Debug									
+									 	$val.=$filename[$i].' | '.$type.' | '.$m.$name.' = '.$value."<br/>\n\r";
+									}
 								}
-								if (trim($type)=='db') { 
-								#DB vars
-									$this->db[trim($name)] = trim($value);					
-								}				
-								if (in_array(trim($type),$varsList)) { 
-								#Print for Debug									
-								 	$val.=$filename[$i].' | '.$type.' | '.$m.$name.' = '.$value."<br/>\n\r";
-								}
-				            }	            
+				            }            
 				        }	        						
 					}else{
 						$msj = utf8_decode("¡ERROR CRÍTICO!<br/> No se ha logrado cargar el archivo de configuración <".$file.">, por favor, contacte al administrador del sistema.<br/>");

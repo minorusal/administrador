@@ -65,7 +65,7 @@ class recetario extends Base_Controller{
 	}
 	public function index(){
 		$tabl_inicial 			  = 1;
-		$view_listado    		  = $this->agregar();	
+		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
@@ -74,7 +74,84 @@ class recetario extends Base_Controller{
 		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
+	
+	public function listado($offset=0){
+		// Crea tabla con listado de elementos capturados 
+		$seccion 		= '/listado';
+		$tab_detalle	= $this->tab2;	
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'listado';
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = count($this->db_model->get_data($sqlData));
+		
+		$sqlData['aplicar_limit'] = true;
+		
+		$list_content = $this->db_model->get_data($sqlData);
+		$url          = base_url($url_link);
+		$arreglo      = array($total_rows, $url, $limit, $uri_segment);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'0'));
+		
+		if($total_rows){
+			foreach ($list_content as $value){
+				// Evento de enlace
+				$atrr = array(
+								'href' => '#',
+							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_receta'].')'
+						);
+				// Datos para tabla
+				$tbl_data[] = array('id'           => $value['id_nutricion_receta'],
+									'receta'       => tool_tips_tpl($value['receta'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'  => $value['clave_corta'],
+									'porciones'    => $value['porciones'],
+									'familia'      => $value['familia'],
+									'preparacion'  => $value['preparacion']
+									
+									);
+			}
+			// Plantilla
+			$tbl_plantilla = set_table_tpl();
+			// Titulos de tabla
+			$this->table->set_heading(	$this->lang_item("ID"),
+										$this->lang_item("receta"),
+										$this->lang_item("clave_corta"),
+										$this->lang_item("porciones"),
+										$this->lang_item("familia"),
+										$this->lang_item("preparacion")
+										);
+			// Generar tabla
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
+			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
+								);
+		}else{
+			$buttonTPL = "";
+			$msg   = $this->lang_item("msg_query_null");
+			$tabla = alertas_tpl('', $msg ,false);
+		}
+		$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search",false),$total_rows , $filtro) : "";
+		$tabData['tabla']     = $tabla;
+		$tabData['export']    = button_tpl($buttonTPL);
+		$tabData['paginador'] = $paginador;
+		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
+		if($this->ajax_post(false))
+		{
+			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+		}
+		else
+		{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
 
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';

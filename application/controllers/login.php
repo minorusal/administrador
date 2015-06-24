@@ -131,7 +131,7 @@ class login extends Base_Controller {
 			$bool = false;
 		}
 
-		$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+		$tbl_plantilla = set_table_tpl();
 		$this->table->set_heading($this->lang_item('row_pais'), $this->lang_item('row_perfil'));
 		$this->table->set_template($tbl_plantilla);
 

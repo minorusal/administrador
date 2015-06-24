@@ -71,7 +71,7 @@ class articulos extends Base_Controller {
 									'descripcion'    => $value['descripcion']);
 			}
 
-			$tbl_plantilla = array ('table_open'  => '<table class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 		
 			$this->table->set_heading(	$this->lang_item("articulos"),
 										$this->lang_item("articulos"),

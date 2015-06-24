@@ -743,6 +743,7 @@ class ordenes extends Base_Controller {
 		$tabData['table']					 = $table;
 		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['moneda']					 = $moneda;
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
 		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);

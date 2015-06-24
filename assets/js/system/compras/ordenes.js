@@ -275,6 +275,7 @@ function calcula_costo2(id_compras_articulo_precios){
 	calcula_valores_finales(id_compras_articulo_precios);
 }
 function calcula_valores_finales(id){
+	var moneda = jQuery('#moneda').val();
 	var valor=[];
 	var valor_2=[];
 	var valor_3=[];
@@ -332,17 +333,17 @@ function calcula_valores_finales(id){
 		impuesto=0;
 	}
 	jQuery('#subtotal').val(subtotal);
-	jQuery('#value_subtotal').html('<strong>'+subtotal.toFixed(2)+'<strong>');
+	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ subtotal.toFixed(2)+'</strong>');
 
 	jQuery('#descuento_total').val(descuento);
-	jQuery('#value_descuento').html('<strong> - '+descuento.toFixed(2)+'<strong>');
+	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+descuento.toFixed(2)+'</strong>');
 
 	jQuery('#impuesto_total').val(impuesto);
-	jQuery('#value_impuesto').html('<strong>'+impuesto.toFixed(2)+'<strong>');
+	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ impuesto.toFixed(2)+'</strong>');
 
 	total=(subtotal-descuento)+impuesto;
 	jQuery('#total_data').val(total);
-	jQuery('#value_total').html('<strong>'+total.toFixed(2)+'<strong>');
+	jQuery('#value_total').html('<strong>'+ moneda+' '+ total.toFixed(2)+'</strong>');
 	
 }
 function calcula_subtotal(id){

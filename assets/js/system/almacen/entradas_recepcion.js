@@ -29,3 +29,28 @@ function agregar(){
 		}
 	})
 }
+function articulos(id_compras_orden){	
+	var functions=[];
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/entradas_recepcion/articulos",
+        dataType: 'json',
+        data: {id_compras_orden : id_compras_orden},
+        success: function(data){
+        	jQuery('#a-0').html('');
+        	functions.push('jQuery(".chzn-select").chosen();');
+          	functions.push('calendar_dual_detalle("orden_fecha","entrega_fecha")');
+        	jQuery('#a-3').html(data+include_script(functions));
+        	jQuery('#ui-id-3').show('slow');
+        	jQuery('#ui-id-3').click();
+        }
+    });
+}
+function calcula_totla_pagar(){
+	var total;
+	var subtotal 	= jQuery('#subtotal_final').val();
+	var descuento 	= jQuery('#descuento_final').val();
+	var impuesto 	= jQuery('#impuesto_final').val();
+	total=parseFloat((subtotal-descuento))+parseFloat(impuesto);
+	jQuery('#value_total').html(total);
+}

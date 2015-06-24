@@ -5,6 +5,7 @@
             <tr>
                 <td class="width30">
                 <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
+                <input id="moneda" type="hidden" data-campo="moneda" value="{moneda}" />
                 <input id="estatus" type="hidden" data-campo="estatus" value="{estatus}" />
                     <label>{orden_num}:</label>
                 </td >
@@ -153,7 +154,7 @@
         </tbody>
       </table>        
       <div class="amountdue" >
-        <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;">{total_value}<span></h1> <br />
+        <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;"><strong>{total_value}</strong></span></h1> <br/>
         <a href="" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{cerrar_orden}</a>
         <br/>
         <a href="" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{cancelar_orden}</a>

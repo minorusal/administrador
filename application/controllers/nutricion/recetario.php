@@ -177,8 +177,8 @@ class recetario extends Base_Controller{
 
 		$list_insumos  = multi_dropdown_tpl($insumos);
 
-		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
-		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn-primary', 'name'=>'limpiar' ,'onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
 		
 		$tab_1['lbl_receta']               = $this->lang_item('lbl_receta');
@@ -187,12 +187,13 @@ class recetario extends Base_Controller{
 		$tab_1['lbl_preparacion']          = $this->lang_item('lbl_preparacion');
 		$tab_1['lbl_familia']              = $this->lang_item('lbl_familia');
 		$tab_1['lbl_asignar_insumos']      = $this->lang_item('lbl_asignar_insumos');
-		$tab_1['select_insumos']            = $this->lang_item('select_insumos');
-		
+		$tab_1['select_insumos']           = $this->lang_item('select_insumos');
+		$tab_1['lbl_presentacion_insumo']  = $this->lang_item('lbl_presentacion_insumo');
 		$tab_1['multiselect_insumos']      = $list_insumos;
 		$tab_1['select_familias']          = $list_familias;
 		$tab_1['button_save']              = $btn_save;
 		$tab_1['button_reset']             = $btn_reset;
+
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1 ,true));
 		}

@@ -95,10 +95,10 @@
 	if(!function_exists('tool_tips_tpl')){
 		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $attr = array()){
 			$attr = array_2_string_format($attr);
-			$tool_tip ="<ul class='tooltips'>
-                       		<a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
-                    	</ul>";
-			
+			/*$tool_tip ="<ul class='tooltips'>
+                       		<a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='' >$value</a></li>
+                    	</ul>";*/
+			$tool_tip ="<a $attr title='$tool_tip'  >$value</a></li>";
 			return $tool_tip ;
 		}
 	}
@@ -163,9 +163,7 @@
 			if($data && $name && $value && $text){
 				foreach ($data as $option => $item) {
 					$option_value = "";
-					if($count==0){
-						$options[0]= $leyenda;
-					}
+
 					if(is_array($text)){
 						foreach ($text as $string) {
 							$option_value .= $item[$string].'-';

@@ -608,7 +608,7 @@ class ordenes extends Base_Controller {
 					$presentacion_x_embalaje = (substr($data_listado[$i]['presentacion_x_embalaje'], strpos($data_listado[$i]['presentacion_x_embalaje'], "." ))=='.000')?number_format($data_listado[$i]['presentacion_x_embalaje'],0):$data_listado[$i]['presentacion_x_embalaje'];
 					$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
 					$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
-								<td class="center">
+								<td class="center consecutivo">
 									<span name="consecutivo">'.($i+1).'</span>
 								</td>
 								<td>
@@ -721,9 +721,9 @@ class ordenes extends Base_Controller {
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
+		$tabData['estatus']	 		 		 = $this->lang_item("estatus",false);;
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
-		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
 		$tabData['list_proveedores']		 = $proveedores[0]['razon_social'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
 		$tabData['descripcion_value'] 		 = $detalle[0]['descripcion'];
@@ -745,6 +745,7 @@ class ordenes extends Base_Controller {
 		$tabData['style_table']				 = $style_table;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 		$tabData['moneda']					 = $moneda;
+		$tabData['estatus_value']  			 = $detalle[0]['estatus'].' - '.$detalle[0]['edit_timestamp'];
 		// Totales
 		$tabData['subtotal_value']			 = $moneda.' '.number_format($subtotal_value,2);
 		$tabData['descuento_value']			 = '- '.$moneda.' '.number_format($descuento_value,2);
@@ -766,6 +767,7 @@ class ordenes extends Base_Controller {
 	}
 	public function get_data_articulo(){
 		$moneda = $this->session->userdata('moneda');
+		$consecutivo = intval($this->ajax_post('consecutivo'))+1;
 		$id_compras_articulo_precios 	= $this->ajax_post('id_compras_articulo_precios');
 		$id_compras_orden 	= $this->ajax_post('id_compras_orden');
 		$sqlData =	array(
@@ -788,6 +790,9 @@ class ordenes extends Base_Controller {
 			$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$get_data[0]['id_compras_articulo_precios'].'" class="ico_eliminar fa fa-times" onclick="deshabilitar_orden_lisatdo('.$get_data[0]['id_compras_articulo_precios'].')" title="'.$this->lang_item("eliminar").'"></span>';
 			$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 			$table='<tr id="'.$get_data[0]['id_compras_articulo_precios'].'">
+						<td class="center consecutivo">
+									<span name="consecutivo">'.$consecutivo.'</span>
+								</td>
 						<td>
 							<span name="proveedor">'.$get_data[0]['nombre_comercial'].'</span>
 							<input type="hidden" value="'.$get_data[0]['id_compras_articulo_precios'].'" data-campo="id_compras_articulo_precios['.$get_data[0]['id_compras_articulo_precios'].']" id="idarticuloprecios_'.$get_data[0]['id_compras_articulo_precios'].'">
@@ -1004,7 +1009,7 @@ class ordenes extends Base_Controller {
 					);
 		$update = $this->db_model->db_update_data($sqldata);
 		if($update){
-			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$msg = sprintf($this->lang_item('orden_cerrada', false));
 			$json_respuesta = array(
 				 'id' 		=> 1
 				,'contenido'=> alertas_tpl('success', $msg ,false)
@@ -1031,7 +1036,7 @@ class ordenes extends Base_Controller {
 		$update = $this->db_model->db_update_data($sqldata);
 		
 		if($update){
-			$msg = sprintf($this->lang_item('msg_insert_success', false));
+			$msg = sprintf($this->lang_item('orden_cancelada', false));
 			$json_respuesta = array(
 				 'id' 		=> 1
 				,'contenido'=> alertas_tpl('success', $msg ,false)

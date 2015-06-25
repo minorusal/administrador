@@ -41,7 +41,11 @@
 }
 
 /* background */
-
+.chzn-container-multi .chzn-choices .search-choice{
+  background-color: #0096d2;
+  color: #fff;
+  opacity: 0.8;
+}
 body.loginpage,
 .ui-datepicker-title,
 .ui-timepicker-div .ui-widget-header, .ui-datepicker .ui-datepicker-header,

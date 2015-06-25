@@ -9,7 +9,7 @@ $lang['lbl_familia']             = 'Familia';
 $lang['lbl_asignar_insumos']             = 'Asignar Insumos';
 $lang['select_insumos']             = 'Aqui puede buscar los insumos que deseé integrar a la receta.';
 
-
+$lang['lbl_presentacion_insumo'] = 'Por favor especifique la resentacion del insumo que utilizara en la preparacion de esta la receta.';
 
 
 

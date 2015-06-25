@@ -33,7 +33,7 @@ class servicios_model extends Base_Model{
 					ORDER BY sr.id_administracion_servicio ASC
 					$limit
 					";
-					//print_debug($query);
+					
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

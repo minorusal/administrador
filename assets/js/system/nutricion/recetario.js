@@ -27,8 +27,8 @@ function load_content(uri, id_content){
 			  jQuery('#search-query').val(filtro).focus();
 			  tool_tips();
 			}else{
-				var chosen  = 'jQuery(".chzn-select").chosen();';
-				
+				imgLoader_clean('#a-'+id_content);
+				var chosen = 'jQuery(".chzn-select").chosen();';
 				jQuery('#a-'+id_content).html(data+include_script(chosen));
 
 			}

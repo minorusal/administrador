@@ -26,6 +26,11 @@ Created by: Mienard Lumaad (@themepixels)
 
 .chzn-container .chzn-results .highlighted 
 { background-color: #0866c6; }
+.chzn-container-multi .chzn-choices .search-choice{
+	background-color: #0866c6;
+	color: #fff;
+	opacity: 0.8;
+}
 /***** RESET BROWSER STYLE *****/
 /*******************************/
 .loading {

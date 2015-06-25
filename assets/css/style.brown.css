@@ -39,6 +39,11 @@
   border-color: rgba(255,255,255,0) rgba(255,255,255,0) #6c5c51 rgba(255,255,255,0);
 }
 /* background */
+.chzn-container-multi .chzn-choices .search-choice{
+  background-color: #6c5c51;
+  color: #fff;
+  opacity: 0.8;
+}
 
 body.loginpage,
 .ui-datepicker-title,

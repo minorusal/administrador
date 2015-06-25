@@ -4,6 +4,7 @@
             <tr>
                 <td class="width30">
                 <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
+                <input id="moneda" type="hidden" data-campo="moneda" value="{moneda}" />
                 <input id="estatus" type="hidden" data-campo="estatus" value="{estatus}" />
                     <label>{orden_num}:</label>
                 </td >
@@ -50,7 +51,7 @@
                     <label>{fecha_factura}:</label>
                 </td>
                 <td>
-                    <input type="text" id="fecha_factura" data-campo="fecha_factura" class="input-small">
+                    <input id="fecha_factura" name="fecha_factura" class="input-large fecha_factura requerido"/>
                 </td>
             </tr> 
        </table>
@@ -102,24 +103,33 @@
                     <p>{fecha_hoy}</p>
                 </td>
                 <td class="width15 right numlist">
-                      <strong>{subtotal}</strong>
+                    <strong>{subtotal}</strong>
                     <strong>{descuento}</strong>
                     <strong>{impuesto}</strong>
                 </td>
                 <td class="width20 right numlist">
-                    <strong>
-                        <input type="text" id="subtotal_final" value="0"data-campo="subtotal_final" onkeyup="calcula_totla_pagar()" class="input-small">
-                    </strong>
-                    <strong>
-                        <input type="text" id="descuento_final" value="0" data-campo="subtotal_final" onkeyup="calcula_totla_pagar()" class="input-small">
-                    </strong>
-                    <strong>
-                        <input type="text" id="impuesto_final" value="0"data-campo="subtotal_final" onkeyup="calcula_totla_pagar()" class="input-small">
-                    </strong>
+                    <span id="value_subtotal"><strong>0</strong></span>
+                    <span id="value_descuento"><strong>0</strong></span>
+                    <span id="value_impuesto"><strong>0</strong></span>
+                    <input id="subtotal" type="hidden" data-campo="subtotal" value="{subtotal_data}" />
+                    <input id="descuento_total" type="hidden" data-campo="descuento_total" value="{descuento_data}" />
+                    <input id="impuesto_total" type="hidden" data-campo="impuesto_total" value="{impuesto_data}" />
+                    <input id="total" type="hidden" data-campo="total" value="{total_data}" />
                 </td>
             </tr>
         </tbody>
       </table>   
+
+      <table class="table invoice-table" >
+        <tbody>
+            <tr>
+                <td class="width65 msg-invoice" style="border: 1px solid #ddd;">
+                    <h4><strong>{observaciones}:</strong></h4>
+                    <textarea id="comentario" data-campo="comentario" class="span8" style="resize: vertical; height: 100px;"></textarea>
+                </td>
+            </tr>
+        </tbody>
+      </table>  
 
       <div class="amountdue" >
         <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;"><span></h1> <br />

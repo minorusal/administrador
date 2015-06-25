@@ -4,8 +4,7 @@ class ciclos_model extends Base_Model{
 		parent::__construct();
 	}
 
-	//Función que obtiene toda la información de la tabla av_administracion_areas
-	/*public function db_get_data($data=array())	{		
+	public function db_get_data($data = array()){
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
@@ -13,20 +12,26 @@ class ciclos_model extends Base_Model{
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (ar.area like '%$filtro%' OR
-									ar.clave_corta like '%$filtro%' OR
-									ar.descripcion like '%$filtro%')" : "";
+		$filtro 		= ($filtro) ? "AND (cl.ciclo like '%$filtro%' OR')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
-		$query = "	SELECT *
+		$query = "	SELECT
+						cl.id_nutricion_ciclos
+						,cl.ciclo
+						,cl.id_sucursal
+						,su.sucursal
+						,su.clave_corta
+						,su.id_sucursal
 					FROM $tbl[nutricion_ciclos] cl
-					WHERE ar.activo = 1 $filtro
-					ORDER BY ar.id_administracion_areas ASC
+					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = cl.id_sucursal
+					WHERE cl.activo = 1 AND
+						  su.id_sucursal = $data[buscar]
+					ORDER BY cl.id_nutricion_ciclos ASC
 					$limit
 					";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}*/
+	}
 }

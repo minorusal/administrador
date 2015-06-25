@@ -99,6 +99,7 @@ class entradas_recepcion extends Base_Controller{
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
+		//dump_var($js['js']);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset=0){
@@ -254,10 +255,8 @@ class entradas_recepcion extends Base_Controller{
 								<span class="add-on">'.$moneda.'</span> '.number_format($data_listado[$i]['costo_sin_impuesto'],2).'
 							</td>
 							<td class="right">
-								<div class="input-prepend input-append">
-									<input type="text" '.$readonly.' id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_costo2('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 40px;"/>
-									<span class="add-on">Pz</span>
-								</div>
+									<input type="hidden" id="cantidad_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['cantidad'].'" data-campo="cantidad['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+									<span>'.number_format($data_listado[$i]['cantidad'],2).' Pz</span>
 							</td>
 							<td class="right">
 								<input type="hidden" name="costo_x_cantidad_hidden[]" id="costo_x_cantidad_hidden' .$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['costo_x_cantidad'].'" data-campo="costo_x_cantidad_hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
@@ -265,10 +264,8 @@ class entradas_recepcion extends Base_Controller{
 								<span id="costo_x_cantidad'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['costo_x_cantidad'],2).'</span>
 							</td>
 							<td class="right">
-								<div class="input-prepend input-append">
-				                  	<input type="text" '.$readonly.' name="descuento[]" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']" class="input-small" onkeyup="calcula_subtotal('.$data_listado[$i]['id_compras_articulo_precios'].')" style="width: 25px;"  maxlength="3"/>
-				                 	<span class="add-on">%</span>
-				                </div>
+				                  	<input type="hidden" name="descuento[]" id="descuento_'.$data_listado[$i]['id_compras_articulo_precios'].'" value="'.$data_listado[$i]['descuento'].'" data-campo="descuento['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
+				                 	<span>'.number_format($data_listado[$i]['descuento'],2).' %</span>
 							</td>
 							<td class="right">
 								<input type="hidden" class="subtotal" name="subtotal__hidden[]" id="subtotal__hidden'.$data_listado[$i]['id_compras_articulo_precios'].'" value ="'.$data_listado[$i]['subtotal'].'"data-campo="subtotal__hidden['.$data_listado[$i]['id_compras_articulo_precios'].']"/>
@@ -292,7 +289,7 @@ class entradas_recepcion extends Base_Controller{
 								<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['total'],2).'</span>
 								</strong>
 							</td>
-							<td class="center"><input type="checkbox" name="aceptar" value="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+							<td class="center"><input type="checkbox" name="aceptar[]" value="'.$data_listado[$i]['id_compras_articulo_precios'].'">
 							</td>
 						</tr>';
 			}
@@ -336,6 +333,9 @@ class entradas_recepcion extends Base_Controller{
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
+		
+		$tabData['aceptar_orden']			 = $this->lang_item("aceptar_orden",false);
+		$tabData['devolucion_orden']		 = $this->lang_item("devolucion_orden",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];

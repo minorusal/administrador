@@ -102,7 +102,6 @@ function calculos(){
 	var descuento=0;
 	var impuesto=0;
 	var total =0;
-	var valor=[];
 	var valor_2=[];
 	var valor_3=[];
 	var valor_4=[];
@@ -111,12 +110,11 @@ function calculos(){
 	var result_2;
 	var result_3;
 	jQuery('input[name="aceptar[]"]:checked').each(function() {
-		valor.push(parseFloat(jQuery('#subtotal__hidden'+jQuery(this).val()).val()));
 		valor_2.push(parseFloat(jQuery('#descuento_'+jQuery(this).val()).val()));
 		valor_3.push(parseFloat(jQuery('#costo_x_cantidad_hidden'+jQuery(this).val()).val()));
 		valor_4.push(parseFloat(jQuery('#valor_hidden_impuesto_'+jQuery(this).val()).val()));
 	});
-	jQuery(valor).each(function(index,value){
+	jQuery(valor_3).each(function(index,value){
 		result=parseFloat(value);
 		subtotal= subtotal+result;
 	});

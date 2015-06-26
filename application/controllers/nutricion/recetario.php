@@ -172,7 +172,7 @@ class recetario extends Base_Controller{
 						,'value' 	=> 'id_compras_articulo'
 						,'text' 	=> array('clave_corta','articulo')
 						,'name' 	=> "lts_insumos_insert"
-						,'class' 	=> "requerido chosen-rtl"
+						,'class' 	=> "requerido  "
 					);
 
 		$list_insumos  = multi_dropdown_tpl($insumos);
@@ -202,6 +202,9 @@ class recetario extends Base_Controller{
 		}
 	}
 
+	public function insert(){
+
+	}
 	
 
 	public function upload_photo(){

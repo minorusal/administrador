@@ -59,7 +59,7 @@ $autoload['libraries'] = array(	'database',
 								'session', 
 								'table',
 								'parser'
-								,'config_vars'
+								,'config_vars' 
 								,'impresion'
 								,'barcode'
 								,'codeqr'

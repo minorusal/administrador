@@ -70,6 +70,7 @@ function actualizar(){
 		btn.attr('disabled','disabled');
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
+
   		objData['incomplete'] = values_requeridos();
 		jQuery.ajax({
 			type:"POST",

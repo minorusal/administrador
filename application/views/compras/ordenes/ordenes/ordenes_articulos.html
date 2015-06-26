@@ -139,13 +139,17 @@
                     <input id="subtotal" type="hidden" data-campo="subtotal" value="{subtotal_data}" />
                     <input id="descuento_total" type="hidden" data-campo="descuento_total" value="{descuento_data}" />
                     <input id="impuesto_total" type="hidden" data-campo="impuesto_total" value="{impuesto_data}" />
-                    <input id="total" type="hidden" data-campo="total" value="{total_data}" />
+                    <input id="total_data" type="hidden" data-campo="total_data" value="{total_data}" />
                 </td>
             </tr>
         </tbody>
       </table>        
       <div class="amountdue" >
-        <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;"><strong>{total_value}</strong></span></h1> <br/>
+        <h1>
+            <span>{a_pagar}:</span>
+            <span id="value_total" style="font-size:.7em;"><strong>{total_value}</strong>
+            </span>
+        </h1> <br/>
         <span id="cerrar" class="btn btn-primary btn-large" onclick="cerrar_orden_listado();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{cerrar_orden}</span>
         <br/>
         <span id="cancelar" class="btn btn-primary btn-large" onclick="cancelar_orden_listado();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{cancelar_orden}</span>

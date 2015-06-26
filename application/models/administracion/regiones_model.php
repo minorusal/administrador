@@ -81,10 +81,11 @@ class regiones_model extends Base_Model{
 
 	/*Inserta informacion en la tabla av_administracion_entidad_region*/
 	public function db_insert_entidades($data = array()){
+		//print_debug($data);
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		$query = $this->db->insert_string($tbl['administracion_regiones'], $data);
+		$query = $this->db->insert_string($tbl['administracion_entidad_region'], $data);
 		$query = $this->db->query($query);
 		if($query)
 			return $query;

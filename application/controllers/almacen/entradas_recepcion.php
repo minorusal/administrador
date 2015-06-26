@@ -99,7 +99,7 @@ class entradas_recepcion extends Base_Controller{
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
-		//dump_var($js['js']);
+		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset=0){
@@ -289,7 +289,7 @@ class entradas_recepcion extends Base_Controller{
 								<span id="total_'.$data_listado[$i]['id_compras_articulo_precios'].'">'.number_format($data_listado[$i]['total'],2).'</span>
 								</strong>
 							</td>
-							<td class="center"><input type="checkbox" name="aceptar[]" value="'.$data_listado[$i]['id_compras_articulo_precios'].'">
+							<td class="center"><input type="checkbox" name="aceptar[]"  onclick="calculos('.$data_listado[$i]['id_compras_articulo_precios'].')"value="'.$data_listado[$i]['id_compras_articulo_precios'].'">
 							</td>
 						</tr>';
 			}
@@ -333,7 +333,7 @@ class entradas_recepcion extends Base_Controller{
 		$tabData['cancelar_orden']			 = $this->lang_item("cancelar_orden",false);
 		$tabData['presentacion']			 = $this->lang_item("presentacion",false);
 		$tabData['consecutivo']				 = $this->lang_item("consecutivo",false);
-		
+		$tabData['moneda']				 	 = $moneda;
 		$tabData['aceptar_orden']			 = $this->lang_item("aceptar_orden",false);
 		$tabData['devolucion_orden']		 = $this->lang_item("devolucion_orden",false);
 		//DATA

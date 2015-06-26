@@ -609,6 +609,7 @@ class ordenes extends Base_Controller {
 					$embalaje = ($data_listado[$i]['embalaje'])?$data_listado[$i]['embalaje'].' CON ':'';
 					$table.='<tr id="'.$data_listado[$i]['id_compras_articulo_precios'].'">
 								<td class="center consecutivo">
+									<input type="hidden" id="id_compras_articulo_precios['.$data_listado[$i]['id_compras_articulo_precios'].']"
 									<span name="consecutivo">'.($i+1).'</span>
 								</td>
 								<td>
@@ -932,7 +933,6 @@ class ordenes extends Base_Controller {
 					5 	=> $valor_hidden_impuesto,
 					6  	=> $total_hidden
 				);
-		
 		$keys=array_keys($id_compras_articulo_precios);
 		for($i=0; count($id_compras_articulo_precios)>$i;$i++){
 			for($j=0; count($array)>$j;$j++){
@@ -990,7 +990,7 @@ class ordenes extends Base_Controller {
 		$subtotal 	= $this->ajax_post('subtotal');
 		$descuento 	= $this->ajax_post('descuento_total');
 		$impuesto 	= $this->ajax_post('impuesto_total');
-		$total 		= $this->ajax_post('total');
+		$total 		= $this->ajax_post('total_data');
 		if($estatus==3){
 			$valor_estatus=4;
 		}

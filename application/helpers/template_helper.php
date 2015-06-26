@@ -96,9 +96,9 @@
 		function tool_tips_tpl($value, $tool_tip = '', $pocision = 'right', $attr = array()){
 			$attr = array_2_string_format($attr);
 			/*$tool_tip ="<ul class='tooltips'>
-                       		<a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='' >$value</a></li>
+                       		<li><a $attr data-placement='$pocision' data-rel='tooltip'  data-original-title='$tool_tip' >$value</a></li>
                     	</ul>";*/
-			$tool_tip ="<a $attr title='$tool_tip'  >$value</a></li>";
+			$tool_tip ="<span><a $attr title='$tool_tip'>$value</a></span>";
 			return $tool_tip ;
 		}
 	}
@@ -174,10 +174,10 @@
 					}					
 					$count++;
 				}
-				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
-			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class='input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 			return $selected;
 		}
 	}

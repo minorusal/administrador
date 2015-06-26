@@ -70,6 +70,7 @@ function actualizar(){
 		btn.attr('disabled','disabled');
   		// Obtiene campos en formulario
   		var objData = formData('#formulario');
+
   		objData['incomplete'] = values_requeridos();
 		jQuery.ajax({
 			type:"POST",
@@ -294,14 +295,6 @@ function calcula_valores_finales(id){
 	var subtotal=0;
 	var descuento=0;
 	var impuesto=0;
-	//CALCULA EL SUBTOTAL
-	jQuery('[name^=subtotal__hidden]').each(function(){
-		valor.push(parseFloat(jQuery(this).val()));
-	});
-	jQuery(valor).each(function(index,value){
-		result=parseFloat(value);
-		subtotal= subtotal+result;
-	});
 	//CALCULA EL DESCUENTO
 	jQuery('[name^=descuento]').each(function(){
 		valor_2.push(parseFloat(jQuery(this).val()));
@@ -317,6 +310,16 @@ function calcula_valores_finales(id){
 		descuento=descuento+result_2;
 		}
 	});
+
+	//CALCULA EL SUBTOTAL
+	/*jQuery('[name^=subtotal__hidden]').each(function(){
+		valor.push(parseFloat(jQuery(this).val()));
+	});*/
+	jQuery(valor_4).each(function(index,value){
+		result=parseFloat(value);
+		subtotal= subtotal+result;
+	});
+
 	//CALCULA EL IMPUESTO
 	jQuery('[name^=valor_hidden_impuesto]').each(function(){
 		valor_3.push(parseFloat(jQuery(this).val()));

@@ -96,12 +96,13 @@ function articulos(id_compras_orden){
         }
     });
 }
-function calculos(){
+function calculos(id){
 	var moneda = jQuery('#moneda').val();
 	var subtotal=0;
 	var descuento=0;
 	var impuesto=0;
 	var total =0;
+	var cont=0;
 	var valor_2=[];
 	var valor_3=[];
 	var valor_4=[];
@@ -109,6 +110,7 @@ function calculos(){
 	var result;
 	var result_2;
 	var result_3;
+	var functions = [];
 	jQuery('input[name="aceptar[]"]:checked').each(function() {
 		valor_2.push(parseFloat(jQuery('#descuento_'+jQuery(this).val()).val()));
 		valor_3.push(parseFloat(jQuery('#costo_x_cantidad_hidden'+jQuery(this).val()).val()));
@@ -138,7 +140,49 @@ function calculos(){
 	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ numeral(impuesto).format('0,0.00')+'</strong>');
 	jQuery('#total_data').val(total);
 	jQuery('#value_total').html('<strong>'+ moneda+' '+ numeral(total).format('0,0.00')+'</strong>');
-
+	jQuery('input[name="aceptar[]"]').each(function() {
+		if(jQuery(this).is(':checked')){
+		}else{cont++;}
+	});
+	if(cont>0){
+		jQuery('#comentario').addClass('requerido');
+	}else{
+		jQuery('#comentario').removeClass('requerido');
+	}
+	if(jQuery('#listado_'+id).is(':checked')){
+		var objData = formData('#formulario');
+	  	objData['incomplete'] = values_requeridos();
+		jQuery.ajax({
+			type:"POST",
+			url: path()+"almacen/entradas_recepcion/modal",
+			dataType: "json",
+			data : {id:id},
+			beforeSend : function(){
+				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			},
+			success : function(data){
+				var promp_content = {
+								content_01:{
+									html:data,
+									buttons: { }
+								}
+							};
+				jQuery.prompt(promp_content);
+				//setTimeout("clean_form_login()",60000);
+				functions.push('calendar_actual("caducidad")');
+				jQuery('#fecha').html(include_script(functions));
+			}
+		});
+	}
+}
+function aceptar_lote(id){
+	var lote 	  = jQuery('#lote').val();
+	var caducidad = jQuery('#caducidad').val();
+	var u_m 	  = jQuery('#u_m').val();
+	jQuery('#lote_val_'+id).val(lote);
+	jQuery('#caducidad_val_'+id).val(caducidad);
+	jQuery('#u_m_val_'+id).val(u_m);
+	jQuery.prompt.close();
 }
 function calcula_totla_pagar(){
 	var total;
@@ -148,18 +192,28 @@ function calcula_totla_pagar(){
 	total=parseFloat((subtotal-descuento))+parseFloat(impuesto);
 	jQuery('#value_total').html(total);
 }
-function aceptar_orden(){
-	var cont=0;
-	jQuery('input[name="aceptar[]"]').each(function() {
-		if(jQuery(this).is(':checked')){
+function recibir_orden(){
+	jQuery('#mensajes').hide();	
+	//var fecha_factura = jQuery('#fecha_factura').val();	
+	// Obtiene campos en formulario
+  	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"almacen/entradas_recepcion/insert",
+		dataType: "json",
+		data : objData,
+		beforeSend : function(){
+			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+		},
+		success : function(data){
+			if(data.id==1){
+				clean_formulario();
+			}
+			jQuery("#registro_loader").html('');
+		    jQuery("#mensajes").html(data.contenido).show('slow');
 		}
-		else{cont++;}
 	});
-	if(cont>0){
-		jQuery('#comentario').addClass('requerido');
-	}else{
-		jQuery('#comentario').removeClass('requerido');
-	}
 }
 function volver_orden(){
 	

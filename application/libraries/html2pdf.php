@@ -47,14 +47,14 @@ class html2pdf extends config_vars{
 	/**
 	* Crea un documento PDF con contenido HTML recibido
 	* $data [] : 
-		html 	=> Contenido del documento
-		output 	=> Tipo de salida al crear el documento (I, D, F, FD, S, E)
-		archivo => Nombre de archivo PDF (sin extensión .pdf)
+	*	html 	=> Contenido del documento
+	*	output 	=> Tipo de salida al crear el documento (I, D, F, FD, S, E)
+	*	archivo => Nombre de archivo PDF (sin extensión .pdf)
 	* @return $respuesta [] :
-		pdf 	=> Contenido del pdf (para output: E & S)
-		path 	=> Ruta local en donde se creó el archivo pdf
-		uri 	=> Ruta URL para accesar al documento creado
-		success	=> true / false
+	*	pdf 	=> Contenido del pdf (para output: E & S)
+	*	path 	=> Ruta local en donde se creó el archivo pdf
+	*	uri 	=> Ruta URL para accesar al documento creado
+	*	success	=> true / false
 	*/
 		#Contenido HTML
 		// dump_var($this->cfg['base_url'].$this->cfg['path_tmp']);

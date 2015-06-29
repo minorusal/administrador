@@ -35,17 +35,20 @@ function load_content(uri, id_content){
 function load_ciclos(id_sucursal){
 	jQuery.ajax({
         type: "POST",
-        url: path()+"nutricion/ciclos/cargar_parametros_ciclos",
+        url: path()+"nutricion/ciclos/cargar_ciclos",
         dataType: 'json',
         data: {id_sucursal:id_sucursal},
         beforeSend : function(){
         	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
-        	/*var chosen  = 'jQuery(".chzn-select").chosen();';
-            jQuery('#a-'+id_content).html(data+include_script(chosen));*/
-        	jQuery('#contenido_ciclos').html(data);
-        	jQuery('#contenido_ciclos').show('slow');
+          if(data == 0){
+            
+          }else{
+            var chosen  = 'jQuery(".chzn-select").chosen();';
+            jQuery('#ciclo').html(data+include_script(chosen));
+            jQuery('#ciclo').show('slow');
+          }
         }
     });
 }

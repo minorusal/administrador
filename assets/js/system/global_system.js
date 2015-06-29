@@ -327,10 +327,12 @@ function values_requeridos(){
     var items_vacios = 0;
     jQuery(".requerido").each(function(){ 
         if(jQuery(this).prop('tagName')=='SELECT'){
-            if(jQuery(this).hasClass('multiple_selected')){
-                if(jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
-                }else{
-                   items_vacios++; 
+            if(jQuery(this).hasAttr('multiple')){
+                if(!jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
+                    items_vacios++; 
+                }
+                if(!jQuery("[name='"+jQuery(this).attr('name')+"'] option:selected").length>0){
+                    items_vacios++; 
                 }
             }else{
                var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
@@ -362,38 +364,7 @@ function values_numericos(){
 }
 
 function allow_only_numeric(){
-    var punto = 0;
-    jQuery('#formulario .numerico').each(function(){
-        jQuery(this).keydown(function(event){
-            var keycode = (event.keyCode ? event.keyCode : event.which);
-            
-            if(keycode == 8 || keycode == 9 || keycode == 190 || keycode == 110){
-                jQuery(this).removeAttr( 'style' );
-                return true;
-            }
-            if(keycode >= 97 && keycode <= 105){
-                jQuery(this).removeAttr( 'style' );
-                return true;
-            }
-             if(keycode >= 112 && keycode <= 123){
-                jQuery(this).removeAttr( 'style' );
-                return true;
-            }
-            if(keycode < 48 || keycode > 57){
-                jQuery(this).css({"border-color": "#bb2f0e", 
-                                  "border-weight":"1px", 
-                                  "border-style":"solid"});
-                jQuery(this).blur(function(){
-                     jQuery(this).removeAttr( 'style' );
-                });
-                return false;
-            }
-            else{
-                jQuery(this).removeAttr( 'style' );
-                return true;
-            }  
-        });
-    });
+    jQuery('.numerico').numeric('.'); 
 }
  
 

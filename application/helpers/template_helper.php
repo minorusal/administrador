@@ -138,6 +138,10 @@
 				}
 				$selected = "<span class='formwrapper'>".form_dropdown($name, $options, $selected, " class='chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
+			}else{
+				//Crea un combo-box vacio
+				$selected = "<span class='formwrapper'>".form_dropdown("class='chzn-container chzn-container-single chzn-select chzn-done' data-campo='$name' ")."</span>";
+				return $selected;
 			}
 			return false;
 		}

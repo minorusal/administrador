@@ -28,6 +28,7 @@ class ciclos extends Base_Controller{
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','ciclos');
 		$this->load->model('administracion/sucursales_model','sucursales');
 		$this->load->model('administracion/servicios_model','servicios');
+		$this->load->model('nutricion/tiempos_model','tiempos');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -91,9 +92,8 @@ class ciclos extends Base_Controller{
 
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
-		$widget    = '<h4 class="widgettitle">Conformacion de Ciclos</h4>';
 		$sqlData = array(
-			 'buscar' => ''
+			 'buscar' => 0
 			,'offset' => 0
 			,'limit' => 0
 			);
@@ -108,8 +108,43 @@ class ciclos extends Base_Controller{
 											'params_type' => array(false))
 					);
 		$sucursales = dropdown_tpl($dropdown_sucursales);
+		
+		$dropdown_ciclos = array(
+				 
+				'value' 	=> 'id_nutricion_ciclos'
+				,'text' 	=> array('ciclo')
+				,'name' 	=> "lts_ciclos");
+		$ciclos = dropdown_tpl($dropdown_ciclos);
+		
+		$dropdown_servicios = array(
+				 'data'     => $this->servicios->db_get_data($sqlData)
+				,'value' 	=> 'id_administracion_servicio'
+				,'text' 	=> array('cv_servicio','servicio')
+				,'name' 	=> "lts_servicios"
+								);
+		$servicios = dropdown_tpl($dropdown_servicios);
+		
+		$dropdown_tiempo = array(
+				 'data'     =>$this->tiempos->db_get_data($sqlData)
+				,'value' 	=> 'id_nutricion_tiempo'
+				,'text' 	=> array('clave_corta','tiempo')
+				,'name' 	=> "lts_tiempos"
+								);
+		$tiempos = dropdown_tpl($dropdown_tiempo);
+
+		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+		
+		$tab_1['lbl_ciclos']     = $this->lang_item('lbl_ciclos');
+		$tab_1['lbl_servicios']  = $this->lang_item('lbl_servicios');
+		$tab_1['lbl_tiempos']    = $this->lang_item('lbl_tiempos');
+		$tab_1['list_ciclos']    = $ciclos;
+		$tab_1['list_servicios'] = $servicios;
+		$tab_1['list_tiempos']   = $tiempos;
+
+		$tab_1['btn_save']     	   = $btn_save;
+		$tab_1['btn_reset']    	   = $btn_reset;
 		$tab_1['list_sucursales']  = $sucursales;
-		$tab_1['title']            = $widget;
 		$tab_1['lbl_sucursal']     = $this->lang_item('lbl_sucursal');
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
@@ -118,7 +153,7 @@ class ciclos extends Base_Controller{
 		}
 	}
 
-	public function cargar_parametros_ciclos(){
+	public function cargar_ciclos(){
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
@@ -127,32 +162,15 @@ class ciclos extends Base_Controller{
 							,'offset' => 0
 							,'limit' => 0
 							);
+			$data_ciclo = $this->ciclos->db_get_data($sqlData);
 			$dropdown_ciclos = array(
-					 'data'     => $this->ciclos->db_get_data($sqlData)
+					 'data'     => $data_ciclo
 					,'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
-					,'name' 	=> "lts_ciclos"
-									);
+					,'name' 	=> "lts_ciclos");
 			$ciclos = dropdown_tpl($dropdown_ciclos);
-			print_debug($dropdown_ciclos);
-			$dropdown_servicios = array(
-					 'data'     => $this->servicios->db_get_data($sqlData)
-					,'value' 	=> 'id_administracion_servicio'
-					,'text' 	=> array('cv_servicio','servicio')
-					,'name' 	=> "lts_servicios"
-									);
-			$servicios = dropdown_tpl($dropdown_servicios);
-
-			$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
-			$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 			
-			$data['lbl_ciclos']     = $this->lang_item('lbl_ciclos');
-			$data['lbl_servicios']  = $this->lang_item('lbl_servicios');
-			$data['lbl_tiempos']    = $this->lang_item('lbl_tiempos');
 			$data['list_ciclos']    = $ciclos;
-			$data['list_servicios'] = $servicios;
-			$data['btn_save']       = $btn_save;
-			$data['btn_reset']      = $btn_reset;
 		}
 		
 		if($this->ajax_post(false)){

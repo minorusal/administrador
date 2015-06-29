@@ -33,7 +33,6 @@ function load_content(uri, id_content){
 }
 
 function load_ciclos(id_sucursal){
-  alert(id_aucursal);
 	jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/ciclos/cargar_ciclos",
@@ -43,10 +42,13 @@ function load_ciclos(id_sucursal){
         	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
-        	/*var chosen  = 'jQuery(".chzn-select").chosen();';
-          jQuery('#a-'+id_content).html(data+include_script(chosen));*/
-        	jQuery('#ciclo').html(data);
-        	jQuery('#ciclo').show('slow');
+          if(data == 0){
+            
+          }else{
+            var chosen  = 'jQuery(".chzn-select").chosen();';
+            jQuery('#ciclo').html(data+include_script(chosen));
+            jQuery('#ciclo').show('slow');
+          }
         }
     });
 }

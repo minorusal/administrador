@@ -92,7 +92,6 @@ class ciclos extends Base_Controller{
 
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
-		$widget    = '<h4 class="widgettitle">Conformacion de Ciclos</h4>';
 		$sqlData = array(
 			 'buscar' => 0
 			,'offset' => 0
@@ -109,10 +108,10 @@ class ciclos extends Base_Controller{
 											'params_type' => array(false))
 					);
 		$sucursales = dropdown_tpl($dropdown_sucursales);
-		$sqlData['buscar'] = 1;
+		
 		$dropdown_ciclos = array(
-				 'data'     => $this->ciclos->db_get_data($sqlData)
-				,'value' 	=> 'id_nutricion_ciclos'
+				 
+				'value' 	=> 'id_nutricion_ciclos'
 				,'text' 	=> array('ciclo')
 				,'name' 	=> "lts_ciclos");
 		$ciclos = dropdown_tpl($dropdown_ciclos);
@@ -143,10 +142,9 @@ class ciclos extends Base_Controller{
 		$tab_1['list_servicios'] = $servicios;
 		$tab_1['list_tiempos']   = $tiempos;
 
-		$tab_1['btn_save']     = $btn_save;
-		$tab_1['btn_reset']    = $btn_reset;
+		$tab_1['btn_save']     	   = $btn_save;
+		$tab_1['btn_reset']    	   = $btn_reset;
 		$tab_1['list_sucursales']  = $sucursales;
-		$tab_1['title']            = $widget;
 		$tab_1['lbl_sucursal']     = $this->lang_item('lbl_sucursal');
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1,true));

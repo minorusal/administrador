@@ -7,6 +7,8 @@ $lang['lbl_porciones']           = 'Porciones';
 $lang['lbl_preparacion']         = 'Preparación';
 $lang['lbl_familia']             = 'Familia';
 $lang['lbl_asignar_insumos']        = 'Asignar Insumos';
+$lang['lbl_editar_porciones']    = 'Editar Porciones';
+$lang['lbl_cantidad']           = 'Cantidad';
 $lang['select_insumos']             = 'Aqui puede buscar los insumos que deseé integrar a la receta.';
 $lang['lbl_presentacion_insumo']    = 'Por favor especifique la resentacion del insumo que utilizara en la preparacion de esta la receta.';
 

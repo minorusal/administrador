@@ -8,8 +8,11 @@ class recetario_model extends Base_Model{
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
-		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$aplicar_limit 	= (array_key_exists('aplicar_limit', $data)) ? $data['aplicar_limit'] : false;
+		$unique         = (array_key_exists('unique', $data) ? $data['unique'] : false);
+
 		
+		$unique = ($unique) ? "AND r.id_nutricion_receta = $unique" : "";
 		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
 									r.receta like '%$filtro%' OR
 									r.clave_corta like '%$filtro%' OR
@@ -17,10 +20,49 @@ class recetario_model extends Base_Model{
 									r.preparacion like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
-		$query = "	SELECT *
+		$query = "	SELECT 
+						f.familia
+						,f.id_nutricion_familia
+						,r.*
 					FROM $tbl[nutricion_recetas] r
 					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
-					WHERE r.activo = 1 $filtro
+					WHERE r.activo = 1 $unique $filtro 
+					$limit 
+					";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+
+	public function get_data_unique($data = array()){	
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (array_key_exists('aplicar_limit', $data)) ? $data['aplicar_limit'] : false;
+		$unique         = (array_key_exists('unique', $data) ? $data['unique'] : false);
+
+		
+		$unique = ($unique) ? "AND r.id_nutricion_receta = $unique" : "";
+		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
+									r.receta like '%$filtro%' OR
+									r.clave_corta like '%$filtro%' OR
+									r.porciones like '%$filtro%' OR
+									r.preparacion like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		//Query
+		$query = "	SELECT 
+						f.familia
+						,f.id_nutricion_familia
+						,r.*
+						,ri.id_compras_articulo
+					FROM $tbl[nutricion_recetas] r
+					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
+					LEFT JOIN $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					WHERE r.activo = 1 $unique $filtro 
 					$limit 
 					";
       	$query = $this->db->query($query);
@@ -51,7 +93,24 @@ class recetario_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}	
+	}
+	public function insert_receta($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['nutricion_recetas'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['nutricion_recetas'], $data, true);
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+	public function insert_receta_articulos($data= array())	{
+		$tbl = $this->tbl;
+		$query = $this->db->insert_batch($tbl['nutricion_recetas_articulos'], $data);
+		
+	}
 }
 
 ?>

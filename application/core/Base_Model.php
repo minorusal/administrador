@@ -60,6 +60,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['nutricion_familias'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_familias'];
 		
 		$this->tbl['nutricion_recetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas'];
+		$this->tbl['nutricion_recetas_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas_articulos'];
 		$this->tbl['nutricion_tiempos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_tiempos'];
 		$this->tbl['nutricion_valores_nutricionales'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_valores_nutricionales'];
 		$this->tbl['ventas_clientes'] = $this->db2.'.'.$this->vars->db['db2_tbl_ventas_clientes'];
@@ -74,13 +75,7 @@ class Base_Model extends CI_Model {
 
 
 	public function last_id(){
-		$last_id = $this->db->insert_id();
-		$query   = "SELECT id_row 
-		          FROM ".$this->tbl['administracion_movimientos']."
-		          WHERE id_administracion_movimientos=$last_id";
-		$query  = $this->db->query($query);
-		$result =  $query->result_array();
-		return $result[0]['id_row'];
+		return $this->db->insert_id();
 	}
 	public function row_exist($table, $row, $debug=false){
     	$this->db->select();
@@ -127,7 +122,7 @@ class Base_Model extends CI_Model {
 	    	return false;
 	    }
     }
-    public function insert_item($tbl, $data = array()){
+    public function insert_item($tbl, $data = array(), $last_id = false){
    		if(isset($data['id_usuario_reg'],$data)){unset($data['id_usuario']);}else{$data['id_usuario'];}
     	$insert  = $this->db->insert_string($tbl, $data);
     	$insert  = $this->db->query($insert);
@@ -146,6 +141,9 @@ class Base_Model extends CI_Model {
 	    	$log   = $this->db->query($log);
     	}else{
     		$insert = false;
+    	}
+    	if($last_id){
+    		return $id_row;
     	}
     	return $insert;
     }

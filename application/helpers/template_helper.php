@@ -147,6 +147,7 @@
 		function multi_dropdown_tpl($params=array()){			
 			if(!empty($params)){
 				$data 		= (isset($params['data']))?$params['data']:false;
+				
 				$selected 	= (isset($params['selected']))?$params['selected']:'';
 				$value 		= (isset($params['value']))?$params['value']:false;
 				$text 		= (isset($params['text']))?$params['text']:false;
@@ -161,6 +162,8 @@
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
 			if($data && $name && $value && $text){
+				
+				
 				foreach ($data as $option => $item) {
 					$option_value = "";
 
@@ -174,6 +177,8 @@
 					}					
 					$count++;
 				}
+
+
 				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
@@ -351,6 +356,43 @@
 		              );
 		}
 	}
-	
-		
+	if(!function_exists('toggle_modal_tpl')){
+		function toggle_modal_tpl($arg_identy, $header= array(), $body= array(), $footer=array(), $static= false){
+			
+			if($static){
+				$backdrop = 'data-backdrop="static"';
+				$close = '';
+			}else{
+				$backdrop = '';
+				$close = '<button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>';
+			}
+
+			$id_header = (array_key_exists('id', $header))? 'id="'.$header['id'].'"' : '';
+			$header    = (array_key_exists('html', $header))? $header['html'] : 'Toggle Modal';
+			
+			$id_body   = (array_key_exists('id', $body))? 'id="'.$body['id'].'"' : ''; 
+			$body      = (array_key_exists('html', $body))? $body['html'] : '';
+
+			$id_footer = (array_key_exists('id', $footer))? 'id="'.$footer['id'].'"' : '';  
+			$footer    = (array_key_exists('html', $footer))? $footer['html'] : '';
+			
+			$modal ='
+					<div aria-hidden="true" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
+						
+						<div class="modal-header btn-primary" '.$id_header.'>
+							'.$close.'
+							<h3 id="myModalLabel">'.$header.'</h3>
+						</div>
+
+						<div  class="modal-body" '.$id_body.'>
+							'.$body.'
+						</div>
+
+						<div class="modal-footer" '.$id_footer.'>
+							'.$footer.'
+						</div>
+					</div>';
+			return $modal;	
+		}	
+	}
 ?>

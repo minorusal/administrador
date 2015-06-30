@@ -131,8 +131,11 @@
 				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
 				$event      = ($event) ? $event : ''; 
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
+
 				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: '-----';
+
 			}
+			//print_debug($params['leyenda']);
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
 			if($data && $name && $value && $text){

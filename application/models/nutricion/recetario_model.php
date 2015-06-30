@@ -35,6 +35,18 @@ class recetario_model extends Base_Model{
 		}	
 	}
 
+	//Función que obtiene las recetas filtradas por familias
+	public function get_data_recetas_x_familia($id_familia){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
 	public function get_data_unique($data = array()){	
 		// DB Info		
 		$tbl = $this->tbl;

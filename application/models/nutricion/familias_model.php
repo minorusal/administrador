@@ -18,7 +18,7 @@ class familias_model extends Base_Model{
 		$query = "	SELECT *
 					FROM $tbl[nutricion_familias] fa
 					WHERE fa.activo = 1 $filtro
-					GROUP BY fa.id_nutricion_familia ASC
+					ORDER BY fa.id_nutricion_familia ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -26,6 +26,7 @@ class familias_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	 
 
 	/*Trae la información para el formulario de edición de la tabla av_nutricion_familias*/
 	public function get_orden_unico_familia($id_nutricion_familia){

@@ -124,10 +124,29 @@ class recetario_model extends Base_Model{
 			return false;
 		}
 	}
-	public function insert_receta_articulos($data= array())	{
+	public function insert_receta_articulos($data= array(), $id_receta = false)	{
 		$tbl = $this->tbl;
+		if($id_receta){
+			$condicion = array("id_nutricion_receta" => $id_receta);
+			$this->db->where($condicion);
+			$query = $this->db->delete($tbl['nutricion_recetas_articulos']);	
+		}
 		$query = $this->db->insert_batch($tbl['nutricion_recetas_articulos'], $data);
 		
+	}
+	public function update_receta($data=array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$condicion = array('id_nutricion_receta !=' => $data['id_nutricion_receta'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe    = $this->row_exist($tbl['nutricion_recetas'], $condicion);
+		if(!$existe){
+			$condicion = "id_nutricion_receta = ".$data['id_nutricion_receta']; 
+			$update    = $this->update_item($tbl['nutricion_recetas'], $data, 'id_nutricion_receta', $condicion);
+			return $update;
+		}else{
+			return false;
+		}
 	}
 }
 

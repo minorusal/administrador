@@ -203,7 +203,7 @@ class recetario extends Base_Controller{
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode(alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			//print_debug($objData);
 			$receta        = $objData['txt_receta'];
@@ -239,10 +239,10 @@ class recetario extends Base_Controller{
 				$insert = $this->db_model->insert_receta_articulos($data_insert);
 
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode(alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' =>alertas_tpl('success', $msg ,false)));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode(alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}	
 	}
@@ -300,8 +300,9 @@ class recetario extends Base_Controller{
 								,'selected' => $id_compras_articulo
 							);
 		$list_insumos  = multi_dropdown_tpl($insumos);
-		$btn_save      = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'update()','content'=>$this->lang_item("btn_guardar")));
+		$btn_save      = form_button(array('class'=>'btn btn-primary', 'name'=>'update_receta', 'onclick'=>'actualizar()','content'=>$this->lang_item("btn_guardar")));
 		
+		$tab_3['id_receta']                = $id_nutricion_receta;
 		$tab_3['lbl_receta']               = $this->lang_item('lbl_receta');
 		$tab_3['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
 		$tab_3['lbl_porciones']            = $this->lang_item('lbl_porciones');
@@ -320,12 +321,89 @@ class recetario extends Base_Controller{
 		$tab_3['select_familias']          = $list_familias;
 		$tab_3['button_save']              = $btn_save;
 
+		$this->load_database('global_system');	
+        $this->load->model('users_model');
+
+		$usuario_registro                  = $this->users_model->search_user_for_id($id_usuario);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tab_3['value_usuarios_registro']  = $usuario_name;
+
+		if($edit_id_usuario)
+		{
+			$usuario_registro = $this->users_model->search_user_for_id($edit_id_usuario);
+			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
+			$tab_3['value_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($edit_timestamp), $usuario_name);
+		}
+		else
+		{
+			$usuario_name = '';
+			$tab_3['value_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+		}
+
+		$tab_3['value_timestamp'] = $timestamp;
+
+		$tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$tab_3['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
+		$tab_3['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
+
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_3 ,true));
 		}
 		else{
 			return $this->load_view_unique($seccion, $tab_3, true);
 		}
+	}
+	public function update(){
+		
+		$objData  	= $this->ajax_post('objData');
+		
+	
+		if($objData['incomplete']>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
+			//print_debug($objData);
+			$id_receta     = $objData['id_receta'];
+			$receta        = $objData['txt_receta'];
+			$clave_corta   = $objData['txt_clave_corta'];
+			$familia       = $objData['lts_familias_insert'];
+			$porciones     = $objData['txt_porciones'];
+			$preparacion   = $objData['txt_preparacion'];
+			$arg_articulo  = explode(',',$objData['lts_insumos_update']);
+
+			$data_insert = array(
+				  'id_nutricion_receta'   => $id_receta
+				 ,'receta'                => $receta
+				 ,'clave_corta'           => $clave_corta
+				 ,'porciones'             => $porciones
+				 ,'preparacion'           => $preparacion 
+				 ,'id_nutricion_familia'  => $familia
+				 ,'edit_id_usuario'       => $this->session->userdata('id_usuario')
+				 ,'edit_timestamp'        => $this->timestamp()
+			);
+
+			$this->db_model->update_receta($data_insert);
+
+			if($id_receta){
+				$data_insert = array();
+				foreach ($arg_articulo as $key => $value) {
+					$data_insert[] = array( 
+												'id_nutricion_receta'   => $id_receta
+											   ,'id_compras_articulo'   => $value
+									           ,'porciones'             => $objData['articulo_'.$value]
+									           ,'id_usuario'            => $this->session->userdata('id_usuario')
+				                               ,'timestamp'             => $this->timestamp()
+				                        );
+				}
+				$insert = $this->db_model->insert_receta_articulos($data_insert,$id_receta);
+
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' =>alertas_tpl('success', $msg ,false)));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+			}
+		}	
 	}
 	public function detalle_articulo(){
 		$id_articulo = $this->ajax_post('id_articulo');

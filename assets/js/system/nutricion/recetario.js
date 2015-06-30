@@ -94,8 +94,32 @@ function agregar(){
 		success : function(data){
 			imgLoader_clean('#registro_loader');
 			btn.removeAttr('disabled');
-			clean_formulario_recetas();
-		    jQuery("#mensajes").html(data).show('slow');
+			if(data.success == 'true' ){
+				clean_formulario_recetas();
+			}
+		    jQuery("#mensajes").html(data.mensaje).show('slow');
+		}
+	});
+}
+function actualizar(){
+	var btn                 = jQuery("button[name='update_receta']");
+	var objData             = formData('#formulario_edicion');
+	objData['incomplete']   = values_requeridos();
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"nutricion/recetario/update",
+		dataType: "json",
+		data: {objData: objData},
+		beforeSend : function(){
+			imgLoader('#registro_loader');
+		},
+		success : function(data){
+			imgLoader_clean('#registro_loader');
+			btn.removeAttr('disabled');
+
+		    jQuery("#mensajes").html(data.mensaje).show('slow');
 		}
 	});
 }

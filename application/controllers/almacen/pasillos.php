@@ -280,7 +280,7 @@ class pasillos extends Base_Controller
 		$tab_1["list_almacen"]         = $almacenes;
 		$tab_1["lbl_almacen"]          = $this->lang_item("lbl_almacen");
 		$tab_1["lbl_descripcion"]      = $this->lang_item("lbl_descripcion");
-
+		 $tab_1["lbl_pasillos"]           = $this->lang_item("lbl_pasillos");
         $tab_1['button_save']       = $btn_save;
         $tab_1['button_reset']      = $btn_reset;
 

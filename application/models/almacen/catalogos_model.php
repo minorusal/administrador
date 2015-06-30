@@ -26,6 +26,7 @@ class catalogos_model extends Base_Model{
 						,av.id_sucursal
 						,su.sucursal
 						,ti.tipos
+						,av.edit
 					FROM $tbl[almacen_almacenes] av					
 					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = av.id_sucursal
 					LEFT JOIN $tbl[almacen_tipos] ti on ti.id_almacen_tipos = av.id_almacen_tipos

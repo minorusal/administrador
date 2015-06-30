@@ -110,9 +110,10 @@ class almacenes extends Base_Controller
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_almacenes'].')'
 						);
+				$edit = (!$value['edit'])?'*':'';
 				$tbl_data[] = array('id'             => $value['clave_corta'],
-									'almacenes'      => tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'    => $value['clave_corta'],
+									'almacenes'      => $edit.tool_tips_tpl($value['almacenes'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'    => $edit.$value['clave_corta'],
 									'sucursal'       => $value['sucursal'],
 									'tipos'          => $value['tipos'],
 									'descripcion'    => $value['descripcion']);
@@ -184,7 +185,7 @@ class almacenes extends Base_Controller
 					,'selected' => $detalle[0]['id_almacen_tipos']
 					);
 		$tipos                 = dropdown_tpl($tipos_array);
-		$btn_save              = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
+		$btn_save              = ($detalle[0]['edit'])?form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") )):$this->lang_item("no_editable");
                 
         $tabData['id_almacen']             = $id_almacen_almacenes;
         $tabData["nombre_almacen"]         = $this->lang_item("almacen");
@@ -198,8 +199,8 @@ class almacenes extends Base_Controller
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['descripcion']            = $detalle[0]['descripcion'];
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+        $tabData['val_fecha_registro']     	= $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']     	= $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
 
         $this->load_database('global_system');

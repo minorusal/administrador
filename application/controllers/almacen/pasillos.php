@@ -111,13 +111,22 @@ class pasillos extends Base_Controller
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_pasillos'].')'
 						);
-				
+				// Validación de gavetas en pasillos de almacen
+				$pasillos = $this->db_model->db_get_data_gavetas_por_pasillo(array('id_almacen' => $value['id_almacen_almacenes'], 'id_pasillo' => $value['id_almacen_pasillos']));
+				// Acciones
+				$accion_id 						= $value['id_almacen_pasillos'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_acciones ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = (!$pasillos)?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'pasillos'       => tool_tips_tpl($value['pasillos'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
 									'almacen'        => $value['almacenes'],
 									//'gaveta'        => $value['gavetas'],
-									'descripcion'    => $value['descripcion']);	
+									'descripcion'    => $value['descripcion'],
+									'acciones' 		 => $acciones
+									);	
 			}
 			
 			// Plantilla
@@ -127,7 +136,9 @@ class pasillos extends Base_Controller
 										$this->lang_item("pasillo"),
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
-										$this->lang_item("descripcion"));
+										$this->lang_item("descripcion"),
+										$this->lang_item("acciones")
+										);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -275,7 +286,7 @@ class pasillos extends Base_Controller
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["lbl_pasillo"]          = $this->lang_item("lbl_pasillo");
+		$tab_1["lbl_pasillos"]          = $this->lang_item("lbl_pasillos");
 		$tab_1["lbl_clave_corta"]      = $this->lang_item("lbl_clave_corta");
 		$tab_1["list_almacen"]         = $almacenes;
 		$tab_1["lbl_almacen"]          = $this->lang_item("lbl_almacen");

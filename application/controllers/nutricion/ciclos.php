@@ -165,28 +165,6 @@ class ciclos extends Base_Controller{
 	}
 
 
-	public function ciclo_receta(){
-		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
-		$id_familia   = $this->ajax_post('id_familia');
-		$id_sucursal = $this->ajax_post('id_sucursal');
-		if($id_familia){
-			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
-			$recetas  = array(
-							 'data'		=> $receta
-							,'value' 	=> 'id_nutricion_receta'
-							,'text' 	=> array('receta')
-							,'name' 	=> "lts_recetas"
-							,'class' 	=> "requerido"
-						);
-			$list_recetas  = multi_dropdown_tpl($recetas);
-			$tab['multiselect_recetas']   = $list_recetas;
-			if($this->ajax_post(false)){
-				echo json_encode($this->load_view_unique($seccion,$tab,true));
-			}else{
-				return $this->load_view_unique($seccion, $tab, true);
-			}
-		}
-	}
 	public function cargar_ciclos(){
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
@@ -225,6 +203,30 @@ class ciclos extends Base_Controller{
 		}
 	}
 
+	public function ciclo_receta(){
+		//$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
+		$id_familia   = $this->ajax_post('id_familia');
+		$id_sucursal = $this->ajax_post('id_sucursal');
+		if($id_familia){
+			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
+			$recetas  = array(
+							 'data'		=> $receta
+							,'value' 	=> 'id_nutricion_receta'
+							,'text' 	=> array('receta')
+							,'name' 	=> "lts_recetas"
+							,'class' 	=> "requerido"
+						);
+			$list_recetas  = multi_dropdown_tpl($recetas);
+			$tab['multiselect_recetas']   = $list_recetas;
+			if($this->ajax_post(false)){
+				echo json_encode($this->load_view_unique($seccion,$tab,true));
+			}else{
+				return $this->load_view_unique($seccion, $tab, true);
+			}
+		}
+	}
+	
+
 	public function ciclo_detalle($id_ciclo = false){
 		$id_ciclo  = $this->ajax_post('id_ciclo');
 		$nom_ciclo = $this->ajax_post('nombre_ciclo');
@@ -255,7 +257,7 @@ class ciclos extends Base_Controller{
 
 			$m = '<a class ="onclick_on" onclick="eliminar_servicio(0,'.$id_ciclo.')"">Eliminar todo <span class=" iconfa-trash"></span></a>';
 		}else{
-			$m = '<a class ="onclick_on">No se tienen recetas vinculadas a este menu</a>';
+			$m = '<a class ="onclick_on">No se tienen recetas vinculadas a este ciclo</a>';
 		}
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);

@@ -45,7 +45,7 @@ function authentication(){
 					var promp_content = {
 									content_01:{
 										html:data,
-										buttons: { }
+										buttons:{ }
 									}
 								};
 					jQuery.prompt(promp_content);

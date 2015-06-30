@@ -936,7 +936,7 @@ class ordenes extends Base_Controller {
 		$keys=array_keys($id_compras_articulo_precios);
 		for($i=0; count($id_compras_articulo_precios)>$i;$i++){
 			for($j=0; count($array)>$j;$j++){
-				$data[$i][]=$array[$j][$keys[$i]].'<br>';
+				$data[$i][]=$array[$j][$keys[$i]];
 			}
 		}
 		for($d=0;count($data)>$d;$d++){

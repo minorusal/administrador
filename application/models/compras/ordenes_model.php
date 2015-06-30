@@ -195,6 +195,7 @@ class ordenes_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$query = "SELECT 
+					l.id_compras_orden_articulo,
 					l.id_compras_articulo_precios,
 					l.cantidad,
 					l.costo_x_cantidad,

@@ -4,7 +4,7 @@ class ciclos extends Base_Controller{
 
 	private $modulo;
 	private $submodulo;
-	private $view_content;
+	//private $view_content;
 	private $path;
 	private $icon;
 	private $offset, $limit_max;
@@ -16,7 +16,7 @@ class ciclos extends Base_Controller{
 		$this->seccion		    = 'ciclos';
 		$this->icon 			= 'fa fa-cutlery'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
-		$this->view_content 	= 'content';
+		$this->view_content 	= 'nutricion/ciclos/ciclos_save';
 		//$this->view_modal       = 'modal_cropper';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -38,27 +38,19 @@ class ciclos extends Base_Controller{
 	public function config_tabs()
 	{
 		$tab_1 	= $this->tab1;
-		$tab_2 	= $this->tab2;
-		$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             
-										,$path.$tab_2.'/'.$pagina 
-										,$tab_3                   
+										 $path.$tab_1                              
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
-										,'load_content'
-										,''
 								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
@@ -68,36 +60,12 @@ class ciclos extends Base_Controller{
 
 		return $config_tab;
 	}
-	private function uri_view_principal()
+	/*private function uri_view_principal()
 	{
 		return $this->modulo.'/'.$this->view_content;
-	}
+	}*/
 
 	public function index(){
-		$tabl_inicial 			  = 2;
-		$view_listado    		  = $this->listado();	
-		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = $this->icon;
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
-		$this->load_view($this->uri_view_principal(), $data, $js);
-	}
-	public function listado($offset=0){
-		// Crea tabla con listado de elementos capturados 
-		$seccion 		= '/listado';
-		$tab_detalle	= $this->tab3;	
-		$limit 			= $this->limit_max;
-		$uri_view 		= $this->modulo.$seccion;
-		$url_link 		= $this->path.'listado';
-		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-	}
-
-	public function agregar(){
-		//Carga formulario de Agregar Ciclos con el archivo ciclos_save.html
-		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
 		$sqlData = array(
 			 'buscar' => 0
 			,'offset' => 0
@@ -122,7 +90,7 @@ class ciclos extends Base_Controller{
 					,'text' 	=> array('ciclo')
 					,'name' 	=> "lts_ciclos"
 			   									);
-			$ciclos = dropdown_tpl($dropdown_ciclos);
+		$ciclos = dropdown_tpl($dropdown_ciclos);
 
 		$data_servicio = $this->servicios->db_get_data($sqlData);
 		$dropdown_servicios = array(
@@ -171,28 +139,31 @@ class ciclos extends Base_Controller{
 
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
-		
-		$tab_1['lbl_ciclos']     		= $this->lang_item('lbl_ciclos');
-		$tab_1['lbl_servicios']  		= $this->lang_item('lbl_servicios');
-		$tab_1['lbl_tiempos']    		= $this->lang_item('lbl_tiempos');
-		$tab_1['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
-		$tab_1['lbl_familias']   		= $this->lang_item('lbl_familias');
 
-		$tab_1['btn_save']     	   		= $btn_save;
-		$tab_1['btn_reset']    	   		= $btn_reset;
-		$tab_1['list_ciclos']  		    = $ciclos;
-		$tab_1['list_sucursales']  		= $sucursales;
-		$tab_1['list_servicios']   		= $servicios;
-		$tab_1['list_tiempos']     		= $tiempos;
-		$tab_1['list_familias']     	= $familias;
-		$tab_1['multiselect_recetas']   = $list_recetas;
-		$tab_1['lbl_sucursal']     = $this->lang_item('lbl_sucursal');
-		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
-		}else{
-			return $this->load_view_unique($seccion, $tab_1, true);
-		}
+		$data['lbl_sucursal']     	   = $this->lang_item('lbl_sucursal');
+		$data['lbl_ciclos']       	   = $this->lang_item('lbl_ciclos');
+		$data['lbl_servicios']    	   = $this->lang_item('lbl_servicios');
+		$data['lbl_tiempos']      	   = $this->lang_item('lbl_tiempos');
+		$data['lbl_familias']     	   = $this->lang_item('lbl_familias');
+		$data['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
+
+
+		$data['btn_save']     	   		= $btn_save;
+		$data['btn_reset']    	        = $btn_reset;
+		$data['list_sucursales']  		= $sucursales;
+		$data['list_ciclos']  		    = $ciclos;
+		$data['list_servicios']   		= $servicios;
+		$data['list_tiempos']     		= $tiempos;
+		$data['list_familias']     	    = $familias;
+		$data['multiselect_recetas']    = $list_recetas;
+		$data['titulo_seccion']   = $this->lang_item($this->seccion);
+		$data['empresa']          = 'Ciclos';
+		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['icon']             = $this->icon;
+		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$this->load_view($this->view_content, $data, $js);
 	}
+
 
 	public function ciclo_receta(){
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';

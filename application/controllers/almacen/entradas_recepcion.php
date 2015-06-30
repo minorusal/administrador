@@ -449,42 +449,6 @@ class entradas_recepcion extends Base_Controller{
 
 		$tabData['modal'] = toggle_modal_tpl('test',array(), $arg_body);
 		echo json_encode( $this->load_view_unique($url_link ,$tabData, true));
-		/*$tbl_plantilla = set_table_tpl();
-		$tbl_data[] = array(
-								
-								'lote'   => 'lote',
-								'msg'    => '<input type="text"  class="input-small" name="lote" id="lote"/>',
-						);
-		$this->table->set_heading($this->lang_item('row_pais'), 'lote');
-		$this->table->set_template($tbl_plantilla);
-		$perfiles = $this->table->generate($tbl_data);
-
-		$tbl_info[] = array(
-								'caducidad'  => 'caducidad',
-								'msg2'    => '<input id="caducidad" type="text"  data-campo="caducidad" name="caducidad" class="input-large caducidad requerido"/><div id="fecha"></div>'
-						);
-
-		$this->table->set_heading($this->lang_item('modal_saludo'),'caducidad');
-		$this->table->set_template($tbl_plantilla);
-		$info = $this->table->generate($tbl_info);
-
-
-		$u_m_data[] = array(
-								'u_m'  => 'u_m',
-								'msg2'    => '<input type="text" class="input-small" name="u_m" id="u_m"/>',
-						);
-		$this->table->set_heading($this->lang_item('modal_saludo'),'um');
-		$this->table->set_template($tbl_plantilla);
-		$u_m = $this->table->generate($u_m_data);
-
-		$button_data[] = array(
-								'buttons'  => 'buttons',
-								'aceptar'    =>'<span class="btn btn-primary btn-small" onclick="aceptar_lote('.$this->ajax_post("id").');" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{recibir_orden}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="btn btn-primary btn-small" onclick="volver_orden();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{devolucion_orden}</span>'
-						);
-		$this->table->set_template($tbl_plantilla);
-		$buttons = $this->table->generate($button_data);
-		
-		echo json_encode($perfiles.$info.$u_m.$buttons);*/
 	}
 }
 ?>

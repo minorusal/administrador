@@ -54,11 +54,13 @@ class catalogos_model extends Base_Model{
 
 
 	/*Actualliza la información en el formuladio de edición de almacen*/
-	public function db_update_data($data=array()){
+	public function db_update_data_almacen($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
+		// $condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_almacenes !='] = (isset($data['id_almacen_almacenes']))?$data['id_almacen_almacenes']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_almacenes'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_almacenes = ".$data['id_almacen_almacenes']; 

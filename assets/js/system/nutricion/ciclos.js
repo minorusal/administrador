@@ -26,7 +26,7 @@ function load_content(uri, id_content){
            		var chosen  = 'jQuery(".chzn-select").chosen();';
            		//jQuery('#a-'+id_content).html(data);
            		jQuery('#a-'+id_content).html(data+include_script(chosen));
-           		jQuery('#contenido_ciclos').hide();
+           		//jQuery('#contenido_ciclos').hide();
            }
         }
     });
@@ -84,6 +84,32 @@ function load_treeview(id){
         unique: false
       });
 }
+
+function buscar_recetas(id_tiempo){
+  //alert(id_tiempo);
+  //var id_tiempo   = jQuery('select[name=lts_tiempos] option:selected').val();
+  var id_sucursal  = jQuery('select[name=lts_sucursales]').val();
+  if(id_tiempo!=0){
+    jQuery.ajax({
+          type: "POST",
+          url: path()+"nutricion/ciclos/ciclo_receta",
+          dataType: 'json',
+          data: {id_tiempo : id_tiempo,id_sucursal:id_sucursal},
+          beforeSend : function(){
+            jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+          },
+          success: function(data){
+            alert(data);
+            jQuery('#lts_recetas').html(data);
+
+          }
+      });
+  }else{
+    jQuery('select[name=lts_recetas]').empty().append('whatever');
+  }
+  jQuery('#loader').html('');
+}
+
 
 function buscar(){
 	var filtro = jQuery('#search-query').val();

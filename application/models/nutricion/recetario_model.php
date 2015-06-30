@@ -71,12 +71,18 @@ class recetario_model extends Base_Model{
 						,f.id_nutricion_familia
 						,r.*
 						,ri.id_compras_articulo
+						,ri.porciones as porciones_articulo
+						,ca.articulo
+						,cu.um
 					FROM $tbl[nutricion_recetas] r
 					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
-					LEFT JOIN $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					LEFT JOIN  $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					LEFT JOIN  $tbl[compras_articulos] ca ON ca.id_compras_articulo = ri.id_compras_articulo
+					LEFT JOIN  $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
 					WHERE r.activo = 1 $unique $filtro 
 					$limit 
 					";
+		//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -118,10 +124,29 @@ class recetario_model extends Base_Model{
 			return false;
 		}
 	}
-	public function insert_receta_articulos($data= array())	{
+	public function insert_receta_articulos($data= array(), $id_receta = false)	{
 		$tbl = $this->tbl;
+		if($id_receta){
+			$condicion = array("id_nutricion_receta" => $id_receta);
+			$this->db->where($condicion);
+			$query = $this->db->delete($tbl['nutricion_recetas_articulos']);	
+		}
 		$query = $this->db->insert_batch($tbl['nutricion_recetas_articulos'], $data);
 		
+	}
+	public function update_receta($data=array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$condicion = array('id_nutricion_receta !=' => $data['id_nutricion_receta'], 'clave_corta = '=> $data['clave_corta']); 
+		$existe    = $this->row_exist($tbl['nutricion_recetas'], $condicion);
+		if(!$existe){
+			$condicion = "id_nutricion_receta = ".$data['id_nutricion_receta']; 
+			$update    = $this->update_item($tbl['nutricion_recetas'], $data, 'id_nutricion_receta', $condicion);
+			return $update;
+		}else{
+			return false;
+		}
 	}
 }
 

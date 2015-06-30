@@ -77,6 +77,7 @@ function edit_porciones(evt,params){
 	}
 }
 function agregar(){
+	jQuery('#a-2').html('');
 	var btn                 = jQuery("button[name='save_receta']");
 	var objData             = formData('#formulario');
 	objData['incomplete']   = values_requeridos();
@@ -94,14 +95,40 @@ function agregar(){
 		success : function(data){
 			imgLoader_clean('#registro_loader');
 			btn.removeAttr('disabled');
-			clean_formulario_recetas();
-		    jQuery("#mensajes").html(data).show('slow');
+			if(data.success == 'true' ){
+				clean_formulario_recetas();
+			}
+		    jQuery("#mensajes").html(data.mensaje).show('slow');
+		}
+	});
+}
+function actualizar(){
+	
+	var btn                 = jQuery("button[name='update_receta']");
+	var objData             = formData('#formulario_edicion');
+	objData['incomplete']   = values_requeridos();
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes').hide();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"nutricion/recetario/update",
+		dataType: "json",
+		data: {objData: objData},
+		beforeSend : function(){
+			imgLoader('#update_loader');
+		},
+		success : function(data){
+			imgLoader_clean('#update_loader');
+			btn.removeAttr('disabled');
+
+		    jQuery("#mensajes_update").html(data.mensaje).show('slow');
 		}
 	});
 }
 function detalle(id_receta){  
-  jQuery('#ui-id-2').click();
-  jQuery.ajax({
+  	jQuery('#a-0').html('');
+  	jQuery('#ui-id-2').click();
+  	jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/recetario/detalle",
         dataType: 'json',
@@ -116,7 +143,6 @@ function detalle(id_receta){
         }
     });
 }
-
 function clean_formulario_recetas(){
 	clean_formulario();
 	jQuery('#content_porciones_insert').html('').hide();

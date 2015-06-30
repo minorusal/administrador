@@ -35,36 +35,6 @@ class ciclos extends Base_Controller{
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
-	public function config_tabs()
-	{
-		$tab_1 	= $this->tab1;
-		$path  	= $this->path;
-		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
-		// Nombre de Tabs
-		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) 
-								); 
-		// Href de tabs
-		$config_tab['links']    = array(
-										 $path.$tab_1                              
-								); 
-		// Accion de tabs
-		$config_tab['action']   = array(
-										 'load_content'
-								);
-		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'));
-
-		$config_tab['style_content'] = array('');
-
-
-		return $config_tab;
-	}
-	/*private function uri_view_principal()
-	{
-		return $this->modulo.'/'.$this->view_content;
-	}*/
-
 	public function index(){
 		$sqlData = array(
 			 'buscar' => 0
@@ -188,7 +158,6 @@ class ciclos extends Base_Controller{
 		}
 	}
 	public function cargar_ciclos(){
-		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
 			$sqlData = array(
@@ -217,9 +186,9 @@ class ciclos extends Base_Controller{
 					,'name' 	=> "lts_ciclos");
 		}
 		$ciclos = dropdown_tpl($dropdown_ciclos);
-		$data['list_ciclos'] = $ciclos;
+		
 		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($seccion,$data,true));
+			echo json_encode($ciclos);
 		}else{
 			return $this->load_view_unique($seccion, $data, true);
 		}

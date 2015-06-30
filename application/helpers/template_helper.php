@@ -1,5 +1,14 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+	
+	if(!function_exists('add_on_tpl')){
+		function add_on_tpl($input, $eti){
+			$add_on = "<span class='field input-prepend input-append'>
+								".$input."
+				               <span class='add-on'>".$eti."</span>		
+				        </span>";
+			return $add_on;
+		}
+	}	
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
 			$link         = "";
@@ -122,8 +131,9 @@
 				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
 				$event      = ($event) ? $event : ''; 
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
-				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: array('-----');
-				//print_debug($params);
+
+				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: '-----';
+
 			}
 			//print_debug($params['leyenda']);
 			$name         = ($name=="")?"selected": $name;
@@ -148,6 +158,7 @@
 				return $selected;
 			}
 			if(!$data){
+				$leyenda = array($leyenda);
 				$selected = "<span class='formwrapper'>".form_dropdown($name,$leyenda, $selected," class='chzn-select $class' ")."</span>";
 				return $selected;
 			}
@@ -343,7 +354,6 @@
 			
 		}
 	}
-
 	if(!function_exists('plantilla_table_tpl')){
 		function set_table_tpl(){
 			return  array (
@@ -368,7 +378,6 @@
 		              );
 		}
 	}
-
 	if(!function_exists('widgetbox_tpl')){
 		function widgetbox_tpl($name, $content){
 			
@@ -385,11 +394,13 @@
 			return $widgetbox;
 		}
 	}
-		
-
 	if(!function_exists('toggle_modal_tpl')){
-		function toggle_modal_tpl($arg_identy, $header= array(), $body= array(), $footer=array(), $static= false){
+		function toggle_modal_tpl($arg_identy, $config = array(), $static= false){
 			
+			$header = (array_key_exists('header',$config)) ? $config['header'] : array();
+			$body   = (array_key_exists('body',$config)) ? $config['body'] : array();
+			$footer = (array_key_exists('footer',$config)) ? $config['footer'] : array();
+
 			if($static){
 				$backdrop = 'data-backdrop="static"';
 				$close = '';
@@ -399,7 +410,7 @@
 			}
 
 			$id_header = (array_key_exists('id', $header))? 'id="'.$header['id'].'"' : '';
-			$header    = (array_key_exists('html', $header))? $header['html'] : 'Toggle Modal';
+			$header    = (array_key_exists('html', $header))? $header['html'] : '';
 			
 			$id_body   = (array_key_exists('id', $body))? 'id="'.$body['id'].'"' : ''; 
 			$body      = (array_key_exists('html', $body))? $body['html'] : '';
@@ -408,14 +419,14 @@
 			$footer    = (array_key_exists('html', $footer))? $footer['html'] : '';
 			
 			$modal ='
-					<div aria-hidden="true" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
+					<div aria-hidden="false" '.$backdrop.' aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
 						
-						<div class="modal-header btn-primary" '.$id_header.'>
+						<div class="modal-header" '.$id_header.'>
 							'.$close.'
 							<h3 id="myModalLabel">'.$header.'</h3>
 						</div>
 
-						<div  class="modal-body" '.$id_body.'>
+						<div  class="modal-body"  '.$id_body.'>
 							'.$body.'
 						</div>
 

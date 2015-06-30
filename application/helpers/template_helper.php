@@ -395,7 +395,7 @@
 		}
 	}
 	if(!function_exists('toggle_modal_tpl')){
-		function toggle_modal_tpl($arg_identy, $config= array(), $static= false){
+		function toggle_modal_tpl($arg_identy, $config = array(), $static= false){
 			
 			$header = (array_key_exists('header',$config)) ? $config['header'] : array();
 			$body   = (array_key_exists('body',$config)) ? $config['body'] : array();
@@ -419,7 +419,7 @@
 			$footer    = (array_key_exists('html', $footer))? $footer['html'] : '';
 			
 			$modal ='
-					<div aria-hidden="false" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
+					<div aria-hidden="false" '.$backdrop.' aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
 						
 						<div class="modal-header" '.$id_header.'>
 							'.$close.'

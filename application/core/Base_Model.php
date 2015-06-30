@@ -39,6 +39,8 @@ class Base_Model extends CI_Model {
 		$this->tbl['administracion_servicios'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_servicios'];
 		$this->tbl['administracion_variables'] = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_variables'];
 		$this->tbl['almacen_almacenes'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_almacenes'];
+		$this->tbl['almacen_entradas_recibir'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_recibir'];
+		$this->tbl['almacen_entradas_partidas'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_partidas'];
 		$this->tbl['almacen_gavetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_gavetas'];
 		$this->tbl['almacen_pasillos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_pasillos'];
 		$this->tbl['almacen_tipos'] = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_tipos'];
@@ -56,9 +58,9 @@ class Base_Model extends CI_Model {
 		$this->tbl['compras_proveedores_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_proveedores_articulos'];
 		$this->tbl['compras_um'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_um'];
 		$this->tbl['compras_embalaje'] = $this->db2.'.'.$this->vars->db['db2_tbl_compras_embalaje'];
+		$this->tbl['nutricion_ciclo_receta'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_ciclo_receta'];
 		$this->tbl['nutricion_ciclos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_ciclos'];
 		$this->tbl['nutricion_familias'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_familias'];
-		
 		$this->tbl['nutricion_recetas'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas'];
 		$this->tbl['nutricion_recetas_articulos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas_articulos'];
 		$this->tbl['nutricion_tiempos'] = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_tiempos'];

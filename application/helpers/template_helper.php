@@ -138,10 +138,6 @@
 				}
 				$selected = "<span class='formwrapper'>".form_dropdown($name, $options, $selected, " class='chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
-			}else{
-				//Crea un combo-box vacio
-				$selected = "<span class='formwrapper'>".form_dropdown("class='chzn-container chzn-container-single chzn-select chzn-done' data-campo='$name' ")."</span>";
-				return $selected;
 			}
 			return false;
 		}
@@ -360,6 +356,25 @@
 		              );
 		}
 	}
+
+	if(!function_exists('widgetbox_tpl')){
+		function widgetbox_tpl($name, $content){
+			
+			$widgetbox = "<div class=''>
+							<h1 class=''>Menu:
+								<span class='' id='html_periodo_1'>$name</span>
+							</h1>
+							<div class=''>
+							$content
+							</div>
+						</div>
+							";
+
+			return $widgetbox;
+		}
+	}
+		
+
 	if(!function_exists('toggle_modal_tpl')){
 		function toggle_modal_tpl($arg_identy, $header= array(), $body= array(), $footer=array(), $static= false){
 			
@@ -399,4 +414,5 @@
 			return $modal;	
 		}	
 	}
+
 ?>

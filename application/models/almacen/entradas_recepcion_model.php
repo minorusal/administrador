@@ -52,5 +52,32 @@ class entradas_recepcion_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	public function insert($data){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		/*$existe = $this->row_exist($tbl['almacen_entradas_recibir']);
+		if(!$existe){*/
+			$insert = $this->insert_item($tbl['almacen_entradas_recibir'], $data);
+			//return $insert;
+			return $last_id = $this->last_id();
+		/*}else{
+			return false;
+		}*/
+
+	}
+	public function insert_entradas_partidas($data){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		/*$existe = $this->row_exist($tbl['almacen_entradas_recibir']);
+		if(!$existe){*/
+			$insert = $this->insert_item($tbl['almacen_entradas_partidas'], $data);
+			return $insert;
+			//return $last_id = $this->last_id();
+		/*}else{
+			return false;
+		}*/
+	}
 }
 ?>

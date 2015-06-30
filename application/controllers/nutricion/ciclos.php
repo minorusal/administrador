@@ -108,29 +108,23 @@ class ciclos extends Base_Controller{
 											'params_type' => array(false))
 					);
 		$sucursales = dropdown_tpl($dropdown_sucursales);
-		
-		$dropdown_ciclos = array(
-				 
-				'value' 	=> 'id_nutricion_ciclos'
-				,'text' 	=> array('ciclo')
-				,'name' 	=> "lts_ciclos");
-		$ciclos = dropdown_tpl($dropdown_ciclos);
-		
+		$data_servicio = $this->servicios->db_get_data($sqlData);
 		$dropdown_servicios = array(
-				 'data'     => $this->servicios->db_get_data($sqlData)
+				 'data'     => $data_servicio
 				,'value' 	=> 'id_administracion_servicio'
-				,'text' 	=> array('cv_servicio','servicio')
+				,'text' 	=> array('servicio')
 				,'name' 	=> "lts_servicios"
-								);
+		   									);
 		$servicios = dropdown_tpl($dropdown_servicios);
-		
-		$dropdown_tiempo = array(
-				 'data'     =>$this->tiempos->db_get_data($sqlData)
+
+		$data_tiempo = $this->tiempos->db_get_data($sqlData);
+		$dropdown_tiempos = array(
+				 'data'     => $data_tiempo
 				,'value' 	=> 'id_nutricion_tiempo'
-				,'text' 	=> array('clave_corta','tiempo')
+				,'text' 	=> array('tiempo')
 				,'name' 	=> "lts_tiempos"
-								);
-		$tiempos = dropdown_tpl($dropdown_tiempo);
+		   									);
+		$tiempos = dropdown_tpl($dropdown_tiempos);
 
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
@@ -138,13 +132,12 @@ class ciclos extends Base_Controller{
 		$tab_1['lbl_ciclos']     = $this->lang_item('lbl_ciclos');
 		$tab_1['lbl_servicios']  = $this->lang_item('lbl_servicios');
 		$tab_1['lbl_tiempos']    = $this->lang_item('lbl_tiempos');
-		$tab_1['list_ciclos']    = $ciclos;
-		$tab_1['list_servicios'] = $servicios;
-		$tab_1['list_tiempos']   = $tiempos;
 
 		$tab_1['btn_save']     	   = $btn_save;
 		$tab_1['btn_reset']    	   = $btn_reset;
 		$tab_1['list_sucursales']  = $sucursales;
+		$tab_1['list_servicios']   = $servicios;
+		$tab_1['list_tiempos']     = $tiempos;
 		$tab_1['lbl_sucursal']     = $this->lang_item('lbl_sucursal');
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
@@ -167,10 +160,15 @@ class ciclos extends Base_Controller{
 					 'data'     => $data_ciclo
 					,'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
-					,'name' 	=> "lts_ciclos");
+					,'name' 	=> "lts_ciclos"
+					,'event'    => array('event' => 'onchange',
+							   						'function' => 'load_contenido_ciclo',
+			   										'params'   => array('this.value'),
+			   										'params_type' => array(false)
+			   									));
 			$ciclos = dropdown_tpl($dropdown_ciclos);
-			
-			$data['list_ciclos']    = $ciclos;
+
+			$data['list_ciclos']       = $ciclos;
 		}
 		
 		if($this->ajax_post(false)){
@@ -178,5 +176,41 @@ class ciclos extends Base_Controller{
 		}else{
 			return $this->load_view_unique($seccion, $data, true);
 		}
+	}
+
+	public function ciclo_detalle($id_ciclo = false){
+		$id_ciclo  = $this->ajax_post('id_ciclo');
+		$nom_ciclo = $this->ajax_post('nombre_ciclo');
+		$list = '';
+		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
+		if(!is_null($contenido_ciclo)){
+			foreach ($contenido_ciclo as $key => $value) {
+				$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
+														 'receta'     => $value['receta'] , 
+														 'id_vinculo' => $value['id_nutricion_receta']) ;
+			}
+			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
+			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
+			foreach ($servicio as $item => $recetas) {
+				$m = '<a class ="onclick_on" onclick ="eliminar_servicio('.$recetas[0]['id_servicio'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+				$list .= '<li><span class=" iconfa-fire"></span>'.$item.$m;
+				if(is_array($recetas)){
+					$list .= '<ul>';
+					
+					foreach ($recetas as $value) {
+						$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_vinculo'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+						$list .= '<li><span class=" iconfa-bookmark"></span>'.$value['receta'].$m.'</li>';
+					}
+					$list .= '</ul>';
+				}
+			}
+			$list .= '</ul>';
+
+			$m = '<a class ="onclick_on" onclick="eliminar_servicio(0,'.$id_ciclo.')"">Eliminar todo <span class=" iconfa-trash"></span></a>';
+		}else{
+			$m = '<a class ="onclick_on">No se tienen recetas vinculadas a este menu</a>';
+		}
+		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
+		echo json_encode($detalle);
 	}
 }

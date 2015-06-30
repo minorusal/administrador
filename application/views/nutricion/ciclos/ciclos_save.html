@@ -1,42 +1,67 @@
-<div id="formulario" class="stdform stdform2">
-	<p>
-		<label>{lbl_sucursal} (*)</label>
-		<span class="field">
-			{list_sucursales} 
-		</span>
-	</p>
-	<p>
-		<label>{lbl_ciclos} (*)</label>
-		<span id="ciclo" class="field">
-			{list_ciclos}
-		</span>
-	</p> 
-	<p>
-		<label>{lbl_servicios} (*)</label>
-		<span class="field">
-			{list_servicios}
-		</span>
-	</p>
-	<p>
-		<label>{lbl_tiempos} (*)</label>
-		<span class="field">
-			{list_tiempos}
-		</span>
-	</p>
-	<p>
-        <label>{lbl_asignar_recetas}: </label>
-    	<span class="field">
-    		{multiselect_recetas}
-            <span id="loader_editar_porciones_insert"></span>
-    	</span>
-    </p>
-	<p>
-		<div id="ciclo_detalle"></div>
-	</p>
-	
-	<span class="field">
-		{btn_save}
-		{btn_reset}
-	</span>
+<!--pageheader-->
+
+<div class="pageheader">
+    <div class="pageicon"><span class="{icon}"></span></div>
+    <div class="pagetitle">
+    	<h5>{titulo_submodulo}</h5>
+        <h1>{titulo_seccion}</h1>
+	</div>
+	<div id = "loader_content"></div>
 </div>
+<!--pageheader-->
+	
+<!--maincontent-->
+<div class="maincontent">
+    <div class="maincontentinner">
+        	<!--row-fluid-->
+        <div class="widget">
+        	<h4 class="widgettitle">{empresa}</h4>
+        	<div class="widgetcontent">
+				<div id="formulario" class="stdform stdform2">
+					<p>
+						<label>{lbl_sucursal} (*)</label>
+						<span class="field">
+							{list_sucursales} 
+						</span>
+					</p>
+					<p>
+						<label>{lbl_ciclos} (*)</label>
+						<span id="ciclo" class="field">
+							{list_ciclos}
+						</span>
+					</p> 
+					<p>
+						<label>{lbl_servicios} (*)</label>
+						<span class="field">
+							{list_servicios}
+						</span>
+					</p>
+					<p>
+						<label>{lbl_tiempos} (*)</label>
+						<span class="field">
+							{list_tiempos}
+						</span>
+					</p>
+					<p>
+						<label>{lbl_familias} (*)</label>
+						<span class="field">
+							{list_familias}
+						</span>
+					</p>
+					<p>
+				        <label>{lbl_asignar_recetas}: </label>
+				    	<span class="field">
+				    		{multiselect_recetas}
+				            <span id="loader_editar_porciones_insert"></span>
+				    	</span>
+				    </p>
+					<p>
+						<div id="ciclo_detalle"></div>
+					</p>
+					
+					<span class="field">
+						{btn_save}
+						{btn_reset}
+					</span>
+				</div>
 

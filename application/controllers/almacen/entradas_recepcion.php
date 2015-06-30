@@ -446,8 +446,8 @@ class entradas_recepcion extends Base_Controller{
 	public function modal(){
 		$accion 	= $this->tab['modal'];
 		$url_link 	= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$accion;
-		$arg_body   = array('html'=>'<h1>hola</h1>' );
-
+		$html = 'Lote<br><input type="text" id="lote" name="lote"><br><br>Caducidad<br><input  data-campo="caducidad"  type="text" id="caducidad" name="caducidad">';
+		$arg_body   = array('html'=>$html );
 		$tabData['modal'] = toggle_modal_tpl('test',array(), $arg_body);
 		echo json_encode( $this->load_view_unique($url_link ,$tabData, true));
 	}

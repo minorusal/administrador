@@ -257,8 +257,6 @@ class recetario extends Base_Controller{
 			,'unique'        => $id_receta
 		);
 		$recetario = $this->db_model->get_data_unique($sqlData);
-
-		
 		
 		foreach ($recetario as $key => $value) {
 			$id_nutricion_receta  = $value['id_nutricion_receta'];
@@ -319,12 +317,6 @@ class recetario extends Base_Controller{
 		$tab_3['multiselect_insumos']      = $list_insumos;
 		$tab_3['select_familias']          = $list_familias;
 		$tab_3['button_save']              = $btn_save;
-		//$tab_3['button_reset']             = $btn_reset;
-
-		$arg_body   = array('html'=>'<h1>hola</h1>');
-		$tab_3['button_reset'] = toggle_modal_tpl('test',array(), $arg_body);
-
-		
 
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_3 ,true));

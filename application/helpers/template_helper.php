@@ -139,6 +139,10 @@
 				$selected = "<span class='formwrapper'>".form_dropdown($name, $options, $selected, " class='chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
+			if(!$data){
+				$selected = "<span class='formwrapper'>".form_dropdown($name,$leyenda, $selected," class='chzn-select $class' ")."</span>";
+				return $selected;
+			}
 			return false;
 		}
 	}

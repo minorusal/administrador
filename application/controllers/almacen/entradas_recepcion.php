@@ -103,7 +103,8 @@ class entradas_recepcion extends Base_Controller{
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		
+		//$data['modal']            = $this->modal();
+
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
 		$this->load_view($this->uri_view_principal(), $data, $js);

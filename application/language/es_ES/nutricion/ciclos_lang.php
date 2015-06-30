@@ -8,4 +8,5 @@ $lang['lbl_ciclos']	      = 'Selecciona un ciclo';
 $lang['lbl_servicios']	  = 'Selecciona un servicio';
 $lang['lbl_tiempos']	  = 'Selecciona un tiempo';
 $lang['lbl_recetas']	  = 'Selecciona una receta';
+$lang['lbl_familias']	  = 'Familias';
 ?>

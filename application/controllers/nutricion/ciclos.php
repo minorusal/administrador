@@ -29,6 +29,7 @@ class ciclos extends Base_Controller{
 		$this->load->model('administracion/sucursales_model','sucursales');
 		$this->load->model('administracion/servicios_model','servicios');
 		$this->load->model('nutricion/tiempos_model','tiempos');
+		$this->load->model('nutricion/familias_model','familias');
 		$this->load->model('nutricion/recetario_model','recetas');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
@@ -108,6 +109,7 @@ class ciclos extends Base_Controller{
 						,'value' 	=> 'id_sucursal'
 						,'text' 	=> array('clave_corta','sucursal')
 						,'name' 	=> "lts_sucursales"
+						,'leyenda' 	=> "-----"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_ciclos', 
 											'params'      => array('this.value'), 
@@ -127,6 +129,7 @@ class ciclos extends Base_Controller{
 				 'data'     => $data_servicio
 				,'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
+				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
 		   									);
 		$servicios = dropdown_tpl($dropdown_servicios);
@@ -136,21 +139,31 @@ class ciclos extends Base_Controller{
 				 'data'     => $data_tiempo
 				,'value' 	=> 'id_nutricion_tiempo'
 				,'text' 	=> array('tiempo')
+				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_tiempos"
-				,'event'      => array('event'       => 'onchange',
-				   					   'function'    => 'buscar_recetas',
-				   					   'params'      => array('this.value'),
-			   						   'params_type' => array(false)
-   										)
 					);						
 		$tiempos = dropdown_tpl($dropdown_tiempos);
+
+		$data_familia = $this->familias->db_get_data($sqlData);
+		$dropdown_familias = array(
+				 'data'     => $data_familia
+				,'value' 	=> 'id_nutricion_familia'
+				,'text' 	=> array('familia')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_familias"
+				,'event'    => array('event'       => 'onchange', 
+									 'function'    => 'load_recetas', 
+									 'params'      => array('this.value'), 
+									 'params_type' => array(false))
+			);						
+		$familias = dropdown_tpl($dropdown_familias);
 
 		$recetas  = array(
 						 'data'		=> $this->recetas->get_data($sqlData)
 						,'value' 	=> 'id_nutricion_receta'
 						,'text' 	=> array('receta')
 						,'name' 	=> "lts_recetas"
-						,'class' 	=> "requerido  "
+						,'class' 	=> "requerido"
 					);
 
 		$list_recetas  = multi_dropdown_tpl($recetas);
@@ -163,6 +176,7 @@ class ciclos extends Base_Controller{
 		$tab_1['lbl_servicios']  		= $this->lang_item('lbl_servicios');
 		$tab_1['lbl_tiempos']    		= $this->lang_item('lbl_tiempos');
 		$tab_1['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
+		$tab_1['lbl_familias']   		= $this->lang_item('lbl_familias');
 
 		$tab_1['btn_save']     	   		= $btn_save;
 		$tab_1['btn_reset']    	   		= $btn_reset;
@@ -170,6 +184,7 @@ class ciclos extends Base_Controller{
 		$tab_1['list_sucursales']  		= $sucursales;
 		$tab_1['list_servicios']   		= $servicios;
 		$tab_1['list_tiempos']     		= $tiempos;
+		$tab_1['list_familias']     	= $familias;
 		$tab_1['multiselect_recetas']   = $list_recetas;
 		$tab_1['lbl_sucursal']     = $this->lang_item('lbl_sucursal');
 		if($this->ajax_post(false)){
@@ -180,24 +195,18 @@ class ciclos extends Base_Controller{
 	}
 
 	public function ciclo_receta(){
-		
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
-		$id_tiempo   = $this->ajax_post('id_tiempo');
+		$id_familia   = $this->ajax_post('id_familia');
 		$id_sucursal = $this->ajax_post('id_sucursal');
-		if($id_tiempo){
-			$sqlData = array(
-							 'buscar' => $id_tiempo
-							,'offset' => 0
-							,'limit' => 0
-							);
+		if($id_familia){
+			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
 			$recetas  = array(
-							 'data'		=> $this->recetas->get_data($sqlData)
+							 'data'		=> $receta
 							,'value' 	=> 'id_nutricion_receta'
 							,'text' 	=> array('receta')
 							,'name' 	=> "lts_recetas"
 							,'class' 	=> "requerido"
 						);
-
 			$list_recetas  = multi_dropdown_tpl($recetas);
 			$tab['multiselect_recetas']   = $list_recetas;
 			if($this->ajax_post(false)){
@@ -221,17 +230,23 @@ class ciclos extends Base_Controller{
 					 'data'     => $data_ciclo
 					,'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos"
 					,'event'    => array('event' => 'onchange',
 							   						'function' => 'load_contenido_ciclo',
 			   										'params'   => array('this.value'),
 			   										'params_type' => array(false)
 			   									));
-			$ciclos = dropdown_tpl($dropdown_ciclos);
 
-			$data['list_ciclos'] = $ciclos;
+		}else{
+			$dropdown_ciclos = array(
+					'value' 	=> 'id_nutricion_ciclos'
+					,'text' 	=> array('ciclo')
+					,'leyenda'  => '-----'
+					,'name' 	=> "lts_ciclos");
 		}
-		
+		$ciclos = dropdown_tpl($dropdown_ciclos);
+		$data['list_ciclos'] = $ciclos;
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$data,true));
 		}else{

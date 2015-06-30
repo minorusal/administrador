@@ -247,17 +247,17 @@ class recetario extends Base_Controller{
 		}	
 	}
 	public function detalle(){
-		$id_receta = $this->ajax_post('id_receta');
-
-		$sqlData = array(
-			 'buscar'        => false
-			,'offset' 		 => false
-			,'limit'      	 => false
-			,'aplicar_limit' => false
-			,'unique'        => $id_receta
-		);
-		$recetario = $this->db_model->get_data_unique($sqlData);
-		
+		$id_receta  = $this->ajax_post('id_receta');
+		$cantidades = '';
+		$sqlData    = array(
+							 'buscar'        => false
+							,'offset' 		 => false
+							,'limit'      	 => false
+							,'aplicar_limit' => false
+							,'unique'        => $id_receta
+						);
+		$id_compras_articulo = array();
+		$recetario           = $this->db_model->get_data_unique($sqlData);
 		foreach ($recetario as $key => $value) {
 			$id_nutricion_receta  = $value['id_nutricion_receta'];
 			$receta               = $value['receta'];
@@ -271,11 +271,17 @@ class recetario extends Base_Controller{
 			$edit_id_usuario      = $value['edit_id_usuario'];
 			$edit_timestamp       = $value['edit_timestamp'];
 			
-			$id_compras_articulo[] = $value['id_compras_articulo'];
+			if($value['id_compras_articulo']){
+				$id_compras_articulo[] = $value['id_compras_articulo'];
+				$input        = form_input($this->att_addon('articulo_'.$value['id_compras_articulo'],$value['porciones_articulo']));
+
+				$cantidades  .=  "<p id='articulo_".$value['id_compras_articulo']."'><label>".$value['articulo']."</label>
+					                ".add_on_tpl($input,$value['um'] )."
+					            </p>";
+			}
 		}
 
-		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_editar';
-
+		$seccion  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_editar';
 		$familias = array(
 						 'data'		=> $this->familias->db_get_data(array())
 						,'value' 	=> 'id_nutricion_familia'
@@ -284,21 +290,17 @@ class recetario extends Base_Controller{
 						,'class' 	=> "requerido"
 						,'selected' => $id_nutricion_familia
 					);
-
 		$list_familias  = dropdown_tpl($familias);
-
-		$insumos  = array(
-						 'data'		=> $insumos  = $this->db_model->get_insumos()
-						,'value' 	=> 'id_compras_articulo'
-						,'text' 	=> array('clave_corta','articulo')
-						,'name' 	=> "lts_insumos_update"
-						,'class' 	=> "requerido  "
-						,'selected' => $id_compras_articulo
-					);
-
+		$insumos        = array(
+								 'data'		=> $insumos  = $this->db_model->get_insumos()
+								,'value' 	=> 'id_compras_articulo'
+								,'text' 	=> array('clave_corta','articulo')
+								,'name' 	=> "lts_insumos_update"
+								,'class' 	=> "requerido  "
+								,'selected' => $id_compras_articulo
+							);
 		$list_insumos  = multi_dropdown_tpl($insumos);
-
-		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_save      = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'update()','content'=>$this->lang_item("btn_guardar")));
 		
 		$tab_3['lbl_receta']               = $this->lang_item('lbl_receta');
 		$tab_3['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
@@ -309,12 +311,12 @@ class recetario extends Base_Controller{
 		$tab_3['lbl_editar_porciones']     = $this->lang_item('lbl_editar_porciones');
 		$tab_3['select_insumos']           = $this->lang_item('select_insumos');
 		$tab_3['lbl_presentacion_insumo']  = $this->lang_item('lbl_presentacion_insumo');
-
 		$tab_3['value_receta']             = $receta;
 		$tab_3['value_clave_corta']        = $clave_corta;
 		$tab_3['value_porciones']          = $porciones;
 		$tab_3['value_preparacion']        = $preparacion;
 		$tab_3['multiselect_insumos']      = $list_insumos;
+		$tab_3['cantidades_insumos']       = $cantidades;
 		$tab_3['select_familias']          = $list_familias;
 		$tab_3['button_save']              = $btn_save;
 
@@ -334,17 +336,24 @@ class recetario extends Base_Controller{
 		$articulo_um     = $articulo[0]['um'];
 		$articulo_id     = $articulo[0]['id_compras_articulo'];
 
-	    $input= "<input data-campo='articulo_$articulo_id' type='text' class='numerico requerido input-small' placeholder='".$this->lang_item('lbl_cantidad')."' /> 
-				<span class='add-on'>$articulo_um</span>";
+
+		$input= form_input($this->att_addon('articulo_'.$articulo_id));
 
 		$data =  "<p id='articulo_$articulo_id'><label>$articulo_nombre</label>
-	                <span class='field input-prepend input-append'>
-	               		: $input
-	                </span>
+	                ".add_on_tpl($input,$articulo_um )."
 	            </p>";
 		echo json_encode($data);
 	}
 
+	public function att_addon($campo, $value= ''){
+		return $att = array(
+                            'data-campo'    => $campo,
+                            'type'          => 'text',
+                            'class'         => 'numerico requerido input-small',
+                            'placeholder'   => $this->lang_item('lbl_cantidad'),
+                            'value'         => $value
+                        );  
+	}
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');

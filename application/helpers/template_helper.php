@@ -1,5 +1,14 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+	
+	if(!function_exists('add_on_tpl')){
+		function add_on_tpl($input, $eti){
+			$add_on = "<span class='field input-prepend input-append'>
+								".$input."
+				               <span class='add-on'>".$eti."</span>		
+				        </span>";
+			return $add_on;
+		}
+	}	
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
 			$link         = "";
@@ -122,7 +131,7 @@
 				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
 				$event      = ($event) ? $event : ''; 
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
-				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: array('-----');
+				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: '-----';
 			}
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;
@@ -146,6 +155,7 @@
 				return $selected;
 			}
 			if(!$data){
+				$leyenda = array($leyenda);
 				$selected = "<span class='formwrapper'>".form_dropdown($name,$leyenda, $selected," class='chzn-select $class' ")."</span>";
 				return $selected;
 			}
@@ -341,7 +351,6 @@
 			
 		}
 	}
-
 	if(!function_exists('plantilla_table_tpl')){
 		function set_table_tpl(){
 			return  array (
@@ -366,7 +375,6 @@
 		              );
 		}
 	}
-
 	if(!function_exists('widgetbox_tpl')){
 		function widgetbox_tpl($name, $content){
 			
@@ -383,8 +391,6 @@
 			return $widgetbox;
 		}
 	}
-		
-
 	if(!function_exists('toggle_modal_tpl')){
 		function toggle_modal_tpl($arg_identy, $header= array(), $body= array(), $footer=array(), $static= false){
 			
@@ -406,7 +412,7 @@
 			$footer    = (array_key_exists('html', $footer))? $footer['html'] : '';
 			
 			$modal ='
-					<div aria-hidden="true" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
+					<div aria-hidden="false" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
 						
 						<div class="modal-header btn-primary" '.$id_header.'>
 							'.$close.'

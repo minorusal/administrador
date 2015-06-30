@@ -116,7 +116,6 @@ function detalle(id_receta){
         }
     });
 }
-
 function clean_formulario_recetas(){
 	clean_formulario();
 	jQuery('#content_porciones_insert').html('').hide();

@@ -59,12 +59,18 @@ class recetario_model extends Base_Model{
 						,f.id_nutricion_familia
 						,r.*
 						,ri.id_compras_articulo
+						,ri.porciones as porciones_articulo
+						,ca.articulo
+						,cu.um
 					FROM $tbl[nutricion_recetas] r
 					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
-					LEFT JOIN $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					LEFT JOIN  $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					LEFT JOIN  $tbl[compras_articulos] ca ON ca.id_compras_articulo = ri.id_compras_articulo
+					LEFT JOIN  $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
 					WHERE r.activo = 1 $unique $filtro 
 					$limit 
 					";
+		//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

@@ -109,13 +109,22 @@ class gavetas extends Base_Controller
 								'href'    => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_gavetas'].')'
 						);
-				
+				// Validacion de estock en gaveta
+				$stock = $this->db_model->db_get_data_stock_por_gaveta(array('id_almacen' => $value['id_almacen_almacenes'], 'id_pasillo' => $value['id_almacen_pasillos'], 'id_gaveta' => $value['id_almacen_gavetas']));
+				// Acciones
+				$accion_id 						= $value['id_almacen_gavetas'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_acciones ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = (!$stock)?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['clave_corta'],
 									'gavetas'       => tool_tips_tpl($value['gavetas'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
 									'gaveta'        => $value['almacenes'],
 									'pasillos'      => $value['pasillos'],
-									'descripcion'   => $value['descripcion']);	
+									'descripcion'   => $value['descripcion'],
+									'acciones' 		=> $acciones
+									);	
 			}
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
@@ -125,7 +134,9 @@ class gavetas extends Base_Controller
 										$this->lang_item("cvl_corta"),
 										$this->lang_item("almacen"),
 										$this->lang_item("pasillos"),
-										$this->lang_item("descripcion"));
+										$this->lang_item("descripcion"),
+										$this->lang_item("acciones")
+										);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);

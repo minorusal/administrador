@@ -395,8 +395,12 @@
 		}
 	}
 	if(!function_exists('toggle_modal_tpl')){
-		function toggle_modal_tpl($arg_identy, $header= array(), $body= array(), $footer=array(), $static= false){
+		function toggle_modal_tpl($arg_identy, $config= array(), $static= false){
 			
+			$header = (array_key_exists('header',$config)) ? $config['header'] : array();
+			$body   = (array_key_exists('body',$config)) ? $config['body'] : array();
+			$footer = (array_key_exists('footer',$config)) ? $config['footer'] : array();
+
 			if($static){
 				$backdrop = 'data-backdrop="static"';
 				$close = '';
@@ -406,7 +410,7 @@
 			}
 
 			$id_header = (array_key_exists('id', $header))? 'id="'.$header['id'].'"' : '';
-			$header    = (array_key_exists('html', $header))? $header['html'] : 'Toggle Modal';
+			$header    = (array_key_exists('html', $header))? $header['html'] : '';
 			
 			$id_body   = (array_key_exists('id', $body))? 'id="'.$body['id'].'"' : ''; 
 			$body      = (array_key_exists('html', $body))? $body['html'] : '';
@@ -417,12 +421,12 @@
 			$modal ='
 					<div aria-hidden="false" '.$backdrop.' style="width:700px;" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" class="modal hide fade in" id="'.$arg_identy.'">
 						
-						<div class="modal-header btn-primary" '.$id_header.'>
+						<div class="modal-header" '.$id_header.'>
 							'.$close.'
 							<h3 id="myModalLabel">'.$header.'</h3>
 						</div>
 
-						<div  class="modal-body" '.$id_body.'>
+						<div  class="modal-body"  '.$id_body.'>
 							'.$body.'
 						</div>
 

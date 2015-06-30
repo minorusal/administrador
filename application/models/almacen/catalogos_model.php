@@ -26,6 +26,7 @@ class catalogos_model extends Base_Model{
 						,av.id_sucursal
 						,su.sucursal
 						,ti.tipos
+						,av.edit
 					FROM $tbl[almacen_almacenes] av					
 					LEFT JOIN $tbl[sucursales] su on su.id_sucursal = av.id_sucursal
 					LEFT JOIN $tbl[almacen_tipos] ti on ti.id_almacen_tipos = av.id_almacen_tipos
@@ -53,11 +54,13 @@ class catalogos_model extends Base_Model{
 
 
 	/*Actualliza la información en el formuladio de edición de almacen*/
-	public function db_update_data($data=array()){
+	public function db_update_data_almacen($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
+		// $condicion = array('id_almacen_almacenes !=' => $data['id_almacen_almacenes'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_almacenes !='] = (isset($data['id_almacen_almacenes']))?$data['id_almacen_almacenes']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_almacenes'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_almacenes = ".$data['id_almacen_almacenes']; 

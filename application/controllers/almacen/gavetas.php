@@ -390,4 +390,33 @@ class gavetas extends Base_Controller
 		
 		$this->excel->generate_xlsx($params);
 	}
+
+	public function eliminar(){
+		$msj_grid = $this->ajax_post('msj_grid');
+		$sqlData = array(
+						 'id_almacen_gavetas'	=> $this->ajax_post('id_almacen_gavetas')
+						,'activo' 		 =>0
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+						);
+			 $insert = $this->db_model->db_update_data_gaveta($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+						,'msj_grid'	=> $msj_grid
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
+				);
+			}
+		echo json_encode($json_respuesta);
+	}
 }

@@ -45,11 +45,7 @@ function authentication(){
 					var promp_content = {
 									content_01:{
 										html:data,
-										buttons:'<input type="button" value="Aceptar"'
-									}
-									content_02:{
-										html:data,
-										buttons:'<input type="button" value="Aceptar"'
+										buttons:{ }
 									}
 								};
 					jQuery.prompt(promp_content);

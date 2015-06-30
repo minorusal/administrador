@@ -31,6 +31,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->tab2 			= 'listado';
 		$this->tab3 			= 'entradas_recepcion_edit';
 		$this->tab4 			= 'articulos';
+		$this->tab5 			= 'modal';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('compras/ordenes_model','ordenes_model');
@@ -48,6 +49,7 @@ class entradas_recepcion extends Base_Controller{
 									,'listado'
 									,'entradas_recepcion_edit'
 									,'articulos'
+									,'modal'
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -59,6 +61,7 @@ class entradas_recepcion extends Base_Controller{
 		$tab_2 	= $this->tab2;
 		$tab_3 	= $this->tab3;
 		$tab_4 	= $this->tab4;
+		$tab_5 	= $this->tab5;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
@@ -67,6 +70,7 @@ class entradas_recepcion extends Base_Controller{
 										,$this->lang_item($tab_2) //listado
 										,$this->lang_item($tab_3) //detalle
 										,$this->lang_item($tab_4) //articulos
+										,$this->lang_item($tab_5) //modal
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
@@ -74,6 +78,7 @@ class entradas_recepcion extends Base_Controller{
 										,$path.$tab_2.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
 										,$tab_3                   //detalle
 										,$tab_4                   //articulos
+										,$tab_5                   //modal
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -81,9 +86,10 @@ class entradas_recepcion extends Base_Controller{
 										,'load_content'
 										,''
 										,''
+										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'), array('style' => 'display:none'));
+		$config_tab['attr']     = array('','', array('style' => 'display:none'), array('style' => 'display:none'), array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -437,7 +443,13 @@ class entradas_recepcion extends Base_Controller{
 		echo json_encode($json_respuesta);
 	}
 	public function modal(){
-		$tbl_plantilla = set_table_tpl();
+		$accion 	= $this->tab['modal'];
+		$url_link 	= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$accion;
+		$arg_body   = array('html'=>'<h1>hola</h1>' );
+
+		$tabData['modal'] = toggle_modal_tpl('test',array(), $arg_body);
+		echo json_encode( $this->load_view_unique($url_link ,$tabData, true));
+		/*$tbl_plantilla = set_table_tpl();
 		$tbl_data[] = array(
 								
 								'lote'   => 'lote',
@@ -472,7 +484,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->table->set_template($tbl_plantilla);
 		$buttons = $this->table->generate($button_data);
 		
-		echo json_encode('<div>'.$perfiles.$info.$u_m.$buttons.'</div>');
+		echo json_encode($perfiles.$info.$u_m.$buttons);*/
 	}
 }
 ?>

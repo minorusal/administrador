@@ -161,16 +161,16 @@ function calculos(id){
 				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
 			success : function(data){
-				var promp_content = {
+				/*var promp_content = {
 								content_01:{
 									html:data,
 									buttons: { }
 								}
 							};
 				jQuery.prompt(promp_content);
-				//setTimeout("clean_form_login()",60000);
-				functions.push('calendar_actual("caducidad")');
-				jQuery('#fecha').html(include_script(functions));
+				//setTimeout("clean_form_login()",60000);*/
+				//functions.push('calendar_actual("caducidad")');
+				jQuery('#formulario').append(data);
 			}
 		});
 	}

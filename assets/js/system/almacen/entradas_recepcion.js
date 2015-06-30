@@ -171,6 +171,7 @@ function calculos(id){
 				//setTimeout("clean_form_login()",60000);*/
 				//functions.push('calendar_actual("caducidad")');
 				jQuery('#formulario').append(data);
+				jQuery('#test').modal();
 			}
 		});
 	}

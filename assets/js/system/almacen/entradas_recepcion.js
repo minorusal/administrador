@@ -169,8 +169,8 @@ function calculos(id){
 							};
 				jQuery.prompt(promp_content);
 				//setTimeout("clean_form_login()",60000);*/
-				//functions.push('calendar_actual("caducidad")');
-				jQuery('#formulario').append(data);
+				functions.push('calendar_actual("caducidad")');
+				jQuery('#modal').html(data+include_script(functions));
 				jQuery('#test').modal();
 			}
 		});

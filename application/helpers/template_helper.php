@@ -45,8 +45,16 @@
 									".$config['names'][$i]."
 								</a>
 							</li>";
-
-				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='overflow-x:auto; $display'>
+				if(array_key_exists('style_content',$config)){
+					if(array_key_exists($i,$config['style_content'])){
+						$overflow_x = $config['style_content'][$i];
+					}else{
+						$overflow_x = "overflow-x:auto;";
+					}
+				}else{
+					$overflow_x = "overflow-x:auto;";
+				}
+				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='$overflow_x $display'>
         							$data
     								</div>";
 			}
@@ -57,9 +65,7 @@
     		$tabbed .= "</ul>";
     		$tabbed .= $tabs_content;
     		$tabbed .= "</div>";
-
-    	return $tabbed;
-
+    		return $tabbed;
 		}
 	}
 	if(!function_exists('alertas_tpl')){
@@ -116,7 +122,7 @@
 				$event      = (array_key_exists('event',$params))?data_event_tpl($params['event']):false;
 				$event      = ($event) ? $event : ''; 
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
-				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
+				$leyenda 	= (array_key_exists('leyenda' ,$params))?$params['leyenda']: array('-----');
 			}
 			$name         = ($name=="")?"selected": $name;
 			$count        = 0;

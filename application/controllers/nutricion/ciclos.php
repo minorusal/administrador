@@ -62,6 +62,9 @@ class ciclos extends Base_Controller{
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
+		$config_tab['style_content'] = array('');
+
+
 		return $config_tab;
 	}
 	private function uri_view_principal()

@@ -10,8 +10,12 @@ jQuery(document).ready(function(){
 });
 
 function selec_manual_auto(){
+  var letra = allow_only_numeric_integer();
+  jQuery("#txt_ciclo").attr("disabled", "disabled");
+  jQuery(".manual").hide();
   jQuery("#txt_ciclo").removeClass("requerido");
   jQuery("#txt_clave_corta").removeClass("requerido");
+  jQuery("#txt_ciclo").val("");
   jQuery("#txt_ciclo").attr("disabled", "disabled");
   jQuery("#txt_clave_corta").attr("disabled", "disabled");
   jQuery('input[name=tipo]').click(function(){
@@ -19,14 +23,21 @@ function selec_manual_auto(){
     if(valor == 'auto'){
       jQuery("#txt_ciclo").removeClass("requerido");
       jQuery("#txt_clave_corta").removeClass("requerido");
+      jQuery("#txt_ciclo").attr('value','');
       jQuery("#txt_cantidad_ciclo").removeAttr("disabled");
       jQuery("#txt_ciclo").attr("disabled", "disabled");
+      jQuery(".manual").hide('slow');
+      jQuery(".auto").show('slow');
       jQuery("#txt_clave_corta").attr("disabled", "disabled");
     }else{
        jQuery("#txt_cantidad_ciclo").removeClass("requerido");
-      jQuery("#txt_cantidad_ciclo").attr("disabled", "disabled");
-      jQuery("#txt_ciclo").removeAttr("disabled");
-      jQuery("#txt_clave_corta").removeAttr("disabled");
+       jQuery("#txt_cantidad_ciclo").attr("disabled", "disabled");
+       jQuery("#txt_ciclo").removeAttr("disabled");
+       jQuery("#txt_clave_corta").removeAttr("disabled");
+       jQuery("#txt_cantidad_ciclo").attr('value','');
+       jQuery(".manual").show('slow');
+       jQuery(".auto").hide('slow');
+       jQuery("#txt_ciclo").removeAttr("disabled");
     }
   });
 }
@@ -41,13 +52,10 @@ function load_content(uri, id_content){
         data: {filtro : filtro, tabs:0},
         success: function(data){
            if(id_content==1){
-           		var funcion = 'buscar';
-           		jQuery('#a-'+id_content).html(data+input_keypress('search-query', funcion));
-           		jQuery('#search-query').val(filtro).focus();
-           		tool_tips();
            }else{
            		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		jQuery('#a-'+id_content).html(data+include_script(chosen));
+              var tipo_insert  = 'selec_manual_auto();';
+           		jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }
         }
     });
@@ -113,9 +121,7 @@ function load_recetas(id_familia){
             jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
           },
           success: function(data){
-            alert(data);
             jQuery('#lts_recetas').html(data);
-
           }
       });
   }else{
@@ -145,6 +151,36 @@ function buscar(){
 	});
 }
 
+function agregar(){
+  var btn          = jQuery("button[name='save_ciclo']");
+  btn.attr('disabled','disabled');
+  jQuery('#mensajes').hide();
+  
+  var objData = formData('#formulario');
+  //alert(dump_var(objData));
+  objData['incomplete'] = values_requeridos();
+
+  jQuery.ajax({
+    type:"POST",
+    url: path()+"nutricion/ciclos/insert_ciclo",
+    dataType: "json",
+    data: objData,
+    beforeSend : function(){
+      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+    },
+    success : function(data){
+      //alert(dump_var(data));
+      btn.removeAttr('disabled');
+
+      var data = data.split('|');
+      if(data[0]==1){
+        clean_formulario();
+      }
+      jQuery("#registro_loader").html('');
+        jQuery("#mensajes").html(data[1]).show('slow');
+    }
+  });
+}
 
 
 //SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-06-26 18:38:00' and '2015-06-26 23:59:59' and envio = 1

@@ -193,6 +193,7 @@ class ciclos extends Base_Controller{
 						,'text' 	=> array('clave_corta','sucursal')
 						,'name' 	=> "lts_sucursales"
 						,'leyenda' 	=> "-----"
+						,'class' 	=> "requerido"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_ciclos', 
 											'params'      => array('this.value'), 
@@ -223,6 +224,32 @@ class ciclos extends Base_Controller{
 		else
 		{
 			return $this->load_view_unique($seccion, $tabIn, true);
+		}
+	}
+
+	public function insert_ciclo(){
+		$incomplete = $this->ajax_post('incomplete');
+		if($incomplete > 0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$sqlData = array(
+				 'ciclo'       => $this->ajax_post('txt_cantidad_ciclo')
+				,'nom_ciclo'  => $this->ajax_post('txt_ciclo')
+				,'id_sucursal'  => $this->ajax_post('lts_sucursales')
+				,'clave_corta'  => $this->ajax_post('txt_clave_corta')
+				,'id_usuario' => $this->session->userdata('id_usuario')
+				,'timestamp' => $this->timestamp()
+				,'tipo'  => $this->ajax_post('tipo')
+				);
+			$insert = $this->ciclos->insert_ciclo($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
 		}
 	}
 

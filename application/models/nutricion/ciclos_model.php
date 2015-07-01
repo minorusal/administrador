@@ -4,6 +4,42 @@ class ciclos_model extends Base_Model{
 		parent::__construct();
 	}
 
+
+	public function insert_ciclo($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		if($data['tipo'] != "manual"){
+			unset($data['tipo']);
+			$query = "SELECT count(*) as id_indice 
+					  FROM $tbl[nutricion_ciclos] cl
+					  WHERE cl.id_sucursal = $data[id_sucursal]";
+			$query = $this->db->query($query);
+			$num_ciclos = $query->result_array();
+			$cantidad = $num_ciclos[0]['id_indice'];
+			$ciclos = $data['ciclo'];
+			for($i=$cantidad+1;$i<($ciclos+$cantidad+1);$i++) {				
+				$data['ciclo'] = 'ciclo'.$i;
+				$data['clave_corta'] = date("YmdHis").$i;
+				$existe = $this->row_exist($tbl['nutricion_ciclos'], array('clave_corta'=> $data['clave_corta']));
+				if(!$existe){
+					$insert = $this->insert_item($tbl['nutricion_ciclos'], $data);
+				}
+			}
+			return $insert;
+		}else{
+			unset($data['tipo']);
+			$data['ciclo'] = $data['nom_ciclo'];
+			unset($data['nom_ciclo']);
+			// Query
+			$existe = $this->row_exist($tbl['nutricion_ciclos'], array('clave_corta'=> $data['clave_corta']));
+			if(!$existe){
+				$insert = $this->insert_item($tbl['nutricion_ciclos'], $data);
+				return $insert;
+			}else{
+				return false;
+			}
+		}
+	}
 	public function db_get_data($data = array()){
 		// DB Info		
 		$tbl = $this->tbl;

@@ -396,7 +396,6 @@
 	}
 	if(!function_exists('toggle_modal_tpl')){
 		function toggle_modal_tpl($arg_identy, $config = array(), $static= false){
-			
 			$header = (array_key_exists('header',$config)) ? $config['header'] : array();
 			$body   = (array_key_exists('body',$config)) ? $config['body'] : array();
 			$footer = (array_key_exists('footer',$config)) ? $config['footer'] : array();

@@ -262,7 +262,7 @@ class entradas_recepcion extends Base_Controller{
 							</td>
 							<td>
 								<ul class="tooltips">
-									<a href"#" style="cursor:pointer" onclick="detalle_articulos_precio('.$data_listado[$i]['id_compras_orden_articulo'].')" data-placement="right" data-rel="tooltip" data-original-title="Ver detalle" rel="tooltip">'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</a>
+									<span>'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</span>
 								</ul>
 							</td>
 							<td>
@@ -411,7 +411,7 @@ class entradas_recepcion extends Base_Controller{
 						,'id_usuario' 		 => $this->session->userdata('id_usuario')
 						,'timestamp'  		 => $this->timestamp()
 						);
-			//$id = $this->db_model->insert($sqlData);
+			$id = $this->db_model->insert($sqlData);
 			//dump_var($id);
 			
 			$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
@@ -426,12 +426,7 @@ class entradas_recepcion extends Base_Controller{
 			$cantidad 					= $this->ajax_post('cantidad');
 			$unidad_minima 					= $this->ajax_post('unidad_minima');
 			$cl_um 					= $this->ajax_post('cl_um');
-			
-			
-
-			
-			
-
+		
 			$array=array(	
 					0  	=> $lote_val, 
 					1   => $caducidad_val,
@@ -470,13 +465,13 @@ class entradas_recepcion extends Base_Controller{
 					$um_presentacion = $data[$d][8]*$data[$d][7];
 					$embalaje_UM 	 = $um_embalaje*$data[$d][9];
 					$presentacion_UM = $um_presentacion*$data[$d][9];
-					$sqldata2[]= array(
+					$sqldata2= array(
 							'id_compras_articulo_precios'  => $keys[$d],
 							'id_articulo_tipo'			   => $data[$d][4],
 							'stock_embalaje_UM'		   	   => $embalaje_UM,
 							'stock_presentacion_UM'	   	   => $presentacion_UM,
-							'UM'			           	   => $data[$d][9],
-							'u_m'			           	   => $data[$d][10],
+							'valor_u_m'			           => $data[$d][9],
+							'clave_u_m'			           => $data[$d][10],
 							'lote'					   	   => $data[$d][0],
 							'caducidad'			   	   	   => $caducidad_val,
 							'timestamp'  	 		       => $this->timestamp(),
@@ -491,9 +486,10 @@ class entradas_recepcion extends Base_Controller{
 						);
 				}
 				
-				//$insert = $this->db_model->insert_entradas_partidas($sqldata);	
+				$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
+				$insertstock = $this->db_model->insert_entradas_stock($sqldata2);	
 			}
-			dump_var($sqldata2);
+			//dump_var($sqldata2);
 
 		}
 		echo json_encode($json_respuesta);
@@ -503,8 +499,11 @@ class entradas_recepcion extends Base_Controller{
 		$accion 	= $this->tab['modal'];
 		$url_link 	= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$accion;
 		$html 		= modal_lote_tpl($id);
-		$arg_body   = array('html'=>$html );
-		$tabData['modal'] = toggle_modal_tpl('lote',array(), $arg_body);
+		$arg_body   = array(
+							'header'=>array('id'=> 1,'html'=>'titulo'),
+							'body' =>array('id'=> 'test','html'=>$html), 
+							'footer' => array('id'=> 'test','html'=>''));
+		$tabData['modal'] = toggle_modal_tpl('lote', $arg_body);
 		echo json_encode( $this->load_view_unique($url_link ,$tabData, true));
 	}
 }

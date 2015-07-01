@@ -10,6 +10,7 @@ class ciclos_model extends Base_Model{
 		$tbl = $this->tbl;
 		if($data['tipo'] != "manual"){
 			unset($data['tipo']);
+			unset($data['nom_ciclo']);
 			$query = "SELECT count(*) as id_indice 
 					  FROM $tbl[nutricion_ciclos] cl
 					  WHERE cl.id_sucursal = $data[id_sucursal]";

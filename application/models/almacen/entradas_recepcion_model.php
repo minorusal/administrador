@@ -52,6 +52,54 @@ class entradas_recepcion_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	public function db_get_data_orden_listado_registrado_unificado($data = array()){
+		$id_compras_orden 			 = (isset($data['id_compras_orden']))?$data['id_compras_orden']:false;
+		$condicion = ($id_compras_orden)?("AND id_compras_orden = '$id_compras_orden'"):false;
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT 
+					l.id_compras_orden_articulo,
+					l.id_compras_articulo_precios,
+					l.cantidad,
+					l.costo_x_cantidad,
+					l.descuento,
+					l.impuesto_porcentaje,
+					l.subtotal,
+					l.valor_impuesto,
+					l.total,
+					c.nombre_comercial,
+					b.articulo,
+					b.id_compras_articulo,
+					b.id_articulo_tipo,
+					b.id_compras_um,
+					a.costo_sin_impuesto,
+					a.upc,
+					a.sku,
+					a.presentacion_x_embalaje,
+					a.edit_timestamp,
+					a.peso_unitario,
+					a.um_x_embalaje,
+					a.um_x_presentacion,
+					e.clave_corta as cl_presentacion,
+					f.embalaje,
+					h.clave_corta as cl_um,
+					h.unidad_minima,
+					e.presentacion
+					FROM $tbl[compras_ordenes_articulos] l
+					LEFT JOIN $tbl[compras_articulos_precios] a on l.id_compras_articulo_precios = a.id_compras_articulo_precios
+					LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
+					LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
+					LEFT JOIN $tbl[compras_presentaciones] e on a.id_presentacion	= e.id_compras_presentacion
+					LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
+					LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
+				WHERE 1 AND l.activo = 1 $condicion";
+		//echo $query;
+      	// Execute querie
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 	public function insert($data){
 		// DB Info
 		$tbl = $this->tbl;
@@ -78,6 +126,19 @@ class entradas_recepcion_model extends Base_Model{
 		/*}else{
 			return false;
 		}*/
-	}
+	}	
+	public function insert_entradas_stock($data){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		/*$existe = $this->row_exist($tbl['almacen_entradas_recibir']);
+		if(!$existe){*/
+			$insert = $this->insert_item($tbl['almacen_stock'], $data);
+			return $insert;
+			//return $last_id = $this->last_id();
+		/*}else{
+			return false;
+		}*/
+	}	
 }
 ?>

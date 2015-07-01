@@ -4,7 +4,7 @@ class ciclos extends Base_Controller{
 
 	private $modulo;
 	private $submodulo;
-	//private $view_content;
+	private $view_content;
 	private $path;
 	private $icon;
 	private $offset, $limit_max;
@@ -16,7 +16,8 @@ class ciclos extends Base_Controller{
 		$this->seccion		    = 'ciclos';
 		$this->icon 			= 'fa fa-cutlery'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
-		$this->view_content 	= 'nutricion/ciclos/ciclos_save';
+		//$this->view_content 	= 'nutricion/ciclos/ciclos_save';
+		$this->view_content 	= 'content';
 		//$this->view_modal       = 'modal_cropper';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -35,8 +36,44 @@ class ciclos extends Base_Controller{
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
+
+	public function config_tabs()
+	{
+		$tab_1 	= $this->tab1;
+		$tab_2 	= $this->tab2;
+		$path  	= $this->path;
+		//$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		// Nombre de Tabs
+		$config_tab['names']    = array(
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+								); 
+		// Href de tabs
+		$config_tab['links']    = array(
+										 $path.$tab_1             
+										,$tab_2                   
+								); 
+		// Accion de tabs
+		$config_tab['action']   = array(
+										 'load_content'
+										,''
+								);
+		// Atributos 
+		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+
+		$config_tab['style_content'] = array('');
+
+
+		return $config_tab;
+	}
+	private function uri_view_principal()
+	{
+		return $this->modulo.'/'.$this->view_content;
+	}
+
+
 	public function index(){
-		$sqlData = array(
+		/*$sqlData = array(
 			 'buscar' => 0
 			,'offset' => 0
 			,'limit'  => 0
@@ -126,37 +163,50 @@ class ciclos extends Base_Controller{
 		$data['list_tiempos']     		= $tiempos;
 		$data['list_familias']     	    = $familias;
 		$data['multiselect_recetas']    = $list_recetas;
+		$data['titulo_seccion']   		= $this->lang_item($this->seccion);
+		$data['empresa']          		= 'Ciclos';
+		$data['titulo_submodulo'] 		= $this->lang_item("titulo_submodulo");
+		$data['icon']             		= $this->icon;
+		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$this->load_view($this->view_content, $data, $js);*/
+		$tabl_inicial 			  = 1;
+		$view_agregar    		  = $this->agregar();	
+		$contenidos_tab           = $view_agregar;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['empresa']          = 'Ciclos';
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
+		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
-		$this->load_view($this->view_content, $data, $js);
+		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
+	public function agregar(){
+		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		$sqlData = array(
+			 'buscar' => ''
+			,'offset' => 0
+			,'limit' => 0
+			);
+		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
+		$tabIn['lbl_ciclo']        = $this->lang_item("lbl_ciclo");
+		$tabIn['lbl_clave_corta']  = $this->lang_item('lbl_clave_corta');
 
-	public function ciclo_receta(){
-		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
-		$id_familia   = $this->ajax_post('id_familia');
-		$id_sucursal = $this->ajax_post('id_sucursal');
-		if($id_familia){
-			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
-			$recetas  = array(
-							 'data'		=> $receta
-							,'value' 	=> 'id_nutricion_receta'
-							,'text' 	=> array('receta')
-							,'name' 	=> "lts_recetas"
-							,'class' 	=> "requerido"
-						);
-			$list_recetas  = multi_dropdown_tpl($recetas);
-			$tab['multiselect_recetas']   = $list_recetas;
-			if($this->ajax_post(false)){
-				echo json_encode($this->load_view_unique($seccion,$tab,true));
-			}else{
-				return $this->load_view_unique($seccion, $tab, true);
-			}
+		$tabIn['button_save']  = $btn_save;
+		$tabIn['button_reset'] = $btn_reset;
+
+		if($this->ajax_post(false))
+		{
+			echo json_encode($this->load_view_unique($seccion,$tabIn,true));
+		}
+		else
+		{
+			return $this->load_view_unique($seccion, $tabIn, true);
 		}
 	}
+
+
 	public function cargar_ciclos(){
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
@@ -186,6 +236,27 @@ class ciclos extends Base_Controller{
 					,'name' 	=> "lts_ciclos");
 		}
 		$ciclos = dropdown_tpl($dropdown_ciclos);
+
+		echo json_encode($ciclos);
+	}
+
+	public function ciclo_receta(){
+		$id_familia   = $this->ajax_post('id_familia');
+		$id_sucursal = $this->ajax_post('id_sucursal');
+		if($id_familia){
+			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
+
+			$recetas  = array(
+							 'data'		=> $receta
+							,'value' 	=> 'id_nutricion_receta'
+							,'text' 	=> array('receta')
+							,'name' 	=> "lts_recetas"
+							,'class' 	=> "requerido"
+						);
+			$list_recetas  = multi_dropdown_tpl($recetas);
+
+			echo json_encode($list_recetas);
+
 		
 		if($this->ajax_post(false)){
 			echo json_encode($ciclos);
@@ -193,6 +264,7 @@ class ciclos extends Base_Controller{
 			return $this->load_view_unique($seccion, $data, true);
 		}
 	}
+	
 
 	public function ciclo_detalle($id_ciclo = false){
 		$id_ciclo  = $this->ajax_post('id_ciclo');
@@ -224,7 +296,7 @@ class ciclos extends Base_Controller{
 
 			$m = '<a class ="onclick_on" onclick="eliminar_servicio(0,'.$id_ciclo.')"">Eliminar todo <span class=" iconfa-trash"></span></a>';
 		}else{
-			$m = '<a class ="onclick_on">No se tienen recetas vinculadas a este menu</a>';
+			$m = '<a class ="onclick_on">No se tienen recetas vinculadas a este ciclo</a>';
 		}
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);

@@ -1,6 +1,6 @@
 /** DATE PICKER **/
 .ui-datepicker { background: #fff; }
-.ui-datepicker { z-index: 100 !important; display: none; border: 1px solid #0866c6; }
+.ui-datepicker { /*z-index: 100 !important;*/ display: none; border: 1px solid #0866c6; }
 .ui-datepicker-header { 
 	position: relative; text-align: center; padding: 5px; color: #fff; background: #0866c6;
 	text-transform: uppercase;

@@ -149,7 +149,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_pasillos !=' => $data['id_almacen_pasillos'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_pasillos !='] = (isset($data['id_almacen_pasillos']))?$data['id_almacen_pasillos']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_pasillos'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
@@ -182,7 +183,7 @@ class catalogos_model extends Base_Model{
 		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
 		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_pasillos] WHERE 1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_pasillos] WHERE 1 AND activo=1 $filtro ;";
       	$query  = $this->db->query($sql);
       	$test = $query->result_array();
 		if($query->num_rows){
@@ -247,7 +248,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_gavetas !=' => $data['id_almacen_gavetas'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_gavetas !='] = (isset($data['id_almacen_gavetas']))?$data['id_almacen_gavetas']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_gavetas'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
@@ -280,7 +282,7 @@ class catalogos_model extends Base_Model{
 		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
 		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $filtro ;";
       	$query  = $this->db->query($sql);
 		if($query->num_rows){
 			return $query->result_array();
@@ -299,7 +301,7 @@ class catalogos_model extends Base_Model{
 		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
 		$filtro .=($id_pasillo)?" AND id_almacen_pasillos='$id_pasillo'":'';
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $filtro ;";
       	$query  = $this->db->query($sql);
 		if($query->num_rows){
 			return $query->result_array();
@@ -320,7 +322,7 @@ class catalogos_model extends Base_Model{
 		$filtro .=($id_pasillo)?" AND id_pasillo='$id_pasillo'":'';
 		$filtro .=($id_gaveta)?" AND id_gaveta='$id_gaveta'":'';
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_stock] WHERE 1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_stock] WHERE 1 AND activo=1 $filtro ;";
       	$query  = $this->db->query($sql);
 		if($query->num_rows){
 			return $query->result_array();
@@ -376,7 +378,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_transportes !=' => $data['id_almacen_transportes'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_transportes !='] = (isset($data['id_almacen_transportes']))?$data['id_almacen_transportes']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_transportes'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_transportes = ".$data['id_almacen_transportes']; 

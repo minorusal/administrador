@@ -1,18 +1,22 @@
 
 <div id="formulario" class="stdform stdform2">
 	<p>
-        <label>{tipo_insert}</label>
-        <span class="formwrapper">
-        	<div class="radio" id="uniform-undefined">
-        		<span class="checked"><input type="radio" name="tipo" style="opacity: 0;"></span>
-        	</div> {lbl_auto} &nbsp; &nbsp;
-        	<div class="radio" id="uniform-undefined">
-        		<span class=""><input type="radio" name="tipo" checked="checked" style="opacity: 0;"></span>
-        	</div> {lbl_manual}
+        <label>{lbl_tipo_insert}</label>
+        <span class="field">
+        	<span><input type="radio" id="auto"  name="tipo" value="auto" checked="checked"></span>
+        	{lbl_auto} 
+        	<span><input type="radio" id="manual"  name="tipo" value="manual" ></span>
+        	{lbl_manual}
         </span>
     </p>
+    <p>
+		<label>{lbl_cantidad_ciclo} (*)</label>
+		<span class="field">
+			<input id="txt_cantidad_ciclo" type="text" name="txt_cantidad_ciclo" class="input-small requerido" value="" />
+		</span>
+	</p>
 	<p>
-		<label>{lbl_ciclo} (*)</label>
+		<label>{lbl_nombre_ciclo} (*)</label>
 		<span class="field">
 			<input id="txt_ciclo" type="text" name="txt_ciclo" class="input-xlarge requerido" value="" />
 		</span>
@@ -20,7 +24,7 @@
 	<p>
 		<label>{lbl_clave_corta} (*)</label>
 		<span class="field">
-			<input id="txt_clave_cprta" type="text" name="txt_clave_cprta" class="input-xlarge requerido" value="" />
+			<input id="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="" />
 		</span>
 	</p>
 	<p>

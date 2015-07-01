@@ -372,7 +372,9 @@ function values_numericos(){
 function allow_only_numeric(){
     jQuery('.numerico').numeric('.'); 
 }
- 
+function allow_only_numeric_integer(){
+    jQuery('.numerico').numeric(); 
+}
 
 function alertas_tpl(type , mensaje ,close){
     var alert = "";

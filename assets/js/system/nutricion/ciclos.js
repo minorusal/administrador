@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+  selec_manual_auto();
 	jQuery('#search-query').focus();
 	jQuery('#search-query').keypress(function(event){
 		var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -7,6 +8,28 @@ jQuery(document).ready(function(){
 		} 
 	});
 });
+
+function selec_manual_auto(){
+  jQuery("#txt_ciclo").removeClass("requerido");
+  jQuery("#txt_clave_corta").removeClass("requerido");
+  jQuery("#txt_ciclo").attr("disabled", "disabled");
+  jQuery("#txt_clave_corta").attr("disabled", "disabled");
+  jQuery('input[name=tipo]').click(function(){
+    var valor = jQuery(this).val();
+    if(valor == 'auto'){
+      jQuery("#txt_ciclo").removeClass("requerido");
+      jQuery("#txt_clave_corta").removeClass("requerido");
+      jQuery("#txt_cantidad_ciclo").removeAttr("disabled");
+      jQuery("#txt_ciclo").attr("disabled", "disabled");
+      jQuery("#txt_clave_corta").attr("disabled", "disabled");
+    }else{
+       jQuery("#txt_cantidad_ciclo").removeClass("requerido");
+      jQuery("#txt_cantidad_ciclo").attr("disabled", "disabled");
+      jQuery("#txt_ciclo").removeAttr("disabled");
+      jQuery("#txt_clave_corta").removeAttr("disabled");
+    }
+  });
+}
 
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
@@ -40,11 +63,9 @@ function load_ciclos(id_sucursal){
         	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
-          
-            var chosen  = 'jQuery(".chzn-select").chosen();';
-            jQuery('#ciclo').html(data+include_script(chosen));
-            jQuery('#ciclo').show('slow');
-          
+          var chosen  = 'jQuery(".chzn-select").chosen();';
+          jQuery('#ciclo').html(data+include_script(chosen));
+          jQuery('#ciclo').show('slow'); 
         }
     });
 }

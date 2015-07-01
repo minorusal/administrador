@@ -28,6 +28,7 @@ class articulos extends Base_Controller {
 										);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
+		$config_tab['style_content'] = array('');
 		return $config_tab;
 	}
 

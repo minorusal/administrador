@@ -207,6 +207,9 @@ class ordenes_model extends Base_Model{
 					a.costo_sin_impuesto,
 					c.nombre_comercial,
 					b.articulo,
+					b.id_compras_articulo,
+					b.id_articulo_tipo,
+					b.id_compras_um,
 					a.upc,
 					a.sku,
 					e.clave_corta as cl_presentacion

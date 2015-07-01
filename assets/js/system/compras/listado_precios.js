@@ -271,6 +271,8 @@ function load_pre_emb(id_presentacion){
   jQuery('#pre_em').html(clave_corta[0]);
   jQuery('#pre_em2').show('slow');
   jQuery('#pre_em2').html(clave_corta[0]);
+  jQuery('#lbl_unitario').show('slow');
+  jQuery('#lbl_unitario').html('1 '+clave_corta[0]);
   jQuery('#signo').show('slow');
 }
 function load_pre_um(id_articulo){
@@ -279,15 +281,15 @@ function load_pre_um(id_articulo){
         url: path()+"compras/listado_precios/load_presentacion_um",
         dataType: 'json',
         data: {id_articulo : id_articulo},
-        success: function(data){
+        success: function(data){          
           jQuery('#pre_um').show('slow');
           jQuery('#pre_um').html(data);
           jQuery('#pre_um2').show('slow');
           jQuery('#pre_um2').html(data);
           jQuery('#lbl_peso').show('slow');
           jQuery('#lbl_peso').html(data);
-          jQuery('#lbl_unitario').show('slow');
-          jQuery('#lbl_unitario').html('1 '+data);
+          jQuery('#lbl_costo_x_um').show('slow');
+          jQuery('#lbl_costo_x_um').html('1 '+data);
         }
     });
 }
@@ -299,12 +301,17 @@ function load_emb(id_embalaje){
   jQuery('#signo2').show('slow');
   jQuery('#pre_um2').show('slow');
 }
-function clean_campos(){
+function load_emb_data(){
   validanumero('presentacion_x_embalaje');
+  if(jQuery('#presentacion_x_embalaje').val()=="") clean_campos_emb();
+  if(jQuery('#peso_unitario').val()!="") calcula_um_presentacion();
+}
+function clean_campos_emb(){
   jQuery('#um_x_presentacion').val('');
   jQuery('#um_x_embalaje').val('');
+  // jQuery('#peso_unitario').val(0);
 }
-function calcula_um_prsentacion(){
+function calcula_um_presentacion(){
   validanumero('um_x_embalaje');
   if(jQuery('#peso_unitario').val()!=""){
     calcula_costos();
@@ -322,14 +329,14 @@ function calcula_um_prsentacion(){
   }
 }
 function calcula_um_embalaje(){
-  validanumero('um_x_presentacion');
-  if(jQuery('#peso_unitario').val()!=""){
-    calcula_costos();
-  }
+  validanumero('um_x_presentacion');  
   var presentacion_x_embalaje = jQuery('#presentacion_x_embalaje').val();
   var um_x_presentacion = jQuery('#um_x_presentacion').val();
   var um_x_embalaje= um_x_presentacion*presentacion_x_embalaje;
   jQuery('#um_x_embalaje').val(um_x_embalaje);
+  if(jQuery('#peso_unitario').val()!=""){
+    calcula_costos();
+  }
 }
 function calcula_costos(){
   validanumero('costo_sin_impuesto');
@@ -342,6 +349,7 @@ function calcula_costos(){
   var costo_final = jQuery('#costo_sin_impuesto').val();
   //CALCULOS
   peso_unitario  = um_x_embalaje/presentacion_x_embalaje;
+
   costo_unitario = costo_sin_impuesto/presentacion_x_embalaje
   costo_x_um     = costo_sin_impuesto/um_x_embalaje
   if(um_x_embalaje >0 && presentacion_x_embalaje>0 && costo_sin_impuesto>0){
@@ -359,9 +367,10 @@ function calcular_precio_final(){
 
   var costo_sin_impuesto = jQuery('#costo_sin_impuesto').val();  
   var valor=impuesto.split("-");
-  var desglose_impuesto = (costo_sin_impuesto*parseFloat(valor[1]))/100;
+  var impuesto_valor = (parseFloat(valor[1])>0)?parseFloat(valor[1]):0;
+  var desglose_impuesto = (costo_sin_impuesto*impuesto_valor)/100;
   var resultado = parseFloat(costo_sin_impuesto)+parseFloat(desglose_impuesto);
-  if(costo_sin_impuesto==""){
+  if(costo_sin_impuesto=="" || parseFloat(costo_sin_impuesto)==0){
       costo_final="";
       desglose_impuesto="";
   }

@@ -36,7 +36,6 @@ class ciclos extends Base_Controller{
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
-
 	public function config_tabs()
 	{
 		$tab_1 	= $this->tab1;
@@ -70,7 +69,6 @@ class ciclos extends Base_Controller{
 	{
 		return $this->modulo.'/'.$this->view_content;
 	}
-
 
 	public function index(){
 		/*$sqlData = array(
@@ -187,14 +185,36 @@ class ciclos extends Base_Controller{
 			,'offset' => 0
 			,'limit' => 0
 			);
-		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+
+		//Combo box que muestra las sucursales
+		$dropdown_sucursales = array(
+						 'data'		=> $this->sucursales->db_get_data($sqlData)
+						,'value' 	=> 'id_sucursal'
+						,'text' 	=> array('clave_corta','sucursal')
+						,'name' 	=> "lts_sucursales"
+						,'leyenda' 	=> "-----"
+						,'event'    => array('event'      => 'onchange', 
+											'function'    => 'load_ciclos', 
+											'params'      => array('this.value'), 
+											'params_type' => array(false))
+					);
+		$sucursales = dropdown_tpl($dropdown_sucursales);
+
+		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$tabIn['lbl_ciclo']        = $this->lang_item("lbl_ciclo");
-		$tabIn['lbl_clave_corta']  = $this->lang_item('lbl_clave_corta');
+		$tabIn['lbl_tipo_insert']    = $this->lang_item("lbl_tipo_insert");
+		$tabIn['lbl_auto']           = $this->lang_item("lbl_auto");
+		$tabIn['lbl_manual']         = $this->lang_item("lbl_manual");
+		$tabIn['lbl_cantidad_ciclo'] = $this->lang_item("lbl_cantidad_ciclo");
+		$tabIn['lbl_nombre_ciclo']   = $this->lang_item("lbl_nombre_ciclo");
+		$tabIn['lbl_clave_corta']    = $this->lang_item('lbl_clave_corta');
+		$tabIn['lbl_sucursal']       = $this->lang_item('lbl_sucursal');
 
-		$tabIn['button_save']  = $btn_save;
-		$tabIn['button_reset'] = $btn_reset;
+		$tabIn['list_sucursales']    = $sucursales;
+
+		$tabIn['btn_save']  = $btn_save;
+		$tabIn['btn_reset'] = $btn_reset;
 
 		if($this->ajax_post(false))
 		{
@@ -208,6 +228,7 @@ class ciclos extends Base_Controller{
 
 
 	public function cargar_ciclos(){
+		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
 			$sqlData = array(
@@ -236,7 +257,6 @@ class ciclos extends Base_Controller{
 					,'name' 	=> "lts_ciclos");
 		}
 		$ciclos = dropdown_tpl($dropdown_ciclos);
-
 		echo json_encode($ciclos);
 	}
 
@@ -256,12 +276,6 @@ class ciclos extends Base_Controller{
 			$list_recetas  = multi_dropdown_tpl($recetas);
 
 			echo json_encode($list_recetas);
-
-		
-		if($this->ajax_post(false)){
-			echo json_encode($ciclos);
-		}else{
-			return $this->load_view_unique($seccion, $data, true);
 		}
 	}
 	

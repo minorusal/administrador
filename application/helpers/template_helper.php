@@ -436,34 +436,4 @@
 			return $modal;	
 		}	
 	}
-	if(!function_exists('modal_lote_tpl')){
-		function modal_lote_tpl($id= false,$caducidad= false,$lote= false,$u_m=false){
-			$modal_content='<div class="tabs-right" align="center">
-	                            Lote
-							  <br>
-							  	<input type="text" id="lotemodal" name="lotemodal" data-campo="lotemodal" value="'.$lote.'">
-							  	<br><br>
-							  Caducidad
-							  <br>
-							  <input  data-campo="caducidad" class="caducidad" type="text" id="caducidad" name="caducidad" value="'.$caducidad.'">
-							  	<br><br>
-							  Unidad de Medida
-							  <br>
-							  <input  data-campo="u_m" clase="u_m" type="text" id="u_m" name="u_m" value="'.$u_m.'">
-							  <br><br><br>
-					            <span class="btn btn-primary btn-large" onclick="aceptar_lote('.$id.');" style="background-color:#006F00; border-color:#006F00;">
-					            	<span class="ico_blanco fa fa-check">&nbsp;</span>{recibir_orden}
-					            </span>
-					            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					            <span class="btn btn-primary btn-large" onclick="volver_lote('.$id.');" style="background-color:#9D0000; border-color:#9D0000;">
-					            	<span class="ico_blanco fa fa-times">&nbsp;</span>{devolucion_orden}
-					            </span>
-					            <br>
-					            <br>
-	                        </div>';
-
-			return $modal_content;
-		}
-	}
-
 ?>

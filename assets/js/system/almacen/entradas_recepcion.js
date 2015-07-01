@@ -157,7 +157,7 @@ function calculos(id){
 	  	objData['incomplete'] = values_requeridos();
 		jQuery.ajax({
 			type:"POST",
-			url: path()+"almacen/entradas_recepcion/modal",
+			url: path()+"almacen/entradas_recepcion/modal_lote_caducidad",
 			dataType: "json",
 			data : {id:id,
 					caducidad_val : caducidad_val,

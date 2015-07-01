@@ -509,17 +509,24 @@ class entradas_recepcion extends Base_Controller{
 		}
 		echo json_encode($json_respuesta);
 	}
-	public function modal(){
+	public function modal_lote_caducidad(){
+		$titulo_modal = $this->lang_item("modal_titulo",true);
 		$id = $this->ajax_post('id');
 		$caducidad = $this->ajax_post('caducidad_val');
 		$lote = $this->ajax_post('lote_val');
-		$u_m = $this->ajax_post('u_m_val');
-		
+		$u_m = $this->ajax_post('u_m_val');		
 		$accion 	= $this->tab['modal'];
 		$url_link 	= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$accion;
-		$html 		= modal_lote_tpl($id,$caducidad,$lote,$u_m);
+		// template html modal
+		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'u_m'=>$u_m);
+		$tabData_modal['lbl_lote'] 			= $this->lang_item("lote",true);
+		$tabData_modal['lbl_caducidad'] 	= $this->lang_item("caducidad",true);
+		$tabData_modal['lbl_um'] 			= $this->lang_item("um",true);
+		$url_modal_tpl = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.'modal_lote_tpl';
+		$html = $this->load_view_unique($url_modal_tpl ,$tabData_modal, true);
+		// Cargar modal
 		$arg_body   = array(
-							'header'=>array('id'=> 1,'html'=>'titulo'),
+							'header'=>array('id'=> 1,'html'=>$titulo_modal),
 							'body' =>array('id'=> 'test','html'=>$html), 
 							'footer' => array('id'=> 'test','html'=>''));
 		$tabData['modal'] = toggle_modal_tpl('lote', $arg_body);

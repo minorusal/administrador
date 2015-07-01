@@ -15,7 +15,7 @@ function load_content(uri, id_content){
         type: "POST",
         url: uri,
         dataType: 'json',
-        data: {filtro : filtro, tabs:1},
+        data: {filtro : filtro, tabs:0},
         success: function(data){
            if(id_content==1){
            		var funcion = 'buscar';
@@ -24,9 +24,7 @@ function load_content(uri, id_content){
            		tool_tips();
            }else{
            		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		//jQuery('#a-'+id_content).html(data);
            		jQuery('#a-'+id_content).html(data+include_script(chosen));
-           		//jQuery('#contenido_ciclos').hide();
            }
         }
     });
@@ -94,6 +92,7 @@ function load_recetas(id_familia){
             jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
           },
           success: function(data){
+            alert(data);
             jQuery('#lts_recetas').html(data);
 
           }

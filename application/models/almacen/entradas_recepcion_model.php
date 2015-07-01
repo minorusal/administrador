@@ -106,9 +106,9 @@ class entradas_recepcion_model extends Base_Model{
 		// Query
 		/*$existe = $this->row_exist($tbl['almacen_entradas_recibir']);
 		if(!$existe){*/
-			$insert = $this->insert_item($tbl['almacen_entradas_recibir'], $data);
+			$insert = $this->insert_item($tbl['almacen_entradas_recibir'], $data,true);
 			//return $insert;
-			return $last_id = $this->last_id();
+			return $insert;
 		/*}else{
 			return false;
 		}*/

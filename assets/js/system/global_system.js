@@ -62,6 +62,9 @@ function calendar_dual_detalle(inicio, fin){
 function calendar_actual(id){
     jQuery('#'+id).datepicker({minDate:0});
 }
+function calendar_no_futuras(id){
+    jQuery('#'+id).datepicker({maxDate: "+0d"});
+}
 
 function time_dual(inicio,fin){
     var horaStrIn = inicio;

@@ -89,7 +89,7 @@ function articulos(id_compras_orden){
         success: function(data){
         	jQuery('#a-0').html('');
         	functions.push('jQuery(".chzn-select").chosen();');
-          	functions.push('calendar_actual("fecha_factura")');
+          	functions.push('calendar_no_futuras("fecha_factura")');
         	jQuery('#a-3').html(data+include_script(functions));
         	jQuery('#ui-id-3').show('slow');
         	jQuery('#ui-id-3').click();
@@ -111,6 +111,9 @@ function calculos(id){
 	var result_2;
 	var result_3;
 	var functions = [];
+	var caducidad_val  	= jQuery('#caducidad_val_'+id).val();
+	var lote_val		= jQuery('#lote_val_'+id).val();
+	var u_m_val			= jQuery('#u_m_val_'+id).val();
 	jQuery('input[name="aceptar[]"]:checked').each(function() {
 		valor_2.push(parseFloat(jQuery('#descuento_'+jQuery(this).val()).val()));
 		valor_3.push(parseFloat(jQuery('#costo_x_cantidad_hidden'+jQuery(this).val()).val()));
@@ -134,7 +137,7 @@ function calculos(id){
 	total=(subtotal-descuento)+impuesto;
 	jQuery('#subtotal').val(subtotal);
 	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ numeral(subtotal).format('0,0.00') +'</strong>');
-	jQuery('#descuento_total').val(descuento);
+	jQuery('#descuento_total').val(subtotal);
 	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+numeral(descuento).format('0,0.00')+'</strong>');
 	jQuery('#impuesto_total').val(impuesto);
 	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ numeral(impuesto).format('0,0.00')+'</strong>');
@@ -156,7 +159,10 @@ function calculos(id){
 			type:"POST",
 			url: path()+"almacen/entradas_recepcion/modal",
 			dataType: "json",
-			data : {id:id},
+			data : {id:id,
+					caducidad_val : caducidad_val,
+					lote_val : lote_val,
+					u_m_val : u_m_val},
 			beforeSend : function(){
 				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
@@ -176,6 +182,7 @@ function aceptar_lote(id){
 	jQuery('#caducidad_val_'+id).val(caducidad);
 	jQuery('#u_m_val_'+id).val(u_m);
 	jQuery('#lote').modal('toggle');
+	//jQuery('#listado_'+id).prop("checked", "checked");
 }
 function calcula_totla_pagar(){
 	var total;
@@ -208,6 +215,10 @@ function recibir_orden(){
 		}
 	});
 }
-function volver_orden(){
-	
+function volver_lote(id){
+	jQuery('#lote_val_'+id).val('');
+	jQuery('#caducidad_val_'+id).val('');
+	jQuery('#u_m_val_'+id).val('');
+	jQuery('#lote').modal('toggle');
+	//jQuery('#listado_'+id).prop("checked", "");
 }

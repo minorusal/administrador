@@ -519,7 +519,7 @@ class entradas_recepcion extends Base_Controller{
 		$tabData_modal['lbl_lote'] 			= $this->lang_item("lote",true);
 		$tabData_modal['lbl_caducidad'] 	= $this->lang_item("caducidad",true);
 		$tabData_modal['lbl_um'] 			= $this->lang_item("um",true);
-		$url_modal_tpl = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.'modal_lote_tpl';
+		$url_modal_tpl = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.'modal_lote_caducidad';
 		$html = $this->load_view_unique($url_modal_tpl ,$tabData_modal, true);
 		// Cargar modal
 		$titulo_modal = $this->lang_item("modal_titulo",true);

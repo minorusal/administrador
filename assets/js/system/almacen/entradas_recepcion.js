@@ -161,29 +161,21 @@ function calculos(id){
 				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
 			success : function(data){
-				/*var promp_content = {
-								content_01:{
-									html:data,
-									buttons: { }
-								}
-							};
-				jQuery.prompt(promp_content);
-				//setTimeout("clean_form_login()",60000);*/
-				functions.push('calendar_actual("caducidad")');
+				functions.push('calendar("caducidad")');
 				jQuery('#modal').html(data+include_script(functions));
-				jQuery('#test').modal();
+				jQuery('#lote').modal();
 			}
 		});
 	}
 }
 function aceptar_lote(id){
-	var lote 	  = jQuery('#lote').val();
+	var lote 	  = jQuery('#lotemodal').val();
 	var caducidad = jQuery('#caducidad').val();
 	var u_m 	  = jQuery('#u_m').val();
 	jQuery('#lote_val_'+id).val(lote);
 	jQuery('#caducidad_val_'+id).val(caducidad);
 	jQuery('#u_m_val_'+id).val(u_m);
-	jQuery.prompt.close();
+	jQuery('#lote').modal('toggle');
 }
 function calcula_totla_pagar(){
 	var total;

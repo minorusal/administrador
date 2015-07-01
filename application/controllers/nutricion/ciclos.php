@@ -36,6 +36,7 @@ class ciclos extends Base_Controller{
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
+
 	public function config_tabs()
 	{
 		$tab_1 	= $this->tab1;
@@ -69,6 +70,7 @@ class ciclos extends Base_Controller{
 	{
 		return $this->modulo.'/'.$this->view_content;
 	}
+
 
 	public function index(){
 		/*$sqlData = array(
@@ -206,7 +208,6 @@ class ciclos extends Base_Controller{
 
 
 	public function cargar_ciclos(){
-		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
 			$sqlData = array(
@@ -235,6 +236,7 @@ class ciclos extends Base_Controller{
 					,'name' 	=> "lts_ciclos");
 		}
 		$ciclos = dropdown_tpl($dropdown_ciclos);
+
 		echo json_encode($ciclos);
 	}
 
@@ -254,6 +256,12 @@ class ciclos extends Base_Controller{
 			$list_recetas  = multi_dropdown_tpl($recetas);
 
 			echo json_encode($list_recetas);
+
+		
+		if($this->ajax_post(false)){
+			echo json_encode($ciclos);
+		}else{
+			return $this->load_view_unique($seccion, $data, true);
 		}
 	}
 	

@@ -97,7 +97,7 @@ class catalogos_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
-	}
+	}	
 
 	/*PASILLOS*/
 	public function db_get_data_pasillo($data=array()){
@@ -149,7 +149,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_pasillos !=' => $data['id_almacen_pasillos'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_pasillos !='] = (isset($data['id_almacen_pasillos']))?$data['id_almacen_pasillos']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_pasillos'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_pasillos = ".$data['id_almacen_pasillos']; 
@@ -169,6 +170,24 @@ class catalogos_model extends Base_Model{
 		if(!$existe){
 			$insert = $this->insert_item($tbl['almacen_pasillos'], $data);
 			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	// Pasillos por almacen
+	public function db_get_data_pasillos_por_almacen($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
+		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
+		// Query
+		$sql  = "SELECT * FROM $tbl[almacen_pasillos] WHERE 1 AND activo=1 $filtro ;";
+      	$query  = $this->db->query($sql);
+      	$test = $query->result_array();
+		if($query->num_rows){
+			return $query->result_array();
 		}else{
 			return false;
 		}
@@ -229,7 +248,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_gavetas !=' => $data['id_almacen_gavetas'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_gavetas !='] = (isset($data['id_almacen_gavetas']))?$data['id_almacen_gavetas']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_gavetas'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_gavetas = ".$data['id_almacen_gavetas']; 
@@ -254,6 +274,62 @@ class catalogos_model extends Base_Model{
 		}
 	}
 
+	// Gavetas por almacen
+	public function db_get_data_gavetas_por_almacen($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
+		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
+		// Query
+		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $filtro ;";
+      	$query  = $this->db->query($sql);
+		if($query->num_rows){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+	}
+
+	// Gavetas por pasillo de un almacen
+	public function db_get_data_gavetas_por_pasillo($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
+		$id_pasillo = (isset($data['id_pasillo']))?$data['id_pasillo']:false;
+		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
+		$filtro .=($id_pasillo)?" AND id_almacen_pasillos='$id_pasillo'":'';
+		// Query
+		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $filtro ;";
+      	$query  = $this->db->query($sql);
+		if($query->num_rows){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+	}
+
+	// Gavetas por pasillo de un almacen
+	public function db_get_data_stock_por_gaveta($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
+		$id_pasillo = (isset($data['id_pasillo']))?$data['id_pasillo']:false;
+		$id_gaveta 	= (isset($data['id_gaveta']))?$data['id_gaveta']:false;
+		$filtro = ($id_almacen)?" AND id_almacen='$id_almacen'":'';
+		$filtro .=($id_pasillo)?" AND id_pasillo='$id_pasillo'":'';
+		$filtro .=($id_gaveta)?" AND id_gaveta='$id_gaveta'":'';
+		// Query
+		$sql  = "SELECT * FROM $tbl[almacen_stock] WHERE 1 AND activo=1 $filtro ;";
+      	$query  = $this->db->query($sql);
+		if($query->num_rows){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+	}
 
 	/*TRANSPORTES*/
 
@@ -302,7 +378,8 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = array('id_almacen_transportes !=' => $data['id_almacen_transportes'], 'clave_corta = '=> $data['clave_corta']); 
+		$condicion['id_almacen_transportes !='] = (isset($data['id_almacen_transportes']))?$data['id_almacen_transportes']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_transportes'], $condicion);
 		if(!$existe){
 			$condicion = "id_almacen_transportes = ".$data['id_almacen_transportes']; 

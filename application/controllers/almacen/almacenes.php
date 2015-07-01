@@ -110,10 +110,13 @@ class almacenes extends Base_Controller
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_almacenes'].')'
 						);
+				// Validación de pasillos y/o gavetas en almacen
+				$pasillos = $this->db_model->db_get_data_pasillos_por_almacen(array('id_almacen' => $value['id_almacen_almacenes']));
+				$gavetas  = $this->db_model->db_get_data_gavetas_por_almacen(array('id_almacen' => $value['id_almacen_almacenes']));
 				// Acciones
 				$accion_id 						= $value['id_almacen_almacenes'];
 				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_acciones ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
-				$btn_acciones['eliminar']       = ($value['edit'])?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
+				$btn_acciones['eliminar']       = ($value['edit'] && !$pasillos && !$gavetas)?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				$edit = (!$value['edit'])?'*':'';
 				// Datos para tabla

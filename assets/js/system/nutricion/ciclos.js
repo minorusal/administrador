@@ -15,18 +15,16 @@ function load_content(uri, id_content){
         type: "POST",
         url: uri,
         dataType: 'json',
-        data: {filtro : filtro, tabs:1},
+        data: {filtro : filtro, tabs:0},
         success: function(data){
            if(id_content==1){
            		var funcion = 'buscar';
-           		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+           		jQuery('#a-'+id_content).html(data+input_keypress('search-query', funcion));
            		jQuery('#search-query').val(filtro).focus();
            		tool_tips();
            }else{
            		var chosen  = 'jQuery(".chzn-select").chosen();';
-           		//jQuery('#a-'+id_content).html(data);
            		jQuery('#a-'+id_content).html(data+include_script(chosen));
-           		//jQuery('#contenido_ciclos').hide();
            }
         }
     });
@@ -42,13 +40,11 @@ function load_ciclos(id_sucursal){
         	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
-          if(data == 0){
-            
-          }else{
+          
             var chosen  = 'jQuery(".chzn-select").chosen();';
             jQuery('#ciclo').html(data+include_script(chosen));
             jQuery('#ciclo').show('slow');
-          }
+          
         }
     });
 }
@@ -66,7 +62,6 @@ function load_contenido_ciclo(id_ciclo){
            jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
           },
           success: function(data){
-            //alert(data);
             jQuery('#ciclo_detalle').html(data+include_script(treeview));
           }
       });
@@ -85,16 +80,14 @@ function load_treeview(id){
       });
 }
 
-function buscar_recetas(id_tiempo){
-  //alert(id_tiempo);
-  //var id_tiempo   = jQuery('select[name=lts_tiempos] option:selected').val();
+function load_recetas(id_familia){
   var id_sucursal  = jQuery('select[name=lts_sucursales]').val();
-  if(id_tiempo!=0){
+  if(id_familia!=0){
     jQuery.ajax({
           type: "POST",
           url: path()+"nutricion/ciclos/ciclo_receta",
           dataType: 'json',
-          data: {id_tiempo : id_tiempo,id_sucursal:id_sucursal},
+          data: {id_familia : id_familia,id_sucursal:id_sucursal},
           beforeSend : function(){
             jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
           },

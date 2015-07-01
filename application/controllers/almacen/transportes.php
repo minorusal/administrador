@@ -30,7 +30,7 @@ class transportes extends Base_Controller
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
 	public function config_tabs()
@@ -108,6 +108,12 @@ class transportes extends Base_Controller
 								'href' => '#',
 							  	'onclick' => 'detalle('.$value['id_almacen_transportes'].')'
 						);
+				// Acciones
+				$accion_id 						= $value['id_almacen_transportes'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_acciones ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['clave_corta'],
 									'placas'      => tool_tips_tpl($value['placas'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'    => $value['clave_corta'],
@@ -116,7 +122,9 @@ class transportes extends Base_Controller
 									'num_lic'          => $value['num_lic'],
 									'marca'          => $value['marca'],
 									'modelo'          => $value['modelo'],
-									'descripcion'    => $value['descripcion']);
+									'descripcion'    => $value['descripcion'],
+									'acciones' 		=> $acciones
+									);
 			}
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
@@ -129,7 +137,9 @@ class transportes extends Base_Controller
 										$this->lang_item("num_lic"),
 										$this->lang_item("marca"),
 										$this->lang_item("modelo"),
-										$this->lang_item("descripcion"));
+										$this->lang_item("descripcion"),
+										$this->lang_item("acciones")
+										);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla     = $this->table->generate($tbl_data);
@@ -376,5 +386,34 @@ class transportes extends Base_Controller
 						);
 		
 		$this->excel->generate_xlsx($params);
+	}
+
+	public function eliminar(){
+		$msj_grid = $this->ajax_post('msj_grid');
+		$sqlData = array(
+						 'id_almacen_transportes'	=> $this->ajax_post('id_almacen_transportes')
+						,'activo' 		 =>0
+						,'edit_timestamp'  	 => $this->timestamp()
+						,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+						);
+			 $insert = $this->db_model->db_update_data_transporte($sqlData);
+			if($insert){
+				$msg = $this->lang_item("msg_delete_success",false);
+				$json_respuesta = array(
+						 'id' 		=> 1
+						,'contenido'=> alertas_tpl('success', $msg ,false)
+						,'success' 	=> true
+						,'msj_grid'	=> $msj_grid
+				);
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
+				);
+			}
+		echo json_encode($json_respuesta);
 	}
 }

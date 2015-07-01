@@ -50,6 +50,8 @@ function authentication(){
 								};
 					jQuery.prompt(promp_content);
 					setTimeout("clean_form_login()",60000);
+					/*jQuery('.loginpage').append(data);
+					jQuery('#login_modal').modal();*/
 					break
 					
 			}

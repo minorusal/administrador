@@ -1,39 +1,34 @@
+
 <div id="formulario" class="stdform stdform2">
+	<p>
+        <label>{tipo_insert}</label>
+        <span class="formwrapper">
+        	<div class="radio" id="uniform-undefined">
+        		<span class="checked"><input type="radio" name="tipo" style="opacity: 0;"></span>
+        	</div> {lbl_auto} &nbsp; &nbsp;
+        	<div class="radio" id="uniform-undefined">
+        		<span class=""><input type="radio" name="tipo" checked="checked" style="opacity: 0;"></span>
+        	</div> {lbl_manual}
+        </span>
+    </p>
+	<p>
+		<label>{lbl_ciclo} (*)</label>
+		<span class="field">
+			<input id="txt_ciclo" type="text" name="txt_ciclo" class="input-xlarge requerido" value="" />
+		</span>
+	</p>
+	<p>
+		<label>{lbl_clave_corta} (*)</label>
+		<span class="field">
+			<input id="txt_clave_cprta" type="text" name="txt_clave_cprta" class="input-xlarge requerido" value="" />
+		</span>
+	</p>
 	<p>
 		<label>{lbl_sucursal} (*)</label>
 		<span class="field">
 			{list_sucursales} 
 		</span>
 	</p>
-	<p>
-		<label>{lbl_ciclos} (*)</label>
-		<span id="ciclo" class="field">
-			{list_ciclos}
-		</span>
-	</p> 
-	<p>
-		<label>{lbl_servicios} (*)</label>
-		<span class="field">
-			{list_servicios}
-		</span>
-	</p>
-	<p>
-		<label>{lbl_tiempos} (*)</label>
-		<span class="field">
-			{list_tiempos}
-		</span>
-	</p>
-	<p>
-        <label>{lbl_asignar_recetas}: </label>
-    	<span class="field">
-    		{multiselect_recetas}
-            <span id="loader_editar_porciones_insert"></span>
-    	</span>
-    </p>
-	<p>
-		<div id="ciclo_detalle"></div>
-	</p>
-	
 	<span class="field">
 		{btn_save}
 		{btn_reset}

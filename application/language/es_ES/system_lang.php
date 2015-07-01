@@ -86,6 +86,7 @@
 	$lang['deshabilitar']	= 'Deshabilitar';
 	$lang['imprimir']		= 'Imprimir';
 	$lang['ver']			= 'Ver';
+	$lang['no_editable']	= 'Este registro no puede ser editado.';
 
 	$lang['ID']			= 'ID';
 	$lang['listado']   = 'listado';

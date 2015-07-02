@@ -8,7 +8,6 @@ class check_session extends Base_Controller
 	}	
 
 	public function check_activity(){
-	
 		$interseccion = null;
 		$ajax = $this->ci->ajax_post(false);
 		if( $this->ci->uri->segment(1) != 'login' ){
@@ -40,7 +39,7 @@ class check_session extends Base_Controller
 		if($this->ci->session->userdata('is_logged')){
 			$ajax             = $this->ci->ajax_post(false);
 			$uri_string       = $this->query_uri_string();
-			$sites_availables = $this->ci->session->userdata('sites_availables');
+			$sites_availables = $this->ci->sites_availables;
 			$sites_availables[] = 'default_controller';
 			$sites_availables[] = 'inicio';
 			$sites_availables[] = 'logout';
@@ -53,7 +52,6 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'test/html2pdf'; #tmp
 			$sites_availables[] = '404_override'; 
 
-			//print_debug($sites_availables);
 			if(!in_array($uri_string, $sites_availables)){
 				if($uri_string==''){
 					redirect(base_url('inicio'));
@@ -61,7 +59,7 @@ class check_session extends Base_Controller
 					if(!$ajax){
 						if(!mb_strstr($this->ci->uri_segment_end(),'export_')){
 							if(!mb_strstr($this->ci->uri_segment_end(),'import_')){
-								redirect(base_url('404_override'));				
+								redirect(base_url('404_override'));	
 							}
 						}
 					}

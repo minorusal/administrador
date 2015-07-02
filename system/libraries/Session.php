@@ -477,7 +477,10 @@ class CI_Session {
 	{
 		if (is_string($newdata))
 		{
+			
 			$newdata = array($newdata => $newval);
+			
+			
 		}
 
 		if (count($newdata) > 0)

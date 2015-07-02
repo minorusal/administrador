@@ -23,7 +23,9 @@ $lang['marcas']                 = 'marcas';
 $lang['unidad_de_medida']       = 'Unidad de medida';	
 
 //MENU DE ALMACEN
-$lang['entradas_recepcion']     = 'entradas recepción';
+$lang['entradas']     			= 'entradas';
+$lang['entradas_recepcion']     = 'entradas a recepción';
+$lang['entradas_almacen']     	= 'entradas a almacen';
 $lang['salidas_despacho']       = 'salidas despacho';
 $lang['devoluciones']           = 'devoluciones';
 $lang['traspasos']              = 'traspasos';

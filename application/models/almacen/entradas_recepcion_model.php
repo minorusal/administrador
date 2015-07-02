@@ -104,14 +104,12 @@ class entradas_recepcion_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		/*$existe = $this->row_exist($tbl['almacen_entradas_recibir']);
-		if(!$existe){*/
-			$insert = $this->insert_item($tbl['almacen_entradas_recibir'], $data,true);
-			//return $insert;
+		if($insert = $this->insert_item($tbl['almacen_entradas_recibir'], $data,true)){
+			// Logs ToDo
 			return $insert;
-		/*}else{
+		}else{
 			return false;
-		}*/
+		}
 
 	}
 	public function insert_entradas_partidas($data){

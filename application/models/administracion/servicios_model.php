@@ -48,7 +48,7 @@ class servicios_model extends Base_Model{
 					FROM $tbl[administracion_servicios] sr
 					WHERE sr.activo = 1 AND sr.id_sucursal = $id_sucursal
 					$id_servicio
-					GROUP BY sr.id_administracion_servicio ASC";
+					ORDER BY sr.id_administracion_servicio ASC";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

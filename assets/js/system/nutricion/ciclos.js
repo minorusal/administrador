@@ -75,9 +75,13 @@ function load_ciclos(id_sucursal){
         	jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
+          //alert(dump_var(data['ciclos']));
           var chosen  = 'jQuery(".chzn-select").chosen();';
-          jQuery('#ciclo').html(data+include_script(chosen));
-          jQuery('#ciclo').show('slow'); 
+          jQuery('#ciclo').html(data['ciclos']+include_script(chosen));
+          jQuery('#ciclo').show('slow');
+
+          jQuery('#servicio').html(data['servicios']+include_script(chosen));
+          jQuery('#servicio').show('slow');  
         }
     });
 }

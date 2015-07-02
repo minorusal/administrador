@@ -181,10 +181,8 @@ class ciclos extends Base_Controller{
 			   									);
 		$ciclos = dropdown_tpl($dropdown_ciclos);
 
-		$data_servicio = $this->servicios->db_get_data($sqlData);
 		$dropdown_servicios = array(
-				 'data'     => $data_servicio
-				,'value' 	=> 'id_administracion_servicio'
+				'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
 				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
@@ -251,7 +249,6 @@ class ciclos extends Base_Controller{
 	}
 
 	public function cargar_ciclos(){
-		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_sucursal){
 			$sqlData = array(
@@ -271,15 +268,36 @@ class ciclos extends Base_Controller{
 			   										'params'   => array('this.value'),
 			   										'params_type' => array(false)
 			   									));
+			$data_servicio = $this->servicios->db_get_data_x_sucursal($id_sucursal);
+			$dropdown_servicios = array(
+				 'data'     => $data_servicio
+				,'value' 	=> 'id_administracion_servicio'
+				,'text' 	=> array('servicio')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_servicios"
+		   									);
+			$servicios = dropdown_tpl($dropdown_servicios);
 		}else{
 			$dropdown_ciclos = array(
 					'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
 					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos");
+
+			$dropdown_servicios = array(
+				 'value' 	=> 'id_administracion_servicio'
+				,'text' 	=> array('servicio')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_servicios"
+		   									);
 		}
+
 		$ciclos = dropdown_tpl($dropdown_ciclos);
-		echo json_encode($ciclos);
+		$servicios = dropdown_tpl($dropdown_servicios);
+		$data['ciclos']     = $ciclos;
+		$data['servicios']  = $servicios;
+
+		echo json_encode($data);
 	}
 
 	public function ciclo_receta(){

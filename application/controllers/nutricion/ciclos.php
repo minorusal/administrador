@@ -385,4 +385,10 @@ class ciclos extends Base_Controller{
 			}
 		}
 	}
+
+	public function eliminar_receta(){
+		$id_receta = $this->ajax_post('id_receta');
+		$id_ciclo  = $this->ajax_post('id_ciclo');
+		//print_debug($this->ajax_post(false));
+	}
 }

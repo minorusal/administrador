@@ -41,6 +41,15 @@ class ciclos_model extends Base_Model{
 			}
 		}
 	}
+
+
+	public function insert_ciclo_receta($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
+	}
+
 	public function db_get_data($data = array()){
 		// DB Info		
 		$tbl = $this->tbl;

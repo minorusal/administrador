@@ -54,9 +54,11 @@ function load_content(uri, id_content){
         success: function(data){
           var chosen  = 'jQuery(".chzn-select").chosen();';
            if(id_content==1){
+            jQuery('#a-0').html('');
             jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }else{
               var tipo_insert  = 'selec_manual_auto();';
+              jQuery('#a-1').html('');
            		jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }
         }
@@ -157,7 +159,36 @@ function agregar(){
         clean_formulario();
       }
       jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
+      jQuery("#mensajes").html(data[1]).show('slow');
+    }
+  });
+}
+
+function insert_config(){
+  var btn = jQuery("button[name='save_config']");
+  btn.attr('disabled','disabled');
+  jQuery('#mensajes').hide();
+
+  var objData = formData('#formularios');
+  objData['incomplete'] = values_requeridos();
+
+  jQuery.ajax({
+    type:"POST",
+    url: path()+"nutricion/ciclos/insert_config",
+    dataType: "json",
+    data: {objData: objData},
+    beforeSend : function(){
+      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+    },
+    success : function(data){
+      btn.removeAttr('disabled');
+
+      var data = data.split('|');
+      if(data[0]==1){
+        clean_formulario();
+      }
+      jQuery("#registro_loader").html('');
+      jQuery("#mensajes").html(data[1]).show('slow');
     }
   });
 }

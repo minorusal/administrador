@@ -332,13 +332,12 @@ function values_requeridos(){
         if(jQuery(this).prop('tagName')=='SELECT'){
             if(jQuery(this).hasAttr('multiple')){
                 if(!jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
-
-                    
-
                     items_vacios++; 
+                     ids = jQuery(this).attr('name')+'|'+ids;
                 }
                 if(!jQuery("[name='"+jQuery(this).attr('name')+"'] option:selected").length>0){
                     items_vacios++; 
+                     ids = jQuery(this).attr('name')+'|'+ids;
                 }
             }else{
                var select = jQuery("select[name='"+jQuery(this).attr('name')+"'] option:selected");
@@ -353,6 +352,7 @@ function values_requeridos(){
             } 
         }
     });
+    //alert(ids);
     return items_vacios;
 }
 

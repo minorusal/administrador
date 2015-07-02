@@ -16,13 +16,11 @@ class ciclos extends Base_Controller{
 		$this->seccion		    = 'ciclos';
 		$this->icon 			= 'fa fa-cutlery'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
-		//$this->view_content 	= 'nutricion/ciclos/ciclos_save';
 		$this->view_content 	= 'content';
-		//$this->view_modal       = 'modal_cropper';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar Ciclos';
+		$this->tab1 			= 'agregar';
 		$this->tab2 			= 'configurar';
 		$this->tab3 			= 'detalle';
 		// DB Model
@@ -41,7 +39,7 @@ class ciclos extends Base_Controller{
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		$path  	= $this->path;
-		//$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) 
@@ -60,7 +58,7 @@ class ciclos extends Base_Controller{
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
-		$config_tab['style_content'] = array('');
+		$config_tab['style_content'] = array('','');
 
 		return $config_tab;
 	}
@@ -87,7 +85,6 @@ class ciclos extends Base_Controller{
 			,'offset' => 0
 			,'limit' => 0
 			);
-
 		//Combo box que muestra las sucursales
 		$dropdown_sucursales = array(
 						 'data'		=> $this->sucursales->db_get_data($sqlData)
@@ -228,24 +225,24 @@ class ciclos extends Base_Controller{
 
 		$list_recetas  = multi_dropdown_tpl($recetas);
 
-		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'insert_config()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$data['lbl_sucursal']     	   = $this->lang_item('lbl_sucursal');
-		$data['lbl_ciclos']       	   = $this->lang_item('lbl_ciclos');
-		$data['lbl_servicios']    	   = $this->lang_item('lbl_servicios');
-		$data['lbl_tiempos']      	   = $this->lang_item('lbl_tiempos');
-		$data['lbl_familias']     	   = $this->lang_item('lbl_familias');
-		$data['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
+		$data['lbl_sucursal']     	 = $this->lang_item('lbl_sucursal');
+		$data['lbl_ciclos']       	 = $this->lang_item('lbl_ciclos');
+		$data['lbl_servicios']    	 = $this->lang_item('lbl_servicios');
+		$data['lbl_tiempos']      	 = $this->lang_item('lbl_tiempos');
+		$data['lbl_familias']     	 = $this->lang_item('lbl_familias');
+		$data['lbl_asignar_recetas'] = $this->lang_item('lbl_recetas');
 
-		$data['btn_save']     	   		= $btn_save;
-		$data['btn_reset']    	        = $btn_reset;
-		$data['list_sucursales']  		= $sucursales;
-		$data['list_ciclos']  		    = $ciclos;
-		$data['list_servicios']   		= $servicios;
-		$data['list_tiempos']     		= $tiempos;
-		$data['list_familias']     	    = $familias;
-		$data['multiselect_recetas']    = $list_recetas;
+		$data['btn_save']     	   	 = $btn_save;
+		$data['btn_reset']    	     = $btn_reset;
+		$data['list_sucursales']  	 = $sucursales;
+		$data['list_ciclos']  		 = $ciclos;
+		$data['list_servicios']   	 = $servicios;
+		$data['list_tiempos']     	 = $tiempos;
+		$data['list_familias']     	 = $familias;
+		$data['multiselect_recetas'] = $list_recetas;
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$data,true));
 		}else{
@@ -339,5 +336,35 @@ class ciclos extends Base_Controller{
 		}
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);
+	}
+
+	public function insert_config(){
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		}else{
+			$arr_recetas  = explode(',',$objData['lts_recetas']);
+			if(!empty($arr_recetas)){
+				$sqlData = array();
+				foreach ($arr_recetas as $key => $value){
+					$sqlData = array(
+						'id_ciclo'     => $objData['lts_ciclos']
+						,'id_servicio' => $objData['lts_servicios']
+						,'id_receta'   => $value
+						,'id_familia'  =>$objData['lts_familias']
+						,'id_usuario'  => $this->session->userdata('id_usuario')
+					    ,'timestamp'   => $this->timestamp()
+						);
+					$insert = $this->ciclos->insert_ciclo_receta($sqlData);
+				}
+
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		}
 	}
 }

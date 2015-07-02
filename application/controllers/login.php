@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+ini_set('memory_limit', '1024M');
 class login extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
@@ -56,7 +56,6 @@ class login extends Base_Controller {
 		}
 	}
 	
-
 	/**
 	* Recontruye el array devuelto por la consulta 
 	* en caso de multiples perfiles para 

@@ -1,11 +1,20 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Base_Controller extends CI_Controller {
- 
+ 	
+ 	public $sites;
+ 	public $sites_availables;
+ 	public $sites_panel;
+
     public function __construct(){
         parent::__construct();
         $this->removeCache();
         $this->lang_load("system","es_ES");
         $this->lang_load("navigate");
+        if($this->session->userdata('is_logged')){
+        	$this->sites            = $this->sites_privilege_navigate();
+        	$this->sites_availables = $this->sites['sites'];
+			$this->sites_panel      = $this->sites['modules'];
+        }
     }
 
     /**
@@ -22,6 +31,39 @@ class Base_Controller extends CI_Controller {
 	    	}
     	}
     }
+    /**
+    * Verfica los modulos que seran visibles en el panel de navegacion
+    * y a los cuales se podra acceder
+    * @return array
+    */
+    private function sites_privilege_navigate(){
+    	$uri      = $this->uri->segment_array();
+		$nivel_1  = $this->session->userdata('id_menu_n1');
+		$nivel_2  = $this->session->userdata('id_menu_n2');
+		$nivel_3  = $this->session->userdata('id_menu_n3');
+		$perfil   = $this->session->userdata('perfil');
+		$sites_priviles    = array();
+		$this->load->database('global_system',TRUE);
+		$this->load->model('users_model');
+
+		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
+		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
+
+		if((is_array($data_modulos))){
+			$data_modulos   = $this->build_array_navigator($data_modulos);
+			$navigate_items = $data_modulos[1];
+			$sites_priviles = $data_modulos[0];
+			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri);
+		}else{
+			$data_modulos   = "";
+			$navigate_items = "";
+			$panel_navigate = "";
+		}
+
+		$data_sites = array('sites' => $sites_priviles, 'modules' => $panel_navigate);
+
+		return $data_sites;
+	}
 
     /**
     * unifica las vistas header & footer con las vistas parseadas
@@ -35,35 +77,10 @@ class Base_Controller extends CI_Controller {
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 		
 		$ext      = ($ext!='.html') ? '': $ext;
-
-		$nivel_1  = $this->session->userdata('id_menu_n1');
-		$nivel_2  = $this->session->userdata('id_menu_n2');
-		$nivel_3  = $this->session->userdata('id_menu_n3');
-		$perfil   = $this->session->userdata('perfil');
-		
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
 
-		$this->load->database('global_system',TRUE);
-		$this->load->model('users_model');
-
-		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
-		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
-		
-		//print_debug($data_modulos);
-		if((is_array($data_modulos))){
-			$data_modulos   = $this->build_array_navigator($data_modulos);
-			$navigate_items =  $data_modulos[1];
-
-			$this->session->set_userdata('sites_availables', $data_modulos[0]);
-
-			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri );
-		}else{
-			$data_modulos   = "";
-			$navigate_items = "";
-			$panel_navigate = "";
-		}
-
+		$data_modulos = $this->sites_panel;
 		$img_path     = './assets/avatar/users/';
 		$img_path_    = base_url().'assets/avatar/users/';
 		$avatar_image = $this->session->userdata('avatar_user');
@@ -72,7 +89,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
-		$dataheader['panel_navigate'] = $panel_navigate;
+		$dataheader['panel_navigate'] = $this->sites_panel;
 		$dataheader['avatar_user']    = (file_exists($img_path.$avatar_image))? $img_path_.$avatar_image : $img_path_.'sin_foto.png';
 		
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
@@ -189,8 +206,6 @@ class Base_Controller extends CI_Controller {
 		return $data_load;
 	}
 
-
-
 	/**
 	* Prepara un array para la construccion
 	* del panel de navegacion 
@@ -202,18 +217,18 @@ class Base_Controller extends CI_Controller {
 			$route = "";
 			if(!is_null($value['menu_n2'])){
 				if(!is_null($value['menu_n3'])){
-					$route = utf8_encode($value['menu_n3_routes']);
-					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])]['content'][utf8_encode($value['menu_n3'])] = array( 'menu_n3'=> utf8_encode($value['menu_n3']) , 'icon' => utf8_encode($value['menu_n3_icon']),'routes'=> $route);
-					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])]['icon'] = utf8_encode($value['menu_n2_icon']);
-					$data_navigator[utf8_encode($value['menu_n1'])]['icon'] = $value['menu_n1_icon'];
+					$route = $value['menu_n3_routes'];
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['content'][$value['menu_n3']] = array( 'menu_n3'=> $value['menu_n3'] , 'icon' => $value['menu_n3_icon'],'routes'=> $route);
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']]['icon'] = $value['menu_n2_icon'];
+					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
 				}else{
-					$route = utf8_encode($value['menu_n2_routes']);
-					$data_navigator[utf8_encode($value['menu_n1'])]['content'][utf8_encode($value['menu_n2'])] = array('icon' => utf8_encode($value['menu_n2_icon']) , 'routes' => $route);
-					$data_navigator[utf8_encode($value['menu_n1'])]['icon'] = utf8_encode($value['menu_n1_icon']);
+					$route = $value['menu_n2_routes'];
+					$data_navigator[$value['menu_n1']]['content'][$value['menu_n2']] = array('icon' => $value['menu_n2_icon'] , 'routes' => $route);
+					$data_navigator[$value['menu_n1']]['icon'] = $value['menu_n1_icon'];
 				}
 			}else{
-				$route = utf8_encode($value['menu_n1_routes']);
-				$data_navigator[utf8_encode($value['menu_n1'])] = array('icon'=>utf8_encode($value['menu_n1_icon']), 'routes' => $route);
+				$route = $value['menu_n1_routes'];
+				$data_navigator[$value['menu_n1']] = array('icon'=>$value['menu_n1_icon'], 'routes' => $route);
 			}
 			$sites_availables[] = $route;
 		}
@@ -545,7 +560,7 @@ class Base_Controller extends CI_Controller {
 		$months[8]  = $this->lang_item('septiembre', false);
 		$months[9]  = $this->lang_item('octubre', false);
 		$months[10] = $this->lang_item('noviembre', false);
-		$months[11] = $this->lang_item('diciembre	', false);
+		$months[11] = $this->lang_item('diciembre', false);
 
 		if($index){
 			return $months[ltrim($index,'0')];

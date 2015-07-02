@@ -100,7 +100,7 @@
                 <td class="width65 msg-invoice" style="border: 1px solid #ddd;">
                     <h4><strong>{observaciones}:</strong></h4>
                     <p>{observaciones_value} </p>
-                    <p>{fecha_hoy}</p>
+                    <p>{fecha_registro}</p>
                 </td>
                 <td class="width15 right numlist">
                     <strong>{subtotal}</strong>
@@ -124,7 +124,7 @@
         <tbody>
             <tr>
                 <td class="width65 msg-invoice" style="border: 1px solid #ddd;">
-                    <h4><strong>{observaciones}:</strong></h4>
+                    <h4><strong>{comentarios_entrada}:</strong></h4>
                     <textarea id="comentario" data-campo="comentario" class="span8 requerido" style="resize: vertical; height: 100px;"></textarea>
                 </td>
             </tr>
@@ -134,9 +134,9 @@
         <div id="mensajes" style="display:none"></div>
       <div class="amountdue" >
             <h1><span>{a_pagar}:</span><span id="value_total" style="font-size:.7em;"><span></h1> <br />
-            <span class="btn btn-primary btn-large" onclick="recibir_orden();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{recibir_orden}</span>
+            <span class="btn btn-primary btn-large" onclick="recibir_orden();" style="background-color:#006F00; border-color:#006F00;"><span class="ico_blanco fa fa-check">&nbsp;</span>{recibir_enetrada}</span>
             <br/>
-            <span class="btn btn-primary btn-large" onclick="volver_orden();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{devolucion_orden}</span>
+            <span class="btn btn-primary btn-large" onclick="volver_orden();" style="background-color:#9D0000; border-color:#9D0000;"><span class="ico_blanco fa fa-times">&nbsp;</span>{rechazar_entrada}</span>
       </div>
     <div id="mensajes" style="display:none"></div>
     <div id="modal"></div>

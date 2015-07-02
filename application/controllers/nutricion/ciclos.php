@@ -22,8 +22,8 @@ class ciclos extends Base_Controller{
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar';
-		$this->tab2 			= 'listado';
+		$this->tab1 			= 'agregar Ciclos';
+		$this->tab2 			= 'configurar';
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','ciclos');
@@ -50,123 +50,25 @@ class ciclos extends Base_Controller{
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $path.$tab_1             
-										,$tab_2                   
+										,$path.$tab_2                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
-										,''
+										,'load_content'
 								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
 		$config_tab['style_content'] = array('');
 
-
 		return $config_tab;
 	}
-	private function uri_view_principal()
-	{
+	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
 
 	public function index(){
-		/*$sqlData = array(
-			 'buscar' => 0
-			,'offset' => 0
-			,'limit'  => 0
-			);
-		//Combo box que muestra las sucursales
-		$dropdown_sucursales = array(
-						 'data'		=> $this->sucursales->db_get_data($sqlData)
-						,'value' 	=> 'id_sucursal'
-						,'text' 	=> array('clave_corta','sucursal')
-						,'name' 	=> "lts_sucursales"
-						,'leyenda' 	=> "-----"
-						,'event'    => array('event'      => 'onchange', 
-											'function'    => 'load_ciclos', 
-											'params'      => array('this.value'), 
-											'params_type' => array(false))
-					);
-		$sucursales = dropdown_tpl($dropdown_sucursales);
-
-		$dropdown_ciclos = array(
-					'value' 	=> 'id_nutricion_ciclos'
-					,'text' 	=> array('ciclo')
-					,'name' 	=> "lts_ciclos"
-			   									);
-		$ciclos = dropdown_tpl($dropdown_ciclos);
-
-		$data_servicio = $this->servicios->db_get_data($sqlData);
-		$dropdown_servicios = array(
-				 'data'     => $data_servicio
-				,'value' 	=> 'id_administracion_servicio'
-				,'text' 	=> array('servicio')
-				,'leyenda' 	=> "-----"
-				,'name' 	=> "lts_servicios"
-		   									);
-		$servicios = dropdown_tpl($dropdown_servicios);
-
-		$data_tiempo = $this->tiempos->db_get_data($sqlData);
-		$dropdown_tiempos = array(
-				 'data'     => $data_tiempo
-				,'value' 	=> 'id_nutricion_tiempo'
-				,'text' 	=> array('tiempo')
-				,'leyenda' 	=> "-----"
-				,'name' 	=> "lts_tiempos"
-					);						
-		$tiempos = dropdown_tpl($dropdown_tiempos);
-
-		$data_familia = $this->familias->db_get_data($sqlData);
-		$dropdown_familias = array(
-				 'data'     => $data_familia
-				,'value' 	=> 'id_nutricion_familia'
-				,'text' 	=> array('familia')
-				,'leyenda' 	=> "-----"
-				,'name' 	=> "lts_familias"
-				,'event'    => array('event'       => 'onchange', 
-									 'function'    => 'load_recetas', 
-									 'params'      => array('this.value'), 
-									 'params_type' => array(false))
-			);						
-		$familias = dropdown_tpl($dropdown_familias);
-
-		$recetas  = array(
-						 'data'		=> $this->recetas->get_data($sqlData)
-						,'value' 	=> 'id_nutricion_receta'
-						,'text' 	=> array('receta')
-						,'name' 	=> "lts_recetas"
-						,'class' 	=> "requerido"
-					);
-
-		$list_recetas  = multi_dropdown_tpl($recetas);
-
-
-		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
-		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
-
-		$data['lbl_sucursal']     	   = $this->lang_item('lbl_sucursal');
-		$data['lbl_ciclos']       	   = $this->lang_item('lbl_ciclos');
-		$data['lbl_servicios']    	   = $this->lang_item('lbl_servicios');
-		$data['lbl_tiempos']      	   = $this->lang_item('lbl_tiempos');
-		$data['lbl_familias']     	   = $this->lang_item('lbl_familias');
-		$data['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
-
-
-		$data['btn_save']     	   		= $btn_save;
-		$data['btn_reset']    	        = $btn_reset;
-		$data['list_sucursales']  		= $sucursales;
-		$data['list_ciclos']  		    = $ciclos;
-		$data['list_servicios']   		= $servicios;
-		$data['list_tiempos']     		= $tiempos;
-		$data['list_familias']     	    = $familias;
-		$data['multiselect_recetas']    = $list_recetas;
-		$data['titulo_seccion']   		= $this->lang_item($this->seccion);
-		$data['empresa']          		= 'Ciclos';
-		$data['titulo_submodulo'] 		= $this->lang_item("titulo_submodulo");
-		$data['icon']             		= $this->icon;
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
-		$this->load_view($this->view_content, $data, $js);*/
 		$tabl_inicial 			  = 1;
 		$view_agregar    		  = $this->agregar();	
 		$contenidos_tab           = $view_agregar;
@@ -235,12 +137,12 @@ class ciclos extends Base_Controller{
 		}else{
 			$sqlData = array(
 				 'ciclo'       => $this->ajax_post('txt_cantidad_ciclo')
-				,'nom_ciclo'  => $this->ajax_post('txt_ciclo')
-				,'id_sucursal'  => $this->ajax_post('lts_sucursales')
-				,'clave_corta'  => $this->ajax_post('txt_clave_corta')
-				,'id_usuario' => $this->session->userdata('id_usuario')
-				,'timestamp' => $this->timestamp()
-				,'tipo'  => $this->ajax_post('tipo')
+				,'nom_ciclo'   => $this->ajax_post('txt_ciclo')
+				,'id_sucursal' => $this->ajax_post('lts_sucursales')
+				,'clave_corta' => $this->ajax_post('txt_clave_corta')
+				,'id_usuario'  => $this->session->userdata('id_usuario')
+				,'timestamp'   => $this->timestamp()
+				,'tipo'        => $this->ajax_post('tipo')
 				);
 			$insert = $this->ciclos->insert_ciclo($sqlData);
 			if($insert){
@@ -253,6 +155,103 @@ class ciclos extends Base_Controller{
 		}
 	}
 
+	public function configurar(){
+		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_config';
+
+		$sqlData = array(
+			 'buscar' => 0
+			,'offset' => 0
+			,'limit'  => 0
+			);
+		//Combo box que muestra las sucursales
+		$dropdown_sucursales = array(
+						 'data'		=> $this->sucursales->db_get_data($sqlData)
+						,'value' 	=> 'id_sucursal'
+						,'text' 	=> array('clave_corta','sucursal')
+						,'name' 	=> "lts_sucursales"
+						,'leyenda' 	=> "-----"
+						,'event'    => array('event'      => 'onchange', 
+											'function'    => 'load_ciclos', 
+											'params'      => array('this.value'), 
+											'params_type' => array(false))
+					);
+		$sucursales = dropdown_tpl($dropdown_sucursales);
+
+		$dropdown_ciclos = array(
+					'value' 	=> 'id_nutricion_ciclos'
+					,'text' 	=> array('ciclo')
+					,'name' 	=> "lts_ciclos"
+			   									);
+		$ciclos = dropdown_tpl($dropdown_ciclos);
+
+		$data_servicio = $this->servicios->db_get_data($sqlData);
+		$dropdown_servicios = array(
+				 'data'     => $data_servicio
+				,'value' 	=> 'id_administracion_servicio'
+				,'text' 	=> array('servicio')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_servicios"
+		   									);
+		$servicios = dropdown_tpl($dropdown_servicios);
+
+		$data_tiempo = $this->tiempos->db_get_data($sqlData);
+		$dropdown_tiempos = array(
+				 'data'     => $data_tiempo
+				,'value' 	=> 'id_nutricion_tiempo'
+				,'text' 	=> array('tiempo')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_tiempos"
+					);						
+		$tiempos = dropdown_tpl($dropdown_tiempos);
+
+		$data_familia = $this->familias->db_get_data($sqlData);
+		$dropdown_familias = array(
+				 'data'     => $data_familia
+				,'value' 	=> 'id_nutricion_familia'
+				,'text' 	=> array('familia')
+				,'leyenda' 	=> "-----"
+				,'name' 	=> "lts_familias"
+				,'event'    => array('event'       => 'onchange', 
+									 'function'    => 'load_recetas', 
+									 'params'      => array('this.value'), 
+									 'params_type' => array(false))
+			);						
+		$familias = dropdown_tpl($dropdown_familias);
+
+		$recetas  = array(
+						// 'data'		=> $this->recetas->get_data($sqlData)
+						'value' 	=> 'id_nutricion_receta'
+						,'text' 	=> array('receta')
+						,'name' 	=> "lts_recetas"
+						,'class' 	=> "requerido"
+					);
+
+		$list_recetas  = multi_dropdown_tpl($recetas);
+
+		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
+		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
+
+		$data['lbl_sucursal']     	   = $this->lang_item('lbl_sucursal');
+		$data['lbl_ciclos']       	   = $this->lang_item('lbl_ciclos');
+		$data['lbl_servicios']    	   = $this->lang_item('lbl_servicios');
+		$data['lbl_tiempos']      	   = $this->lang_item('lbl_tiempos');
+		$data['lbl_familias']     	   = $this->lang_item('lbl_familias');
+		$data['lbl_asignar_recetas']   = $this->lang_item('lbl_recetas');
+
+		$data['btn_save']     	   		= $btn_save;
+		$data['btn_reset']    	        = $btn_reset;
+		$data['list_sucursales']  		= $sucursales;
+		$data['list_ciclos']  		    = $ciclos;
+		$data['list_servicios']   		= $servicios;
+		$data['list_tiempos']     		= $tiempos;
+		$data['list_familias']     	    = $familias;
+		$data['multiselect_recetas']    = $list_recetas;
+		if($this->ajax_post(false)){
+			echo json_encode($this->load_view_unique($seccion,$data,true));
+		}else{
+			return $this->load_view_unique($seccion, $data, true);
+		}
+	}
 
 	public function cargar_ciclos(){
 		$seccion   = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_content';
@@ -275,7 +274,6 @@ class ciclos extends Base_Controller{
 			   										'params'   => array('this.value'),
 			   										'params_type' => array(false)
 			   									));
-
 		}else{
 			$dropdown_ciclos = array(
 					'value' 	=> 'id_nutricion_ciclos'
@@ -288,12 +286,12 @@ class ciclos extends Base_Controller{
 	}
 
 	public function ciclo_receta(){
-		$id_familia   = $this->ajax_post('id_familia');
+		$id_familia  = $this->ajax_post('id_familia');
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_familia){
-			$receta = $this->recetas->get_data_recetas_x_familia($id_familia);
+			$receta  = $this->recetas->get_data_recetas_x_familia($id_familia);
 
-			$recetas  = array(
+			$recetas = array(
 							 'data'		=> $receta
 							,'value' 	=> 'id_nutricion_receta'
 							,'text' 	=> array('receta')

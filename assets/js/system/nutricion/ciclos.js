@@ -1,22 +1,22 @@
 jQuery(document).ready(function(){
   selec_manual_auto();
-	jQuery('#search-query').focus();
-	jQuery('#search-query').keypress(function(event){
-		var keycode = (event.keyCode ? event.keyCode : event.which);
-		if(keycode == '13'){  
-			buscar();
-		} 
-	});
 });
 
 function selec_manual_auto(){
+  /*Se llama a la funcion que permite ingresar solo números enteros
+  *en un campo de texto*/
+
   var letra = allow_only_numeric_integer();
+  
+  //Se inicializan los estados de los elementos del formulario
+  /*
+   * txt_ciclo se deshabilita, se le remueve la clase requerido
+   */
   jQuery("#txt_ciclo").attr("disabled", "disabled");
-  jQuery(".manual").hide();
   jQuery("#txt_ciclo").removeClass("requerido");
+
+  jQuery(".manual").hide();
   jQuery("#txt_clave_corta").removeClass("requerido");
-  jQuery("#txt_ciclo").val("");
-  jQuery("#txt_ciclo").attr("disabled", "disabled");
   jQuery("#txt_clave_corta").attr("disabled", "disabled");
   jQuery('input[name=tipo]').click(function(){
     var valor = jQuery(this).val();
@@ -24,6 +24,7 @@ function selec_manual_auto(){
       jQuery("#txt_ciclo").removeClass("requerido");
       jQuery("#txt_clave_corta").removeClass("requerido");
       jQuery("#txt_ciclo").attr('value','');
+      jQuery("#txt_clave_corta").attr('value','');
       jQuery("#txt_cantidad_ciclo").removeAttr("disabled");
       jQuery("#txt_ciclo").attr("disabled", "disabled");
       jQuery(".manual").hide('slow');
@@ -49,11 +50,12 @@ function load_content(uri, id_content){
         type: "POST",
         url: uri,
         dataType: 'json',
-        data: {filtro : filtro, tabs:0},
+        data: {filtro : filtro, tabs:1},
         success: function(data){
+          var chosen  = 'jQuery(".chzn-select").chosen();';
            if(id_content==1){
+            jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }else{
-           		var chosen  = 'jQuery(".chzn-select").chosen();';
               var tipo_insert  = 'selec_manual_auto();';
            		jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }
@@ -121,7 +123,8 @@ function load_recetas(id_familia){
             jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
           },
           success: function(data){
-            jQuery('#lts_recetas').html(data);
+            var chosen  = 'jQuery(".chzn-select").chosen();';
+            jQuery('#lts_recetas').html(data+include_script(chosen));
           }
       });
   }else{
@@ -130,34 +133,12 @@ function load_recetas(id_familia){
   jQuery('#loader').html('');
 }
 
-
-function buscar(){
-	var filtro = jQuery('#search-query').val();
-	jQuery.ajax({
-		type:"POST",
-		url: path()+"nutricion/ciclos/listado",
-		dataType: "json",
-		data: {filtro : filtro},
-		beforeSend : function(){
-			jQuery("#loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-		},
-		success : function(data){
-			var funcion = 'buscar';
-        	jQuery("#loader").html('');
-        	jQuery('#a-1').html(data+input_keypress('search-query', funcion));
-			jQuery('#search-query').val(filtro).focus();
-			tool_tips();
-		}
-	});
-}
-
 function agregar(){
   var btn          = jQuery("button[name='save_ciclo']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
   var objData = formData('#formulario');
-  //alert(dump_var(objData));
   objData['incomplete'] = values_requeridos();
 
   jQuery.ajax({
@@ -169,7 +150,6 @@ function agregar(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      //alert(dump_var(data));
       btn.removeAttr('disabled');
 
       var data = data.split('|');

@@ -82,14 +82,14 @@ class entradas_recepcion extends Base_Controller{
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 'load_content'
+										 ''
 										,'load_content'
 										,''
 										,''
 										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'), array('style' => 'display:none'), array('style' => 'display:none'));
+		$config_tab['attr']     = array(array('style' => 'display:none'),'', array('style' => 'display:none'), array('style' => 'display:none'), array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -112,7 +112,6 @@ class entradas_recepcion extends Base_Controller{
 	public function listado($offset=0){
 		// Crea tabla con listado de ordenes aprobadas 
 		$accion 		= $this->tab['listado'];
-		$tab_detalle	= $this->tab['entradas_recepcion_edit'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
@@ -133,18 +132,10 @@ class entradas_recepcion extends Base_Controller{
 		if($total_rows){
 			foreach ($list_content as $value) {
 				// Evento de enlace
-				$atrr = array(
-								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_compras_orden'].')'
-						);
 				// Acciones
 				$accion_id 						= $value['id_compras_orden'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="articulos('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
-				
-
-
-
 				// Datos para tabla
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => $value['orden_num'],
@@ -198,38 +189,6 @@ class entradas_recepcion extends Base_Controller{
 		$id_compras_orden 	= (!$id_compras_orden)?$this->ajax_post('id_compras_orden'):$id_compras_orden;
 		$detalle  			= $this->ordenes_model->get_orden_unico($id_compras_orden);
 		//dump_var($detalle);
-		$btn_save       	= form_button(array('class'=>"btn btn-primary",'name' => 'save' , 'onclick'=>'cerrar_orden_listado()','content' => $this->lang_item("btn_cerrar") ));
-		$btn_canceled       = form_button(array('class'=>"btn btn-primary",'name' => 'canceled' , 'onclick'=>'cancelar_orden_listado()','content' => $this->lang_item("btn_cancelar") ));
-		//se agrega para mostrar la opcion de proveedor y No. prefactura, solo si se selcciono proveedor en tipo de orden
-		if($detalle[0]['id_orden_tipo']==2){
-			$style='style="display:none"';
-			$class ='';
-		}else{
-			$style='';
-			$class ='requerido';
-		}	
-		if($detalle[0]['id_proveedor']>0){
-			$get_data=$this->listado_precios_model->db_get_data_x_proveedor($detalle[0]['id_proveedor']);
-		}else{
-			$get_data=$this->listado_precios_model->db_get_data_x_proveedor();
-		}
-		$dropArray4 = array(
-					 'data'		=> $get_data
-					,'value' 	=> 'id_compras_articulo_precios'
-					,'text' 	=> array('articulo','presentacion','embalaje','peso_unitario','cl_um')
-					,'name' 	=> "lts_articulos"
-					,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'get_orden_listado_articulo',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-									)
-					,'class' 	=> "articulos_lista"
-				);
-		if($detalle[0]['estatus']==7){
-			$readonly="readonly";
-		}else{
-			$readonly="";
-		}
 
 		$data_sql = array('id_compras_orden'=>$id_compras_orden);
 		$data_listado=$this->db_model->db_get_data_orden_listado_registrado_unificado($data_sql);
@@ -259,14 +218,17 @@ class entradas_recepcion extends Base_Controller{
 							<td>
 								<span name="proveedor">'.$data_listado[$i]['nombre_comercial'].'</span>
 								<input type="hidden" value="'.$data_listado[$i]['id_compras_orden_articulo'].'" data-campo="id_compras_orden_articulo['.$data_listado[$i]['id_compras_orden_articulo'].']" id="idarticuloprecios_'.$data_listado[$i]['id_compras_orden_articulo'].'"/>
+								<input type="hidden" id="proveedor_'.$data_listado[$i]['id_compras_orden_articulo'].'" value="'.$data_listado[$i]['nombre_comercial'].'">
 							</td>
 							<td>
+								<input type="hidden" id="articulo_'.$data_listado[$i]['id_compras_orden_articulo'].'" value="'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].' '.$data_listado[$i]['upc'].'">
 								<ul class="tooltips">
 									<span>'.$data_listado[$i]['articulo'].' - '.$peso_unitario.' '.$data_listado[$i]['cl_um'].'<br/>'.$data_listado[$i]['upc'].'</span>
 								</ul>
 							</td>
 							<td>
 								'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'
+								<input type="hidden" id="presentacion_'.$data_listado[$i]['id_compras_orden_articulo'].'" value="'.$embalaje.$presentacion_x_embalaje.' '.$data_listado[$i]['presentacion'].'">
 							</td>
 							<td class="right">
 								<input type="hidden" id="costo_sin_impuesto_'.$data_listado[$i]['id_compras_orden_articulo'].'" value="'.$data_listado[$i]['costo_sin_impuesto'].'"/>
@@ -354,20 +316,27 @@ class entradas_recepcion extends Base_Controller{
 		$tabData['moneda']				 	 = $moneda;
 		$tabData['aceptar_orden']			 = $this->lang_item("aceptar_orden",false);
 		$tabData['devolucion_orden']		 = $this->lang_item("devolucion_orden",false);
+		$tabData['no_factura']		 		 = $this->lang_item("no_factura",false);
+		$tabData['fecha_factura']		 	 = $this->lang_item("fecha_factura",false);
+		$tabData['#']		 	 			 = $this->lang_item("#",false);
+		$tabData['costo_unitario']		 	 = $this->lang_item("costo_unitario",false);
+		$tabData['costo_cantidad']		 	 = $this->lang_item("costo_cantidad",false);
+		$tabData['valor_imp']		 	 	 = $this->lang_item("valor_imp",false);
+		$tabData['aceptar']		 	 		 = $this->lang_item("aceptar",false);
+		$tabData['comentarios_entrada']		 = $this->lang_item("comentarios_entrada",false);
+		$tabData['recibir_enetrada']		 = $this->lang_item("recibir_enetrada",false);
+		$tabData['rechazar_entrada']		 = $this->lang_item("rechazar_entrada",false);
 		//DATA
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
+		$tabData['observaciones_value']	 	 = $detalle[0]['observaciones'];
+		$tabData['fecha_registro']	 	 = $detalle[0]['timestamp'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
-		$tabData['button_save']       		 = $btn_save;
-		$tabData['btn_canceled']       		 = $btn_canceled;
 		$tabData['orden_fecha_value']	 	 = $orden_fecha;
 		$tabData['entrega_fecha_value']	     = $entrega_fecha;
 		$tabData['list_forma_pago']			 = $forma_pago[0]['forma_pago'];
-		$tabData['style']					 = $style;
-		$tabData['class']					 = $class;
 		$tabData['table']					 = $table;
 		$tabData['style_table']				 = $style_table;
-		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
 
 		$uri_view  = $this->path.$this->submodulo.'/'.$accion;
 		if(!$uso_interno){
@@ -447,7 +416,6 @@ class entradas_recepcion extends Base_Controller{
 				}
 			}
 				$id = $this->db_model->insert($sqlData);
-				//dump_var($id);
 				for($d=0;count($data)>$d;$d++){
 					if($data[$d][11]=='true'){
 						if($data[$d][1]==''){
@@ -513,12 +481,22 @@ class entradas_recepcion extends Base_Controller{
 		$id = $this->ajax_post('id');
 		$caducidad = $this->ajax_post('caducidad_val');
 		$lote = $this->ajax_post('lote_val');
-		$u_m = $this->ajax_post('u_m_val');				
+		$u_m = $this->ajax_post('u_m_val');		
+		$proveedor = $this->ajax_post('proveedor');
+		$articulo = $this->ajax_post('articulo');
+		$presentacion = $this->ajax_post('presentacion');
+		
 		// template html modal
-		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'u_m'=>$u_m);
+		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'u_m'=>$u_m, 'proveedor_val'=>$proveedor,'articulo_val'=>$articulo, 'presentacion_val'=>$presentacion);
 		$tabData_modal['lbl_lote'] 			= $this->lang_item("lote",true);
 		$tabData_modal['lbl_caducidad'] 	= $this->lang_item("caducidad",true);
 		$tabData_modal['lbl_um'] 			= $this->lang_item("um",true);
+		$tabData_modal['recibir_lote'] 	    = $this->lang_item("recibir_lote",true);
+		$tabData_modal['devolver_lote'] 	= $this->lang_item("devolver_lote",true);
+		$tabData_modal['proveedor'] 	 	= $this->lang_item("proveedor",false);
+		$tabData_modal['articulo']  	    = $this->lang_item("articulo",false);
+		$tabData_modal['presentacion']		= $this->lang_item("presentacion",false);
+		
 		$url_modal_tpl = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.'modal_lote_caducidad';
 		$html = $this->load_view_unique($url_modal_tpl ,$tabData_modal, true);
 		// Cargar modal

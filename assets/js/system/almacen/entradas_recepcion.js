@@ -42,7 +42,6 @@ function load_content(uri, id_content){
            }else{
            		functions.push('jQuery(".chzn-select").chosen();');
           	 	functions.push('calendar_actual("fecha_factura")');
-          	 	//jQuery('#a-'+id_content).html(data);
           	 	jQuery('#a-'+id_content).html(data+include_script(functions));
 
            }
@@ -114,6 +113,9 @@ function calculos(id){
 	var caducidad_val  	= jQuery('#caducidad_val_'+id).val();
 	var lote_val		= jQuery('#lote_val_'+id).val();
 	var u_m_val			= jQuery('#u_m_val_'+id).val();
+	var proveedor		= jQuery('#proveedor_'+id).val();
+	var articulo		= jQuery('#articulo_'+id).val();
+	var presentacion    = jQuery('#presentacion_'+id).val();
 	jQuery('input[name="aceptar[]"]:checked').each(function() {
 		valor_2.push(parseFloat(jQuery('#descuento_'+jQuery(this).val()).val()));
 		valor_3.push(parseFloat(jQuery('#costo_x_cantidad_hidden'+jQuery(this).val()).val()));
@@ -162,7 +164,10 @@ function calculos(id){
 			data : {id:id,
 					caducidad_val : caducidad_val,
 					lote_val : lote_val,
-					u_m_val : u_m_val},
+					u_m_val : u_m_val,
+					proveedor  : proveedor,
+					articulo : articulo,
+					presentacion : presentacion},
 			beforeSend : function(){
 				jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 			},
@@ -173,6 +178,7 @@ function calculos(id){
 			}
 		});
 	}
+	jQuery('#listado_'+id).prop("checked", "");
 }
 function aceptar_lote(id){
 	var lote 	  = jQuery('#lotemodal').val();
@@ -182,7 +188,7 @@ function aceptar_lote(id){
 	jQuery('#caducidad_val_'+id).val(caducidad);
 	jQuery('#u_m_val_'+id).val(u_m);
 	jQuery('#lote').modal('toggle');
-	//jQuery('#listado_'+id).prop("checked", "checked");
+	jQuery('#listado_'+id).prop("checked", "checked");
 }
 function calcula_totla_pagar(){
 	var total;
@@ -194,7 +200,6 @@ function calcula_totla_pagar(){
 }
 function recibir_orden(){
 	jQuery('#mensajes').hide();	
-	//var fecha_factura = jQuery('#fecha_factura').val();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
   	objData['incomplete'] = values_requeridos();
@@ -220,5 +225,5 @@ function volver_lote(id){
 	jQuery('#caducidad_val_'+id).val('');
 	jQuery('#u_m_val_'+id).val('');
 	jQuery('#lote').modal('toggle');
-	//jQuery('#listado_'+id).prop("checked", "");
+	jQuery('#listado_'+id).prop("checked", "");
 }

@@ -166,6 +166,7 @@ class ciclos extends Base_Controller{
 						,'value' 	=> 'id_sucursal'
 						,'text' 	=> array('clave_corta','sucursal')
 						,'name' 	=> "lts_sucursales"
+						,'class' 	=> "requerido"
 						,'leyenda' 	=> "-----"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_ciclos', 
@@ -175,16 +176,18 @@ class ciclos extends Base_Controller{
 		$sucursales = dropdown_tpl($dropdown_sucursales);
 
 		$dropdown_ciclos = array(
-					'value' 	=> 'id_nutricion_ciclos'
+					 'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'name' 	=> "lts_ciclos"
 			   									);
 		$ciclos = dropdown_tpl($dropdown_ciclos);
 
 		$dropdown_servicios = array(
-				'value' 	=> 'id_administracion_servicio'
+				 'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_servicios"
 		   									);
 		$servicios = dropdown_tpl($dropdown_servicios);
@@ -195,6 +198,7 @@ class ciclos extends Base_Controller{
 				,'value' 	=> 'id_nutricion_tiempo'
 				,'text' 	=> array('tiempo')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_tiempos"
 					);						
 		$tiempos = dropdown_tpl($dropdown_tiempos);
@@ -205,6 +209,7 @@ class ciclos extends Base_Controller{
 				,'value' 	=> 'id_nutricion_familia'
 				,'text' 	=> array('familia')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_familias"
 				,'event'    => array('event'       => 'onchange', 
 									 'function'    => 'load_recetas', 
@@ -261,6 +266,7 @@ class ciclos extends Base_Controller{
 					 'data'     => $data_ciclo
 					,'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos"
 					,'event'    => array('event' => 'onchange',
@@ -273,6 +279,7 @@ class ciclos extends Base_Controller{
 				 'data'     => $data_servicio
 				,'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
+				,'class' 	=> "requerido"
 				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
 		   									);
@@ -281,12 +288,14 @@ class ciclos extends Base_Controller{
 			$dropdown_ciclos = array(
 					'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos");
 
 			$dropdown_servicios = array(
 				 'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
+				,'class' 	=> "requerido"
 				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
 		   									);

@@ -334,7 +334,7 @@ class entradas_recepcion extends Base_Controller{
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
 		$tabData['observaciones_value']	 	 = $detalle[0]['observaciones'];
-		$tabData['fecha_registro']	 	 = $detalle[0]['timestamp'];
+		$tabData['fecha_registro']	 	 	 = $detalle[0]['timestamp'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
 		$tabData['orden_fecha_value']	 	 = $orden_fecha;
 		$tabData['entrega_fecha_value']	     = $entrega_fecha;

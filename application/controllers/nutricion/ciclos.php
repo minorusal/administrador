@@ -377,7 +377,8 @@ class ciclos extends Base_Controller{
 						'id_ciclo'     => $objData['lts_ciclos']
 						,'id_servicio' => $objData['lts_servicios']
 						,'id_receta'   => $value
-						,'id_familia'  =>$objData['lts_familias']
+						,'id_familia'  => $objData['lts_familias']
+						,'id_tiempo'   => $objData['lts_tiempos']
 						,'id_usuario'  => $this->session->userdata('id_usuario')
 					    ,'timestamp'   => $this->timestamp()
 						);

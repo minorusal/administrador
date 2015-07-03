@@ -1,0 +1,64 @@
+	<script>
+  jQuery(function() {
+    jQuery( "#ciclos_programados" ).sortable();
+    jQuery( "#ciclos_programados" ).disableSelection();
+  });
+</script>
+	<p>
+		<label>{lbl_input_fecha_inicio}</label>
+		<span class="field">
+			<input id ="fecha_inicio" type="text" readonly="true" value="{value_fecha_inicio}" />
+		</span>
+	</p>
+	<p>
+		<label>{lbl_input_fecha_termino}</label>
+		<span class="field">
+			<input id="fecha_termino" type="text" readonly="true" value="{value_fecha_termino}" />
+		</span>
+	</p>
+	<p>
+		<label>{lbl_dias_descartados}</label>
+		<span class="field">
+			<a class="">{lbl_info_dias_descartados}</a><br>
+			{values_dias_descartados}
+		</span>
+	</p>
+	<p>
+		<label>{lbl_dias_festivos}</label>
+		<span class="field">
+			<input class ="fechas_festivas" type="text" readonly="true"/>
+		</span>
+	</p>
+	<p>
+		<label>{lbl_agregar_ciclos}</label>
+		<span class="field">
+			<a >{lbl_info_agregar_ciclos}</a><br><br>
+			{multiselect_ciclos}
+		</span>
+	</p>
+	<p>
+		<label>{lbl_orden_ciclos}</label>
+		<span class="field">
+			<a >{lbl_info_orden_ciclos}</a><br>
+			<center>
+				<div style="text-align:left;border:2px solid #ddd;width:30%;padding:20px;cursor:pointer;">
+					{ciclos_programados}
+				</div>
+				<br>
+			</center>
+		</span>
+	</p>
+	<p>
+		<label>{lbl_cantidad_recetas}</label>
+		<span class="field">
+			<a >{lbl_info_cantidad_recetas}</a><br><br>
+			{dropdown_ciclos}
+			<div id="cantidades_ciclo_receta" ></div>
+		</span>
+	</p>
+
+	<div id="registro_loader"></div>
+    <div id="mensajes" style="display:none"></div>
+    <p class="stdformbutton">
+        {btn_guardar_parametros}
+    </p>  

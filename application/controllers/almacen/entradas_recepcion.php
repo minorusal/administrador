@@ -18,6 +18,9 @@ class entradas_recepcion extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
+
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
 		$this->submodulo        = 'entradas_recepcion';
@@ -76,7 +79,7 @@ class entradas_recepcion extends Base_Controller{
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $path.$tab_1            //almacen/entradas_recepcion/agregar
-										,$path.$tab_2.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
+										,$this->modulo.'/'.$this->submodulo.'/'.$tab_2.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
 										,$tab_3                   //detalle
 										,$tab_4                   //articulos
 										,$tab_5                   //modal
@@ -349,6 +352,8 @@ class entradas_recepcion extends Base_Controller{
 		}
 	}
 	public function insert(){
+		$id_almacen_lobby = $this->vars->cfg['id_almacen_lobby'];
+		$id_gaveta_lobby  = $this->vars->cfg['id_gaveta_lobby'];
 		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		$cont=0;
@@ -442,6 +447,8 @@ class entradas_recepcion extends Base_Controller{
 						if($data[$d][4]==1){}
 						elseif($data[$d][4]==2){
 							$sqldata2= array(
+									'id_almacen'		   	   	   => $id_almacen_lobby,
+									'id_gaveta'		   	   	   	   => $id_gaveta_lobby,
 									'id_almacen_entradas_recibir'  => $id,
 									'id_compras_articulo_precios'  => $keys[$d],
 									'id_articulo_tipo'	   		   => $data[$d][4],
@@ -454,10 +461,12 @@ class entradas_recepcion extends Base_Controller{
 								);
 						}else{
 							$sqldata2= array(
+									'id_almacen'		   	   	   => $id_almacen_lobby,
+									'id_gaveta'		   	   	   	   => $id_gaveta_lobby,
 									'id_almacen_entradas_recibir'  => $id,
 									'id_compras_articulo_precios'  => $keys[$d],
 									'id_articulo_tipo'			   => $data[$d][4],
-									'stock'		   	   			   => $embalaje_UM,
+									'stock'		   	   			   => $embalaje_UM,									
 									'lote'					   	   => $data[$d][0],
 									'caducidad'			   	   	   => $caducidad_val,
 									'id_estatus'			  	   => 1,
@@ -471,7 +480,10 @@ class entradas_recepcion extends Base_Controller{
 							if($insertstock){
 									$sqldatalog_stock= array(
 									'id_almacen_entrada'  		   => $id,
-									'id_compras_articulo_precios'  => $keys[$d],
+									'id_compras_orden_articulo'    => $keys[$d],
+									'id_stock'			   		   => $insertstock,
+									'log_id_almacen_origen'		   => $id_almacen_lobby,
+									'log_id_gaveta_origen'		   => $id_gaveta_lobby,
 									'id_stock'			   		   => $insertstock,
 									'log_cantidad'      	 	   => $data[$d][8],
 									'log_lote'					   => $data[$d][0],

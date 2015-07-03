@@ -494,3 +494,30 @@ function ver_pdf(URi, titulo){
         scrollable:false
     });   
 }
+
+function dual_select(){
+    var db   = jQuery('#dualselected').find('.ds_arrow button');    
+    var sel1 = jQuery('#dualselected select:first-child');      
+    var sel2 = jQuery('#dualselected select:last-child');           
+    //sel2.empty(); 
+    db.click(function(){
+        var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;  
+        if(t){
+            sel1.find('option').each(function(){
+            if(jQuery(this).is(':selected')){
+                jQuery(this).attr('selected',false);
+                var op = sel2.find('option:first-child');
+                sel2.append(jQuery(this));
+            }
+            }); 
+        }else{
+            sel2.find('option').each(function(){
+                if(jQuery(this).is(':selected')){
+                    jQuery(this).attr('selected',false);
+                    sel1.append(jQuery(this));
+                }
+            });
+        }
+        return false;
+    });
+}

@@ -114,12 +114,13 @@ class gavetas extends Base_Controller
 				// Acciones
 				$accion_id 						= $value['id_almacen_gavetas'];
 				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_acciones ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
-				$btn_acciones['eliminar']       = (!$stock)?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
+				$btn_acciones['eliminar']       = (!$stock || $value['edit'])?'<span id="ico-eliminar_'.$accion_id.'" class="ico_acciones ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>':'';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				$edit = (!$value['edit'])?'*':'';
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['clave_corta'],
-									'gavetas'       => tool_tips_tpl($value['gavetas'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'   => $value['clave_corta'],
+									'gavetas'       => $edit.tool_tips_tpl($value['gavetas'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'   => $edit.$value['clave_corta'],
 									'gaveta'        => $value['almacenes'],
 									'pasillos'      => $value['pasillos'],
 									'descripcion'   => $value['descripcion'],
@@ -189,7 +190,7 @@ class gavetas extends Base_Controller
 					,'selected' => $detalle[0]['id_almacen_pasillos']
 					);
 		$pasillos     = dropdown_tpl($pasillos_array);
-		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
+		$btn_save     = ($detalle[0]['edit'])?form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") )):$this->lang_item("no_editable");
         $tabData['id_gaveta']              = $id_almacen_gavetas;
         $tabData["lbl_gabetas"]            = $this->lang_item("lbl_gabetas");
 		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");

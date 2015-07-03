@@ -218,6 +218,7 @@ class catalogos_model extends Base_Model{
 						,av.clave_corta
 						,av.descripcion
 						,av.gavetas
+						,av.edit
 					FROM $tbl[almacen_gavetas] av
 					LEFT JOIN $tbl[almacen_pasillos] al on al.id_almacen_pasillos = av.id_almacen_pasillos
 					LEFT JOIN $tbl[almacen_almacenes] am on am.id_almacen_almacenes = av.id_almacen_almacenes

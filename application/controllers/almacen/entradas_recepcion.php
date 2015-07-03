@@ -20,7 +20,7 @@ class entradas_recepcion extends Base_Controller{
 		parent::__construct();
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
-		$this->submodulo         = 'entradas_recepcion';
+		$this->submodulo        = 'entradas_recepcion';
 		$this->icon 			= 'fa fa-book'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
@@ -35,6 +35,7 @@ class entradas_recepcion extends Base_Controller{
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('compras/ordenes_model','ordenes_model');
+		$this->load->model('stock_model','stock_model');
 		$this->load->model('compras/listado_precios_model','listado_precios_model');
 		$this->load->model('administracion/sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
@@ -82,7 +83,7 @@ class entradas_recepcion extends Base_Controller{
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 ''
+										 'load_content'
 										,'load_content'
 										,''
 										,''
@@ -99,8 +100,8 @@ class entradas_recepcion extends Base_Controller{
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
-		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
+		$data['titulo_submodulo'] = $this->lang_item($this->seccion);
+		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		//$data['modal']            = $this->modal();
@@ -114,7 +115,7 @@ class entradas_recepcion extends Base_Controller{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
+		//$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -127,7 +128,7 @@ class entradas_recepcion extends Base_Controller{
 		$total_rows   			  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content 			  = $this->db_model->db_get_data($sqlData);
-		$url          			  = base_url($url_link);
+		$url          			  = base_url($uri_view);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value) {
@@ -415,7 +416,8 @@ class entradas_recepcion extends Base_Controller{
 					$data[$i][]=$array[$j][$keys[$i]];
 				}
 			}
-				$id = $this->db_model->insert($sqlData);
+			$id = $this->db_model->insert($sqlData);
+			if($id){
 				for($d=0;count($data)>$d;$d++){
 					if($data[$d][11]=='true'){
 						if($data[$d][1]==''){
@@ -464,8 +466,47 @@ class entradas_recepcion extends Base_Controller{
 								);
 						}
 						$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
-						$insertstock = $this->db_model->insert_entradas_stock($sqldata2);	
+						if($insert_partidas){
+							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);
+							if($insertstock){
+									$sqldatalog_stock= array(
+									'id_almacen_entrada'  		   => $id,
+									'id_compras_articulo_precios'  => $keys[$d],
+									'id_stock'			   		   => $insertstock,
+									'log_cantidad'      	 	   => $data[$d][8],
+									'log_lote'					   => $data[$d][0],
+									'log_caducidad'			   	   => $caducidad_val,
+									'timestamp'  	 		       => $this->timestamp(),
+									'id_usuario'   		   		   => $this->session->userdata('id_usuario'),
+									'activo'					   => 1
+								);
+								$insertstock = $this->stock_model->insert_stock_log($sqldatalog_stock);
+							}else{
+								$msg = $this->lang_item("msg_query_insert",false);
+								$json_respuesta = array(
+										 'id' 		=> 0
+										,'contenido'=> alertas_tpl('error', $msg ,false)
+										,'success' 	=> false
+								);
+							}
+						}else{
+							$msg = $this->lang_item("msg_query_insert",false);
+							$json_respuesta = array(
+									 'id' 		=> 0
+									,'contenido'=> alertas_tpl('error', $msg ,false)
+									,'success' 	=> false
+							);
+						}
 					}
+				}
+				$sqldata3= array(
+						'id_compras_orden' 			   => $id_compras_orden,
+						'estatus'					   => 8,
+						'edit_timestamp'  	 		   => $this->timestamp(),
+						'edit_id_usuario'   		   => $this->session->userdata('id_usuario')
+						);
+				$update = $this->ordenes_model->db_update_data($sqldata3);
+				if($update){
 					$msg = $this->lang_item("msg_insert_success",false);
 					$json_respuesta = array(
 								 'id' 		=> 0
@@ -473,7 +514,15 @@ class entradas_recepcion extends Base_Controller{
 								,'success' 	=> false
 						);
 				}
-				
+			}
+			else{
+				$msg = $this->lang_item("msg_query_insert",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('error', $msg ,false)
+						,'success' 	=> false
+				);
+			}
 		}
 		echo json_encode($json_respuesta);
 	}

@@ -466,11 +466,11 @@ function objLength(objeto) {
 
 function imgLoader(idDiv, imageFile){
     // Muestra image de loader en <div> 
-    var imageFile   = ((imageFile=='') || (imageFile==undefined)) ? 'loader.gif' : imageFile;
+    var imageFile   = ((imageFile=='') || (imageFile==undefined)) ? 'loader.GIF' : imageFile;
     var idDiv       = ((idDiv=='') || (idDiv==undefined)) ? '#loader' : idDiv;
     
     var imgPath     = path()+'assets/images/loaders/';
-    var imageName   = 'loader.gif';    
+    var imageName   = 'loader.GIF';    
 
     imageFile       = imgPath + imageName ;
 

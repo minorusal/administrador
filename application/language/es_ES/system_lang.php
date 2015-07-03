@@ -41,6 +41,7 @@
 	$lang['msg_campos_numericos']              = '<strong>Atencion!</strong><br>Los campos deben contener numeros, gracias';
 	$lang['msg_query_search']        		   = '<div style="float:left;"><p class="text-info">Se han encontrado %d registros para "%s".</p></div>'; 
 	$lang['msg_err_clv']             		   = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
+	$lang['msg_query_insert']             	   = '<strong>Advertencia!</strong><br>No se puedo realizar el registro';
 
 	$lang['msg_insert_orden_success']      = '<strong>Exito!</strong><br>El registro se dio de alta correctamente. Con el numero de orden %s';
 
@@ -91,8 +92,4 @@
 	$lang['ID']			= 'ID';
 	$lang['listado']   = 'listado';
 	$lang['detalle']   = 'detalle';
-
-
-
-	
 ?>

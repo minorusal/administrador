@@ -202,10 +202,10 @@
 				}
 
 
-				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class=' clean chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
-			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class=' clean chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 			return $selected;
 		}
 	}
@@ -219,8 +219,11 @@
 				$value 		   = (isset($params['value']))?$params['value']:false;
 				$text 		   = (isset($params['text']))?$params['text']:false;
 				$name 		   = (isset($params['name']))?$params['name']:false;
+				$name2 		   = (isset($params['name2']))?$params['name2']:'list';
 				$class 		   = (isset($params['class']))?$params['class']:'';
 				$event 		   = (isset($params['event']))?$params['event']:'';
+				$prev 		   = (isset($params['prev']))?$params['prev']:'';
+				$next 		   = (isset($params['next']))?$params['next']:'';
 				$disabled      = (isset($params['disabled']))?$params['disabled']:'';
 			}
 
@@ -242,7 +245,7 @@
 						}		
 					}
 				}
-
+				$options = array();
 				foreach ($data as $option => $item){
 					$option_value = "";
 					if(is_array($text)){
@@ -259,18 +262,18 @@
 					}					
 					$count++;
 				}
-				$multiple =  form_multiselect('list', $options_selected, $selected,  "multiple='multiple' class='multiple_selected $class'  size='10'");
+				$multiple =  form_multiselect($name2, $options_selected, $selected,  "multiple='multiple' class='multiple_selected $class'  size='10'");
 
 				$selected = "<span id='dualselected' class='dualselect'>"
 							.form_multiselect($name, $options, $selected,"multiple='multiple' class='uniformselect' size='10'")
 
 				               ."<span class='ds_arrow'>
-					               	<button class='btn ds_prev'>
+					               	<button onclick='$prev' class='btn ds_prev'>
 								    	<i class='iconfa-chevron-left'>
 								    	</i>
 								    </button>
 								    <br>
-								    <button class='btn ds_next'>
+								    <button onclick='$next' class='btn ds_next'>
 								    	<i class='iconfa-chevron-right'>
 								        </i>
 									</button>

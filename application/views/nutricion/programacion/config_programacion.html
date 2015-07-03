@@ -6,29 +6,29 @@
 </script>
 <hr>
 <div  class="stdform">
-	<h1>{title}</h1>
+	<h1>{lbl_config_programacion}</h1>
 	<hr>
-		<a class="">{input_fecha_inicio}</a><br>
+		<a class="">{lbl_input_fecha_inicio}</a><br>
 		<input id ="inicio" type="text" readonly="true" value="{inicio_value}" />
 		<br>
-		<a class="">{input_fecha_termino}</a><br>
+		<a class="">{lbl_input_fecha_temrino}</a><br>
 		<input id="fin" type="text" readonly="true" value="{fin_value}" />
 	<hr>
-		<h1>{}</h1>
+		<h1>{lbl_dias_descartados}</h1>
 	<hr>
-		<a class="">Selección de Días para Descartar en la Programación:</a><br>
-		{dias_descartados}
+		<a class=""></a><br>
+		{lbl_dias_descartados}
 	<hr>
-		<a class="">Selección de Días festivos para Descartar en la Programación:</a><br>
+		<a class="">{lbl_info_dias_descartados}</a><br>
 		<input id ="festivos" type="text" readonly="true"/>
 	<hr>
-		<h1>Agregar Menus</h1>
+		<h1>{lbl_agregar_menus}</h1>
 	<hr>
-		<a >Agrega los menus que seran ciclados en el calendario de Programación</a><br><br>
+		<a >{lbl_info_agregar_menus}</a><br><br>
 		{list_menus}
 		<br>
 	<hr>
-		<h1>Orden de Menus</h1>
+		<h1>{lbl_orden_menus}</h1>
 	<hr>
 		<a >Coloca los menus en el orden que apareceran en el ciclo, para moverlos solo basta dar click sobre un menu y desplazalo al lugar que le corresponda</a><br><br>
 		<center><div style="text-align:left;border:2px solid #ddd;width:30%;padding:20px;">{menus_ciclados}</div></center>

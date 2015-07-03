@@ -166,6 +166,7 @@ class ciclos extends Base_Controller{
 						,'value' 	=> 'id_sucursal'
 						,'text' 	=> array('clave_corta','sucursal')
 						,'name' 	=> "lts_sucursales"
+						,'class' 	=> "requerido"
 						,'leyenda' 	=> "-----"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_ciclos', 
@@ -175,16 +176,18 @@ class ciclos extends Base_Controller{
 		$sucursales = dropdown_tpl($dropdown_sucursales);
 
 		$dropdown_ciclos = array(
-					'value' 	=> 'id_nutricion_ciclos'
+					 'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'name' 	=> "lts_ciclos"
 			   									);
 		$ciclos = dropdown_tpl($dropdown_ciclos);
 
 		$dropdown_servicios = array(
-				'value' 	=> 'id_administracion_servicio'
+				 'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_servicios"
 		   									);
 		$servicios = dropdown_tpl($dropdown_servicios);
@@ -195,6 +198,7 @@ class ciclos extends Base_Controller{
 				,'value' 	=> 'id_nutricion_tiempo'
 				,'text' 	=> array('tiempo')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_tiempos"
 					);						
 		$tiempos = dropdown_tpl($dropdown_tiempos);
@@ -205,6 +209,7 @@ class ciclos extends Base_Controller{
 				,'value' 	=> 'id_nutricion_familia'
 				,'text' 	=> array('familia')
 				,'leyenda' 	=> "-----"
+				,'class' 	=> "requerido"
 				,'name' 	=> "lts_familias"
 				,'event'    => array('event'       => 'onchange', 
 									 'function'    => 'load_recetas', 
@@ -261,6 +266,7 @@ class ciclos extends Base_Controller{
 					 'data'     => $data_ciclo
 					,'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos"
 					,'event'    => array('event' => 'onchange',
@@ -273,6 +279,7 @@ class ciclos extends Base_Controller{
 				 'data'     => $data_servicio
 				,'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
+				,'class' 	=> "requerido"
 				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
 		   									);
@@ -281,12 +288,14 @@ class ciclos extends Base_Controller{
 			$dropdown_ciclos = array(
 					'value' 	=> 'id_nutricion_ciclos'
 					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
 					,'leyenda'  => '-----'
 					,'name' 	=> "lts_ciclos");
 
 			$dropdown_servicios = array(
 				 'value' 	=> 'id_administracion_servicio'
 				,'text' 	=> array('servicio')
+				,'class' 	=> "requerido"
 				,'leyenda' 	=> "-----"
 				,'name' 	=> "lts_servicios"
 		   									);
@@ -327,10 +336,17 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
-				$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
+				/*$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
 														 'receta'     => $value['receta'] , 
-														 'id_vinculo' => $value['id_nutricion_receta']) ;
+														 'id_vinculo' => $value['id_nutricion_receta']);*/
+				$servicio[$value['servicio']][$value['tiempo']][$value['familia']][] = array('id_servicio' => $value['id_servicio'],
+														'id_tiempo'   => $value['id_tiempo'],
+														'id_familia'  => $value['id_familia'],
+														'familia '    => $value['familia'],
+														'receta'      => $value['receta'], 
+														'id_vinculo'  => $value['id_nutricion_receta']);
 			}
+			print_debug($servicio);
 			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
 			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
 			foreach ($servicio as $item => $recetas) {
@@ -355,7 +371,7 @@ class ciclos extends Base_Controller{
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);
 	}
-
+//56 24 77 00
 	public function insert_config(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
@@ -370,7 +386,8 @@ class ciclos extends Base_Controller{
 						'id_ciclo'     => $objData['lts_ciclos']
 						,'id_servicio' => $objData['lts_servicios']
 						,'id_receta'   => $value
-						,'id_familia'  =>$objData['lts_familias']
+						,'id_familia'  => $objData['lts_familias']
+						,'id_tiempo'   => $objData['lts_tiempos']
 						,'id_usuario'  => $this->session->userdata('id_usuario')
 					    ,'timestamp'   => $this->timestamp()
 						);

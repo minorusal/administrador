@@ -83,7 +83,7 @@ class entradas_recepcion extends Base_Controller{
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 ''
+										 'load_content'
 										,'load_content'
 										,''
 										,''
@@ -100,8 +100,8 @@ class entradas_recepcion extends Base_Controller{
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
-		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
+		$data['titulo_submodulo'] = $this->lang_item($this->seccion);
+		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		//$data['modal']            = $this->modal();
@@ -115,7 +115,7 @@ class entradas_recepcion extends Base_Controller{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
+		//$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -128,7 +128,7 @@ class entradas_recepcion extends Base_Controller{
 		$total_rows   			  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content 			  = $this->db_model->db_get_data($sqlData);
-		$url          			  = base_url($url_link);
+		$url          			  = base_url($uri_view);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value) {

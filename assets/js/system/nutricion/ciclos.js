@@ -169,6 +169,7 @@ function agregar(){
 }
 
 function insert_config(){
+  var treeview    = 'load_treeview("treeview_ciclos");';
   var btn = jQuery("button[name='save_config']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -189,10 +190,11 @@ function insert_config(){
 
       var data = data.split('|');
       if(data[0]==1){
-        clean_formulario();
+        //clean_formulario();
       }
       jQuery("#registro_loader").html('');
       jQuery("#mensajes").html(data[1]).show('slow');
+      jQuery('#ciclo_detalle').html(data.include_script(treeview));
     }
   });
 }

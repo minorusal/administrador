@@ -202,10 +202,10 @@
 				}
 
 
-				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class=' clean chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}
-			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class='chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+			$selected = "<span class='formwrapper '>".form_multiselect($name, array(), $selected, " class=' clean chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 			return $selected;
 		}
 	}

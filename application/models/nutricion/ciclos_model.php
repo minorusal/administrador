@@ -83,17 +83,23 @@ class ciclos_model extends Base_Model{
 		$query = "	SELECT 
 						 cl.id_nutricion_ciclos
 						,cl.ciclo
+						,ncr.id_familia
 						,ncr.id_nutricion_ciclo_receta
 						,ncr.id_receta
 						,ncr.id_servicio
+						,ncr.id_tiempo
 						,ncr.porciones
+						,fm.familia
 						,nr.id_nutricion_receta
 						,nr.receta
 						,s.servicio
+						,tm.tiempo
 					FROM 
 						$tbl[nutricion_ciclo_receta] ncr
 					LEFT JOIN $tbl[nutricion_ciclos] cl on cl.id_nutricion_ciclos = ncr.id_ciclo
 					LEFT JOIN $tbl[nutricion_recetas] nr on nr.id_nutricion_receta = ncr.id_receta
+					LEFT JOIN $tbl[nutricion_tiempos] tm on tm.id_nutricion_tiempo = ncr.id_tiempo
+					LEFT JOIN $tbl[nutricion_familias] fm on fm.id_nutricion_familia = ncr.id_familia
 					LEFT JOIN $tbl[administracion_servicios] s on s.id_administracion_servicio = ncr.id_servicio
 					WHERE cl.id_nutricion_ciclos= $id_ciclo AND ncr.activo = 1
 					ORDER BY s.servicio";

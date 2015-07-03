@@ -327,10 +327,16 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
-				$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
+				/*$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
 														 'receta'     => $value['receta'] , 
-														 'id_vinculo' => $value['id_nutricion_receta']) ;
+														 'id_vinculo' => $value['id_nutricion_receta']);*/
+				$servicio[$value['servicio']][$value['tiempo']] = array('id_servicio' => $value['id_servicio'],
+														'id_tiempo'   => $value['id_tiempo'],
+														'id_familia'  => $value['id_familia'],
+														'receta'      => $value['receta'], 
+														'id_vinculo'  => $value['id_nutricion_receta']);
 			}
+			print_debug($servicio);
 			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
 			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
 			foreach ($servicio as $item => $recetas) {
@@ -355,7 +361,7 @@ class ciclos extends Base_Controller{
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);
 	}
-
+//56 24 77 00
 	public function insert_config(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){

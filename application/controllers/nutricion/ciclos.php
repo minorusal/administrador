@@ -330,9 +330,10 @@ class ciclos extends Base_Controller{
 				/*$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
 														 'receta'     => $value['receta'] , 
 														 'id_vinculo' => $value['id_nutricion_receta']);*/
-				$servicio[$value['servicio']][$value['tiempo']] = array('id_servicio' => $value['id_servicio'],
+				$servicio[$value['servicio']][$value['tiempo']][$value['familia']][] = array('id_servicio' => $value['id_servicio'],
 														'id_tiempo'   => $value['id_tiempo'],
 														'id_familia'  => $value['id_familia'],
+														'familia '    => $value['familia'],
 														'receta'      => $value['receta'], 
 														'id_vinculo'  => $value['id_nutricion_receta']);
 			}

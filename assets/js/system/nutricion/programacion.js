@@ -138,7 +138,7 @@ function guardar_cantidad_receta_ciclo(id_vinculo){
 	}
 }
 function load_calendario(id_sucursal){
-	jQuery('#mensajes').html('');
+	jQuery('#mensajes').html('').hide();
 	if(id_sucursal!=0){
 		jQuery.ajax({
 	        type: "POST",
@@ -150,11 +150,10 @@ function load_calendario(id_sucursal){
 	        },
 	        success: function(data){
 	        	imgLoader_clean('#loader_calendario');
-	        	jQuery('#form_calendario').append("<div id='calendar'></div>");
+	        	jQuery('#contenedor_calendario').html(data.result);
 	        	if(data.success == 1){
-	        		config_calendar('calendar', data.json);
 	        	}else{
-	        		jQuery('#mensajes').html(data.msg);
+	        		jQuery('#mensajes').html(data.msg).show('slow');
 	        	}
 	        	
 	        }

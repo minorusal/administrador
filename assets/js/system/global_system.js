@@ -17,9 +17,10 @@ jQuery.fn.hasAttr = function(name,val){
     }
     return jQuery(this).attr(name) !== undefined;
 };
-function config_calendar(id, Objson ){
-    alert(dump_var(Objson));
+function full_calendar(id, Objson ){
+   
     var json = (Objson == undefined) ? '' : Objson
+     alert(dump_var(json));
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -62,7 +63,7 @@ function config_calendar(id, Objson ){
             calendar.fullCalendar('unselect');
         },
         editable: false,
-        events: json
+        events: [json]
     });
 }
 function config_datepicker(){

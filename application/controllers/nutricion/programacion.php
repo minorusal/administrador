@@ -220,7 +220,12 @@ class programacion extends Base_Controller{
 		echo json_encode($list);
 	}
 	public function make_list($items, $inicio = true, $inputs = true) {
-	    $ret = ($inicio) ? '<ul id="treeview_ciclos" class=" treeview-gray">': '<ul>';
+
+		if($inputs){
+			$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
+		}else{
+			$ret = ($inicio) ? "<ul class='list-nostyle'>": '<ul>';
+		}
 	    foreach ($items as $item => $subitems) {
 	        if (!is_numeric($item)) {
 	        	$nivel = explode('-', $item);
@@ -244,7 +249,12 @@ class programacion extends Base_Controller{
 		        			$icon = 'iconfa-fire';
 		        			break;
 		        	}
-		            $ret .= "<li><span class='$icon'></span>".$tipo.':&nbsp;'.strtoupper($tittle);
+		        	if(!$inputs){
+		        		$tipo = '';
+		        	}else{
+		        		$tipo = $tipo.':';
+		        	}	
+		            $ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle);
 	        	}
 	        }
 
@@ -267,7 +277,7 @@ class programacion extends Base_Controller{
 	            $ret .= "<li>".$cantidades."<span class=' iconfa-bookmark'></span>".$subitems['recetas'];
 		         
 		        }else{
-		        	$ret .= $this->make_list($subitems, false);
+		        	$ret .= $this->make_list($subitems, false,$inputs);
 		        }
 	        }
 
@@ -371,7 +381,7 @@ class programacion extends Base_Controller{
 					);
 
 		$data['dropdpwn_sucursales'] = dropdown_tpl($dropdown);
-		$view = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/calendario',$data, true);
+		$view = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/calendario_content',$data, true);
 		return $view ;
 	}
 	public function cargar_calendario(){
@@ -394,8 +404,6 @@ class programacion extends Base_Controller{
 																												);
 
 			}
-
-			//print_debug($ciclos);
 			
 			if(is_array($dias_descartados)){
 				foreach ($dias_descartados as $key => $value) {
@@ -416,26 +424,28 @@ class programacion extends Base_Controller{
 					$mes  = (date('n', $i)-1);
 					$anio =  date('Y', $i); 
 					
-					$json['title'] = "<span class=\"iconfa-glass\"></span>&nbsp;-&nbsp;<span>".$ciclos[$index]['nombre'].'</span><hr>'.
-						$this->make_list($ciclos[$index]['servicios']);
-					$json['start'] = "new Date($anio, $mes, $dia)";
-					$json['allDay'] = 1;
-
-					/*$json[] = "{
-								title: '<span class=\"iconfa-glass\"></span>&nbsp;-&nbsp;<span>".$ciclos[$index]['nombre'].'</span><hr>'.$this->make_list($ciclos[$index]['servicios'])."',
-								start: new Date($anio, $mes, $dia),
+					$list = $this->make_list($ciclos[$index]['servicios'],true, false);
+					
+					$json[] = '{
+								title: "<span class=\'iconfa-glass\'></span>&nbsp;-&nbsp;<span>'.$ciclos[$index]['nombre'].'</span><hr>'.$list .'",
+								start: new Date('.$anio.', '.$mes.', '.$dia.'),
 			                    allDay: true
-							}";*/
+							}';
 					$index++;
 				}
 			}
-
-			$response = array('success' => 1, 'json' => $json);
-
+			$json         = implode(',',$json);
+			$data['json'] = $json;
+			$success = 1;
+			$msg = '';
 		}else{
-			$response = array('success' => 0, 'msg' => alertas_tpl('', $this->lang_item('msg_ciclos_null') ,false));
+			$data['json'] = '';
+			$success = 0;
+			$msg = alertas_tpl('', $this->lang_item('msg_ciclos_null') ,false);
 		}
-		//return $view ;
+		$json = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/calendario',$data, true);
+		$response = array('success' => $success,'result' => $json, 'msg' => $msg);
+		
 		echo json_encode( $response);
 	}
 	public function enlistar_contenido($array){

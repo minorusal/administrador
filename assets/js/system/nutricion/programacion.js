@@ -159,6 +159,7 @@ function load_calendario(id_sucursal){
 	        }
 	    });
 	}else{
+		jQuery('#contenedor_calendario').html('');
 	}
 }
 //config_calendar

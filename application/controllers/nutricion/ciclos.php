@@ -328,10 +328,13 @@ class ciclos extends Base_Controller{
 		}
 	}
 	public function ciclo_detalle($id_ciclo = false){
-		$id_ciclo  = $this->ajax_post('id_ciclo');
-		$nom_ciclo = $this->ajax_post('nombre_ciclo');
+		$id_ciclo = ($this->ajax_post('id_ciclo'))?$this->ajax_post('id_ciclo'):$id_ciclo;
+		//print_debug($id_ciclo);
+		//$id_ciclo  = $this->ajax_post('id_ciclo');
+		//$nom_ciclo = $this->ajax_post('nombre_ciclo');
 		$list = '';
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
+		//print_debug($contenido_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
 				//print_debug($value);
@@ -345,8 +348,8 @@ class ciclos extends Base_Controller{
 																							 'receta'      => $value['receta'], 
 																							 'id_vinculo'  => $value['id_nutricion_receta']);
 			}
-			
-			//print_debug($contenido_ciclo);
+			$nom_ciclo = ($this->ajax_post('nombre_ciclo'))?$nom_ciclo = $this->ajax_post('nombre_ciclo'):'';
+			//print_debug($nom_ciclo);
 			//print_debug($servicios);
 			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
 			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
@@ -398,16 +401,17 @@ class ciclos extends Base_Controller{
 
 	public function insert_config(){
 		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode(alertas_tpl('error', $msg ,false));
 		}else{
 			$arr_recetas  = explode(',',$objData['lts_recetas']);
 			if(!empty($arr_recetas)){
 				$sqlData = array();
 				foreach ($arr_recetas as $key => $value){
 					$sqlData = array(
-						'id_ciclo'     => $objData['lts_ciclos']
+						 'id_ciclo'    => $objData['lts_ciclos']
 						,'id_servicio' => $objData['lts_servicios']
 						,'id_receta'   => $value
 						,'id_familia'  => $objData['lts_familias']
@@ -417,12 +421,14 @@ class ciclos extends Base_Controller{
 						);
 					$insert = $this->ciclos->insert_ciclo_receta($sqlData);
 				}
-
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				$arbol = $this->ciclo_detalle($objData['lts_ciclos']);
+				//print_debug($arbol);
+				//$msg = $this->lang_item("msg_insert_success",false);
+				//echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				//echo json_encode($arbol);
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(alertas_tpl('', $msg ,false));
 			}
 		}
 	}

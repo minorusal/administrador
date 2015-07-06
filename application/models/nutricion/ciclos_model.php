@@ -46,13 +46,12 @@ class ciclos_model extends Base_Model{
 	public function insert_ciclo_receta($data = array()){
 		// DB Info
 		$tbl = $this->tbl;
-		$existe = $this->row_exist($tbl['nutricion_ciclo_receta'], array('id_nutricion_ciclo_receta'=> $data['id_ciclo'],'id_receta'=>$data['id_receta']));
-		print_debug($existe);
-		if(!$existe){
-				$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
-			}else{
-				return false;
-			}
+		$existe = $this->row_exist($tbl['nutricion_ciclo_receta'], array('id_servicio'=> $data['id_servicio'],'id_ciclo'=> $data['id_ciclo'],'id_receta'=>$data['id_receta'],'id_tiempo'=>$data['id_tiempo']));
+		if($existe){
+			return false;
+		}else{
+			$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
+		}
 	}
 
 	public function db_get_data($data = array()){

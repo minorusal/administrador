@@ -57,6 +57,7 @@ function load_content(uri, id_content){
             jQuery('#a-0').html('');
             jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
            }else{
+              var treeview    = 'load_treeview("treeview_ciclos");';
               var tipo_insert  = 'selec_manual_auto();';
               jQuery('#a-1').html('');
            		jQuery('#a-'+id_content).html(data+include_script(chosen+tipo_insert));
@@ -169,7 +170,7 @@ function agregar(){
 }
 
 function insert_config(){
-  var treeview    = 'load_treeview("treeview_ciclos");';
+  var treeview    = 'load_treeview("treeview_ciclos")';
   var btn = jQuery("button[name='save_config']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -183,18 +184,12 @@ function insert_config(){
     dataType: "json",
     data: {objData: objData},
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      //jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      btn.removeAttr('disabled');
-
-      var data = data.split('|');
-      if(data[0]==1){
-        //clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-      jQuery("#mensajes").html(data[1]).show('slow');
-      jQuery('#ciclo_detalle').html(data.include_script(treeview));
+      //jQuery('.chzn-choices').clear();
+      //jQuery('.chzn-choices').append(toAppend).multiselect("destroy").multiselect();
+      jQuery('#ciclo_detalle').html(data+include_script(treeview));
     }
   });
 }

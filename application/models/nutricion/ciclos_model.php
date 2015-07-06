@@ -115,5 +115,20 @@ class ciclos_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+
+	function eliminar_servicio($id_servicio, $id_ciclo){
+		print_debug($id_servicio);
+		$tbl = $this->tbl;
+		if($id_servicio==0){
+			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
+		}else{
+			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_servicio = $id_servicio";
+		}
+		//print_debug($query);
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
 	
 }

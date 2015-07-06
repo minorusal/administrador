@@ -3,36 +3,34 @@
         <table  class="table table-bordered table-invoice"> 
             <tr>
                 <td class="width30">
-                <input id="id_compras_orden" type="hidden" data-campo="id_compras_orden" value="{id_compras_orden}" />
-                <input id="moneda" type="hidden" data-campo="moneda" value="{moneda}" />
-                <input id="estatus" type="hidden" data-campo="estatus" value="{estatus}" />
-                    <label>{orden_num}:</label>
+                    <input type="hidden" id="id_stock" value="{id_stock}" name="id_stock" data-campo="id_stock">
+                    <label>{upc_lbl}:</label>
                 </td >
-                <td><strong>{orden_num_value}</strong></td>
+                <td><strong>{upc}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label>{orden_fecha}:</label>
+                    <label>{sku_lbl}:</label>
                 </td>
-                <td><strong>{orden_fecha_value}</strong></td>
+                <td><strong>{sku}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label>{sucursal}:</label>
+                    <label>{marca_lbl}:</label>
                 </td>
-                <td><strong>{list_sucursales}</strong></td>
+                <td><strong>{marca}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label>{entrega_fecha}:</label>
+                    <label>{presentacion_lbl}:</label>
                 </td>
-                <td><strong>{entrega_fecha_value}</strong></td>
+                <td><strong>{presentacion}</strong></td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label>{forma_pago}:</label>
+                    <label>{lote_lbl}:</label>
                 </td>
-                <td><strong>{list_forma_pago}</strong></td>
+                <td><strong>{lote}</strong></td>
             </tr>
         </table>
    </div>
@@ -40,24 +38,74 @@
        <table class="table table-bordered table-invoice">
             <tr>
                 <td class="width30">
-                    <label>{no_factura}:</label>
+                    <label>{stock_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="no_factura" data-campo="no_factura" class="input-small">
+                    <strong>{stock}</strong>
                 </td>
             </tr>
             <tr>
                 <td class="width30">
-                    <label>{fecha_factura}:</label>
+                    <label>{caducidad_lbl}:</label>
                 </td>
                 <td>
-                    <input id="fecha_factura" type="text"  data-campo="fecha_factura" name="fecha_factura" class="input-large fecha_factura requerido"/>
+                    <strong>{caducidad}</strong>
                 </td>
             </tr> 
        </table>
    </div>
-
+   <br>
+   <br>
+   <br>
+   <table class="table table-bordered" border="2">
+        <tr>
+            <th>
+                {origen}
+            </th>
+            <th>
+                {destino}
+            </th>
+        </tr>
+        <tr>
+             <td>
+                    <label><strong>{almacen_origen_lbl}: </strong></label>
+                    <span class="field">{almacenes}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                    <label><strong>{almacen_lbl} (*)</strong></label>
+                    <span class="field">{lts_almacen}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><strong>{pasillo_origen_lbl}: </strong></label>
+                <span class="field">{pasillos}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                <label><strong>{pasillo_lbl}</strong></label>
+                <span class="field" id="lts_pasillo"></span>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><strong>{gaveta_origen_lbl}: </strong></label>
+                <span class="field">{gavetas}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                <label><strong>{gaveta_lbl} (*)</strong></label>
+                <span class="field" id="lts_gavetas"></span>
+            </div>
+            </td>
+        </tr>
+   </table>
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>  
-    <div id="modal"></div>
+     <p class="stdformbutton"> 
+        {button_save}
+    </p>
 </div>

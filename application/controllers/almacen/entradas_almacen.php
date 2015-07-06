@@ -35,9 +35,10 @@ class entradas_almacen extends Base_Controller{
 		// DB Model
 		//almacen/entradas_almacen/listado
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
 
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 		// Tabs
 		$this->tab_inicial 			= 2;
 		$this->tab_indice 		= array(
@@ -125,11 +126,6 @@ class entradas_almacen extends Base_Controller{
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 
-
-
-
-
-
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_stock'],
 									'articulo'  	 	=> $value['articulo'],
@@ -178,11 +174,127 @@ class entradas_almacen extends Base_Controller{
 		}
 	}
 	public function detalle(){
-		$seccion       = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/detalle';
 		$id_compras_orden_articulo    = $this->ajax_post('id_compras_orden_articulo');
-		dump_var($id_compras_orden_articulo);
-		$detalle  		= $this->db_model->get_data_unico($id_compras_articulo_precio);
-		dump_var($detalle);
-		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'update' , 'onclick'=>'update()','content' => $this->lang_item("btn_guardar") ));
+		$view 			= $this->tab['detalle'];
+		$detalle  		= $this->db_model->get_data_unico($id_compras_orden_articulo);
+		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save' , 'onclick'=>'save()','content' => $this->lang_item("btn_guardar") ));
+		
+		//dump_var($detalle);
+		$dropArray = array(
+				 'data'		=> $this->catalogos_model->db_get_data_almacen()
+				,'value' 	=> 'id_almacen_almacenes'
+				,'text' 	=> array('clave_corta','almacenes')
+				,'name' 	=> "lts_almacen"
+				,'event'    => array('event'       => 'onchange',
+			   						 'function'    => 'load_gaveta_pas',
+			   						 'params'      => array('this.value'),
+			   						 'params_type' => array(0)
+								)
+				,'class' 	=> "requerido"
+			);
+		$lts_almacen  = dropdown_tpl($dropArray);
+		//DATA
+		$tabData['id_stock']	     = $detalle[0]['id_stock'];
+		$tabData['upc']	 		     = $detalle[0]['upc'];
+		$tabData['sku']	 		 	 = $detalle[0]['sku'];
+		$tabData['marca']	 	     = $detalle[0]['marca'];
+		$tabData['presentacion']	 = $detalle[0]['presentacion'];
+		$tabData['lote']			 = $detalle[0]['lote'];
+		$tabData['stock']	 	 	 = $detalle[0]['stock'];
+		$tabData['caducidad']	     = $detalle[0]['caducidad'];
+		$tabData['almacenes']	     = $detalle[0]['almacenes'];
+		$tabData['pasillos']	     = $detalle[0]['pasillos'];
+		$tabData['gavetas']	     	 = $detalle[0]['gavetas'];
+		$tabData['lts_almacen']	     = $lts_almacen;
+		$tabData['button_save']      = $btn_save;
+
+		$tabData['upc_lbl']			 = $this->lang_item("upc_lbl",false);
+		$tabData['sku_lbl']			 = $this->lang_item("sku_lbl",false);
+		$tabData['marca_lbl']		 = $this->lang_item("marca_lbl",false);
+		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
+		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
+		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
+		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
+		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
+		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
+		$tabData['gaveta_lbl']		 = $this->lang_item("gaveta_lbl",false);
+		$tabData['almacen_origen_lbl']		 = $this->lang_item("almacen_origen_lbl",false);
+		$tabData['pasillo_origen_lbl']		 = $this->lang_item("pasillo_origen_lbl",false);
+		$tabData['gaveta_origen_lbl']		 = $this->lang_item("gaveta_origen_lbl",false);
+		$tabData['origen']		 = $this->lang_item("origen",false);
+		$tabData['destino']		 = $this->lang_item("destino",false);
+		
+
+		
+		$uri_view  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$view;
+
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
+	public function load_gaveta_pas(){
+		$id_almacen    = $this->ajax_post('id_almacen');
+		$datasql=array('id_almacen'=>$id_almacen);
+			$dropArray = array(
+					 'data'		=> $this->catalogos_model->db_get_data_pasillos_por_almacen($datasql)
+					,'value' 	=> 'id_almacen_pasillos'
+					,'text' 	=> array('clave_corta','pasillos')
+					,'name' 	=> "lts_pasillos"
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'load_gaveta',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+									)
+				);
+			$dropArray2 = array(
+					 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
+					,'value' 	=> 'id_almacen_gavetas'
+					,'text' 	=> array('clave_corta','gavetas')
+					,'name' 	=> "lts_gavetas"
+					,'class' 	=> "requerido"
+				);
+			$lts_pasillo  = dropdown_tpl($dropArray);
+			$lts_gavetas  = dropdown_tpl($dropArray2);
+			$data['pasillos']=$lts_pasillo;
+			$data['gavetas']=$lts_gavetas;
+
+		echo json_encode($data);
+	}
+	public function load_gaveta(){
+		$id_pasillo    = $this->ajax_post('id_pasillo');
+		$datasql=array('id_pasillo'=>$id_pasillo);
+		$dropArray = array(
+					 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_pasillo($datasql)
+					,'value' 	=> 'id_almacen_gavetas'
+					,'text' 	=> array('clave_corta','gavetas')
+					,'name' 	=> "lts_gavetas"
+					,'class' 	=> "requerido"
+				);
+		$lts_gavetas  = dropdown_tpl($dropArray);
+		echo json_encode($lts_gavetas);
+	}
+	public function update_almacen(){
+
+		$id_almacen = $this->ajax_post('lts_almacen');
+		$id_pasillo = $this->ajax_post('lts_pasillos');
+		$id_gaveta = $this->ajax_post('lts_gavetas');
+		$id_stock = $this->ajax_post('id_stock');
+		$data_update  = array(
+								'id_stock'     => $id_stock,
+								'id_almacen'   => $id_almacen,
+								'id_pasillo'  	=> $id_pasillo,
+								'id_gaveta'  	=> $id_gaveta,
+								'edit_timestamp'  	=> $this->timestamp(),
+								'edit_id_usuario'  => $this->session->userdata('id_usuario')
+							);
+		//dump_var($data_update);
+		$update = $this->db_model->db_update_alma_gav_pas($data_update);
+
+			if($update){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			}
+		
 	}
 }

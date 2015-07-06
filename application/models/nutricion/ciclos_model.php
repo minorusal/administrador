@@ -46,8 +46,13 @@ class ciclos_model extends Base_Model{
 	public function insert_ciclo_receta($data = array()){
 		// DB Info
 		$tbl = $this->tbl;
-		// Query
-		$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
+		$existe = $this->row_exist($tbl['nutricion_ciclo_receta'], array('id_nutricion_ciclo_receta'=> $data['id_ciclo'],'id_receta'=>$data['id_receta']));
+		//print_debug($existe);
+		if(!$existe){
+				$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
+			}else{
+				return false;
+			}
 	}
 
 	public function db_get_data($data = array()){
@@ -93,6 +98,7 @@ class ciclos_model extends Base_Model{
 						,nr.id_nutricion_receta
 						,nr.receta
 						,s.servicio
+						,concat_ws('-', s.inicio, s.final) as horario
 						,tm.tiempo
 					FROM 
 						$tbl[nutricion_ciclo_receta] ncr

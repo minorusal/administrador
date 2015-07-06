@@ -17,6 +17,54 @@ jQuery.fn.hasAttr = function(name,val){
     }
     return jQuery(this).attr(name) !== undefined;
 };
+function config_calendar(id, Objson ){
+    alert(dump_var(Objson));
+    var json = (Objson == undefined) ? '' : Objson
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    var calendar = jQuery('#'+id).fullCalendar({
+        header: {
+            left:   'prev,next,today',
+            center: 'title',
+            right:  'month,agendaWeek,agendaDay'
+        },
+        buttonText: {
+            prev: '&laquo;',
+            next: '&raquo;',
+            prevYear: '&nbsp;&lt;&lt;&nbsp;',
+            nextYear: '&nbsp;&gt;&gt;&nbsp;',
+            today: 'HOY',
+            month: 'MES',
+            week: 'SEMANA',
+            day: 'DIA'
+        },
+        selectable: false,
+        selectHelper: false,
+        eventRender: function(event, element) {                                          
+            element.find('span.fc-event-title').html(element.find('span.fc-event-title').text());                     
+        },
+        select: function(start, end, allDay) {
+            var title = prompt('Event Title:');
+            if (title) {
+                calendar.fullCalendar('renderEvent',
+                    {
+                        title: title,
+                        start: start,
+                        end: end,
+                        allDay: allDay
+                    },
+                    true 
+                );
+            }
+            calendar.fullCalendar('unselect');
+        },
+        editable: false,
+        events: json
+    });
+}
 function config_datepicker(){
     if(typeof  months_timepicker=="undefined"){
         return false;
@@ -493,4 +541,31 @@ function ver_pdf(URi, titulo){
         closeButton:true,
         scrollable:false
     });   
+}
+
+function dual_select(){
+    var db   = jQuery('#dualselected').find('.ds_arrow button');    
+    var sel1 = jQuery('#dualselected select:first-child');      
+    var sel2 = jQuery('#dualselected select:last-child');           
+    //sel2.empty(); 
+    db.click(function(){
+        var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;  
+        if(t){
+            sel1.find('option').each(function(){
+            if(jQuery(this).is(':selected')){
+                jQuery(this).attr('selected',false);
+                var op = sel2.find('option:first-child');
+                sel2.append(jQuery(this));
+            }
+            }); 
+        }else{
+            sel2.find('option').each(function(){
+                if(jQuery(this).is(':selected')){
+                    jQuery(this).attr('selected',false);
+                    sel1.append(jQuery(this));
+                }
+            });
+        }
+        return false;
+    });
 }

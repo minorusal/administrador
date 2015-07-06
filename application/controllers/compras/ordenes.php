@@ -81,6 +81,7 @@ class ordenes extends Base_Controller {
 								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'),array('style' => 'display:none'));
+		$config_tab['style_content'] = array('');
 		return $config_tab;
 	}
 	public function index(){		

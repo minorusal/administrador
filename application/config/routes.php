@@ -62,7 +62,7 @@ $route['nutricion/catalogos/tiempos']    	    = 'nutricion/tiempos/index';
 
 /*Recetario*/
 $route['nutricion/recetario']              = 'nutricion/recetario/index';
-$route['nutricion/programacion_de_menus']              = 'nutricion/programacion/index';
+$route['nutricion/programacion']              = 'nutricion/programacion/index';
 $route['nutricion/conformacion_de_ciclos'] = 'nutricion/ciclos/index';
 
 /*COMPRAS*/

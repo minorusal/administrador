@@ -327,8 +327,6 @@ class ciclos extends Base_Controller{
 			echo json_encode($list_recetas);
 		}
 	}
-	
-
 	public function ciclo_detalle($id_ciclo = false){
 		$id_ciclo  = $this->ajax_post('id_ciclo');
 		$nom_ciclo = $this->ajax_post('nombre_ciclo');
@@ -336,28 +334,50 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
-				/*$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
-														 'receta'     => $value['receta'] , 
-														 'id_vinculo' => $value['id_nutricion_receta']);*/
-				$servicio[$value['servicio']][$value['tiempo']][$value['familia']][] = array('id_servicio' => $value['id_servicio'],
-														'id_tiempo'   => $value['id_tiempo'],
-														'id_familia'  => $value['id_familia'],
-														'familia '    => $value['familia'],
-														'receta'      => $value['receta'], 
-														'id_vinculo'  => $value['id_nutricion_receta']);
+				$servicios[$value['servicio']][$value['tiempo']][$value['familia']][$value['receta']] = array('id_servicio' => $value['id_servicio'],
+																							 'id_tiempo'   => $value['id_tiempo'],
+																							 'id_familia'  => $value['id_familia'],
+																							 'familia '    => $value['familia'],
+																							 'receta'      => $value['receta'], 
+																							 'id_vinculo'  => $value['id_nutricion_receta']);
 			}
-			print_debug($servicio);
+			
+			//print_debug($contenido_ciclo);
+			//print_debug($servicios);
 			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
 			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
-			foreach ($servicio as $item => $recetas) {
-				$m = '<a class ="onclick_on" onclick ="eliminar_servicio('.$recetas[0]['id_servicio'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
-				$list .= '<li><span class=" iconfa-fire"></span>'.$item.$m;
-				if(is_array($recetas)){
+			
+			foreach ($servicios as $servicio => $tiempos) {
+				//print_debug($servicio);
+				//print_debug($servicio);
+				$m = '<a class ="onclick_on" onclick ="eliminar_servicio('.$value['id_servicio'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+				$list .= '<li><span class=" iconfa-fire"></span>'.$servicio.$m;
+				if(is_array($tiempos)){
 					$list .= '<ul>';
 					
-					foreach ($recetas as $value) {
-						$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_vinculo'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
-						$list .= '<li><span class=" iconfa-bookmark"></span>'.$value['receta'].$m.'</li>';
+					foreach ($tiempos as $tiempo => $familias){
+						//print_debug($tiempo);
+						$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_tiempo'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+						$list .= '<li><span class=" iconfa-bookmark"></span>'.$tiempo.$m;
+
+						if(is_array($familias)){
+							$list .= '<ul>';
+							foreach ($familias as $familia => $recetas){
+								//print_debug($familia);
+								$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_familia'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+								$list .= '<li><span class=" iconfa-bookmark"></span>'.$familia.$m;
+								if(is_array($recetas)){
+									$list .= '<ul>';
+									foreach ($recetas as $receta => $val) {
+										//print_debug($val);
+										$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_nutricion_receta'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
+										$list .= '<li><span class=" iconfa-bookmark"></span>'.$receta.$m.'</li>';
+									}
+									$list .= '</ul>';
+								}
+							}
+							$list .= '</ul>';
+						}
 					}
 					$list .= '</ul>';
 				}
@@ -371,7 +391,7 @@ class ciclos extends Base_Controller{
 		$detalle = widgetbox_tpl($nom_ciclo, $m.$list);
 		echo json_encode($detalle);
 	}
-//56 24 77 00
+
 	public function insert_config(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){

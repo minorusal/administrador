@@ -334,10 +334,6 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
-				//print_debug($value);
-				/*$servicio[$value['servicio']][] = array('id_servicio' => $value['id_servicio'],
-														 'receta'     => $value['receta'] , 
-														 'id_vinculo' => $value['id_nutricion_receta']);*/
 				$servicios[$value['servicio']][$value['tiempo']][$value['familia']][$value['receta']] = array('id_servicio' => $value['id_servicio'],
 																							 'id_tiempo'   => $value['id_tiempo'],
 																							 'id_familia'  => $value['id_familia'],

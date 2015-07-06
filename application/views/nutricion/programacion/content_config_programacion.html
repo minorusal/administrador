@@ -1,4 +1,4 @@
-	<script>
+<script>
   jQuery(function() {
     jQuery( "#ciclos_programados" ).sortable();
     jQuery( "#ciclos_programados" ).disableSelection();
@@ -50,13 +50,21 @@
 	</p>
 	<p>
 		<label>{lbl_cantidad_recetas}</label>
+
 		<span class="field">
 			<a >{lbl_info_cantidad_recetas}</a><br><br>
 			{dropdown_ciclos}
-			<div id="cantidades_ciclo_receta" ></div>
+			 
+			<!--<div id="cantidades_ciclo_receta" ></div> -->
 		</span>
 	</p>
-
+	<p id="edicion_cantidades_receta" style="display:none;">
+		<label>{lbl_cantidad_recetas}</label>
+		<div id="loader_cantidades"></div>
+		<span class="field" id="cantidades_ciclo_receta">
+			
+		</span>
+	</p>
 	<div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton">

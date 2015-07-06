@@ -6,6 +6,7 @@
 	$lang['um']     				= 'unidad de medida';
 	$lang['modal_titulo']     		= 'Asignación de lote y caducidad';
 	$lang['orden_num']     			= 'Número de la orden';
+	$lang['orden_fecha']     	    = 'Fecha de la orden';
 	$lang['entrega_fecha']         	= 'fecha de la entrega';
 	$lang['forma_pago']         	= 'Forma de pago';	
 	$lang['no_factura']         	= 'No. de la factura';	
@@ -20,4 +21,27 @@
 	$lang['rechazar_entrada']       = 'Rechazar entrada';
 	$lang['recibir_lote']           = 'aceptar';
 	$lang['devolver_lote']          = 'cancelar';
+	$lang['a_pagar']         	    = 'total a pagar';
+	$lang['subtotal']         	    = 'Subtotal';
+	$lang['descuento']         	    = 'Descuento';
+	$lang['impuesto']         	    = 'Impuesto';
+
+	$lang['upc_lbl']         	    = 'UPC';
+	$lang['sku_lbl']         	    = 'SKU';
+	$lang['marca_lbl']         	    = 'Marca';
+	$lang['presentacion_lbl']       = 'Presentación';
+	$lang['lote_lbl']         	    = 'Lote';
+	$lang['stock_lbl']         	    = 'Stock';
+	$lang['caducidad_lbl']         	= 'Caducidad';
+	$lang['almacen_lbl']         	= 'Almacen';
+	$lang['pasillo_lbl']         	= 'Pasillo';
+	$lang['gaveta_lbl']         	= 'Gaveta';
+
+	$lang['almacen_origen_lbl']     = 'Almacen origen';
+	$lang['pasillo_origen_lbl']     = 'Pasillo origen';
+	$lang['gaveta_origen_lbl']      = 'Gaveta origen';
+	$lang['origen']     			= 'origen';
+	$lang['destino']     		    = 'destino';
+	
+
 ?>

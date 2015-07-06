@@ -38,7 +38,7 @@ class entradas_almacen extends Base_Controller{
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
 
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 		// Tabs
 		$this->tab_inicial 			= 2;
 		$this->tab_indice 		= array(
@@ -126,11 +126,6 @@ class entradas_almacen extends Base_Controller{
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 
-
-
-
-
-
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_stock'],
 									'articulo'  	 	=> $value['articulo'],
@@ -207,9 +202,30 @@ class entradas_almacen extends Base_Controller{
 		$tabData['lote']			 = $detalle[0]['lote'];
 		$tabData['stock']	 	 	 = $detalle[0]['stock'];
 		$tabData['caducidad']	     = $detalle[0]['caducidad'];
+		$tabData['almacenes']	     = $detalle[0]['almacenes'];
+		$tabData['pasillos']	     = $detalle[0]['pasillos'];
+		$tabData['gavetas']	     	 = $detalle[0]['gavetas'];
 		$tabData['lts_almacen']	     = $lts_almacen;
-		$tabData['button_save']             = $btn_save;
+		$tabData['button_save']      = $btn_save;
 
+		$tabData['upc_lbl']			 = $this->lang_item("upc_lbl",false);
+		$tabData['sku_lbl']			 = $this->lang_item("sku_lbl",false);
+		$tabData['marca_lbl']		 = $this->lang_item("marca_lbl",false);
+		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
+		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
+		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
+		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
+		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
+		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
+		$tabData['gaveta_lbl']		 = $this->lang_item("gaveta_lbl",false);
+		$tabData['almacen_origen_lbl']		 = $this->lang_item("almacen_origen_lbl",false);
+		$tabData['pasillo_origen_lbl']		 = $this->lang_item("pasillo_origen_lbl",false);
+		$tabData['gaveta_origen_lbl']		 = $this->lang_item("gaveta_origen_lbl",false);
+		$tabData['origen']		 = $this->lang_item("origen",false);
+		$tabData['destino']		 = $this->lang_item("destino",false);
+		
+
+		
 		$uri_view  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$view;
 
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));

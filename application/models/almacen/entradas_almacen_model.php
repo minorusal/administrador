@@ -65,13 +65,20 @@ class entradas_almacen_model extends Base_Model{
 					e.lote,
 					e.stock,
 					e.id_stock,
-					e.caducidad
+					e.caducidad,
+					f.gavetas,
+					g.almacenes,
+					h.pasillos
 				FROM 
 					$tbl[compras_ordenes_articulos] a
 				LEFT JOIN $tbl[compras_articulos_precios] b ON a.id_compras_articulo_precios=b.id_compras_articulo_precios
 				LEFT JOIN $tbl[compras_marcas] c ON b.id_marca=c.id_compras_marca
 				LEFT JOIN $tbl[compras_presentaciones] d ON b.id_presentacion=d.id_compras_presentacion
 				LEFT JOIN $tbl[almacen_stock] e ON a.id_compras_orden_articulo=e.id_compras_orden_articulo
+				LEFT JOIN $tbl[almacen_gavetas] f ON e.id_gaveta=f.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_almacenes] g ON e.id_almacen=g.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_pasillos] h ON e.id_pasillo=h.id_almacen_pasillos
+
 				WHERE a.id_compras_orden_articulo = $id_compras_orden_articulo";
 				//echo $query;
 		$query = $this->db->query($query);

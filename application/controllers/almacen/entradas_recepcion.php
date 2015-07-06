@@ -45,7 +45,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->load->model('administracion/creditos_model','creditos_model');
 
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 		// Tabs
 		$this->tab_inicial 			= 2;
 		$this->tab_indice 		= array(

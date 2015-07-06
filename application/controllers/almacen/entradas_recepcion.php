@@ -15,12 +15,12 @@ class entradas_recepcion extends Base_Controller{
 	private $icon;
 	private $offset, $limit_max;
 	private $tab_inicial, $tab = array(), $tab_indice = array();
+	// private $vars;
 
 	public function __construct(){
 		parent::__construct();
 		$this->vars = new config_vars();
         $this->vars->load_vars();
-
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
 		$this->submodulo        = 'entradas_recepcion';
@@ -45,7 +45,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->load->model('administracion/creditos_model','creditos_model');
 
 		// Diccionario
-		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 		// Tabs
 		$this->tab_inicial 			= 2;
 		$this->tab_indice 		= array(
@@ -334,7 +334,7 @@ class entradas_recepcion extends Base_Controller{
 		$tabData['orden_num_value']	 		 = $detalle[0]['orden_num'];
 		$tabData['estatus']	 		 		 = $detalle[0]['estatus'];
 		$tabData['observaciones_value']	 	 = $detalle[0]['observaciones'];
-		$tabData['fecha_registro']	 	 = $detalle[0]['timestamp'];
+		$tabData['fecha_registro']	 	 	 = $detalle[0]['timestamp'];
 		$tabData['list_sucursales']			 = $sucursales[0]['sucursal'];
 		$tabData['orden_fecha_value']	 	 = $orden_fecha;
 		$tabData['entrega_fecha_value']	     = $entrega_fecha;

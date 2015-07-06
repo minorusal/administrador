@@ -63,3 +63,58 @@ function detalle(id_compras_orden_articulo){
         }
     });
 }
+function load_gaveta_pas(id_almacen){
+	jQuery('#ui-id-2').click();
+	  jQuery.ajax({
+	        type: "POST",
+	        url: path()+"almacen/entradas_almacen/load_gaveta_pas",
+	        dataType: 'json',
+	        data: {id_almacen : id_almacen},
+	        success: function(data){
+	         var chosen = 'jQuery(".chzn-select").chosen();';
+	          jQuery('#a-0').html('');
+	          jQuery('#lts_pasillo').html(data['pasillos']+include_script(chosen));
+	          jQuery('#lts_gavetas').html(data['gavetas']+include_script(chosen));
+	        }
+	    });
+}
+function load_gaveta(id_pasillo){
+	jQuery('#ui-id-2').click();
+	  jQuery.ajax({
+	        type: "POST",
+	        url: path()+"almacen/entradas_almacen/load_gaveta",
+	        dataType: 'json',
+	        data: {id_pasillo : id_pasillo},
+	        success: function(data){
+	         var chosen = 'jQuery(".chzn-select").chosen();';
+	          jQuery('#a-0').html('');
+	          jQuery('#lts_gavetas').html(data+include_script(chosen));
+	        }
+	    });
+}
+function save(){
+	jQuery('#mensajes_update').hide();		
+	var btn          = jQuery("button[name='save']");
+	btn.attr('disabled','disabled');
+	// Obtiene campos en formulario
+	var objData = formData('#formulario');
+	objData['incomplete'] = values_requeridos();
+
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"almacen/entradas_almacen/update_almacen",
+		dataType: "json",			
+		data : objData,
+		beforeSend : function(){
+			imgLoader("#update_loader");
+		},
+		success : function(data){
+			btn.removeAttr('disabled');   
+	      var data = data.split('|');
+	        if(data[0]==1){
+	        }
+	      	jQuery("#update_loader").html('');
+	        jQuery("#mensajes_update").html(data[1]).show('slow');
+	    }
+	});
+}

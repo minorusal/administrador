@@ -1,4 +1,4 @@
-Iconos-Acciones-Grid*/
+/*Iconos-Acciones-Grid*/
 .ico_acciones{
 	font-size: 1.1em;
 	font-weight: lighter;
@@ -31,6 +31,9 @@ Iconos-Acciones-Grid*/
 	border-color:#9D0000;
 }
 
+.txt_fecha{
+	width: 90px;
+}
 .btn_verde{
 	background-color:#006F00; 
 	border-color:#006F00;

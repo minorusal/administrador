@@ -92,4 +92,7 @@
 	$lang['ID']			= 'ID';
 	$lang['listado']   = 'listado';
 	$lang['detalle']   = 'detalle';
+
+	$lang['collapse']            = 'Contraer lista';
+$lang['expand']              = 'Expander Lista';
 ?>

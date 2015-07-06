@@ -223,7 +223,7 @@ class ciclos extends Base_Controller{
 						'value' 	=> 'id_nutricion_receta'
 						,'text' 	=> array('receta')
 						,'name' 	=> "lts_recetas"
-						,'class' 	=> "requerido"
+						,'class' 	=> "requerido limpio"
 					);
 
 		$list_recetas  = multi_dropdown_tpl($recetas);
@@ -320,7 +320,7 @@ class ciclos extends Base_Controller{
 							,'value' 	=> 'id_nutricion_receta'
 							,'text' 	=> array('receta')
 							,'name' 	=> "lts_recetas"
-							,'class' 	=> "requerido"
+							,'class' 	=> "requerido limpio"
 						);
 			$list_recetas  = multi_dropdown_tpl($recetas);
 
@@ -328,13 +328,10 @@ class ciclos extends Base_Controller{
 		}
 	}
 	public function ciclo_detalle($id_ciclo = false){
+		$nom_ciclo = $this->ajax_post('nombre_ciclo');
 		$id_ciclo = ($this->ajax_post('id_ciclo'))?$this->ajax_post('id_ciclo'):$id_ciclo;
-		//print_debug($id_ciclo);
-		//$id_ciclo  = $this->ajax_post('id_ciclo');
-		//$nom_ciclo = $this->ajax_post('nombre_ciclo');
 		$list = '';
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
-		//print_debug($contenido_ciclo);
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
 				$servicios[$value['servicio']][$value['tiempo']][$value['familia']][$value['receta']] = array('id_servicio' => $value['id_servicio'],
@@ -344,35 +341,25 @@ class ciclos extends Base_Controller{
 																							 'receta'      => $value['receta'], 
 																							 'id_vinculo'  => $value['id_nutricion_receta']);
 			}
-			$nom_ciclo = ($this->ajax_post('nombre_ciclo'))?$nom_ciclo = $this->ajax_post('nombre_ciclo'):'';
-			//print_debug($nom_ciclo);
-			//print_debug($servicios);
+			$nom_ciclo = ($nom_ciclo)?$nom_ciclo:$contenido_ciclo[0]['ciclo'];
 			$list ='<br><div id="sidetreecontrol"><a href="?#">Colapsar</a> | <a href="?#">Extender</a></div>';
 			$list .= '<ul id="treeview_ciclos" class=" treeview-gray">';
-			
 			foreach ($servicios as $servicio => $tiempos) {
-				//print_debug($servicio);
-				//print_debug($servicio);
 				$m = '<a class ="onclick_on" onclick ="eliminar_servicio('.$value['id_servicio'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 				$list .= '<li><span class=" iconfa-fire"></span>'.$servicio.$m;
 				if(is_array($tiempos)){
 					$list .= '<ul>';
-					
 					foreach ($tiempos as $tiempo => $familias){
-						//print_debug($tiempo);
 						$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_tiempo'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 						$list .= '<li><span class=" iconfa-bookmark"></span>'.$tiempo.$m;
-
 						if(is_array($familias)){
 							$list .= '<ul>';
 							foreach ($familias as $familia => $recetas){
-								//print_debug($familia);
 								$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_familia'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 								$list .= '<li><span class=" iconfa-bookmark"></span>'.$familia.$m;
 								if(is_array($recetas)){
 									$list .= '<ul>';
 									foreach ($recetas as $receta => $val) {
-										//print_debug($val);
 										$m = '<a class ="onclick_on" onclick ="eliminar_receta('.$value['id_nutricion_receta'].','.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 										$list .= '<li><span class=" iconfa-bookmark"></span>'.$receta.$m.'</li>';
 									}
@@ -399,6 +386,7 @@ class ciclos extends Base_Controller{
 		$objData  	= $this->ajax_post('objData');
 		//print_debug($objData);
 		if($objData['incomplete']>0){
+			$arbol = $this->ciclo_detalle($objData['lts_ciclos']);
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(alertas_tpl('error', $msg ,false));
 		}else{
@@ -423,8 +411,9 @@ class ciclos extends Base_Controller{
 				//echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 				//echo json_encode($arbol);
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode(alertas_tpl('', $msg ,false));
+				$arbol = $this->ciclo_detalle($objData['lts_ciclos']);
+				/*$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(alertas_tpl('', $msg ,false));*/
 			}
 		}
 	}

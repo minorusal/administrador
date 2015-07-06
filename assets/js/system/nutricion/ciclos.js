@@ -187,8 +187,7 @@ function insert_config(){
       //jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
-      //jQuery('.chzn-choices').clear();
-      //jQuery('.chzn-choices').append(toAppend).multiselect("destroy").multiselect();
+      jQuery('.limpio').val('').trigger('liszt:updated');
       jQuery('#ciclo_detalle').html(data+include_script(treeview));
     }
   });

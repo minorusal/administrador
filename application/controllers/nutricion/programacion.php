@@ -172,11 +172,14 @@ class programacion extends Base_Controller{
 
 			}
 
-			$date_multi        = array(
-								 'data'		=> null
-								 ,'name' 	=> "multidropdown_ciclos_especiales"
-							);
-			
+			$multidropdown_especiales        = array(
+													 'data'		=> null
+													 ,'name' 	=> "multidropdown_ciclos_especiales"
+												);
+			$multidropdown_festivos        = array(
+													 'data'		=> null
+													 ,'name' 	=> "multidropdown_festivos"
+												);
 			
 			$tab['btn_guardar_parametros']        = $btn_guardar_parametros;
 			$tab['values_dias_descartados']       = implode('&nbsp;', $dias_descartados_checkbox);
@@ -184,7 +187,9 @@ class programacion extends Base_Controller{
 			$tab['ciclos_programados']            = '<ol id="ciclos_programados" class="list-ordered">'.$li_ciclos.'</ol>';
 			$tab['dropdown_ciclos']               = $dropdown_ciclos;
 			$tab['dropdown_ciclos_especiales']    = $dropdown_ciclos_especiales;
-			$tab['multidropdown']    = multi_dropdown_tpl($date_multi );
+			$tab['multidropdown_especiales']      = multi_dropdown_tpl($multidropdown_especiales);
+			$tab['multidropdown_festivos']        = multi_dropdown_tpl($multidropdown_festivos);
+			
 			
 		}else{
 			$tab['btn_guardar_parametros']      = '';
@@ -195,7 +200,9 @@ class programacion extends Base_Controller{
 			$tab['ciclos_programados']          = '';
 			$tab['dropdown_ciclos']             = '';
 			$tab['dropdown_ciclos_especiales']  = '';
-			$tab['multidropdown']    = '';
+			$tab['multidropdown_especiales']    = '';
+			$tab['multidropdown_festivos']      = '';
+			
 		}
 		
 		$tab['lbl_config_programacion']    = $this->lang_item('lbl_config_programacion');
@@ -214,9 +221,18 @@ class programacion extends Base_Controller{
 		$tab['lbl_dias_especiales']        = $this->lang_item('lbl_dias_especiales');
 		$tab['info_agregar_ciclo']         = $this->lang_item('info_agregar_ciclo');
 		
+		$tab['info_dias_festivos']       = $this->lang_item('info_dias_festivos');
+		$tab['info_agregar_festivo']     = $this->lang_item('info_agregar_festivo');
+
+
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
 		$tab['info_select_ciclo']          = $this->lang_item('info_select_ciclo');
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
+		$tab['info_ciclos_especiales']     = $this->lang_item('info_ciclos_especiales');
+
+
+		
+
 
 		
 		$uri_view = $this->modulo.'/'.$this->seccion.'/content_config_programacion';

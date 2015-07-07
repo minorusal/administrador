@@ -27,7 +27,22 @@
 	<p>
 		<label>{lbl_dias_festivos}</label>
 		<span class="field">
-			<input id ="fechas_festivas" class ="input_calendar" type="text" readonly="true"/>
+			<label>{info_select_dia}</label>
+			<span class="field">
+				<input id ="fechas_festivas" class ="input_calendar" type="text" readonly="true"/>
+			</span>
+			<label></label>
+			<span class="field">
+				<button onclick="agregar_festivo()" class="btn ds_prev">
+			    	<i class=" iconfa-chevron-down">
+			    	</i>
+			    	{info_agregar_festivo}
+			    </button>
+			</span>
+			<label>{info_select_dia}</label>
+			<span class="field">
+			    {multidropdown_festivos}
+		    </span>
 		</span>
 	</p>
 	<p>
@@ -37,7 +52,7 @@
 			<span class="field">
 				<input id ="fechas_especiales" class ="input_calendar" type="text" readonly="true"/>
 			</span>
-			<label>{info_select_ciclo}</label>
+			<label>{info_dias_festivos}</label>
 			<span class="field">
 				{dropdown_ciclos_especiales}
 			</span>
@@ -49,9 +64,9 @@
 			    	{info_agregar_ciclo}
 			    </button>
 			</span>
-			<label>{info_select_dia}</label>
+			<label>{info_ciclos_especiales}</label>
 			<span class="field">
-			    {multidropdown}
+			    {multidropdown_especiales}
 		    </span>
 		</span>
 	</p>
@@ -68,7 +83,7 @@
 			<a >{lbl_info_orden_ciclos}</a><br>
 			<center>
 				<div style="text-align:left;border:2px solid #ddd;width:30%;padding:20px;cursor:pointer;">
-					{ciclos_programados}
+			 		{ciclos_programados}
 				</div>
 				<br>
 			</center>

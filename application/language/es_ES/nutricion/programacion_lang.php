@@ -27,4 +27,9 @@
 $lang['tiempo'] = 'tiempo';
 $lang['familia'] = 'familia';
 
+$lang['lbl_dias_especiales'] = 'Fechas especiales';
+$lang['info_select_dia'] = 'Seleccione una fecha';
+$lang['info_select_ciclo'] = 'Escoja un Ciclo de la lista';
+$lang['info_select_dia'] = 'Contenido de fecha';
+$lang['info_agregar_ciclo'] = 'Agregar Ciclo';
 ?>

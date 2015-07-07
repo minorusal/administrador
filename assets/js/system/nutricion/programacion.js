@@ -3,10 +3,11 @@ jQuery(document).ready(function(){
 });
 function load_programacion(id_sucursal){
 
-	var calendar     = 'calendar_dual("fecha_inicio", "fecha_termino");';
-	var dual_select  = 'dual_select();';
-	var festivos     = 'calendar("fechas_festivas");';
-	var chosen       = 'jQuery(".chzn-select").chosen();';
+	var calendar          = 'calendar_dual("fecha_inicio", "fecha_termino");';
+	var dual_select       = 'dual_select();';
+	var input_calendar    = 'calendar("input_calendar");';
+	var chosen            = 'jQuery(".chzn-select").chosen();';
+	
 	jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/programacion/form_config_programacion",
@@ -17,10 +18,43 @@ function load_programacion(id_sucursal){
         },
         success: function(data){
         	imgLoader_clean("#loader_programacion");
-        	jQuery('#configuracion_programacion').html(data+include_script(calendar+dual_select+festivos+chosen));
+        	jQuery('#configuracion_programacion').html(data+include_script(calendar+dual_select+input_calendar+chosen));
         }
     });
 }
+function agregar_ciclo_especial(){
+	var multidropdown  = jQuery('select[name="multidropdown_ciclos_especiales"]');
+	var fecha_especial = jQuery('#fechas_especiales').val();
+	var ciclo_especial = jQuery('select[name="dropdown_ciclos_especiales"] option:selected');
+	var value          = ciclo_especial.text()+'|'+fecha_especial+'|'+ciclo_especial.text();
+	var text           = fecha_especial+'-'+ciclo_especial.text();
+	var existe = false
+	multidropdown.find('option').each(function(){
+        var v  = jQuery(this).val().split('|'); 
+        if(v[1]==fecha_especial){
+        	existe = true;
+        }
+    }); 
+	if(existe){
+		alert('Solo se acepta un ciclo por fecha, gracias');
+	}else{
+		if((ciclo_especial.val()>0)&&(fecha_especial!='')){
+			multidropdown.append(jQuery('<option></option>').attr('value',value).text(text));
+			jQuery('select[name="multidropdown_ciclos_especiales"] option[value="'+value+'"]').attr('selected', true).trigger('liszt:updated');
+			multidropdown.on('change', function(evt, params){
+				if(params.deselected){
+					jQuery('select[name="multidropdown_ciclos_especiales"] option[value="'+params.deselected+'"]').remove();
+					multidropdown.trigger('liszt:updated');
+				}
+			});
+		}else{
+			alert('Es necesario definir una fecha y un ciclo, gracias');
+		}
+	}
+	
+	
+}
+
 function quitar_ciclo(){
 	var id = '';
 	jQuery('select[name=multiselect_ciclos_agregados] option:selected').each(function(){
@@ -162,4 +196,3 @@ function load_calendario(id_sucursal){
 		jQuery('#contenedor_calendario').html('');
 	}
 }
-//config_calendar

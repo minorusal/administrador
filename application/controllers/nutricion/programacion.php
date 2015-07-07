@@ -147,6 +147,12 @@ class programacion extends Base_Controller{
 							   										 'params_type' => array(false)
 							   										)
 							));
+				$dropdown_ciclos_especiales = dropdown_tpl(array(
+								 'data'		=> $ciclos
+								,'value' 	=> 'id_nutricion_ciclos'
+								,'text' 	=> array('id_nutricion_ciclos','ciclo')
+								,'name' 	=> "dropdown_ciclos_especiales"
+							));
 
 				$btn_guardar_parametros = form_button(array( 'content'  => 'Guardar Cambios',
 														'class' => 'btn btn-primary',
@@ -159,27 +165,37 @@ class programacion extends Base_Controller{
 														'disabled' =>'disabled',
 														'name'  => 'guardar_programacion'
 											));
+				$dropdown_ciclos_especiales = '';
 				$dropdown_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
 				$multiselect_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
 
 
 			}
 
+			$date_multi        = array(
+								 'data'		=> null
+								 ,'name' 	=> "multidropdown_ciclos_especiales"
+							);
 			
 			
-			$tab['btn_guardar_parametros']  = $btn_guardar_parametros;
-			$tab['values_dias_descartados'] = implode('&nbsp;', $dias_descartados_checkbox);
-			$tab['multiselect_ciclos']      = $multiselect_ciclos;
-			$tab['ciclos_programados']      = '<ol id="ciclos_programados" class="list-ordered">'.$li_ciclos.'</ol>';
-			$tab['dropdown_ciclos']         = $dropdown_ciclos;
+			$tab['btn_guardar_parametros']        = $btn_guardar_parametros;
+			$tab['values_dias_descartados']       = implode('&nbsp;', $dias_descartados_checkbox);
+			$tab['multiselect_ciclos']            = $multiselect_ciclos;
+			$tab['ciclos_programados']            = '<ol id="ciclos_programados" class="list-ordered">'.$li_ciclos.'</ol>';
+			$tab['dropdown_ciclos']               = $dropdown_ciclos;
+			$tab['dropdown_ciclos_especiales']    = $dropdown_ciclos_especiales;
+			$tab['multidropdown']    = multi_dropdown_tpl($date_multi );
+			
 		}else{
-			$tab['btn_guardar_parametros']  = '';
-			$tab['value_fecha_inicio']      = '';
-			$tab['value_fecha_termino']     = '';
-			$tab['values_dias_descartados'] = '';
-			$tab['multiselect_ciclos']      = '';
-			$tab['ciclos_programados']      = '';
-			$tab['dropdown_ciclos']         = '';
+			$tab['btn_guardar_parametros']      = '';
+			$tab['value_fecha_inicio']          = '';
+			$tab['value_fecha_termino']         = '';
+			$tab['values_dias_descartados']     = '';
+			$tab['multiselect_ciclos']          = '';
+			$tab['ciclos_programados']          = '';
+			$tab['dropdown_ciclos']             = '';
+			$tab['dropdown_ciclos_especiales']  = '';
+			$tab['multidropdown']    = '';
 		}
 		
 		$tab['lbl_config_programacion']    = $this->lang_item('lbl_config_programacion');
@@ -195,10 +211,18 @@ class programacion extends Base_Controller{
 		$tab['lbl_info_orden_ciclos']      = $this->lang_item('lbl_info_orden_ciclos');
 		$tab['lbl_cantidad_recetas']       = $this->lang_item('lbl_cantidad_recetas');
 		$tab['lbl_info_cantidad_recetas']  = $this->lang_item('lbl_info_cantidad_recetas');
+		$tab['lbl_dias_especiales']        = $this->lang_item('lbl_dias_especiales');
+		$tab['info_agregar_ciclo']         = $this->lang_item('info_agregar_ciclo');
+		
+		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
+		$tab['info_select_ciclo']          = $this->lang_item('info_select_ciclo');
+		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
+
 		
 		$uri_view = $this->modulo.'/'.$this->seccion.'/content_config_programacion';
 		echo json_encode( $this->load_view_unique($uri_view , $tab, true) );	
 	}
+
 	public function ciclo_cantidad_recetas(){
 		$id_ciclo        = $this->ajax_post('id_ciclo');
 		$list            = '';
@@ -218,73 +242,6 @@ class programacion extends Base_Controller{
 			$list = alertas_tpl('', $this->lang_item('msg_sin_recetas'),false);
 		}
 		echo json_encode($list);
-	}
-	public function make_list($items, $inicio = true, $inputs = true) {
-
-		if($inputs){
-			$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
-		}else{
-			$ret = ($inicio) ? "<ul class='list-nostyle'>": '<ul>';
-		}
-	    foreach ($items as $item => $subitems) {
-	        if (!is_numeric($item)) {
-	        	$nivel = explode('-', $item);
-	        	if(count($nivel)>1){
-	        		$icon   = $nivel[0];
-		        	$tittle = $nivel[1];
-		        	switch ($icon) {
-		        		case 's':
-		        			$icon = ' iconfa-time';
-		        			$tipo = strtoupper( $this->lang_item('servicio') );
-		        			break;
-		        		case 't':
-		        			$icon = 'iconfa-sitemap';
-		        			$tipo = strtoupper( $this->lang_item('tiempo') );
-		        			break;
-		        		case 'f':
-		        			$icon = 'iconfa-certificate';
-		        			$tipo = strtoupper( $this->lang_item('familia') );
-		        			break;
-		        		default:
-		        			$icon = 'iconfa-fire';
-		        			break;
-		        	}
-		        	if(!$inputs){
-		        		$tipo = '';
-		        	}else{
-		        		$tipo = $tipo.':';
-		        	}	
-		            $ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle);
-	        	}
-	        }
-
-	        if (is_array($subitems)) {
-	        	if(array_key_exists('recetas', $subitems)){
-	        	$data_input = array(
-	        				  'id'     => 'cantidad_'.$subitems['id_vinculo'],
-				              'class'  => 'input-mini numerico',
-				              'type'   => 'text',
-				              'value'  => $subitems['porciones']
-				            );
-	        	$save_disk = '<a onclick="guardar_cantidad_receta_ciclo('.$subitems['id_vinculo'].')">
-	        					<span style ="font-size:1.6em;" class="  iconfa-save"></span>
-	        				 </a>';
-	        	if($inputs){
-	        		$cantidades = form_input($data_input).$save_disk;
-	        	}else{
-	        		$cantidades = '';
-	        	}
-	            $ret .= "<li>".$cantidades."<span class=' iconfa-bookmark'></span>".$subitems['recetas'];
-		         
-		        }else{
-		        	$ret .= $this->make_list($subitems, false,$inputs);
-		        }
-	        }
-
-	        $ret .= "</li>";
-	    }
-	    $ret .= "</ul>";
-	    return($ret);
 	}
 	public function guardar_parametros_programacion(){
 		$values              = '';
@@ -462,5 +419,72 @@ class programacion extends Base_Controller{
 		}
 		$list .= '</ul>';
 		return $list;
+	}
+	public function make_list($items, $inicio = true, $inputs = true) {
+
+		if($inputs){
+			$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
+		}else{
+			$ret = ($inicio) ? "<ul class='list-nostyle'>": '<ul>';
+		}
+	    foreach ($items as $item => $subitems) {
+	        if (!is_numeric($item)) {
+	        	$nivel = explode('-', $item);
+	        	if(count($nivel)>1){
+	        		$icon   = $nivel[0];
+		        	$tittle = $nivel[1];
+		        	switch ($icon) {
+		        		case 's':
+		        			$icon = ' iconfa-time';
+		        			$tipo = strtoupper( $this->lang_item('servicio') );
+		        			break;
+		        		case 't':
+		        			$icon = 'iconfa-sitemap';
+		        			$tipo = strtoupper( $this->lang_item('tiempo') );
+		        			break;
+		        		case 'f':
+		        			$icon = 'iconfa-certificate';
+		        			$tipo = strtoupper( $this->lang_item('familia') );
+		        			break;
+		        		default:
+		        			$icon = 'iconfa-fire';
+		        			break;
+		        	}
+		        	if(!$inputs){
+		        		$tipo = '';
+		        	}else{
+		        		$tipo = $tipo.':';
+		        	}	
+		            $ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle);
+	        	}
+	        }
+
+	        if (is_array($subitems)) {
+	        	if(array_key_exists('recetas', $subitems)){
+	        	$data_input = array(
+	        				  'id'     => 'cantidad_'.$subitems['id_vinculo'],
+				              'class'  => 'input-mini numerico',
+				              'type'   => 'text',
+				              'value'  => $subitems['porciones']
+				            );
+	        	$save_disk = '<a onclick="guardar_cantidad_receta_ciclo('.$subitems['id_vinculo'].')">
+	        					<span style ="font-size:1.6em;" class="  iconfa-save"></span>
+	        				 </a>';
+	        	if($inputs){
+	        		$cantidades = form_input($data_input).$save_disk;
+	        	}else{
+	        		$cantidades = '';
+	        	}
+	            $ret .= "<li>".$cantidades."<span class=' iconfa-bookmark'></span>".$subitems['recetas'];
+		         
+		        }else{
+		        	$ret .= $this->make_list($subitems, false,$inputs);
+		        }
+	        }
+
+	        $ret .= "</li>";
+	    }
+	    $ret .= "</ul>";
+	    return($ret);
 	}
 }

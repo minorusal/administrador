@@ -185,7 +185,9 @@ function guardar_configuracion_programacion(){
 	        }
 	    }).error(function(){
 	       		progress.progressTimer('error', {
-		            errorText:'ERROR!'
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
 	            });
 	           btn.attr('disabled',false);
 	        }).done(function(){

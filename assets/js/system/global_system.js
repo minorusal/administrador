@@ -17,55 +17,6 @@ jQuery.fn.hasAttr = function(name,val){
     }
     return jQuery(this).attr(name) !== undefined;
 };
-function full_calendar(id, Objson ){
-   
-    var json = (Objson == undefined) ? '' : Objson
-     alert(dump_var(json));
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
-
-    var calendar = jQuery('#'+id).fullCalendar({
-        header: {
-            left:   'prev,next,today',
-            center: 'title',
-            right:  'month,agendaWeek,agendaDay'
-        },
-        buttonText: {
-            prev: '&laquo;',
-            next: '&raquo;',
-            prevYear: '&nbsp;&lt;&lt;&nbsp;',
-            nextYear: '&nbsp;&gt;&gt;&nbsp;',
-            today: 'HOY',
-            month: 'MES',
-            week: 'SEMANA',
-            day: 'DIA'
-        },
-        selectable: false,
-        selectHelper: false,
-        eventRender: function(event, element) {                                          
-            element.find('span.fc-event-title').html(element.find('span.fc-event-title').text());                     
-        },
-        select: function(start, end, allDay) {
-            var title = prompt('Event Title:');
-            if (title) {
-                calendar.fullCalendar('renderEvent',
-                    {
-                        title: title,
-                        start: start,
-                        end: end,
-                        allDay: allDay
-                    },
-                    true 
-                );
-            }
-            calendar.fullCalendar('unselect');
-        },
-        editable: false,
-        events: [json]
-    });
-}
 function config_datepicker(){
     if(typeof  months_timepicker=="undefined"){
         return false;
@@ -114,7 +65,6 @@ function calendar_actual(id){
 function calendar_no_futuras(id){
     jQuery('#'+id).datepicker({maxDate: "+0d"});
 }
-
 function time_dual(inicio,fin){
     var horaStrIn = inicio;
     var horaStrEnd = fin;
@@ -130,13 +80,11 @@ function time_dual(inicio,fin){
         return false;
     }else{
         return true;
-    }
-    
+    }   
 } 
 function clearEndDate(fin) {          
     jQuery('#'+fin).val('');      
 }
-
 function enabled_item(uri, id){
     jQuery.ajax({
         type: "POST",
@@ -247,7 +195,6 @@ function send_form_ajax(uri, content, form){
         }
     });
 }
-
 function remove_tr(id){
     jQuery("#"+id).click(function() {
  
@@ -317,7 +264,6 @@ function live_clock(){
             setTimeout("live_clock()",1000)
     }
 } 
-
 function obj2json(_data){
     str = '{ ';
     first = true;
@@ -335,12 +281,10 @@ function obj2json(_data){
     });
     return str+= '}';
 }
-
 function redirect(uri){
     jQuery('.ui-tabs-panel').html('<img src="'+path()+'assets/images/loaders/loader27.gif"/>');
     location.href = uri;
 }
-
 function load_content_tab(uri, id_content){
     jQuery.ajax({
         type: "POST",
@@ -352,7 +296,6 @@ function load_content_tab(uri, id_content){
         }
     });
 }
-
 function clean_formulario(){
     var selected_2 = jQuery('#dualselect select:last-child'); 
     var selected_1 = jQuery('#dualselect select:first-child');
@@ -373,7 +316,6 @@ function clean_formulario(){
     });
     jQuery('.chzn-select').val('').trigger('liszt:updated');
 }
-
 function values_requeridos(){
     var ids = "";
     var items_vacios = 0;
@@ -404,7 +346,6 @@ function values_requeridos(){
     //alert(ids);
     return items_vacios;
 }
-
 function values_numericos(){
      var ids = "";
      var items_numericos = 0;
@@ -417,14 +358,12 @@ function values_numericos(){
      });
      return items_numericos;
 }
-
 function allow_only_numeric(){
     jQuery('.numerico').numeric('.'); 
 }
 function allow_only_numeric_integer(){
     jQuery('.numerico').numeric(false); 
 }
-
 function alertas_tpl(type , mensaje ,close){
     var alert = "";
     var button_close = "";
@@ -439,7 +378,6 @@ function alertas_tpl(type , mensaje ,close){
     alert = "<div class='alert "+type+"'>"+button_close+mensaje+"</div>";
     return alert
 }
-
 function formData(selector, template){
     /**
     * Descripcion:  Crea un objeto recuperando los valores ingresados en los campos INPUT
@@ -503,7 +441,6 @@ function formData(selector, template){
     }// next  
     return data;
 }
-
 function objLength(objeto) {
     // Devuelve la longitud de un Objeto => array.length
     var size = 0, key; 
@@ -512,7 +449,6 @@ function objLength(objeto) {
     }
     return size;
 }
-
 function imgLoader(idDiv, imageFile){
     // Muestra image de loader en <div> 
     var imageFile   = ((imageFile=='') || (imageFile==undefined)) ? 'loader.GIF' : imageFile;
@@ -527,12 +463,10 @@ function imgLoader(idDiv, imageFile){
     jQuery(idDiv).html(htmlLoader);
     return true;
 }
-
 function imgLoader_clean(idDiv){
     var idDiv = ((idDiv=='') || (idDiv==undefined)) ? '#loader' : idDiv;
     jQuery(idDiv).html('');
 }
-
 function ver_pdf(URi, titulo){   
     titulo = (!titulo)?'PDF':titulo;
     var iframe = '<div class="iframe-container"><iframe src="'+URi+'"></iframe></div>'
@@ -543,7 +477,6 @@ function ver_pdf(URi, titulo){
         scrollable:false
     });   
 }
-
 function dual_select(){
     var db   = jQuery('#dualselected').find('.ds_arrow button');    
     var sel1 = jQuery('#dualselected select:first-child');      

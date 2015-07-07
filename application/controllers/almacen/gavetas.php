@@ -334,7 +334,7 @@ class gavetas extends Base_Controller
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$id_almacen   = $this->ajax_post('id_almacen');
 			$id_pasillo   = $this->ajax_post('id_pasillo');
-			$descripcion  = ($this->ajax_post('descripcion')=='')? $this->lang_item("sin_descripcion") : $this->ajax_post('descripcion');
+			$descripcion  = $this->ajax_post('descripcion');
 			$data_insert  = array('clave_corta'         => $clave_corta,
 								 'descripcion'          => $descripcion,
 								 'gavetas'              => $gaveta,

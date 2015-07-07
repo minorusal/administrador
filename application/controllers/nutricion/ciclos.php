@@ -335,8 +335,9 @@ class ciclos extends Base_Controller{
 
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
+				$id_familia = $value['id_familia'];
 				$idc = $value['id_ciclo'];
-					$servicios['s-'.$value['servicio'].$idc.$value['id_servicio']]['t-'.$value['tiempo'].$idc.$value['id_tiempo']]['f-'.$value['familia'].$idc.$value['id_familia']][] =array(
+					$servicios['s-'.$value['servicio'].','.$idc.','.$value['id_servicio']]['t-'.$value['tiempo'].','.$idc.','.$value['id_tiempo']]['f-'.$value['familia'].','.$idc.','.$id_familia][] =array(
 																												'id_receta'   => $value['id_receta'],
 																												'id_ciclo'    => $value['id_ciclo'],
 																												'recetas'     => $value['receta'] , 
@@ -345,6 +346,7 @@ class ciclos extends Base_Controller{
 																													);
 
 			}
+
 			$list  ='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
 			$list .= $this->make_list($servicios,true);	
 		}else{
@@ -366,22 +368,25 @@ class ciclos extends Base_Controller{
 		        	$tittle = $nivel[1];
 		        	switch ($icon) {
 		        		case 's':
-		        		    $id_servicio = substr($item,-1);
-		        		    $id_ciclo = substr($item,-2,-1);
+		        			$servicio = explode(',',$item);
+		        		    $id_ciclo = $servicio[1];
+		        		    $id_servicio = $servicio[2];
 		        			$icon    = 'iconfa-time';
 		        			$tipo    = strtoupper($this->lang_item('servicio'));
 		        			$elimina = 'eliminar_servicio('.$id_servicio.','.$id_ciclo.')';
 		        			break;
 		        		case 't':
-		        		    $id_tiempo   = substr($item,-1);
-		        		    $id_ciclo = substr($item,-2,-1);
+		        			$tiempo = explode(',',$item);
+		        		    $id_ciclo = $tiempo[1];
+		        		    $id_tiempo = $tiempo[2];
 		        			$icon 	= 'iconfa-sitemap';
 		        			$tipo 	= strtoupper( $this->lang_item('tiempo') );
 		        			$elimina = 'eliminar_tiempo('.$id_tiempo.','.$id_ciclo.')';
 		        			break;
 		        		case 'f':
-		        			$id_familia   = substr($item,-1);
-		        			$id_ciclo = substr($item,-2,-1);
+		        			$familia = explode(',',$item);
+		        			$id_ciclo = $familia[1];
+		        			$id_familia = $familia[2];
 		        			$icon 	= 'iconfa-certificate';
 		        			$tipo 	= strtoupper( $this->lang_item('familia') );
 		        			$elimina = 'eliminar_familia('.$id_familia.','.$id_ciclo.')';
@@ -390,7 +395,8 @@ class ciclos extends Base_Controller{
 		        			$icon = 'iconfa-fire';
 		        			break;
 		        	}
-		        	$ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle)."<a class ='onclick_on' onclick='$elimina'><span class=' iconfa-trash'></span></a>";
+		        	$tittle = explode(',',$tittle);
+		        	$ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle[0])."<a class ='onclick_on' onclick='$elimina'><span class=' iconfa-trash'></span></a>";
 	        	}
         	}
 	        if (is_array($subitems)) {
@@ -405,7 +411,7 @@ class ciclos extends Base_Controller{
 	        					<span style ="font-size:1.6em;" class="  iconfa-save"></span>
 	        				 </a>';
 	        	
-	            $ret .= "<li><span class=' iconfa-bookmark'></span>".$subitems['recetas']."<a class ='onclick_on' onclick='elimina_receta(".$subitems['id_receta'].",".$subitems['id_ciclo'].")'><span class=' iconfa-trash'></span></a>";
+	            $ret .= "<li><span class=' iconfa-bookmark'></span>".$subitems['recetas']."<a class ='onclick_on' onclick='eliminar_receta(".$subitems['id_vinculo'].",".$subitems['id_ciclo'].")'><span class=' iconfa-trash'></span></a>";
 		         
 		        }else{
 		        	$ret .= $this->make_list($subitems, false);
@@ -418,6 +424,7 @@ class ciclos extends Base_Controller{
 	    return($ret);
 	}
 	public function insert_config(){
+		//print_debug($this->ajax_post('objData'));
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -466,6 +473,15 @@ class ciclos extends Base_Controller{
 		$id_familia   = $this->ajax_post('id_familia');
 		
 		$elimina = $this->ciclos->eliminar_familia($id_familia,$id_ciclo);
+		$detalle = $this->ciclo_detalle($id_ciclo);
+	}
+
+	public function eliminar_receta(){
+
+		$id_ciclo    = $this->ajax_post('id_ciclo');
+		$id_vinculo  = $this->ajax_post('id_vinculo');
+		
+		$elimina = $this->ciclos->eliminar_receta($id_vinculo,$id_ciclo);
 		$detalle = $this->ciclo_detalle($id_ciclo);
 	}
 }

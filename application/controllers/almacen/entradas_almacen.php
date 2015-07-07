@@ -103,7 +103,7 @@ class entradas_almacen extends Base_Controller{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
+		$url_link 		= $this->modulo.'/'.$this->seccion.'/'.$accion;
 		$buttonTPL 		= '';
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(

@@ -433,47 +433,36 @@ class entradas_recepcion extends Base_Controller{
 						}
 						$sqldata= array(
 									'id_almacen_entradas_recibir'  => $id,
-									'id_compras_articulo_precios'  => $keys[$d],
+									'id_compras_orden_articulo'    => $keys[$d],
 									'lote'					   	   => $data[$d][0],
 									'caducidad'			   	   	   => $caducidad_val,
 									'um'					   	   => $data[$d][2],
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
-						$um_embalaje     = $data[$d][8]*$data[$d][6];
-						$um_presentacion = $data[$d][8]*$data[$d][7];
-						$embalaje_UM 	 = $um_embalaje*$data[$d][9];
-						$presentacion_UM = $um_presentacion*$data[$d][9];
 						if($data[$d][4]==1){}
 						elseif($data[$d][4]==2){
-							$sqldata2= array(
-									'id_almacen'		   	   	   => $id_almacen_lobby,
-									'id_gaveta'		   	   	   	   => $id_gaveta_lobby,
-									'id_almacen_entradas_recibir'  => $id,
-									'id_compras_articulo_precios'  => $keys[$d],
-									'id_articulo_tipo'	   		   => $data[$d][4],
-									'stock'	   	   		   		   => $presentacion_UM,
-									'lote'				   		   => $data[$d][0],
-									'caducidad'			  		   => $caducidad_val,
-									'id_estatus'			  	   => 1,
-									'timestamp'  	 	  		   => $this->timestamp(),
-									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
-								);
+							$um_embalaje     = $data[$d][8]*$data[$d][6];
+							$um_presentacion = $data[$d][8]*$data[$d][7];
+							$embalaje_UM 	 = $um_embalaje*$data[$d][9];
+							$presentacion_UM = $um_presentacion*$data[$d][9];
+							$stock	 = $presentacion_UM;
 						}else{
-							$sqldata2= array(
+							$stock   = $data[$d][8];
+						}
+						$sqldata2= array(
 									'id_almacen'		   	   	   => $id_almacen_lobby,
 									'id_gaveta'		   	   	   	   => $id_gaveta_lobby,
 									'id_almacen_entradas_recibir'  => $id,
-									'id_compras_articulo_precios'  => $keys[$d],
+									'id_compras_orden_articulo'    => $keys[$d],
 									'id_articulo_tipo'			   => $data[$d][4],
-									'stock'		   	   			   => $embalaje_UM,									
+									'stock'		   	   			   => $stock,									
 									'lote'					   	   => $data[$d][0],
 									'caducidad'			   	   	   => $caducidad_val,
 									'id_estatus'			  	   => 1,
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
-						}
 						$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
 						if($insert_partidas){
 							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);

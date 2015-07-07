@@ -32,7 +32,7 @@ class programacion extends Base_Controller{
 		$path  						 = $this->path;
 		$config_tab['names']         = array($this->lang_item($tab_1) ,$this->lang_item($tab_2)); 
 		$config_tab['links']         = array($path.$tab_1 ,$path.$tab_2); 
-		$config_tab['action']        = array('','');
+		$config_tab['action']        = array('','load_calendario_tab');
 		$config_tab['attr']          = array('','');
 		$config_tab['style_content'] = array('','');
 		return $config_tab;
@@ -82,7 +82,10 @@ class programacion extends Base_Controller{
 		
 		if($id_sucursal){
 			$params_ciclo     = $this->db_model->get_params_ciclos($id_sucursal);
+			$dias_festivos    = $this->db_model->get_dias_festivos($id_sucursal);
+			$dias_especiales  = $this->db_model->get_dias_especiales($id_sucursal);
 			$dias_descartados = $this->db_model->get_dias_descartados($id_sucursal);
+
 			/*Periodo Programado*/
 			if(is_array($params_ciclo)){
 				$tab['value_fecha_inicio']     = $params_ciclo[0]['fecha_inicio'];
@@ -126,59 +129,66 @@ class programacion extends Base_Controller{
 
 			if(!is_null($ciclos)){
 				$multiselect_ciclos = dropMultiselect_tpl(array(
-															 'data'		        => $ciclos
-															,'data_seleted' 	=> $ciclos_programados
-															,'value' 	        => 'id_nutricion_ciclos'
-															,'text' 	        => array('id_nutricion_ciclos','ciclo')
-															,'name' 	        => "multiselect_ciclos"
-															,'name2' 	        => "multiselect_ciclos_agregados"
-															,'prev' 	        => "quitar_ciclo()"
-															,'next' 	        => "agregar_ciclo()"
+																 'data'		        => $ciclos
+																,'data_seleted' 	=> $ciclos_programados
+																,'value' 	        => 'id_nutricion_ciclos'
+																,'text' 	        => array('id_nutricion_ciclos','ciclo')
+																,'name' 	        => "multiselect_ciclos"
+																,'name2' 	        => "multiselect_ciclos_agregados"
+																,'prev' 	        => "quitar_ciclo()"
+																,'next' 	        => "agregar_ciclo()"
 															)
 														);
 				$dropdown_ciclos = dropdown_tpl(array(
-								 'data'		=> $ciclos
-								,'value' 	=> 'id_nutricion_ciclos'
-								,'text' 	=> array('id_nutricion_ciclos','ciclo')
-								,'name' 	=> "dropdown_ciclos"
-								,'event'      => array('event'    => 'onchange',
-											   						 'function' => 'load_contenido_ciclo',
-							   										 'params'   => array('this.value'),
-							   										 'params_type' => array(false)
-							   										)
-							));
+														 'data'		=> $ciclos
+														,'value' 	=> 'id_nutricion_ciclos'
+														,'text' 	=> array('id_nutricion_ciclos','ciclo')
+														,'name' 	=> "dropdown_ciclos"
+														,'event'    => array('event' => 'onchange',
+																   						'function' => 'load_contenido_ciclo',
+												   										'params'   => array('this.value'),
+												   										'params_type' => array(false)
+												   							)
+													));
 				$dropdown_ciclos_especiales = dropdown_tpl(array(
-								 'data'		=> $ciclos
-								,'value' 	=> 'id_nutricion_ciclos'
-								,'text' 	=> array('id_nutricion_ciclos','ciclo')
-								,'name' 	=> "dropdown_ciclos_especiales"
-							));
+																	 'data'		=> $ciclos
+																	,'value' 	=> 'id_nutricion_ciclos'
+																	,'text' 	=> array('id_nutricion_ciclos','ciclo')
+																	,'name' 	=> "dropdown_ciclos_especiales"
+																));
 
-				$btn_guardar_parametros = form_button(array( 'content'  => 'Guardar Cambios',
-														'class' => 'btn btn-primary',
-														'name'  => 'guardar_programacion',
-														'onclick'=> 'guardar_configuracion_programacion()'
-											));
+				$btn_guardar_parametros = form_button(array( 	
+																'content'  => 'Guardar Cambios',
+																'class'    => 'btn btn-primary',
+																'name'     => 'guardar_programacion',
+																'onclick'  => 'guardar_configuracion_programacion()'
+															));
 			}else{
-				$btn_guardar_parametros = form_button(array( 'content'  => 'Guardar Cambios',
-														'class' => 'btn btn-primary',
-														'disabled' =>'disabled',
-														'name'  => 'guardar_programacion'
-											));
+				$btn_guardar_parametros = form_button(array( 
+																'content'  => 'Guardar Cambios',
+																'class'    => 'btn btn-primary',
+																'disabled' => 'disabled',
+																'name'     => 'guardar_programacion'
+															));
 				$dropdown_ciclos_especiales = '';
 				$dropdown_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
 				$multiselect_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
 
 
-			}
-
-			$multidropdown_especiales        = array(
-													 'data'		=> null
-													 ,'name' 	=> "multidropdown_ciclos_especiales"
+			}			
+			$multidropdown_especiales   = array(
+													'text' 	    => array('fecha','ciclo')
+													,'data'		=> $dias_especiales
+													,'name' 	=> "multidropdown_ciclos_especiales"
+													,'value' 	=> array('id_nutricion_ciclos', 'fecha')
+													,'selected' => 'all'
 												);
-			$multidropdown_festivos        = array(
-													 'data'		=> null
-													 ,'name' 	=> "multidropdown_festivos"
+			$multidropdown_festivos     = array(
+													'text' 	    => array('fecha')
+													,'data'		=> $dias_festivos
+													,'name' 	=> "multidropdown_festivos"
+													,'value' 	=> array('fecha')
+													,'selected' => 'all'
 												);
 			
 			$tab['btn_guardar_parametros']        = $btn_guardar_parametros;
@@ -189,8 +199,6 @@ class programacion extends Base_Controller{
 			$tab['dropdown_ciclos_especiales']    = $dropdown_ciclos_especiales;
 			$tab['multidropdown_especiales']      = multi_dropdown_tpl($multidropdown_especiales);
 			$tab['multidropdown_festivos']        = multi_dropdown_tpl($multidropdown_festivos);
-			
-			
 		}else{
 			$tab['btn_guardar_parametros']      = '';
 			$tab['value_fecha_inicio']          = '';
@@ -202,7 +210,6 @@ class programacion extends Base_Controller{
 			$tab['dropdown_ciclos_especiales']  = '';
 			$tab['multidropdown_especiales']    = '';
 			$tab['multidropdown_festivos']      = '';
-			
 		}
 		
 		$tab['lbl_config_programacion']    = $this->lang_item('lbl_config_programacion');
@@ -220,25 +227,16 @@ class programacion extends Base_Controller{
 		$tab['lbl_info_cantidad_recetas']  = $this->lang_item('lbl_info_cantidad_recetas');
 		$tab['lbl_dias_especiales']        = $this->lang_item('lbl_dias_especiales');
 		$tab['info_agregar_ciclo']         = $this->lang_item('info_agregar_ciclo');
-		
-		$tab['info_dias_festivos']       = $this->lang_item('info_dias_festivos');
-		$tab['info_agregar_festivo']     = $this->lang_item('info_agregar_festivo');
-
-
+		$tab['info_dias_festivos']         = $this->lang_item('info_dias_festivos');
+		$tab['info_agregar_festivo']       = $this->lang_item('info_agregar_festivo');
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
 		$tab['info_select_ciclo']          = $this->lang_item('info_select_ciclo');
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
 		$tab['info_ciclos_especiales']     = $this->lang_item('info_ciclos_especiales');
-
-
-		
-
-
 		
 		$uri_view = $this->modulo.'/'.$this->seccion.'/content_config_programacion';
 		echo json_encode( $this->load_view_unique($uri_view , $tab, true) );	
 	}
-
 	public function ciclo_cantidad_recetas(){
 		$id_ciclo        = $this->ajax_post('id_ciclo');
 		$list            = '';
@@ -246,10 +244,10 @@ class programacion extends Base_Controller{
 		if(!is_null($contenido_ciclo)){
 			foreach ($contenido_ciclo as $key => $value) {
 					$servicios['s-'.$value['servicio']]['t-'.$value['tiempo']]['f-'.$value['familia']][] =array(
-																															 'recetas'     => $value['receta'] , 
-																															 'porciones'   => $value['porciones'],
-																															 'id_vinculo'  => $value['id_nutricion_ciclo_receta']
-																													);
+																													 'recetas'     => $value['receta'] , 
+																													 'porciones'   => $value['porciones'],
+																													 'id_vinculo'  => $value['id_nutricion_ciclo_receta']
+																											);
 
 			}
 			$list  ='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
@@ -260,20 +258,22 @@ class programacion extends Base_Controller{
 		echo json_encode($list);
 	}
 	public function guardar_parametros_programacion(){
+		//sleep(3);
 		$values              = '';
 		$params_programacion = $this->ajax_post('params');
+		//print_debug($params_programacion);
 		$id_sucursal         = $params_programacion['id_sucursal'];
 		$fecha_inicio        = $params_programacion['fecha_inicio'];
 		$fecha_termino       = $params_programacion['fecha_termino'];
+		$fecha_inicio        = explode('/', $fecha_inicio);
+		$fecha_inicio        = $fecha_inicio[2].'-'.$fecha_inicio[1].'-'.$fecha_inicio[0];
+		$fecha_termino       = explode('/', $fecha_termino);
+		$fecha_termino       = $fecha_termino[2].'-'.$fecha_termino[1].'-'.$fecha_termino[0];
 		$dias_descartados    = (array_key_exists('dias_descartados', $params_programacion)) ? $params_programacion['dias_descartados'] : false;
+		$dias_festivos       = (array_key_exists('festivos', $params_programacion)) ? $params_programacion['festivos'] : false;
+		$dias_especiales     = (array_key_exists('especiales', $params_programacion)) ? $params_programacion['especiales'] : false;
 		$orden_ciclos        = (array_key_exists('orden_ciclos', $params_programacion)) ? $params_programacion['orden_ciclos'] : false;
-
-
-		$fecha_inicio      = explode('/', $fecha_inicio);
-		$fecha_inicio      = $fecha_inicio[2].'-'.$fecha_inicio[1].'-'.$fecha_inicio[0];
-		$fecha_termino     = explode('/', $fecha_termino);
-		$fecha_termino     = $fecha_termino[2].'-'.$fecha_termino[1].'-'.$fecha_termino[0];
-
+		
 		$this->db_model->delete_paramas_programacion($id_sucursal);
 
 		$data_insert = array(
@@ -285,11 +285,46 @@ class programacion extends Base_Controller{
 						);
 
 		$this->db_model->insert_params_programacion($data_insert);
-		
+		$data_insert  = array();
+		if($dias_festivos){
+			foreach ($dias_festivos as $key => $value) {
+				//echo $value;
+				$fecha = '';
+				$fecha = explode('/', $value);
+				$fecha = $fecha[2].'-'.$fecha[1].'-'.$fecha[0];
+				$data_insert[] = array(
+								  'fecha'          => $fecha
+								 ,'id_sucursal'    => $id_sucursal
+								 ,'id_usuario'     => $this->session->userdata('id_usuario')
+								 ,'timestamp'      => $this->timestamp()
+							);
+			}	
+			$this->db_model->insert_dias_festivos($data_insert);
+			//print_debug($values);
+		}
+		$data_insert  = array();
+		if($dias_especiales){
+			foreach ($dias_especiales as $key => $value) {
+				//print_debug($value);
+				$fecha = '';
+				$fecha = explode('/', $value['fecha']);
+				$fecha = $fecha[2].'-'.$fecha[1].'-'.$fecha[0];
+				$data_insert[] = array(
+								  'fecha'               => $fecha
+								 ,'id_nutricion_ciclos' => $value['id_ciclo']
+								 ,'id_sucursal'         => $id_sucursal
+								 ,'id_usuario'          => $this->session->userdata('id_usuario')
+								 ,'timestamp'           => $this->timestamp()
+							);
+			}	
+			$this->db_model->insert_dias_especiales($data_insert);
+		}
+
+		$data_insert  = array();
 		if($dias_descartados){
 			foreach ($dias_descartados as $value) {
 				$dia = $this->days($value, true);
-				$values[] = array(
+				$data_insert[] = array(
 								  'dia_index'      => $value
 								 ,'dia_name'       => $dia
 								 ,'id_sucursal'    => $id_sucursal
@@ -297,14 +332,14 @@ class programacion extends Base_Controller{
 								 ,'timestamp'      => $this->timestamp()
 							);
 			}	
-			$this->db_model->insert_dias_descartados($values);
+			$this->db_model->insert_dias_descartados($data_insert);
 		}
+		$data_insert  = array();
 		if($orden_ciclos){
-			$values  = '';
 			foreach ($orden_ciclos as $key => $value) {
 				$index    = $value['index'];
 				$id_ciclo = $value['ciclo_id'];
-				$values[] = array(
+				$data_insert[] = array(
 								  'id_nutricion_ciclos'   => $id_ciclo
 								 ,'orden'                 => $index
 								 ,'id_sucursal'           => $id_sucursal
@@ -312,9 +347,9 @@ class programacion extends Base_Controller{
 								 ,'timestamp'             => $this->timestamp()
 							);
 			}
-			$this->db_model->insert_ciclos_menus($values);
+			$this->db_model->insert_ciclos_menus($data_insert);
 		}
-		echo json_encode( 'exito');
+		echo json_encode($this->lang_item("msg_update_success",false));
 	}
 	public function actuaizar_cantidad_receta(){
 		$cantidad    = $this->ajax_post('cantidad');
@@ -362,12 +397,12 @@ class programacion extends Base_Controller{
 		$descartados          =array();
 		$id_sucursal          = $this->ajax_post('id_sucursal');
 		$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
-		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
 		$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo($id_sucursal);
-		
+		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
+		$dias_especiales      = $this->db_model->get_dias_especiales($id_sucursal);
+		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
 		
 		if(is_array($ciclos_programados)){
-			
 			foreach ($ciclos_programados as $key => $value) {
 				$ciclos[$value['orden']]['nombre'] = $value['ciclo'];
 				$ciclos[$value['orden']]['servicios']['s-'.$value['servicio']]['t-'.$value['tiempo']]['f-'.$value['familia']][] =array(
@@ -400,7 +435,7 @@ class programacion extends Base_Controller{
 					$list = $this->make_list($ciclos[$index]['servicios'],true, false);
 					
 					$json[] = '{
-								title: "<span class=\'iconfa-glass\'></span>&nbsp;-&nbsp;<span>'.$ciclos[$index]['nombre'].'</span><hr>'.$list .'",
+								title: "<span class=\'fa fa-coffee\'></span>&nbsp;&nbsp;<span>'.strtoupper($ciclos[$index]['nombre']).'</span><hr>'.$list .'",
 								start: new Date('.$anio.', '.$mes.', '.$dia.'),
 			                    allDay: true
 							}';
@@ -441,7 +476,7 @@ class programacion extends Base_Controller{
 		if($inputs){
 			$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
 		}else{
-			$ret = ($inicio) ? "<ul class='list-nostyle'>": '<ul>';
+			$ret = ($inicio) ? "<ul class='list-normalstyle' >": '<ul>';
 		}
 	    foreach ($items as $item => $subitems) {
 	        if (!is_numeric($item)) {

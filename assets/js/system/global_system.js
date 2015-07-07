@@ -11,6 +11,18 @@
     // GoTopIcon
     GoTop();
 });
+function jgrowl(msg){
+    jQuery.jGrowl(msg, {life:5000});
+}
+function progress_initialized(id){
+    jQuery("#"+id).html('').show();
+    var progress = jQuery("#"+id).progressTimer({
+        onFinish: function () {
+            jQuery("#"+id).hide('slow').html('');
+        }
+    });
+    return progress;
+}
 jQuery.fn.hasAttr = function(name,val){
     if(val){
         return jQuery(this).attr(name) === val;

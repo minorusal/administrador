@@ -338,13 +338,23 @@ class ciclos extends Base_Controller{
 					$servicios['s-'.$value['servicio']]['t-'.$value['tiempo']]['f-'.$value['familia']][] =array(
 																												'recetas'     => $value['receta'] , 
 																												'porciones'   => $value['porciones'],
-																												'id_servicio' => $value['id_servicio'],
 																												'id_vinculo'  => $value['id_nutricion_ciclo_receta']
 																													);
 
 			}
+			//$count = 0;
+			foreach ($contenido_ciclo as $key => $value) {
+				//$count++;		
+				$ids[$value['id_servicio']] = array(
+							 'id_ciclo'    => $value['id_nutricion_ciclos']
+							,'id_servicio' => $value['id_servicio']
+							,'id_tiempo'   => $value['id_tiempo']
+							,'id_familia'  => $value['id_familia']
+					);
+			}
+			print_debug($ids);
 			$list  ='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
-			$list .= $this->make_list($servicios,true);	
+			$list .= $this->make_list($servicios,$ids,true);	
 		}else{
 			$list = alertas_tpl('', $this->lang_item('msg_sin_recetas'),false);
 		}
@@ -404,42 +414,41 @@ class ciclos extends Base_Controller{
 
 
 
-	public function make_list($items, $inicio = true) {
+	public function make_list($items, $itemid, $inicio = true) {
+		//print_debug($itemid);
 		
-		
-			$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
+		$elimina = '';
+		$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';
+			
 	    foreach ($items as $item => $subitems) {
-	    	//print_debug($subitems);
-	        if (!is_numeric($item)) {
-	        	$nivel = explode('-', $item);
-	        	if(count($nivel)>1){
+			if (!is_numeric($item)){
+        		$nivel = explode('-', $item);
+        		if(count($nivel)>1){
+        			
 	        		$icon   = $nivel[0];
 		        	$tittle = $nivel[1];
 		        	switch ($icon) {
 		        		case 's':
-		        			$icon   = ' iconfa-time';
-		        			$tipo   = strtoupper( $this->lang_item('servicio') );
-		        			$delete = 'eliminar_servicio('.$subitems["id_vinculo"].')';
-		        			print_debug($delete); 
+		        			$icon    = 'iconfa-time';
+		        			$tipo    = strtoupper($this->lang_item('servicio'));
+		        			$elimina = 'eliminar_servicio("'.$itemid[$count]['id_ciclo'].','.$itemid[$count]['id_servicio'].'")';
 		        			break;
 		        		case 't':
 		        			$icon 	= 'iconfa-sitemap';
 		        			$tipo 	= strtoupper( $this->lang_item('tiempo') );
-		        			$delete = "eliminar_tiempo()";
 		        			break;
 		        		case 'f':
 		        			$icon 	= 'iconfa-certificate';
 		        			$tipo 	= strtoupper( $this->lang_item('familia') );
-		        			$delete = "eliminar_familia()";
 		        			break;
 		        		default:
 		        			$icon = 'iconfa-fire';
 		        			break;
 		        	}
 		        	
-		        	$ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle)."<a class ='onclick_on' onclick='eliminar()'><span class=' iconfa-trash'></span></a>";
+		        	$ret .= "<li><span class='$icon'></span>".$tipo.'&nbsp;'.strtoupper($tittle)."<a class ='onclick_on' onclick='$elimina'><span class=' iconfa-trash'></span></a>";
 	        	}
-	        }
+        	}
 
 	        if (is_array($subitems)) {
 	        	if(array_key_exists('recetas', $subitems)){
@@ -453,7 +462,7 @@ class ciclos extends Base_Controller{
 	        					<span style ="font-size:1.6em;" class="  iconfa-save"></span>
 	        				 </a>';
 	        	
-	            $ret .= "<li><span class=' iconfa-bookmark'></span>".$subitems['recetas']."<a class ='onclick_on' onclick=".$delete."><span class=' iconfa-trash'></span></a>";
+	            $ret .= "<li><span class=' iconfa-bookmark'></span>".$subitems['recetas']."<a class ='onclick_on' onclick=''><span class=' iconfa-trash'></span></a>";
 		         
 		        }else{
 		        	$ret .= $this->make_list($subitems, false);

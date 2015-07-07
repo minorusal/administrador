@@ -323,7 +323,7 @@ class listado_precios extends Base_Controller {
 								'peso_unitario' 			=> $peso_unitario,
 								'costo_unitario'			=> $costo_unitario,
 								'costo_x_um'				=> $costo_x_um,
-								'rendimiento' 				=> $$rendimiento,
+								'rendimiento' 				=> $rendimiento,
 								'timestamp'            		=> $this->timestamp(),
 								'id_usuario'           		=> $this->session->userdata('id_usuario')
 							);

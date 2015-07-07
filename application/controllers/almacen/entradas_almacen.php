@@ -77,7 +77,7 @@ class entradas_almacen extends Base_Controller{
 										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array(array('style' => 'display:none'),'', array('style' => 'display:none'),);
+		$config_tab['attr']     = array(array('style' => 'display:none'),'', array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -103,7 +103,7 @@ class entradas_almacen extends Base_Controller{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
+		$url_link 		= $this->modulo.'/'.$this->seccion.'/'.$accion;
 		$buttonTPL 		= '';
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(
@@ -131,6 +131,7 @@ class entradas_almacen extends Base_Controller{
 									'articulo'  	 	=> $value['articulo'],
 									'presentacion'   	=> $value['presentacion'],
 									'stock'      		=> $value['stock'],
+									'clave_corta'   	=> $value['clave_corta'],
 									'fecha_recepcion'   => $value['fecha_recepcion'],
 									'almacenes'   	 	=> $value['almacenes'],
 									'gavetas'   	 	=> $value['gavetas'],
@@ -144,6 +145,7 @@ class entradas_almacen extends Base_Controller{
 										$this->lang_item("articulo"),										
 										$this->lang_item("presentacion"),
 										$this->lang_item("stock"),
+										$this->lang_item("clave_corta"),
 										$this->lang_item("fecha_recepcion"),
 										$this->lang_item("almacenes"),
 										$this->lang_item("gavetas"),
@@ -260,15 +262,28 @@ class entradas_almacen extends Base_Controller{
 	}
 	public function load_gaveta(){
 		$id_pasillo    = $this->ajax_post('id_pasillo');
-		$datasql=array('id_pasillo'=>$id_pasillo);
-		$dropArray = array(
-					 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_pasillo($datasql)
-					,'value' 	=> 'id_almacen_gavetas'
-					,'text' 	=> array('clave_corta','gavetas')
-					,'name' 	=> "lts_gavetas"
-					,'class' 	=> "requerido"
-				);
-		$lts_gavetas  = dropdown_tpl($dropArray);
+		$id_almacen    = $this->ajax_post('id_almacen');
+		if($id_pasillo==0){
+			$datasql=array('id_almacen'=>$id_almacen);
+			$dropArray = array(
+						 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
+						,'value' 	=> 'id_almacen_gavetas'
+						,'text' 	=> array('clave_corta','gavetas')
+						,'name' 	=> "lts_gavetas"
+						,'class' 	=> "requerido"
+					);
+			$lts_gavetas  = dropdown_tpl($dropArray);
+		}else{
+			$datasql=array('id_pasillo'=>$id_pasillo);
+			$dropArray = array(
+						 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_pasillo($datasql)
+						,'value' 	=> 'id_almacen_gavetas'
+						,'text' 	=> array('clave_corta','gavetas')
+						,'name' 	=> "lts_gavetas"
+						,'class' 	=> "requerido"
+					);
+			$lts_gavetas  = dropdown_tpl($dropArray);
+		}
 		echo json_encode($lts_gavetas);
 	}
 	public function update_almacen(){

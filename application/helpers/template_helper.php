@@ -182,26 +182,42 @@
 				$disabled   = (isset($params['disabled']))?$params['disabled']:'';
 				$leyenda 	= (isset($params['leyenda']))?$params['leyenda']:'-----';
 			}
-			$name         = ($name=="")?"selected": $name;
+			$name         = ($name=="")?"multi_selected": $name;
 			$count        = 0;
 			if($data && $name && $value && $text){
 				
-				
+				$s = array();
 				foreach ($data as $option => $item) {
 					$option_value = "";
+					if(is_array($value)){
+						$v = array();
 
+						foreach ($value as $i) {
+							$v[] = $item[$i];
+						}
+						$v = implode('|', $v);
+						$s[] = $v;
+						
+					}else{
+						$v = $item[$value];
+					}
+					 
 					if(is_array($text)){
 						foreach ($text as $string) {
 							$option_value .= $item[$string].'-';
 						}
-						$options[$item[$value]] = trim($option_value, '-');
+
+						$options[$v] = trim($option_value, '-');
 					}else{
-						$options[$item[$value]]= $item[$text];
+						$options[$v]= $item[$text];
 					}					
 					$count++;
 				}
 
-
+				if($selected=='all'){
+					$selected = array();
+					$selected = $s;
+				}
 				$selected = "<span class='formwrapper '>".form_multiselect($name, $options, $selected, " class=' clean chosen-multiselect input-xlarge chzn-select $class' $event $disabled data-campo='$name'")."</span>";
 				return $selected;
 			}

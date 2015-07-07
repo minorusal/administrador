@@ -110,7 +110,7 @@ class ciclos_model extends Base_Model{
 					LEFT JOIN $tbl[administracion_servicios] s on s.id_administracion_servicio = ncr.id_servicio
 					WHERE cl.id_nutricion_ciclos= $id_ciclo AND ncr.activo = 1
 					ORDER BY ncr.id_servicio ,ncr.id_tiempo ,ncr.id_familia";
-		//print_debug($query);	
+		// print_debug($query);	
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

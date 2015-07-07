@@ -48,18 +48,17 @@ function load_content(uri, id_content){
     });
 }
 function detalle(id_compras_orden_articulo){
-  jQuery('#ui-id-2').click();
-  jQuery.ajax({
+	jQuery.ajax({
         type: "POST",
         url: path()+"almacen/entradas_almacen/detalle",
         dataType: 'json',
         data: {id_compras_orden_articulo : id_compras_orden_articulo},
         success: function(data){
-          var chosen = 'jQuery(".chzn-select").chosen();';
-          jQuery('#a-0').html('');
-          jQuery('#a-2').html(data);
-          jQuery('#a-2').html(data+include_script(chosen));
-          jQuery('#ui-id-2').show('slow');
+        	var chosen = 'jQuery(".chzn-select").chosen();';
+        	jQuery('#a-0').html('');
+        	jQuery('#a-2').html(data+include_script(chosen));
+        	jQuery('#ui-id-2').show('slow');
+        	jQuery('#ui-id-2').click();
         }
     });
 }
@@ -72,7 +71,6 @@ function load_gaveta_pas(id_almacen){
 	        data: {id_almacen : id_almacen},
 	        success: function(data){
 	         var chosen = 'jQuery(".chzn-select").chosen();';
-	          jQuery('#a-0').html('');
 	          jQuery('#lts_pasillo').html(data['pasillos']+include_script(chosen));
 	          jQuery('#lts_gavetas').html(data['gavetas']+include_script(chosen));
 	        }
@@ -80,14 +78,14 @@ function load_gaveta_pas(id_almacen){
 }
 function load_gaveta(id_pasillo){
 	jQuery('#ui-id-2').click();
+	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	  jQuery.ajax({
 	        type: "POST",
 	        url: path()+"almacen/entradas_almacen/load_gaveta",
 	        dataType: 'json',
-	        data: {id_pasillo : id_pasillo},
+	        data: {id_pasillo : id_pasillo,id_almacen:id_almacen},
 	        success: function(data){
 	         var chosen = 'jQuery(".chzn-select").chosen();';
-	          jQuery('#a-0').html('');
 	          jQuery('#lts_gavetas').html(data+include_script(chosen));
 	        }
 	    });

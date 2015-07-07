@@ -68,7 +68,8 @@ class ordenes extends Base_Controller {
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $this->modulo.'/'.$this->submodulo.'/'.$tab_1
-										,$path.$tab_2.'/'.$pagina
+										 ,$this->modulo.'/'.$this->seccion.'/'.$tab_2.$pagina
+										//,$path.$tab_2.'/'.$pagina
 										,$tab_3
 										,$tab_4
 								); 

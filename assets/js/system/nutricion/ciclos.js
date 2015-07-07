@@ -194,7 +194,7 @@ function insert_config(){
 }
 
 function eliminar_servicio(id_servicio,id_ciclo){
-  var treeview    = 'load_treeview("treeview_menus");';
+  var treeview    = 'load_treeview("treeview_ciclos");';
   var nombre_ciclo = jQuery('select[name=lts_ciclos] option:selected').text();
   jQuery.ajax({
         type: "POST",
@@ -202,7 +202,25 @@ function eliminar_servicio(id_servicio,id_ciclo){
         dataType: 'json',
         data: {id_servicio : id_servicio,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
         beforeSend : function(){
-          jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+        },
+        success: function(data){
+          jQuery('#ciclo_detalle').html(data+include_script(treeview));
+
+        }
+  });
+}
+
+function eliminar_tiempo(id_tiempo,id_ciclo){
+  var treeview     = 'load_treeview("treeview_ciclos");';
+  var nombre_ciclo = jQuery('select[name=lts_ciclos] option:selected').text();
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"nutricion/ciclos/eliminar_tiempo",
+        dataType: 'json',
+        data: {id_tiempo : id_tiempo,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
+        beforeSend : function(){
+         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
           jQuery('#ciclo_detalle').html(data+include_script(treeview));
@@ -211,6 +229,24 @@ function eliminar_servicio(id_servicio,id_ciclo){
   });
 } 
 
+function eliminar_familia(id_familia,id_ciclo){
+  var treeview     = 'load_treeview("treeview_ciclos");';
+  var nombre_ciclo = jQuery('select[name=lts_ciclos] option:selected').text();
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"nutricion/ciclos/eliminar_familia",
+        dataType: 'json',
+        data: {id_familia : id_familia,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
+        beforeSend : function(){
+         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+        },
+        success: function(data){
+          jQuery('#ciclo_detalle').html(data+include_script(treeview));
+
+        }
+  });
+}   
+//UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-02 23:59:59' and '2015-07-06 23:59:59' and envio = 0
 //SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59' and envio = 1
 //UPDATE `notas_facturas` set envio = 0 WHERE fecha_registro between '2015-06-26 18:38:00' and '2015-06-26 23:59:59' and envio = 1
 

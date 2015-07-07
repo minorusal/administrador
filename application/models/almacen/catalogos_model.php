@@ -250,6 +250,7 @@ class catalogos_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$condicion['id_almacen_gavetas !='] = (isset($data['id_almacen_gavetas']))?$data['id_almacen_gavetas']:'';
+		$condicion['id_almacen_almacenes = '] = (isset($data['id_almacen_almacenes']))?$data['id_almacen_almacenes']:'';
 		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
 		$existe = $this->row_exist($tbl['almacen_gavetas'], $condicion);
 		if(!$existe){
@@ -266,7 +267,9 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$existe = $this->row_exist($tbl['almacen_gavetas'], array('clave_corta'=> $data['clave_corta']));
+		$condicion['id_almacen_almacenes = '] = (isset($data['id_almacen_almacenes']))?$data['id_almacen_almacenes']:'';
+		$condicion['clave_corta = '] = (isset($data['clave_corta']))?$data['clave_corta']:'';
+		$existe = $this->row_exist($tbl['almacen_gavetas'], $condicion);
 		if(!$existe){
 			$insert = $this->insert_item($tbl['almacen_gavetas'], $data);
 			return $insert;

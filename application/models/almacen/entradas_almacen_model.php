@@ -30,7 +30,8 @@ class entradas_almacen_model extends Base_Model{
 					d.articulo,
 					e.presentacion,
 					f.almacenes,
-					g.gavetas
+					g.gavetas,
+					h.clave_corta
 				from $tbl[almacen_stock] a 
 				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
 				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
@@ -38,6 +39,7 @@ class entradas_almacen_model extends Base_Model{
 				LEFT JOIN $tbl[compras_presentaciones] e on c.id_presentacion=e.id_compras_presentacion
 				LEFT JOIN $tbl[almacen_almacenes] f on a.id_almacen=f.id_almacen_almacenes
 				LEFT JOIN $tbl[almacen_gavetas] g on a.id_gaveta=g.id_almacen_gavetas
+				LEFT JOIN $tbl[compras_articulos_tipo] h on a.id_articulo_tipo=h.id_articulo_tipo
 			WHERE a.id_almacen = 1 $filtro
 			$limit";
 		/*

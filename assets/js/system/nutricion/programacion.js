@@ -181,15 +181,16 @@ function guardar_configuracion_programacion(){
 	        	btn.attr('disabled',true);
 	        },
 	        success: function(data){
-	        	btn.attr('disabled',false);
 	        	jgrowl(data);
 	        }
 	    }).error(function(){
 	       		progress.progressTimer('error', {
 		            errorText:'ERROR!'
 	            });
+	           btn.attr('disabled',false);
 	        }).done(function(){
 		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
 		    });
 		
 	}else{

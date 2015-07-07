@@ -258,7 +258,7 @@ class programacion extends Base_Controller{
 		echo json_encode($list);
 	}
 	public function guardar_parametros_programacion(){
-		//sleep(3);
+		//sleep(3);df
 		$values              = '';
 		$params_programacion = $this->ajax_post('params');
 		//print_debug($params_programacion);
@@ -394,7 +394,7 @@ class programacion extends Base_Controller{
 	}
 	public function cargar_calendario(){
 		$index                = 0;
-		$descartados          =array();
+		$descartados          = array();
 		$id_sucursal          = $this->ajax_post('id_sucursal');
 		$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
 		$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo($id_sucursal);

@@ -23,6 +23,9 @@ function progress_initialized(id){
     });
     return progress;
 }
+function clean(id){
+    jQuery("#"+id).hide('slow').html('');
+}
 jQuery.fn.hasAttr = function(name,val){
     if(val){
         return jQuery(this).attr(name) === val;

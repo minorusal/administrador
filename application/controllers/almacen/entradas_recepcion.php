@@ -118,7 +118,7 @@ class entradas_recepcion extends Base_Controller{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		//$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
@@ -131,7 +131,7 @@ class entradas_recepcion extends Base_Controller{
 		$total_rows   			  = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content 			  = $this->db_model->db_get_data($sqlData);
-		$url          			  = base_url($uri_view);
+		$url          			  = base_url($url_link);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value) {

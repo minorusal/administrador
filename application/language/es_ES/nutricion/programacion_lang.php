@@ -1,4 +1,8 @@
 <?php
+	
+
+	$lang['programacion'] = 'Programación';
+	$lang['nutricion'] = 'Nutrición';
 	$lang['lbl_sucursal'] = 'Primero seleccione una sucursal';
 	$lang['config_programacion'] = 'Configuración de Programación';
 	$lang['ver_calendario'] = 'Visualizar Calendario de Programación';
@@ -16,4 +20,16 @@
 	$lang['lbl_cantidad_recetas']            = 'Definir Cantidad de Recetas por Ciclo';
 	$lang['lbl_info_cantidad_recetas'] ='Seleccióna un Ciclo de la lista para poder editar la cantidad porciones de recetas que lo configuran';
 	$lang['msg_ciclos_null'] = 'No se tienen ciclos vinculadas a esta sucursal';
+	$lang['msg_sin_recetas'] = 'No se tienen recetas viculadas a este ciclo';
+
+
+	$lang['servicio'] = 'servicio';
+$lang['tiempo'] = 'tiempo';
+$lang['familia'] = 'familia';
+
+$lang['lbl_dias_especiales'] = 'Fechas especiales';
+$lang['info_select_dia'] = 'Seleccione una fecha';
+$lang['info_select_ciclo'] = 'Escoja un Ciclo de la lista';
+$lang['info_select_dia'] = 'Contenido de fecha';
+$lang['info_agregar_ciclo'] = 'Agregar Ciclo';
 ?>

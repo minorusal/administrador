@@ -15,12 +15,12 @@ class entradas_recepcion extends Base_Controller{
 	private $icon;
 	private $offset, $limit_max;
 	private $tab_inicial, $tab = array(), $tab_indice = array();
+	// private $vars;
 
 	public function __construct(){
 		parent::__construct();
 		$this->vars = new config_vars();
         $this->vars->load_vars();
-
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
 		$this->submodulo        = 'entradas_recepcion';

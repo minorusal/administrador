@@ -46,13 +46,13 @@ class ciclos_model extends Base_Model{
 	public function insert_ciclo_receta($data = array()){
 		// DB Info
 		$tbl = $this->tbl;
-		$existe = $this->row_exist($tbl['nutricion_ciclo_receta'], array('id_nutricion_ciclo_receta'=> $data['id_ciclo'],'id_receta'=>$data['id_receta']));
-		print_debug($existe);
-		if(!$existe){
-				$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
-			}else{
-				return false;
-			}
+
+		$existe = $this->row_exist($tbl['nutricion_ciclo_receta'], array('id_servicio'=> $data['id_servicio'],'id_ciclo'=> $data['id_ciclo'],'id_receta'=>$data['id_receta'],'id_tiempo'=>$data['id_tiempo']));
+		if($existe){
+			return false;
+		}else{
+			$insert = $this->insert_item($tbl['nutricion_ciclo_receta'], $data);
+		}
 	}
 
 	public function db_get_data($data = array()){
@@ -88,6 +88,7 @@ class ciclos_model extends Base_Model{
 		$query = "	SELECT 
 						 cl.id_nutricion_ciclos
 						,cl.ciclo
+						,ncr.id_ciclo
 						,ncr.id_familia
 						,ncr.id_nutricion_ciclo_receta
 						,ncr.id_receta
@@ -98,6 +99,7 @@ class ciclos_model extends Base_Model{
 						,nr.id_nutricion_receta
 						,nr.receta
 						,s.servicio
+						,concat_ws('-', s.inicio, s.final) as horario
 						,tm.tiempo
 					FROM 
 						$tbl[nutricion_ciclo_receta] ncr
@@ -108,11 +110,56 @@ class ciclos_model extends Base_Model{
 					LEFT JOIN $tbl[administracion_servicios] s on s.id_administracion_servicio = ncr.id_servicio
 					WHERE cl.id_nutricion_ciclos= $id_ciclo AND ncr.activo = 1
 					ORDER BY ncr.id_servicio ,ncr.id_tiempo ,ncr.id_familia";
-		//print_debug($query);	
+		// print_debug($query);	
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
+	}
+
+	function eliminar_servicio($id_servicio, $id_ciclo){
+		//print_debug($id_servicio);
+		$tbl = $this->tbl;
+		if($id_servicio==0){
+			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
+		}else{
+			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_servicio = $id_servicio";
+		}
+		//print_debug($query);
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+
+	function eliminar_tiempo($id_tiempo, $id_ciclo){
+		//print_debug($id_tiempo);
+		$tbl = $this->tbl;
+		if($id_tiempo==0){
+			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
+		}else{
+			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_tiempo = $id_tiempo";
+		}
+		//print_debug($query);
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+
+	function eliminar_familia($id_familia, $id_ciclo){
+		//print_debug($id_tiempo);
+		$tbl = $this->tbl;
+		if($id_familia==0){
+			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
+		}else{
+			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_familia = $id_familia";
+		}
+		//print_debug($query);
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
 	}
 	
 }

@@ -1,4 +1,4 @@
-	<script>
+<script>
   jQuery(function() {
     jQuery( "#ciclos_programados" ).sortable();
     jQuery( "#ciclos_programados" ).disableSelection();
@@ -23,10 +23,36 @@
 			{values_dias_descartados}
 		</span>
 	</p>
+
 	<p>
 		<label>{lbl_dias_festivos}</label>
 		<span class="field">
-			<input class ="fechas_festivas" type="text" readonly="true"/>
+			<input id ="fechas_festivas" class ="input_calendar" type="text" readonly="true"/>
+		</span>
+	</p>
+	<p>
+		<label>{lbl_dias_especiales}</label>
+		<span class="field">
+			<label>{info_select_dia}</label>
+			<span class="field">
+				<input id ="fechas_especiales" class ="input_calendar" type="text" readonly="true"/>
+			</span>
+			<label>{info_select_ciclo}</label>
+			<span class="field">
+				{dropdown_ciclos_especiales}
+			</span>
+			<label></label>
+			<span class="field">
+				<button onclick="agregar_ciclo_especial()" class="btn ds_prev">
+			    	<i class=" iconfa-chevron-down">
+			    	</i>
+			    	{info_agregar_ciclo}
+			    </button>
+			</span>
+			<label>{info_select_dia}</label>
+			<span class="field">
+			    {multidropdown}
+		    </span>
 		</span>
 	</p>
 	<p>
@@ -50,13 +76,19 @@
 	</p>
 	<p>
 		<label>{lbl_cantidad_recetas}</label>
+
 		<span class="field">
 			<a >{lbl_info_cantidad_recetas}</a><br><br>
 			{dropdown_ciclos}
-			<div id="cantidades_ciclo_receta" ></div>
 		</span>
 	</p>
-
+	<p id="edicion_cantidades_receta" style="display:none;">
+		<label>{lbl_cantidad_recetas}</label>
+		<div id="loader_cantidades"></div>
+		<span class="field" id="cantidades_ciclo_receta">
+			
+		</span>
+	</p>
 	<div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>
     <p class="stdformbutton">

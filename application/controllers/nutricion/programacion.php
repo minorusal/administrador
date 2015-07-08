@@ -111,7 +111,9 @@ class programacion extends Base_Controller{
 				}else{
 					$checked =  false;
 				}
-				$dias_descartados_checkbox[]=  form_checkbox('dias_descartados', $key, $checked).'&nbsp;'.$value;
+				$n = ($key+1);
+				$n = ($n == 7) ? 0 : $n;
+				$dias_descartados_checkbox[]=  form_checkbox('dias_descartados', $n, $checked).'&nbsp;'.$value;
 			}
 
 			/*recuperacion de Ciclos en programacion*/
@@ -173,8 +175,6 @@ class programacion extends Base_Controller{
 				$dropdown_ciclos_especiales = '';
 				$dropdown_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
 				$multiselect_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
-
-
 			}			
 			$multidropdown_especiales   = array(
 													'text' 	    => array('fecha','ciclo')
@@ -363,12 +363,7 @@ class programacion extends Base_Controller{
 						);
 		$update = $this->db_model->update_cantidad_ciclo_receta($data);
 
-		if($update==''){
-			$m = 'exito';
-		}else{
-			$m = 'error';
-		}
-		return $m;
+		echo json_encode($this->lang_item("msg_update_success",false));
 	}
 	public function calendario(){
 		$data['lbl_sucursal'] = $this->lang_item('lbl_sucursal');
@@ -395,13 +390,30 @@ class programacion extends Base_Controller{
 	public function cargar_calendario(){
 		$index                = 0;
 		$descartados          = array();
+		$festivos             = array();
+		$especiales           = array();
 		$id_sucursal          = $this->ajax_post('id_sucursal');
 		$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
 		$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo($id_sucursal);
 		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
-		$dias_especiales      = $this->db_model->get_dias_especiales($id_sucursal);
-		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
+		$dias_festivos        = $this->db_model->get_dias_festivos($id_sucursal);
+		$dias_especiales      = $this->db_model->get_dias_especiales_contenido_ciclo($id_sucursal);
 		
+		if(is_array($dias_festivos)){
+			foreach ($dias_festivos as $key => $items) {
+				$festivos[] = strtotime(str_replace('/', '-', $items['fecha'])); ;
+			}
+		}
+
+		if(is_array($dias_especiales)){
+			foreach ($dias_especiales as $key => $items) {
+
+				$especiales[strtotime(str_replace('/', '-', $items['fecha']))]['nombre'] = $items['ciclo'];
+				$especiales[strtotime(str_replace('/', '-', $items['fecha']))]['servicios']['s-'.$items['servicio']]['t-'.$items['tiempo']]['f-'.$items['familia']][] =array('recetas' => $items['receta'],
+																																											'porciones'   => $items['porciones'],
+																																											'id_vinculo'  => $items['id_nutricion_ciclo_receta']);
+			}
+		}
 		if(is_array($ciclos_programados)){
 			foreach ($ciclos_programados as $key => $value) {
 				$ciclos[$value['orden']]['nombre'] = $value['ciclo'];
@@ -423,24 +435,43 @@ class programacion extends Base_Controller{
 			$fechaFin    = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_termino']));
 			
 			for($i=$fechaInicio; $i<=$fechaFin; $i+=86400){
-				$day = (date('N', $i) == 7) ? 0 : date('N', $i);
-				if(!array_key_exists($index, $ciclos)){
-					$index = 0;
-				}
-				if(!in_array($day, $descartados)){
-					$dia  =  date('j', $i);
-					$mes  = (date('n', $i)-1);
-					$anio =  date('Y', $i); 
-					
-					$list = $this->make_list($ciclos[$index]['servicios'],true, false);
-					
-					$json[] = '{
-								title: "<span class=\'fa fa-coffee\'></span>&nbsp;&nbsp;<span>'.strtoupper($ciclos[$index]['nombre']).'</span><hr>'.$list .'",
-								start: new Date('.$anio.', '.$mes.', '.$dia.'),
-			                    allDay: true
-							}';
-					$index++;
-				}
+					if(array_key_exists($i, $especiales)){
+						$dia  =  date('j', $i);
+						$mes  = (date('n', $i)-1);
+						$anio =  date('Y', $i); 
+						
+						$list = $this->make_list($especiales[$i]['servicios'],true, false);
+						
+						$json[] = '{
+									title: "<span class=\'fa fa-birthday-cake\'></span>&nbsp;&nbsp;'.strtoupper($this->lang_item('lbl_especial', false)).'<br>'.'<span class=\'fa fa-coffee\'></span>&nbsp;&nbsp;<span>'.strtoupper($especiales[$i]['nombre']).'</span><hr>'.$list .'",
+									start: new Date('.$anio.', '.$mes.', '.$dia.'),
+				                    allDay: true
+								}';
+						continue;
+					}
+
+					if(!in_array($i, $festivos)){
+						$day = (date('N', $i) == 7) ? 0 : date('N', $i);
+						
+						if(!array_key_exists($index, $ciclos)){
+							$index = 0;
+						}
+
+						if(!in_array($day, $descartados)){
+							$dia  =  date('j', $i);
+							$mes  = (date('n', $i)-1);
+							$anio =  date('Y', $i); 
+							
+							$list = $this->make_list($ciclos[$index]['servicios'],true, false);
+							
+							$json[] = '{
+										title: "<span class=\'fa fa-coffee\'></span>&nbsp;&nbsp;<span>'.strtoupper($ciclos[$index]['nombre']).'</span><hr>'.$list .'",
+										start: new Date('.$anio.', '.$mes.', '.$dia.'),
+					                    allDay: true
+									}';
+							$index++;
+						}
+					}
 			}
 			$json         = implode(',',$json);
 			$data['json'] = $json;

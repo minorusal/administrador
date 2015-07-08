@@ -212,7 +212,7 @@ class entradas_recepcion extends Base_Controller{
 								<input type="hidden" id="id_compras_um" data-campo="id_compras_um['.$data_listado[$i]['id_compras_orden_articulo'].']" value="'.$data_listado[$i]['id_compras_um'].'">
 								<input type="hidden" data-campo="lote_val['.$data_listado[$i]['id_compras_orden_articulo'].']" name="lote_val" id="lote_val_'.$data_listado[$i]['id_compras_orden_articulo'].'"/>
 								<input type="hidden" data-campo="caducidad_val['.$data_listado[$i]['id_compras_orden_articulo'].']" name="caducidad_val" id="caducidad_val_'.$data_listado[$i]['id_compras_orden_articulo'].'"/>
-								<input type="hidden" data-campo="u_m_val['.$data_listado[$i]['id_compras_orden_articulo'].']" name="u_m_val" id="u_m_val_'.$data_listado[$i]['id_compras_orden_articulo'].'"/>
+								<input type="hidden" data-campo="cantidad_lote['.$data_listado[$i]['id_compras_orden_articulo'].']" name="cantidad_lote" id="cantidad_lote_'.$data_listado[$i]['id_compras_orden_articulo'].'"/>
 								<input type="hidden" id="um_x_embalaje" data-campo="um_x_embalaje['.$data_listado[$i]['id_compras_orden_articulo'].']" value="'.$data_listado[$i]['um_x_embalaje'].'">
 								<input type="hidden" id="um_x_presentacion" data-campo="um_x_presentacion['.$data_listado[$i]['id_compras_orden_articulo'].']" value="'.$data_listado[$i]['um_x_presentacion'].'">								
 								<input type="hidden" id="unidad_minima" data-campo="unidad_minima['.$data_listado[$i]['id_compras_orden_articulo'].']" value="'.$data_listado[$i]['unidad_minima'].'">
@@ -374,7 +374,7 @@ class entradas_recepcion extends Base_Controller{
 			$descuento_total  = $this->ajax_post('descuento_total');
 			$impuesto_total   = $this->ajax_post('impuesto_total');
 			$total 			  = $this->ajax_post('total');
-			$chek_box = $this->ajax_post('aceptar');
+			$chek_box         = $this->ajax_post('aceptar');
 
 			$sqlData = array(
 						'id_compras_orden'	 => $id_compras_orden
@@ -391,20 +391,20 @@ class entradas_recepcion extends Base_Controller{
 			$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
 			$lote_val 					= $this->ajax_post('lote_val');
 			$caducidad_val 				= $this->ajax_post('caducidad_val');
-			$u_m_val 					= $this->ajax_post('u_m_val');
+			$cantidad_lote 				= $this->ajax_post('cantidad_lote');
 			$id_compras_articulo 		= $this->ajax_post('id_compras_articulo');
 			$id_articulo_tipo 			= $this->ajax_post('id_articulo_tipo');
 			$id_compras_um 				= $this->ajax_post('id_compras_um');
 			$um_x_embalaje 				= $this->ajax_post('um_x_embalaje');
 			$um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
 			$cantidad 					= $this->ajax_post('cantidad');
-			$unidad_minima 					= $this->ajax_post('unidad_minima');
-			$cl_um 					= $this->ajax_post('cl_um');
+			$unidad_minima 				= $this->ajax_post('unidad_minima');
+			$cl_um 						= $this->ajax_post('cl_um');
 		
 			$array=array(	
 					0  	=> $lote_val, 
 					1   => $caducidad_val,
-					2  	=> $u_m_val,
+					2  	=> $cantidad_lote,
 					3  	=> $id_compras_articulo,
 					4  	=> $id_articulo_tipo,
 					5  	=> $id_compras_um,
@@ -415,13 +415,15 @@ class entradas_recepcion extends Base_Controller{
 					10  => $cl_um,
 					11  => $chek_box
 				);
+			dump_var($cantidad_lote);
 			$keys=array_keys($id_compras_orden_articulo);
 			for($i=0; count($id_compras_orden_articulo)>$i;$i++){
 				for($j=0; count($array)>$j;$j++){
 					$data[$i][]=$array[$j][$keys[$i]];
 				}
 			}
-			$id = $this->db_model->insert($sqlData);
+			//$id = $this->db_model->insert($sqlData);
+			$id=1;
 			if($id){
 				for($d=0;count($data)>$d;$d++){
 					if($data[$d][11]=='true'){
@@ -431,20 +433,20 @@ class entradas_recepcion extends Base_Controller{
 							$fec=explode('/',$data[$d][1]);
 							$caducidad_val=$fec[2].'-'.$fec[1].'-'.$fec[0];
 						}
-						$sqldata= array(
+						$sqldata[]= array(
 									'id_almacen_entradas_recibir'  => $id,
 									'id_compras_orden_articulo'    => $keys[$d],
 									'lote'					   	   => $data[$d][0],
 									'caducidad'			   	   	   => $caducidad_val,
-									'um'					   	   => $data[$d][2],
+									'cantidad'					   => $data[$d][2],
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
 						if($data[$d][4]==1){}
 						elseif($data[$d][4]==2){
-							$um_embalaje     = $data[$d][8]*$data[$d][6];
+							//$um_embalaje     = $data[$d][8]*$data[$d][6];
+							//$embalaje_UM 	 = $um_embalaje*$data[$d][9];
 							$um_presentacion = $data[$d][8]*$data[$d][7];
-							$embalaje_UM 	 = $um_embalaje*$data[$d][9];
 							$presentacion_UM = $um_presentacion*$data[$d][9];
 							$stock	 = $presentacion_UM;
 						}else{
@@ -463,8 +465,9 @@ class entradas_recepcion extends Base_Controller{
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
-						$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
-						if($insert_partidas){
+						//$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
+
+						/*if($insert_partidas){
 							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);
 							if($insertstock){
 									$sqldatalog_stock= array(
@@ -497,8 +500,9 @@ class entradas_recepcion extends Base_Controller{
 									,'contenido'=> alertas_tpl('error', $msg ,false)
 									,'success' 	=> false
 							);
-						}
+						}*/
 					}
+					dump_var($sqldata);
 				}
 				$sqldata3= array(
 						'id_compras_orden' 			   => $id_compras_orden,
@@ -531,16 +535,16 @@ class entradas_recepcion extends Base_Controller{
 		$id = $this->ajax_post('id');
 		$caducidad = $this->ajax_post('caducidad_val');
 		$lote = $this->ajax_post('lote_val');
-		$u_m = $this->ajax_post('u_m_val');		
+		$cantidad_lote = $this->ajax_post('cantidad_lote');		
 		$proveedor = $this->ajax_post('proveedor');
 		$articulo = $this->ajax_post('articulo');
 		$presentacion = $this->ajax_post('presentacion');
 		
 		// template html modal
-		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'u_m'=>$u_m, 'proveedor_val'=>$proveedor,'articulo_val'=>$articulo, 'presentacion_val'=>$presentacion);
+		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'cantidad_lote'=>$cantidad_lote, 'proveedor_val'=>$proveedor,'articulo_val'=>$articulo, 'presentacion_val'=>$presentacion);
 		$tabData_modal['lbl_lote'] 			= $this->lang_item("lote",true);
 		$tabData_modal['lbl_caducidad'] 	= $this->lang_item("caducidad",true);
-		$tabData_modal['lbl_um'] 			= $this->lang_item("um",true);
+		$tabData_modal['lbl_cantidad'] 		= $this->lang_item("cantidad",true);
 		$tabData_modal['recibir_lote'] 	    = $this->lang_item("recibir_lote",true);
 		$tabData_modal['devolver_lote'] 	= $this->lang_item("devolver_lote",true);
 		$tabData_modal['proveedor'] 	 	= $this->lang_item("proveedor",false);

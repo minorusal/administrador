@@ -112,7 +112,7 @@ function calculos(id){
 	var functions = [];
 	var caducidad_val  	= jQuery('#caducidad_val_'+id).val();
 	var lote_val		= jQuery('#lote_val_'+id).val();
-	var u_m_val			= jQuery('#u_m_val_'+id).val();
+	var cantidad_lote			= jQuery('#cantidad_lote_'+id).val();
 	var proveedor		= jQuery('#proveedor_'+id).val();
 	var articulo		= jQuery('#articulo_'+id).val();
 	var presentacion    = jQuery('#presentacion_'+id).val();
@@ -164,7 +164,7 @@ function calculos(id){
 			data : {id:id,
 					caducidad_val : caducidad_val,
 					lote_val : lote_val,
-					u_m_val : u_m_val,
+					cantidad_lote : cantidad_lote,
 					proveedor  : proveedor,
 					articulo : articulo,
 					presentacion : presentacion},
@@ -183,10 +183,28 @@ function calculos(id){
 function aceptar_lote(id){
 	var lote 	  = jQuery('#lotemodal').val();
 	var caducidad = jQuery('#caducidad').val();
-	var u_m 	  = jQuery('#u_m').val();
+	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
+	var tds=7;
+	var nuevaFila;
+	var cantidad;
+	var td_valor=new Array(
+					'',
+					jQuery('#proveedor_'+id).val(),
+					jQuery('#articulo_'+id).val(),
+					jQuery('#presentacion_'+id).val(),
+					lote,
+					cantidad_lote,
+					caducidad,
+					''
+					);
+	for(var i=0;i<tds;i++){
+		nuevaFila+='<td>'+td_valor[i]+'</td>';
+    }
+	jQuery('#'+id).after('<tr id="muestra_lote_"'+id+' style="background-color: #BDBDBD">'+nuevaFila+'</tr>');
+
 	jQuery('#lote_val_'+id).val(lote);
 	jQuery('#caducidad_val_'+id).val(caducidad);
-	jQuery('#u_m_val_'+id).val(u_m);
+	jQuery('#cantidad_lote_'+id).val(cantidad_lote);
 	jQuery('#lote').modal('toggle');
 	jQuery('#listado_'+id).prop("checked", "checked");
 }
@@ -199,9 +217,9 @@ function calcula_totla_pagar(){
 	jQuery('#value_total').html(total);
 }
 function recibir_orden(){
-	jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
+	/*jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
 	jQuery('#recibir').hide();	
-	jQuery('#volver').hide();	
+	jQuery('#volver').hide();	*/
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -226,7 +244,7 @@ function recibir_orden(){
 function volver_lote(id){
 	jQuery('#lote_val_'+id).val('');
 	jQuery('#caducidad_val_'+id).val('');
-	jQuery('#u_m_val_'+id).val('');
+	jQuery('#cantidad_lote_'+id).val('');
 	jQuery('#lote').modal('toggle');
 	jQuery('#listado_'+id).prop("checked", "");
 }

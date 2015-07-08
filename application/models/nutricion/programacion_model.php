@@ -18,7 +18,8 @@ class programacion_model extends Base_Model{
 		$query = "SELECT 
 					date_format(f.fecha, '%d/%m/%Y') as fecha
 				  FROM av_nutricion_programacion_dias_festivos f
-				  WHERE id_sucursal = $id_sucursal";
+				  WHERE id_sucursal = $id_sucursal
+				  ORDER BY fecha";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -34,7 +35,36 @@ class programacion_model extends Base_Model{
 						c.ciclo 
 					FROM av_nutricion_programacion_dias_especiales s
 					LEFT JOIN av_nutricion_ciclos c ON c.id_nutricion_ciclos = s.id_nutricion_ciclos
-					WHERE s.id_sucursal = $id_sucursal";
+					WHERE s.id_sucursal = $id_sucursal
+					ORDER BY fecha";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}else{
+			return null;
+		}
+	}
+	public function get_dias_especiales_contenido_ciclo($id_sucursal){
+		$query = "	SELECT 			 
+						cl.ciclo
+						,ncr.id_nutricion_ciclo_receta
+						,ncr.porciones
+						,s.servicio
+						,tm.tiempo
+						,fm.familia
+						,nr.receta
+						,concat_ws('-', s.inicio, s.final) as horario
+						,e.*
+					FROM 
+						av_nutricion_programacion_dias_especiales e
+					LEFT JOIN av_nutricion_ciclos cl  on cl.id_nutricion_ciclos = e.id_nutricion_ciclos
+					LEFT JOIN av_nutricion_ciclo_receta ncr on cl.id_nutricion_ciclos = ncr.id_ciclo
+					LEFT JOIN av_nutricion_recetas nr on nr.id_nutricion_receta = ncr.id_receta
+					LEFT JOIN av_nutricion_tiempos tm on tm.id_nutricion_tiempo = ncr.id_tiempo
+					LEFT JOIN av_nutricion_familias fm on fm.id_nutricion_familia = ncr.id_familia
+					LEFT JOIN av_administracion_servicios s on s.id_administracion_servicio = ncr.id_servicio
+					WHERE e.id_sucursal= $id_sucursal
+					ORDER BY e.fecha";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

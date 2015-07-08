@@ -13,7 +13,7 @@ class check_session extends Base_Controller
 		if( $this->ci->uri->segment(1) != 'login' ){
 			if(!$this->ci->session->userdata('is_logged')){
 				if($ajax){
-					$msg = $this->ci->lang_item("msg_seesion_destroy");
+					$msg = $this->ci->lang_item("msg_seesion_destroy",false);
 					echo json_encode(alertas_tpl('error', $msg ,false));
 					exit;
 				}else{

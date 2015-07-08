@@ -27,7 +27,8 @@
 	$lang['info_select_ciclo']               = 'Escoja un Ciclo de la lista';
 	$lang['info_select_dia']                 = 'Seleccione una fecha';
 	$lang['info_agregar_ciclo']              = 'Agregar Ciclo';
-	$lang['info_ciclos_especiales']          = 'Lista de Fechas con Ciclos especiales porgramados';
+	$lang['info_ciclos_especiales']          = 'Lista Ciclos disponibles';
 	$lang['info_dias_festivos']              = 'Lista de Fechas Festivas o no laborales';
 	$lang['info_agregar_festivo']            = 'Agregar Fecha';
+	$lang['lbl_especial']            = 'Ciclo Especial';
 ?>

@@ -118,8 +118,7 @@ function load_contenido_ciclo(id_ciclo){
 	}
 }
 function guardar_configuracion_programacion(){
-	var progress = progress_initialized('registro_loader');
-	jQuery('#mensajes').hide();
+	
 	var btn              = jQuery("button[name='guardar_programacion']");
 	var multidropdown_f  = jQuery('select[name="multidropdown_festivos"]');
 	var multidropdown_e  = jQuery('select[name="multidropdown_ciclos_especiales"]');
@@ -162,8 +161,10 @@ function guardar_configuracion_programacion(){
 		if(orden_ciclos.length===0){
 			alert('Es necesario definir almenos un ciclo para comenzar con la programación, gracias');
 			return false;
-		}
-		params = {	id_sucursal      : jQuery('select[name=lts_sucursales]').val(),
+		}else{
+			var progress = progress_initialized('registro_loader');
+			jQuery('#mensajes').hide();
+			params = {	id_sucursal      : jQuery('select[name=lts_sucursales]').val(),
 					fecha_inicio     : fecha_inicio,
 					fecha_termino    : fecha_termino,
 					dias_descartados : dias_descartados,
@@ -172,29 +173,29 @@ function guardar_configuracion_programacion(){
 					festivos         : festivos
 				};
 
-		jQuery.ajax({
-	        type: "POST",
-	        url: path()+"nutricion/programacion/guardar_parametros_programacion",
-	        dataType: 'json',
-	        data: { params : params },
-	        beforeSend : function(){
-	        	btn.attr('disabled',true);
-	        },
-	        success: function(data){
-	        	jgrowl(data);
-	        }
-	    }).error(function(){
-	       		progress.progressTimer('error', {
-		            errorText:'ERROR!',
-		            onFinish:function(){
-		            }
-	            });
-	           btn.attr('disabled',false);
-	        }).done(function(){
-		        progress.progressTimer('complete');
-		        btn.attr('disabled',false);
-		    });
-		
+			jQuery.ajax({
+		        type: "POST",
+		        url: path()+"nutricion/programacion/guardar_parametros_programacion",
+		        dataType: 'json',
+		        data: { params : params },
+		        beforeSend : function(){
+		        	btn.attr('disabled',true);
+		        },
+		        success: function(data){
+		        	jgrowl(data);
+		        }
+		    }).error(function(){
+		       		progress.progressTimer('error', {
+			            errorText:'ERROR!',
+			            onFinish:function(){
+			            }
+		            });
+		           btn.attr('disabled',false);
+		        }).done(function(){
+			        progress.progressTimer('complete');
+			        btn.attr('disabled',false);
+			    });
+			}
 	}else{
 		alert('Es necesario definir una fecha de inicio y una fecha termino, gracias');
 	}
@@ -209,6 +210,7 @@ function load_treeview_collapse(id){
 }
 function guardar_cantidad_receta_ciclo(id_vinculo){
 	var cantidad = jQuery('#cantidad_'+id_vinculo).val();
+	var progress = progress_initialized('loader_cantidades');
 	if(cantidad==''){
 		alert('Es necesario que se defina una cantidad');
 	}else{
@@ -218,12 +220,19 @@ function guardar_cantidad_receta_ciclo(id_vinculo){
 	        dataType: 'json',
 	        data: { id_vinculo: id_vinculo, cantidad : cantidad },
 	        beforeSend : function(){
-	        	imgLoader('#loader_cantidades');
 	        },
 	        success: function(data){
-	        	jQuery('#loader_cantidades').html('');
+	        	jgrowl(data);
 	        }
-	    });
+	    }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		    });
 	}
 }
 function load_calendario(id_sucursal){

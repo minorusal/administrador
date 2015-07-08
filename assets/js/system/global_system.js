@@ -12,7 +12,7 @@
     GoTop();
 });
 function jgrowl(msg){
-    jQuery.jGrowl(msg, {life:5000});
+    jQuery.jGrowl(msg, {life:8000});
 }
 function progress_initialized(id){
     jQuery("#"+id).html('').show();

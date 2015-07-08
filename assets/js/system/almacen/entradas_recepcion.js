@@ -199,6 +199,9 @@ function calcula_totla_pagar(){
 	jQuery('#value_total').html(total);
 }
 function recibir_orden(){
+	jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
+	jQuery('#recibir').hide();	
+	jQuery('#volver').hide();	
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');

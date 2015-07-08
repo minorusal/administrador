@@ -14,6 +14,34 @@ class programacion_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	public function get_dias_festivos($id_sucursal){
+		$query = "SELECT 
+					date_format(f.fecha, '%d/%m/%Y') as fecha
+				  FROM av_nutricion_programacion_dias_festivos f
+				  WHERE id_sucursal = $id_sucursal";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}else{
+			return null;
+		}
+	}
+	public function get_dias_especiales($id_sucursal){
+		$query = "	SELECT 
+						s.id_nutricion_ciclos,
+						date_format(s.fecha, '%d/%m/%Y') as fecha, 
+						c.clave_corta, 
+						c.ciclo 
+					FROM av_nutricion_programacion_dias_especiales s
+					LEFT JOIN av_nutricion_ciclos c ON c.id_nutricion_ciclos = s.id_nutricion_ciclos
+					WHERE s.id_sucursal = $id_sucursal";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}else{
+			return null;
+		}
+	}
 	public function get_dias_descartados($id_sucursal){
 		$query = "SELECT * FROM av_nutricion_programacion_dias_descartados WHERE id_sucursal = $id_sucursal";
 		$query = $this->db->query($query);
@@ -100,17 +128,17 @@ class programacion_model extends Base_Model{
 							,concat_ws('-', s.inicio, s.final) as horario
 							,tm.tiempo
 						FROM 
-							av_nutricion_ciclo_receta ncr
-						LEFT JOIN av_nutricion_ciclos cl on cl.id_nutricion_ciclos = ncr.id_ciclo
+							av_nutricion_ciclos cl 
+						LEFT JOIN av_nutricion_ciclo_receta ncr on cl.id_nutricion_ciclos = ncr.id_ciclo
 						LEFT JOIN av_nutricion_recetas nr on nr.id_nutricion_receta = ncr.id_receta
 						LEFT JOIN av_nutricion_tiempos tm on tm.id_nutricion_tiempo = ncr.id_tiempo
 						LEFT JOIN av_nutricion_familias fm on fm.id_nutricion_familia = ncr.id_familia
 						LEFT JOIN av_administracion_servicios s on s.id_administracion_servicio = ncr.id_servicio
-						WHERE cl.id_sucursal= $id_sucursal AND ncr.activo = 1
-						ORDER BY ncr.id_servicio, ncr.id_tiempo ,ncr.id_familia
+						WHERE cl.id_sucursal= $id_sucursal 
+						ORDER BY s.servicio, tm.tiempo ,fm.familia, nr.receta
 					) c on npc.id_nutricion_ciclos = c.id_nutricion_ciclos
 					WHERE npc.id_sucursal = $id_sucursal 
-					ORDER BY npc.orden ";
+					ORDER BY npc.orden,c.servicio, c.tiempo ,c.familia, c.receta";
 		//print_debug($query);	
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -122,13 +150,23 @@ class programacion_model extends Base_Model{
 	public function delete_paramas_programacion($id_sucursal){
 		$this->db->delete('av_nutricion_programacion', array('id_sucursal' => $id_sucursal)); 
 		$this->db->delete('av_nutricion_programacion_ciclos', array('id_sucursal' => $id_sucursal)); 
-		$this->db->delete('av_nutricion_programacion_dias_festivos', array('id_sucursal' => $id_sucursal)); 
+		$this->db->delete('av_nutricion_programacion_dias_festivos', array('id_sucursal' => $id_sucursal));
+		$this->db->delete('av_nutricion_programacion_dias_especiales', array('id_sucursal' => $id_sucursal)); 
 		$this->db->delete('av_nutricion_programacion_dias_descartados', array('id_sucursal' => $id_sucursal)); 
 	}
 	public function insert_params_programacion($data){
 		$insert = $this->insert_item('av_nutricion_programacion', $data);
 		return $insert;
 	}
+	public function insert_dias_festivos($data){
+		$insert = $this->db->insert_batch('av_nutricion_programacion_dias_festivos', $data);
+		return $insert;
+	}
+	public function insert_dias_especiales($data){
+		$insert = $this->db->insert_batch('av_nutricion_programacion_dias_especiales', $data);
+		return $insert;
+	}
+	
 	public function insert_dias_descartados($data){
 		$insert = $this->db->insert_batch('av_nutricion_programacion_dias_descartados', $data);
 		return $insert;

@@ -161,5 +161,16 @@ class ciclos_model extends Base_Model{
 			return $query;
 		}
 	}
+
+	function eliminar_receta($id_vinculo,$id_ciclo){
+				$tbl = $this->tbl;
+		//print_debug($id_vinculo);
+		$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_nutricion_ciclo_receta = $id_vinculo AND id_ciclo = $id_ciclo";
+		//print_debug($query);
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
 	
 }

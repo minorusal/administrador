@@ -21,6 +21,13 @@
   -khtml-opacity: 0.7;
   opacity: 0.7;
 }
+.fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
+  background: #bb2f0e;
+}
+.fc-event {
+  border: 1px solid #370D04;
+  background-color: #370D04; 
+}
 .treeview .hover { color: #bb2f0e; cursor: pointer; }
 /* login */
 .inputwrapper button { background: #d3401e; border-color: #b02808; }

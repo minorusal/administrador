@@ -105,6 +105,8 @@ $route['compras/ordenes/historial_ordenes']                = 'compras/historial_
 /*ENtradas Recepcion*/
 $route['almacen/entradas/entradas_recepcion']		 = 'almacen/entradas_recepcion/index';
 $route['almacen/entradas/entradas_almacen']		     = 'almacen/entradas_almacen/index';
+/*Traspasos de alamcen*/
+$route['almacen/traspasos']			     			 = 'almacen/traspasos';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/

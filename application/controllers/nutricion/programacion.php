@@ -502,8 +502,7 @@ class programacion extends Base_Controller{
 			echo json_encode( $response);
 		}else{
 			return $json;
-		}
-		
+		}	
 	}
 	public function enlistar_contenido($array){
 		$list .= '<ul  class="list-nostyle ">';

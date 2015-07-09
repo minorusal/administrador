@@ -1,0 +1,113 @@
+<div id="formulario" class="stdform">
+    <div id="tbl1" class="span5" >
+        <table  class="table table-bordered table-invoice"> 
+            <tr>
+                <td class="width30">
+                    <input type="hidden" id="id_stock" value="{id_stock}" name="id_stock" data-campo="id_stock">
+                    <label>{upc_lbl}:</label>
+                </td >
+                <td><strong>{upc}</strong></td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{sku_lbl}:</label>
+                </td>
+                <td><strong>{sku}</strong></td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{marca_lbl}:</label>
+                </td>
+                <td><strong>{marca}</strong></td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{presentacion_lbl}:</label>
+                </td>
+                <td><strong>{presentacion}</strong></td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{lote_lbl}:</label>
+                </td>
+                <td><strong>{lote}</strong></td>
+            </tr>
+        </table>
+   </div>
+   <div class="span5">
+       <table class="table table-bordered table-invoice">
+            <tr>
+                <td class="width30">
+                    <label>{stock_lbl}:</label>
+                </td>
+                <td>
+                    <strong>{stock}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{caducidad_lbl}:</label>
+                </td>
+                <td>
+                    <strong>{caducidad}</strong>
+                </td>
+            </tr> 
+       </table>
+   </div>
+   <br>
+   <br>
+   <br>
+   <table class="table table-bordered">
+        <tr>
+            <th>
+                {origen}
+            </th>
+            <th>
+                {destino}
+            </th>
+        </tr>
+        <tr>
+             <td>
+                    <label><strong>{almacen_origen_lbl}: </strong></label>
+                    <span class="field">{almacenes}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                    <label><strong>{almacen_lbl} (*)</strong></label>
+                    <span class="field">{lts_almacen}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><strong>{pasillo_origen_lbl}: </strong></label>
+                <span class="field">{pasillos}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                <label><strong>{pasillo_lbl}</strong></label>
+                <span class="field" id="lts_pasillo"></span>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label><strong>{gaveta_origen_lbl}: </strong></label>
+                <span class="field">{gavetas}</span>
+            </td>
+            <td>
+                <div id="embajale">
+                <label><strong>{gaveta_lbl} (*)</strong></label>
+                <span class="field" id="lts_gavetas"></span>
+            </div>
+            </td>
+        </tr>
+   </table>
+   <br>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>  
+     <p class="stdformbutton"> 
+        {button_save}
+    </p>
+    <br><br><br><br><br><br><br><br><br><br>
+</div>

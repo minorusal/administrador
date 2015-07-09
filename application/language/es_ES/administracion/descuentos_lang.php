@@ -5,10 +5,10 @@ $lang['agregar'] 			= "Nuevo descuento";
 $lang['listado'] 			= "Listado de descuentos";
 $lang['detalle'] 			= "Detalle";
 
-$lang['nombre_descuento'] 	= "descuento";
-$lang['clave_corta'] 		= "clave corta";
-$lang['descripcion']        = "descripción";
-$lang['valor']              = "valor";
+$lang['lbl_descuento'] 	   = "descuento";
+$lang['lbl_clave_corta']   = "clave corta";
+$lang['lbl_descripcion']   = "descripción";
+$lang['lbl_valor']         = "valor";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

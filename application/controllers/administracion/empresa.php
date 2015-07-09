@@ -24,13 +24,11 @@ class empresa extends Base_Controller {
 		$this->view_content 	= 'contentInfo';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
-		$this->titulo 			= 'Empresa';
-		$this->mensaje 			= '<h4>Bienvenido al sistema AdminVentas.</h4> <br/>Por favor seleccione una opción del menú lateral.';
 		// Tabs
 		$this->tab1 			= 'inicio';
 		$this->load->model($this->modulo.'/'.$this->submodulo.'s_model','db_model');
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
 	public function config_tabs(){
@@ -60,50 +58,45 @@ class empresa extends Base_Controller {
 		$button_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_empresa', 'onclick'=>'agregar()','content'=>'Guardar'));
 		$tabl_inicial 			  = 1;
 		$contenidos_tab           = $this->mensaje;
-		$data['titulo_seccion']   = $this->titulo;
-		$data['titulo_submodulo'] = 'Bienvenido';
+		$data['titulo_seccion']   = $this->lang_item('titulo_seccion');
+		$data['titulo_submodulo'] = $this->lang_item('titulo_submodulo');
 		$data['icon']             = $this->icon;
 		$data['Titulo']           = $this->titulo;
 		$data['id_empresa']       = $datos[0]['id_empresa'];
-		$data['empresa']          = 'Empresa';
-		$data['emp']              = $datos[0]['empresa'];
-		$data['logotipo']         = 'Logotipo';
+		$data['lbl_empresa']      = $this->lang_item('titulo_seccion');
+		$data['txt_empresa']      = $datos[0]['empresa'];
+		$data['lbl_logotipo']     = $this->lang_item('logotipo');
 		$data['imagen']           = base_url().'assets/avatar/users/00001.jpg';
-		$data['razon_social']     = 'Razón Social';
-		$data['r_social']         = $datos[0]['razon_social'];
-		$data['r_f_c']            = 'RFC';
-		$data['rfc']              = $datos[0]['rfc'];
-		$data['pais']             = 'País';
+		$data['lbl_razon_social'] = $this->lang_item('razon_social');
+		$data['txt_razon_social'] = $datos[0]['razon_social'];
+		$data['lbl_rfc']          = $this->lang_item('r_f_c');
+		$data['txt_rfc']          = $datos[0]['rfc'];
+		$data['lbl_pais']         = $this->lang_item('pais');
 		$data['txt_pais']         = base_url().'assets/avatar/'.$pais[0]['avatar_pais'];
-		$data['moneda']           = 'Moneda';
+		$data['lbl_moneda']       = $this->lang_item('moneda');
 		$data['txt_moneda']       = $pais[0]['moneda'];
-		$data['telefono']         = 'Teléfono';
-		$data['tel']              = $datos[0]['telefono'];
-		$data['direccion']        = 'Dirección';
-		$data['dir']              = $datos[0]['direccion'];
+		$data['lbl_telefono']     = $this->lang_item('telefono');
+		$data['txt_telefono']     = $datos[0]['telefono'];
+		$data['lbl_direccion']    = $this->lang_item('direccion');
+		$data['txt_direccion']    = $datos[0]['direccion'];
 		$data['button_save']      = $button_save;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		$js['js'][]  = array('name' => 'empresas', 'dirname' => 'administracion');
 		$this->load_view($this->template, $data,$js);	
 	}
 
-	public function insert()
-	{
-		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0)
-		{
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		else
-		{
+	public function insert(){
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+		}else{
 			$data_insert = array(
-				  'id_empresa'   => $this->ajax_post('id_empresa')
-				 ,'empresa'      => $this->ajax_post('empresa')
-				 ,'razon_social' => $this->ajax_post('razon_social')
-				 ,'rfc'          => $this->ajax_post('rfc')
-				 ,'telefono'     => $this->ajax_post('telefono')
-				 ,'direccion'    => $this->ajax_post('direccion')
+				  'id_empresa'   => $objData['id_empresa']
+				 ,'empresa'      => $objData['txt_empresa']
+				 ,'razon_social' => $objData['txt_razon_social']
+				 ,'rfc'          => $objData['txt_rfc']
+				 ,'telefono'     => $objData['txt_telefono']
+				 ,'direccion'    => $objData['txt_direccion']
 				 ,'id_usuario'   => $this->session->userdata('id_usuario')
 				 ,'timestamp'    => $this->timestamp()
 				);
@@ -112,11 +105,9 @@ class empresa extends Base_Controller {
 			$insert = $this->db_model->db_update_data($data_insert);
 
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode($this->lang_item("msg_insert_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
 	}

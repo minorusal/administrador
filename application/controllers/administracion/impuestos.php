@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class impuestos extends Base_Controller
-{
+class impuestos extends Base_Controller{
 	private $modulo;
 	private $submodulo;
 	private $seccion;
@@ -12,14 +11,13 @@ class impuestos extends Base_Controller
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'impuestos';
 		$this->icon 			= 'fa fa-tasks'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/impuestos
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -33,8 +31,7 @@ class impuestos extends Base_Controller
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 
-	public function config_tabs()
-	{
+	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		$tab_3 	= $this->tab3;
@@ -42,15 +39,15 @@ class impuestos extends Base_Controller
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/impuestos/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/impuestos/listado
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -63,13 +60,11 @@ class impuestos extends Base_Controller
 		return $config_tab;
 	}
 
-	private function uri_view_principal()
-	{
+	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index()
-	{
+	public function index(){
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
@@ -82,8 +77,7 @@ class impuestos extends Base_Controller
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function listado($offset=0)
-	{
+	public function listado($offset=0){
 	// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
@@ -102,10 +96,8 @@ class impuestos extends Base_Controller
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-		if($total_rows)
-		{
-			foreach ($list_content as $value)
-			{
+		if($total_rows){
+			foreach ($list_content as $value){
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
@@ -134,9 +126,7 @@ class impuestos extends Base_Controller
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
-		}
-		else
-		{
+		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
@@ -146,18 +136,14 @@ class impuestos extends Base_Controller
 		$tabData['export']    = button_tpl($buttonTPL);
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
 
-	public function detalle()
-	{
+	public function detalle(){
 		$id_impuesto                 = $this->ajax_post('id_impuesto');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_impuesto);
 		$seccion 	                 = 'detalle';
@@ -189,14 +175,11 @@ class impuestos extends Base_Controller
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 
-        if($detalle[0]['edit_id_usuario'])
-        {
+        if($detalle[0]['edit_id_usuario']){
         	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
         	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
-        }
-        else
-        {
+        }else{
         	$usuario_name = '';
     		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
         }
@@ -209,8 +192,7 @@ class impuestos extends Base_Controller
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
-	public function actualizar()
-	{
+	public function actualizar(){
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -219,9 +201,7 @@ class impuestos extends Base_Controller
 						,'contenido'     => alertas_tpl('error', $msg ,false)
 						,'success' 	     => false
 				);
-		}
-		else
-		{
+		}else{
 			$sqlData = array(
 						 'id_administracion_impuestos'	     => $this->ajax_post('id_impuesto')
 						,'impuesto'          => $this->ajax_post('impuesto')
@@ -232,17 +212,14 @@ class impuestos extends Base_Controller
 						,'edit_id_usuario'	 => $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
-			if($insert)
-			{
+			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				$json_respuesta = array(
 						 'id' 		     => 1
 						,'contenido'     => alertas_tpl('success', $msg ,false)
 						,'success' 	     => true
 				);
-			}
-			else
-			{
+			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				$json_respuesta = array(
 						 'id' 		    => 0
@@ -254,8 +231,7 @@ class impuestos extends Base_Controller
 		echo json_encode($json_respuesta);
 	}
 
-	public function agregar()
-	{							#administracion/catalogos_generales/impuestos/impuestos_save
+	public function agregar(){							#administracion/catalogos_generales/impuestos/impuestos_save
 		$seccion       = $this->modulo.'/'.$this->seccion.'/impuestos_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
@@ -275,12 +251,9 @@ class impuestos extends Base_Controller
         $tab_1['button_reset']     = $btn_reset;
 
 
-        if($this->ajax_post(false))
-        {
+        if($this->ajax_post(false)){
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($seccion , $tab_1, true);
 		}
 	}

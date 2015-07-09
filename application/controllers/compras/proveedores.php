@@ -31,6 +31,7 @@ class proveedores extends Base_Controller {
 
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('administracion/entidades_model','entidad');
+		$this->load->model('administracion/regiones_model','regiones');
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 	public function config_tabs(){
@@ -209,6 +210,14 @@ class proveedores extends Base_Controller {
 		$detalle  			    = $this->db_model->get_proveedor_unico($id_compras_proveedor);
 		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
 
+		$region_array = array(
+							'data'		=> $this->regiones->db_get_data(array('aplicar_limit'=> false))
+							,'selected' => $detalle[0]['id_administracion_region'] 
+							,'value' 	=> 'id_administracion_region'
+							,'text' 	=> array('clave_corta','region')
+							,'name' 	=> "lts_regiones"
+							,'class' 	=> "requerido"
+						);
 		$dropArray = array(
 					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
 					,'selected' => $detalle[0]['id_administracion_entidad'] 
@@ -229,6 +238,8 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
 		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
 		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
+		$tabData['lbl_region']             =  $this->lang_item('lbl_region', false);
+		$tabData['dropdown_region']       =  dropdown_tpl($region_array);
 		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
 		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);

@@ -111,13 +111,14 @@ function agregar(){
     var tel          = jQuery('#telefono').val();
     var email        = jQuery('#email').val();
     var encargado    = jQuery('#encargado').val();
+    var id_region    = jQuery("select[name='lts_regiones'] option:selected").val();
     var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
     var direccion    =jQuery('#direccion').val();
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/sucursales/insert_sucursal",
 		dataType: "json",
-		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, id_entidad:id_entidad, direccion:direccion },
+		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, id_region:id_region, id_entidad:id_entidad, direccion:direccion },
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

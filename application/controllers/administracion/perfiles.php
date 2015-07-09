@@ -157,7 +157,7 @@ class perfiles extends Base_Controller{
 		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
-        $tabData['val_fecha_registro']      = $detalle[0]['registro'];
+        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
 		$tabData['tree_view']               = $this->treeview_perfiles($id_perfil);

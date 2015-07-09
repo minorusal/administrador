@@ -59,20 +59,18 @@ function agregar(){
 	jQuery('#mensajes').hide();
 	var entidades = [];
 	var objData = formData('#formulario');
+	objData['incomplete'] = values_requeridos();
 	jQuery("[name='list'] option").each(function(){
 	  entidades.push(jQuery(this).val());
 	});
-	objData['incomplete']  = values_requeridos();
-	objData['region']      = jQuery('#txt_region').val();
-	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
-	objData['descripcion'] = jQuery('#txt_descripcion').val();
-	objData['entidades']   = entidades;
 	
+	objData['entidades']   = entidades;
+	//alert(dump_var(objData));
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/regiones/insert_region",
 		dataType: "json",
-		data: objData,
+		data: {objData},
 		beforeSend : function(){
 			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},
@@ -95,21 +93,18 @@ function actualizar(){
 	btn.attr('disabled','disabled');
 	var entidades = [];
 	var objData = formData('#formulario');
+	objData['incomplete'] = values_requeridos();
 	jQuery("[name='list'] option").each(function(){
 	  entidades.push(jQuery(this).val());
 	});
-	objData['incomplete']  = values_requeridos();
-	objData['id_region']   = jQuery('#id_region').val();
-	objData['region']      = jQuery('#txt_region').val();
-	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
-	objData['descripcion'] = jQuery('#txt_descripcion').val();
+	
 	objData['entidades']   = entidades;
-	//alert(jQuery('#id_region').val());
+	alert(dump_var(objData));
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/regiones/actualizar",
 		dataType: "json",
-		data: objData,
+		data: {objData},
 		beforeSend : function(){
 			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
 		},

@@ -5,6 +5,8 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
+$lang['lbl_entidad']        = 'entidad';
+$lang['lbl_region']         = 'región';
 $lang['nombre_sucursal'] 	= "sucursal";
 $lang['clave_corta'] 		= "clave corta";
 $lang['direccion']          = "dirección";

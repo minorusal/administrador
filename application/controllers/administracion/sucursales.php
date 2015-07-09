@@ -30,6 +30,7 @@ class sucursales extends Base_Controller
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model('administracion/entidades_model','db_model2');
+		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -169,6 +170,15 @@ class sucursales extends Base_Controller
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
+		$regiones_array = array(
+					'data'			 => $this->regiones->db_get_data($sqlData)
+					,'value' 	     => 'id_administracion_region'
+					,'text' 	     => array('region')
+					,'name' 	     => "lts_regiones"
+					,'class' 	     => "requerido"
+					,'selected'      => $detalle[0]['id_region']
+			);
+		$regiones                    = dropdown_tpl($regiones_array);
 		$entidades_array = array(
 					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
 					,'value' 	     => 'id_administracion_entidad'
@@ -189,7 +199,9 @@ class sucursales extends Base_Controller
 		$tabData["dir"]                    = $this->lang_item("direccion");
 		$tabData["tel"]                    = $this->lang_item("tel");
 		$tabData["list_entidad"]           = $entidades;
-		$tabData["entidad"]                = $this->lang_item("entidad");
+		$tabData["list_region"]            = $regiones;
+		$tabData["lbl_entidad"]            = $this->lang_item("lbl_entidad");
+		$tabData["lbl_region"]             = $this->lang_item("lbl_region");
         $tabData['sucursal']               = $detalle[0]['sucursal'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['razon_social']           = $detalle[0]['razon_social'];
@@ -281,13 +293,21 @@ class sucursales extends Base_Controller
 	}
 
 	public function agregar()
-	{							#administracion/catalogos/sucursales/sucursales_save
+	{							
 		$seccion       = $this->modulo.'/'.$this->seccion.'/sucursales_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
+		$regiones_array = array(
+			      'data'   => $this->regiones->db_get_data($sqlData)
+			     ,'value'  => 'id_administracion_region'
+			     ,'text'   => array('region')
+			     ,'name'   => 'lts_regiones'
+			     ,'class'  => 'requerido'
+			);
+		$regiones = dropdown_tpl($regiones_array);
 		$entidades_array = array(
 					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
 					,'value' 	  => 'id_administracion_entidad'
@@ -307,7 +327,9 @@ class sucursales extends Base_Controller
 		$tab_1["lbl_encargado"]    = $this->lang_item("lbl_encargado");
 		$tab_1["tel"]              = $this->lang_item("telefono");
 		$tab_1["list_entidad"]     = $entidades;
-		$tab_1["entidad"]          = $this->lang_item("entidad");
+		$tab_1["list_region"]      = $regiones;
+		$tab_1["lbl_region"]       = $this->lang_item("lbl_region");
+		$tab_1["lbl_entidad"]      = $this->lang_item("lbl_entidad");
 		$tab_1["direccion"]        = $this->lang_item("direccion");
 
         $tab_1['button_save']      = $btn_save;
@@ -338,12 +360,14 @@ class sucursales extends Base_Controller
 			$email           = $this->ajax_post('email');
 			$encargado       = $this->ajax_post('encargado');
 			$telefono        = $this->ajax_post('tel');
+			$region          = $this->ajax_post('id_region');
 			$entidad         = $this->ajax_post('id_entidad');
 			$direccion       = $this->ajax_post('direccion');
 			$data_insert     = array('sucursal' => $sucursal,
 								 'clave_corta'  => $clave_corta,
 								 'direccion'    => $direccion,
 								 'id_usuario'   => $this->session->userdata('id_usuario'),
+								 'id_region'    => $region,
 								 'id_entidad'   => $entidad,
 								 'razon_social' => $razon_social,
 								 'rfc'          => $rfc,

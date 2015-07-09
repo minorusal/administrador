@@ -11,6 +11,10 @@
     // GoTopIcon
     GoTop();
 });
+function sortable(id){
+    jQuery( "#"+id ).sortable();
+    jQuery( "#"+id ).disableSelection();
+}
 function jgrowl(msg){
     jQuery.jGrowl(msg, {life:8000});
 }

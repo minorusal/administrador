@@ -37,17 +37,17 @@ class Base_Controller extends CI_Controller {
     * @return array
     */
     private function sites_privilege_navigate(){
-    	$uri      = $this->uri->segment_array();
-		$nivel_1  = $this->session->userdata('id_menu_n1');
-		$nivel_2  = $this->session->userdata('id_menu_n2');
-		$nivel_3  = $this->session->userdata('id_menu_n3');
-		$perfil   = $this->session->userdata('perfil');
-		$sites_priviles    = array();
+    	$uri                = $this->uri->segment_array();
+		$nivel_1            = $this->session->userdata('id_menu_n1');
+		$nivel_2            = $this->session->userdata('id_menu_n2');
+		$nivel_3            = $this->session->userdata('id_menu_n3');
+		$perfil             = $this->session->userdata('perfil');
+		$sites_priviles     = array();
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 
-		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
-		$data_modulos = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
+		$user_root          = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
+		$data_modulos       = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 
 		if((is_array($data_modulos))){
 			$data_modulos   = $this->build_array_navigator($data_modulos);
@@ -179,10 +179,15 @@ class Base_Controller extends CI_Controller {
 		if(empty($data)){
 			return '';
 		}
-		$days_timepicker   = "var days_timepicker = ".json_encode($this->days(false, 1)).";";
-		$months_timepicker = "var months_timepicker = ".json_encode($this->months(false, 1)).";";
+		$vars_js = '';
+		$vars_js.= "var days_timepicker   = ".json_encode($this->days(false, 1)).";";
+		$vars_js.= "var months_timepicker = ".json_encode($this->months(false, 1)).";";
+		$vars_js.= "var calendar_month    = '".$this->lang_item('calendar_month',false)."';";
+		$vars_js.= "var calendar_week     = '".$this->lang_item('calendar_week',false)."';";
+		$vars_js.= "var calendar_day      = '".$this->lang_item('calendar_day',false)."';";
+		$vars_js.= "var calendar_today    = '".$this->lang_item('calendar_today',false)."';";
 		//$lang_datepicker   = "var lang_datepicker = ".json_encode($this->months(false, 1)).";";
-		$files_js  		   = "<script type='text/javascript'>".$days_timepicker.$months_timepicker." </script>";
+		$files_js  		   = "<script type='text/javascript'>".$vars_js." </script>";
 		$files_css 		   = '';
 		$url_js    		   = base_url().'assets/js/system';
 		$url_css  		   = base_url().'assets/css';
@@ -540,6 +545,29 @@ class Base_Controller extends CI_Controller {
 		if($index){
 			return $days[ltrim($index,'0')];
 		}
+		return $days;
+    }
+    /**
+    * Devuelve el item del dia con respecto al indice $index
+    * @param int $index
+    */
+    public function days_item($index){
+    	$day = $this->days_all();
+		return $day[$index];
+    }
+    /**
+    * Devuelve un array con los dias de la semana
+    * @param array
+    */
+    public function days_all(){
+		$days[0]= $this->lang_item('domingo',false);
+		$days[1]= $this->lang_item('lunes',false);
+		$days[2]= $this->lang_item('martes',false);
+		$days[3]= $this->lang_item('miercoles',false);
+		$days[4]= $this->lang_item('jueves',false);
+		$days[5]= $this->lang_item('viernes',false);
+		$days[6]= $this->lang_item('sabado',false);
+		
 		return $days;
     }
     /**

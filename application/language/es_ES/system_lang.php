@@ -25,7 +25,10 @@
 	$lang['octubre']    = 'Octubre';
 	$lang['noviembre']  = 'Noviembre';
 	$lang['diciembre']  = 'Diciembre';
-
+	$lang['calendar_month'] = 'Mes';
+	$lang['calendar_week']  = 'Semana';
+	$lang['calendar_day']   = 'Dia';
+	$lang['calendar_today'] = 'Hoy';
 
 // Mensajes
 	$lang['msg_searh_fail']          		   = '<strong>Atencion!</strong><br>No se encontraron coincidencias.';

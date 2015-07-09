@@ -212,7 +212,7 @@ class proveedores extends Base_Controller {
 
 		$region_array = array(
 							'data'		=> $this->regiones->db_get_data(array('aplicar_limit'=> false))
-							,'selected' => $detalle[0]['id_administracion_region'] 
+							,'selected' => 'id_administracion_region'
 							,'value' 	=> 'id_administracion_region'
 							,'text' 	=> array('clave_corta','region')
 							,'name' 	=> "lts_regiones"

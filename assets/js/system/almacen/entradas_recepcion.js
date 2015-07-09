@@ -187,6 +187,12 @@ function aceptar_lote(id){
 	var tds=7;
 	var nuevaFila;
 	var cantidad;
+	var hiddens;;
+	var lote_hidden;
+	var caducidad_hidden;
+	var cantidad_hidden;
+	var cont=1;
+	var contador=jQuery('#candidad_modal_1').val();
 	var td_valor=new Array(
 					'',
 					jQuery('#proveedor_'+id).val(),
@@ -198,9 +204,46 @@ function aceptar_lote(id){
 					''
 					);
 	for(var i=0;i<tds;i++){
-		nuevaFila+='<td>'+td_valor[i]+'</td>';
+		if(i==4){
+			if(typeof(contador) == 'undefined'){
+				lote_hidden='<input type="hidden" id="lote_modal_'+cont+'" name="lote_modal[]"  data-campo="lote_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					lote_hidden='<input type="hidden" id="lote_modal_'+cont+'" name="lote_modal[]"  data-campo="lote_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			lote_hidden='';
+		}
+		 if(i==5){
+			if(typeof(contador) == 'undefined'){
+				cantidad_hidden='<input type="hidden" id="candidad_modal_'+cont+'" name="candidad_modal[]"  data-campo="candidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					cantidad_hidden='<input type="hidden" id="candidad_modal_'+cont+'" name="candidad_modal[]"  data-campo="candidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			cantidad_hidden='';
+		}
+		 if(i==6){
+			if(typeof(contador) == 'undefined'){
+				caducidad_hidden='<input type="hidden" id="caducidad_modal_'+cont+'" name="caducidad_modal[]"  data-campo="caducidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					caducidad_hidden='<input type="hidden" id="caducidad_modal_'+cont+'" name="caducidad_modal[]"  data-campo="caducidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			caducidad_hidden='';
+		}
+		hiddens=lote_hidden+caducidad_hidden+cantidad_hidden;
+		nuevaFila+='<td>'+hiddens+td_valor[i]+'</td>';
     }
-	jQuery('#'+id).after('<tr id="muestra_lote_"'+id+' style="background-color: #BDBDBD">'+nuevaFila+'</tr>');
+	jQuery('#'+id).after('<tr id="muestra_lote_'+id+'" style="background-color: #BDBDBD">'+nuevaFila+'</tr>');
 
 	jQuery('#lote_val_'+id).val(lote);
 	jQuery('#caducidad_val_'+id).val(caducidad);

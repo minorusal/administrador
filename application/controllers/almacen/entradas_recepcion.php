@@ -388,10 +388,9 @@ class entradas_recepcion extends Base_Controller{
 						,'id_usuario' 		 => $this->session->userdata('id_usuario')
 						,'timestamp'  		 => $this->timestamp()
 						);
+			//$id = $this->db_model->insert($sqlData);
+			///CONSTRUCCION PARA INSERT EN ALMACEN PARTIDAS
 			$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
-			$lote_val 					= $this->ajax_post('lote_val');
-			$caducidad_val 				= $this->ajax_post('caducidad_val');
-			$cantidad_lote 				= $this->ajax_post('cantidad_lote');
 			$id_compras_articulo 		= $this->ajax_post('id_compras_articulo');
 			$id_articulo_tipo 			= $this->ajax_post('id_articulo_tipo');
 			$id_compras_um 				= $this->ajax_post('id_compras_um');
@@ -400,30 +399,49 @@ class entradas_recepcion extends Base_Controller{
 			$cantidad 					= $this->ajax_post('cantidad');
 			$unidad_minima 				= $this->ajax_post('unidad_minima');
 			$cl_um 						= $this->ajax_post('cl_um');
-		
+			
+			$lote_val 					= $this->ajax_post('lote_modal');
+			$caducidad_val 				= $this->ajax_post('caducidad_modal');
+			$candidad_modal 			= $this->ajax_post('candidad_modal');
+			
+			$values_lote=array_values($lote_val);
+			$values_caducidad=array_values($caducidad_val);
+			$values_cantidad=array_values($candidad_modal);
 			$array=array(	
 					0  	=> $lote_val, 
 					1   => $caducidad_val,
-					2  	=> $cantidad_lote,
-					3  	=> $id_compras_articulo,
+					2  	=> $candidad_modal,
 					4  	=> $id_articulo_tipo,
-					5  	=> $id_compras_um,
-					6  	=> $um_x_embalaje,
-					7  	=> $um_x_presentacion,
 					8  	=> $cantidad,
+					7  	=> $um_x_presentacion,
 					9  	=> $unidad_minima,
-					10  => $cl_um,
 					11  => $chek_box
 				);
-			dump_var($cantidad_lote);
-			$keys=array_keys($id_compras_orden_articulo);
-			for($i=0; count($id_compras_orden_articulo)>$i;$i++){
-				for($j=0; count($array)>$j;$j++){
-					$data[$i][]=$array[$j][$keys[$i]];
-				}
+			$keys=array_keys($lote_val);	
+			for($i=0; count($lote_val)>$i;$i++){
+				$data[]=explode('-',$keys[$i]);
+				$ya[][$data[$i][0]]=[
+										$data[$i][0],
+										$values_lote[$i],
+										$values_cantidad[$i],
+										$values_caducidad[$i],
+										$id_articulo_tipo[$data[$i][0]],
+										$chek_box[$data[$i][0]]
+									];
+			}	
+
+			for($j=0; count($lote_val)>$j;$j++){
+					$data[]=explode('-',$keys[$j]);
+					$sqldata[]= array(
+										'id_compras_orden_articulo' => $ya[$j][$data[$j][0]][0],
+										'lote'=>$ya[$j][$data[$j][0]][1],
+										'cantidad'=>$ya[$j][$data[$j][0]][2],
+										'caducidad'=>$ya[$j][$data[$j][0]][3]
+										);
 			}
-			//$id = $this->db_model->insert($sqlData);
-			$id=1;
+			dump_var($ya);
+			//echo count($data);
+		dump_var();			
 			if($id){
 				for($d=0;count($data)>$d;$d++){
 					if($data[$d][11]=='true'){
@@ -442,7 +460,12 @@ class entradas_recepcion extends Base_Controller{
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
-						if($data[$d][4]==1){}
+					}
+					//$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
+					dump_var($sqldata);
+				}
+				/////////////////
+					if($data[$d][4]==1){}
 						elseif($data[$d][4]==2){
 							//$um_embalaje     = $data[$d][8]*$data[$d][6];
 							//$embalaje_UM 	 = $um_embalaje*$data[$d][9];
@@ -465,7 +488,7 @@ class entradas_recepcion extends Base_Controller{
 									'timestamp'  	 		       => $this->timestamp(),
 									'id_usuario'   		   		   => $this->session->userdata('id_usuario')
 								);
-						//$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
+						
 
 						/*if($insert_partidas){
 							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);
@@ -501,9 +524,7 @@ class entradas_recepcion extends Base_Controller{
 									,'success' 	=> false
 							);
 						}*/
-					}
-					dump_var($sqldata);
-				}
+				/////////////////
 				$sqldata3= array(
 						'id_compras_orden' 			   => $id_compras_orden,
 						'estatus'					   => 8,

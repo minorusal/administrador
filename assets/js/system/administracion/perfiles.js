@@ -67,6 +67,7 @@ function detalle(id_perfil){
     });
 }
 function actualizar(){
+	var progress = progress_initialized('update_loader');
 	jQuery('#mensajes_update').hide();
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
@@ -75,7 +76,7 @@ function actualizar(){
 	var nivel_2 = [];
 	var nivel_3 = [];
 	var objData = formData('#formulario');
-	//objData['incomplete']  = incomplete;
+	objData['incomplete']  = values_requeridos();
 
 	jQuery("input[name='nivel_1']:checked").each(function(){
 	  nivel_1.push(jQuery(this).val());
@@ -89,11 +90,6 @@ function actualizar(){
 	  nivel_3.push(jQuery(this).val());
 	});
 
-	objData['incomplete']  = values_requeridos();
-	objData['id_perfil']   = jQuery('#id_perfil').val();
-	objData['perfil']      = jQuery('#txt_perfil').val();
-	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
-	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
 	objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
 	objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
@@ -102,18 +98,27 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/perfiles/actualizar",
 		dataType: "json",
-		data: objData,
+		data: {objData},
 		beforeSend : function(){
-			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');		
-			jQuery("#mensajes_update").html(data.contenido).show('slow');
-			jQuery("#update_loader").html('');
+			jgrowl(data);
 		}
-	});
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 function agregar(){
+	var progress = progress_initialized('registro_loader');
 	var btn     = jQuery("button[name='save_perfil']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
@@ -121,7 +126,7 @@ function agregar(){
 	var nivel_2 = [];
 	var nivel_3 = [];
 	var objData = formData('#formulario');
-	//objData['incomplete']  = incomplete;
+	objData['incomplete']  = values_requeridos();
 
 	jQuery("input[name='nivel_1']:checked").each(function(){
 	  nivel_1.push(jQuery(this).val());
@@ -135,10 +140,6 @@ function agregar(){
 	  nivel_3.push(jQuery(this).val());
 	});
 
-	objData['incomplete']  = values_requeridos();
-	objData['perfil']      = jQuery('#txt_perfil').val();
-	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
-	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
 	objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
 	objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
@@ -146,21 +147,25 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/perfiles/insert_perfil",
 		dataType: "json",
-		data: objData,
+		data: {objData},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-			
-			var data = data.split('|');
-			if(data[0]==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+			jgrowl(data);
+			clean_formulario();
 		}
-	});
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 

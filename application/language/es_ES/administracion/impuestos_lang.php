@@ -8,11 +8,11 @@ $lang['detalle'] 			= "Detalle";
 $lang['lbl_fecha_registro'] = 'Fecha de registro';
 $lang['lbl_usuario_registro'] = 'Registrado por';
 $lang['lbl_ultima_modificacion'] = 'Ultima Modificación';
-
-$lang['nombre_impuesto'] 	= "impuesto";
-$lang['clave_corta'] 		= "clave corta";
-$lang['descripcion']        = "descripción";
-$lang['valor']              = "valor";
+$lang['lbl_id']             = 'ID';
+$lang['lbl_impuesto'] 	    = "impuesto";
+$lang['lbl_clave_corta'] 	= "clave corta";
+$lang['lbl_descripcion']    = "descripción";
+$lang['lbl_valor']          = "valor";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

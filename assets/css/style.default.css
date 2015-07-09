@@ -27,7 +27,7 @@ Created by: Mienard Lumaad (@themepixels)
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
 	background: #0866c6;
 }
-.progress{
+.progress-login .progress{
 	
 	background-image: linear-gradient(to bottom, #0866c6, #f9f9f9);
 }

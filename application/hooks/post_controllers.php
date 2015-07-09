@@ -3,6 +3,7 @@ if (!defined( 'BASEPATH')) exit('No direct script access allowed');
 class check_session extends Base_Controller
 {
 	private $ci;
+	private $reload;
 	public function __construct(){
 		$this->ci =& get_instance();
 	}	
@@ -14,7 +15,10 @@ class check_session extends Base_Controller
 			if(!$this->ci->session->userdata('is_logged')){
 				if($ajax){
 					$msg = $this->ci->lang_item("msg_seesion_destroy",false);
-					echo json_encode(alertas_tpl('error', $msg ,false));
+					$reload  = "<script>";
+					$reload .= "location.reload();";
+					$reload .= "</script>";
+					echo json_encode($reload);
 					exit;
 				}else{
 					redirect(base_url('login'));
@@ -37,9 +41,9 @@ class check_session extends Base_Controller
 	public function check_sites_availables(){
 		$uri = "";
 		if($this->ci->session->userdata('is_logged')){
-			$ajax             = $this->ci->ajax_post(false);
-			$uri_string       = $this->query_uri_string();
-			$sites_availables = $this->ci->sites_availables;
+			$ajax               = $this->ci->ajax_post(false);
+			$uri_string         = $this->query_uri_string();
+			$sites_availables   = $this->ci->sites_availables;
 			$sites_availables[] = 'default_controller';
 			$sites_availables[] = 'inicio';
 			$sites_availables[] = 'logout';

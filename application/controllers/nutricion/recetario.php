@@ -29,6 +29,7 @@ class recetario extends Base_Controller{
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model($this->modulo.'/familias_model','familias');
 		$this->load->model('compras/catalogos_model','compras');
+		$this->load->model('administracion/sucursales_model','sucursales');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -151,6 +152,19 @@ class recetario extends Base_Controller{
 	}
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
+		$sqlData = array(
+			 'buscar' => 0
+			,'offset' => 0
+			,'limit'  => 0
+			);
+		$dropdown_sucursales = array(
+									 'data'		=> $this->sucursales->db_get_data($sqlData)
+									,'value' 	=> 'id_sucursal'
+									,'text' 	=> array('clave_corta','sucursal')
+									,'name' 	=> "lts_sucursales_agregar"
+									,'class' 	=> "requerido"
+								);
+		$sucursales = dropdown_tpl($dropdown_sucursales);
 
 		$familias = array(
 						 'data'		=> $this->familias->db_get_data(array())
@@ -176,10 +190,10 @@ class recetario extends Base_Controller{
 
 		$btn_save  = form_button(array('class'=>'btn btn-primary', 'name'=>'save_receta', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn-primary', 'name'=>'limpiar' ,'onclick'=>'clean_formulario_recetas()','content'=>$this->lang_item('btn_limpiar')));
-
 		
 		$tab_1['lbl_receta']               = $this->lang_item('lbl_receta');
 		$tab_1['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
+		$tab_1['lbl_sucursal']             = $this->lang_item('lbl_sucursal');
 		$tab_1['lbl_porciones']            = $this->lang_item('lbl_porciones');
 		$tab_1['lbl_preparacion']          = $this->lang_item('lbl_preparacion');
 		$tab_1['lbl_familia']              = $this->lang_item('lbl_familia');
@@ -187,6 +201,7 @@ class recetario extends Base_Controller{
 		$tab_1['lbl_editar_porciones']     = $this->lang_item('lbl_editar_porciones');
 		$tab_1['select_insumos']           = $this->lang_item('select_insumos');
 		$tab_1['lbl_presentacion_insumo']  = $this->lang_item('lbl_presentacion_insumo');
+		$tab_1['dropdown_sucursal']        = $sucursales;
 		$tab_1['multiselect_insumos']      = $list_insumos;
 		$tab_1['select_familias']          = $list_familias;
 		$tab_1['button_save']              = $btn_save;
@@ -205,7 +220,6 @@ class recetario extends Base_Controller{
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
-			//print_debug($objData);
 			$receta        = $objData['txt_receta'];
 			$clave_corta   = $objData['txt_clave_corta'];
 			$familia       = $objData['lts_familias_insert'];
@@ -281,6 +295,21 @@ class recetario extends Base_Controller{
 			}
 		}
 
+		$sqlData = array(
+			 'buscar' => 0
+			,'offset' => 0
+			,'limit'  => 0
+			);
+		$dropdown_sucursales = array(
+									 'data'		=> $this->sucursales->db_get_data($sqlData)
+									,'value' 	=> 'id_sucursal'
+									,'text' 	=> array('clave_corta','sucursal')
+									,'name' 	=> "lts_sucursales_agregar"
+									,'class' 	=> "requerido"
+								);
+		$sucursales                = dropdown_tpl($dropdown_sucursales);
+
+
 		$seccion  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_editar';
 		$familias = array(
 						 'data'		=> $this->familias->db_get_data(array())
@@ -320,7 +349,8 @@ class recetario extends Base_Controller{
 		$tab_3['cantidades_insumos']       = $cantidades;
 		$tab_3['select_familias']          = $list_familias;
 		$tab_3['button_save']              = $btn_save;
-
+		$tab_3['lbl_sucursal']             = $this->lang_item('lbl_sucursal');
+		$tab_3['dropdown_sucursal']        = $sucursales;
 		$this->load_database('global_system');	
         $this->load->model('users_model');
 
@@ -422,7 +452,6 @@ class recetario extends Base_Controller{
 	            </p>";
 		echo json_encode($data);
 	}
-
 	public function att_addon($campo, $value= ''){
 		return $att = array(
                             'data-campo'    => $campo,

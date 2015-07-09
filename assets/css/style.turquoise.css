@@ -24,8 +24,9 @@
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
   background: #0096d2;
 }
-.progress{
-  background-color: #0096d2;
+.progress-login .progress{
+  
+  background-image: linear-gradient(to bottom, #0096d2, #f9f9f9);
 }
 .fc-event {
   border: 1px solid #002C3E;

@@ -81,7 +81,6 @@ function agregar(){
 	var btn                 = jQuery("button[name='save_receta']");
 	var objData             = formData('#formulario');
 	objData['incomplete']   = values_requeridos();
-	var btn          = jQuery("button[name='save_receta']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
 	jQuery.ajax({

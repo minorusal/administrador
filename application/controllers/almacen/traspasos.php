@@ -18,11 +18,13 @@ class traspasos extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
 		$this->modulo 			= 'almacen';
 		$this->submodulo        = 'traspasos';
 		$this->seccion          = '';
 		$this->icon 			= 'fa fa-sign-in'; //Icono de modulo
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //almacen/entradas_recepcion/
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -31,8 +33,9 @@ class traspasos extends Base_Controller{
 		$this->tab2 			= 'detalle';
 		// DB Model
 		//almacen/entradas_almacen/listado
-		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
+		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
+		$this->load->model('stock_model','stock_model');
 
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
@@ -58,7 +61,7 @@ class traspasos extends Base_Controller{
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_2.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
+										 $path.$tab_1.'/'.$pagina //almacen/entradas_recepcion/listado/pagina
 										,$tab_2                   //detalle
 								); 
 		// Accion de tabs
@@ -84,7 +87,7 @@ class traspasos extends Base_Controller{
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		//$data['modal']            = $this->modal();
 
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
@@ -190,6 +193,7 @@ class traspasos extends Base_Controller{
 			);
 		$lts_almacen  = dropdown_tpl($dropArray);
 		//DATA
+		$tabData['id_compras_orden_articulo'] = $detalle[0]['id_compras_orden_articulo'];
 		$tabData['id_stock']	     = $detalle[0]['id_stock'];
 		$tabData['upc']	 		     = $detalle[0]['upc'];
 		$tabData['sku']	 		 	 = $detalle[0]['sku'];
@@ -201,6 +205,10 @@ class traspasos extends Base_Controller{
 		$tabData['almacenes']	     = $detalle[0]['almacenes'];
 		$tabData['pasillos']	     = $detalle[0]['pasillos'];
 		$tabData['gavetas']	     	 = $detalle[0]['gavetas'];
+		$tabData['id_almacen_origen']= $detalle[0]['id_almacen'];
+		$tabData['id_pasillo_origen']= $detalle[0]['id_pasillo'];
+		$tabData['id_gaveta_origen'] = $detalle[0]['id_gaveta'];
+		$tabData['id_almacen_entradas_recepcion'] = $detalle[0]['id_almacen_entradas_recepcion'];
 		$tabData['lts_almacen']	     = $lts_almacen;
 		$tabData['button_save']      = $btn_save;
 
@@ -282,10 +290,20 @@ class traspasos extends Base_Controller{
 	}
 	public function update_almacen(){
 
-		$id_almacen = $this->ajax_post('lts_almacen');
-		$id_pasillo = $this->ajax_post('lts_pasillos');
-		$id_gaveta = $this->ajax_post('lts_gavetas');
-		$id_stock = $this->ajax_post('id_stock');
+		$id_almacen_origen			= $this->ajax_post('id_almacen_origen'); #origen
+		$id_pasillo_origen			= $this->ajax_post('id_pasillo_origen'); #origen
+		$id_pasillo_origen 			= ($id_pasillo_origen==0)?null:$id_pasillo_origen; #Validacion de nulo
+		$id_gaveta_origen			= $this->ajax_post('id_gaveta_origen'); #origen
+		$id_almacen					= $this->ajax_post('lts_almacen'); #destino
+		$id_pasillo					= $this->ajax_post('lts_pasillos'); #destino
+		$id_pasillo 				= ($id_pasillo==0)?null:$id_pasillo; #Validacion de nulo
+		$id_gaveta 					= $this->ajax_post('lts_gavetas'); #destino
+		$id_stock 					= $this->ajax_post('id_stock');
+		$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
+		$id_almacen_entradas_recepcion= $this->ajax_post('id_almacen_entradas_recepcion');
+		$stock 						= $this->ajax_post('stock');
+		$lote 						= $this->ajax_post('lote');
+		$caducidad 					= $this->ajax_post('caducidad');
 		$data_update  = array(
 								'id_stock'     => $id_stock,
 								'id_almacen'   => $id_almacen,
@@ -295,10 +313,30 @@ class traspasos extends Base_Controller{
 								'edit_id_usuario'  => $this->session->userdata('id_usuario')
 							);
 		//dump_var($data_update);
-		$update = $this->db_model->db_update_alma_gav_pas($data_update);
+		$traspaso = $this->db_model->db_update_almacen_pasillo_gaveta($data_update);
 
-			if($update){
-				$msg = $this->lang_item("msg_update_success",false);
+			if($traspaso){
+				// Log Stock
+				$sqldatalog_stock= array(
+					'id_accion'			  		   => $this->vars->cfg['id_accion_almacen_traspaso'], #3 => TRASPASO
+					'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion,
+					'id_compras_orden_articulo'    => $id_compras_orden_articulo,
+					'id_stock'			   		   => $id_stock,
+					'log_id_almacen_origen'		   => $id_almacen_origen,
+					'log_id_pasillo_origen'		   => $id_pasillo_origen,
+					'log_id_gaveta_origen'		   => $id_gaveta_origen,
+					'log_id_almacen_destino'	   => $id_almacen,
+					'log_id_pasillo_destino'	   => $id_pasillo,
+					'log_id_gaveta_destino'		   => $id_gaveta,
+					'log_cantidad'      	 	   => $stock,
+					'log_lote'					   => $lote,
+					'log_caducidad'			   	   => $caducidad,
+					'timestamp'  	 		       => $this->timestamp(),
+					'id_usuario'   		   		   => $this->session->userdata('id_usuario')
+				);
+				$insertlog = $this->stock_model->insert_stock_log($sqldatalog_stock);
+				// mensaje
+				$msg = $this->lang_item("traspaso_exito",false);
 				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
@@ -307,3 +345,4 @@ class traspasos extends Base_Controller{
 		
 	}
 }
+?>

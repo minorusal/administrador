@@ -114,11 +114,11 @@ class impuestos extends Base_Controller{
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("id"),
-										$this->lang_item("impuesto"),
-										$this->lang_item("valor"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("descripcion"));
+			$this->table->set_heading(	$this->lang_item("lbl_id"),
+										$this->lang_item("lbl_impuesto"),
+										$this->lang_item("lbl_valor"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -155,17 +155,17 @@ class impuestos extends Base_Controller{
 		);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_impuesto']            = $id_impuesto;
-        $tabData["nombre_impuesto"]        = $this->lang_item("nombre_impuesto");
-		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
-		$tabData["desc"]                   = $this->lang_item("descripcion");
-		$tabData["val"]                    = $this->lang_item("valor");
-        $tabData['impuesto']               = $detalle[0]['impuesto'];
-		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
-        $tabData['descripcion']            = $detalle[0]['descripcion'];
-        $tabData["valor"]                  = $detalle[0]['valor'];
+        $tabData["lbl_impuesto"]           = $this->lang_item("lbl_impuesto");
+		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
+		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
+		$tabData["lbl_valor"]              = $this->lang_item("lbl_valor");
+        $tabData['txt_impuesto']           = $detalle[0]['impuesto'];
+		$tabData['txt_clave_corta']        = $detalle[0]['clave_corta'];
+        $tabData['txt_descripcion']        = $detalle[0]['descripcion'];
+        $tabData['txt_valor']              = $detalle[0]['valor'];
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
+        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
         
         $this->load_database('global_system');
@@ -187,51 +187,35 @@ class impuestos extends Base_Controller{
         $tabData['button_save']           = $btn_save;
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
       	$tabData['usuario_registro']	= $usuario_name;
-        									   #administracion/catalogos/sucursales/sucursales_detalle	
+        									   	
 		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function actualizar(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		     => 0
-						,'contenido'     => alertas_tpl('error', $msg ,false)
-						,'success' 	     => false
-				);
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
 			$sqlData = array(
-						 'id_administracion_impuestos'	     => $this->ajax_post('id_impuesto')
-						,'impuesto'          => $this->ajax_post('impuesto')
-						,'valor'             => $this->ajax_post('valor')
-						,'clave_corta' 	     => $this->ajax_post('clave_corta')
-						,'descripcion'	     => $this->ajax_post('descripcion')
+						 'id_administracion_impuestos'	=> $objData['id_impuesto']
+						,'impuesto'          => $objData['txt_impuesto']
+						,'valor'             => $objData['txt_valor']
+						,'clave_corta' 	     => $objData['txt_clave_corta']
+						,'descripcion'	     => $objData['txt_descripcion']
 						,'edit_timestamp'    => $this->timestamp()
 						,'edit_id_usuario'	 => $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		     => 1
-						,'contenido'     => alertas_tpl('success', $msg ,false)
-						,'success' 	     => true
-				);
+				echo json_encode($this->lang_item("msg_update_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		    => 0
-						,'contenido'    => alertas_tpl('', $msg ,false)
-						,'success'    	=> false
-				);
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
-	public function agregar(){							#administracion/catalogos_generales/impuestos/impuestos_save
+	public function agregar(){							
 		$seccion       = $this->modulo.'/'.$this->seccion.'/impuestos_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
@@ -241,11 +225,11 @@ class impuestos extends Base_Controller{
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["nombre_impuesto"]  = $this->lang_item("nombre_impuesto");
-		$tab_1["impuesto"]         = $this->lang_item("impuesto");
-		$tab_1["valor"]            = $this->lang_item("valor");
-		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
-		$tab_1["desc"]             = $this->lang_item("descripcion");
+		//$tab_1["nombre_impuesto"]  = $this->lang_item("nombre_impuesto");
+		$tab_1["lbl_impuesto"]     = $this->lang_item("lbl_impuesto");
+		$tab_1["lbl_valor"]        = $this->lang_item("lbl_valor");
+		$tab_1["lbl_clave_corta"]  = $this->lang_item("lbl_clave_corta");
+		$tab_1["lbl_descripcion"]  = $this->lang_item("lbl_descripcion");
 
         $tab_1['button_save']      = $btn_save;
         $tab_1['button_reset']     = $btn_reset;
@@ -259,30 +243,22 @@ class impuestos extends Base_Controller{
 	}
 
 	public function insert_impuesto(){
-		$incomplete  = $this->ajax_post('incomplete');
-
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
-			$impuesto        = $this->ajax_post('impuesto');
-			$valor           = $this->ajax_post('valor');
-			$clave_corta     = $this->ajax_post('clave_corta');
-			$descripcion     = $this->ajax_post('descripcion');
-			$data_insert     = array('impuesto' => $impuesto,
-								 'valor'        => $valor,
-								 'clave_corta'  => $clave_corta,
-								 'descripcion'  => $descripcion,
+			$data_insert     = array('impuesto' => $objData['txt_impuesto'],
+								 'valor'        => $objData['txt_valor'],
+								 'clave_corta'  => $objData['txt_clave_corta'],
+								 'descripcion'  => $objData['txt_descripcion'],
 								 'id_usuario'   => $this->session->userdata('id_usuario'),  
 								 'timestamp'     => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode($this->lang_item("msg_insert_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
 	}

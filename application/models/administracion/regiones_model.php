@@ -116,14 +116,13 @@ class regiones_model extends Base_Model{
 		foreach ($data['id_entidad'] as $key => $value) {
 			$new_data[] = array(
 								'id_entidad' => $value,
-							    'id_region'  => $data['id_region']	
+							    'id_region'  => $data['id_administracion_region']	
 								);
 		}
-		$condicion = array("id_region" => $data['id_region']);
+		$condicion = array("id_region" => $data['id_administracion_region']);
 		$this->db->where($condicion);
-		$query = $this->db->delete($tbl['administracion_regiones']);
-		$query = $this->db->insert_batch($tbl['administracion_regiones'], $new_data);
+		$query = $this->db->delete($tbl['administracion_entidad_region']);
+		$query = $this->db->insert_batch($tbl['administracion_entidad_region'], $new_data);
 		return $query;	
 	}
-
 }

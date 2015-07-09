@@ -353,6 +353,7 @@ class entradas_recepcion extends Base_Controller{
 	}
 	public function insert(){
 		$id_almacen_lobby = $this->vars->cfg['id_almacen_lobby'];
+		// $id_pasillo_lobby = $this->vars->cfg['id_pasillo_lobby'];
 		$id_gaveta_lobby  = $this->vars->cfg['id_gaveta_lobby'];
 		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
@@ -471,8 +472,12 @@ class entradas_recepcion extends Base_Controller{
 									'id_almacen_entrada'  		   => $id,
 									'id_compras_orden_articulo'    => $keys[$d],
 									'id_stock'			   		   => $insertstock,
-									'log_id_almacen_origen'		   => $id_almacen_lobby,
-									'log_id_gaveta_origen'		   => $id_gaveta_lobby,
+									// 'log_id_almacen_origen'		   => $id_almacen_origen,
+									// 'log_id_pasillo_origen'		   => $id_pasillo_origen,
+									// 'log_id_gaveta_origen'		   => $id_gaveta_origen,
+									'log_id_almacen_destino'	   => $id_almacen_lobby,
+									// 'log_id_pasillo_destino'	   => $id_pasillo_lobby,
+									'log_id_gaveta_destino'		   => $id_gaveta_lobby,
 									'id_stock'			   		   => $insertstock,
 									'log_cantidad'      	 	   => $data[$d][8],
 									'log_lote'					   => $data[$d][0],

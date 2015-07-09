@@ -67,6 +67,7 @@ class traspasos_model extends Base_Model{
 					a.id_compras_orden_articulo, 
 					a.id_compras_orden, 
 					a.id_compras_articulo_precios, 
+					i.id_almacen_entradas_recibir,
 					b.upc, 
 					b.sku,
 					b.id_articulo,
@@ -80,6 +81,9 @@ class traspasos_model extends Base_Model{
 					f.gavetas,
 					g.almacenes,
 					h.pasillos
+					,e.id_almacen
+					,e.id_pasillo
+					,e.id_gaveta
 				FROM 
 					$tbl[compras_ordenes_articulos] a
 				LEFT JOIN $tbl[compras_articulos_precios] b ON a.id_compras_articulo_precios=b.id_compras_articulo_precios
@@ -89,15 +93,14 @@ class traspasos_model extends Base_Model{
 				LEFT JOIN $tbl[almacen_gavetas] f ON e.id_gaveta=f.id_almacen_gavetas
 				LEFT JOIN $tbl[almacen_almacenes] g ON e.id_almacen=g.id_almacen_almacenes
 				LEFT JOIN $tbl[almacen_pasillos] h ON e.id_pasillo=h.id_almacen_pasillos
-
+				LEFT JOIN $tbl[almacen_entradas_recibir] i ON a.id_compras_orden=i.id_compras_orden
 				WHERE a.id_compras_orden_articulo = $id_compras_orden_articulo";
-				//echo $query;
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
-	public function db_update_alma_gav_pas($data=array()){
+	public function db_update_almacen_pasillo_gaveta($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query

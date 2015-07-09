@@ -66,13 +66,13 @@ class regiones_model extends Base_Model{
 
 	/*Inserta informacion en la tabla av_administracion_regiones*/
 	public function db_insert_data($data = array())	{
+		print_debug($data);
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
 		$existe = $this->row_exist($tbl['administracion_regiones'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
-			$query = $this->db->insert_string($tbl['administracion_regiones'], $data);
-			$query = $this->db->query($query);
+			$query = $this->db->insert_item($tbl['administracion_regiones'], $data, true);
 			return $query;
 		}else{
 			return false;
@@ -81,7 +81,6 @@ class regiones_model extends Base_Model{
 
 	/*Inserta informacion en la tabla av_administracion_entidad_region*/
 	public function db_insert_entidades($data = array()){
-		//print_debug($data);
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
@@ -113,7 +112,7 @@ class regiones_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		foreach ($data['id_entidad'] as $key => $value) {
+		foreach ($data['id_entidad'] as $key => $value){
 			$new_data[] = array(
 								'id_entidad' => $value,
 							    'id_region'  => $data['id_administracion_region']	

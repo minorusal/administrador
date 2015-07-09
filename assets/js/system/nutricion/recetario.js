@@ -77,11 +77,11 @@ function edit_porciones(evt,params){
 	}
 }
 function agregar(){
-	jQuery('#a-2').html('');
+	var progress            = progress_initialized('registro_loader');
 	var btn                 = jQuery("button[name='save_receta']");
 	var objData             = formData('#formulario');
 	objData['incomplete']   = values_requeridos();
-	btn.attr('disabled','disabled');
+	jQuery('#a-2').html('');
 	jQuery('#mensajes').hide();
 	jQuery.ajax({
 		type:"POST",
@@ -89,24 +89,35 @@ function agregar(){
 		dataType: "json",
 		data: {objData: objData},
 		beforeSend : function(){
-			imgLoader('#registro_loader');
+			btn.attr('disabled','disabled');
 		},
 		success : function(data){
-			imgLoader_clean('#registro_loader');
-			btn.removeAttr('disabled');
 			if(data.success == 'true' ){
 				clean_formulario_recetas();
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
 			}
-		    jQuery("#mensajes").html(data.mensaje).show('slow');
+		    
 		}
-	});
+	}).error(function(){
+		       		progress.progressTimer('error', {
+			            errorText:'ERROR!',
+			            onFinish:function(){
+			            }
+		            });
+		           btn.attr('disabled',false);
+		        }).done(function(){
+			        progress.progressTimer('complete');
+			        btn.attr('disabled',false);
+			    });
 }
 function actualizar(){
-	
+	var progress            = progress_initialized('update_loader');
 	var btn                 = jQuery("button[name='update_receta']");
 	var objData             = formData('#formulario_edicion');
 	objData['incomplete']   = values_requeridos();
-	btn.attr('disabled','disabled');
+	
 	jQuery('#mensajes').hide();
 	jQuery.ajax({
 		type:"POST",
@@ -114,15 +125,26 @@ function actualizar(){
 		dataType: "json",
 		data: {objData: objData},
 		beforeSend : function(){
-			imgLoader('#update_loader');
+			btn.attr('disabled','disabled');
 		},
 		success : function(data){
-			imgLoader_clean('#update_loader');
-			btn.removeAttr('disabled');
-
-		    jQuery("#mensajes_update").html(data.mensaje).show('slow');
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
 		}
-	});
+	}).error(function(){
+		       		progress.progressTimer('error', {
+			            errorText:'ERROR!',
+			            onFinish:function(){
+			            }
+		            });
+		           btn.attr('disabled',false);
+		        }).done(function(){
+			        progress.progressTimer('complete');
+			        btn.attr('disabled',false);
+			    });
 }
 function detalle(id_receta){  
   	jQuery('#a-0').html('');

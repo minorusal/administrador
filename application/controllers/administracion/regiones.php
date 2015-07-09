@@ -167,7 +167,7 @@ class regiones extends Base_Controller
 					,'value' 	        => 'id_administracion_entidad'
 					,'text' 	        => array('entidad','clave_corta')
 					,'name' 	        => "lts_entidades"
-					,'class' 	        => ""
+					,'class' 	        => "requerido"
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
@@ -246,6 +246,7 @@ class regiones extends Base_Controller
 	}
 
 	public function insert_region(){
+		print_debug($this->ajax_post(false));
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -262,13 +263,13 @@ class regiones extends Base_Controller
 								,'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
-			$region = $this->db->insert_id($insert);
+			/*$region = $this->db->insert_id($insert);
 			foreach($entidades as $item => $valor)
 			{
 				$insertar = array('id_entidad' => $valor,
 								  'id_region'  => $region);
 				$insert = $this->db_model->db_insert_entidades($insertar);
-			}
+			}*/
 
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);

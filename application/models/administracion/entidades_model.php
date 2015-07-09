@@ -14,15 +14,6 @@ class entidades_model extends Base_Model{
 		$aplicar_limit 	= (array_key_exists('aplicar_limit',$data)) ? $data['aplicar_limit'] : false;
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		
-		/*$filtro         = (isset($data['buscar']))?$data['buscar']:false;
-		$limit 			= (isset($data['limit']))?$data['limit']:0;
-		$offset 		= (isset($data['offset']))?$data['offset']:0;
-		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		
-		$filtro = ($filtro) ? "AND (e.ent_abrev  LIKE '%$filtro%' OR 
-										e.id_administracion_entidad  LIKE '%$filtro%' OR
-										e.clave_corta  LIKE '%$filtro%')" : "";
-		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";*/
 		// Query
 		$query = "	SELECT *
 					FROM $tbl[administracion_entidades] e

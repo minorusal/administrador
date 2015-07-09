@@ -110,6 +110,7 @@ class recetario extends Base_Controller{
 				$tbl_data[] = array('id'           => $value['id_nutricion_receta'],
 									'receta'       => tool_tips_tpl($value['receta'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'  => $value['clave_corta'],
+									'sucursal'     => $value['sucursal'],
 									'porciones'    => $value['porciones'],
 									'familia'      => $value['familia'],
 									'preparacion'  => $value['preparacion']
@@ -122,6 +123,7 @@ class recetario extends Base_Controller{
 			$this->table->set_heading(	$this->lang_item("ID"),
 										$this->lang_item("lbl_receta"),
 										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_sucursal"),
 										$this->lang_item("lbl_porciones"),
 										$this->lang_item("lbl_familia"),
 										$this->lang_item("lbl_preparacion")
@@ -216,6 +218,7 @@ class recetario extends Base_Controller{
 	}
 	public function insert(){
 		$objData  	= $this->ajax_post('objData');
+		
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
@@ -231,6 +234,7 @@ class recetario extends Base_Controller{
 				  'receta'                => $receta
 				 ,'clave_corta'           => $clave_corta
 				 ,'porciones'             => $porciones
+				 ,'id_sucursal'           => $objData['lts_sucursales_agregar']
 				 ,'preparacion'           => $preparacion 
 				 ,'id_nutricion_familia'  => $familia
 				 ,'id_usuario'            => $this->session->userdata('id_usuario')
@@ -253,10 +257,10 @@ class recetario extends Base_Controller{
 				$insert = $this->db_model->insert_receta_articulos($data_insert);
 
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' =>alertas_tpl('success', $msg ,false)));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode(array(  'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}	
 	}
@@ -427,8 +431,8 @@ class recetario extends Base_Controller{
 				}
 				$insert = $this->db_model->insert_receta_articulos($data_insert,$id_receta);
 
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' =>alertas_tpl('success', $msg ,false)));
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));

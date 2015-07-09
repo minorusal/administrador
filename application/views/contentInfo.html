@@ -18,40 +18,40 @@
             <h4 class="widgettitle">{empresa}</h4>
             <div class="widgetcontent">
             	<div class="stdform stdform2">
-            		<input type="hidden" name="id_empresa" id="id_empresa" value="{id_empresa}"/>	
+            		<input type="hidden" name="id_empresa" data-campo="id_empresa" id="id_empresa" value="{id_empresa}"/>	
 	                <p>
-	                    <label>{logotipo}</label>
+	                    <label>{lbl_logotipo}</label>
 	                    <span class="field"><img src="{imagen}"></span>
 	                </p>
 	                <p>
-	                    <label>{razon_social}</label>
-	                    <span class="field"><input type="text" name="txt_razon_social" id="txt_razon_social" class="input-xxlarge" value="{r_social}" /></span>
+	                    <label>{lbl_razon_social}</label>
+	                    <span class="field"><input type="text" name="txt_razon_social" data-campo="txt_razon_social" id="txt_razon_social" class="input-xxlarge" value="{txt_razon_social}" /></span>
 	                </p>
 	                <p>
-	                    <label>{r_f_c}</label>
-	                   	<span class="field"><input type="text" name="txt_rfc" id="txt_rfc" class="input-xxlarge" value="{rfc}" /></span>
+	                    <label>{lbl_rfc}</label>
+	                   	<span class="field"><input type="text" name="txt_rfc" id="txt_rfc" data-campo="txt_rfc" class="input-xxlarge" value="{txt_rfc}" /></span>
 	                </p>
 	                <p>
-	                    <label>{moneda}</label>
-	                    <span class="field"><span type="text" name="txt_moneda" id="txt_moneda" class="input-xxlarge uneditable-input" >{txt_moneda}</span></span>
+	                    <label>{lbl_moneda}</label>
+	                    <span class="field"><span type="text" name="txt_moneda" id="txt_moneda" data-campo="txt_moneda" class="input-xxlarge uneditable-input" >{txt_moneda}</span></span>
 	                </p>
 	                 <p>
-	                    <label>{pais}</label>
+	                    <label>{lbl_pais}</label>
 	                    <span class="field"><img src="{txt_pais}"style="background:transparent;max-width:30px;max-height:30px;"/></span>
 	                </p>
 	                <p>
-	                    <label>{telefono}</label>
-	                    <span class="field"><input type="text" name="txt_telefono" id="txt_telefono" class="input-xxlarge" value="{tel}" /></span>
+	                    <label>{lbl_telefono}</label>
+	                    <span class="field"><input type="text" name="txt_telefono" data-campo="txt_telefono" id="txt_telefono" class="input-xxlarge" value="{txt_telefono}" /></span>
 	                </p>
 	                <p>
-	                    <label>{empresa}</label>
-	                    <span class="field"><input type="text" name="txt_empresa" id="txt_empresa" class="input-xxlarge" value="{emp}" /></span>
+	                    <label>{lbl_empresa}</label>
+	                    <span class="field"><input type="text" name="txt_empresa" data-campo="txt_empresa" id="txt_empresa" class="input-xxlarge" value="{txt_empresa}" /></span>
 	                </p>
 	                <p>
-	                    <label>{direccion}</label>
-	                    <span class="field"><textarea cols="80" rows="5" name="txt_direccion" id="txt_direccion" class="span5">{dir}</textarea></span>
+	                    <label>{lbl_direccion}</label>
+	                    <span class="field"><textarea cols="80" rows="5" name="txt_direccion" name="txt_direccion" data-campo="txt_direccion" id="txt_direccion" class="span5">{txt_direccion}</textarea></span>
 	                </p>
-	                <div id="registro_loader"></div>
+	                <div id="registro_loader" class="progress progress-striped"></div>
         			<div id="mensajes" style="display:none"></div>
 	                <p class="stdformbutton">
                         {button_save}

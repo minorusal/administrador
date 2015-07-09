@@ -5,10 +5,10 @@ $lang['agregar'] 			= "Nuevo credito";
 $lang['listado'] 			= "Listado de creditos";
 $lang['detalle'] 			= "Detalle";
 
-$lang['nombre_credito'] 	= "credito";
-$lang['clave_corta'] 		= "clave corta";
-$lang['descripcion']        = "descripción";
-$lang['valor']              = "valor";
+$lang['lbl_credito'] 	    = "credito";
+$lang['lbl_clave_corta'] 	= "clave corta";
+$lang['lbl_descripcion']    = "descripción";
+$lang['lbl_valor']          = "valor";
 
 $lang['fecha_registro'] 	= "Creado el";
 $lang['registro_por'] 		= "Creado por";

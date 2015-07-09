@@ -187,6 +187,7 @@ function insert_config(){
       //jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
     },
     success : function(data){
+      //alert(data);
       jQuery('.limpio').val('').trigger('liszt:updated');
       jQuery('#ciclo_detalle').html(data+include_script(treeview));
     }

@@ -71,14 +71,15 @@ class programacion extends Base_Controller{
 														'params'      => array('this.value'), 
 														'params_type' => array(false))
 								);
-		$sucursales = dropdown_tpl($dropdown_sucursales);
+		$sucursales                = dropdown_tpl($dropdown_sucursales);
 		$tab['dropdow_sucursales'] = $sucursales;
-		$uri_view = $this->modulo.'/'.$this->seccion.'/header_config_programacion';
+		$tab['config_form']        = $this->form_config_programacion();
+		$uri_view                  = $this->modulo.'/'.$this->seccion.'/header_config_programacion';
 		return $this->load_view_unique($uri_view , $tab, true);
 	}
 	public function form_config_programacion(){
 
-		$id_sucursal = ($this->ajax_post('id_sucursal')) ? $this->ajax_post('id_sucursal') : false;
+		$id_sucursal = ($this->ajax_post('id_sucursal')) ? $this->ajax_post('id_sucursal') : 0;
 		
 		if($id_sucursal){
 			$params_ciclo     = $this->db_model->get_params_ciclos($id_sucursal);
@@ -104,16 +105,14 @@ class programacion extends Base_Controller{
 				$dias_index = array();
 			}
 
-			foreach ($this->days() as $key => $value) {
+			foreach ($this->days_all() as $key => $value) {
 				$value = '<span>'.ucwords($value).'</span>';
 				if(in_array($key, $dias_index)){
 					$checked =  true;
 				}else{
 					$checked =  false;
 				}
-				$n = ($key+1);
-				$n = ($n == 7) ? 0 : $n;
-				$dias_descartados_checkbox[]=  form_checkbox('dias_descartados', $n, $checked).'&nbsp;'.$value;
+				$dias_descartados_checkbox[]=  form_checkbox('dias_descartados', $key, $checked).'&nbsp;'.$value;
 			}
 
 			/*recuperacion de Ciclos en programacion*/
@@ -172,9 +171,21 @@ class programacion extends Base_Controller{
 																'disabled' => 'disabled',
 																'name'     => 'guardar_programacion'
 															));
-				$dropdown_ciclos_especiales = '';
-				$dropdown_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
-				$multiselect_ciclos = alertas_tpl('', $this->lang_item('msg_ciclos_null'),false);
+				$dropdown_ciclos_especiales = dropdown_tpl(array(
+														 'data'		=> null
+														,'name' 	=> "dropdown_ciclos_especiales"
+														
+													));
+				$dropdown_ciclos = dropdown_tpl(array(
+														 'data'		=> null
+														,'name' 	=> "dropdown_ciclos"
+														
+													));
+				$multiselect_ciclos = dropMultiselect_tpl(array(
+														 'data'		=> null
+														,'name' 	=> "multiselect_ciclos"
+														
+													));
 			}			
 			$multidropdown_especiales   = array(
 													'text' 	    => array('fecha','ciclo')
@@ -232,10 +243,17 @@ class programacion extends Base_Controller{
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
 		$tab['info_select_ciclo']          = $this->lang_item('info_select_ciclo');
 		$tab['info_select_dia']            = $this->lang_item('info_select_dia');
+		$tab['lbl_ciclos_disponibles']     = $this->lang_item('lbl_ciclos_disponibles');
 		$tab['info_ciclos_especiales']     = $this->lang_item('info_ciclos_especiales');
+
 		
 		$uri_view = $this->modulo.'/'.$this->seccion.'/content_config_programacion';
-		echo json_encode( $this->load_view_unique($uri_view , $tab, true) );	
+		$response = $this->load_view_unique($uri_view , $tab, true);
+		if($this->ajax_post(false)){
+			echo json_encode( $response );	
+		}else{
+			return $response;
+		}	
 	}
 	public function ciclo_cantidad_recetas(){
 		$id_ciclo        = $this->ajax_post('id_ciclo');
@@ -258,10 +276,8 @@ class programacion extends Base_Controller{
 		echo json_encode($list);
 	}
 	public function guardar_parametros_programacion(){
-		//sleep(3);df
 		$values              = '';
 		$params_programacion = $this->ajax_post('params');
-		//print_debug($params_programacion);
 		$id_sucursal         = $params_programacion['id_sucursal'];
 		$fecha_inicio        = $params_programacion['fecha_inicio'];
 		$fecha_termino       = $params_programacion['fecha_termino'];
@@ -288,7 +304,6 @@ class programacion extends Base_Controller{
 		$data_insert  = array();
 		if($dias_festivos){
 			foreach ($dias_festivos as $key => $value) {
-				//echo $value;
 				$fecha = '';
 				$fecha = explode('/', $value);
 				$fecha = $fecha[2].'-'.$fecha[1].'-'.$fecha[0];
@@ -300,12 +315,10 @@ class programacion extends Base_Controller{
 							);
 			}	
 			$this->db_model->insert_dias_festivos($data_insert);
-			//print_debug($values);
 		}
 		$data_insert  = array();
 		if($dias_especiales){
 			foreach ($dias_especiales as $key => $value) {
-				//print_debug($value);
 				$fecha = '';
 				$fecha = explode('/', $value['fecha']);
 				$fecha = $fecha[2].'-'.$fecha[1].'-'.$fecha[0];
@@ -322,8 +335,8 @@ class programacion extends Base_Controller{
 
 		$data_insert  = array();
 		if($dias_descartados){
-			foreach ($dias_descartados as $value) {
-				$dia = $this->days($value, true);
+			foreach ($dias_descartados as $key => $value){
+				$dia = $this->days_item($value, true);
 				$data_insert[] = array(
 								  'dia_index'      => $value
 								 ,'dia_name'       => $dia
@@ -331,7 +344,7 @@ class programacion extends Base_Controller{
 								 ,'id_usuario'     => $this->session->userdata('id_usuario')
 								 ,'timestamp'      => $this->timestamp()
 							);
-			}	
+			}
 			$this->db_model->insert_dias_descartados($data_insert);
 		}
 		$data_insert  = array();
@@ -384,6 +397,7 @@ class programacion extends Base_Controller{
 					);
 
 		$data['dropdpwn_sucursales'] = dropdown_tpl($dropdown);
+		$data['calendar']            = $this->cargar_calendario(0);
 		$view = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/calendario_content',$data, true);
 		return $view ;
 	}
@@ -392,7 +406,7 @@ class programacion extends Base_Controller{
 		$descartados          = array();
 		$festivos             = array();
 		$especiales           = array();
-		$id_sucursal          = $this->ajax_post('id_sucursal');
+		$id_sucursal          = ($this->ajax_post('id_sucursal')) ? $this->ajax_post('id_sucursal') : 0;
 		$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
 		$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo($id_sucursal);
 		$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
@@ -449,14 +463,12 @@ class programacion extends Base_Controller{
 								}';
 						continue;
 					}
-
+					if(!array_key_exists($index, $ciclos)){
+						$index = 0;
+					}
 					if(!in_array($i, $festivos)){
 						$day = (date('N', $i) == 7) ? 0 : date('N', $i);
 						
-						if(!array_key_exists($index, $ciclos)){
-							$index = 0;
-						}
-
 						if(!in_array($day, $descartados)){
 							$dia  =  date('j', $i);
 							$mes  = (date('n', $i)-1);
@@ -471,6 +483,8 @@ class programacion extends Base_Controller{
 									}';
 							$index++;
 						}
+					}else{
+						$index++;
 					}
 			}
 			$json         = implode(',',$json);
@@ -484,8 +498,12 @@ class programacion extends Base_Controller{
 		}
 		$json = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/calendario',$data, true);
 		$response = array('success' => $success,'result' => $json, 'msg' => $msg);
+		if($this->ajax_post(false)){
+			echo json_encode( $response);
+		}else{
+			return $json;
+		}
 		
-		echo json_encode( $response);
 	}
 	public function enlistar_contenido($array){
 		$list .= '<ul  class="list-nostyle ">';

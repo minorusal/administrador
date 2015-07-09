@@ -8,7 +8,6 @@ jQuery(document).ready(function(){
 	    if(keycode == '13'){
 	        authentication();
 	    }
-
 	});
 	jQuery('#pwd').keypress(function(event){
 	    var keycode = (event.keyCode ? event.keyCode : event.which);

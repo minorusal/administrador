@@ -167,7 +167,7 @@ function guardar_configuracion_programacion(){
 		}else{
 			var progress = progress_initialized('registro_loader');
 			jQuery('#mensajes').hide();
-			params = {	id_sucursal      : jQuery('select[name=lts_sucursales]').val(),
+			params = {	id_sucursal  : jQuery('select[name=lts_sucursales]').val(),
 					fecha_inicio     : fecha_inicio,
 					fecha_termino    : fecha_termino,
 					dias_descartados : dias_descartados,
@@ -263,8 +263,7 @@ function load_calendario(id_sucursal){
         	}
         	
         }
-    });
-	
+    });	
 }
 function load_calendario_tab(){
 	load_calendario(jQuery('select[name=lts_sucursales_calendario] option:selected').val());

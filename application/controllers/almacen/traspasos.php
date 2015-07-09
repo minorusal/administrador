@@ -18,6 +18,8 @@ class traspasos extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
 		$this->modulo 			= 'almacen';
 		$this->submodulo        = 'traspasos';
 		$this->seccion          = '';
@@ -206,7 +208,7 @@ class traspasos extends Base_Controller{
 		$tabData['id_almacen_origen']= $detalle[0]['id_almacen'];
 		$tabData['id_pasillo_origen']= $detalle[0]['id_pasillo'];
 		$tabData['id_gaveta_origen'] = $detalle[0]['id_gaveta'];
-		$tabData['id_almacen_entradas_recibir'] = $detalle[0]['id_almacen_entradas_recibir'];
+		$tabData['id_almacen_entradas_recepcion'] = $detalle[0]['id_almacen_entradas_recepcion'];
 		$tabData['lts_almacen']	     = $lts_almacen;
 		$tabData['button_save']      = $btn_save;
 
@@ -298,7 +300,7 @@ class traspasos extends Base_Controller{
 		$id_gaveta 					= $this->ajax_post('lts_gavetas'); #destino
 		$id_stock 					= $this->ajax_post('id_stock');
 		$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
-		$id_almacen_entradas_recibir= $this->ajax_post('id_almacen_entradas_recibir');
+		$id_almacen_entradas_recepcion= $this->ajax_post('id_almacen_entradas_recepcion');
 		$stock 						= $this->ajax_post('stock');
 		$lote 						= $this->ajax_post('lote');
 		$caducidad 					= $this->ajax_post('caducidad');
@@ -316,8 +318,8 @@ class traspasos extends Base_Controller{
 			if($traspaso){
 				// Log Stock
 				$sqldatalog_stock= array(
-					'id_accion'			  		   => 3, #3 => TRASPASO
-					'id_almacen_entrada'  		   => $id_almacen_entradas_recibir,
+					'id_accion'			  		   => $this->vars->cfg['id_accion_almacen_traspaso'], #3 => TRASPASO
+					'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion,
 					'id_compras_orden_articulo'    => $id_compras_orden_articulo,
 					'id_stock'			   		   => $id_stock,
 					'log_id_almacen_origen'		   => $id_almacen_origen,

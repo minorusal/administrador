@@ -2,12 +2,13 @@ jQuery(document).ready(function(){
 	calendar_dual("fecha_inicio", "fecha_termino");
 });
 function load_programacion(id_sucursal){
-	var calendar          = 'calendar_dual("fecha_inicio", "fecha_termino");';
-	var dual_select       = 'dual_select();';
-	var input_calendar    = 'calendar("input_calendar");';
-	var chosen            = 'jQuery(".chzn-select").chosen();';
-	var remove_e            = 'remove_option("multidropdown_ciclos_especiales");';
-	var remove_f            = 'remove_option("multidropdown_festivos");';
+	var functions = []
+	functions.push('calendar_dual("fecha_inicio", "fecha_termino");');
+	functions.push('dual_select();');
+	functions.push('calendar("input_calendar");');
+	functions.push('jQuery(".chzn-select").chosen();');
+	functions.push('remove_option("multidropdown_ciclos_especiales");');
+	functions.push('remove_option("multidropdown_festivos");');
 	jQuery.ajax({
         type: "POST",
         url: path()+"nutricion/programacion/form_config_programacion",
@@ -18,8 +19,8 @@ function load_programacion(id_sucursal){
         },
         success: function(data){
         	imgLoader_clean("#loader_programacion");
-        	jQuery('#configuracion_programacion').html(data+include_script(calendar+dual_select+input_calendar+chosen+remove_e+remove_f));
-        	
+        	jQuery('#configuracion_programacion').html(data+include_script(functions));
+        	sortable('ciclos_programados');
         }
     });
 }
@@ -43,7 +44,7 @@ function agregar_festivo(){
 			});
 			
 		}else{
-			alert('Es necesario definir una fecha, gracias');
+			/*alert('Es necesario definir una fecha, gracias');*/
 		}
 	}
 }
@@ -53,6 +54,8 @@ function agregar_ciclo_especial(){
 	var ciclo_especial = jQuery('select[name="dropdown_ciclos_especiales"] option:selected');
 	var value          = ciclo_especial.val()+'|'+fecha_especial;
 	var text           = fecha_especial+'-'+ciclo_especial.text();
+
+	//alert(text);
 	var existe = false;
 	multidropdown.find('option').each(function(){
         var v  = jQuery(this).val().split('|'); 
@@ -61,7 +64,7 @@ function agregar_ciclo_especial(){
         }
     }); 
 	if(existe){
-		alert('Solo se acepta un ciclo por fecha, gracias');
+		/*alert('Solo se acepta un ciclo por fecha, gracias');*/
 	}else{
 		if((ciclo_especial.val()>0)&&(fecha_especial!='')){
 			multidropdown.append(jQuery('<option></option>').attr('value',value).text(text));
@@ -69,7 +72,7 @@ function agregar_ciclo_especial(){
 			remove_option(multidropdown);
 			
 		}else{
-			alert('Es necesario definir una fecha y un ciclo, gracias');
+			/*alert('Es necesario definir una fecha y un ciclo, gracias');*/
 		}
 	}
 }
@@ -77,8 +80,8 @@ function remove_option(name){
 	var element = jQuery('select[name="'+name+'"]');
 	element.on('change', function(evt, params){		
 		if(params.deselected){
-			element.find('option[value="'+params.deselected+'"]').remove();
-			element.trigger('liszt:updated');
+			element.find('option[value="'+params.deselected+'"]').attr('selected', false).remove();
+			element.trigger("chosen:updated");
 		}
 	});
 }
@@ -164,7 +167,7 @@ function guardar_configuracion_programacion(){
 		}else{
 			var progress = progress_initialized('registro_loader');
 			jQuery('#mensajes').hide();
-			params = {	id_sucursal      : jQuery('select[name=lts_sucursales]').val(),
+			params = {	id_sucursal  : jQuery('select[name=lts_sucursales]').val(),
 					fecha_inicio     : fecha_inicio,
 					fecha_termino    : fecha_termino,
 					dias_descartados : dias_descartados,
@@ -236,30 +239,31 @@ function guardar_cantidad_receta_ciclo(id_vinculo){
 	}
 }
 function load_calendario(id_sucursal){
-	jQuery('#mensajes').html('').hide();
-	if(id_sucursal!=0){
-		jQuery.ajax({
-	        type: "POST",
-	        url: path()+"nutricion/programacion/cargar_calendario",
-	        dataType: 'json',
-	        data: { id_sucursal : id_sucursal },
-	        beforeSend : function(){
-	        	imgLoader('#loader_calendario');
-	        },
-	        success: function(data){
-	        	imgLoader_clean('#loader_calendario');
-	        	jQuery('#contenedor_calendario').html(data.result);
-	        	if(data.success == 1){
-	        	}else{
-	        		jQuery('#mensajes').html(data.msg).show('slow');
-	        	}
-	        	
-	        }
-	    });
-	}else{
-		imgLoader_clean('#loader_calendario');
-		jQuery('#contenedor_calendario').html('');
-	}
+	jQuery('#mensajes_calendario').html('').hide();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"nutricion/programacion/cargar_calendario",
+        dataType: 'json',
+        data: { id_sucursal : id_sucursal },
+        beforeSend : function(){
+        	imgLoader('#loader_calendario');
+        },
+        success: function(data){
+        	imgLoader_clean('#loader_calendario');
+        	jQuery('#contenedor_calendario').html(data.result);
+        	if(data.success == 1){
+        	}else{
+        		if(id_sucursal!=0){
+        			jQuery('#mensajes_calendario').html(data.msg).show('slow');
+        		}else{
+        			imgLoader_clean('#loader_calendario');
+
+					var calendar = jQuery('#calendar').fullCalendar('removeEvents');
+        		}
+        	}
+        	
+        }
+    });	
 }
 function load_calendario_tab(){
 	load_calendario(jQuery('select[name=lts_sucursales_calendario] option:selected').val());

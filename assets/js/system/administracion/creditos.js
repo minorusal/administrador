@@ -62,37 +62,48 @@ function detalle(id_credito){
     });
 }
 function actualizar(){
+	var progress = progress_initialized('update_loader');
 	jQuery('#mensajes_update').hide();
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
-	var btn_text        = btn.html();	
-	var incomplete      = values_requeridos();
-	var id_credito      = jQuery('#id_credito').val();
-	var valor_credito   = jQuery('#valor_credito').val();
-    var credito         = jQuery('#credito').val();
-    var clave_corta     = jQuery('#clave_corta').val();
-    var descripcion     = jQuery('#descripcion').val();
+
+	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/creditos/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_credito:id_credito, valor_credito:valor_credito, credito:credito, clave_corta:clave_corta, descripcion:descripcion},
+		data: {objData},
 		beforeSend : function(){
-			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');		
-			jQuery("#mensajes_update").html(data.contenido).show('slow');
-			jQuery("#update_loader").html('');
+			jgrowl(data);
 		}
-	})
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 
 function agregar(){
+	var progress = progress_initialized('registro_loader');
 	var btn          = jQuery("button[name='save_credito']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
+
+	var objData = formData('#formulario');
+  	objData['incomplete'] = values_requeridos();
+
 	var incomplete       = values_requeridos();
 	var id_credito       = jQuery('#id_credito').val();
     var credito          = jQuery('#credito').val();
@@ -101,23 +112,27 @@ function agregar(){
     var descripcion      = jQuery('#descripcion').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"administracion/creditos/insert_descuento",
+		url: path()+"administracion/creditos/insert_credito",
 		dataType: "json",
-		data: {incomplete :incomplete, id_credito:id_credito ,credito:credito, valor_credito:valor_credito, clave_corta:clave_corta, descripcion:descripcion},
+		data: {objData},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-
-			var data = data.split('|');
-			if(data[0]==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+			jgrowl(data);
+			clean_formulario();
 		}
-	})
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 

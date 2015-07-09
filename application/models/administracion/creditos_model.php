@@ -58,7 +58,7 @@ class creditos_model extends Base_Model{
 
 	/*Inserta registro de la tabla ac_administracion_creditos*/
 	public function db_insert_data($data = array()){
-		$tbl    = $this->db1.'.'.$this->tbl1;
+		$tbl = $this->tbl;
 		$existe = $this->row_exist($tbl['administracion_creditos'], array('clave_corta'=> $data['clave_corta']));
 		if(!$existe){
 			$insert = $this->insert_item($tbl['administracion_creditos'], $data);

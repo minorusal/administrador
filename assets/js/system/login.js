@@ -8,7 +8,6 @@ jQuery(document).ready(function(){
 	    if(keycode == '13'){
 	        authentication();
 	    }
-
 	});
 	jQuery('#pwd').keypress(function(event){
 	    var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -23,7 +22,7 @@ jQuery(document).ready(function(){
 });
 
 function authentication(){
-
+	var progress = progress_initialized('progress');
 	var user     = jQuery('#user').val();
 	var pwd      = jQuery('#pwd').val();
 	var id_user  = jQuery('#id_user').val();
@@ -33,7 +32,6 @@ function authentication(){
 		dataType: 'json',
 		data: {id_user: id_user,user: user, pwd: pwd},
 		success: function(data){
-
 			switch (data){
 				case 0:
 					jQuery(location).attr('href','login');
@@ -50,13 +48,18 @@ function authentication(){
 								};
 					jQuery.prompt(promp_content);
 					setTimeout("clean_form_login()",60000);
-					/*jQuery('.loginpage').append(data);
-					jQuery('#login_modal').modal();*/
 					break
-					
 			}
 		}
-	});
+	}).error(function(){
+       		progress.progressTimer('error', {
+	            errorText:'ERROR!',
+	            onFinish:function(){
+	            }
+            });
+        }).done(function(){
+	        progress.progressTimer('complete');
+	    });
 	
 }
 

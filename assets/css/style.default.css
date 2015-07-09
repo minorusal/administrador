@@ -26,7 +26,11 @@ Created by: Mienard Lumaad (@themepixels)
 
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
 	background: #0866c6;
-	}
+}
+.progress-login .progress{
+	
+	background-image: linear-gradient(to bottom, #0866c6, #f9f9f9);
+}
 .fc-event {
   border: 1px solid #021E3A;
   background-color: #021E3A; 

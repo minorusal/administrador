@@ -167,20 +167,20 @@ class regiones extends Base_Controller
 					,'value' 	        => 'id_administracion_entidad'
 					,'text' 	        => array('entidad','clave_corta')
 					,'name' 	        => "lts_entidades"
-					,'class' 	        => "requerido"
+					,'class' 	        => ""
 					);
 		$entidades = dropMultiselect_tpl($entidades_array);
 
 		$btn_save = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_region'] = $id_region;
-		$tabData['lbl_region'] = $this->lang_item("lbl_region");
-		$tabData['lbl_clave_corta'] = $this->lang_item("lbl_clave_corta");
-		$tabData['lbl_entidades'] = $this->lang_item("lbl_entidades");
-		$tabData['lbl_descripcion'] = $this->lang_item("lbl_descripcion");
-		$tabData['txt_region'] = $detalle[0]['region'];
-		$tabData['txt_clave_corta'] = $detalle[0]['clave_corta'];
-		$tabData['txt_descripcion'] = $detalle[0]['descripcion'];
-		$tabData['list_entidad'] = $entidades;
+		$tabData['id_region']               = $id_region;
+		$tabData['lbl_region']              = $this->lang_item("lbl_region");
+		$tabData['lbl_clave_corta']         = $this->lang_item("lbl_clave_corta");
+		$tabData['lbl_entidades']           = $this->lang_item("lbl_entidades");
+		$tabData['lbl_descripcion']         = $this->lang_item("lbl_descripcion");
+		$tabData['txt_region']              = $detalle[0]['region'];
+		$tabData['txt_clave_corta']         = $detalle[0]['clave_corta'];
+		$tabData['txt_descripcion']         = $detalle[0]['descripcion'];
+		$tabData['list_entidad']            = $entidades;
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']      = $detalle[0]['registro'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
@@ -280,8 +280,7 @@ class regiones extends Base_Controller
 		}
 	}
 
-	public function actualizar()
-	{
+	public function actualizar(){
 		$incomplete = $this->ajax_post('incomplete');
 		if($incomplete > 0)
 		{
@@ -305,18 +304,12 @@ class regiones extends Base_Controller
 			$insert = $this->db_model->db_update_data($sqlData);
 			
 			
-			$id_region = $this->ajax_post('id_region');
+			$id_region   = $this->ajax_post('id_region');
 			$entidades   = $this->ajax_post('entidades');
-			//print_debug($insertar);
-			/*foreach($entidades as $item => $valor)
-			{
-			*/
 
-				
 			$insertar = array('id_entidad' => $entidades,
-							  'id_region'  => $id_region);
+							  'id_administracion_region'  => $id_region);
 			$insert = $this->db_model->db_update_entidades($insertar);
-			
 			
 			if($insert)
 			{

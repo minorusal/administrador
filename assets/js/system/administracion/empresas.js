@@ -1,33 +1,31 @@
 function agregar(){
+	var progress = progress_initialized('registro_loader');
 	var btn          = jQuery("button[name='save_area']");
 	btn.attr('disabled','disabled');
+
 	var objData = formData('#formulario');
-	
 	objData['incomplete']   = values_requeridos();
-	objData['id_empresa'] = jQuery('#id_empresa').val();
-	objData['razon_social'] = jQuery('#txt_razon_social').val();
-	objData['rfc']          = jQuery('#txt_rfc').val();
-	objData['telefono']     = jQuery('#txt_telefono').val();
-	objData['empresa']      = jQuery('#txt_empresa').val();
-	objData['direccion']    = jQuery('#txt_direccion').val();
 	
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/empresa/insert",
 		dataType: "json",
-		data: objData,
+		data: {objData},
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-
-			var data = data.split('|');
-			/*if(data[0]==1){
-				clean_formulario();
-			}*/
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+			jgrowl(data);
 		}
-	});
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }

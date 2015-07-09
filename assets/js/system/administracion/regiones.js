@@ -99,11 +99,12 @@ function actualizar(){
 	  entidades.push(jQuery(this).val());
 	});
 	objData['incomplete']  = values_requeridos();
-	objData['id_region']     = jQuery('#id_region').val();
+	objData['id_region']   = jQuery('#id_region').val();
 	objData['region']      = jQuery('#txt_region').val();
 	objData['clave_corta'] = jQuery('#txt_clave_corta').val();
 	objData['descripcion'] = jQuery('#txt_descripcion').val();
 	objData['entidades']   = entidades;
+	//alert(jQuery('#id_region').val());
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/regiones/actualizar",

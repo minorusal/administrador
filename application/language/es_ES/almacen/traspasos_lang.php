@@ -9,6 +9,8 @@
 	$lang['gaveta'] 				= 'Gaveta';
 	$lang['acciones'] 				= 'Acciones';
 	$lang['pieza_abrev']			= 'Pza';
+/*Mensajes*/
+	$lang['traspaso_exito']			= 'El traspaso se ha realizado con éxito.';
 /*USOS MULTIPLES*/
 	$lang['lote']     				= 'lote';
 	$lang['caducidad']     			= 'caducidad';

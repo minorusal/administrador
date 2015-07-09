@@ -424,7 +424,6 @@ class ciclos extends Base_Controller{
 	    return($ret);
 	}
 	public function insert_config(){
-		//print_debug($this->ajax_post('objData'));
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);

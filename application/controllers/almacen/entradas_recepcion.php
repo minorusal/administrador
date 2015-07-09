@@ -353,6 +353,7 @@ class entradas_recepcion extends Base_Controller{
 	}
 	public function insert(){
 		$id_almacen_lobby = $this->vars->cfg['id_almacen_lobby'];
+		// $id_pasillo_lobby = $this->vars->cfg['id_pasillo_lobby'];
 		$id_gaveta_lobby  = $this->vars->cfg['id_gaveta_lobby'];
 		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
@@ -451,8 +452,8 @@ class entradas_recepcion extends Base_Controller{
 							$fec=explode('/',$data[$d][1]);
 							$caducidad_val=$fec[2].'-'.$fec[1].'-'.$fec[0];
 						}
-						$sqldata[]= array(
-									'id_almacen_entradas_recibir'  => $id,
+						$sqldata= array(
+									'id_almacen_entradas_recepcion'  => $id,
 									'id_compras_orden_articulo'    => $keys[$d],
 									'lote'					   	   => $data[$d][0],
 									'caducidad'			   	   	   => $caducidad_val,
@@ -478,7 +479,7 @@ class entradas_recepcion extends Base_Controller{
 						$sqldata2= array(
 									'id_almacen'		   	   	   => $id_almacen_lobby,
 									'id_gaveta'		   	   	   	   => $id_gaveta_lobby,
-									'id_almacen_entradas_recibir'  => $id,
+									'id_almacen_entradas_recepcion'=> $id,
 									'id_compras_orden_articulo'    => $keys[$d],
 									'id_articulo_tipo'			   => $data[$d][4],
 									'stock'		   	   			   => $stock,									
@@ -494,19 +495,24 @@ class entradas_recepcion extends Base_Controller{
 							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);
 							if($insertstock){
 									$sqldatalog_stock= array(
-									'id_almacen_entrada'  		   => $id,
-									'id_compras_orden_articulo'    => $keys[$d],
-									'id_stock'			   		   => $insertstock,
-									'log_id_almacen_origen'		   => $id_almacen_lobby,
-									'log_id_gaveta_origen'		   => $id_gaveta_lobby,
-									'id_stock'			   		   => $insertstock,
-									'log_cantidad'      	 	   => $data[$d][8],
-									'log_lote'					   => $data[$d][0],
-									'log_caducidad'			   	   => $caducidad_val,
-									'timestamp'  	 		       => $this->timestamp(),
-									'id_usuario'   		   		   => $this->session->userdata('id_usuario'),
-									'activo'					   => 1
-								);
+										'id_accion'			  		   => $this->vars->cfg['id_accion_almacen_recepcion'], #1 => RECEPCION
+										'id_almacen_entradas_recepcion'=> $id,
+										'id_compras_orden_articulo'    => $keys[$d],
+										'id_stock'			   		   => $insertstock,
+										// 'log_id_almacen_origen'		   => $id_almacen_origen,
+										// 'log_id_pasillo_origen'		   => $id_pasillo_origen,
+										// 'log_id_gaveta_origen'		   => $id_gaveta_origen,
+										'log_id_almacen_destino'	   => $id_almacen_lobby,
+										// 'log_id_pasillo_destino'	   => $id_pasillo_lobby,
+										'log_id_gaveta_destino'		   => $id_gaveta_lobby,
+										'id_stock'			   		   => $insertstock,
+										'log_cantidad'      	 	   => $data[$d][8],
+										'log_lote'					   => $data[$d][0],
+										'log_caducidad'			   	   => $caducidad_val,
+										'timestamp'  	 		       => $this->timestamp(),
+										'id_usuario'   		   		   => $this->session->userdata('id_usuario'),
+										'activo'					   => 1
+									);
 								$insertstock = $this->stock_model->insert_stock_log($sqldatalog_stock);
 							}else{
 								$msg = $this->lang_item("msg_query_insert",false);

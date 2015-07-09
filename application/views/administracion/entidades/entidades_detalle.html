@@ -1,16 +1,16 @@
 <div id="formulario" class="stdform stdform2">
-	<input type="hidden" id="id_entidad" name="id_entidad" value="{id_entidad}">
+	<input type="hidden" id="id_entidad" name="id_entidad" data-campo="id_entidad" value="{id_entidad}">
 	<p>
-		<label>{nombre_entidad} (*)</label>
-		<span class="field"><input type="text" id="entidad" name="entidad" class="input-xlarge requerido" value="{entidad}" /></span>
+		<label>{lbl_entidad} (*)</label>
+		<span class="field"><input type="text" id="txt_entidad" name="txt_entidad" data-campo="txt_entidad" class="input-xlarge requerido" value="{txt_entidad}" /></span>
 	</p>
 	<p>
-		<label>{cvl_corta} (*)</label>
-		<span class="field"><input type="text" id="clave_corta" name="clave_corta" class="input-xlargue requerido" value="{clave_corta}" /></span>
+		<label>{lbl_clave_corta} (*)</label>
+		<span class="field"><input type="text" id="txt_clave_corta" name="txt_clave_corta" data-campo="txt_clave_corta" class="input-xlargue requerido" value="{txt_clave_corta}" /></span>
 	</p>
 	<p>
-		<label>{abreviatura} (*)</label>
-		<span class="field"><input type="text" id="abrev" name="abrev" class="input_xlarge requerido" value="{abrev}" /></span>
+		<label>{lbl_abreviatura} (*)</label>
+		<span class="field"><input type="text" id="txt_abreviatura" name="txt_abreviatura" data-campo="txt_abreviatura" class="input_xlarge requerido" value="{txt_abreviatura}" /></span>
 	</p>
 	<p>
 		<label>{lbl_fecha_registro}: </label>
@@ -24,7 +24,7 @@
     	<label>{lbl_ultima_modificacion}: </label>
         <span class="field"><textarea id="ultima_modificacion" class="span5 textareaUneditable" style="resize: vertical; height: 100px;" readonly  >{val_ultima_modificacion}</textarea></span>
     </p>
-	<div id="update_loader"></div>
+	<div id="update_loader" class="progress progress-striped"></div>
 	<div id="mensajes_update" style="display:none"></div>
 	<p class="stdformbutton">
 		{button_save}

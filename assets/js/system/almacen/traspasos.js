@@ -46,14 +46,14 @@ function load_content(uri, id_content){
         }
     });
 }
-function detalle(id_compras_orden_articulo){
+function detalle(id_stock){
 	var params = [];
 	params.push('allow_only_numeric();');
 	jQuery.ajax({
         type: "POST",
         url: path()+"almacen/traspasos/detalle",
         dataType: 'json',
-        data: {id_compras_orden_articulo : id_compras_orden_articulo},
+        data: {id_stock : id_stock},
         success: function(data){
         	params.push('jQuery(".chzn-select").chosen();');
         	jQuery('#a-1').html(data+include_script(params));
@@ -97,7 +97,7 @@ function save(){
 	// Obtiene campos en formulario
 	var objData = formData('#formulario');
 	objData['incomplete'] = values_requeridos();
-	objData['error_stock'] = (objData['stock']>objData['stock_origen'])?true:false; 
+	objData['error_stock'] = (parseFloat(objData['stock'])>parseFloat(objData['stock_origen']))?1:0; 
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/traspasos/update_almacen",
@@ -130,7 +130,6 @@ function calcula_stock_um(){
 		var stock_um_final 	= 0;
 	}
 	var resultado = parseFloat(stock_um_final);
-	// var resultado = (stock_input*stock_um_origen) + ' | ' + stock_um_final + ' | ' + stock_origen;
 	jQuery("#stock_um_destino").val(resultado);
 }
 

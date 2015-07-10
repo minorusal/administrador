@@ -35,8 +35,10 @@ function load_content(uri, id_content){
         dataType: 'json',
         data: {filtro : filtro, tabs:1},
         beforeSend : function(){
-        	if(id_content!==1){
+        	if(id_content!=1){
         		imgLoader('#a-'+id_content);
+        	}else{
+        		imgLoader('#loader');
         	}
 		},
         success: function(data){

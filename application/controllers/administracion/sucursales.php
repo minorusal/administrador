@@ -127,8 +127,8 @@ class sucursales extends Base_Controller
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("sucursal"),
 										$this->lang_item("clave_corta"),
-										$this->lang_item("rs"),
 										$this->lang_item("rfc"),
+										$this->lang_item("rs"),
 										$this->lang_item("direccion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

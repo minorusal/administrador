@@ -76,7 +76,7 @@ class perfiles extends Base_Controller{
 	}
 
 	public function listado($offset=0){
-	// Crea tabla con listado de elementos capturados 
+	
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;

@@ -25,6 +25,7 @@ class traspasos_model extends Base_Model{
 					a.id_compras_orden_articulo,
 					a.id_articulo_tipo,
 					a.stock,
+					a.stock_um,
 					a.timestamp as fecha_recepcion,
 					c.id_articulo,
 					d.articulo,
@@ -76,6 +77,7 @@ class traspasos_model extends Base_Model{
 					d.presentacion,
 					e.lote,
 					e.stock,
+					e.stock_um,
 					e.id_stock,
 					e.caducidad,
 					f.gavetas,
@@ -84,6 +86,7 @@ class traspasos_model extends Base_Model{
 					,e.id_almacen
 					,e.id_pasillo
 					,e.id_gaveta
+					,j.unidad_minima_cve
 				FROM 
 					$tbl[compras_ordenes_articulos] a
 				LEFT JOIN $tbl[compras_articulos_precios] b ON a.id_compras_articulo_precios=b.id_compras_articulo_precios
@@ -94,6 +97,8 @@ class traspasos_model extends Base_Model{
 				LEFT JOIN $tbl[almacen_almacenes] g ON e.id_almacen=g.id_almacen_almacenes
 				LEFT JOIN $tbl[almacen_pasillos] h ON e.id_pasillo=h.id_almacen_pasillos
 				LEFT JOIN $tbl[almacen_entradas_recibir] i ON a.id_compras_orden=i.id_compras_orden
+				LEFT JOIN $tbl[compras_articulos] k on b.id_articulo=k.id_compras_articulo
+				LEFT JOIN $tbl[compras_um] j on k.id_compras_um = j.id_compras_um
 				WHERE a.id_compras_orden_articulo = $id_compras_orden_articulo";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

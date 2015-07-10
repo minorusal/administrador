@@ -37,7 +37,17 @@
                     <label>{stock_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="stock" value="{stock}" name="stock" data-campo="stock" readonly>
+                    <strong>{stock}</strong>
+                    <input type="hidden" id="stock" value="{stock}" name="stock" data-campo="stock">
+                </td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{stock_um_lbl}:</label>
+                </td>
+                <td>
+                    <strong>{stock_um}</strong>
+                    <input type="hidden" id="stock_um" value="{stock_um}" name="stock_um" data-campo="stock_um">
                 </td>
             </tr>
             <tr>
@@ -45,7 +55,8 @@
                     <label>{lote_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="lote" value="{lote}" name="lote" data-campo="lote" readonly>
+                    <strong>{lote}</strong>
+                    <input type="hidden" id="lote" value="{lote}" name="lote" data-campo="lote">
                 </td>
             </tr>
             <tr>
@@ -53,7 +64,8 @@
                     <label>{caducidad_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="caducidad" value="{caducidad}" name="caducidad" data-campo="caducidad" readonly>
+                    <strong>{caducidad}</strong>
+                    <input type="hidden" id="caducidad" value="{caducidad}" name="caducidad" data-campo="caducidad" >
                 </td>
             </tr> 
        </table>
@@ -116,5 +128,4 @@
      <p class="stdformbutton"> 
         {button_save}
     </p>
-    <br><br><br><br><br><br><br><br><br><br>
 </div>

@@ -207,6 +207,7 @@ class entradas_almacen extends Base_Controller{
 		$tabData['presentacion']	 = $detalle[0]['presentacion'];
 		$tabData['lote']			 = $detalle[0]['lote'];
 		$tabData['stock']	 	 	 = $detalle[0]['stock'];
+		$tabData['stock_um'] 	 	 = $detalle[0]['stock_um'];
 		$tabData['caducidad']	     = $detalle[0]['caducidad'];
 		$tabData['almacenes']	     = $detalle[0]['almacenes'];
 		$tabData['pasillos']	     = $detalle[0]['pasillos'];
@@ -224,6 +225,7 @@ class entradas_almacen extends Base_Controller{
 		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
 		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
 		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
+		$tabData['stock_um_lbl']	 = $this->lang_item("stock_lbl",false);
 		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
 		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
 		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
@@ -307,6 +309,7 @@ class entradas_almacen extends Base_Controller{
 		$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
 		$id_almacen_entradas_recepcion= $this->ajax_post('id_almacen_entradas_recepcion');
 		$stock 						= $this->ajax_post('stock');
+		$stock_um 					= $this->ajax_post('stock_um');
 		$lote 						= $this->ajax_post('lote');
 		$caducidad 					= $this->ajax_post('caducidad');
 		$data_update  = array(
@@ -332,7 +335,8 @@ class entradas_almacen extends Base_Controller{
 					'log_id_almacen_destino'	   => $id_almacen,
 					'log_id_pasillo_destino'	   => $id_pasillo,
 					'log_id_gaveta_destino'		   => $id_gaveta,
-					'log_cantidad'      	 	   => $stock,
+					'log_stock'					   => $stock,
+					'log_stock_um'				   => $stock_um,
 					'log_lote'					   => $lote,
 					'log_caducidad'			   	   => $caducidad,
 					'timestamp'  	 		       => $this->timestamp(),

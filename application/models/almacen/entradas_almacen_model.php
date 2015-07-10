@@ -75,6 +75,7 @@ class entradas_almacen_model extends Base_Model{
 					d.presentacion,
 					e.lote,
 					e.stock,
+					e.stock_um,
 					e.id_stock,
 					e.caducidad,
 					f.gavetas,

@@ -61,7 +61,7 @@ class traspasos_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_data_unico($id_compras_orden_articulo){
+	public function get_data_unico($id_stock){
 		$tbl = $this->tbl;
 		// Query
 		$query = "SELECT 
@@ -87,6 +87,7 @@ class traspasos_model extends Base_Model{
 					,e.id_pasillo
 					,e.id_gaveta
 					,j.unidad_minima_cve
+					,k.id_articulo_tipo
 				FROM 
 					$tbl[compras_ordenes_articulos] a
 				LEFT JOIN $tbl[compras_articulos_precios] b ON a.id_compras_articulo_precios=b.id_compras_articulo_precios
@@ -99,7 +100,7 @@ class traspasos_model extends Base_Model{
 				LEFT JOIN $tbl[almacen_entradas_recibir] i ON a.id_compras_orden=i.id_compras_orden
 				LEFT JOIN $tbl[compras_articulos] k on b.id_articulo=k.id_compras_articulo
 				LEFT JOIN $tbl[compras_um] j on k.id_compras_um = j.id_compras_um
-				WHERE a.id_compras_orden_articulo = $id_compras_orden_articulo";
+				WHERE e.id_stock = $id_stock";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

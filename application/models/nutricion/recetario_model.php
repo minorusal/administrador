@@ -14,7 +14,7 @@ class recetario_model extends Base_Model{
 									r.receta like '%$filtro%' OR
 									r.clave_corta like '%$filtro%' OR
 									r.porciones like '%$filtro%' OR
-									r.preparacion like '%$filtro%')" : "";
+									s.sucursal like '%$filtro%' OR" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						f.familia
@@ -57,8 +57,8 @@ class recetario_model extends Base_Model{
 		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
 									r.receta like '%$filtro%' OR
 									r.clave_corta like '%$filtro%' OR
-									r.porciones like '%$filtro%' OR
-									r.preparacion like '%$filtro%')" : "";
+									s.sucursal like '%$filtro%' OR
+									r.porciones like '%$filtro%' OR" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						f.familia
@@ -68,11 +68,14 @@ class recetario_model extends Base_Model{
 						,ri.porciones as porciones_articulo
 						,ca.articulo
 						,cu.um
+						,s.id_sucursal
+						,s.sucursal
 					FROM $tbl[nutricion_recetas] r
 					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
 					LEFT JOIN  $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
 					LEFT JOIN  $tbl[compras_articulos] ca ON ca.id_compras_articulo = ri.id_compras_articulo
 					LEFT JOIN  $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
+					LEFT JOIN  $tbl[sucursales] s ON s.id_sucursal = r.id_sucursal
 					WHERE r.activo = 1 $unique $filtro 
 					$limit 
 					";

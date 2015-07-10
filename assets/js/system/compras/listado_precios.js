@@ -68,6 +68,7 @@ function agregar(){
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
   }
   var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
+  var id_region                 = jQuery("select[name='lts_region'] option:selected").val();
   var id_proveedor              = jQuery("select[name='lts_proveedores'] option:selected").val();
   var id_marca                  = jQuery("select[name='lts_marcas'] option:selected").val();
   var id_presentacion           = jQuery("select[name='lts_presentaciones'] option:selected").val();
@@ -96,6 +97,7 @@ function agregar(){
         impuesto_porcentaje : impuesto_porcentaje,
         id_articulo : id_articulo,
         id_proveedor : id_proveedor,
+        id_region : id_region,
         id_marca : id_marca,
         id_presentacion : id_presentacion,
         id_embalaje : id_embalaje,
@@ -207,6 +209,18 @@ function update(){
           jQuery("#mensajes_update").html(data[1]).show('slow');
     }
   });
+}
+function load_proveedor(id_region){
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"compras/listado_precios/load_proveedores_x_region",
+        dataType: 'json',
+        data: {id_region : id_region},
+        success: function(data){  
+        var chosen = 'jQuery(".chzn-select").chosen();';        
+          jQuery('#lts_proveedores_cargar').html(data+include_script(chosen));
+        }
+    });
 }
 function oculta_impuesto(){
   if(jQuery('#impuesto_aplica').is(':checked') ){

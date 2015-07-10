@@ -30,6 +30,7 @@ class listado_precios extends Base_Controller {
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
 		$this->load->model($this->modulo.'/proveedores_model','proveedores_model');
 		$this->load->model('administracion/impuestos_model','impuestos_model');
+		$this->load->model('administracion/regiones_model','regiones_model');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -112,6 +113,7 @@ class listado_precios extends Base_Controller {
 									'upc'   		 	=> tool_tips_tpl($value['upc'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'sku'   		 	=> tool_tips_tpl($value['sku'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'articulo'   		 => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'cl_region'   		 => $value['cl_region'],
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
@@ -128,6 +130,7 @@ class listado_precios extends Base_Controller {
 										$this->lang_item("upc"),
 										$this->lang_item("sku"),
 										$this->lang_item("articulo"),
+										$this->lang_item("cl_region"),
 										$this->lang_item("proveedor"),
 										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
@@ -177,13 +180,18 @@ class listado_precios extends Base_Controller {
 		$lts_articulos  = dropdown_tpl($dropArray);
 
 		$dropArray2 = array(
-					 'data'		=> $this->proveedores_model->db_get_data()
-					,'value' 	=> 'id_compras_proveedor'
-					,'text' 	=> array('clave_corta','nombre_comercial')
-					,'name' 	=> "lts_proveedores"
+					 'data'		=> $this->regiones_model->db_get_data()
+					,'value' 	=> 'id_administracion_region'
+					,'text' 	=> array('clave_corta','region')
+					,'name' 	=> "lts_region"
 					,'class' 	=> "requerido"
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'load_proveedor',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+   									)
 				);
-		$lts_proveedores  = dropdown_tpl($dropArray2);
+		$lts_region  = dropdown_tpl($dropArray2);
 
 		$dropArray3 = array(
 					 'data'		=> $this->catalogos_model->get_marcas($limit="", $offset="", $filtro="", $aplicar_limit = false)
@@ -239,7 +247,7 @@ class listado_precios extends Base_Controller {
 		$lts_impuesto  = dropdown_tpl($dropArray6);
 
 		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_precios_save';
-		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'save_pasillo','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'listado_precios_save','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
 		$tab_1["upc"] 				      = $this->lang_item("upc");
@@ -248,6 +256,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["impuesto_porcentaje"]     = $this->lang_item("impuesto_porcentaje");
 		$tab_1["articulo"]      	      = $this->lang_item("articulo");
 		$tab_1["proveedores"]             = $this->lang_item("proveedores");
+		$tab_1["region"]             	  = $this->lang_item("region");
 		$tab_1["marcas"]                  = $this->lang_item("marcas");
 		$tab_1["presentaciones"]          = $this->lang_item("presentaciones");
 		$tab_1["embajale"]                = $this->lang_item("embajale");
@@ -263,7 +272,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["costo_final"]             = $this->lang_item("costo_final");
 		$tab_1["rendimiento"]             = $this->lang_item("rendimiento");
 		$tab_1['lts_articulos']      	  = $lts_articulos;
-		$tab_1['lts_proveedores']    	  = $lts_proveedores;
+		$tab_1['lts_region']    	  	  = $lts_region;
 		$tab_1['lts_marcas']         	  = $lts_marcas;
 		$tab_1['lts_presentaciones'] 	  = $lts_presentaciones;
 		$tab_1['lts_embalaje'] 	  	 	  = $lts_embalaje;
@@ -298,6 +307,7 @@ class listado_precios extends Base_Controller {
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
+	        $id_region 					= $this->ajax_post('id_region');
 	        $id_marca 					= $this->ajax_post('id_marca');
 	        $id_presentacion 			= $this->ajax_post('id_presentacion');
 	        $id_embalaje 				= $this->ajax_post('id_embalaje');
@@ -311,6 +321,7 @@ class listado_precios extends Base_Controller {
 								'id_articulo'  				=> $id_articulo,
 								'upc'  						=> $upc,
 								'id_proveedor'  			=> $id_proveedor,
+								'id_administracion_region'  => $id_region,
 								'id_marca'  				=> $id_marca,
 								'id_presentacion'  			=> $id_presentacion,
 								'id_embalaje'  				=> $id_embalaje,
@@ -397,6 +408,21 @@ class listado_precios extends Base_Controller {
 		$lts_articulos  = dropdown_tpl($dropArray);
 
 		$dropArray2 = array(
+					 'data'		=> $this->regiones_model->db_get_data()
+					 ,'selected'=> $detalle[0]['id_administracion_region']
+					,'value' 	=> 'id_administracion_region'
+					,'text' 	=> array('clave_corta','region')
+					,'name' 	=> "lts_region"
+					,'class' 	=> "requerido"
+					,'event'    => array('event'       => 'onchange',
+				   						 'function'    => 'load_proveedor',
+				   						 'params'      => array('this.value'),
+				   						 'params_type' => array(0)
+   									)
+				);
+		$lts_regiones  = dropdown_tpl($dropArray2);
+
+		$dropArray3 = array(
 					 'data'		=> $this->proveedores_model->db_get_data()
 					 ,'selected'=> $detalle[0]['id_proveedor']
 					,'value' 	=> 'id_compras_proveedor'
@@ -404,9 +430,9 @@ class listado_precios extends Base_Controller {
 					,'name' 	=> "lts_proveedores"
 					,'class' 	=> "requerido"
 				);
-		$lts_proveedores  = dropdown_tpl($dropArray2);
+		$lts_proveedores  = dropdown_tpl($dropArray3);
 
-		$dropArray3 = array(
+		$dropArray4 = array(
 					 'data'		=> $this->catalogos_model->get_marcas($limit="", $offset="", $filtro="", $aplicar_limit = false)
 					 ,'selected'=> $detalle[0]['id_marca']
 					,'value' 	=> 'id_compras_marca'
@@ -414,9 +440,9 @@ class listado_precios extends Base_Controller {
 					,'name' 	=> "lts_marcas"
 					,'class' 	=> "requerido"
 				);
-		$lts_marcas  = dropdown_tpl($dropArray3);
+		$lts_marcas  = dropdown_tpl($dropArray4);
 
-		$dropArray4 = array(
+		$dropArray5 = array(
 					 'data'		=> $this->catalogos_model->get_presentaciones($limit="", $offset="", $filtro="", $aplicar_limit = false)
 					 ,'selected'=> $detalle[0]['id_presentacion']
 					,'value' 	=> 'id_compras_presentacion'
@@ -429,9 +455,9 @@ class listado_precios extends Base_Controller {
 									)
 					,'class' 	=> "requerido"
 				);
-		$lts_presentaciones  = dropdown_tpl($dropArray4); 
+		$lts_presentaciones  = dropdown_tpl($dropArray5); 
 		
-		$dropArray5 = array(
+		$dropArray6 = array(
 					 'data'		=> $this->catalogos_model->get_embalaje()
 					 ,'selected'=> $detalle[0]['id_embalaje']
 					,'value' 	=> 'id_compras_embalaje'
@@ -444,9 +470,9 @@ class listado_precios extends Base_Controller {
 			   						 'params_type' => array(0)
 								)
 				);
-		$lts_embalaje  = dropdown_tpl($dropArray5);
+		$lts_embalaje  = dropdown_tpl($dropArray6);
 
-		$dropArray6 = array(
+		$dropArray7 = array(
 					 'data'		 => $this->impuestos_model->db_get_data()
 					 ,'selected' => $detalle[0]['id_impuesto']
 					 ,'value' 	 => 'id_administracion_impuestos'
@@ -459,7 +485,7 @@ class listado_precios extends Base_Controller {
 							   						 'params_type' => array(0)
 			   										)
 				);
-		$lts_impuesto  = dropdown_tpl($dropArray6);
+		$lts_impuesto  = dropdown_tpl($dropArray7);
 
 		$data_tab["upc"] 						 = $this->lang_item("upc");
 		$data_tab["sku"] 						 = $this->lang_item("sku");
@@ -467,6 +493,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["impuesto_porcentaje"]         = $this->lang_item("impuesto_porcentaje");
 		$data_tab["articulo"]      				 = $this->lang_item("articulo");
 		$data_tab["proveedores"]                 = $this->lang_item("proveedores");
+		$data_tab["region"]             	     = $this->lang_item("region");
 		$data_tab["marcas"]                      = $this->lang_item("marcas");
 		$data_tab["presentaciones"]              = $this->lang_item("presentaciones");
 		$data_tab["embajale"]                    = $this->lang_item("embajale");
@@ -487,6 +514,7 @@ class listado_precios extends Base_Controller {
 		////DATA 
 		$data_tab['id_compras_articulo_precios'] = $id_compras_articulo_precio;      
         $data_tab['lts_articulos']        		 = $lts_articulos;
+        $data_tab['lts_regiones']        		 = $lts_regiones;
 		$data_tab['lts_proveedores']           	 = $lts_proveedores;
         $data_tab['lts_marcas']           	 	 = $lts_marcas;
         $data_tab['lts_presentaciones']          = $lts_presentaciones;
@@ -666,6 +694,18 @@ class listado_precios extends Base_Controller {
 		$id_articulo = $this->ajax_post('id_articulo');
 		$presentacion_em=$this->db_model->get_articulos_um($id_articulo);
      	echo json_encode($presentacion_em[0]['cv_um']);
+	}
+	public function load_proveedores_x_region(){
+		$id_region = $this->ajax_post('id_region');
+		$dropArray2 = array(
+					 'data'		=> $this->proveedores_model->get_proveedor_region($id_region)
+					,'value' 	=> 'id_compras_proveedor'
+					,'text' 	=> array('clave_corta','nombre_comercial')
+					,'name' 	=> "lts_proveedores"
+					,'class' 	=> "requerido"
+				);
+		$lts_proveedores  = dropdown_tpl($dropArray2);
+		echo json_encode($lts_proveedores);
 	}
 	public function eliminar(){
 		$msj_grid = $this->ajax_post('msj_grid');

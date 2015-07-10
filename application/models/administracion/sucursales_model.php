@@ -22,7 +22,9 @@ class sucursales_model extends Base_Model{
 						,su.direccion
 						,su.sucursal
 						,su.razon_social
+						,r.clave_corta as region
 					FROM $tbl[sucursales] su
+					LEFT JOIN $tbl[administracion_regiones] r on su.id_region = r.id_administracion_region
 					WHERE su.activo = 1 $filtro
 					ORDER BY su.id_sucursal ASC
 					$limit

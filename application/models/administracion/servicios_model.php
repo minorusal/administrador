@@ -40,7 +40,7 @@ class servicios_model extends Base_Model{
 		}	
 	}
 
-	public function db_get_data_x_sucursal($id_sucursal,$id_servicio = false){		
+	public function db_get_data_x_sucursal($id_sucursal,$id_servicio = false){
 		// DB Info		
 		$tbl = $this->tbl;
 		$id_servicio = ($id_servicio)?" AND sr.id_administracion_servicio <> $id_servicio ":'';

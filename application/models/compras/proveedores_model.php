@@ -29,6 +29,7 @@ class proveedores_model extends Base_Model{
 						,p.colonia
 						,p.municipio
 						,e.entidad
+						,r.clave_corta as region
 						,p.cp
 						,p.telefonos
 						,p.email
@@ -41,6 +42,7 @@ class proveedores_model extends Base_Model{
 						,p.activo
 					FROM $tbl[compras_proveedores] p 
 					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
+					LEFT JOIN $tbl[administracion_regiones] r on p.id_administracion_region = r.id_administracion_region
 					WHERE p.activo = 1 $filtro
 					$limit
 					";
@@ -151,5 +153,39 @@ class proveedores_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+	public function get_proveedor_region($id_region){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query = "	SELECT
+						 p.id_compras_proveedor
+						,p.razon_social
+						,p.nombre_comercial
+						,p.clave_corta
+						,p.rfc
+						,p.calle
+						,p.num_int
+						,p.num_ext
+						,p.colonia
+						,p.municipio
+						,e.entidad
+						,p.cp
+						,p.telefonos
+						,p.email
+						,p.contacto
+						,p.comentarios
+						,p.edit_timestamp
+						,p.edit_id_usuario
+						,p.timestamp
+						,p.id_usuario
+						,p.activo
+					FROM $tbl[compras_proveedores] p 
+					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
+					WHERE id_administracion_region = $id_region;";
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 }

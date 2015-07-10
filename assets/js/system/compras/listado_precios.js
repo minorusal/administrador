@@ -216,8 +216,9 @@ function load_proveedor(id_region){
         url: path()+"compras/listado_precios/load_proveedores_x_region",
         dataType: 'json',
         data: {id_region : id_region},
-        success: function(data){          
-          jQuery('#lts_proveedores_cargar').html(data);
+        success: function(data){  
+        var chosen = 'jQuery(".chzn-select").chosen();';        
+          jQuery('#lts_proveedores_cargar').html(data+include_script(chosen));
         }
     });
 }

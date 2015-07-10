@@ -47,6 +47,7 @@ class listado_precios_model extends Base_Model{
 					,f.clave_corta as cl_embalaje
 					,g.valor as impuesto
 					,h.clave_corta as cl_um
+					,i.clave_corta as cl_region
 				from $tbl[compras_articulos_precios] a 
 				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo  	= b.id_compras_articulo
 				LEFT JOIN $tbl[compras_proveedores] c on a.id_proveedor 	= c.id_compras_proveedor
@@ -55,6 +56,7 @@ class listado_precios_model extends Base_Model{
 				LEFT JOIN $tbl[compras_embalaje] f on a.id_embalaje    	= f.id_compras_embalaje
 				LEFT JOIN $tbl[administracion_impuestos] g on a.id_impuesto    	= g.id_administracion_impuestos
 				LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
+				LEFT JOIN $tbl[administracion_regiones] i on a.id_administracion_region   = i.id_administracion_region
 				WHERE a.activo = 1 AND 1  $filtro
 				GROUP BY a.id_compras_articulo_precios ASC
 				$limit";

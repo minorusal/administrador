@@ -220,7 +220,7 @@ class proveedores extends Base_Controller {
 							,'selected' => $detalle[0]['id_administracion_region']
 							,'value' 	=> 'id_administracion_region'
 							,'text' 	=> array('region')
-							,'name' 	=> "lts_regiones"
+							,'name' 	=> "id_administracion_region"
 							,'class' 	=> "requerido"
 						);
 		$dropArray = array(
@@ -309,7 +309,7 @@ class proveedores extends Base_Controller {
 							'data'		=> $this->regiones->db_get_data($sqlData)
 							,'value' 	=> 'id_administracion_region'
 							,'text' 	=> array('region')
-							,'name' 	=> "lts_regiones"
+							,'name' 	=> "id_administracion_region"
 							,'class' 	=> "requerido"
 						);
 		$dropArray = array(

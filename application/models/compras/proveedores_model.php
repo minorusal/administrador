@@ -182,7 +182,7 @@ class proveedores_model extends Base_Model{
 						,p.activo
 					FROM $tbl[compras_proveedores] p 
 					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
-					WHERE id_administracion_region = $id_region;";
+					WHERE p.id_administracion_region = $id_region AND p.activo=1;";
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

@@ -427,7 +427,7 @@ class entradas_recepcion extends Base_Controller{
 						if($ya[$j][$data[$j][0]][5]=='true'){
 							//SQL PARA INSERTAR EN ENTRASDAS RECEPCION PARTIDAS
 							$sqldata= array(
-											'id_almacen_entradas_recibir' => $id,
+											'id_almacen_entradas_recepcion' => $id,
 											'id_compras_orden_articulo'   => $ya[$j][$data[$j][0]][0],
 											'lote'						  => $ya[$j][$data[$j][0]][1],
 											'cantidad'					  => $ya[$j][$data[$j][0]][2],

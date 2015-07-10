@@ -531,7 +531,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["desglose_impuesto"]           = $this->lang_item("desglose_impuesto");
 		$data_tab["costo_final"]                 = $this->lang_item("costo_final");
 		$data_tab["rendimiento"]                 = $this->lang_item("rendimiento");
-		$tab_1["listado_principal"]       		 = $this->lang_item("listado_principal");
+		$data_tab["listado_principal"]           = $this->lang_item("listado_principal");
 		$data_tab['lbl_fecha_registro']      	 = $this->lang_item('lbl_fecha_registro');
 		$data_tab['registro_por']    			 = $this->lang_item('lbl_usuario_registro');
 		$data_tab["lbl_ultima_modificacion"] 	 = $this->lang_item('lbl_ultima_modificacion', false);

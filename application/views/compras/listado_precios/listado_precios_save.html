@@ -12,7 +12,7 @@
         <span class="field">{lts_region}</span>
     </p>
     <p>
-        <label>{proveedor} (*)</label>
+        <label>{proveedores} (*)</label>
         <span class="field" id="lts_proveedores_cargar"><select name="lts_proveedores" class="chzn-select requerido" data-campo="lts_proveedores"><option value="0">-----</option></select></span>
     </p>
     <p>
@@ -106,6 +106,11 @@
             &nbsp;&nbsp;<span>{moneda}</span>
             <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/></span>
         </div>
+    </p>
+     <p>
+        <label>{listado_principal}:</label>
+        <span class="field">
+        <input type="checkbox" id="listado_principal" name="listado_principal" data-campo="listado_principal"></span>
     </p>
     <p>
         <div id="div_rendimiento">

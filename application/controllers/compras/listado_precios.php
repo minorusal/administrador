@@ -113,6 +113,7 @@ class listado_precios extends Base_Controller {
 									'upc'   		 	=> tool_tips_tpl($value['upc'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'sku'   		 	=> tool_tips_tpl($value['sku'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'articulo'   		 => tool_tips_tpl($value['articulo'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'cl_region'   		 => $value['cl_region'],
 									'nombre_comercial'   => $value['nombre_comercial'],	
 									'marca'    			 => $value['marca'],	
 									'presentacion'    	 => $value['presentacion'],
@@ -129,6 +130,7 @@ class listado_precios extends Base_Controller {
 										$this->lang_item("upc"),
 										$this->lang_item("sku"),
 										$this->lang_item("articulo"),
+										$this->lang_item("cl_region"),
 										$this->lang_item("proveedor"),
 										$this->lang_item("marca"),
 										$this->lang_item("presentacion"),
@@ -268,6 +270,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["costo_x_um"]              = $this->lang_item("costo_x_um");
 		$tab_1["desglose_impuesto"]       = $this->lang_item("desglose_impuesto");
 		$tab_1["costo_final"]             = $this->lang_item("costo_final");
+		$tab_1["listado_principal"]       = $this->lang_item("listado_principal");
 		$tab_1["rendimiento"]             = $this->lang_item("rendimiento");
 		$tab_1['lts_articulos']      	  = $lts_articulos;
 		$tab_1['lts_region']    	  	  = $lts_region;
@@ -291,13 +294,10 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}
-		else{	
-			$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
-			if($id_impuesto==0){
-					$id_impuesto ="";
-			}else{
-				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
-			}
+		else{
+			$listado_principal = $this->ajax_post('listado_principal');
+			$id_region 					= $this->ajax_post('id_region');
+			$id_impuesto = $this->ajax_post('impuesto_porcentaje');
 	        $upc						= $this->ajax_post('upc');
 	        $presentacion_x_embalaje	= $this->ajax_post('presentacion_x_embalaje');
 	        $um_x_presentacion 			= $this->ajax_post('um_x_presentacion');
@@ -305,7 +305,6 @@ class listado_precios extends Base_Controller {
 	        $impuesto_aplica 			= $this->ajax_post('impuesto_aplica');
 	        $id_articulo 				= $this->ajax_post('id_articulo');
 	        $id_proveedor 				= $this->ajax_post('id_proveedor');
-	        $id_region 					= $this->ajax_post('id_region');
 	        $id_marca 					= $this->ajax_post('id_marca');
 	        $id_presentacion 			= $this->ajax_post('id_presentacion');
 	        $id_embalaje 				= $this->ajax_post('id_embalaje');
@@ -314,12 +313,33 @@ class listado_precios extends Base_Controller {
 			$costo_unitario 			= $this->ajax_post('costo_unitario');
 			$costo_x_um					= $this->ajax_post('costo_x_um');
 			$rendimiento				= $this->ajax_post('rendimiento');
+			if($listado_principal==1){
+				$sqlData=array(
+							'id_administracion_region' => $id_region,
+							'id_articulo' => $id_articulo);
+				$listado=$this->db_model->db_get_data_listado_principal($sqlData);
+				if(count($listado)>0){
+					$data_update=array(
+									'listado_principal'  => '',
+									'id_articulo'  		 => $id_articulo,
+									'edit_timestamp'  	 => $this->timestamp(),
+									'edit_id_usuario'    => $this->session->userdata('id_usuario')
 
+						);
+					$update_listado_princ=$this->db_model->update_listado_principal($data_update,$id_region);
+				}
+			}	
+			if($id_impuesto==0){
+					$id_impuesto ="";
+			}else{
+				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			}
 	        $data_insert  = array(
 								'id_articulo'  				=> $id_articulo,
 								'upc'  						=> $upc,
 								'id_proveedor'  			=> $id_proveedor,
 								'id_administracion_region'  => $id_region,
+								'listado_principal'         => $listado_principal,
 								'id_marca'  				=> $id_marca,
 								'id_presentacion'  			=> $id_presentacion,
 								'id_embalaje'  				=> $id_embalaje,
@@ -389,6 +409,11 @@ class listado_precios extends Base_Controller {
 			$class_em ='requerido';
 			$style_em='';
 			$readonly='';
+		}
+		if($detalle[0]['listado_principal']==1){
+			$checked_listado='checked';
+		}else{
+			$checked_listado='';
 		}
        	$dropArray = array(
 					 'data'		=> $this->catalogos_model->get_articulos($limit="", $offset="",$filtro="", $aplicar_limit = false )
@@ -506,6 +531,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["desglose_impuesto"]           = $this->lang_item("desglose_impuesto");
 		$data_tab["costo_final"]                 = $this->lang_item("costo_final");
 		$data_tab["rendimiento"]                 = $this->lang_item("rendimiento");
+		$tab_1["listado_principal"]       		 = $this->lang_item("listado_principal");
 		$data_tab['lbl_fecha_registro']      	 = $this->lang_item('lbl_fecha_registro');
 		$data_tab['registro_por']    			 = $this->lang_item('lbl_usuario_registro');
 		$data_tab["lbl_ultima_modificacion"] 	 = $this->lang_item('lbl_ultima_modificacion', false);
@@ -534,6 +560,7 @@ class listado_precios extends Base_Controller {
         $data_tab['style'] 						 = $style;
         $data_tab['checked'] 					 = $checked;
         $data_tab['checked_em'] 				 = $checked_em;
+        $data_tab['checked_listado'] 			 = $checked_listado;
         $data_tab['style_em'] 				 	 = $style_em;
         $data_tab['readonly'] 				 	 = $readonly;
         $data_tab['moneda'] 	  	 	  	  		 = $this->session->userdata('moneda');        
@@ -572,12 +599,9 @@ class listado_precios extends Base_Controller {
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
 		}else{
-			$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
-			if($id_impuesto==0){
-					$id_impuesto ="";
-			}else{
-				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
-			}
+			$id_impuesto 				 = $this->ajax_post('impuesto_porcentaje');	
+			$listado_principal 			 = $this->ajax_post('listado_principal');
+			$id_region 					 = $this->ajax_post('id_region');
 	        $id_compras_articulo_precios = $this->ajax_post('id_compras_articulo_precios');
 	        $upc						 = $this->ajax_post('upc');
 	        $presentacion_x_embalaje	 = $this->ajax_post('presentacion_x_embalaje');
@@ -594,12 +618,37 @@ class listado_precios extends Base_Controller {
 			$costo_unitario 			 = $this->ajax_post('costo_unitario');
 			$costo_x_um					 = $this->ajax_post('costo_x_um');
 			$rendimiento				 = $this->ajax_post('rendimiento');
+
+			if($listado_principal==1){
+				$sqlData=array(
+							'id_administracion_region' => $id_region,
+							'id_articulo' => $id_articulo);
+				$listado=$this->db_model->db_get_data_listado_principal($sqlData);
+				//dump_var($listado);
+				if(count($listado)>0){
+					$data_update=array(
+									'listado_principal'  => '',
+									'id_articulo'  		 => $id_articulo,
+									'edit_timestamp'  	 => $this->timestamp(),
+									'edit_id_usuario'    => $this->session->userdata('id_usuario')
+
+						);
+					$update_listado_princ=$this->db_model->update_listado_principal($data_update,$id_region);
+				}
+			}	
+			if($id_impuesto==0){
+					$id_impuesto ="";
+			}else{
+				$id_impuesto = $this->ajax_post('impuesto_porcentaje');					
+			}
 			
 			$data_update  = array(
 								'id_compras_articulo_precios'   => $id_compras_articulo_precios,
 								'upc'  							=> $upc,
 								'id_articulo'  					=> $id_articulo,
 								'id_proveedor'  				=> $id_proveedor,
+								'id_administracion_region'      => $id_region,
+								'listado_principal'             => $listado_principal,
 								'id_marca'  					=> $id_marca,
 								'id_presentacion'  				=> $id_presentacion,
 								'id_embalaje'  					=> $id_embalaje,

@@ -19,7 +19,7 @@ class areas extends Base_Controller{
 		$this->icon 			= 'iconfa-fire'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/areas
 		$this->view_content 	= 'content';
-		$this->limit_max		= 10;
+		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -116,6 +116,7 @@ class areas extends Base_Controller{
 			$this->table->set_heading(	$this->lang_item("ID"),
 										$this->lang_item("lbl_area"),
 										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_region"),
 										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);

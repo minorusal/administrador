@@ -24,6 +24,7 @@ Created by: Mienard Lumaad (@themepixels)
 @import url('font-awesome.min.css');
 @import url('font-awesome.min.tpl.css');
 
+
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
 	background: #0866c6;
 }
@@ -1878,4 +1879,3 @@ table td.center, table th.center { text-align: center; }
 		  .table-infinite tr th:nth-child(3),
 		  .table-infinite tr td:nth-child(3) { display: none; }
 }
-

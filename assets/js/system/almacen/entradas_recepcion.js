@@ -112,7 +112,7 @@ function calculos(id){
 	var functions = [];
 	var caducidad_val  	= jQuery('#caducidad_val_'+id).val();
 	var lote_val		= jQuery('#lote_val_'+id).val();
-	var u_m_val			= jQuery('#u_m_val_'+id).val();
+	var cantidad_lote			= jQuery('#cantidad_lote_'+id).val();
 	var proveedor		= jQuery('#proveedor_'+id).val();
 	var articulo		= jQuery('#articulo_'+id).val();
 	var presentacion    = jQuery('#presentacion_'+id).val();
@@ -139,7 +139,7 @@ function calculos(id){
 	total=(subtotal-descuento)+impuesto;
 	jQuery('#subtotal').val(subtotal);
 	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ numeral(subtotal).format('0,0.00') +'</strong>');
-	jQuery('#descuento_total').val(subtotal);
+	jQuery('#descuento_total').val(descuento);
 	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+numeral(descuento).format('0,0.00')+'</strong>');
 	jQuery('#impuesto_total').val(impuesto);
 	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ numeral(impuesto).format('0,0.00')+'</strong>');
@@ -164,7 +164,7 @@ function calculos(id){
 			data : {id:id,
 					caducidad_val : caducidad_val,
 					lote_val : lote_val,
-					u_m_val : u_m_val,
+					cantidad_lote : cantidad_lote,
 					proveedor  : proveedor,
 					articulo : articulo,
 					presentacion : presentacion},
@@ -180,15 +180,100 @@ function calculos(id){
 	}
 	jQuery('#listado_'+id).prop("checked", "");
 }
-function aceptar_lote(id){
+function validar_cantidad(id){
+	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta    = jQuery('#cantidad_resta_'+id).val();
+	var cantidad_total;
+	cantidad_total=cantidad_resta-cantidad_lote;
+	jQuery('#cantidad_resta_'+id).val(cantidad_total);
+}
+function aceptar_lote(id){	
+	validar_cantidad(id);
 	var lote 	  = jQuery('#lotemodal').val();
 	var caducidad = jQuery('#caducidad').val();
-	var u_m 	  = jQuery('#u_m').val();
+	var cantidad_lote 	= jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta  = jQuery('#cantidad_resta_'+id).val();
+	var cantidad_val    = jQuery('#cantidad_'+id).val();
+	var cantidad_total;
+	var tds=7;
+	var nuevaFila;
+	var cantidad;
+	var hiddens;;
+	var lote_hidden;
+	var caducidad_hidden;
+	var cantidad_hidden;
+	var cont=1;
+	var contador=jQuery('#candidad_modal_1').val();
+	var td_valor=new Array(
+					'',
+					jQuery('#proveedor_'+id).val(),
+					jQuery('#articulo_'+id).val(),
+					jQuery('#presentacion_'+id).val(),
+					lote,
+					cantidad_lote,
+					caducidad,
+					''
+					);
+	if(cantidad_resta<=0){
+		if(cantidad_resta>=0){
+			jQuery('#listado_'+id).attr("disabled", true);
+			jQuery('#listado_'+id).prop("checked", "checked");
+		}else{
+			jQuery('#cantidad_resta_'+id).val(cantidad_val);
+			alert('No puede ser mayor a la cantidad');
+			return false;
+		}
+	}else{
+		jQuery('#listado_'+id).prop("checked", "");
+	}
+	//Comienzan operaciones
+	for(var i=0;i<tds;i++){
+		if(i==4){
+			if(typeof(contador) == 'undefined'){
+				lote_hidden='<input type="hidden" id="lote_modal_'+cont+'" name="lote_modal[]"  data-campo="lote_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					lote_hidden='<input type="hidden" id="lote_modal_'+cont+'" name="lote_modal[]"  data-campo="lote_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			lote_hidden='';
+		}
+		 if(i==5){
+			if(typeof(contador) == 'undefined'){
+				cantidad_hidden='<input type="hidden" id="candidad_modal_'+cont+'" name="candidad_modal[]"  data-campo="candidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					cantidad_hidden='<input type="hidden" id="candidad_modal_'+cont+'" name="candidad_modal[]"  data-campo="candidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			cantidad_hidden='';
+		}
+		 if(i==6){
+			if(typeof(contador) == 'undefined'){
+				caducidad_hidden='<input type="hidden" id="caducidad_modal_'+cont+'" name="caducidad_modal[]"  data-campo="caducidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+			}else{
+				jQuery('input[name="candidad_modal[]"]').each(function() {
+					cont++;
+					caducidad_hidden='<input type="hidden" id="caducidad_modal_'+cont+'" name="caducidad_modal[]"  data-campo="caducidad_modal['+id+'-'+cont+']" value="'+td_valor[i]+'">';
+				});
+			}
+		}else{
+			caducidad_hidden='';
+		}
+		hiddens=lote_hidden+caducidad_hidden+cantidad_hidden;
+		nuevaFila+='<td>'+hiddens+td_valor[i]+'</td>';
+    }
+	jQuery('#'+id).after('<tr id="muestra_lote_'+id+'" style="background-color: #BDBDBD">'+nuevaFila+'</tr>');
+
 	jQuery('#lote_val_'+id).val(lote);
 	jQuery('#caducidad_val_'+id).val(caducidad);
-	jQuery('#u_m_val_'+id).val(u_m);
+	jQuery('#cantidad_lote_'+id).val(cantidad_lote);
 	jQuery('#lote').modal('toggle');
-	jQuery('#listado_'+id).prop("checked", "checked");
+	//jQuery('#listado_'+id).prop("checked", "checked");
 }
 function calcula_totla_pagar(){
 	var total;
@@ -199,9 +284,6 @@ function calcula_totla_pagar(){
 	jQuery('#value_total').html(total);
 }
 function recibir_orden(){
-	jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
-	jQuery('#recibir').hide();	
-	jQuery('#volver').hide();	
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -220,13 +302,16 @@ function recibir_orden(){
 			}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');
+		    jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
+			jQuery('#recibir').hide();	
+			jQuery('#volver').hide();	
 		}
 	});
 }
 function volver_lote(id){
 	jQuery('#lote_val_'+id).val('');
 	jQuery('#caducidad_val_'+id).val('');
-	jQuery('#u_m_val_'+id).val('');
+	jQuery('#cantidad_lote_'+id).val('');
 	jQuery('#lote').modal('toggle');
 	jQuery('#listado_'+id).prop("checked", "");
 }

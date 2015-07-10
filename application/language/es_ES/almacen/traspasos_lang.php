@@ -4,6 +4,7 @@
 	$lang['articulo'] 				= 'Artículo';
 	$lang['presentacion'] 			= 'Presentación';
 	$lang['stock'] 					= 'Stock';
+	$lang['stock_um_lbl']			= 'Stock UM';	
 	$lang['articulo_tipo'] 			= 'Artículo tipo';
 	$lang['almacen'] 				= 'Almacen';
 	$lang['gaveta'] 				= 'Gaveta';
@@ -11,6 +12,7 @@
 	$lang['pieza_abrev']			= 'Pza';
 /*Mensajes*/
 	$lang['traspaso_exito']			= 'El traspaso se ha realizado con éxito.';
+	$lang['error_stock']			= 'El STOCK DESTINO no puede ser mayor al STOCK ORIGEN';
 /*USOS MULTIPLES*/
 	$lang['lote']     				= 'lote';
 	$lang['caducidad']     			= 'caducidad';

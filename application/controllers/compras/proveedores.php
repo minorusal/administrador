@@ -14,7 +14,7 @@ class proveedores extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->submodulo		= 'proveedores';
-		$this->icon 			= 'fa fa-users'; #Icono de modulo
+		$this->icon 			= 'fa fa-users';
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -209,13 +209,18 @@ class proveedores extends Base_Controller {
 		$id_compras_proveedor 	= $this->ajax_post('id_compras_proveedor');
 		$detalle  			    = $this->db_model->get_proveedor_unico($id_compras_proveedor);
 		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);		
+		
 		$region_array = array(
-							'data'		=> $this->regiones->db_get_data(array('aplicar_limit'=> false))
-							,'selected' => 'id_administracion_region'
+							'data'		=> $this->regiones->db_get_data($sqlData)
+							,'selected' => $detalle[0]['id_administracion_region']
 							,'value' 	=> 'id_administracion_region'
-							,'text' 	=> array('clave_corta','region')
-							,'name' 	=> "lts_regiones"
+							,'text' 	=> array('region')
+							,'name' 	=> "id_administracion_region"
 							,'class' 	=> "requerido"
 						);
 		$dropArray = array(
@@ -239,7 +244,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
 		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
 		$tabData['lbl_region']             =  $this->lang_item('lbl_region', false);
-		$tabData['dropdown_region']       =  dropdown_tpl($region_array);
+		$tabData['dropdown_region']        =  dropdown_tpl($region_array);
 		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
 		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
@@ -293,14 +298,28 @@ class proveedores extends Base_Controller {
 		$accion 		= $this->tab['agregar'];
 		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
 
+
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);		
+		
+		$region_array = array(
+							'data'		=> $this->regiones->db_get_data($sqlData)
+							,'value' 	=> 'id_administracion_region'
+							,'text' 	=> array('region')
+							,'name' 	=> "id_administracion_region"
+							,'class' 	=> "requerido"
+						);
 		$dropArray = array(
-					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
+					 'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('ent_abrev','entidad')
 					,'name' 	=> "id_administracion_entidad"
 					,'class' 	=> "requerido"
 				);
-		//print_debug($this->entidad->get_entidades_default(array('aplicar_limit'=> false)));
+		
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
@@ -314,6 +333,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
 		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
 		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
+		$tabData['lbl_region']             =  $this->lang_item('lbl_region', false);
 		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
 		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
@@ -323,6 +343,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
 
+		$tabData['dropdown_region']        =  dropdown_tpl($region_array);
 		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
 		$tabData['button_save']            =  $btn_save;
         $tabData['button_reset']           =  $btn_reset;
@@ -334,110 +355,73 @@ class proveedores extends Base_Controller {
 		}
 	}
 	public function insert(){
-		// Recibe datos de formulario e inserta un nuevo registro en la BD
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
 			$sqlData = array(
-							 'razon_social'              => $this->ajax_post('rsocial')
-							,'nombre_comercial'          => $this->ajax_post('nombre')
-							,'clave_corta'               => $this->ajax_post('clave_corta')
-							,'rfc'                       => $this->ajax_post('rfc')
-							,'calle'                     => $this->ajax_post('calle')
-							,'num_int'                   => $this->ajax_post('num_int')
-							,'num_ext'                   => $this->ajax_post('num_ext')
-							,'colonia'                   => $this->ajax_post('colonia')
-							,'municipio'                 => $this->ajax_post('municipio')
-							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
-							,'cp'                        => $this->ajax_post('cp')
-							,'telefonos'                 => $this->ajax_post('telefono')
-							,'email'                     => $this->ajax_post('email')
-							,'contacto'                  => $this->ajax_post('contacto')
-							,'comentarios'               => $this->ajax_post('comentario')
+							 'razon_social'              => $objData['rsocial']
+							,'nombre_comercial'          => $objData['nombre']
+							,'clave_corta'               => $objData['clave_corta']
+							,'rfc'                       => $objData['rfc']
+							,'calle'                     => $objData['calle']
+							,'num_int'                   => $objData['num_int']
+							,'num_ext'                   => $objData['num_ext']
+							,'colonia'                   => $objData['colonia']
+							,'municipio'                 => $objData['municipio']
+							,'id_administracion_entidad' => $objData['id_administracion_entidad']
+							,'id_administracion_region'  => $objData['id_administracion_region']
+							,'cp'                        => $objData['cp']
+							,'telefonos'                 => $objData['telefono']
+							,'email'                     => $objData['email']
+							,'contacto'                  => $objData['contacto']
+							,'comentarios'               => $objData['comentario']
 							,'id_usuario' 		         => $this->session->userdata('id_usuario')
 							,'timestamp'  		         => $this->timestamp()
 
 						);
-
-
-			
-			//print_debug($sqlData);
-
 			$insert = $this->db_model->insert($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
+				echo json_encode($this->lang_item("msg_insert_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 	public function actualizar(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
-
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
 			$sqlData = array(
-							'id_compras_proveedor'	     => $this->ajax_post('id_compras_proveedor')
-							,'razon_social'              => $this->ajax_post('rsocial')
-							,'nombre_comercial'          => $this->ajax_post('nombre')
-							,'clave_corta'               => $this->ajax_post('clave_corta')
-							,'rfc'                       => $this->ajax_post('rfc')
-							,'calle'                     => $this->ajax_post('calle')
-							,'num_int'                   => $this->ajax_post('num_int')
-							,'num_ext'                   => $this->ajax_post('num_ext')
-							,'colonia'                   => $this->ajax_post('colonia')
-							,'municipio'                 => $this->ajax_post('municipio')
-							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
-							,'cp'                        => $this->ajax_post('cp')
-							,'telefonos'                 => $this->ajax_post('telefono')
-							,'email'                     => $this->ajax_post('email')
-							,'contacto'                  => $this->ajax_post('contacto')
-							,'comentarios'               => $this->ajax_post('comentario')
+							'id_compras_proveedor'	     => $objData['id_compras_proveedor']
+							,'razon_social'              => $objData['rsocial']
+							,'nombre_comercial'          => $objData['nombre']
+							,'clave_corta'               => $objData['clave_corta']
+							,'rfc'                       => $objData['rfc']
+							,'calle'                     => $objData['calle']
+							,'num_int'                   => $objData['num_int']
+							,'num_ext'                   => $objData['num_ext']
+							,'colonia'                   => $objData['colonia']
+							,'municipio'                 => $objData['municipio']
+							,'id_administracion_entidad' => $objData['id_administracion_entidad']
+							,'id_administracion_region'  => $objData['id_administracion_region']
+							,'cp'                        => $objData['cp']
+							,'telefonos'                 => $objData['telefono']
+							,'email'                     => $objData['email']
+							,'contacto'                  => $objData['contacto']
+							,'comentarios'               => $objData['comentario']
 							,'edit_id_usuario' 		     => $this->session->userdata('id_usuario')
 							,'edit_timestamp'  		     => $this->timestamp()
 
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
+				echo json_encode($this->lang_item("msg_update_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
 	public function eliminar(){

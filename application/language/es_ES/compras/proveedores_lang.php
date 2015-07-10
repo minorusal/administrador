@@ -2,6 +2,7 @@
 $lang['submodulo']     = "compras";
 $lang['seccion']       = "proveedores";
 
+$lang['lbl_region']      = 'región';
 $lang['lbl_rsocial']    = "Razon Social";
 $lang['lbl_nombre']	    = "Nombre del Proveedor";
 $lang['lbl_clv']        = "Clave corta";
@@ -17,7 +18,6 @@ $lang['lbl_telefono']   = "Telefono";
 $lang['lbl_email']      = "Correo electronico";
 $lang['lbl_contacto']   = "Contacto";
 $lang['lbl_comentario'] = "Comentario";
-
 
 $lang['lbl_fecha_registro'] = 'Fecha de registro';
 $lang['lbl_usuario_registro'] = 'Registrado por';

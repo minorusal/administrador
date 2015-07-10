@@ -121,7 +121,7 @@ class proveedores_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$query = "SELECT
-						p.id_compras_proveedor
+						 p.id_compras_proveedor
 						,p.razon_social
 						,p.nombre_comercial
 						,p.clave_corta
@@ -132,6 +132,7 @@ class proveedores_model extends Base_Model{
 						,p.colonia
 						,p.municipio
 						,e.id_administracion_entidad
+						,r.id_administracion_region
 						,p.cp
 						,p.telefonos
 						,p.email
@@ -144,6 +145,7 @@ class proveedores_model extends Base_Model{
 						,p.activo
 					FROM $tbl[compras_proveedores] p 
 					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
+					LEFT JOIN $tbl[administracion_regiones] r on p.id_administracion_region = r.id_administracion_region
 					WHERE id_compras_proveedor = $id_compras_proveedor";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

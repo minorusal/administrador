@@ -408,7 +408,7 @@ class entradas_recepcion extends Base_Controller{
 				//CONSTRUCCION DE ARRAY QUE GUARDA DATOS PARA INSERT
 				for($i=0; count($lote_val)>$i;$i++){
 					$data[]=explode('-',$keys[$i]);
-					$ya[][$data[$i][0]]=[
+					$array[][$data[$i][0]]=[
 											$data[$i][0],
 											$values_lote[$i],
 											$values_cantidad[$i],
@@ -422,38 +422,38 @@ class entradas_recepcion extends Base_Controller{
 
 				for($j=0; count($lote_val)>$j;$j++){
 						$data[]=explode('-',$keys[$j]);
-						$fec=explode('/',$ya[$j][$data[$j][0]][3]);
+						$fec=explode('/',$array[$j][$data[$j][0]][3]);
 						$caducidad=$fec[2].'-'.$fec[1].'-'.$fec[0];
-						if($ya[$j][$data[$j][0]][5]=='true'){
+						if($array[$j][$data[$j][0]][5]=='true'){
 							//SQL PARA INSERTAR EN ENTRASDAS RECEPCION PARTIDAS
 							$sqldata= array(
 											'id_almacen_entradas_recepcion' => $id,
-											'id_compras_orden_articulo'   => $ya[$j][$data[$j][0]][0],
-											'lote'						  => $ya[$j][$data[$j][0]][1],
-											'cantidad'					  => $ya[$j][$data[$j][0]][2],
+											'id_compras_orden_articulo'   => $array[$j][$data[$j][0]][0],
+											'lote'						  => $array[$j][$data[$j][0]][1],
+											'cantidad'					  => $array[$j][$data[$j][0]][2],
 											'caducidad'					  => $caducidad,
 											'timestamp'  	 		      => $this->timestamp(),
 											'id_usuario'   		   		  => $this->session->userdata('id_usuario')
 											);
 							$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
 							if($insert_partidas){
-								if($ya[$j][$data[$j][0]][4]==2){//SE VALIDA EL TIPO DE ARITUCLO
-									$um_presentacion = $ya[$j][$data[$j][0]][2]*$ya[$j][$data[$j][0]][6];//CANTIDAD*PRESENTACION
-									$presentacion_UM = $um_presentacion*$ya[$j][$data[$j][0]][7];//UM_PRESENTACION*UNIDAD_MINIMA
+								if($array[$j][$data[$j][0]][4]==2){//SE VALIDA EL TIPO DE ARITUCLO
+									$um_presentacion = $array[$j][$data[$j][0]][2]*$array[$j][$data[$j][0]][6];//CANTIDAD*PRESENTACION
+									$presentacion_UM = $um_presentacion*$array[$j][$data[$j][0]][7];//UM_PRESENTACION*UNIDAD_MINIMA
 									$stock_um	     = $presentacion_UM;
 								}else{
-									$stock_um   = $ya[$j][$data[$j][0]][2];//CANTIDAD
+									$stock_um   = $array[$j][$data[$j][0]][2];//CANTIDAD
 								}
 								//SE CREA SQL PARA INSERTAR EN LA TABLA DE STOCK
 								$sqldata_stock=array(
 												'id_almacen'		   	   		=> $id_almacen_lobby,
 												'id_gaveta'		   	   	   		=> $id_gaveta_lobby,
 												'id_almacen_entradas_recepcion' => $id,
-												'id_compras_orden_articulo' 	=> $ya[$j][$data[$j][0]][0],
-												'id_articulo_tipo' 				=> $ya[$j][$data[$j][0]][4],
-												'stock'							=> $ya[$j][$data[$j][0]][2],
+												'id_compras_orden_articulo' 	=> $array[$j][$data[$j][0]][0],
+												'id_articulo_tipo' 				=> $array[$j][$data[$j][0]][4],
+												'stock'							=> $array[$j][$data[$j][0]][2],
 												'stock_um'						=> $stock_um,
-												'lote'							=> $ya[$j][$data[$j][0]][1],
+												'lote'							=> $array[$j][$data[$j][0]][1],
 												'caducidad'						=> $caducidad,
 												'id_estatus' 					=> 1,
 												'timestamp'  	 		    	=> $this->timestamp(),
@@ -465,13 +465,13 @@ class entradas_recepcion extends Base_Controller{
 									$sqldata_stock_logs=array(
 												'id_accion'			  		    => $this->vars->cfg['id_accion_almacen_recepcion'], #1 => RECEPCION
 												'id_almacen_entradas_recepcion' => $id,
-												'id_compras_orden_articulo'  	=> $ya[$j][$data[$j][0]][0],
+												'id_compras_orden_articulo'  	=> $array[$j][$data[$j][0]][0],
 												'id_stock' 						=> $id_stock,
 												'log_id_almacen_destino'		=> $id_almacen_lobby,
 												'log_id_gaveta_destino'		   	=> $id_gaveta_lobby,
-												'log_stock'						=> $ya[$j][$data[$j][0]][2],
+												'log_stock'						=> $array[$j][$data[$j][0]][2],
 												'log_stock_um'					=> $stock_um,
-												'log_lote'						=> $ya[$j][$data[$j][0]][1],
+												'log_lote'						=> $array[$j][$data[$j][0]][1],
 												'log_caducidad'					=> $caducidad,
 												'timestamp'  	 		    	=> $this->timestamp(),
 												'id_usuario'   		   			=> $this->session->userdata('id_usuario'),
@@ -479,10 +479,11 @@ class entradas_recepcion extends Base_Controller{
 												);
 									$id_stock_logs = $this->stock_model->insert_stock_log($sqldata_stock_logs);
 								}else{$cont++;}
-							}else{$cont++;}							
+							}else{$cont++;}					
 						}else{//NO INSERTA EN PARTIDAS SI NO ESTA CHECKEADO EL LISTADO
 						}
 				}
+				//dump_var($sqldata);
 				//ACTUAIZAR A LA ORDEN
 				if($cont==0){
 					$sqldata3= array(

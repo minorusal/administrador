@@ -32,6 +32,7 @@
 	$lang['presentacion_lbl']       = 'Presentación';
 	$lang['lote_lbl']         	    = 'Lote';
 	$lang['stock_lbl']         	    = 'Stock';
+	$lang['stock_um_lbl']           = 'Stock UM';
 	$lang['caducidad_lbl']         	= 'Caducidad';
 	$lang['almacen_lbl']         	= 'Almacen';
 	$lang['pasillo_lbl']         	= 'Pasillo';

@@ -201,6 +201,8 @@ class traspasos extends Base_Controller{
 		$tabData['presentacion']	 = $detalle[0]['presentacion'];
 		$tabData['lote']			 = $detalle[0]['lote'];
 		$tabData['stock']	 	 	 = $detalle[0]['stock'];
+		$tabData['stock_um'] 	 	 = $detalle[0]['stock_um'];
+		$tabData['unidad_minima_cve']= $detalle[0]['unidad_minima_cve'];		
 		$tabData['caducidad']	     = $detalle[0]['caducidad'];
 		$tabData['almacenes']	     = $detalle[0]['almacenes'];
 		$tabData['pasillos']	     = $detalle[0]['pasillos'];
@@ -218,6 +220,7 @@ class traspasos extends Base_Controller{
 		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
 		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
 		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
+		$tabData['stock_um_lbl']	 = $this->lang_item("stock_um_lbl",false);
 		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
 		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
 		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
@@ -289,32 +292,73 @@ class traspasos extends Base_Controller{
 		echo json_encode($lts_gavetas);
 	}
 	public function update_almacen(){
+		$error_stock = $this->ajax_post('error_stock'); #error_stock
+		if(!$error_stock){
+			$id_almacen_origen			= $this->ajax_post('id_almacen_origen'); #origen
+			$id_pasillo_origen			= $this->ajax_post('id_pasillo_origen'); #origen
+			$id_pasillo_origen 			= ($id_pasillo_origen==0)?null:$id_pasillo_origen; #Validacion de nulo
+			$id_gaveta_origen			= $this->ajax_post('id_gaveta_origen'); #origen
+			$stock_origen 				= $this->ajax_post('stock_origen'); #Origen
+			$stock_um_origen 			= $this->ajax_post('stock_um_origen'); #Origen
+			$id_almacen_destino			= $this->ajax_post('lts_almacen'); #destino
+			$id_pasillo					= $this->ajax_post('lts_pasillos'); #destino
+			$id_pasillo_destino 		= ($id_pasillo==0)?null:$id_pasillo; #Validacion de nulo
+			$id_gaveta_destino			= $this->ajax_post('lts_gavetas'); #destino
+			$stock_destino				= $this->ajax_post('stock'); #destino
+			$stock_um_destino			= $this->ajax_post('stock_um_destino'); #destino
+			$id_stock 					= $this->ajax_post('id_stock');
+			$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
+			$id_almacen_entradas_recepcion= $this->ajax_post('id_almacen_entradas_recepcion');
+			$id_articulo_tipo 			= $this->ajax_post('id_articulo_tipo');
+			$lote 						= $this->ajax_post('lote');
+			$caducidad 					= $this->ajax_post('caducidad');
 
-		$id_almacen_origen			= $this->ajax_post('id_almacen_origen'); #origen
-		$id_pasillo_origen			= $this->ajax_post('id_pasillo_origen'); #origen
-		$id_pasillo_origen 			= ($id_pasillo_origen==0)?null:$id_pasillo_origen; #Validacion de nulo
-		$id_gaveta_origen			= $this->ajax_post('id_gaveta_origen'); #origen
-		$id_almacen					= $this->ajax_post('lts_almacen'); #destino
-		$id_pasillo					= $this->ajax_post('lts_pasillos'); #destino
-		$id_pasillo 				= ($id_pasillo==0)?null:$id_pasillo; #Validacion de nulo
-		$id_gaveta 					= $this->ajax_post('lts_gavetas'); #destino
-		$id_stock 					= $this->ajax_post('id_stock');
-		$id_compras_orden_articulo 	= $this->ajax_post('id_compras_orden_articulo');
-		$id_almacen_entradas_recepcion= $this->ajax_post('id_almacen_entradas_recepcion');
-		$stock 						= $this->ajax_post('stock');
-		$lote 						= $this->ajax_post('lote');
-		$caducidad 					= $this->ajax_post('caducidad');
-		$data_update  = array(
-								'id_stock'     => $id_stock,
-								'id_almacen'   => $id_almacen,
-								'id_pasillo'  	=> $id_pasillo,
-								'id_gaveta'  	=> $id_gaveta,
-								'edit_timestamp'  	=> $this->timestamp(),
-								'edit_id_usuario'  => $this->session->userdata('id_usuario')
-							);
-		//dump_var($data_update);
-		$traspaso = $this->db_model->db_update_almacen_pasillo_gaveta($data_update);
-
+			if($stock==$stock_origen){
+			// Insert Stock
+				$sqlData= array(
+							'id_almacen'		   	   	   => $id_almacen_destino,
+							'id_pasillo'				   => $id_pasillo_destino,
+							'id_gaveta'		   	   	   	   => $id_gaveta_destino,
+							'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion,
+							'id_compras_orden_articulo'    => $id_compras_orden_articulo,
+							'id_articulo_tipo'			   => $id_articulo_tipo,
+							'stock'		   	   			   => $stock_destino,									
+							'stock_um'		   	   		   => $stock_um_destino,
+							'lote'					   	   => $lote,
+							'caducidad'			   	   	   => $caducidad,
+							'id_estatus'			  	   => 1, #1 => STOCK
+							'timestamp'  	 		       => $this->timestamp(),
+							'id_usuario'   		   		   => $this->session->userdata('id_usuario')
+						);
+				$traspaso = $this->stock_model->insert_data_stock($sqlData);
+				if($traspaso){
+				// Update Stock
+					$sqlData2  = array(
+										'id_stock'     		=> $id_stock,
+										'id_almacen'   		=> $id_almacen,
+										'id_pasillo'  		=> $id_pasillo,
+										'id_gaveta'  		=> $id_gaveta,
+										'stock'				=> $stock_origen,
+										'stock_um'			=> $stock_um_origen,
+										'edit_timestamp'  	=> $this->timestamp(),
+										'edit_id_usuario'  	=> $this->session->userdata('id_usuario')
+									);
+					$traspaso = $this->stock_model->update_data_stock($sqlData2);
+				}
+			}else{
+			// Update Stock
+				$data_update  = array(
+										'id_stock'     		=> $id_stock,
+										'id_almacen'   		=> $id_almacen_destino,
+										'id_pasillo'  		=> $id_pasillo_destino,
+										'id_gaveta'  		=> $id_gaveta_destino,
+										'stock'				=> $stock_origen,
+										'stock_um'			=> $stock_um_origen,
+										'edit_timestamp'  	=> $this->timestamp(),
+										'edit_id_usuario'  	=> $this->session->userdata('id_usuario')
+									);
+				$traspaso = $this->db_model->db_update_almacen_pasillo_gaveta($data_update);
+			}
 			if($traspaso){
 				// Log Stock
 				$sqldatalog_stock= array(
@@ -325,10 +369,10 @@ class traspasos extends Base_Controller{
 					'log_id_almacen_origen'		   => $id_almacen_origen,
 					'log_id_pasillo_origen'		   => $id_pasillo_origen,
 					'log_id_gaveta_origen'		   => $id_gaveta_origen,
-					'log_id_almacen_destino'	   => $id_almacen,
-					'log_id_pasillo_destino'	   => $id_pasillo,
-					'log_id_gaveta_destino'		   => $id_gaveta,
-					'log_cantidad'      	 	   => $stock,
+					'log_id_almacen_destino'	   => $id_almacen_destino,
+					'log_id_pasillo_destino'	   => $id_pasillo_destino,
+					'log_id_gaveta_destino'		   => $id_gaveta_destino,
+					'log_stock' 	     	 	   => $stock_destino,
 					'log_lote'					   => $lote,
 					'log_caducidad'			   	   => $caducidad,
 					'timestamp'  	 		       => $this->timestamp(),
@@ -342,7 +386,10 @@ class traspasos extends Base_Controller{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode('0|'.alertas_tpl('', $msg ,false));
 			}
-		
+		}else{
+			$msg = $this->lang_item("error_stock",false);
+			echo json_encode('0|'.alertas_tpl('', $msg ,false));
+		}		
 	}
 }
 ?>

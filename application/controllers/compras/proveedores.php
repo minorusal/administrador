@@ -14,7 +14,7 @@ class proveedores extends Base_Controller {
 		parent::__construct();
 		$this->modulo 			= 'compras';
 		$this->submodulo		= 'proveedores';
-		$this->icon 			= 'fa fa-users'; #Icono de modulo
+		$this->icon 			= 'fa fa-users';
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/';
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -209,13 +209,18 @@ class proveedores extends Base_Controller {
 		$id_compras_proveedor 	= $this->ajax_post('id_compras_proveedor');
 		$detalle  			    = $this->db_model->get_proveedor_unico($id_compras_proveedor);
 		$btn_save       	    = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));
-
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);		
+		
 		$region_array = array(
-							'data'		=> $this->regiones->db_get_data(array('aplicar_limit'=> false))
-							,'selected' => 'id_administracion_region'
+							'data'		=> $this->regiones->db_get_data($sqlData)
+							,'selected' => $detalle[0]['id_administracion_region']
 							,'value' 	=> 'id_administracion_region'
-							,'text' 	=> array('clave_corta','region')
-							,'name' 	=> "lts_regiones"
+							,'text' 	=> array('region')
+							,'name' 	=> "id_administracion_region"
 							,'class' 	=> "requerido"
 						);
 		$dropArray = array(
@@ -239,7 +244,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
 		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
 		$tabData['lbl_region']             =  $this->lang_item('lbl_region', false);
-		$tabData['dropdown_region']       =  dropdown_tpl($region_array);
+		$tabData['dropdown_region']        =  dropdown_tpl($region_array);
 		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
 		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
@@ -293,14 +298,28 @@ class proveedores extends Base_Controller {
 		$accion 		= $this->tab['agregar'];
 		$uri_view   	= $this->path.$this->submodulo.'_'.$accion;
 
+
+		$sqlData        = array(
+			 'buscar'      	=> ''
+			,'offset' 		=> 0
+			,'limit'      	=> 0
+		);		
+		
+		$region_array = array(
+							'data'		=> $this->regiones->db_get_data($sqlData)
+							,'value' 	=> 'id_administracion_region'
+							,'text' 	=> array('region')
+							,'name' 	=> "id_administracion_region"
+							,'class' 	=> "requerido"
+						);
 		$dropArray = array(
-					'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
+					 'data'		=> $this->entidad->get_entidades_default(array('aplicar_limit'=> false))
 					,'value' 	=> 'id_administracion_entidad'
 					,'text' 	=> array('ent_abrev','entidad')
 					,'name' 	=> "id_administracion_entidad"
 					,'class' 	=> "requerido"
 				);
-		//print_debug($this->entidad->get_entidades_default(array('aplicar_limit'=> false)));
+		
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save','onclick'=>'insert()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset      = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 		
@@ -314,6 +333,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_colonia']            =  $this->lang_item('lbl_colonia', false);
 		$tabData['lbl_municipio']          =  $this->lang_item('lbl_municipio', false);
 		$tabData['lbl_entidad']            =  $this->lang_item('lbl_entidad', false);
+		$tabData['lbl_region']             =  $this->lang_item('lbl_region', false);
 		$tabData['lbl_cp']                 =  $this->lang_item('lbl_cp', false);
 		$tabData['lbl_telefono']           =  $this->lang_item('lbl_telefono', false);
 		$tabData['lbl_email']              =  $this->lang_item('lbl_email', false);
@@ -323,6 +343,7 @@ class proveedores extends Base_Controller {
 		$tabData['lbl_fecha_registro']     =  $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_regitro']    =  $this->lang_item('lbl_usuario_regitro', false);
 
+		$tabData['dropdown_region']        =  dropdown_tpl($region_array);
 		$tabData['dropdown_entidad']       =  dropdown_tpl($dropArray);
 		$tabData['button_save']            =  $btn_save;
         $tabData['button_reset']           =  $btn_reset;
@@ -334,7 +355,6 @@ class proveedores extends Base_Controller {
 		}
 	}
 	public function insert(){
-		// Recibe datos de formulario e inserta un nuevo registro en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
@@ -355,6 +375,7 @@ class proveedores extends Base_Controller {
 							,'colonia'                   => $this->ajax_post('colonia')
 							,'municipio'                 => $this->ajax_post('municipio')
 							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
+							,'id_administracion_region'  => $this->ajax_post('id_administracion_region')
 							,'cp'                        => $this->ajax_post('cp')
 							,'telefonos'                 => $this->ajax_post('telefono')
 							,'email'                     => $this->ajax_post('email')
@@ -411,6 +432,7 @@ class proveedores extends Base_Controller {
 							,'colonia'                   => $this->ajax_post('colonia')
 							,'municipio'                 => $this->ajax_post('municipio')
 							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
+							,'id_administracion_region'  => $this->ajax_post('id_administracion_region')
 							,'cp'                        => $this->ajax_post('cp')
 							,'telefonos'                 => $this->ajax_post('telefono')
 							,'email'                     => $this->ajax_post('email')

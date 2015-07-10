@@ -182,18 +182,18 @@ function calculos(id){
 }
 function validar_cantidad(id){
 	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
-	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
+	var cantidad_resta    = jQuery('#cantidad_resta_'+id).val();
 	var cantidad_total;
 	cantidad_total=cantidad_resta-cantidad_lote;
 	jQuery('#cantidad_resta_'+id).val(cantidad_total);
 }
 function aceptar_lote(id){	
-	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
-	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
+	validar_cantidad(id);
 	var lote 	  = jQuery('#lotemodal').val();
 	var caducidad = jQuery('#caducidad').val();
-	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
-	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
+	var cantidad_lote 	= jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta  = jQuery('#cantidad_resta_'+id).val();
+	var cantidad_val    = jQuery('#cantidad_'+id).val();
 	var cantidad_total;
 	var tds=7;
 	var nuevaFila;
@@ -214,13 +214,19 @@ function aceptar_lote(id){
 					caducidad,
 					''
 					);
-	//Comienzan operaciones
-	validar_cantidad(id);
-	if(cantidad_resta==0){
-		jQuery('#listado_'+id).attr("disabled", true);
+	if(cantidad_resta<=0){
+		if(cantidad_resta>=0){
+			jQuery('#listado_'+id).attr("disabled", true);
+			jQuery('#listado_'+id).prop("checked", "checked");
+		}else{
+			jQuery('#cantidad_resta_'+id).val(cantidad_val);
+			alert('No puede ser mayor a la cantidad');
+			return false;
+		}
 	}else{
 		jQuery('#listado_'+id).prop("checked", "");
 	}
+	//Comienzan operaciones
 	for(var i=0;i<tds;i++){
 		if(i==4){
 			if(typeof(contador) == 'undefined'){
@@ -278,9 +284,6 @@ function calcula_totla_pagar(){
 	jQuery('#value_total').html(total);
 }
 function recibir_orden(){
-	jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
-	jQuery('#recibir').hide();	
-	jQuery('#volver').hide();	
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');
@@ -299,6 +302,9 @@ function recibir_orden(){
 			}
 			jQuery("#registro_loader").html('');
 		    jQuery("#mensajes").html(data.contenido).show('slow');
+		    jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
+			jQuery('#recibir').hide();	
+			jQuery('#volver').hide();	
 		}
 	});
 }

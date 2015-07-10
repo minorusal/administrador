@@ -355,111 +355,73 @@ class proveedores extends Base_Controller {
 		}
 	}
 	public function insert(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
 			$sqlData = array(
-							 'razon_social'              => $this->ajax_post('rsocial')
-							,'nombre_comercial'          => $this->ajax_post('nombre')
-							,'clave_corta'               => $this->ajax_post('clave_corta')
-							,'rfc'                       => $this->ajax_post('rfc')
-							,'calle'                     => $this->ajax_post('calle')
-							,'num_int'                   => $this->ajax_post('num_int')
-							,'num_ext'                   => $this->ajax_post('num_ext')
-							,'colonia'                   => $this->ajax_post('colonia')
-							,'municipio'                 => $this->ajax_post('municipio')
-							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
-							,'id_administracion_region'  => $this->ajax_post('id_administracion_region')
-							,'cp'                        => $this->ajax_post('cp')
-							,'telefonos'                 => $this->ajax_post('telefono')
-							,'email'                     => $this->ajax_post('email')
-							,'contacto'                  => $this->ajax_post('contacto')
-							,'comentarios'               => $this->ajax_post('comentario')
+							 'razon_social'              => $objData['rsocial']
+							,'nombre_comercial'          => $objData['nombre']
+							,'clave_corta'               => $objData['clave_corta']
+							,'rfc'                       => $objData['rfc']
+							,'calle'                     => $objData['calle']
+							,'num_int'                   => $objData['num_int']
+							,'num_ext'                   => $objData['num_ext']
+							,'colonia'                   => $objData['colonia']
+							,'municipio'                 => $objData['municipio']
+							,'id_administracion_entidad' => $objData['id_administracion_entidad']
+							,'id_administracion_region'  => $objData['id_administracion_region']
+							,'cp'                        => $objData['cp']
+							,'telefonos'                 => $objData['telefono']
+							,'email'                     => $objData['email']
+							,'contacto'                  => $objData['contacto']
+							,'comentarios'               => $objData['comentario']
 							,'id_usuario' 		         => $this->session->userdata('id_usuario')
 							,'timestamp'  		         => $this->timestamp()
 
 						);
-
-
-			
-			//print_debug($sqlData);
-
 			$insert = $this->db_model->insert($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
+				echo json_encode($this->lang_item("msg_insert_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 	public function actualizar(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
-			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
-
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
+			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
 		}else{
 			$sqlData = array(
-							'id_compras_proveedor'	     => $this->ajax_post('id_compras_proveedor')
-							,'razon_social'              => $this->ajax_post('rsocial')
-							,'nombre_comercial'          => $this->ajax_post('nombre')
-							,'clave_corta'               => $this->ajax_post('clave_corta')
-							,'rfc'                       => $this->ajax_post('rfc')
-							,'calle'                     => $this->ajax_post('calle')
-							,'num_int'                   => $this->ajax_post('num_int')
-							,'num_ext'                   => $this->ajax_post('num_ext')
-							,'colonia'                   => $this->ajax_post('colonia')
-							,'municipio'                 => $this->ajax_post('municipio')
-							,'id_administracion_entidad' => $this->ajax_post('id_administracion_entidad')
-							,'id_administracion_region'  => $this->ajax_post('id_administracion_region')
-							,'cp'                        => $this->ajax_post('cp')
-							,'telefonos'                 => $this->ajax_post('telefono')
-							,'email'                     => $this->ajax_post('email')
-							,'contacto'                  => $this->ajax_post('contacto')
-							,'comentarios'               => $this->ajax_post('comentario')
+							'id_compras_proveedor'	     => $objData['id_compras_proveedor']
+							,'razon_social'              => $objData['rsocial']
+							,'nombre_comercial'          => $objData['nombre']
+							,'clave_corta'               => $objData['clave_corta']
+							,'rfc'                       => $objData['rfc']
+							,'calle'                     => $objData['calle']
+							,'num_int'                   => $objData['num_int']
+							,'num_ext'                   => $objData['num_ext']
+							,'colonia'                   => $objData['colonia']
+							,'municipio'                 => $objData['municipio']
+							,'id_administracion_entidad' => $objData['id_administracion_entidad']
+							,'id_administracion_region'  => $objData['id_administracion_region']
+							,'cp'                        => $objData['cp']
+							,'telefonos'                 => $objData['telefono']
+							,'email'                     => $objData['email']
+							,'contacto'                  => $objData['contacto']
+							,'comentarios'               => $objData['comentario']
 							,'edit_id_usuario' 		     => $this->session->userdata('id_usuario')
 							,'edit_timestamp'  		     => $this->timestamp()
 
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
+				echo json_encode($this->lang_item("msg_update_success",false));
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
 	public function eliminar(){

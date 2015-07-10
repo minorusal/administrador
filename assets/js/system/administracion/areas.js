@@ -82,7 +82,7 @@ function actualizar(){
 		success : function(data){
 			jgrowl(data);
 		}
-	}).error(function(){
+	  }).error(function(){
 	       		progress.progressTimer('error', {
 		            errorText:'ERROR!',
 		            onFinish:function(){

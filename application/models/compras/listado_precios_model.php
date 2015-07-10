@@ -171,7 +171,7 @@ class listado_precios_model extends Base_Model{
 		$insert = $this->insert_item($tbl['compras_articulos_precios'], $data);
 		$ultimo_id  = $this->db->insert_id();
 		//ULTIMO ID
-		$query="SELECT id_row FROM av_administracion_movimientos WHERE id_administracion_movimientos=$ultimo_id";
+		$query="SELECT id_row FROM $tbl[administracion_movimientos] WHERE id_administracion_movimientos=$ultimo_id";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

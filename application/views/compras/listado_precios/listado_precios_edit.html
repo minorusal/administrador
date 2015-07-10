@@ -13,8 +13,12 @@
         <span class="field">{lts_articulos}</span>
     </p>
     <p>
+        <label>{region} (*)</label>
+        <span class="field">{lts_regiones}</span>
+    </p>
+    <p>
         <label>{proveedores} (*)</label>
-        <span class="field">{lts_proveedores}</span>
+        <span class="field" id="lts_proveedores_cargar">{lts_proveedores}</span>
     </p>
     <p>
         <label>{marcas} (*)</label>
@@ -105,7 +109,7 @@
         <input id="costo_final" type="text" name="costo_final" data-campo="costo_final" class="input-small" readonly/></span>
     </p>
     <p>
-        <label>{rendimiento}:</label>
+        <label>{rendimiento}: (*)</label>
         <span class="field">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="rendimiento" type="text" name="rendimiento" data-campo="rendimiento" class="input-small requerido" value="{val_rendimiento}"/>
         &nbsp;<span>%</span></span>

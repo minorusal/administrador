@@ -8,8 +8,12 @@
         <span class="field">{lts_articulos}</span>
     </p>
     <p>
-        <label>{proveedores} (*)</label>
-        <span class="field">{lts_proveedores}</span>
+        <label>{region} (*)</label>
+        <span class="field">{lts_region}</span>
+    </p>
+    <p>
+        <label>{proveedor} (*)</label>
+        <span class="field" id="lts_proveedores_cargar"><select name="lts_proveedores" class="chzn-select requerido" data-campo="lts_proveedores"><option value="0">-----</option></select></span>
     </p>
     <p>
         <label>{marcas} (*)</label>
@@ -105,7 +109,7 @@
     </p>
     <p>
         <div id="div_rendimiento">
-            <label>{rendimiento}:</label>
+            <label>{rendimiento}: (*)</label>
             <span class="field">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="rendimiento" type="text" name="rendimiento" data-campo="rendimiento" class="input-small requerido"/>
             &nbsp;<span>%</span></span>

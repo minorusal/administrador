@@ -117,7 +117,7 @@ function actualizar(){
 	var btn                 = jQuery("button[name='update_receta']");
 	var objData             = formData('#formulario_edicion');
 	objData['incomplete']   = values_requeridos();
-	
+	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();
 	jQuery.ajax({
 		type:"POST",

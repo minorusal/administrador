@@ -466,7 +466,8 @@ class entradas_recepcion extends Base_Controller{
 								);
 						$insert_partidas = $this->db_model->insert_entradas_partidas($sqldata);	
 						if($insert_partidas){
-							$insertstock = $this->db_model->insert_entradas_stock($sqldata2);
+							// $insertstock = $this->db_model->insert_entradas_stock($sqldata2);
+							$insertstock = $this->stock_model->insert_data_stock($sqldata2);
 							if($insertstock){
 									$sqldatalog_stock= array(
 										'id_accion'			  		   => $this->vars->cfg['id_accion_almacen_recepcion'], #1 => RECEPCION

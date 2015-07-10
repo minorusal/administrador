@@ -6,6 +6,7 @@
                     <input type="hidden" id="id_stock" value="{id_stock}" name="id_stock" data-campo="id_stock">
                     <input type="hidden" id="id_compras_orden_articulo" value="{id_compras_orden_articulo}" name="id_compras_orden_articulo" data-campo="id_compras_orden_articulo">
                     <input type="hidden" id="id_almacen_entradas_recepcion" value="{id_almacen_entradas_recepcion}" name="id_almacen_entradas_recepcion" data-campo="id_almacen_entradas_recepcion">
+                    <input type="hidden" id="id_articulo_tipo" value="{id_articulo_tipo}" name="id_articulo_tipo" data-campo="id_articulo_tipo">
                     <label>{upc_lbl}:</label>
                 </td >
                 <td><strong>{upc}</strong></td>
@@ -31,21 +32,13 @@
         </table>
    </div>
    <div class="span5">
-       <table class="table table-bordered table-invoice">
-            <tr>
-                <td class="width30">
-                    <label>{stock_lbl}:</label>
-                </td>
-                <td>
-                    <input type="text" id="stock" value="{stock}" name="stock" data-campo="stock" readonly>
-                </td>
-            </tr>
+       <table class="table table-bordered table-invoice">            
             <tr>
                 <td class="width30">
                     <label>{lote_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="lote" value="{lote}" name="lote" data-campo="lote" readonly>
+                    <input type="text" id="lote" value="{lote}" name="lote" data-campo="lote" readonly style="width:90px;">
                 </td>
             </tr>
             <tr>
@@ -53,7 +46,7 @@
                     <label>{caducidad_lbl}:</label>
                 </td>
                 <td>
-                    <input type="text" id="caducidad" value="{caducidad}" name="caducidad" data-campo="caducidad" readonly>
+                    <input type="text" id="caducidad" value="{caducidad}" name="caducidad" data-campo="caducidad" readonly style="width:90px;">
                 </td>
             </tr> 
        </table>
@@ -69,6 +62,28 @@
             <th>
                 {destino}
             </th>
+        </tr>
+        <tr>
+             <td valign="middle">
+                    <label><strong>{stock_lbl}: </strong></label>
+                    <span class="field">{stock}</span>
+                    <input type="hidden" id="stock_origen" value="{stock}" name="stock_origen" data-campo="stock_origen" />
+            </td>
+            <td>
+                    <label><strong>{stock_lbl}: </strong></label>
+                    <input type="text" id="stock" value="{stock}" name="stock" data-campo="stock" class="numerico" style="width:90px;" onkeyup="calcula_stock_um();" />
+            </td>
+        </tr>
+        <tr>
+             <td valign="middle">
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                    <span class="field">{stock_um} {unidad_minima_cve}</span>
+                    <input type="hidden" id="stock_um_origen" value="{stock_um}" name="stock_um_origen" data-campo="stock_um_origen" />
+            </td>
+            <td>
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                    <input type="text" id="stock_um_destino" value="{stock_um}" name="stock_um_destino" data-campo="stock_um_destino" class="numerico" style="width:90px;" onkeyup="calcula_stock_pz();"> {unidad_minima_cve}
+            </td>
         </tr>
         <tr>
              <td>
@@ -116,5 +131,4 @@
      <p class="stdformbutton"> 
         {button_save}
     </p>
-    <br><br><br><br><br><br><br><br><br><br>
 </div>

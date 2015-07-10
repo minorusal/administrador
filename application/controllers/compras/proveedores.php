@@ -110,6 +110,7 @@ class proveedores extends Base_Controller {
 									'nombre_comercial'  => $value['nombre_comercial'],
 									'rfc'               => $value['rfc'],
 									'clave_corta'       => $value['clave_corta'],
+									'region'            => $value['region'],
 									'entidad'           => $value['entidad'],
 									'acciones'	 		 => $acciones
 									);
@@ -122,6 +123,7 @@ class proveedores extends Base_Controller {
 										$this->lang_item("lbl_nombre"),
 										$this->lang_item("lbl_rfc"),
 										$this->lang_item("lbl_clv"),
+										$this->lang_item("lbl_clv_region"),
 										$this->lang_item("lbl_entidad"),
 										$this->lang_item("acciones")
 									);

@@ -117,6 +117,7 @@ class sucursales extends Base_Controller
 									'sucursal'      => tool_tips_tpl($value['sucursal'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
 									'razon_social'  => $value['rfc'],
+									'regiones'      => $value['region'],
 									'rfc'  => $value['razon_social'],
 									'direccion'     => tool_tips_tpl($value['direccion'], $this->lang_item("tool_tip"), 'right' , $atrr)
 									);
@@ -128,6 +129,7 @@ class sucursales extends Base_Controller
 										$this->lang_item("sucursal"),
 										$this->lang_item("clave_corta"),
 										$this->lang_item("rfc"),
+										$this->lang_item("región"),
 										$this->lang_item("rs"),
 										$this->lang_item("direccion"));
 			// Generar tabla

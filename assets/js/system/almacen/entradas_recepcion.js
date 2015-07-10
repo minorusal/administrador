@@ -139,7 +139,7 @@ function calculos(id){
 	total=(subtotal-descuento)+impuesto;
 	jQuery('#subtotal').val(subtotal);
 	jQuery('#value_subtotal').html('<strong>'+ moneda+' '+ numeral(subtotal).format('0,0.00') +'</strong>');
-	jQuery('#descuento_total').val(subtotal);
+	jQuery('#descuento_total').val(descuento);
 	jQuery('#value_descuento').html('<strong> - '+ moneda+' '+numeral(descuento).format('0,0.00')+'</strong>');
 	jQuery('#impuesto_total').val(impuesto);
 	jQuery('#value_impuesto').html('<strong>'+ moneda+' '+ numeral(impuesto).format('0,0.00')+'</strong>');
@@ -180,10 +180,21 @@ function calculos(id){
 	}
 	jQuery('#listado_'+id).prop("checked", "");
 }
-function aceptar_lote(id){
+function validar_cantidad(id){
+	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
+	var cantidad_total;
+	cantidad_total=cantidad_resta-cantidad_lote;
+	jQuery('#cantidad_resta_'+id).val(cantidad_total);
+}
+function aceptar_lote(id){	
+	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
 	var lote 	  = jQuery('#lotemodal').val();
 	var caducidad = jQuery('#caducidad').val();
 	var cantidad_lote 	  = jQuery('#cantidad_lote_modal').val();
+	var cantidad_resta =jQuery('#cantidad_resta_'+id).val();
+	var cantidad_total;
 	var tds=7;
 	var nuevaFila;
 	var cantidad;
@@ -203,6 +214,13 @@ function aceptar_lote(id){
 					caducidad,
 					''
 					);
+	//Comienzan operaciones
+	validar_cantidad(id);
+	if(cantidad_resta==0){
+		jQuery('#listado_'+id).attr("disabled", true);
+	}else{
+		jQuery('#listado_'+id).prop("checked", "");
+	}
 	for(var i=0;i<tds;i++){
 		if(i==4){
 			if(typeof(contador) == 'undefined'){
@@ -249,7 +267,7 @@ function aceptar_lote(id){
 	jQuery('#caducidad_val_'+id).val(caducidad);
 	jQuery('#cantidad_lote_'+id).val(cantidad_lote);
 	jQuery('#lote').modal('toggle');
-	jQuery('#listado_'+id).prop("checked", "checked");
+	//jQuery('#listado_'+id).prop("checked", "checked");
 }
 function calcula_totla_pagar(){
 	var total;
@@ -260,9 +278,9 @@ function calcula_totla_pagar(){
 	jQuery('#value_total').html(total);
 }
 function recibir_orden(){
-	/*jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
+	jQuery('input[name="aceptar[]"]:checked').attr('checked',false);
 	jQuery('#recibir').hide();	
-	jQuery('#volver').hide();	*/
+	jQuery('#volver').hide();	
 	jQuery('#mensajes').hide();	
 	// Obtiene campos en formulario
   	var objData = formData('#formulario');

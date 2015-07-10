@@ -279,6 +279,7 @@ class recetario extends Base_Controller{
 		foreach ($recetario as $key => $value) {
 			$id_nutricion_receta  = $value['id_nutricion_receta'];
 			$receta               = $value['receta'];
+			$id_sucursal          = $value['id_sucursal'];
 			$clave_corta          = $value['clave_corta'];
 			$id_nutricion_familia = $value['id_nutricion_familia'];
 			$familia              = $value['familia'];
@@ -308,8 +309,9 @@ class recetario extends Base_Controller{
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
 									,'text' 	=> array('clave_corta','sucursal')
-									,'name' 	=> "lts_sucursales_agregar"
+									,'name' 	=> "lts_sucursales_update"
 									,'class' 	=> "requerido"
+									,'selected' => $id_sucursal
 								);
 		$sucursales                = dropdown_tpl($dropdown_sucursales);
 
@@ -396,10 +398,11 @@ class recetario extends Base_Controller{
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			//print_debug($objData);
+			//print_debug($objData);,'id_sucursal'           => $objData['lts_sucursales_agregar']
 			$id_receta     = $objData['id_receta'];
 			$receta        = $objData['txt_receta'];
 			$clave_corta   = $objData['txt_clave_corta'];
+			$id_sucursal   = $objData['lts_sucursales_update'];
 			$familia       = $objData['lts_familias_insert'];
 			$porciones     = $objData['txt_porciones'];
 			$preparacion   = $objData['txt_preparacion'];
@@ -409,6 +412,7 @@ class recetario extends Base_Controller{
 				  'id_nutricion_receta'   => $id_receta
 				 ,'receta'                => $receta
 				 ,'clave_corta'           => $clave_corta
+				 ,'id_sucursal'           => $id_sucursal
 				 ,'porciones'             => $porciones
 				 ,'preparacion'           => $preparacion 
 				 ,'id_nutricion_familia'  => $familia

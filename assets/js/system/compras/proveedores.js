@@ -67,55 +67,71 @@ function detalle(id_compras_proveedor){
     });
 }
 
-function insert(){		
+function insert(){	
+var progress = progress_initialized('loader');	
 	var btn          = jQuery("button[name='save']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();	
-	// Obtiene campos en formulario
+	
   	var objData = formData('#formulario');
   	objData['incomplete'] = values_requeridos();
+
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"compras/proveedores/insert",
 		dataType: "json",
-		data : objData,
+		data : {objData},
 		beforeSend : function(){
-			imgLoader("#registro_loader");
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-			if(data.id==1){
-				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data.contenido).show('slow');
-			
+		    jgrowl(data);
+		    clean_formulario();
 		}
-	})
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 function actualizar(){	
+	var progress = progress_initialized('update_loader');
 		jQuery('#mensajes_update').hide();		
 		var btn          = jQuery("button[name='update']");
 		btn.attr('disabled','disabled');
-  		// Obtiene campos en formulario
+  		
   		var objData = formData('#formulario');
   		objData['incomplete'] = values_requeridos();
-  		//alert(dump_var(objData));
+  		
 		jQuery.ajax({
 			type:"POST",
 			url: path()+"compras/proveedores/actualizar",
 			dataType: "json",			
-			data : objData,
+			data : {objData},
 			beforeSend : function(){
-				imgLoader("#update_loader");
+			btn.attr('disabled',true);
 			},
 			success : function(data){
-				btn.removeAttr('disabled');
-				jQuery("#update_loader").html('');
-			    jQuery("#mensajes_update").html(data.contenido).show('slow');
+				jgrowl(data);
 			}
-		})
+		  }).error(function(){
+		       		progress.progressTimer('error', {
+			            errorText:'ERROR!',
+			            onFinish:function(){
+			            }
+		            });
+		           btn.attr('disabled',false);
+		        }).done(function(){
+			        progress.progressTimer('complete');
+			        btn.attr('disabled',false);
+		  });
 }
 
 function eliminar(id){	

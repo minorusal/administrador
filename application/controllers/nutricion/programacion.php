@@ -461,6 +461,7 @@ class programacion extends Base_Controller{
 									start: new Date('.$anio.', '.$mes.', '.$dia.'),
 				                    allDay: true
 								}';
+						$index++;
 						continue;
 					}
 					if(!array_key_exists($index, $ciclos)){

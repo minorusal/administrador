@@ -14,7 +14,7 @@ class recetario_model extends Base_Model{
 									r.receta like '%$filtro%' OR
 									r.clave_corta like '%$filtro%' OR
 									r.porciones like '%$filtro%' OR
-									s.sucursal like '%$filtro%' OR" : "";
+									s.sucursal like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						f.familia
@@ -57,8 +57,8 @@ class recetario_model extends Base_Model{
 		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
 									r.receta like '%$filtro%' OR
 									r.clave_corta like '%$filtro%' OR
-									s.sucursal like '%$filtro%' OR
-									r.porciones like '%$filtro%' OR" : "";
+									r.porciones like '%$filtro%' OR
+									s.sucursal like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "	SELECT 
 						f.familia
@@ -79,7 +79,9 @@ class recetario_model extends Base_Model{
 					WHERE r.activo = 1 $unique $filtro 
 					$limit 
 					";
+
       	$query = $this->db->query($query);
+      	//print_debug($query->result_array());
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	

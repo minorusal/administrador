@@ -2,7 +2,8 @@
 $lang['submodulo']     = "compras";
 $lang['seccion']       = "proveedores";
 
-$lang['lbl_region']      = 'región';
+$lang['lbl_clv_region'] = 'Región';
+$lang['lbl_region']     = 'región';
 $lang['lbl_rsocial']    = "Razon Social";
 $lang['lbl_nombre']	    = "Nombre del Proveedor";
 $lang['lbl_clv']        = "Clave corta";

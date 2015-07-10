@@ -11,8 +11,7 @@ class valores_nutricionales extends Base_Controller{
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'nutricion';
 		$this->submodulo		= 'valores_nutricionales';
@@ -32,8 +31,7 @@ class valores_nutricionales extends Base_Controller{
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}
 
-	public function config_tabs()
-	{
+	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		
@@ -61,13 +59,11 @@ class valores_nutricionales extends Base_Controller{
 		return $config_tab;
 	}
 
-	private function uri_view_principal()
-	{
+	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index()
-	{
+	public function index(){
 		$tabl_inicial 			  = 1;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
@@ -80,8 +76,7 @@ class valores_nutricionales extends Base_Controller{
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function listado($offset=0)
-	{
+	public function listado($offset=0){
 		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab2;	
@@ -103,10 +98,8 @@ class valores_nutricionales extends Base_Controller{
 		
 		$paginador = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'0'));
 		
-		if($total_rows)
-		{
-			foreach ($list_content as $value)
-			{
+		if($total_rows){
+			foreach ($list_content as $value){
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
@@ -122,10 +115,10 @@ class valores_nutricionales extends Base_Controller{
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("articulo"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("descripcion"));
+			$this->table->set_heading(	$this->lang_item("lbl_id"),
+										$this->lang_item("lbl_articulo"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -133,9 +126,7 @@ class valores_nutricionales extends Base_Controller{
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
-		}
-		else
-		{
+		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
@@ -146,18 +137,14 @@ class valores_nutricionales extends Base_Controller{
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
 
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
 
-	public function detalle()
-	{
+	public function detalle(){
 		$id_articulo         = $this->ajax_post('id_articulo');
 		$detalle             = $this->db_model_articulos->get_articulo_unico($id_articulo);
 		$seccion             = $this->tab2;
@@ -165,56 +152,56 @@ class valores_nutricionales extends Base_Controller{
 
 		$btn_save                        = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
 		$tabData['id_articulo']          = $id_articulo;
-		$tabData['nombre_articulo']      = $this->lang_item("articulo");
-		$tabData['cantidad_sugerida']    = $this->lang_item("cantidad_sugerida");
-		$tabData['peso_bruto']           = $this->lang_item("peso_bruto");
-		$tabData['peso_neto']            = $this->lang_item("peso_neto");
-		$tabData['energia']              = $this->lang_item("energia");
-		$tabData['proteina']             = $this->lang_item("proteina");
-		$tabData['lipidos']              = $this->lang_item("lipidos");
-		$tabData['hidratos_carbono']     = $this->lang_item("hidratos_carbono");
-		$tabData['fibra']                = $this->lang_item("fibra");
-		$tabData['vitamina_a']           = $this->lang_item("vitamina_a");
-		$tabData['acido_ascorbico']      = $this->lang_item("acido_ascorbico");
-		$tabData['acido_folico']         = $this->lang_item("acido_folico");
-		$tabData['hierro_nohem']         = $this->lang_item("hierro_nohem");
-		$tabData['potasio']              = $this->lang_item("potasio");
-		$tabData['azucar']               = $this->lang_item("azucar");
-		$tabData['indice_glicemico']     = $this->lang_item("indice_glicemico");
-		$tabData['carga_glicemica']      = $this->lang_item("carga_glicemica");
-		$tabData['calcio']               = $this->lang_item("calcio");
-		$tabData['sodio']                = $this->lang_item("sodio");
-		$tabData['selenio']              = $this->lang_item("selenio");
-		$tabData['fosforo']              = $this->lang_item("fosforo");
-		$tabData['colesterol']           = $this->lang_item("colesterol");
-		$tabData['ag_saturados']         = $this->lang_item("ag_saturados");
-		$tabData['ag_mono']              = $this->lang_item("ag_mono");
-		$tabData['ag_poli']              = $this->lang_item("ag_poli");
-		$tabData['cant_sugerida']        = ($detalle_nutricional)?$detalle_nutricional[0]['cantidad_sugerida']:'';
-		$tabData['articulo']             = $detalle[0]['articulo'];
-		$tabData['p_bruto']              = ($detalle_nutricional)?$detalle_nutricional[0]['peso_bruto']:'';
-		$tabData['p_neto']               = ($detalle_nutricional)?$detalle_nutricional[0]['peso_neto']:'';
-		$tabData['ener']                 = ($detalle_nutricional)?$detalle_nutricional[0]['energia']:'';
-		$tabData['prot']                 = ($detalle_nutricional)?$detalle_nutricional[0]['proteina']:'';
-		$tabData['lipids']               = ($detalle_nutricional)?$detalle_nutricional[0]['lipidos']:'';
-		$tabData['h_carbono']            = ($detalle_nutricional)?$detalle_nutricional[0]['hidratos_carbono']:'';
-		$tabData['fib']                  = ($detalle_nutricional)?$detalle_nutricional[0]['fibra']:'';
-		$tabData['vit_a']                = ($detalle_nutricional)?$detalle_nutricional[0]['vitamina_a']:'';
-		$tabData['a_ascorbico']          = ($detalle_nutricional)?$detalle_nutricional[0]['acido_ascorbico']:'';
-		$tabData['a_folico']             = ($detalle_nutricional)?$detalle_nutricional[0]['acido_folico']:'';
-		$tabData['h_nohem']              = ($detalle_nutricional)?$detalle_nutricional[0]['hierro_nohem']:'';
-		$tabData['pot']                  = ($detalle_nutricional)?$detalle_nutricional[0]['potasio']:'';
-		$tabData['azu']                  = ($detalle_nutricional)?$detalle_nutricional[0]['azucar']:'';
-		$tabData['i_glicemico']          = ($detalle_nutricional)?$detalle_nutricional[0]['indice_glicemico']:'';
-		$tabData['c_glicemica']          = ($detalle_nutricional)?$detalle_nutricional[0]['carga_glicemica']:'';
-		$tabData['calc']                 = ($detalle_nutricional)?$detalle_nutricional[0]['calcio']:'';
-		$tabData['sod']                  = ($detalle_nutricional)?$detalle_nutricional[0]['sodio']:'';
-		$tabData['sel']                  = ($detalle_nutricional)?$detalle_nutricional[0]['selenio']:'';
-		$tabData['fos']                  = ($detalle_nutricional)?$detalle_nutricional[0]['fosforo']:'';
-		$tabData['coles']                = ($detalle_nutricional)?$detalle_nutricional[0]['colesterol']:'';
-		$tabData['saturados']            = ($detalle_nutricional)?$detalle_nutricional[0]['ag_saturados']:'';
-		$tabData['mono']                 = ($detalle_nutricional)?$detalle_nutricional[0]['ag_mono']:'';
-		$tabData['poli']                 = ($detalle_nutricional)?$detalle_nutricional[0]['ag_poli']:'';
+		$tabData['lbl_articulo']         = $this->lang_item("lbl_articulo");
+		$tabData['lbl_cantidad_sugerida']= $this->lang_item("lbl_cantidad_sugerida");
+		$tabData['lbl_peso_bruto']       = $this->lang_item("lbl_peso_bruto");
+		$tabData['lbl_peso_neto']        = $this->lang_item("lbl_peso_neto");
+		$tabData['lbl_energia']          = $this->lang_item("lbl_energia");
+		$tabData['lbl_proteina']         = $this->lang_item("lbl_proteina");
+		$tabData['lbl_lipidos']          = $this->lang_item("lbl_lipidos");
+		$tabData['lbl_hidratos_carbono'] = $this->lang_item("lbl_hidratos_carbono");
+		$tabData['lbl_fibra']            = $this->lang_item("lbl_fibra");
+		$tabData['lbl_vitamina_a']       = $this->lang_item("lbl_vitamina_a");
+		$tabData['lbl_acido_ascorbico']  = $this->lang_item("lbl_acido_ascorbico");
+		$tabData['lbl_acido_folico']     = $this->lang_item("lbl_acido_folico");
+		$tabData['lbl_hierro_nohem']     = $this->lang_item("lbl_hierro_nohem");
+		$tabData['lbl_potasio']          = $this->lang_item("lbl_potasio");
+		$tabData['lbl_azucar']           = $this->lang_item("lbl_azucar");
+		$tabData['lbl_indice_glicemico'] = $this->lang_item("lbl_indice_glicemico");
+		$tabData['lbl_carga_glicemica']  = $this->lang_item("lbl_carga_glicemica");
+		$tabData['lbl_calcio']           = $this->lang_item("lbl_calcio");
+		$tabData['lbl_sodio']            = $this->lang_item("lbl_sodio");
+		$tabData['lbl_selenio']          = $this->lang_item("lbl_selenio");
+		$tabData['lbl_fosforo']          = $this->lang_item("lbl_fosforo");
+		$tabData['lbl_colesterol']       = $this->lang_item("lbl_colesterol");
+		$tabData['lbl_ag_saturados']     = $this->lang_item("lbl_ag_saturados");
+		$tabData['lbl_ag_mono']          = $this->lang_item("lbl_ag_mono");
+		$tabData['lbl_ag_poli']          = $this->lang_item("lbl_ag_poli");
+		$tabData['txt_cantidad_sugerida']= ($detalle_nutricional)?$detalle_nutricional[0]['cantidad_sugerida']:'';
+		$tabData['txt_articulo']         = $detalle[0]['articulo'];
+		$tabData['txt_peso_bruto']       = ($detalle_nutricional)?$detalle_nutricional[0]['peso_bruto']:'';
+		$tabData['txt_peso_neto']        = ($detalle_nutricional)?$detalle_nutricional[0]['peso_neto']:'';
+		$tabData['txt_energia']          = ($detalle_nutricional)?$detalle_nutricional[0]['energia']:'';
+		$tabData['txt_proteina']         = ($detalle_nutricional)?$detalle_nutricional[0]['proteina']:'';
+		$tabData['txt_lipidos']          = ($detalle_nutricional)?$detalle_nutricional[0]['lipidos']:'';
+		$tabData['txt_hidratos_carbono'] = ($detalle_nutricional)?$detalle_nutricional[0]['hidratos_carbono']:'';
+		$tabData['txt_fibra']            = ($detalle_nutricional)?$detalle_nutricional[0]['fibra']:'';
+		$tabData['txt_vitamina_a']       = ($detalle_nutricional)?$detalle_nutricional[0]['vitamina_a']:'';
+		$tabData['txt_acido_ascorbico']  = ($detalle_nutricional)?$detalle_nutricional[0]['acido_ascorbico']:'';
+		$tabData['txt_acido_folico']     = ($detalle_nutricional)?$detalle_nutricional[0]['acido_folico']:'';
+		$tabData['txt_hierro_nohem']     = ($detalle_nutricional)?$detalle_nutricional[0]['hierro_nohem']:'';
+		$tabData['txt_potasio']          = ($detalle_nutricional)?$detalle_nutricional[0]['potasio']:'';
+		$tabData['txt_azucar']           = ($detalle_nutricional)?$detalle_nutricional[0]['azucar']:'';
+		$tabData['txt_indice_glicemico'] = ($detalle_nutricional)?$detalle_nutricional[0]['indice_glicemico']:'';
+		$tabData['txt_carga_glicemica']  = ($detalle_nutricional)?$detalle_nutricional[0]['carga_glicemica']:'';
+		$tabData['txt_calcio']           = ($detalle_nutricional)?$detalle_nutricional[0]['calcio']:'';
+		$tabData['txt_sodio']            = ($detalle_nutricional)?$detalle_nutricional[0]['sodio']:'';
+		$tabData['txt_selenio']          = ($detalle_nutricional)?$detalle_nutricional[0]['selenio']:'';
+		$tabData['txt_fosforo']          = ($detalle_nutricional)?$detalle_nutricional[0]['fosforo']:'';
+		$tabData['txt_colesterol']       = ($detalle_nutricional)?$detalle_nutricional[0]['colesterol']:'';
+		$tabData['txt_ag_saturados']     = ($detalle_nutricional)?$detalle_nutricional[0]['ag_saturados']:'';
+		$tabData['txt_ag_mono']          = ($detalle_nutricional)?$detalle_nutricional[0]['ag_mono']:'';
+		$tabData['txt_ag_poli']          = ($detalle_nutricional)?$detalle_nutricional[0]['ag_poli']:'';
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']     = $detalle_nutricional[0]['timestamp'];
@@ -228,14 +215,11 @@ class valores_nutricionales extends Base_Controller{
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 
-		if($detalle_nutricional[0]['edit_id_usuario'])
-		{
+		if($detalle_nutricional[0]['edit_id_usuario']){
 			$usuario_registro = $this->users_model->search_user_for_id($detalle_nutricional[0]['edit_id_usuario']);
 			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
 			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($detalle_nutricional[0]['edit_timestamp']), $usuario_name);
-		}
-		else
-		{
+		}else{
 			$usuario_name = '';
 			$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
 		}
@@ -247,73 +231,49 @@ class valores_nutricionales extends Base_Controller{
 		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
 	}
 
-	public function actualizar()
-	{
-		$numerico = $this->ajax_post('numerico');
-		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0 || $numerico > 0)
-		{
-			$msg = $this->lang_item('msg_campos_numericos',false);
-			$json_respuesta = array(
-				 'id' => 0
-				,'contenido' => alertas_tpl('error',$msg, false)
-				,'succes' => false
-				);
-		}
-		else
-		{
+	public function actualizar(){
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0 || $objData['numerico']>0){
+			echo json_encode($this->lang_item("msg_campos_numericos",false));
+		}else{
 			$sqlData = array(
-				'id_compras_articulos' => $this->ajax_post('id_articulo')
-				,'cantidad_sugerida'   => $this->ajax_post('cant_sugerida')
-				,'peso_bruto'          => $this->ajax_post('p_bruto')
-				,'peso_neto'           => $this->ajax_post('p_neto')
-				,'energia'             => $this->ajax_post('ener')
-				,'proteina'            => $this->ajax_post('prot')
-				,'lipidos'             => $this->ajax_post('lipids')
-				,'hidratos_carbono'    => $this->ajax_post('h_carbono')
-				,'fibra'               => $this->ajax_post('fib')
-				,'vitamina_a'          => $this->ajax_post('vit_a')
-				,'acido_ascorbico'     => $this->ajax_post('a_ascorbico')
-				,'acido_folico'        => $this->ajax_post('a_folico')
-				,'hierro_nohem'        => $this->ajax_post('h_nohem')
-				,'potasio'             => $this->ajax_post('pot')
-				,'azucar'              => $this->ajax_post('azu')
-				,'indice_glicemico'    => $this->ajax_post('i_glicemico')
-				,'carga_glicemica'     => $this->ajax_post('c_glicemica')
-				,'calcio'              => $this->ajax_post('calc')
-				,'sodio'               => $this->ajax_post('sod')
-				,'selenio'             => $this->ajax_post('sel')
-				,'fosforo'             => $this->ajax_post('fos')
-				,'colesterol'          => $this->ajax_post('coles')
-				,'ag_saturados'        => $this->ajax_post('saturados')
-				,'ag_mono'             => $this->ajax_post('mono')
-				,'ag_poli'             => $this->ajax_post('poli')
+				'id_compras_articulos' => $objData['id_articulo']
+				,'cantidad_sugerida'   => $objData['txt_cantidad_sugerida']
+				,'peso_bruto'          => $objData['txt_peso_bruto']
+				,'peso_neto'           => $objData['txt_peso_neto']
+				,'energia'             => $objData['txt_energia']
+				,'proteina'            => $objData['txt_proteina']
+				,'lipidos'             => $objData['txt_lipidos']
+				,'hidratos_carbono'    => $objData['txt_hidratos_carbono']
+				,'fibra'               => $objData['txt_fibra']
+				,'vitamina_a'          => $objData['txt_vitamina_a']
+				,'acido_ascorbico'     => $objData['txt_acido_ascorbico']
+				,'acido_folico'        => $objData['txt_acido_folico']
+				,'hierro_nohem'        => $objData['txt_hierro_nohem']
+				,'potasio'             => $objData['txt_potasio']
+				,'azucar'              => $objData['txt_azucar']
+				,'indice_glicemico'    => $objData['txt_indice_glicemico']
+				,'carga_glicemica'     => $objData['txt_carga_glicemica']
+				,'calcio'              => $objData['txt_calcio']
+				,'sodio'               => $objData['txt_sodio']
+				,'selenio'             => $objData['txt_selenio']
+				,'fosforo'             => $objData['txt_fosforo']
+				,'colesterol'          => $objData['txt_colesterol']
+				,'ag_saturados'        => $objData['txt_ag_saturados']
+				,'ag_mono'             => $objData['txt_ag_mono']
+				,'ag_poli'             => $objData['txt_ag_poli']
 				,'timestamp'           => $this->timestamp()
 				,'id_usuario'          => $this->session->userdata('id_usuario')
 				,'edit_timestamp'      => $this->timestamp()
 				,'edit_id_usuario'     => $this->session->userdata('id_usuario')
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
-			if($insert)
-			{
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		     => 1
-						,'contenido'     => alertas_tpl('success', $msg ,false)
-						,'success' 	     => true
-				);
-			}
-			else
-			{
-				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		    => 0
-						,'contenido'    => alertas_tpl('', $msg ,false)
-						,'success'    	=> false
-				);
+			if($insert){
+				echo json_encode($this->lang_item("msg_update_success",false));
+			}else{
+				echo json_encode($this->lang_item("msg_err_clv",false));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
 

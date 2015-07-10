@@ -29,6 +29,7 @@ class proveedores_model extends Base_Model{
 						,p.colonia
 						,p.municipio
 						,e.entidad
+						,r.clave_corta as region
 						,p.cp
 						,p.telefonos
 						,p.email
@@ -41,6 +42,7 @@ class proveedores_model extends Base_Model{
 						,p.activo
 					FROM $tbl[compras_proveedores] p 
 					LEFT JOIN $tbl[administracion_entidades] e on p.id_administracion_entidad = e.id_administracion_entidad
+					LEFT JOIN $tbl[administracion_regiones] r on p.id_administracion_region = r.id_administracion_region
 					WHERE p.activo = 1 $filtro
 					$limit
 					";

@@ -85,7 +85,10 @@ class Base_Controller extends CI_Controller {
 		$img_path_    = base_url().'assets/avatar/users/';
 		$avatar_image = $this->session->userdata('avatar_user');
 		
-		
+		$perfil             = $this->session->userdata('perfil');
+		$user_root          = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
+		$icon_root          = ($user_root) ? 'fa fa-user-secret' : '';
+
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
@@ -96,6 +99,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['user_mail']      = $this->session->userdata('mail');
 		$dataheader['user_name']      = $this->session->userdata('name');
 		$dataheader['user_perfil']    = $this->session->userdata('perfil');
+		$dataheader['icon_root']      = $icon_root;
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
 		$dataheader['fecha_hoy']	  = $this->timestamp_complete();

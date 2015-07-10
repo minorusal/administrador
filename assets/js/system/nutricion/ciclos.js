@@ -3,15 +3,7 @@ jQuery(document).ready(function(){
 });
 
 function selec_manual_auto(){
-  /*Se llama a la funcion que permite ingresar solo números enteros
-  *en un campo de texto*/
-
   var letra = allow_only_numeric_integer();
-  
-  //Se inicializan los estados de los elementos del formulario
-  /*
-   * txt_ciclo se deshabilita, se le remueve la clase requerido
-   */
   jQuery("#txt_ciclo").attr("disabled", "disabled");
   jQuery("#txt_ciclo").removeClass("requerido");
 

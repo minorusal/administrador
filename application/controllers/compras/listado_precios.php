@@ -292,7 +292,7 @@ class listado_precios extends Base_Controller {
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));			
 		}
 		else{
 			$articulo_default = $this->ajax_post('listado_principal');

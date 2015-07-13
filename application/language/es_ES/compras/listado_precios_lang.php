@@ -25,5 +25,5 @@ $lang['costo_unitario_tipo']  	 	  = 'costo uni. tipo';
 $lang['rendimiento']  	 	  		  = 'rendimiento';
 $lang['region']  	 	  		  	  = 'región';
 $lang['cl_region']  	 	  		  = 'Clave corta región';
-$lang['listado_principal']  	 	  = 'listado principal';
+$lang['articulo_default']  	 	      = 'articulo default';
 ?>

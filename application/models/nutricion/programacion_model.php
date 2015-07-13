@@ -148,7 +148,7 @@ class programacion_model extends Base_Model{
 						npc.orden,
 						c.*
 					FROM 
-						$tbl[nutricion_programacion_ciclo] npc
+						$tbl[nutricion_programacion_ciclos] npc
 					LEFT JOIN (
 						SELECT 
 							 cl.id_nutricion_ciclos

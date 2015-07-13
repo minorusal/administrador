@@ -49,6 +49,7 @@ function buscar(){
   })
 }
 function agregar(){
+  var progress = progress_initialized('registro_loader');
   var btn          = jQuery("button[name='listado_precios_save']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -115,18 +116,23 @@ function agregar(){
         listado_principal : listado_principal
     },
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-      var data = data.split('|');
-      if(data[0]==1){
+        jgrowl(data);
         clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
     }
-  });
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 function detalle(id_compras_articulo_precio){
   jQuery('#ui-id-2').click();
@@ -146,6 +152,7 @@ function detalle(id_compras_articulo_precio){
     });
 }
 function update(){
+  var progress = progress_initialized('update_loader');
   jQuery('#mensajes_update').hide();
   var btn          = jQuery("button[name='update']");
   btn.attr('disabled','disabled');
@@ -212,18 +219,23 @@ function update(){
         rendimiento : rendimiento,
         listado_principal : listado_principal
       },
-    beforeSend : function(){
-      jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+   beforeSend : function(){
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');   
-      var data = data.split('|');
-        if(data[0]==1){
-        }
-      jQuery("#update_loader").html('');
-          jQuery("#mensajes_update").html(data[1]).show('slow');
+      jgrowl(data);
     }
-  });
+    }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 function load_proveedor(id_region){
   jQuery.ajax({

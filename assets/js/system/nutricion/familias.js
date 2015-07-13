@@ -64,62 +64,69 @@ function detalle(id_familia){
 }
 
 function actualizar(){
+  var progress = progress_initialized('update_loader');
  jQuery('#mensajes_update').hide();
   var btn             = jQuery("button[name='actualizar']");
   btn.attr('disabled','disabled');
   var btn_text        = btn.html()
+
   var objData = formData('#formulario');
-  
-  objData['incomplete']   = values_requeridos();
-  objData['id_familia']   = jQuery('#id_familia').val();
-  objData['familia']      = jQuery('#txt_familia').val();
-  objData['clave_corta']  = jQuery('#txt_clave_corta').val();
-  objData['descripcion']  = jQuery('#txt_descripcion').val();
+  objData['incomplete'] = values_requeridos();
 
   jQuery.ajax({
     type:"POST",
     url: path()+"nutricion/familias/actualizar",
     dataType: "json",
-    data: objData,
+    data: {objData},
     beforeSend : function(){
-      jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');   
-      jQuery("#mensajes_update").html(data.contenido).show('slow');
-      jQuery("#update_loader").html('');
+      jgrowl(data);
     }
-  })
+    }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 
 function agregar(){
+  var progress = progress_initialized('registro_loader');
   var btn          = jQuery("button[name='save_familia']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
 
   var objData = formData('#formulario');
   objData['incomplete']   = values_requeridos();
-  objData['id_familia']   = jQuery('#id_familia').val();
-  objData['familia']      = jQuery('#txt_familia').val();
-  objData['clave_corta']  = jQuery('#txt_clave_corta').val();
-  objData['descripcion']  = jQuery('#txt_descripcion').val();
+
   jQuery.ajax({
     type:"POST",
     url: path()+"nutricion/familias/insert_familia",
     dataType: "json",
-    data: objData,
+    data: {objData},
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-
-      var data = data.split('|');
-      if(data[0]==1){
+        jgrowl(data);
         clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
     }
-  });
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }

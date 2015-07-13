@@ -80,6 +80,7 @@ class recetario_model extends Base_Model{
 					$limit 
 					";
 
+		
       	$query = $this->db->query($query);
       	//print_debug($query->result_array());
 		if($query->num_rows >= 1){

@@ -59,14 +59,15 @@ class recetario_model extends Base_Model{
 									r.clave_corta like '%$filtro%' OR
 									r.porciones like '%$filtro%' OR
 									s.sucursal like '%$filtro%')" : "";
-		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		$query = "	SELECT 
+		$limit  = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query  = "	SELECT 
 						f.familia
 						,f.id_nutricion_familia
 						,r.*
 						,ri.id_compras_articulo
 						,ri.porciones as porciones_articulo
 						,ca.articulo
+						,ap.costo_x_um
 						,cu.um
 						,s.id_sucursal
 						,s.sucursal
@@ -76,9 +77,18 @@ class recetario_model extends Base_Model{
 					LEFT JOIN  $tbl[compras_articulos] ca ON ca.id_compras_articulo = ri.id_compras_articulo
 					LEFT JOIN  $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
 					LEFT JOIN  $tbl[sucursales] s ON s.id_sucursal = r.id_sucursal
-					WHERE r.activo = 1 $unique $filtro 
-					$limit 
-					";
+					LEFT JOIN  (SELECT 
+									ap.id_articulo, 
+									ap.costo_x_um,
+									ap.id_administracion_region
+								FROM 
+									$tbl[compras_articulos_precios] ap
+								WHERE 
+									ap.articulo_default = 1
+					) ap ON (ap.id_articulo = ca.id_compras_articulo AND ap.id_administracion_region = s.id_region)
+
+					WHERE r.activo = 1 $unique $filtro";
+
 
       	$query = $this->db->query($query);
       	//print_debug($query->result_array());

@@ -2,11 +2,22 @@
     <input id="id_receta" data-campo="id_receta" type="hidden" name="id_receta" value="{id_receta}" />
     <p>
         <label>{lbl_receta}: (*)</label>
-        <span class="field"><input id="txt_receta" data-campo="txt_receta" type="text" name="txt_familia" class="input-xlarge requerido" value="{value_receta}" /></span>
+        <span class="field">
+            <input id="txt_receta" data-campo="txt_receta" type="text" name="txt_familia" class="input-xlarge requerido" value="{value_receta}" />
+        </span>
     </p>
     <p>
         <label>{lbl_clave_corta}: (*)</label>
-        <span class="field"><input id="txt_clave_corta" data-campo="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="{value_clave_corta}" /></span>
+        <span class="field">
+            <input id="txt_clave_corta" data-campo="txt_clave_corta" type="text" name="txt_clave_corta" class="input-xlarge requerido" value="{value_clave_corta}" />
+        </span>
+    </p>
+    <p>
+        <label>{lbl_costo_x_porcion}:</label>
+        <span class="field">
+            <input id="txt_costo_x_porcion" readonly data-campo="txt_costo_x_porcion" type="text" name="txt_costo_x_porcion" class="input-xlarge" value="{value_costo_x_porcion}" />
+            {msg_insumos_sin_costo}
+        </span>
     </p>
     <p>
         <label>{lbl_sucursal}: (*)</label>
@@ -18,7 +29,9 @@
     </p>
     <p>
         <label>{lbl_porciones}: (*)</label>
-         <span class="field"><input id="txt_porciones" data-campo="txt_porciones" type="text" name="txt_clave_corta" class="input-small numerico requerido" value="{value_porciones}" /></span>
+         <span class="field">
+            <input id="txt_porciones" data-campo="txt_porciones" type="text" name="txt_porciones" class="input-small numerico requerido" value="{value_porciones}" />
+        </span>
     </p>
    
     <p>
@@ -35,7 +48,9 @@
 
      <p>
         <label>{lbl_preparacion}: </label>
-        <span class="field"><textarea id="txt_preparacion" data-campo="txt_preparacion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{value_preparacion}</textarea></span>
+        <span class="field">
+            <textarea id="txt_preparacion" data-campo="txt_preparacion" name="txt_descripcion"  class="span5" style="resize: vertical; height: 100px;">{value_preparacion}</textarea>
+        </span>
     </p>
 
     <p>

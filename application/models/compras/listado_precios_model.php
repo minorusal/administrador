@@ -166,6 +166,38 @@ class listado_precios_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+	public function db_get_data_listado_principal($data=array()){
+		//$condicion =($id_administracion_region)?"AND a.id_administracion_region= '$id_administracion_region'":"";
+		$id_administracion_region = " AND a.id_administracion_region=".$data['id_administracion_region'];
+		$id_articulo = " AND a.id_articulo=".$data['id_articulo'];
+		$condicion=$id_administracion_region.$id_articulo;
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query="SELECT 
+					a.id_compras_articulo_precios
+					,a.id_administracion_region
+					,a.articulo_default
+					
+				from $tbl[compras_articulos_precios] a 
+				WHERE a.activo = 1 AND 1  $condicion;";
+      	// Execute querie
+				//echo $query;
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+	public function update_listado_principal($data = array(),$id_region){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$id_articulo = " AND id_articulo = ".$data['id_articulo'];
+		$condicion = "id_administracion_region = ".$id_region.$id_articulo;
+
+		$update = $this->update_item($tbl['compras_articulos_precios'], $data, 'articulo_default', $condicion);
+		return $update;
+	}
 	public function db_insert_data($data = array()){
 		// DB Info
 		$tbl = $this->tbl;

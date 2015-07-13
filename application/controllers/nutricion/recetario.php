@@ -392,13 +392,11 @@ class recetario extends Base_Controller{
 	public function update(){
 		
 		$objData  	= $this->ajax_post('objData');
-		
-	
+
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			//print_debug($objData);,'id_sucursal'           => $objData['lts_sucursales_agregar']
 			$id_receta     = $objData['id_receta'];
 			$receta        = $objData['txt_receta'];
 			$clave_corta   = $objData['txt_clave_corta'];

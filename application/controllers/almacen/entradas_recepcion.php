@@ -408,7 +408,7 @@ class entradas_recepcion extends Base_Controller{
 				//CONSTRUCCION DE ARRAY QUE GUARDA DATOS PARA INSERT
 				for($i=0; count($lote_val)>$i;$i++){
 					$data[]=explode('-',$keys[$i]);
-					$array[][$data[$i][0]]=[
+					$array[][$data[$i][0]]=array(
 											$data[$i][0],
 											$values_lote[$i],
 											$values_cantidad[$i],
@@ -417,7 +417,7 @@ class entradas_recepcion extends Base_Controller{
 											$chek_box[$data[$i][0]],
 											$um_x_presentacion[$data[$i][0]],
 											$unidad_minima[$data[$i][0]]
-										];
+										);
 				}	
 
 				for($j=0; count($lote_val)>$j;$j++){

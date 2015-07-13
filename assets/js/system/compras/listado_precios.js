@@ -55,6 +55,7 @@ function agregar(){
   var incomplete   = values_requeridos();
   var impuesto_aplica;
   var id_embalaje;
+  var listado_principal;
   if( jQuery('#impuesto_aplica').is(':checked') ){
     impuesto_aplica = 1;
   }else{
@@ -66,6 +67,11 @@ function agregar(){
   }
   else{
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
+  }
+  if( jQuery('#listado_principal').is(':checked') ){
+    listado_principal = 1;
+  }else{
+    listado_principal = 0;    
   }
   var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
   var id_region                 = jQuery("select[name='lts_region'] option:selected").val();
@@ -105,7 +111,8 @@ function agregar(){
         costo_unitario : costo_unitario,
         costo_x_um   :costo_x_um,
         upc : upc,
-        rendimiento : rendimiento
+        rendimiento : rendimiento,
+        listado_principal : listado_principal
     },
     beforeSend : function(){
       jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
@@ -142,7 +149,7 @@ function update(){
   jQuery('#mensajes_update').hide();
   var btn          = jQuery("button[name='update']");
   btn.attr('disabled','disabled');
-  var btn_text     = btn.html();  
+  //var btn_text     = btn.html();  
   var incomplete   = values_requeridos();
   var impuesto_aplica;
   var id_embalaje;
@@ -157,8 +164,14 @@ function update(){
   else{
     id_embalaje = jQuery("select[name='lts_embalaje'] option:selected").val();
   }
+  if( jQuery('#listado_principal').is(':checked') ){
+    listado_principal = 1;
+  }else{
+    listado_principal = 0;    
+  }
   var id_compras_articulo_precios  = jQuery('#id_compras_articulo_precios').val();
   var id_articulo               = jQuery("select[name='lts_articulos'] option:selected").val();
+  var id_region                 = jQuery("select[name='lts_region'] option:selected").val();
   var id_proveedor              = jQuery("select[name='lts_proveedores'] option:selected").val();
   var id_marca                  = jQuery("select[name='lts_marcas'] option:selected").val();
   var id_presentacion           = jQuery("select[name='lts_presentaciones'] option:selected").val();
@@ -187,6 +200,7 @@ function update(){
         impuesto_aplica : impuesto_aplica,
         impuesto_porcentaje : impuesto_porcentaje,
         id_articulo : id_articulo,
+        id_region : id_region, 
         id_proveedor : id_proveedor,
         id_marca : id_marca,
         id_presentacion : id_presentacion,
@@ -195,7 +209,8 @@ function update(){
         costo_unitario : costo_unitario,
         costo_x_um   :costo_x_um,
         upc : upc,
-        rendimiento : rendimiento
+        rendimiento : rendimiento,
+        listado_principal : listado_principal
       },
     beforeSend : function(){
       jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');

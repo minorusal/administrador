@@ -30,6 +30,7 @@ $.fn.numeric = function(decimal, callback)
   return this.data("numeric.decimal", decimal).data("numeric.callback", callback).keypress($.fn.numeric.keypress).blur($.fn.numeric.blur);
 }
 
+
 $.fn.numeric.keypress = function(e)
 {
   var decimal = $.data(this, "numeric.decimal");
@@ -116,6 +117,11 @@ $.fn.numeric.keypress = function(e)
   {
     allow = true;
   }
+  if(allow){
+    $(this).css( 'border-color', '');
+  }else{
+     $(this).css( 'border-color', '#b94a48');
+  }
   return allow;
 }
 
@@ -137,6 +143,10 @@ $.fn.numeric.blur = function()
 $.fn.removeNumeric = function()
 {
   return this.data("numeric.decimal", null).data("numeric.callback", null).unbind("keypress", $.fn.numeric.keypress).unbind("blur", $.fn.numeric.blur);
+}
+$.fn.err = function()
+{
+  $(this).css( 'border-color', '#b94a48');
 }
 
 })(jQuery);

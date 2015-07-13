@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class entradas_almacen extends Base_Controller{
+require_once('stock.php');
+class entradas_almacen extends stock{
 		/**
 	* Nombre:		Historial Ordenes
 	* Ubicación:	Compras>Ordenes/historial ordenes
@@ -225,7 +226,7 @@ class entradas_almacen extends Base_Controller{
 		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
 		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
 		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
-		$tabData['stock_um_lbl']	 = $this->lang_item("stock_lbl",false);
+		$tabData['stock_um_lbl']	 = $this->lang_item("stock_um_lbl",false);		
 		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
 		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
 		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
@@ -312,44 +313,32 @@ class entradas_almacen extends Base_Controller{
 		$stock_um 					= $this->ajax_post('stock_um');
 		$lote 						= $this->ajax_post('lote');
 		$caducidad 					= $this->ajax_post('caducidad');
-		$data_update  = array(
-								'id_stock'     => $id_stock,
-								'id_almacen'   => $id_almacen,
-								'id_pasillo'  	=> $id_pasillo,
-								'id_gaveta'  	=> $id_gaveta,
-								'edit_timestamp'  	=> $this->timestamp(),
-								'edit_id_usuario'  => $this->session->userdata('id_usuario')
-							);
-		//dump_var($data_update);
-		$update = $this->db_model->db_update_alma_gav_pas($data_update);
-			if($update){
-				// Log Stock
-				$sqldatalog_stock= array(
-					'id_accion'			  		   => $this->vars->cfg['id_accion_almacen_entrada'], #2 => ENTRADA
-					'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion,
-					'id_compras_orden_articulo'    => $id_compras_orden_articulo,
-					'id_stock'			   		   => $id_stock,
-					'log_id_almacen_origen'		   => $id_almacen_origen,
-					'log_id_pasillo_origen'		   => $id_pasillo_origen,
-					'log_id_gaveta_origen'		   => $id_gaveta_origen,
-					'log_id_almacen_destino'	   => $id_almacen,
-					'log_id_pasillo_destino'	   => $id_pasillo,
-					'log_id_gaveta_destino'		   => $id_gaveta,
-					'log_stock'					   => $stock,
-					'log_stock_um'				   => $stock_um,
-					'log_lote'					   => $lote,
-					'log_caducidad'			   	   => $caducidad,
-					'timestamp'  	 		       => $this->timestamp(),
-					'id_usuario'   		   		   => $this->session->userdata('id_usuario')
-				);
-				$insertstock = $this->stock_model->insert_stock_log($sqldatalog_stock);
-				// mensaje
-				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
-			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
-			}
-		
+
+		$arrayData = array(
+						 'id_accion' 					=> $this->vars->cfg['id_accion_almacen_entrada'] #2 => ENTRADA
+						,'id_stock' 					=> $id_stock
+						,'id_compras_orden_articulo' 	=> $id_compras_orden_articulo
+						,'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion
+						,'id_almacen_origen'			=> $id_almacen_origen
+						,'id_pasillo_origen'			=> $id_pasillo_origen
+						,'id_gaveta_origen'				=> $id_gaveta_origen
+						,'stock_origen'					=> $stock
+						,'stock_um_origen'				=> $stock_um
+						,'id_almacen_destino'			=> $id_almacen
+						,'id_pasillo_destino'			=> $id_pasillo
+						,'id_gaveta_destino'			=> $id_gaveta
+						,'stock_destino'				=> $stock
+						,'stock_um_destino'				=> $stock_um
+						,'lote'							=> $lote
+						,'caducidad'					=> $caducidad
+					);
+		$update = $this->stock_update($arrayData);
+		if($update){
+			$msg = $this->lang_item("msg_update_success",false);
+			echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+		}else{
+			$msg = $this->lang_item("msg_err_clv",false);
+			echo json_encode('0|'.alertas_tpl('', $msg ,false));
+		}		
 	}
 }

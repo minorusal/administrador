@@ -317,6 +317,7 @@ function load_pre_um(id_articulo){
           jQuery('#pre_um2').html(data);
           jQuery('#lbl_peso').show('slow');
           jQuery('#lbl_peso').html(data);
+          jQuery('#lbl_peso_edit').html(data);
           jQuery('#lbl_costo_x_um').show('slow');
           jQuery('#lbl_costo_x_um').html('1 '+data);
         }

@@ -8,6 +8,15 @@
 				        </span>";
 			return $add_on;
 		}
+	}
+	if(!function_exists('input_error_tpl')){
+		function input_bootstrap_tpl($data, $type = false){
+			$class = ($type) ? "has-".$type : ''; 
+			$input = "<div class='form-group ".$class."'>".
+								form_input($data)."	
+				        </div>";
+			return $input;
+		}
 	}	
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
@@ -78,8 +87,9 @@
 		}
 	}
 	if(!function_exists('alertas_tpl')){
-		function alertas_tpl($type = '', $mensaje = '' ,$close = false){
+		function alertas_tpl($type = '', $mensaje = '' ,$close = false, $width = false){
 			$alert = "";
+			$width = ($width) ? 'style = width:'.$width : '';
 			$button_close = "";
 			if($type == ""){
 				$type = "alert";
@@ -90,7 +100,7 @@
 				$button_close = "button data-dismiss='alert' class='close' type='button'>×</button>";
 			}
 			
-			$alert ="<div class='alert $type'> $mensaje </div>";
+			$alert ="<div class='alert $type' ".$width."> $mensaje </div>";
 
 			return $alert;
 		}

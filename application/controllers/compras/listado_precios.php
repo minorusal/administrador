@@ -292,7 +292,7 @@ class listado_precios extends Base_Controller {
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode('0|'.alertas_tpl('error', $msg ,false));			
 		}
 		else{
 			$articulo_default = $this->ajax_post('listado_principal');
@@ -317,7 +317,7 @@ class listado_precios extends Base_Controller {
 				$sqlData=array(
 							'id_administracion_region' => $id_region,
 							'id_articulo' => $id_articulo);
-				$listado=$this->db_model->articulo_default($sqlData);
+				$listado=$this->db_model->get_data_articulo_default($sqlData);
 				if(count($listado)>0){
 					$data_update=array(
 									'articulo_default'  => '',
@@ -623,7 +623,7 @@ class listado_precios extends Base_Controller {
 				$sqlData=array(
 							'id_administracion_region' => $id_region,
 							'id_articulo' => $id_articulo);
-				$listado=$this->db_model->db_get_data_listado_principal($sqlData);
+				$listado=$this->db_model->get_data_articulo_default($sqlData);
 				//dump_var($listado);
 				if(count($listado)>0){
 					$data_update=array(

@@ -133,32 +133,37 @@ function load_recetas(id_familia){
 }
 
 function agregar(){
+  var progress = progress_initialized('registro_loader');
   var btn          = jQuery("button[name='save_ciclo']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
   var objData = formData('#formulario');
   objData['incomplete'] = values_requeridos();
-
+  //alert(dump_var(objData));
   jQuery.ajax({
     type:"POST",
     url: path()+"nutricion/ciclos/insert_ciclo",
     dataType: "json",
-    data: objData,
+    data: {objData},
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-
-      var data = data.split('|');
-      if(data[0]==1){
+        jgrowl(data);
         clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-      jQuery("#mensajes").html(data[1]).show('slow');
     }
-  });
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 
 function insert_config(){

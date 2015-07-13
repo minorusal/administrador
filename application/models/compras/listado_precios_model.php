@@ -166,7 +166,7 @@ class listado_precios_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-	public function db_get_data_listado_principal($data=array()){
+	public function get_data_articulo_default($data=array()){
 		//$condicion =($id_administracion_region)?"AND a.id_administracion_region= '$id_administracion_region'":"";
 		$id_administracion_region = " AND a.id_administracion_region=".$data['id_administracion_region'];
 		$id_articulo = " AND a.id_articulo=".$data['id_articulo'];

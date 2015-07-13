@@ -256,7 +256,23 @@ function eliminar_receta(id_vinculo,id_ciclo){
 
         }
   });
-}     
+} 
+
+function eliminar_ciclo(id_ciclo){
+  var treeview     = 'load_treeview("treeview_ciclos");';
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"nutricion/ciclos/eliminar_ciclo",
+        dataType: 'json',
+        data: {id_ciclo:id_ciclo},
+        beforeSend : function(){
+        },
+        success: function(data){
+          jQuery('#ciclo_detalle').html(data+include_script(treeview));
+
+        }
+  });
+}    
 //UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-02 23:59:59' and '2015-07-06 23:59:59' and envio = 0
 //SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59' and envio = 1
 //UPDATE `notas_facturas` set envio = 0 WHERE fecha_registro between '2015-06-26 18:38:00' and '2015-06-26 23:59:59' and envio = 1

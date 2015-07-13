@@ -70,7 +70,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['nutricion_valores_nutricionales']              = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_valores_nutricionales'];
 		
 		$this->tbl['nutricion_programacion']                       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion'];
-		$this->tbl['nutricion_programacion_ciclo']                 = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_ciclos'];
+		$this->tbl['nutricion_programacion_ciclos']                 = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_ciclos'];
 		$this->tbl['nutricion_programacion_dias_descartados']      = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_descartados'];
 		$this->tbl['nutricion_programacion_dias_especiales']       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_especiales'];
 		$this->tbl['nutricion_programacion_dias_festivos']         = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_festivos'];

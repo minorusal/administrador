@@ -334,6 +334,7 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 
 		if(!is_null($contenido_ciclo)){
+			//print_debug($contenido_ciclo);
 			foreach ($contenido_ciclo as $key => $value) {
 				$id_familia = $value['id_familia'];
 				$idc = $value['id_ciclo'];
@@ -346,8 +347,9 @@ class ciclos extends Base_Controller{
 																													);
 
 			}
-
-			$list  ='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
+			$list  = '<span class="$icon"></span>'.$contenido_ciclo[0]['ciclo'].'&nbsp<a style="cursor:pointer;" onclick="eliminar_ciclo('.$contenido_ciclo[0]['id_ciclo'].')"><span class=" iconfa-trash"></span></a>'; 
+			//$list  ='<a href="#" onclick="eliminar_ciclo('.$contenido_ciclo[0]['id_ciclo'].')">'.$contenido_ciclo[0]['ciclo'].'</a>';
+			$list .='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
 			$list .= $this->make_list($servicios,true);	
 		}else{
 			$list = alertas_tpl('', $this->lang_item('msg_sin_recetas'),false);
@@ -357,7 +359,7 @@ class ciclos extends Base_Controller{
 
 
 
-	public function make_list($items, $inicio = true) {
+	public function make_list($items, $inicio = true){
 		$elimina = '';
 		$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';	
 	    foreach ($items as $item => $subitems) {
@@ -368,28 +370,28 @@ class ciclos extends Base_Controller{
 		        	$tittle = $nivel[1];
 		        	switch ($icon) {
 		        		case 's':
-		        			$servicio = explode(',',$item);
-		        		    $id_ciclo = $servicio[1];
+		        			$servicio    = explode(',',$item);
+		        		    $id_ciclo    = $servicio[1];
 		        		    $id_servicio = $servicio[2];
-		        			$icon    = 'iconfa-time';
-		        			$tipo    = strtoupper($this->lang_item('servicio'));
-		        			$elimina = 'eliminar_servicio('.$id_servicio.','.$id_ciclo.')';
+		        			$icon        = 'iconfa-time';
+		        			$tipo        = strtoupper($this->lang_item('servicio'));
+		        			$elimina     = 'eliminar_servicio('.$id_servicio.','.$id_ciclo.')';
 		        			break;
 		        		case 't':
-		        			$tiempo = explode(',',$item);
-		        		    $id_ciclo = $tiempo[1];
+		        			$tiempo    = explode(',',$item);
+		        		    $id_ciclo  = $tiempo[1];
 		        		    $id_tiempo = $tiempo[2];
-		        			$icon 	= 'iconfa-sitemap';
-		        			$tipo 	= strtoupper( $this->lang_item('tiempo') );
-		        			$elimina = 'eliminar_tiempo('.$id_tiempo.','.$id_ciclo.')';
+		        			$icon 	   = 'iconfa-sitemap';
+		        			$tipo 	   = strtoupper( $this->lang_item('tiempo') );
+		        			$elimina   = 'eliminar_tiempo('.$id_tiempo.','.$id_ciclo.')';
 		        			break;
 		        		case 'f':
-		        			$familia = explode(',',$item);
-		        			$id_ciclo = $familia[1];
+		        			$familia    = explode(',',$item);
+		        			$id_ciclo   = $familia[1];
 		        			$id_familia = $familia[2];
-		        			$icon 	= 'iconfa-certificate';
-		        			$tipo 	= strtoupper( $this->lang_item('familia') );
-		        			$elimina = 'eliminar_familia('.$id_familia.','.$id_ciclo.')';
+		        			$icon 	    = 'iconfa-certificate';
+		        			$tipo 	    = strtoupper( $this->lang_item('familia') );
+		        			$elimina    = 'eliminar_familia('.$id_familia.','.$id_ciclo.')';
 		        			break;
 		        		default:
 		        			$icon = 'iconfa-fire';
@@ -482,5 +484,11 @@ class ciclos extends Base_Controller{
 		
 		$elimina = $this->ciclos->eliminar_receta($id_vinculo,$id_ciclo);
 		$detalle = $this->ciclo_detalle($id_ciclo);
+	}
+
+	public function eliminar_ciclo(){
+		$id_ciclo = $this->ajax_post('id_ciclo');
+		$elimina  = $this->ciclos->eliminar_ciclo($id_ciclo);
+		$detalle  = $this->ciclo_detalle($id_ciclo);
 	}
 }

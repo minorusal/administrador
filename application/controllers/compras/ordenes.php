@@ -403,11 +403,7 @@ class ordenes extends Base_Controller {
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$fec=explode('/',$this->ajax_post('entrega_fecha'));
 			$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
@@ -442,41 +438,24 @@ class ordenes extends Base_Controller {
 									);	
 				$insert2 = $this->variables_model->update($sqlData2);	
 				if($insert2){
-					$msg = sprintf($this->lang_item('msg_insert_orden_success', false), $no_orden[0]['valor']+1);
-					$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-					);
+					$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 				}else{
 					$msg = $this->lang_item("msg_err_clv",false);
-					$json_respuesta = array(
-							 'id' 		=> 0
-							,'contenido'=> alertas_tpl('', $msg ,false)
-							,'success' 	=> false
-					);
+					echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 				}
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 	public function actualizar(){
 		// Recibe datos de formulario y actualiza un registro existente en la BD
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$fec=explode('/',$this->ajax_post('entrega_fecha'));
 			$entrega_fecha=$fec[2].'-'.$fec[1].'-'.$fec[0];
@@ -500,21 +479,12 @@ class ordenes extends Base_Controller {
 			$update = $this->db_model->db_update_data($sqlData);
 			if($update){
 				$msg = $this->lang_item("msg_update_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 	public function eliminar(){
 		$msj_grid = $this->ajax_post('msj_grid');

@@ -58,7 +58,7 @@ class listado_precios_model extends Base_Model{
 				LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
 				LEFT JOIN $tbl[administracion_regiones] i on a.id_administracion_region   = i.id_administracion_region
 				WHERE a.activo = 1 AND 1  $filtro
-				GROUP BY a.id_compras_articulo_precios ASC
+				ORDER BY a.id_compras_articulo_precios ASC
 				$limit";
       	// Execute querie
 				//echo $query;
@@ -109,7 +109,7 @@ class listado_precios_model extends Base_Model{
 				LEFT JOIN $tbl[administracion_impuestos] g on a.id_impuesto    	= g.id_administracion_impuestos
 				LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
 				WHERE a.activo = 1 AND 1  $condicion
-				GROUP BY a.id_compras_articulo_precios ASC";
+				ORDER BY a.id_compras_articulo_precios ASC";
       	// Execute querie
 				//echo $query;
       	$query = $this->db->query($query);
@@ -158,7 +158,7 @@ class listado_precios_model extends Base_Model{
 				LEFT JOIN $tbl[administracion_impuestos] g on a.id_impuesto    	= g.id_administracion_impuestos
 				LEFT JOIN $tbl[compras_um] h on b.id_compras_um    	= h.id_compras_um
 				WHERE a.activo = 1 AND 1  $condicion
-				GROUP BY a.id_compras_articulo_precios ASC";
+				ORDER BY a.id_compras_articulo_precios ASC";
       	// Execute querie
 				//echo $query;
       	$query = $this->db->query($query);

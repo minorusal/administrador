@@ -41,7 +41,7 @@ class aprobar_ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
 				WHERE a.activo=1 AND a.estatus IN(7,4) AND 1  $filtro
-				GROUP BY orden_num ASC
+				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;
       	// Execute querie

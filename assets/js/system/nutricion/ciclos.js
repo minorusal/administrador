@@ -277,8 +277,12 @@ function eliminar_ciclo(id_ciclo){
         beforeSend : function(){
         },
         success: function(data){
-          jQuery('#ciclo_detalle').html(data+include_script(treeview));
-
+          if(data == 1){
+            jQuery('#ciclo_detalle').html('');
+          }else{
+            alert('Este ciclo esta ocupado y no se puede eliminar');
+            jQuery('#ciclo_detalle').html(data+include_script(treeview));
+          }
         }
   });
 }    

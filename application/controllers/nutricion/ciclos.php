@@ -334,8 +334,7 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 
 		if(!is_null($contenido_ciclo)){
-			//print_debug($contenido_ciclo);
-			foreach ($contenido_ciclo as $key => $value) {
+			foreach ($contenido_ciclo as $key => $value){
 				$id_familia = $value['id_familia'];
 				$idc = $value['id_ciclo'];
 					$servicios['s-'.$value['servicio'].','.$idc.','.$value['id_servicio']]['t-'.$value['tiempo'].','.$idc.','.$value['id_tiempo']]['f-'.$value['familia'].','.$idc.','.$id_familia][] =array(
@@ -348,11 +347,10 @@ class ciclos extends Base_Controller{
 
 			}
 			$list  = '<span class="$icon"></span>'.$contenido_ciclo[0]['ciclo'].'&nbsp<a style="cursor:pointer;" onclick="eliminar_ciclo('.$contenido_ciclo[0]['id_ciclo'].')"><span class=" iconfa-trash"></span></a>'; 
-			//$list  ='<a href="#" onclick="eliminar_ciclo('.$contenido_ciclo[0]['id_ciclo'].')">'.$contenido_ciclo[0]['ciclo'].'</a>';
 			$list .='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
 			$list .= $this->make_list($servicios,true);	
 		}else{
-			$list = alertas_tpl('', $this->lang_item('msg_sin_recetas'),false);
+			$list  = '<span class="$icon"></span>'.$nom_ciclo.'&nbsp<a style="cursor:pointer;" onclick="eliminar_ciclo('.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 		}
 		echo json_encode($list);
 	}
@@ -489,6 +487,31 @@ class ciclos extends Base_Controller{
 	public function eliminar_ciclo(){
 		$id_ciclo = $this->ajax_post('id_ciclo');
 		$elimina  = $this->ciclos->eliminar_ciclo($id_ciclo);
-		$detalle  = $this->ciclo_detalle($id_ciclo);
+		if($elimina){
+			/*$sqlData = array(
+							 'buscar' => $id_sucursal
+							,'offset' => 0
+							,'limit' => 0
+							);
+			$data_ciclo = $this->ciclos->db_get_data($sqlData);
+			
+			$dropdown_ciclos = array(
+					 'data'     => $data_ciclo
+					,'value' 	=> 'id_nutricion_ciclos'
+					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
+					,'leyenda'  => '-----'
+					,'name' 	=> "lts_ciclos"
+					,'event'    => array('event' => 'onchange',
+							   						'function' => 'load_contenido_ciclo',
+			   										'params'   => array('this.value'),
+			   										'params_type' => array(false)
+			   									));
+			$ciclos = dropdown_tpl($dropdown_ciclos);
+			$data['ciclos'] = $ciclos;*/
+			echo json_encode(1);
+		}else{
+			$detalle = $this->ciclo_detalle($id_ciclo);
+		}
 	}
 }

@@ -100,7 +100,7 @@ class programacion_model extends Base_Model{
 						,pc.orden
 						,nc.ciclo
 					FROM 
-						$tbl[nutricion_programacion_ciclo] pc
+						$tbl[nutricion_programacion_ciclos] pc
 					LEFT JOIN $tbl[nutricion_ciclos] nc ON pc.id_nutricion_ciclos = nc.id_nutricion_ciclos
 			 		WHERE pc.id_sucursal = $id_sucursal  
 					ORDER BY pc.orden;";
@@ -187,7 +187,7 @@ class programacion_model extends Base_Model{
 	public function delete_paramas_programacion($id_sucursal){
 		$tbl = $this->tbl;
 		$this->db->delete($tbl['nutricion_programacion'], array('id_sucursal' => $id_sucursal)); 
-		$this->db->delete($tbl['nutricion_programacion_ciclo'], array('id_sucursal' => $id_sucursal)); 
+		$this->db->delete($tbl['nutricion_programacion_ciclos'], array('id_sucursal' => $id_sucursal)); 
 		$this->db->delete($tbl['nutricion_programacion_dias_festivos'], array('id_sucursal' => $id_sucursal));
 		$this->db->delete($tbl['nutricion_programacion_dias_especiales'], array('id_sucursal' => $id_sucursal)); 
 		$this->db->delete($tbl['nutricion_programacion_dias_descartados'], array('id_sucursal' => $id_sucursal)); 
@@ -215,7 +215,7 @@ class programacion_model extends Base_Model{
 	}
 	public function insert_ciclos_menus($data){
 		$tbl = $this->tbl;
-		$insert = $this->db->insert_batch($tbl['nutricion_programacion_ciclo'], $data);
+		$insert = $this->db->insert_batch($tbl['nutricion_programacion_ciclos'], $data);
 		return $insert;
 	}
 

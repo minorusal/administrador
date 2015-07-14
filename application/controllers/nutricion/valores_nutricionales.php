@@ -234,7 +234,8 @@ class valores_nutricionales extends Base_Controller{
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0 || $objData['numerico']>0){
-			echo json_encode($this->lang_item("msg_campos_numericos",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$sqlData = array(
 				'id_compras_articulos' => $objData['id_articulo']
@@ -269,9 +270,11 @@ class valores_nutricionales extends Base_Controller{
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				echo json_encode($this->lang_item("msg_update_success",false));
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

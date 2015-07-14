@@ -61,6 +61,7 @@ function detalle_um(id_um){
     });
 }
 function update_um(){
+  var progress = progress_initialized('update_loader');
   jQuery('#mensajes_update').hide();
   var btn          = jQuery("button[name='update_um']");
   btn.attr('disabled','disabled');
@@ -77,19 +78,29 @@ function update_um(){
     dataType: "json",
     data: {incomplete :incomplete,id_um:id_um, um:um, clave_corta:clave_corta, descripcion:descripcion },
     beforeSend : function(){
-      jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-      var data = data.split('|');
-      if(data[0]==1){
+      if(data.success == 'true' ){
+        jgrowl(data.mensaje);
+      }else{
+        jQuery("#mensajes_update").html(data.mensaje).show('slow'); 
       }
-      jQuery("#update_loader").html('');
-        jQuery("#mensajes_update").html(data[1]).show('slow');
     }
-  })
+    }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 function insert_um(){
+  var progress = progress_initialized('registro_loader');
   var btn          = jQuery("button[name='save_um']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -104,16 +115,25 @@ function insert_um(){
     dataType: "json",
     data: {incomplete :incomplete, um:um, clave_corta:clave_corta, descripcion:descripcion },
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-      var data = data.split('|');
-      if(data[0]==1){
+        if(data.success == 'true' ){
         clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
+        jgrowl(data.mensaje);
+      }else{
+        jQuery("#mensajes").html(data.mensaje).show('slow');  
+      } 
     }
-  })
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }

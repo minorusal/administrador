@@ -88,7 +88,8 @@ class empresa extends Base_Controller {
 	public function insert(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$data_insert = array(
 				  'id_empresa'   => $objData['id_empresa']
@@ -105,9 +106,11 @@ class empresa extends Base_Controller {
 			$insert = $this->db_model->db_update_data($data_insert);
 
 			if($insert){
-				echo json_encode($this->lang_item("msg_insert_success",false));
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

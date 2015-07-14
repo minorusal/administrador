@@ -52,8 +52,6 @@ class traspasos_model extends Base_Model{
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
 			WHERE a.id_almacen != 1 $filtro
 			$limit";
-		/*
-	FALTAN LOS FILTROS Y LA BUSQUEDA*/
 	  	// Execute querie
 
 	  	$query = $this->db->query($query);

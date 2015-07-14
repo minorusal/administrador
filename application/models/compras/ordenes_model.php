@@ -63,7 +63,7 @@ class ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
 				WHERE a.activo=1 AND a.estatus IN (1,3) AND 1  $filtro
-				GROUP BY orden_num ASC
+				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;
 
@@ -109,7 +109,7 @@ class ordenes_model extends Base_Model{
 						,clave_corta
 					FROM $tbl[compras_proveedores]
 					WHERE 1 AND activo=1 $filtro $condicion
-					GROUP BY clave_corta ASC
+					ORDER BY clave_corta ASC
 					$limit
 					";
 		// dump_var($query);
@@ -133,7 +133,7 @@ class ordenes_model extends Base_Model{
 		$query = "	SELECT count(*)
 					FROM $tbl[vw_compras_orden_proveedores]
 					WHERE 1 AND activo=1 $filtro
-					GROUP BY orden_num ASC
+					ORDER BY orden_num ASC
 					";
 		 dump_var($query);
       	// Execute querie
@@ -285,7 +285,7 @@ class ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
 				WHERE a.activo=1 AND 1  $filtro
-				GROUP BY orden_num ASC
+				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;
 

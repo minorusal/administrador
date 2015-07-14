@@ -169,7 +169,7 @@ class embalaje extends Base_Controller {
 		
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$embalaje     = $this->ajax_post('embalaje');
 			$clave_corta  = $this->ajax_post('clave_corta');
@@ -186,10 +186,10 @@ class embalaje extends Base_Controller {
 			
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -233,7 +233,7 @@ class embalaje extends Base_Controller {
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$id_embalaje  	= $this->ajax_post('id_embalaje');
 			$embalaje   	= $this->ajax_post('embalaje');
@@ -250,10 +250,10 @@ class embalaje extends Base_Controller {
 
 			if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

@@ -234,20 +234,12 @@ class gavetas extends Base_Controller
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
-	public function actualizar()
-	{
+	public function actualizar(){
 		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0)
-		{
-			$msg            = $this->lang_item("msg_campos_obligatorios",false);
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
-		}
-		else
-		{
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
 			$sqlData = array(
 						 'id_almacen_gavetas'	    => $this->ajax_post('id_gaveta')
 						,'gavetas' 		            => $this->ajax_post('gavetas')
@@ -259,26 +251,14 @@ class gavetas extends Base_Controller
 						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data_gaveta($sqlData);
-			if($insert)
-			{
-				$msg            = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
-			}
-			else
-			{
-				$msg            = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+			if($insert){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 	public function agregar()
 	{
@@ -320,16 +300,12 @@ class gavetas extends Base_Controller
 		}
 	}
 
-	public function insert_gaveta()
-	{
+	public function insert_gaveta(){
 		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0)
-		{
+		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		else
-		{
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
+		}else{
 			$gaveta       = $this->ajax_post('gaveta');
 			$clave_corta  = $this->ajax_post('clave_corta');
 			$id_almacen   = $this->ajax_post('id_almacen');
@@ -343,15 +319,12 @@ class gavetas extends Base_Controller
 								 'id_almacen_pasillos'  => $id_pasillo,
 								 'timestamp'            => $this->timestamp());
 			$insert       = $this->db_model->db_insert_data_gavetas($data_insert);
-			if($insert)
-			{
-				$msg      = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
-			}
-			else
-			{
-				$msg      = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

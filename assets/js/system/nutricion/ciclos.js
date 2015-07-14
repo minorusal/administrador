@@ -150,8 +150,12 @@ function agregar(){
       btn.attr('disabled',true);
     },
     success : function(data){
-        jgrowl(data);
-        clean_formulario();
+        if(data.success == 'true' ){
+          clean_formulario();
+          jgrowl(data.mensaje);
+        }else{
+          jQuery("#mensajes").html(data.mensaje).show('slow');  
+        } 
     }
   }).error(function(){
             progress.progressTimer('error', {
@@ -273,8 +277,12 @@ function eliminar_ciclo(id_ciclo){
         beforeSend : function(){
         },
         success: function(data){
-          jQuery('#ciclo_detalle').html(data+include_script(treeview));
-
+          if(data == 1){
+            jQuery('#ciclo_detalle').html('');
+          }else{
+            alert('Este ciclo esta ocupado y no se puede eliminar');
+            jQuery('#ciclo_detalle').html(data+include_script(treeview));
+          }
         }
   });
 }    

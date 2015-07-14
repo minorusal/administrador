@@ -63,11 +63,11 @@ class ciclos_model extends Base_Model{
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro 		= ($filtro) ? "AND (cl.ciclo like '%$filtro%' OR')" : "";
+		$filtro 		= ($filtro) ? "AND (cl.id_sucursal like '%$filtro%' OR')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT
-						cl.id_nutricion_ciclos
+						 cl.id_nutricion_ciclos
 						,cl.ciclo
 						,cl.id_sucursal
 						
@@ -163,6 +163,10 @@ class ciclos_model extends Base_Model{
 			return $query;
 		}
 	}
+
+	/*function get_data_sucursales(){
+
+	}*/
 
 	function eliminar_ciclo($id_ciclo){
 		$tbl = $this->tbl;

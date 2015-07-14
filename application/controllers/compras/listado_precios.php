@@ -291,9 +291,8 @@ class listado_precios extends Base_Controller {
 	public function insert(){
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
-			/*$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));*/
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}
 		else{
 			$articulo_default = $this->ajax_post('listado_principal');
@@ -373,18 +372,15 @@ class listado_precios extends Base_Controller {
 							);
 				$update = $this->db_model->db_update_sku($data_update_sku);
 				if($update){
-					/*$msg = $this->lang_item("msg_insert_success",false);
-					echo json_encode('1|'.alertas_tpl('success', $msg ,false));*/
-					echo json_encode($this->lang_item("msg_insert_success",false));
+					$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 				}else{
-					/*$msg = $this->lang_item("msg_err_clv",false);
-					echo json_encode('0|'.alertas_tpl('', $msg ,false));*/
-					echo json_encode($this->lang_item("msg_err_clv",false));
+					$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 				}
 			}else{
-				/*$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));*/
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -600,9 +596,8 @@ class listado_precios extends Base_Controller {
 	public function update(){
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
-			/*$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));*/
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$id_impuesto 				 = $this->ajax_post('impuesto_porcentaje');	
 			$articulo_default 			 = $this->ajax_post('listado_principal');
@@ -670,13 +665,11 @@ class listado_precios extends Base_Controller {
 			$update = $this->db_model->db_update_data($data_update);
 
 			if($update){
-				/*$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));*/
-				echo json_encode($this->lang_item("msg_update_success",false));
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
-				/*$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));*/
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

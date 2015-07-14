@@ -139,10 +139,6 @@ class clientes extends Base_Controller {
 			$buttonTPL = "";
 		}
 		
-		/*$buttonIPX = array( 'text'       => $this->lang_item("btn_xlsx"), 
-							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->uri_modulo.$this->uri_submodulo.'import_xlsx')
-							);*/
 
 		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
 		$data_tab_2['export']    = button_tpl($buttonTPL);
@@ -161,14 +157,14 @@ class clientes extends Base_Controller {
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$clave_corta= $this->ajax_post('clave_corta');
 			$existe = count($this->clientes_model->get_existencia_cliente($clave_corta));
 			
 			if($existe>0){
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}else{
 				$data_insert = array('nombre' 		  => $this->ajax_post('nombre'),
 									 'paterno'	  	  => $this->ajax_post('paterno'),
@@ -194,10 +190,10 @@ class clientes extends Base_Controller {
 
 				if($insert){
 					$msg = $this->lang_item("msg_insert_success",false);
-					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 				}else{
 					$msg = $this->lang_item("msg_err_clv",false);
-					echo json_encode('0|'.alertas_tpl('', $msg ,false));
+					echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 				}
 			}
 			
@@ -290,7 +286,7 @@ class clientes extends Base_Controller {
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$id_cliente  = $this->ajax_post('id_cliente');
 			$data_insert = array('nombre' => $this->ajax_post('nombre'),
@@ -315,10 +311,10 @@ class clientes extends Base_Controller {
 			$update = $this->clientes_model->update_cliente($data_insert,$id_cliente);
 			if($update){
 				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

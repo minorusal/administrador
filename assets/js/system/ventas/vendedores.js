@@ -48,7 +48,8 @@ function load_content(uri, id_content){
     });
 }
 function insert(){
- var btn          = jQuery("button[name='save_vendedor']");
+  var progress = progress_initialized('registro_loader');
+  var btn          = jQuery("button[name='save_vendedor']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
@@ -76,20 +77,28 @@ function insert(){
     dataType: "json",
     data: {
             incomplete :incomplete,nombre:nombre,paterno:paterno,materno: materno, clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
-    beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+   beforeSend : function(){
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-      var data = data.split('|');
-      if(data[0]==1){
+        if(data.success == 'true' ){
         clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-        jQuery("#mensajes").html(data[1]).show('slow');
-      
+        jgrowl(data.mensaje);
+      }else{
+        jQuery("#mensajes").html(data.mensaje).show('slow');  
+      } 
     }
-  });
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 function detalle(id_vendedor){
   jQuery('#ui-id-2').click();
@@ -107,6 +116,7 @@ function detalle(id_vendedor){
     });
 }
 function update(){
+  var progress = progress_initialized('update_loader');
   var btn          = jQuery("button[name='update_vendedor']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
@@ -137,16 +147,24 @@ function update(){
     data: {
             incomplete :incomplete,id_vendedor:id_vendedor,nombre:nombre,paterno:paterno,materno: materno,clave_corta:clave_corta,rfc:rfc,calle:calle,num_int:num_int,num_ext:num_ext,colonia:colonia,municipio:municipio,id_entidad:id_entidad,id_sucursal:id_sucursal,cp:cp,telefonos:telefonos,email:email},
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-      var data = data.split('|');
-      if(data[0]==1){
+      if(data.success == 'true' ){
+        jgrowl(data.mensaje);
+      }else{
+        jQuery("#mensajes_update").html(data.mensaje).show('slow'); 
       }
-      jQuery("#update_loader").html('');
-        jQuery("#mensajes_update").html(data[1]).show('slow');
-      
     }
-  });
+    }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }

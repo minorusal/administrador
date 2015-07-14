@@ -64,7 +64,8 @@ function detalle(id_compras_orden){
         }
     });
 }
-function actualizar(){	
+function actualizar(){
+var progress = progress_initialized('update_loader');	
 		jQuery('#mensajes_update').hide();		
 		var btn          = jQuery("button[name='update']");
 		btn.attr('disabled','disabled');
@@ -78,15 +79,26 @@ function actualizar(){
 			dataType: "json",			
 			data : objData,
 			beforeSend : function(){
-				imgLoader("#update_loader");
-			},
-			success : function(data){
-				btn.removeAttr('disabled');
-				// if(data.id==1){	}
-				jQuery("#update_loader").html('');
-			    jQuery("#mensajes_update").html(data.contenido).show('slow');
+			btn.attr('disabled',true);
+		},
+		success : function(data){
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
 			}
-		})
+		}
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 function eliminar(id){	
 	id = (!id)?false:id;
@@ -120,7 +132,8 @@ function eliminar(id){
 		}
 	});
 }
-function insert(){		
+function insert(){	
+var progress = progress_initialized('registro_loader');	
 	var btn   = jQuery("button[name='save']");
 	//btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();	
@@ -133,18 +146,27 @@ function insert(){
 		dataType: "json",
 		data : objData,
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-			if(data.id==1){
+		    if(data.success == 'true' ){
 				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data.contenido).show('slow');
-			
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
+			} 
 		}
-	});
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 function show_proveedor(id_tipo){
 	if(id_tipo==1){

@@ -359,7 +359,8 @@ class proveedores extends Base_Controller {
 	public function insert(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$sqlData = array(
 							 'razon_social'              => $objData['rsocial']
@@ -384,16 +385,19 @@ class proveedores extends Base_Controller {
 						);
 			$insert = $this->db_model->insert($sqlData);
 			if($insert){
-				echo json_encode($this->lang_item("msg_insert_success",false));
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$sqlData = array(
 							'id_compras_proveedor'	     => $objData['id_compras_proveedor']
@@ -419,9 +423,11 @@ class proveedores extends Base_Controller {
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				echo json_encode($this->lang_item("msg_update_success",false));
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

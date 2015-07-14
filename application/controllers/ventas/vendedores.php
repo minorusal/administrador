@@ -148,14 +148,14 @@ class vendedores extends Base_Controller {
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$clave_corta= $this->ajax_post('clave_corta');
 			$existe = count($this->vendedores_model->get_existencia_vendedor($clave_corta));
 			
 			if($existe>0){
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}else{
 				$data_insert = array('nombre' 	  	=> $this->ajax_post('nombre'),
 									 'paterno'    	=> $this->ajax_post('paterno'),
@@ -180,10 +180,10 @@ class vendedores extends Base_Controller {
 
 				if($insert){
 					$msg = $this->lang_item("msg_insert_success",false);
-					echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 				}else{
 					$msg = $this->lang_item("msg_err_clv",false);
-					echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 				}
 			}
 			
@@ -272,7 +272,7 @@ class vendedores extends Base_Controller {
 		$incomplete  	= $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$id_vendedor  = $this->ajax_post('id_vendedor');
 			$data_insert = array('nombre' 		  => $this->ajax_post('nombre'),
@@ -296,10 +296,10 @@ class vendedores extends Base_Controller {
 			$update = $this->vendedores_model->update_vendedor($data_insert,$id_vendedor);
 			if($update){
 				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

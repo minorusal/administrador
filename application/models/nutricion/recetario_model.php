@@ -89,9 +89,9 @@ class recetario_model extends Base_Model{
 
 					WHERE r.activo = 1 $unique $filtro";
 
-
+					
       	$query = $this->db->query($query);
-      	//print_debug($query->result_array());
+      	
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	

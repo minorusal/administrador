@@ -32,5 +32,16 @@
 	$lang['info_agregar_festivo']            = 'Agregar Fecha';
 	$lang['lbl_especial']                    = 'Ciclo Especial';
 	$lang['info_ciclos_especiales']          = 'Lista de ciclos especiales';
+	$lang['generar_formatos']                = 'Generar formatos';
+	$lang['lbl_tipo_formato']                = 'Tipo de formato';
+	$lang['lbl_formato_abasto']              = 'Formato de Abasto';
+	$lang['lbl_formato_nutricional']         = 'Formato de valores nutriconales por receta';
+	$lang['lbl_formato_licitacion']          = 'Formato de Licitación';
+	$lang['btn_formato']                     = 'Generar Formato';
+	$lang['lbl_sucursal_formatos']           = 'Seleecione una sucursal';
+	$lang['msg_periodo_sin_contenido']       = 'No se tienen ciclos programados en el periodos definido.';
+	$lang['msg_sucursal_sin_contenido']      = 'Esta Sucursal no tiene ciclos programados';
+	
+
 	
 ?>

@@ -66,6 +66,7 @@ function detalle(id_sucursal){
     });
 }
 function actualizar(){
+	var progress = progress_initialized('update_loader');
 	jQuery('#mensajes_update').hide();
 	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
@@ -87,18 +88,31 @@ function actualizar(){
 		dataType: "json",
 		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, email:email, encargado:encargado, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
 		beforeSend : function(){
-			jQuery("#update_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');		
-			jQuery("#mensajes_update").html(data.contenido).show('slow');
-			jQuery("#update_loader").html('');
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
 		}
-	})
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 
 function agregar(){
+	var progress = progress_initialized('registro_loader');
 	var btn          = jQuery("button[name='save_sucursal']");
 	btn.attr('disabled','disabled');
 	jQuery('#mensajes').hide();
@@ -120,19 +134,27 @@ function agregar(){
 		dataType: "json",
 		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, id_region:id_region, id_entidad:id_entidad, direccion:direccion },
 		beforeSend : function(){
-			jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+			btn.attr('disabled',true);
 		},
 		success : function(data){
-			btn.removeAttr('disabled');
-
-			var data = data.split('|');
-			if(data[0]==1){
+		    if(data.success == 'true' ){
 				clean_formulario();
-			}
-			jQuery("#registro_loader").html('');
-		    jQuery("#mensajes").html(data[1]).show('slow');
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
+			} 
 		}
-	})
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 

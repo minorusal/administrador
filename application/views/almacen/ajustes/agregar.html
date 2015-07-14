@@ -1,0 +1,78 @@
+<div id="formulario" class="stdform">    
+   <table class="table table-bordered">
+        <tr>
+            <th>
+                {acciones}
+            </th>
+        </tr>
+        <tr>
+            <td valign="middle">
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                    <input type="text" id="stock_destino" value="" name="stock_destino" data-campo="stock_destino" class="numerico" onkeyup="realiza_calculos();" style="width:90px;"> {unidad_minima_cve}
+            </td>
+        </tr>
+        <tr>
+             <td valign="middle">
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                    <input type="text" id="stock_um_destino" value="" name="stock_um_destino" data-campo="stock_um_destino" class="numerico" style="width:90px;"> {unidad_minima_cve}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="embajale">
+                    <label><strong>{almacen_lbl} (*)</strong></label>
+                    <span class="field">{lts_almacen}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="embajale">
+                <label><strong>{pasillo_lbl}</strong></label>
+                <span class="field" id="lts_pasillo"></span>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="embajale">
+                <label><strong>{gaveta_lbl} (*)</strong></label>
+                <span class="field" id="lts_gavetas"></span>
+            </div>
+            </td>
+        </tr>
+   </table>
+   <div id="lts_ajustes">
+       
+   </div>
+    <div id="tbl1" class="span5" >
+        <table  class="table table-bordered table-invoice"> 
+            <tr>
+                <td class="width30">
+                    <label>{lblstock}:</label>
+                </td >
+                <td>
+                    <div id="value_stock"><strong></strong>
+                    </div>
+                    <input type="hidden" id="stock_num" value="" data-campo="stock_num">
+                </td>
+            </tr>
+            <tr>
+                <td class="width30">
+                    <label>{stock_um_lbl}:</label>
+                </td>
+                <td>
+                    <div id="value_stock_um">
+                        <strong></strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+   </div>
+   <br>
+    <div id="update_loader"></div>
+    <div id="mensajes_update" style="display:none"></div>  
+     <p class="stdformbutton"> 
+        {button_save}
+    </p>
+</div>

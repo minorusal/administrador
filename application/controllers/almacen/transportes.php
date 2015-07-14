@@ -229,22 +229,12 @@ class transportes extends Base_Controller
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
-	public function actualizar()
-	{
+	public function actualizar(){
 		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0)
-		{
-			$msg            = $this->lang_item("msg_campos_obligatorios",false);
-
-			$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('error', $msg ,false)
-						,'success' 	=> false
-				);
-
-		}
-		else
-		{
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
 			$sqlData = array(
 						 'id_almacen_transportes'  => $this->ajax_post('id_transporte')
 						,'empresa' 		           => $this->ajax_post('empresa')
@@ -259,28 +249,14 @@ class transportes extends Base_Controller
 						,'edit_id_usuario'			=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data_transporte($sqlData);
-			if($insert)
-			{
-				
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		=> 1
-						,'contenido'=> alertas_tpl('success', $msg ,false)
-						,'success' 	=> true
-				);
-			}
-			else
-			{
-
+			if($insert){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		=> 0
-						,'contenido'=> alertas_tpl('', $msg ,false)
-						,'success' 	=> false
-				);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
 	public function agregar(){
@@ -301,27 +277,20 @@ class transportes extends Base_Controller
         $tab_1['button_reset']      = $btn_reset;
 
 
-        if($this->ajax_post(false))
-        {
+        if($this->ajax_post(false)){
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($seccion , $tab_1, true);
 		}
 	}
 
-	public function insert_transporte()
-	{
+	public function insert_transporte(){
 		$incomplete  = $this->ajax_post('incomplete');
 
-		if($incomplete>0)
-		{
+		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
-		}
-		else
-		{
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
+		}else{
 			$data_insert = array('empresa'        => $this->ajax_post('empresa')
 								 ,'conductor'     => $this->ajax_post('conductor')
 								 ,'num_lic'       => $this->ajax_post('licencia')
@@ -335,15 +304,12 @@ class transportes extends Base_Controller
 			
 			$insert = $this->db_model->db_insert_data_transportes($data_insert);
 			
-			if($insert)
-			{
+			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
-			}
-			else
-			{
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

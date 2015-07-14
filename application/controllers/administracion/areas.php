@@ -246,9 +246,7 @@ class areas extends Base_Controller{
 				 ,'id_usuario'  => $this->session->userdata('id_usuario')
 				 ,'timestamp'   => $this->timestamp()
 				);
-
 			$insert = $this->db_model->db_insert_data($data_insert);
-
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
 				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));

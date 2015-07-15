@@ -32,6 +32,8 @@ class recetario_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+
+	
 	public function get_data_recetas_x_familia($id_familia){
 			
 		$tbl = $this->tbl;

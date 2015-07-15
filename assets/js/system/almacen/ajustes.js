@@ -132,7 +132,7 @@ function realiza_calculos(){
 		jQuery('#stock').val('');
 	}
 }
-function load_gaveta_pas_destino(id_almacen_destino){
+/*function load_gaveta_pas_destino(id_almacen_destino){
 	jQuery.ajax({
         type: "POST",
         url: path()+"almacen/ajustes/load_gaveta_pas",
@@ -144,8 +144,8 @@ function load_gaveta_pas_destino(id_almacen_destino){
           jQuery('#lts_gavetas_destino').html(data['gavetas']+include_script(chosen));
         }
     });
-}
-function load_gaveta_destino(id_pasillo_destino){
+}*/
+/*function load_gaveta_destino(id_pasillo_destino){
 	id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
 	  jQuery.ajax({
 	        type: "POST",
@@ -157,7 +157,7 @@ function load_gaveta_destino(id_pasillo_destino){
 	          jQuery('#lts_gavetas_destino').html(data['lts_gavetas']+include_script(chosen));
 	        }
 	    });
-}
+}*/
 
 function agregar(){
 	var progress = progress_initialized('update_loader');
@@ -174,7 +174,7 @@ function agregar(){
 	//DESTINO
 	var id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
 	var id_pasillo_destino = jQuery('select[name=lts_pasillos_destino] option:selected').val();
-	var id_pasillo_destino = jQuery('select[name=lts_gavetas_destino] option:selected').val();
+	var id_gaveta_destino  = jQuery('select[name=lts_gavetas_destino] option:selected').val();
 
 	var incomplete = values_requeridos();
 	jQuery.ajax({
@@ -190,7 +190,7 @@ function agregar(){
 				id_gavetas	 		 :	id_gavetas,
 				id_almacen_destino	 :	id_almacen_destino,	
 				id_pasillo_destino	 :	id_pasillo_destino,
-				id_pasillo_destino	 :	id_pasillo_destino	
+				id_gaveta_destino	 :	id_gaveta_destino	
 		},
 		beforeSend : function(){
 			btn.attr('disabled',true);

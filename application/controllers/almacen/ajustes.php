@@ -32,7 +32,6 @@ class ajustes extends Base_Controller {
 		// Tabs
 		$this->tab1 			= 'agregar';
 		$this->tab2 			= 'listado';
-		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -45,7 +44,6 @@ class ajustes extends Base_Controller {
 		$this->tab_indice 		= array(
 									 $this->tab1
 									,$this->tab2
-									,$this->tab3
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -54,33 +52,29 @@ class ajustes extends Base_Controller {
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
-		$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) //agregar
 										,$this->lang_item($tab_2) //listado
-										,$this->lang_item($tab_3) //detalle
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
 										 $path.$tab_1            //compras/listado_precios/agregar
 										,$path.$tab_2.'/'.$pagina //compras/listado_precios/listado/pagina
-										,$tab_3                   //detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										 'load_content'
 										,'load_content'
-										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+		$config_tab['attr']     = array('','');
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->modulo.'/'.$this->view_content; //compras/content
+		return $this->modulo.'/'.$this->view_content;
 	}
 	public function index(){
 		$tabl_inicial 			  = $this->tab_inicial;
@@ -178,8 +172,10 @@ class ajustes extends Base_Controller {
 	}
 	public function agregar(){
 		$view = $this->tab['agregar'];
+		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
+		$listado_almacen=$this->catalogos_model->db_get_data_almacen();
 		$dropArray = array(
-				 'data'		=> $this->catalogos_model->db_get_data_almacen()
+				 'data'		=> $listado_almacen
 				,'value' 	=> 'id_almacen_almacenes'
 				,'text' 	=> array('clave_corta','almacenes')
 				,'name' 	=> "lts_almacen"
@@ -190,8 +186,25 @@ class ajustes extends Base_Controller {
 								)
 				,'class' 	=> "requerido"
 			);
-		$lts_almacen  = dropdown_tpl($dropArray);
-		$tabData['lts_almacen'] = $lts_almacen;
+		$dropArray2 = array(
+				 'data'		=> $listado_almacen
+				,'value' 	=> 'id_almacen_almacenes'
+				,'text' 	=> array('clave_corta','almacenes')
+				,'name' 	=> "lts_almacen_destino"
+				,'event'    => array('event'       => 'onchange',
+			   						 'function'    => 'load_gaveta_pas_destino',
+			   						 'params'      => array('this.value'),
+			   						 'params_type' => array(0)
+								)
+				,'class' 	=> "requerido"
+			);
+
+		$lts_almacen  		  = dropdown_tpl($dropArray);
+		$lts_almacen_destino  = dropdown_tpl($dropArray2);
+
+		$tabData['lts_almacen'] 		= $lts_almacen;
+		$tabData['lts_almacen_destino'] = $lts_almacen_destino;
+		$tabData['button_save'] = $btn_save;
 		$uri_view  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$view;
 		if($this->ajax_post(false)){
 				echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -214,6 +227,7 @@ class ajustes extends Base_Controller {
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
 		$stock=0;
 		$stock_um=0;
+		//dump_var($detalle);
 		for($i=0; count($detalle)>$i;$i++){
 			$stock+=$detalle[$i]['stock'];
 			$stock_um+=$detalle[$i]['stock_um'];
@@ -223,42 +237,55 @@ class ajustes extends Base_Controller {
 		echo json_encode($data);
 	}
 	public function load_gaveta_pas(){
-		$id_almacen    = $this->ajax_post('id_almacen');
+		$id_almacen    		= $this->ajax_post('id_almacen');
+		$id_almacen_destino = $this->ajax_post('id_almacen_destino');
+
+		if($id_almacen_destino!=''){
+			$vent='load_gaveta_destino';
+			$name = 'lts_pasillos_destino';
+			$name_gav = 'lts_gavetas_destino';
+			$event_2='';
+			$id_almacen = $id_almacen_destino;
+		}else{
+			$vent='load_gaveta';
+			$name = 'lts_pasillos';
+			$name_gav = 'lts_gavetas';
+			$event_2='load_articulos';
+			$id_almacen = $id_almacen;
+		}
 		$datasql=array('id_almacen'=>$id_almacen);
-			$dropArray = array(
-					 'data'		=> $this->catalogos_model->db_get_data_pasillos_por_almacen($datasql)
-					,'value' 	=> 'id_almacen_pasillos'
-					,'text' 	=> array('clave_corta','pasillos')
-					,'name' 	=> "lts_pasillos"
-					,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'load_gaveta',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
+		$dropArray = array(
+				 'data'		=> $this->catalogos_model->db_get_data_pasillos_por_almacen($datasql)
+				,'value' 	=> 'id_almacen_pasillos'
+				,'text' 	=> array('clave_corta','pasillos')
+				,'name' 	=> $name
+				,'event'    => array('event'       => 'onchange',
+			   						 'function'    => $vent,
+			   						 'params'      => array('this.value'),
+			   						 'params_type' => array(0)
+								)
+			);
+		$dropArray2 = array(
+				 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
+				,'value' 	=> 'id_almacen_gavetas'
+				,'text' 	=> array('clave_corta','gavetas')
+				,'name' 	=> $name_gav
+				,'event'    => array('event'       => 'onchange',
+			   						 'function'    => $event_2,
+			   						 'params'      => array('this.value'),
+			   						 'params_type' => array(0)
 									)
-				);
-			$dropArray2 = array(
-					 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
-					,'value' 	=> 'id_almacen_gavetas'
-					,'text' 	=> array('clave_corta','gavetas')
-					,'name' 	=> "lts_gavetas"
-					,'class' 	=> "requerido"
-					,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'load_articulos',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-   									)
-				);
-		//
-			$datasql=array(
-					'id_almacen' => $id_almacen,
-					'id_pasillo' => '',
-					'id_gaveta' => '');
+			);
+		//se cargar el select de lso articulos para modificar su cantidad
+		$datasql=array(
+				'id_almacen' => $id_almacen,
+				'id_pasillo' => '',
+				'id_gaveta' => '');
 		$dropArray3 = array(
 				 'data'		=> $this->db_model->db_get_data_articulos($datasql)
 				,'value' 	=> 'id_articulo'
 				,'text' 	=> array('cl_um','articulo')
 				,'name' 	=> "lts_ajustes"
-				,'class' 	=> "requerido"
 				,'event'    => array('event'       => 'onchange',
 				   						 'function'    => 'load_stock',
 				   						 'params'      => array('this.value'),
@@ -269,66 +296,76 @@ class ajustes extends Base_Controller {
 		$lts_gavetas  = dropdown_tpl($dropArray2);
 		$lts_ajustes  = dropdown_tpl($dropArray3);
 
-
 		$data['pasillos']=$lts_pasillo;
 		$data['gavetas']=$lts_gavetas;
 		$data['lts_ajustes']=$lts_ajustes;
 		echo json_encode($data);
 	}
 	public function load_gaveta(){
-		//$id_pasillo    = $this->ajax_post('id_pasillo');
-		//$id_almacen    = $this->ajax_post('id_almacen');
 		$id_almacen    =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
 		$id_pasillo    =  ($this->ajax_post('id_pasillo')!=0)?$this->ajax_post('id_pasillo'):'';
-		$id_gaveta    =  ($this->ajax_post('id_gaveta')!=0)?$this->ajax_post('id_gaveta'):'';
+		$id_gaveta    =   ($this->ajax_post('id_gaveta')!=0)?$this->ajax_post('id_gaveta'):'';
+
+		$id_pasillo_destino    =   $this->ajax_post('id_pasillo_destino');
+		$id_almacen_destino    =   $this->ajax_post('id_almacen_destino');
+		
+
+		if($id_almacen_destino!=''){
+			$event='';
+			$id_pasillo = $id_pasillo_destino;
+			$id_almacen=$id_almacen_destino;
+			$name = 'lts_gavetas_destino';
+		}else{
+			$event='load_articulos';
+			$id_pasillo = $id_pasillo;
+			$id_almacen = $id_almacen;
+			$name = 'lts_gavetas';
+		}
 		if($id_pasillo==0){
 			$datasql=array('id_almacen'=>$id_almacen);
 			$dropArray = array(
-						 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
-						,'value' 	=> 'id_almacen_gavetas'
-						,'text' 	=> array('clave_corta','gavetas')
-						,'name' 	=> "lts_gavetas"
-						,'class' 	=> "requerido"
-						,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'load_articulos',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-   									)
-					);
-			$lts_gavetas  = dropdown_tpl($dropArray);
+							 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_almacen($datasql)
+							,'value' 	=> 'id_almacen_gavetas'
+							,'text' 	=> array('clave_corta','gavetas')
+							,'name' 	=> $name
+							,'event'    => array('event'       => 'onchange',
+						   						 'function'    => $event,
+						   						 'params'      => array('this.value'),
+						   						 'params_type' => array(0)
+		   									)
+						);
 		}else{
 			$datasql=array('id_pasillo'=>$id_pasillo);
 			$dropArray = array(
-						 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_pasillo($datasql)
-						,'value' 	=> 'id_almacen_gavetas'
-						,'text' 	=> array('clave_corta','gavetas')
-						,'name' 	=> "lts_gavetas"
-						,'class' 	=> "requerido"
-						,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'load_articulos',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-   									)
-					);
-			$lts_gavetas  = dropdown_tpl($dropArray);
+							 'data'		=> $this->catalogos_model->db_get_data_gavetas_por_pasillo($datasql)
+							,'value' 	=> 'id_almacen_gavetas'
+							,'text' 	=> array('clave_corta','gavetas')
+							,'name' 	=> $name
+							,'event'    => array('event'       => 'onchange',
+						   						 'function'    => $event,
+						   						 'params'      => array('this.value'),
+						   						 'params_type' => array(0)
+	   										)
+						);
 		}
 		$datasql=array(
 					'id_almacen' => $id_almacen,
 					'id_pasillo' => $id_pasillo,
 					'id_gaveta' => '');
 		$dropArray3 = array(
-				 'data'		=> $this->db_model->db_get_data_articulos($datasql)
-				,'value' 	=> 'id_articulo'
-				,'text' 	=> array('cl_um','articulo')
-				,'name' 	=> "lts_ajustes"
-				,'class' 	=> "requerido"
-				,'event'    => array('event'       => 'onchange',
-				   						 'function'    => 'load_stock',
-				   						 'params'      => array('this.value'),
-				   						 'params_type' => array(0)
-   									)
-			);
+						 'data'		=> $this->db_model->db_get_data_articulos($datasql)
+						,'value' 	=> 'id_articulo'
+						,'text' 	=> array('cl_um','articulo')
+						,'name' 	=> "lts_ajustes"
+						,'class' 	=> "requerido"
+						,'event'    => array('event'       => 'onchange',
+						   						 'function'    => 'load_stock',
+						   						 'params'      => array('this.value'),
+						   						 'params_type' => array(0)
+		   									)
+					);
 		$lts_ajustes  = dropdown_tpl($dropArray3);
+		$lts_gavetas  = dropdown_tpl($dropArray);
 		$data['lts_gavetas']=$lts_gavetas;
 		$data['lts_ajustes']=$lts_ajustes;
 		echo json_encode($data);
@@ -358,82 +395,50 @@ class ajustes extends Base_Controller {
 		$lts_ajustes  = dropdown_tpl($dropArray3);
 		echo json_encode($lts_ajustes);
 	}
-	public function detalle(){	
-		$id_articulo    =  $this->ajax_post('id_articulo');
-		$view 			= $this->tab['detalle'];
-		$detalle  		= $this->db_model->db_get_data_x_articulo($id_articulo);
-		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'save' , 'onclick'=>'save()','content' => $this->lang_item("btn_guardar") ));
-		$stock=0;
-		$stock_um=0;
-		for($i=0; count($detalle)>$i;$i++){
-			$stock+=$detalle[$i]['stock'];
-			$stock_um+=$detalle[$i]['stock_um'];
+	public function update(){
+		$incomplete		 	= $this->ajax_post('incomplete');
+		if($incomplete>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
+		}else{
+			$stock 				= $this->ajax_post('stock');
+			$id_articulo 		= $this->ajax_post('id_articulo');
+			$id_almacen 		= $this->ajax_post('id_almacen');
+			$id_pasillo 		= $this->ajax_post('id_pasillo');
+			$id_gaveta 			= $this->ajax_post('id_gavetas');
+			$id_almacen_destino = $this->ajax_post('id_almacen_destino');
+			$id_pasillo_destino = $this->ajax_post('id_pasillo_destino');
+			$id_pasillo_destino = $this->ajax_post('id_pasillo_destino');
+
+			$datasql=array(
+					'id_articulo' => $id_articulo,
+					'id_almacen' => $id_almacen,
+					'id_pasillo' => $id_pasillo,
+					'id_gaveta' => $id_gaveta);
+
+			$data=$this->db_model->data_update($datasql);
+			//echo count($data);
+			for($i=0;count($data)>$i;$i++){
+				//echo $i;
+				/*$cantidad=$data[$i]['stock']-$stock;
+				echo $stock.'<br>';*/
+				//echo $cantidad;
+
+				if($i==0){
+					$cantidad=$data[$i]['stock']-$stock;
+					echo $data[$i]['stock'].'-'.$stock.'<br>';
+				}else{
+					if($cantidad<=0){
+						$cantidad= $cantidad*-1;
+						echo $data[$i]['stock'].'-'.$cantidad.'<br>';
+						$cantidad=$data[$i]['stock']-$cantidad;
+					}
+				}
+				/*die();*/
+				//echo $cantidad;
+			}
+			dump_var($data);
 		}
-		//echo $stock;
-		//die();
-		$dropArray = array(
-				 'data'		=> $this->catalogos_model->db_get_data_almacen()
-				,'value' 	=> 'id_almacen_almacenes'
-				,'text' 	=> array('clave_corta','almacenes')
-				,'name' 	=> "lts_almacen"
-				,'event'    => array('event'       => 'onchange',
-			   						 'function'    => 'load_gaveta_pas',
-			   						 'params'      => array('this.value'),
-			   						 'params_type' => array(0)
-								)
-				,'class' 	=> "requerido"
-			);
-		$lts_almacen  = dropdown_tpl($dropArray);
-		//DATA
-		/*$tabData['id_compras_orden_articulo'] = $detalle[0]['id_compras_orden_articulo'];
-		$tabData['id_stock']	     = $detalle[0]['id_stock'];
-		$tabData['upc']	 		     = $detalle[0]['upc'];
-		$tabData['sku']	 		 	 = $detalle[0]['sku'];
-		$tabData['marca']	 	     = $detalle[0]['marca'];
-		$tabData['presentacion']	 = $detalle[0]['presentacion'];
-		$tabData['lote']			 = $detalle[0]['lote'];
-		$tabData['stock']	 	 	 = $detalle[0]['stock'];
-		$tabData['stock_um'] 	 	 = $detalle[0]['stock_um'];
-		$tabData['unidad_minima_cve']= $detalle[0]['unidad_minima_cve'];		
-		$tabData['caducidad']	     = $detalle[0]['caducidad'];
-		$tabData['almacenes']	     = $detalle[0]['almacenes'];
-		$tabData['pasillos']	     = $detalle[0]['pasillos'];
-		$tabData['gavetas']	     	 = $detalle[0]['gavetas'];
-		$tabData['id_almacen_origen']= $detalle[0]['id_almacen'];
-		$tabData['id_pasillo_origen']= $detalle[0]['id_pasillo'];
-		$tabData['id_gaveta_origen'] = $detalle[0]['id_gaveta'];
-		$tabData['id_almacen_entradas_recepcion'] = $detalle[0]['id_almacen_entradas_recepcion'];
-		$tabData['id_articulo_tipo'] = $detalle[0]['id_articulo_tipo'];
-		
-		$tabData['button_save']      = $btn_save;*/
-
-		$tabData['stock']	 	 	 = $stock;
-		$tabData['stock_um'] 	 	 = $stock_um;
-		$tabData['unidad_minima_cve']= $detalle[0]['unidad_minima_cve'];
-		$tabData['lts_almacen']	     = $lts_almacen;
-
-		$tabData['upc_lbl']			 = $this->lang_item("upc_lbl",false);
-		$tabData['sku_lbl']			 = $this->lang_item("sku_lbl",false);
-		$tabData['marca_lbl']		 = $this->lang_item("marca_lbl",false);
-		$tabData['presentacion_lbl'] = $this->lang_item("presentacion_lbl",false);
-		$tabData['lote_lbl']		 = $this->lang_item("lote_lbl",false);
-		$tabData['stock_lbl']		 = $this->lang_item("stock_lbl",false);
-		$tabData['stock_um_lbl']	 = $this->lang_item("stock_um_lbl",false);
-		$tabData['caducidad_lbl']	 = $this->lang_item("caducidad_lbl",false);
-		$tabData['almacen_lbl']		 = $this->lang_item("almacen_lbl",false);
-		$tabData['pasillo_lbl']		 = $this->lang_item("pasillo_lbl",false);
-		$tabData['gaveta_lbl']		 = $this->lang_item("gaveta_lbl",false);
-		$tabData['almacen_origen_lbl']		 = $this->lang_item("almacen_origen_lbl",false);
-		$tabData['pasillo_origen_lbl']		 = $this->lang_item("pasillo_origen_lbl",false);
-		$tabData['gaveta_origen_lbl']		 = $this->lang_item("gaveta_origen_lbl",false);
-		$tabData['origen']		 = $this->lang_item("origen",false);
-		$tabData['destino']		 = $this->lang_item("destino",false);
-		
-
-		
-		$uri_view  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$view;
-
-		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 }
 ?>

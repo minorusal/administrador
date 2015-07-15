@@ -1,6 +1,6 @@
 <?php
-$lang['agregar'] 		         	  = "Nueva lista";
-$lang['listado'] 		         	  = "Listado de precios";
+$lang['agregar'] 		         	  = "Nueva presentación";
+$lang['listado'] 		         	  = "Listado de presentaciones";
 $lang['detalle'] 		        	  = "Detalle";
 $lang['impuesto_aplica'] 		 	  ="aplica impuesto";
 $lang['impuesto_porcentaje'] 		  ="porcentaje de impuesto";

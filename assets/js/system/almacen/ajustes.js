@@ -79,18 +79,18 @@ function load_stock(id_articulo){
 	    });
 }
 function load_gaveta_pas(id_almacen){
-	  jQuery.ajax({
-	        type: "POST",
-	        url: path()+"almacen/ajustes/load_gaveta_pas",
-	        dataType: 'json',
-	        data: {id_almacen : id_almacen},
-	        success: function(data){
-	         var chosen = 'jQuery(".chzn-select").chosen();';
-	          jQuery('#lts_pasillo').html(data['pasillos']+include_script(chosen));
-	          jQuery('#lts_gavetas').html(data['gavetas']+include_script(chosen));
-	          jQuery('#lts_ajustes').html(data['lts_ajustes']+include_script(chosen));
-	        }
-	    });
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/ajustes/load_gaveta_pas",
+        dataType: 'json',
+        data: {id_almacen : id_almacen},
+        success: function(data){
+         var chosen = 'jQuery(".chzn-select").chosen();';
+          jQuery('#lts_pasillo').html(data['pasillos']+include_script(chosen));
+          jQuery('#lts_gavetas').html(data['gavetas']+include_script(chosen));
+          jQuery('#lts_ajustes').html(data['lts_ajustes']+include_script(chosen));
+        }
+    });
 }
 function load_gaveta(id_pasillo){
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
@@ -124,11 +124,93 @@ function realiza_calculos(){
 	var stock 	  =	jQuery('#stock_destino').val();
 	var stock_num = jQuery('#stock_num').val();
 	var cantidad;
-	
-	if(stock_num>stock){
-		cantidad=stock_num-stock;	
+	cantidad=stock_num-stock;
+	if(cantidad>=0){
+		jQuery('#stock').val(stock);
 	}else{
-		alert('mayor');
+		alert('nada');
+		jQuery('#stock').val('');
 	}
-	//alert(cantidad);
+}
+function load_gaveta_pas_destino(id_almacen_destino){
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/ajustes/load_gaveta_pas",
+        dataType: 'json',
+        data: {id_almacen_destino : id_almacen_destino,},
+        success: function(data){
+         var chosen = 'jQuery(".chzn-select").chosen();';
+          jQuery('#lts_pasillo_destino').html(data['pasillos']+include_script(chosen));
+          jQuery('#lts_gavetas_destino').html(data['gavetas']+include_script(chosen));
+        }
+    });
+}
+function load_gaveta_destino(id_pasillo_destino){
+	id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
+	  jQuery.ajax({
+	        type: "POST",
+	        url: path()+"almacen/ajustes/load_gaveta",
+	        dataType: 'json',
+	        data: {id_pasillo_destino : id_pasillo_destino,id_almacen_destino:id_almacen_destino},
+	        success: function(data){
+	         var chosen = 'jQuery(".chzn-select").chosen();';
+	          jQuery('#lts_gavetas_destino').html(data['lts_gavetas']+include_script(chosen));
+	        }
+	    });
+}
+
+function agregar(){
+	var progress = progress_initialized('update_loader');
+	jQuery("#mensajes_update").html('').hide('slow');
+	jQuery('#mensajes').hide();
+	var btn = jQuery("button[name='ajuste_save']");
+	//btn.attr('disabled','disabled');
+	var stock = jQuery('#stock').val();
+	var id_articulo = jQuery('select[name=lts_ajustes] option:selected').val();
+	//ORIGEN
+	var id_almacen  = jQuery('select[name=lts_almacen] option:selected').val();
+	var id_pasillo  = jQuery('select[name=lts_pasillos] option:selected').val();
+	var id_gavetas  = jQuery('select[name=lts_gavetas] option:selected').val();
+	//DESTINO
+	var id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
+	var id_pasillo_destino = jQuery('select[name=lts_pasillos_destino] option:selected').val();
+	var id_pasillo_destino = jQuery('select[name=lts_gavetas_destino] option:selected').val();
+
+	var incomplete = values_requeridos();
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"almacen/ajustes/update",
+		dataType: "json",			
+		data : {
+				incomplete			 :  incomplete,
+				stock	 			 :  stock,
+				id_articulo	 		 :  id_articulo,	
+				id_almacen	 		 :	id_almacen,
+				id_pasillo	 		 :	id_pasillo,
+				id_gavetas	 		 :	id_gavetas,
+				id_almacen_destino	 :	id_almacen_destino,	
+				id_pasillo_destino	 :	id_pasillo_destino,
+				id_pasillo_destino	 :	id_pasillo_destino	
+		},
+		beforeSend : function(){
+			btn.attr('disabled',true);
+		},
+		success : function(data){
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
+		}
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }

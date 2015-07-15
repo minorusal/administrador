@@ -63,10 +63,6 @@ class ajustes_model extends Base_Model{
 		}
 	}
 	public function db_get_data_articulos($data=array()){	
-		/*$id_almacen = (isset($data['id_almacen']))?"AND a.id_almacen=$data[id_almacen]":'';
-		$id_pasillo = (isset($data['id_pasillo']))?" AND a.id_pasillo=$data[id_pasillo]":'';
-		//$id_gaveta  = (isset($data['id_gaveta']))?"AND a.id_gaveta=$data[id_gaveta]":'';
-		$id_gaveta  = ($data['id_gaveta']!='')?"AND a.id_gaveta=$data[id_gaveta]":'';*/
 		$id_almacen = ($data['id_almacen']!='')?"AND a.id_almacen=$data[id_almacen]":'';
 		$id_pasillo = ($data['id_pasillo']!='')?" AND a.id_pasillo=$data[id_pasillo]":'';
 		$id_gaveta  = ($data['id_gaveta']!='')?"AND a.id_gaveta=$data[id_gaveta]":'';
@@ -159,8 +155,42 @@ class ajustes_model extends Base_Model{
 				LEFT JOIN $tbl[compras_articulos_tipo] h on a.id_articulo_tipo=h.id_articulo_tipo
 				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
-			WHERE  id_articulo = $data[id_articulo] $id_almacen $id_pasillo $id_gaveta";
-			echo $query;
+			WHERE  c.id_articulo = $data[id_articulo] $id_almacen $id_pasillo $id_gaveta";
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function data_update($data=array()){	
+		$id_almacen = ($data['id_almacen']!=0)?"AND a.id_almacen=$data[id_almacen]":'';
+		$id_pasillo = ($data['id_pasillo']!=0)?" AND a.id_pasillo=$data[id_pasillo]":'';
+		$id_gaveta  = ($data['id_gaveta']!=0)?"AND a.id_gaveta=$data[id_gaveta]":'';
+		$id_articulo  = ($data['id_articulo']!=0)?"AND c.id_articulo=$data[id_articulo]":'';
+		
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query="SELECT 
+					a.id_stock,
+					a.id_almacen,
+					a.id_pasillo,
+					a.id_gaveta,
+					a.id_almacen_entradas_recepcion,
+					a.id_compras_orden_articulo,
+					a.id_articulo_tipo,
+					a.stock,
+					a.stock_um,
+					a.timestamp as fecha_recepcion,
+					a.caducidad
+				from $tbl[almacen_stock] a 
+				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
+				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
+				WHERE 1 $id_articulo $id_almacen $id_pasillo $id_gaveta
+				ORDER BY a.caducidad, a.timestamp ASC;";
+			//echo $query;
 	  	// Execute querie
 
 	  	$query = $this->db->query($query);

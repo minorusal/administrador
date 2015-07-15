@@ -21,6 +21,8 @@ function jgrowl(msg){
 function progress_initialized(id){
     jQuery("#"+id).html('').show();
     var progress = jQuery("#"+id).progressTimer({
+        //timeLimit:1200,
+        warningThreshold:90,
         onFinish: function () {
             jQuery("#"+id).hide('slow').html('');
         }
@@ -335,10 +337,11 @@ function clean_formulario(){
     });
     jQuery('.chzn-select').val('').trigger('liszt:updated');
 }
-function values_requeridos(){
+function values_requeridos(formulario, debug){
     var ids = "";
     var items_vacios = 0;
-    jQuery(".requerido").each(function(){ 
+    var padre = (formulario) ? '#'+formulario+' ' : '';
+    jQuery(padre+" .requerido").each(function(){ 
         if(jQuery(this).prop('tagName')=='SELECT'){
             if(jQuery(this).hasAttr('multiple')){
                 if(!jQuery("[name='"+jQuery(this).attr('name')+"'] option").length>0){
@@ -362,6 +365,9 @@ function values_requeridos(){
             } 
         }
     });
+    if(debug){
+       alert(ids); 
+    }
     //alert(ids);
     return items_vacios;
 }

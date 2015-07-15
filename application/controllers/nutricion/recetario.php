@@ -491,6 +491,41 @@ class recetario extends Base_Controller{
                             'value'         => $value
                         );  
 	}
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro,
+			 'offset' 		=> $offset
+		);
+		$lts_content = $this->db_model->get_data($sqlData);
+		foreach ($lts_content as $value){
+					$set_data[] = array(	
+											$value['receta'],
+											$value['clave_corta'],
+											$value['sucursal'],
+											$value['porciones'],
+											$value['familia'],
+											$value['preparacion']
+									);
+
+		}
+
+		$set_heading = array(
+								$this->lang_item("lbl_receta"),
+								$this->lang_item("lbl_clave_corta"),
+								$this->lang_item("lbl_sucursal"),
+								$this->lang_item("lbl_porciones"),
+								$this->lang_item("lbl_familia"),
+								$this->lang_item("lbl_preparacion")
+							);
+
+		$params = array(	'title'   => $this->lang_item("titulo_submodulo"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
+	}
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');
       	$data = $this->ajax_post('avatar_data');

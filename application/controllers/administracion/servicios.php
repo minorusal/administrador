@@ -224,9 +224,9 @@ class servicios extends Base_Controller{
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
-		}
-		else{
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
 			$id_servicio  =  $objData['id_servicio'];
 			$id_sucursal  =  $objData['lts_sucursales'];
 			$ajax_inicio  =  $objData['timepicker1'];
@@ -250,11 +250,16 @@ class servicios extends Base_Controller{
 				$insert = $this->db_model->db_update_data($sqlData);
 
 				if($insert){
-					echo json_encode($this->lang_item("msg_update_success",false));
+					$msg = $this->lang_item("msg_update_success",false);
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 				}
 				else{
-					echo json_encode($this->lang_item("msg_err_clv",false));
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 				}
+			}else{
+				$msg = $this->lang_item("msg_horario_empalmado",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -302,7 +307,8 @@ class servicios extends Base_Controller{
 	public function insert_servicio(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$id_sucursal  =	$objData['lts_sucursales'];
 			$ajax_inicio  = $objData['timepicker1'];
@@ -323,10 +329,15 @@ class servicios extends Base_Controller{
  					);
 				$insert = $this->db_model->db_insert_data($sqlData);
 				if($insert){
-					echo json_encode($this->lang_item("msg_insert_success",false));
+					$$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 				}
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_horario_empalmado",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

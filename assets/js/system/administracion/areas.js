@@ -63,7 +63,8 @@ function detalle(id_area){
 }
 function actualizar(){
 	var progress = progress_initialized('update_loader');
-	jQuery('#mensajes_update').hide();
+	jQuery("#mensajes_update").html('').hide('slow');
+	jQuery('#mensajes').hide();
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();
@@ -80,7 +81,11 @@ function actualizar(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-			jgrowl(data);
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
 		}
 	  }).error(function(){
 	       		progress.progressTimer('error', {
@@ -114,8 +119,12 @@ function agregar(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-		    jgrowl(data);
-		    clean_formulario();
+		    if(data.success == 'true' ){
+				clean_formulario();
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
+			} 
 		}
 	}).error(function(){
 	       		progress.progressTimer('error', {

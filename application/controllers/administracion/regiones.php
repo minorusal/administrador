@@ -250,7 +250,7 @@ class regiones extends Base_Controller
 		$incomplete  = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$region      = $this->ajax_post('region');
 			$clave_corta = $this->ajax_post('clave_corta');
@@ -262,35 +262,22 @@ class regiones extends Base_Controller
 								,'id_usuario'      => $this->session->userdata('id_usuario')
 								,'registro'        => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
-			
-			/*$region = $this->db->insert_id($insert);
-			foreach($entidades as $item => $valor)
-			{
-				$insertar = array('id_entidad' => $valor,
-								  'id_region'  => $region);
-				$insert = $this->db_model->db_insert_entidades($insertar);
-			}*/
 
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
 
 	public function actualizar(){
 		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0)
-		{
-			$msg = $this->lang_item('msg_campos_obligatorios',false);
-			$json_respuesta = array(
-				 'id' => 0
-				,'contenido' => alertas_tpl('error',$msg, false)
-				,'succes' => false
-				);
+		if($incomplete > 0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}
 		else
 		{
@@ -304,7 +291,6 @@ class regiones extends Base_Controller
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
 			
-			
 			$id_region   = $this->ajax_post('id_region');
 			$entidades   = $this->ajax_post('entidades');
 
@@ -312,26 +298,14 @@ class regiones extends Base_Controller
 							  'id_administracion_region'  => $id_region);
 			$insert = $this->db_model->db_update_entidades($insertar);
 			
-			if($insert)
-			{
-				$msg = $this->lang_item("msg_insert_success",false);
-				$json_respuesta = array(
-						 'id' 		     => 1
-						,'contenido'     => alertas_tpl('success', $msg ,false)
-						,'success' 	     => true
-				);
-			}
-			else
-			{
+			if($insert){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				$json_respuesta = array(
-						 'id' 		    => 0
-						,'contenido'    => alertas_tpl('', $msg ,false)
-						,'success'    	=> false
-				);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
-		echo json_encode($json_respuesta);
 	}
 
 	public function export_xlsx($offset=0){

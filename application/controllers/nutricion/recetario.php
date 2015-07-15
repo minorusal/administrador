@@ -275,7 +275,10 @@ class recetario extends Base_Controller{
 							,'unique'        => $id_receta
 						);
 		$id_compras_articulo = array();
+		$insumos_sin_costo   = array();
 		$recetario           = $this->db_model->get_data_unique($sqlData);
+		$costo_porcion       = 0;
+
 		foreach ($recetario as $key => $value) {
 			$id_nutricion_receta  = $value['id_nutricion_receta'];
 			$receta               = $value['receta'];
@@ -292,13 +295,32 @@ class recetario extends Base_Controller{
 			
 			if($value['id_compras_articulo']){
 				$id_compras_articulo[] = $value['id_compras_articulo'];
+
+				if(!$value['costo_x_um']){
+					$insumos_sin_costo[] = $value['articulo'];
+				}else{
+					$costo_porcion = $costo_porcion + ($value['porciones_articulo'] * $value['costo_x_um']);
+				}
 				$input        = form_input($this->att_addon('articulo_'.$value['id_compras_articulo'],$value['porciones_articulo']));
 
-				$cantidades  .=  "<p id='articulo_".$value['id_compras_articulo']."'><label>".$value['articulo']."</label>
+				$cantidades  .=  "<p id='articulo_".$value['id_compras_articulo']."'>
+									<label>".$value['articulo']."</label>
 					                ".add_on_tpl($input,$value['um'] )."
-					            </p>";
+					              </p>";
 			}
 		}
+
+		if(!empty($insumos_sin_costo)){
+			$lista_insumos_sin_costo = ol($insumos_sin_costo, array('class' => 'list-ordered'));
+			$msg_insumos_sin_costo   = $this->lang_item("msg_insumos_sin_costo",false).br(1).$lista_insumos_sin_costo;
+			$msg_insumos_sin_costo   = alertas_tpl('', $msg_insumos_sin_costo ,false, '20%');
+
+		}else{
+			$msg_insumos_sin_costo = '';
+		}
+
+		
+		$costo_porcion = ($costo_porcion > 0 ) ? $costo_porcion/$porciones : 0;
 
 		$sqlData = array(
 			 'buscar' => 0
@@ -347,8 +369,13 @@ class recetario extends Base_Controller{
 		$tab_3['lbl_editar_porciones']     = $this->lang_item('lbl_editar_porciones');
 		$tab_3['select_insumos']           = $this->lang_item('select_insumos');
 		$tab_3['lbl_presentacion_insumo']  = $this->lang_item('lbl_presentacion_insumo');
+		$tab_3['lbl_costo_x_porcion']      = $this->lang_item('lbl_costo_x_porcion');
+		
 		$tab_3['value_receta']             = $receta;
 		$tab_3['value_clave_corta']        = $clave_corta;
+		$tab_3['value_costo_x_porcion']    = $costo_porcion;
+		$tab_3['msg_insumos_sin_costo']    = $msg_insumos_sin_costo;
+
 		$tab_3['value_porciones']          = $porciones;
 		$tab_3['value_preparacion']        = $preparacion;
 		$tab_3['multiselect_insumos']      = $list_insumos;
@@ -364,14 +391,11 @@ class recetario extends Base_Controller{
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tab_3['value_usuarios_registro']  = $usuario_name;
 
-		if($edit_id_usuario)
-		{
+		if($edit_id_usuario){
 			$usuario_registro = $this->users_model->search_user_for_id($edit_id_usuario);
 			$usuario_name = text_format_tpl($usuario_registro[0]['name'],"u");
 			$tab_3['value_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($edit_timestamp), $usuario_name);
-		}
-		else
-		{
+		}else{
 			$usuario_name = '';
 			$tab_3['value_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
 		}
@@ -392,13 +416,11 @@ class recetario extends Base_Controller{
 	public function update(){
 		
 		$objData  	= $this->ajax_post('objData');
-		
-	
+
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			//print_debug($objData);,'id_sucursal'           => $objData['lts_sucursales_agregar']
 			$id_receta     = $objData['id_receta'];
 			$receta        = $objData['txt_receta'];
 			$clave_corta   = $objData['txt_clave_corta'];
@@ -468,6 +490,41 @@ class recetario extends Base_Controller{
                             'placeholder'   => $this->lang_item('lbl_cantidad'),
                             'value'         => $value
                         );  
+	}
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro,
+			 'offset' 		=> $offset
+		);
+		$lts_content = $this->db_model->get_data($sqlData);
+		foreach ($lts_content as $value){
+					$set_data[] = array(	
+											$value['receta'],
+											$value['clave_corta'],
+											$value['sucursal'],
+											$value['porciones'],
+											$value['familia'],
+											$value['preparacion']
+									);
+
+		}
+
+		$set_heading = array(
+								$this->lang_item("lbl_receta"),
+								$this->lang_item("lbl_clave_corta"),
+								$this->lang_item("lbl_sucursal"),
+								$this->lang_item("lbl_porciones"),
+								$this->lang_item("lbl_familia"),
+								$this->lang_item("lbl_preparacion")
+							);
+
+		$params = array(	'title'   => $this->lang_item("titulo_submodulo"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
 	}
 	public function upload_photo(){
       	$src =  $this->ajax_post('avatar_src');

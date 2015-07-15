@@ -1,5 +1,6 @@
 jQuery(document).ready(function(){
 	calendar_dual("fecha_inicio", "fecha_termino");
+	calendar_dual("fecha_inicio_formatos", "fecha_termino_formatos");
 });
 function load_programacion(id_sucursal){
 	var functions = []
@@ -267,4 +268,58 @@ function load_calendario(id_sucursal){
 }
 function load_calendario_tab(){
 	load_calendario(jQuery('select[name=lts_sucursales_calendario] option:selected').val());
+}
+function generar_formato(){
+	jQuery('#mensajes_formatos').html('').hide('slow');
+	var btn                 = jQuery("button[name='generar_formato']");
+	var callback            = false;
+	var id_sucursal         = jQuery('select[name=lts_sucursales_formatos]').val();
+	var radio_formato       = jQuery("input[name='tipo_formato']:checked").val();
+	var objData             = formData('#formatos');
+	objData['incomplete']   = values_requeridos('formatos');
+	switch (radio_formato){
+		case '1':
+			var callback = 'formato_abasto';
+		break;
+		case '2':
+			var callback = 'formato_valores_nutrcionales';
+		break;
+		case '3':
+			var callback = 'formato_licitacion';
+		break;
+			
+	}
+	if(callback){
+		var progress = progress_initialized('loader_formatos');
+		jQuery.ajax({
+	        type: "POST",
+	        url: path()+"nutricion/programacion/"+callback,
+	        dataType: 'json',
+	        data: { objData : objData },
+	        beforeSend : function(){
+	        	btn.attr('disabled',true);
+	        },
+	        success: function(data){
+	        	if(data.success){
+	        		jgrowl(data.msg);
+	        		window.location.href = path()+data.file;
+	        	}else{
+	        		jQuery('#mensajes_formatos').html(data.msg).show('slow');
+	        	}
+	        	
+	        }
+	    }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            	btn.attr('disabled',false);
+		            }
+	            });
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+		    });
+	}else{
+		alert('por favor seleccione una opcion');
+	}
 }

@@ -24,6 +24,15 @@ Created by: Mienard Lumaad (@themepixels)
 @import url('font-awesome.min.css');
 @import url('font-awesome.min.tpl.css');
 
+ input[disabled].locked_active,
+ select[disabled].locked_active,
+ textarea[disabled].locked_active,
+ input[readonly].locked_active,
+ select[readonly].locked_active,
+ textarea[readonly].locked_active{
+	cursor: pointer;
+  	background-color: transparent;
+}
 
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
 	background: #0866c6;

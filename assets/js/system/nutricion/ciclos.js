@@ -133,32 +133,41 @@ function load_recetas(id_familia){
 }
 
 function agregar(){
+  var progress = progress_initialized('registro_loader');
   var btn          = jQuery("button[name='save_ciclo']");
   btn.attr('disabled','disabled');
   jQuery('#mensajes').hide();
   
   var objData = formData('#formulario');
   objData['incomplete'] = values_requeridos();
-
+  //alert(dump_var(objData));
   jQuery.ajax({
     type:"POST",
     url: path()+"nutricion/ciclos/insert_ciclo",
     dataType: "json",
-    data: objData,
+    data: {objData},
     beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+      btn.attr('disabled',true);
     },
     success : function(data){
-      btn.removeAttr('disabled');
-
-      var data = data.split('|');
-      if(data[0]==1){
-        clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-      jQuery("#mensajes").html(data[1]).show('slow');
+        if(data.success == 'true' ){
+          clean_formulario();
+          jgrowl(data.mensaje);
+        }else{
+          jQuery("#mensajes").html(data.mensaje).show('slow');  
+        } 
     }
-  });
+  }).error(function(){
+            progress.progressTimer('error', {
+                errorText:'ERROR!',
+                onFinish:function(){
+                }
+              });
+             btn.attr('disabled',false);
+          }).done(function(){
+            progress.progressTimer('complete');
+            btn.attr('disabled',false);
+    });
 }
 
 function insert_config(){
@@ -256,7 +265,27 @@ function eliminar_receta(id_vinculo,id_ciclo){
 
         }
   });
-}     
+} 
+
+function eliminar_ciclo(id_ciclo){
+  var treeview     = 'load_treeview("treeview_ciclos");';
+  jQuery.ajax({
+        type: "POST",
+        url: path()+"nutricion/ciclos/eliminar_ciclo",
+        dataType: 'json',
+        data: {id_ciclo:id_ciclo},
+        beforeSend : function(){
+        },
+        success: function(data){
+          if(data == 1){
+            jQuery('#ciclo_detalle').html('');
+          }else{
+            alert('Este ciclo esta ocupado y no se puede eliminar');
+            jQuery('#ciclo_detalle').html(data+include_script(treeview));
+          }
+        }
+  });
+}    
 //UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-02 23:59:59' and '2015-07-06 23:59:59' and envio = 0
 //SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59' and envio = 1
 //UPDATE `notas_facturas` set envio = 0 WHERE fecha_registro between '2015-06-26 18:38:00' and '2015-06-26 23:59:59' and envio = 1

@@ -15,11 +15,10 @@ class valores_nutricionales_model extends Base_Model{
 		
 		// Query
 		$query = "	SELECT *
-					FROM $tbl[nutricion_valores_nutricionales] va,
-					     $tbl[compras_articulos] ar
-					WHERE  va.id_compras_articulos = ar.id_compras_articulo AND
-						   va.activo = 1 $filtro
-					GROUP BY va.id_compras_articulos ASC
+					FROM $tbl[nutricion_valores_nutricionales] va
+					LEFT JOIN $tbl[compras_articulos] ar on ar.id_compras_articulo = va.id_compras_articulos
+					WHERE va.activo = 1 $filtro
+					ORDER BY va.id_compras_articulos ASC
 					$limit
 					";
       	$query = $this->db->query($query);
@@ -27,7 +26,7 @@ class valores_nutricionales_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-
+//WHERE  va.id_compras_articulos = ar.id_compras_articulo AND
 	public function get_valores_nutricionales_unico($id_articulo){
 		// DB Info
 		$tbl = $this->tbl;

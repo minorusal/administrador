@@ -17,7 +17,7 @@ class areas extends Base_Controller{
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'areas';
 		$this->icon 			= 'iconfa-fire'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/areas
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
@@ -187,7 +187,8 @@ class areas extends Base_Controller{
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$sqlData = array(
 				'id_administracion_areas' => $objData['id_area']
@@ -199,9 +200,11 @@ class areas extends Base_Controller{
 				);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
-				echo json_encode($this->lang_item("msg_update_success",false));
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -233,7 +236,8 @@ class areas extends Base_Controller{
 	public function insert_area(){
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
-			echo json_encode($this->lang_item("msg_campos_obligatorios",false));
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$data_insert = array(
 				  'area'        => $objData['txt_area']
@@ -242,13 +246,13 @@ class areas extends Base_Controller{
 				 ,'id_usuario'  => $this->session->userdata('id_usuario')
 				 ,'timestamp'   => $this->timestamp()
 				);
-
 			$insert = $this->db_model->db_insert_data($data_insert);
-
 			if($insert){
-				echo json_encode($this->lang_item("msg_insert_success",false));
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
-				echo json_encode($this->lang_item("msg_err_clv",false));
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

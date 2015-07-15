@@ -18,7 +18,7 @@ class ciclos_model extends Base_Model{
 			$num_ciclos = $query->result_array();
 			$cantidad = $num_ciclos[0]['id_indice'];
 			$ciclos = $data['ciclo'];
-			for($i=$cantidad+1;$i<($ciclos+$cantidad+1);$i++) {				
+			for($i=$cantidad+1;$i<($ciclos+$cantidad+1);$i++){				
 				$data['ciclo'] = 'ciclo'.$i;
 				$data['clave_corta'] = date("YmdHis").$i;
 				$existe = $this->row_exist($tbl['nutricion_ciclos'], array('clave_corta'=> $data['clave_corta']));
@@ -63,11 +63,11 @@ class ciclos_model extends Base_Model{
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro 		= ($filtro) ? "AND (cl.ciclo like '%$filtro%' OR')" : "";
+		$filtro 		= ($filtro) ? "AND (cl.id_sucursal like '%$filtro%' OR')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT
-						cl.id_nutricion_ciclos
+						 cl.id_nutricion_ciclos
 						,cl.ciclo
 						,cl.id_sucursal
 						
@@ -110,7 +110,6 @@ class ciclos_model extends Base_Model{
 					LEFT JOIN $tbl[administracion_servicios] s on s.id_administracion_servicio = ncr.id_servicio
 					WHERE cl.id_nutricion_ciclos= $id_ciclo AND ncr.activo = 1
 					ORDER BY ncr.id_servicio ,ncr.id_tiempo ,ncr.id_familia";
-		// print_debug($query);	
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -118,14 +117,12 @@ class ciclos_model extends Base_Model{
 	}
 
 	function eliminar_servicio($id_servicio, $id_ciclo){
-		//print_debug($id_servicio);
 		$tbl = $this->tbl;
 		if($id_servicio==0){
 			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
 		}else{
 			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_servicio = $id_servicio";
 		}
-		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query){
 			return $query;
@@ -133,14 +130,12 @@ class ciclos_model extends Base_Model{
 	}
 
 	function eliminar_tiempo($id_tiempo, $id_ciclo){
-		//print_debug($id_tiempo);
 		$tbl = $this->tbl;
 		if($id_tiempo==0){
 			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
 		}else{
 			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_tiempo = $id_tiempo";
 		}
-		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query){
 			return $query;
@@ -148,14 +143,12 @@ class ciclos_model extends Base_Model{
 	}
 
 	function eliminar_familia($id_familia, $id_ciclo){
-		//print_debug($id_tiempo);
 		$tbl = $this->tbl;
 		if($id_familia==0){
 			 $query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo";
 		}else{
 			$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_ciclo = $id_ciclo AND id_familia = $id_familia";
 		}
-		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query){
 			return $query;
@@ -163,14 +156,46 @@ class ciclos_model extends Base_Model{
 	}
 
 	function eliminar_receta($id_vinculo,$id_ciclo){
-				$tbl = $this->tbl;
-		//print_debug($id_vinculo);
+		$tbl = $this->tbl;
 		$query = "DELETE FROM $tbl[nutricion_ciclo_receta] WHERE id_nutricion_ciclo_receta = $id_vinculo AND id_ciclo = $id_ciclo";
-		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query){
 			return $query;
 		}
 	}
+
+	/*function get_data_sucursales(){
+
+	}*/
+
+	function eliminar_ciclo($id_ciclo){
+		$tbl = $this->tbl;
+		$query = "SELECT *
+				  FROM $tbl[nutricion_programacion_ciclos] npc
+				  WHERE npc.id_nutricion_ciclos = $id_ciclo
+				 ";
+				 //print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return false;
+		}else{
+			$query = "DELETE 
+					  FROM $tbl[nutricion_ciclo_receta] 
+					  WHERE id_ciclo = $id_ciclo";
+			$query = $this->db->query($query);
+			if($query){
+				$query = "DELETE 
+					      FROM $tbl[nutricion_ciclos] 
+					      WHERE id_nutricion_ciclos = $id_ciclo";
+				$query = $this->db->query($query);
+				if($query){
+					return $query;
+				}
+			}
+		}
+	}
 	
 }
+
+
+//LEFT JOIN $tbl[nutricion_programacion_ciclos] npc on npc.id_nutricion_ciclos = $id_ciclo

@@ -33,7 +33,6 @@ class traspasos extends stock{
 		$this->tab1 			= 'listado';
 		$this->tab2 			= 'detalle';
 		// DB Model
-		//almacen/entradas_almacen/listado
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
 		$this->load->model('stock_model','stock_model');

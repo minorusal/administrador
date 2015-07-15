@@ -127,27 +127,27 @@ class ciclos extends Base_Controller{
 	}
 
 	public function insert_ciclo(){
-		$incomplete = $this->ajax_post('incomplete');
-		if($incomplete > 0){
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode('0|'.alertas_tpl('error', $msg ,false));
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
 			$sqlData = array(
-				 'ciclo'       => $this->ajax_post('txt_cantidad_ciclo')
-				,'nom_ciclo'   => $this->ajax_post('txt_ciclo')
-				,'id_sucursal' => $this->ajax_post('lts_sucursales')
-				,'clave_corta' => $this->ajax_post('txt_clave_corta')
+				 'ciclo'       => $objData['txt_cantidad_ciclo']
+				,'nom_ciclo'   => $objData['txt_ciclo']
+				,'id_sucursal' => $objData['lts_sucursales']
+				,'clave_corta' => $objData['txt_clave_corta']
 				,'id_usuario'  => $this->session->userdata('id_usuario')
 				,'timestamp'   => $this->timestamp()
-				,'tipo'        => $this->ajax_post('tipo')
+				,'tipo'        => (isset($objData['tipo']))?$objData['tipo']:'auto'
 				);
 			$insert = $this->ciclos->insert_ciclo($sqlData);
 			if($insert){
 				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode('1|'.alertas_tpl('success', $msg ,false));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode('0|'.alertas_tpl('', $msg ,false));
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -334,7 +334,7 @@ class ciclos extends Base_Controller{
 		$contenido_ciclo = $this->ciclos->get_ciclo_contenido($id_ciclo);
 
 		if(!is_null($contenido_ciclo)){
-			foreach ($contenido_ciclo as $key => $value) {
+			foreach ($contenido_ciclo as $key => $value){
 				$id_familia = $value['id_familia'];
 				$idc = $value['id_ciclo'];
 					$servicios['s-'.$value['servicio'].','.$idc.','.$value['id_servicio']]['t-'.$value['tiempo'].','.$idc.','.$value['id_tiempo']]['f-'.$value['familia'].','.$idc.','.$id_familia][] =array(
@@ -346,18 +346,18 @@ class ciclos extends Base_Controller{
 																													);
 
 			}
-
-			$list  ='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
+			$list  = '<span class="$icon"></span>'.$contenido_ciclo[0]['ciclo'].'&nbsp<a style="cursor:pointer;" onclick="eliminar_ciclo('.$contenido_ciclo[0]['id_ciclo'].')"><span class=" iconfa-trash"></span></a>'; 
+			$list .='<br><div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse').'</a> | <a href="?#">'.$this->lang_item('expand').'</a></div>';
 			$list .= $this->make_list($servicios,true);	
 		}else{
-			$list = alertas_tpl('', $this->lang_item('msg_sin_recetas'),false);
+			$list  = '<span class="$icon"></span>'.$nom_ciclo.'&nbsp<a style="cursor:pointer;" onclick="eliminar_ciclo('.$id_ciclo.')"><span class=" iconfa-trash"></span></a>';
 		}
 		echo json_encode($list);
 	}
 
 
 
-	public function make_list($items, $inicio = true) {
+	public function make_list($items, $inicio = true){
 		$elimina = '';
 		$ret = ($inicio) ? "<ul id='treeview_ciclos' class='treeview-gray'>": '<ul>';	
 	    foreach ($items as $item => $subitems) {
@@ -368,28 +368,28 @@ class ciclos extends Base_Controller{
 		        	$tittle = $nivel[1];
 		        	switch ($icon) {
 		        		case 's':
-		        			$servicio = explode(',',$item);
-		        		    $id_ciclo = $servicio[1];
+		        			$servicio    = explode(',',$item);
+		        		    $id_ciclo    = $servicio[1];
 		        		    $id_servicio = $servicio[2];
-		        			$icon    = 'iconfa-time';
-		        			$tipo    = strtoupper($this->lang_item('servicio'));
-		        			$elimina = 'eliminar_servicio('.$id_servicio.','.$id_ciclo.')';
+		        			$icon        = 'iconfa-time';
+		        			$tipo        = strtoupper($this->lang_item('servicio'));
+		        			$elimina     = 'eliminar_servicio('.$id_servicio.','.$id_ciclo.')';
 		        			break;
 		        		case 't':
-		        			$tiempo = explode(',',$item);
-		        		    $id_ciclo = $tiempo[1];
+		        			$tiempo    = explode(',',$item);
+		        		    $id_ciclo  = $tiempo[1];
 		        		    $id_tiempo = $tiempo[2];
-		        			$icon 	= 'iconfa-sitemap';
-		        			$tipo 	= strtoupper( $this->lang_item('tiempo') );
-		        			$elimina = 'eliminar_tiempo('.$id_tiempo.','.$id_ciclo.')';
+		        			$icon 	   = 'iconfa-sitemap';
+		        			$tipo 	   = strtoupper( $this->lang_item('tiempo') );
+		        			$elimina   = 'eliminar_tiempo('.$id_tiempo.','.$id_ciclo.')';
 		        			break;
 		        		case 'f':
-		        			$familia = explode(',',$item);
-		        			$id_ciclo = $familia[1];
+		        			$familia    = explode(',',$item);
+		        			$id_ciclo   = $familia[1];
 		        			$id_familia = $familia[2];
-		        			$icon 	= 'iconfa-certificate';
-		        			$tipo 	= strtoupper( $this->lang_item('familia') );
-		        			$elimina = 'eliminar_familia('.$id_familia.','.$id_ciclo.')';
+		        			$icon 	    = 'iconfa-certificate';
+		        			$tipo 	    = strtoupper( $this->lang_item('familia') );
+		        			$elimina    = 'eliminar_familia('.$id_familia.','.$id_ciclo.')';
 		        			break;
 		        		default:
 		        			$icon = 'iconfa-fire';
@@ -482,5 +482,36 @@ class ciclos extends Base_Controller{
 		
 		$elimina = $this->ciclos->eliminar_receta($id_vinculo,$id_ciclo);
 		$detalle = $this->ciclo_detalle($id_ciclo);
+	}
+
+	public function eliminar_ciclo(){
+		$id_ciclo = $this->ajax_post('id_ciclo');
+		$elimina  = $this->ciclos->eliminar_ciclo($id_ciclo);
+		if($elimina){
+			/*$sqlData = array(
+							 'buscar' => $id_sucursal
+							,'offset' => 0
+							,'limit' => 0
+							);
+			$data_ciclo = $this->ciclos->db_get_data($sqlData);
+			
+			$dropdown_ciclos = array(
+					 'data'     => $data_ciclo
+					,'value' 	=> 'id_nutricion_ciclos'
+					,'text' 	=> array('ciclo')
+					,'class' 	=> "requerido"
+					,'leyenda'  => '-----'
+					,'name' 	=> "lts_ciclos"
+					,'event'    => array('event' => 'onchange',
+							   						'function' => 'load_contenido_ciclo',
+			   										'params'   => array('this.value'),
+			   										'params_type' => array(false)
+			   									));
+			$ciclos = dropdown_tpl($dropdown_ciclos);
+			$data['ciclos'] = $ciclos;*/
+			echo json_encode(1);
+		}else{
+			$detalle = $this->ciclo_detalle($id_ciclo);
+		}
 	}
 }

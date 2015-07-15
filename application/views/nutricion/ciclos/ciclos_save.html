@@ -3,9 +3,9 @@
 	<p>
         <label>{lbl_tipo_insert}</label>
         <span class="field">
-        	<span><input type="radio"  data-campo="tipo"  name="tipo" value="auto" checked></span>
+        	<span><input id="tipo" type="radio"  data-campo="tipo"  name="tipo" value="auto" checked></span>
         	{lbl_auto} 
-        	<span><input type="radio"  data-campo="tipo"  name="tipo" value="manual" ></span>
+        	<span><input id="tipo" type="radio"  data-campo="tipo"  name="tipo" value="manual" ></span>
         	{lbl_manual}
         </span>
     </p>
@@ -33,7 +33,7 @@
 			{list_sucursales} 
 		</span>
 	</p>
-	<div id="registro_loader"></div>
+	<div id="registro_loader" class="progress progress-striped" style="display:none;"></div>
     <div id="mensajes" style="display:none"></div>
 	<span class="field">
 		{btn_save}

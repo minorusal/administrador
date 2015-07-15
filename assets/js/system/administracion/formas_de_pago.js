@@ -80,9 +80,13 @@ function actualizar(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-			jgrowl(data);
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
 		}
-	}).error(function(){
+	  }).error(function(){
 	       		progress.progressTimer('error', {
 		            errorText:'ERROR!',
 		            onFinish:function(){
@@ -114,8 +118,12 @@ function agregar(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-			jgrowl(data);
-			clean_formulario();
+		    if(data.success == 'true' ){
+				clean_formulario();
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
+			} 
 		}
 	}).error(function(){
 	       		progress.progressTimer('error', {

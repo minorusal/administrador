@@ -85,8 +85,12 @@ var progress = progress_initialized('loader');
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-		    jgrowl(data);
-		    clean_formulario();
+		    if(data.success == 'true' ){
+				clean_formulario();
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes").html(data.mensaje).show('slow');	
+			} 
 		}
 	}).error(function(){
 	       		progress.progressTimer('error', {
@@ -117,21 +121,25 @@ function actualizar(){
 			data : {objData},
 			beforeSend : function(){
 			btn.attr('disabled',true);
-			},
-			success : function(data){
-				jgrowl(data);
+		},
+		success : function(data){
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
 			}
-		  }).error(function(){
-		       		progress.progressTimer('error', {
-			            errorText:'ERROR!',
-			            onFinish:function(){
-			            }
-		            });
-		           btn.attr('disabled',false);
-		        }).done(function(){
-			        progress.progressTimer('complete');
-			        btn.attr('disabled',false);
-		  });
+		}
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }
 
 function eliminar(id){	

@@ -8,12 +8,11 @@ class excel extends PHPExcel{
 		parent::__construct();
 	}
 	
-	public function generate_xlsx($params = array(), $debug = false){
+	public function generate_xlsx($params = array(), $save = false){
 		
 		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
 		$items   = (array_key_exists('items',$params)) ? $params['items'] : false;
-
 
 		if($headers && $items){
 
@@ -31,7 +30,6 @@ class excel extends PHPExcel{
 			$objDrawing->setPath('./assets/images/logo.png');
 			$objDrawing->setHeight(36);
 			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-
 			
 			$countHeaders = count($params['headers'])+64;
 			$column       = chr($countHeaders).'3';
@@ -45,7 +43,6 @@ class excel extends PHPExcel{
 	        $objPHPExcel->setActiveSheetIndex(0);
 	        
 	      	$objPHPExcel->getActiveSheet()->fromArray($params['headers'], null, 'A3');
-
 	      	$objPHPExcel->getActiveSheet()->getStyle("A3:$column")->applyFromArray($this->defaultStyle_headers());
 	      	
 	      	foreach(range('A',$column) as $columnID) {
@@ -53,19 +50,22 @@ class excel extends PHPExcel{
 			}
 	      	
 	      	$items = $objPHPExcel->getActiveSheet()->fromArray($params['items'], null, 'A4'); 
-	      	
-		
 			$objPHPExcel->setActiveSheetIndex(0);
-			if($debug==false){
-				//ob_end_clean();
+				
+			if($save){
+				$pathfile  = 'assets/docs/'.$title.'.xlsx';
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+				rename(APPPATH.'libraries/excel.xlsx', $pathfile);
+				return $pathfile;
+			}else{
 				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save('php://output');
-				//ob_end_clean();
+				$objWriter->save('php://output');
 				exit;
 			}
-			
 			
 		}else{
 			redirect('override_404');

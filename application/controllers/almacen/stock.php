@@ -151,5 +151,13 @@ class stock extends Base_Controller{
 		}
 		return $success;
 	}
+
+	public function eliminar_stock_en_cero($borrado_fisico=false){
+		$success = $this->stock_model->copy_stock_to_deleted();
+		if($borrado_fisico){
+			$success = $this->stock_model->delete_stock_en_cero(); #Eliminación física
+		}
+		return $success;
+	}
 }
 ?>

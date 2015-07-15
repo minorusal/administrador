@@ -336,10 +336,10 @@ class traspasos extends stock{
 
 			if($stock_destino!=$stock_origen){
 				// Inserta y Actualiza tabla de stock y crea sus respectivos logs
-				$traspaso = $this->stock_model->stock_insert($arrayData);
+				$traspaso = $this->stock_insert($arrayData);
 			}else{
 				// Solo actualiza tabla de stock y crea su respectivo log
-				$traspaso = $this->stock_model->stock_update($arrayData);				
+				$traspaso = $this->stock_update($arrayData);				
 			}
 			// Mensajes
 			if($traspaso){				

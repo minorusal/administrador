@@ -118,6 +118,7 @@ class stock extends Base_Controller{
 							'edit_timestamp'  	=> $this->timestamp(),
 							'edit_id_usuario'  	=> $this->session->userdata('id_usuario')
 						);
+			if($stock_destino<=0){$sqlData['activo']=0;}
 			if($traspaso = $this->stock_model->update_data_stock($sqlData)){
 			// Log Stock
 				if($id_accion == $this->vars->cfg['id_accion_almacen_actualizacion']){
@@ -147,15 +148,23 @@ class stock extends Base_Controller{
 							);
 				$insertlog = $this->stock_model->insert_stock_log($sqldatalog_stock);
 				$success = true;
+			// Stock vacío => ceros
+				if($stock_destino<=0){
+					$delArray = array('fisico'=>true, 'id_stock'=>$id_stock);
+					$success = $this->eliminar_stock_en_cero($delArray);
+				}
 			}
 		}
 		return $success;
 	}
 
-	public function eliminar_stock_en_cero($borrado_fisico=false){
-		$success = $this->stock_model->copy_stock_to_deleted();
+	public function eliminar_stock_en_cero($data=array()){
+	// Copia y elimina registros con stock = 0 y activo = 0
+		$borrado_fisico = (isset($data['fisico']))?true:false;
+		$id_stock 		= (isset($data['id_stock']))?$data['id_stock']:false;
+		$success = $this->stock_model->copy_stock_to_deleted(array('id_stock'=>$id_stock));
 		if($borrado_fisico){
-			$success = $this->stock_model->delete_stock_en_cero(); #Eliminación física
+			$success = $this->stock_model->delete_stock_en_cero(array('id_stock'=>$id_stock)); #Eliminación física
 		}
 		return $success;
 	}

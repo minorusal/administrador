@@ -20,6 +20,7 @@ class programacion extends Base_Controller{
 		$this->view_content 	= 'content';
 		$this->tab1 			= 'config_programacion';
 		$this->tab2 			= 'ver_calendario';
+		$this->tab3 			= 'generar_formatos';
 
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model('administracion/sucursales_model','sucursales');
@@ -29,12 +30,13 @@ class programacion extends Base_Controller{
 	public function config_tabs(){
 		$tab_1 						 = $this->tab1;
 		$tab_2 						 = $this->tab2;
+		$tab_3 						 = $this->tab3;
 		$path  						 = $this->path;
-		$config_tab['names']         = array($this->lang_item($tab_1) ,$this->lang_item($tab_2)); 
-		$config_tab['links']         = array($path.$tab_1 ,$path.$tab_2); 
-		$config_tab['action']        = array('','load_calendario_tab');
-		$config_tab['attr']          = array('','');
-		$config_tab['style_content'] = array('','');
+		$config_tab['names']         = array($this->lang_item($tab_1) ,$this->lang_item($tab_2),$this->lang_item($tab_3)); 
+		$config_tab['links']         = array($path.$tab_1 ,$path.$tab_2,$path.$tab_2); 
+		$config_tab['action']        = array('','load_calendario_tab','');
+		$config_tab['attr']          = array('','','');
+		$config_tab['style_content'] = array('','','');
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -43,13 +45,16 @@ class programacion extends Base_Controller{
 	public function index(){
 		$tabl_inicial 			  = 1;
 		$view_agregar    		  = $this->inicio_config_programacion();	
-		$contenidos_tab           = array($view_agregar,$this->calendario());
+		$contenidos_tab           = array($view_agregar,$this->calendario(),$this->formatos_programacion());
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]  = array(
+								'name' => $this->seccion, 
+								'dirname' => $this->modulo
+							);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function inicio_config_programacion(){
@@ -159,14 +164,14 @@ class programacion extends Base_Controller{
 																));
 
 				$btn_guardar_parametros = form_button(array( 	
-																'content'  => 'Guardar Cambios',
+																'content'  => $this->lang_item('btn_guardar'),
 																'class'    => 'btn btn-primary',
 																'name'     => 'guardar_programacion',
 																'onclick'  => 'guardar_configuracion_programacion()'
 															));
 			}else{
 				$btn_guardar_parametros = form_button(array( 
-																'content'  => 'Guardar Cambios',
+																'content'  => $this->lang_item('btn_guardar'),
 																'class'    => 'btn btn-primary',
 																'disabled' => 'disabled',
 																'name'     => 'guardar_programacion'
@@ -428,6 +433,12 @@ class programacion extends Base_Controller{
 																																											'id_vinculo'  => $items['id_nutricion_ciclo_receta']);
 			}
 		}
+		if(is_array($dias_descartados)){
+			foreach ($dias_descartados as $key => $value) {
+				$descartados[] = $value['dia_index'];
+			}
+		}
+
 		if(is_array($ciclos_programados)){
 			foreach ($ciclos_programados as $key => $value) {
 				$ciclos[$value['orden']]['nombre'] = $value['ciclo'];
@@ -439,11 +450,7 @@ class programacion extends Base_Controller{
 
 			}
 			
-			if(is_array($dias_descartados)){
-				foreach ($dias_descartados as $key => $value) {
-					$descartados[] = $value['dia_index'];
-				}
-			}
+			
 
 			$fechaInicio = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_inicio']));
 			$fechaFin    = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_termino']));
@@ -586,5 +593,207 @@ class programacion extends Base_Controller{
 	    }
 	    $ret .= "</ul>";
 	    return($ret);
+	}
+	public function formatos_programacion(){
+		
+		$sqlData = array(
+			 'buscar' => 0
+			,'offset' => 0
+			,'limit'  => 0
+			);
+		$dropdown_sucursales = array(
+									 'data'		=> $this->sucursales->db_get_data($sqlData)
+									,'value' 	=> 'id_sucursal'
+									,'text' 	=> array('clave_corta','sucursal')
+									,'name' 	=> "lts_sucursales_formatos"
+									,'leyenda' 	=> "-----"
+									,'class'    => "requerido"
+								);
+		$sucursales                = dropdown_tpl($dropdown_sucursales);
+
+		$btn_guardar = form_button(array( 
+										'content'  => $this->lang_item('btn_formato'),
+										'class'    => 'btn btn-primary',
+										'name'     => 'generar_formato',
+										'onclick'  => 'generar_formato()'
+									));
+		$data['lbl_sucursal']                   = $this->lang_item('lbl_sucursal_formatos');
+		$data['dropdown_sucursales']            = $sucursales;
+		$data['lbl_input_fecha_inicio']         = $this->lang_item('lbl_fecha_inicio');
+		$data['lbl_input_fecha_termino']        = $this->lang_item('lbl_fecha_termino');
+		$data['lbl_tipo_formato']               = $this->lang_item('lbl_tipo_formato');
+		$data['checked_orden_compra']           = $this->lang_item('lbl_formato_abasto');
+		$data['checked_valores_nutricionales']  = $this->lang_item('lbl_formato_nutricional');
+		$data['checked_licitacion']             = $this->lang_item('lbl_formato_licitacion');
+		$data['btn_formato']                    = $btn_guardar;
+		
+
+		$view = $this->load_view_unique($this->modulo.'/'.$this->seccion.'/formatos',$data, true);
+		return $view;
+	}
+	public function formato_abasto(){
+		$params = $this->ajax_post('objData');
+		if($params['incomplete']>0){
+			$response['msg']      = alertas_tpl('error',$this->lang_item("msg_campos_obligatorios",false),false);
+			$response['success']  = 0;
+			echo json_encode($response);
+		}else{
+			$index                = 0;
+			$indexar              = false;
+			$rows_format          = array();
+			$descartados          = array();
+			$festivos             = array();
+			$especiales           = array();
+			$periodo_inicio       = $params['fecha_inicio_formatos'];
+			$periodo_termino      = $params['fecha_termino_formatos'];
+			$id_sucursal          = $params['lts_sucursales_formatos'];
+			$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
+			$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo_insumos($id_sucursal);
+			$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
+			$dias_festivos        = $this->db_model->get_dias_festivos($id_sucursal);
+			$dias_especiales      = $this->db_model->get_dias_especiales_contenido_ciclo_insumos($id_sucursal);
+			$params_inicio        = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_inicio']));
+			$params_termino       = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_termino']));
+			$periodo_inicio       = strtotime(str_replace('/', '-', $periodo_inicio));
+			$periodo_termino      = strtotime(str_replace('/', '-', $periodo_termino));
+
+			if(!is_array($params_ciclo)){
+				$response['msg']     = alertas_tpl('',$this->lang_item("msg_sucursal_sin_contenido",false),false);
+				$response['success'] = 0;
+				echo json_encode($response);
+				exit;
+			}
+			if($periodo_termino<$params_inicio){
+            	$response['msg']     = alertas_tpl('',$this->lang_item("msg_periodo_sin_contenido",false),false);
+				$response['success'] = 0;
+				echo json_encode($response);
+				exit;
+            }
+
+            if($periodo_inicio>$params_termino){
+            	$response['msg']     = alertas_tpl('',$this->lang_item("msg_periodo_sin_contenido",false),false);
+				$response['success'] = 0;
+				echo json_encode($response);
+				exit;
+            }
+
+            if($periodo_inicio<$params_inicio){
+            	$periodo_inicio = $params_inicio;
+            }
+
+			if(is_array($dias_festivos)){
+				foreach ($dias_festivos as $key => $items) {
+					$festivos[] = strtotime(str_replace('/', '-', $items['fecha'])); ;
+				}
+			}
+
+			
+			if(is_array($dias_descartados)){
+				foreach ($dias_descartados as $key => $items) {
+					$descartados[] = $items['dia_index'];
+				}
+			}
+
+			if(is_array($dias_especiales)){
+				foreach ($dias_especiales as $key => $items) {
+					$especiales[strtotime(str_replace('/', '-', $items['fecha']))][] =  $items;
+				}
+			}
+
+			if(is_array($ciclos_programados)){
+				foreach ($ciclos_programados as $key => $items) {
+					$ciclos[$items['orden']][] = $items ;
+				}
+
+				for($i=$params_inicio; $i<=$periodo_termino; $i+=86400){
+					if($i==$periodo_inicio ){
+						$indexar= true;
+					}
+					if(array_key_exists($i, $especiales)){
+						if($indexar){
+							$rows_format[$i]= $especiales[$i];
+						}
+						$index++;
+						continue;
+					}
+					if(!array_key_exists($index, $ciclos)){
+						$index = 0;
+					}
+					if(!in_array($i, $festivos)){
+						$day = (date('N', $i) == 7) ? 0 : date('N', $i);
+						
+						if(!in_array($day, $descartados)){
+							
+							if($indexar){
+								$rows_format[$i]= $ciclos[$index];
+							}
+							
+							$index++;
+						}
+					}else{
+						$index++;
+					}
+				}
+
+				if(!empty($rows_format)){
+					foreach ($rows_format as $groups => $items) {
+						foreach ($items as $row => $value) {
+							$data_items[] = array(	
+													 $value['sucursal']
+													,$value['ciclo']
+													,$value['servicio']
+													,$value['receta']
+													,$value['clave_receta']
+													,$value['porciones_receta_preparacion']
+													,$value['porciones_recetas_ciclos']
+													,$value['articulo']
+													,$value['porciones_articulo']
+													,$value['linea']
+													,$value['marca']
+													,$value['proveedor']
+													,$value['presentacion']
+													,$value['um']
+													,$value['rendimiento']
+													,$value['costo_x_um']
+													);
+						}
+					}
+					$set_heading = array(
+											 'sucursal'
+											,'ciclo'
+											,'servicio'
+											,'receta'
+											,'clave_receta'
+											,'porciones_receta_preparacion'
+											,'porciones_recetas_ciclos'
+											,'articulo'
+											,'porciones_articulo'
+											,'linea'
+											,'marca'
+											,'proveedor'
+											,'presentacion'
+											,'um'
+											,'rendimiento'
+											,'costo_x_um'
+									);
+
+					$params = array(	'title'   => 'Formato programacion',
+										'items'   => $data_items,
+										'headers' => $set_heading
+									);
+
+					$response['file']       = $this->excel->generate_xlsx($params, true);
+					$response['msg']        = 'exito';
+					$response['success']    = 1;
+					echo json_encode($response);
+				}
+			}else{
+				$response['msg']     = alertas_tpl('',$this->lang_item("msg_sucursal_sin_contenido",false),false);
+				$response['success'] = 0;
+				echo json_encode($response);
+				exit;
+			}
+			
+		}
 	}
 }

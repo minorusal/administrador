@@ -54,7 +54,7 @@
 // Botones
 	$lang['btn_xlsx']     		= 'Generar Excel';
 	$lang['btn_import_xlsx']    = 'Importar Excel';
-	$lang['btn_guardar']  		= 'guardar cambios';
+	$lang['btn_guardar']  		= 'Guardar cambios';
 	$lang['btn_eliminar']  		= 'Eliminar registro';
 	$lang['btn_limpiar']  		= 'limpiar';
 	$lang['btn_search']   		= 'buscar';
@@ -99,4 +99,9 @@
 
 	$lang['collapse']            = 'Contraer lista';
 $lang['expand']              = 'Expander Lista';
+
+$lang['lbl_fecha_inicio']                = 'Fecha de Inicio';
+	
+	$lang['lbl_fecha_termino']                = 'Fecha de Termino';
+
 ?>

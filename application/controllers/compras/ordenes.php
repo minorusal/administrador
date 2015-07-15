@@ -22,7 +22,7 @@ class ordenes extends Base_Controller {
 		$this->modulo 				= 'compras';
 		$this->seccion 				= 'ordenes';
 		$this->submodulo			= 'ordenes';
-		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
+		$this->icon 				= 'fa fa-pencil-square'; #Icono de modulo
 		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
 		$this->view_content 		= 'content';
 		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;

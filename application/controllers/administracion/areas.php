@@ -17,7 +17,7 @@ class areas extends Base_Controller{
 		$this->submodulo		= 'catalogos';
 		$this->seccion          = 'areas';
 		$this->icon 			= 'iconfa-fire'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/areas
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;

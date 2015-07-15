@@ -32,6 +32,8 @@ class recetario_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+
+	
 	public function get_data_recetas_x_familia($id_familia){
 			
 		$tbl = $this->tbl;
@@ -89,9 +91,9 @@ class recetario_model extends Base_Model{
 
 					WHERE r.activo = 1 $unique $filtro";
 
-
+					
       	$query = $this->db->query($query);
-      	//print_debug($query->result_array());
+      	
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	

@@ -6,18 +6,6 @@
             </th>
         </tr>
         <tr>
-            <td valign="middle">
-                    <label><strong>{stock_um_lbl}: </strong></label>
-                    <input type="text" id="stock_destino" value="" name="stock_destino" data-campo="stock_destino" class="numerico" onkeyup="realiza_calculos();" style="width:90px;"> {unidad_minima_cve}
-            </td>
-        </tr>
-        <tr>
-             <td valign="middle">
-                    <label><strong>{stock_um_lbl}: </strong></label>
-                    <input type="text" id="stock_um_destino" value="" name="stock_um_destino" data-campo="stock_um_destino" class="numerico" style="width:90px;"> {unidad_minima_cve}
-            </td>
-        </tr>
-        <tr>
             <td>
                 <div id="embajale">
                     <label><strong>{almacen_lbl} (*)</strong></label>
@@ -42,10 +30,11 @@
             </td>
         </tr>
    </table>
+    <br>
    <div id="lts_ajustes">
-       
    </div>
-    <div id="tbl1" class="span5" >
+    <br>
+    <div id="tbl1" class="span5">
         <table  class="table table-bordered table-invoice"> 
             <tr>
                 <td class="width30">
@@ -55,6 +44,7 @@
                     <div id="value_stock"><strong></strong>
                     </div>
                     <input type="hidden" id="stock_num" value="" data-campo="stock_num">
+
                 </td>
             </tr>
             <tr>
@@ -67,12 +57,34 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                </td>
+                <td valign="middle">
+                        <input type="text" id="stock_destino" name="stock_destino" data-campo="stock_destino" class="numerico requerido" onkeyup="realiza_calculos();" style="
+                        width:90px;"> {unidad_minima_cve}
+                        <input type="hidden" id="stock" value="" class="requerido" data-campo="stock">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label><strong>{stock_um_lbl}: </strong></label>
+                </td>
+                 <td valign="middle">
+                        <input type="text" id="stock_um_destino" name="stock_um_destino" data-campo="stock_um_destino" class="numerico requerido" style="width:90px;"> {unidad_minima_cve}
+                </td>
+            </tr>
         </table>
+        <br><br>
    </div>
-   <br>
+   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <div id="update_loader"></div>
     <div id="mensajes_update" style="display:none"></div>  
+
+     <div
      <p class="stdformbutton"> 
         {button_save}
     </p>
+    </div>
 </div>

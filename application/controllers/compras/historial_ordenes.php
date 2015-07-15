@@ -22,7 +22,7 @@ class historial_ordenes extends Base_Controller {
 		$this->modulo 				= 'compras';
 		$this->seccion 				= 'ordenes';
 		$this->submodulo			= 'historial_ordenes';
-		$this->icon 				= 'fa fa-file-text'; #Icono de modulo
+		$this->icon 				= 'fa fa-archive'; #Icono de modulo
 		$this->path 				= $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/';
 		$this->view_content 		= 'content';
 		$this->uri_view_principal 	= $this->modulo.'/'.$this->view_content;

@@ -776,5 +776,15 @@ class Base_Controller extends CI_Controller {
 	    $value   = strtotime($value);
 	    return (($value >= $inicio) && ($value <= $fin));
 	}
+
+	/**
+	* Devuelve el valo buscado aplicando una regla de tres
+	* @param double $valorA, double $valorB, double $cantidadBuscada
+	* @return double
+	*/
+	public function regla_de_tres($valorA, $valorB, $cantidadBuscada=1){
+		$resultado = ($cantidadBuscada*$valorB)/$valorA;
+		return $resultado;
+	}
 }
 ?>

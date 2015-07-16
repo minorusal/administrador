@@ -11,6 +11,17 @@
     // GoTopIcon
     GoTop();
 });
+function promp_answer(call_fucntion){
+    jQuery.prompt("Proceeding may be good for your site..", {
+        title: "Are you Ready?",
+        buttons: { "Yes, I'm Ready": true, "No, Lets Wait": false },
+        submit: function(e,v,m,f){
+            if(v){
+                call_fucntion();
+            }
+        }
+    });
+}
 function sortable(id){
     jQuery( "#"+id ).sortable();
     jQuery( "#"+id ).disableSelection();

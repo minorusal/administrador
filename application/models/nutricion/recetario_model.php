@@ -34,11 +34,12 @@ class recetario_model extends Base_Model{
 	}
 
 	
-	public function get_data_recetas_x_familia($id_familia){
-			
+	public function get_data_recetas_x_familia($id_familia, $id_sucursal = false){
+		
+		$filtro = ($id_sucursal) ? 'AND r.id_sucursal = '.$id_sucursal : '';
 		$tbl = $this->tbl;
 		
-		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia";
+		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia $filtro";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

@@ -78,7 +78,7 @@ class familias extends Base_Controller{
 	}
 
 	public function listado($offset=0){
-	// Crea tabla con listado de elementos capturados 
+		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
@@ -98,6 +98,11 @@ class familias extends Base_Controller{
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value){
+				$accion_id 						= $value['id_nutricion_familia'];
+				$btn_acciones['detalle'] 		= '<span id="ico-detalle_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("detalle").'"></span>';
+				$btn_acciones['eliminar']       = '<span id="ico-eliminar_'.$accion_id.'" class="ico_eliminar fa fa-times" onclick="eliminar('.$accion_id.')" title="'.$this->lang_item("eliminar").'"></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+
 				// Evento de enlace
 				$atrr = array(
 								'href'    => '#',
@@ -107,7 +112,8 @@ class familias extends Base_Controller{
 				$tbl_data[] = array('id'            => $value['id_nutricion_familia'],
 									'familia'       => tool_tips_tpl($value['familia'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
-									'descripcion'   => $value['descripcion']
+									'descripcion'   => $value['descripcion'],
+									'acciones'      => $acciones
 									);
 			}
 			// Plantilla
@@ -116,7 +122,8 @@ class familias extends Base_Controller{
 			$this->table->set_heading(	$this->lang_item("lbl_id"),
 										$this->lang_item("lbl_familia"),
 										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_descripcion"));
+										$this->lang_item("lbl_descripcion"),
+										$this->lang_item("acciones"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);

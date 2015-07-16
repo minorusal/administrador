@@ -341,6 +341,7 @@ class programacion extends Base_Controller{
 		$data_insert  = array();
 		if($dias_descartados){
 			foreach ($dias_descartados as $key => $value){
+
 				$dia = $this->days_item($value, true);
 				$data_insert[] = array(
 								  'dia_index'      => $value
@@ -357,15 +358,20 @@ class programacion extends Base_Controller{
 			foreach ($orden_ciclos as $key => $value) {
 				$index    = $value['index'];
 				$id_ciclo = $value['ciclo_id'];
-				$data_insert[] = array(
+
+				$verifica_contenido = $this->db_model->get_ciclos( $id_sucursal, $id_ciclo );
+
+				if($verifica_contenido){
+					$data_insert[] = array(
 								  'id_nutricion_ciclos'   => $id_ciclo
 								 ,'orden'                 => $index
 								 ,'id_sucursal'           => $id_sucursal
 								 ,'id_usuario'            => $this->session->userdata('id_usuario')
 								 ,'timestamp'             => $this->timestamp()
-							);
+							);	
+				}
 			}
-			$this->db_model->insert_ciclos_menus($data_insert);
+			$this->db_model->insert_programacion_ciclos($data_insert);
 		}
 		echo json_encode($this->lang_item("msg_update_success",false));
 	}
@@ -648,10 +654,10 @@ class programacion extends Base_Controller{
 			$periodo_termino      = $params['fecha_termino_formatos'];
 			$id_sucursal          = $params['lts_sucursales_formatos'];
 			$params_ciclo         = $this->db_model->get_params_ciclos($id_sucursal);
-			$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo_insumos($id_sucursal);
 			$dias_descartados     = $this->db_model->get_dias_descartados($id_sucursal);
 			$dias_festivos        = $this->db_model->get_dias_festivos($id_sucursal);
 			$dias_especiales      = $this->db_model->get_dias_especiales_contenido_ciclo_insumos($id_sucursal);
+			$ciclos_programados   = $this->db_model->get_programacion_contenido_ciclo_insumos($id_sucursal);
 			$params_inicio        = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_inicio']));
 			$params_termino       = strtotime(str_replace('/', '-', $params_ciclo[0]['fecha_termino']));
 			$periodo_inicio       = strtotime(str_replace('/', '-', $periodo_inicio));
@@ -669,14 +675,12 @@ class programacion extends Base_Controller{
 				echo json_encode($response);
 				exit;
             }
-
             if($periodo_inicio>$params_termino){
             	$response['msg']     = alertas_tpl('',$this->lang_item("msg_periodo_sin_contenido",false),false);
 				$response['success'] = 0;
 				echo json_encode($response);
 				exit;
             }
-
             if($periodo_inicio<$params_inicio){
             	$periodo_inicio = $params_inicio;
             }
@@ -686,7 +690,6 @@ class programacion extends Base_Controller{
 					$festivos[] = strtotime(str_replace('/', '-', $items['fecha'])); ;
 				}
 			}
-
 			
 			if(is_array($dias_descartados)){
 				foreach ($dias_descartados as $key => $items) {
@@ -725,7 +728,7 @@ class programacion extends Base_Controller{
 						if(!in_array($day, $descartados)){
 							
 							if($indexar){
-								$rows_format[$i]= $ciclos[$index];
+								$rows_format[$i] = $ciclos[$index];
 							}
 							
 							$index++;
@@ -736,10 +739,14 @@ class programacion extends Base_Controller{
 				}
 
 				if(!empty($rows_format)){
-					foreach ($rows_format as $groups => $items) {
+					foreach ($rows_format as $date => $items) {
+						$day   = $this->days_item(date('N', $date));
+						$fecha = date('d/m/Y', $date);
 						foreach ($items as $row => $value) {
 							$data_items[] = array(	
 													 $value['sucursal']
+													,$day
+													,$fecha
 													,$value['ciclo']
 													,$value['servicio']
 													,$value['receta']
@@ -759,25 +766,27 @@ class programacion extends Base_Controller{
 						}
 					}
 					$set_heading = array(
-											 'sucursal'
-											,'ciclo'
-											,'servicio'
-											,'receta'
-											,'clave_receta'
-											,'porciones_receta_preparacion'
-											,'porciones_recetas_ciclos'
-											,'articulo'
-											,'porciones_articulo'
-											,'linea'
-											,'marca'
-											,'proveedor'
-											,'presentacion'
-											,'um'
-											,'rendimiento'
-											,'costo_x_um'
+											 $this->lang_item('sucursal', false)
+											,$this->lang_item('dia', false)
+										 	,$this->lang_item('fecha', false)
+											,$this->lang_item('ciclo', false)
+											,$this->lang_item('servicio', false)
+											,$this->lang_item('receta', false)
+											,$this->lang_item('clave_receta', false)
+											,$this->lang_item('porciones_receta_preparacion', false)
+											,$this->lang_item('porciones_recetas_ciclos', false)
+											,$this->lang_item('articulo', false)
+											,$this->lang_item('porciones_articulo', false)
+											,$this->lang_item('linea', false)
+											,$this->lang_item('marca', false)
+											,$this->lang_item('proveedor', false)
+											,$this->lang_item('presentacion', false)
+											,$this->lang_item('um', false)
+											,$this->lang_item('rendimiento', false)
+											,$this->lang_item('costo_x_um', false)
 									);
 
-					$params = array(	'title'   => 'Formato programacion',
+					$params = array(	'title'   => $this->lang_item('formato_programacion'),
 										'items'   => $data_items,
 										'headers' => $set_heading
 									);

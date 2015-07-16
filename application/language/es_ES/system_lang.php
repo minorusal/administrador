@@ -83,7 +83,8 @@
 
 	$lang['catalogo']        = 'Catalogo de ';
 
-// Acciones
+// Acciones 
+	$lang['acciones']		= 'Acciones';
 	$lang['eliminar']		= 'Eliminar';
 	$lang['editar']			= 'Editar';
 	$lang['agregar']		= 'Agregar';

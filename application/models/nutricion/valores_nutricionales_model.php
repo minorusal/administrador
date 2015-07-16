@@ -26,15 +26,49 @@ class valores_nutricionales_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
-//WHERE  va.id_compras_articulos = ar.id_compras_articulo AND
+
 	public function get_valores_nutricionales_unico($id_articulo){
 		// DB Info
 		$tbl = $this->tbl;
-		//print_debug($tbl['nutricion_valores_nutricionales']);
+		
 		$condicion = array('id_compras_articulos =' => $id_articulo); 
 		$existe    = $this->row_exist($tbl['nutricion_valores_nutricionales'], $condicion);
 		if($existe){
-			$query = "SELECT * FROM $tbl[nutricion_valores_nutricionales] WHERE id_compras_articulos = $id_articulo";
+			$query = "SELECT 
+							 ca.articulo
+							,vn.cantidad_sugerida
+							,cu.um
+							,vn.peso_bruto
+							,vn.peso_neto
+							,vn.energia
+							,vn.proteina
+							,vn.lipidos
+							,vn.hidratos_carbono
+							,vn.fibra
+							,vn.vitamina_a
+							,vn.acido_ascorbico
+							,vn.acido_folico
+							,vn.hierro_nohem 
+							,vn.potasio
+							,vn.azucar
+							,vn.indice_glicemico
+							,vn.carga_glicemica
+							,vn.calcio
+							,vn.sodio
+							,vn.selenio
+							,vn.fosforo
+							,vn.colesterol
+							,vn.ag_saturados
+							,vn.ag_mono
+							,vn.ag_poli
+							,vn.timestamp
+							,vn.edit_id_usuario
+							,vn.edit_timestamp
+					  FROM $tbl[nutricion_valores_nutricionales] vn
+					  LEFT JOIN $tbl[compras_articulos] ca on ca.id_compras_articulo = vn.id_compras_articulos
+					  LEFT JOIN $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
+					  WHERE vn.id_compras_articulos = $id_articulo
+					  ";
 			$query = $this->db->query($query);
 			if($query->num_rows >= 1){
 				return $query->result_array();

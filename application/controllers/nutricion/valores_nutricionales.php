@@ -178,6 +178,7 @@ class valores_nutricionales extends Base_Controller{
 		$tabData['lbl_ag_mono']          = $this->lang_item("lbl_ag_mono");
 		$tabData['lbl_ag_poli']          = $this->lang_item("lbl_ag_poli");
 		$tabData['txt_cantidad_sugerida']= ($detalle_nutricional)?$detalle_nutricional[0]['cantidad_sugerida']:'';
+		$tabData['txt_um']               = ($detalle_nutricional)?$detalle_nutricional[0]['um']:'';
 		$tabData['txt_articulo']         = $detalle[0]['articulo'];
 		$tabData['txt_peso_bruto']       = ($detalle_nutricional)?$detalle_nutricional[0]['peso_bruto']:'';
 		$tabData['txt_peso_neto']        = ($detalle_nutricional)?$detalle_nutricional[0]['peso_neto']:'';

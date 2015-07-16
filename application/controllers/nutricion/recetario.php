@@ -322,7 +322,6 @@ class recetario extends Base_Controller{
 
 		
 		$costo_porcion = ($costo_porcion > 0 ) ? $costo_porcion/$porciones : 0;
-
 		$sqlData = array(
 			 'buscar' => 0
 			,'offset' => 0
@@ -359,7 +358,13 @@ class recetario extends Base_Controller{
 							);
 		$list_insumos  = multi_dropdown_tpl($insumos);
 		$btn_save      = form_button(array('class'=>'btn btn-primary', 'name'=>'update_receta', 'onclick'=>'actualizar()','content'=>$this->lang_item("btn_guardar")));
+		$buttonTPL     = array( 'text'   => $this->lang_item("btn_xlsx"), 
+								'iconsweets' => 'iconsweets-excel',
+								'href'       => base_url($this->path.'export_rexlsx?filtro='.base64_encode($id_receta))
+								);
 		
+		//$tab_3['filtro']                   = (isset($id_receta) && $id_receta!="") ? sprintf($this->lang_item("msg_query_search",false),array() , $id_receta) : ""; 
+		$tab_3['export']                   = button_tpl($buttonTPL);
 		$tab_3['id_receta']                = $id_nutricion_receta;
 		$tab_3['lbl_receta']               = $this->lang_item('lbl_receta');
 		$tab_3['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
@@ -492,6 +497,33 @@ class recetario extends Base_Controller{
                             'value'         => $value
                         );  
 	}
+	public function export_rexlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$contenido = $this->db_model->get_data_receta_vnutricion($filtro);
+		//print_debug($contenido);
+		foreach ($contenido as $value) {
+			$set_data[] = array(
+				 $value['sucursal']
+				,$value['familia']
+				,$value['receta']
+				,$value['porciones']
+				);
+		}
+		//print_debug($value);
+		$set_heading = array(
+			 $this->lang_item("lbl_sucursal")
+			,$this->lang_item("lbl_familia")
+			,$this->lang_item("lbl_receta")
+			,$this->lang_item("lbl_porciones")
+			);
+		$params = array(	'title'   => $this->lang_item("Ficha Tecnica"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
+		//print_debug($contenido);
+	}
+
 	public function export_xlsx($offset=0){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$limit 		 = $this->limit_max;
@@ -521,7 +553,7 @@ class recetario extends Base_Controller{
 								$this->lang_item("lbl_preparacion")
 							);
 
-		$params = array(	'title'   => $this->lang_item("titulo_submodulo"),
+		$params = array(	'title'   => $this->lang_item("ficha tecnica"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

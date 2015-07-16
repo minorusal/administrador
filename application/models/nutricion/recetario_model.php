@@ -42,22 +42,14 @@ class recetario_model extends Base_Model{
 				  FROM $tbl[nutricion_recetas] nr
 				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = nr.id_sucursal
 				  LEFT JOIN $tbl[nutricion_familias] nf on nf.id_nutricion_familia = nr.id_nutricion_familia
-				  
 				  WHERE nr.id_nutricion_receta = $id_receta";
-		print_debug($query);
+		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
-	/*
-	LEFT JOIN (SELECT
-				  				)
-	LEFT JOIN $tbl[nutricion_recetas_articulos] ra on ra.id_nutricion_receta = nr.id_nutricion_receta
-				  LEFT JOIN $tbl[compras_articulos] ca on ca.id_compras_articulo = ra.id_compras_articulo
-				  LEFT JOIN $tbl[nutricion_valores_nutricionales] vn on vn.id_compras_articulos = ca.id_compras_articulo
-				  LEFT JOIN $tbl[compras_um] um on um.id_compras_um = ca.id_compras_um
-				  LEFT JOIN $tbl[compras_articulos_precios] ap on ap.id_articulo = ca.id_compras_articulo*/
+	
 	public function get_data_recetas_x_familia($id_familia){
 			
 		$tbl = $this->tbl;

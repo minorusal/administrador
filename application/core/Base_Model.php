@@ -40,6 +40,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['administracion_servicios']                     = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_servicios'];
 		$this->tbl['administracion_variables']                     = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_variables'];
 
+		$this->tbl['almacen_ajustes']                              = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_ajustes'];
 		$this->tbl['almacen_almacenes']                            = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_almacenes'];
 		$this->tbl['almacen_entradas_recibir']                     = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_recibir'];
 		$this->tbl['almacen_entradas_partidas']                    = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_partidas'];

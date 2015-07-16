@@ -77,7 +77,7 @@ function actualizar(){
     type:"POST",
     url: path()+"nutricion/familias/actualizar",
     dataType: "json",
-    data: {objData:objData},
+    data: {objData : objData },
     beforeSend : function(){
       btn.attr('disabled',true);
     },
@@ -137,10 +137,4 @@ function agregar(){
             progress.progressTimer('complete');
             btn.attr('disabled',false);
     });
-}
-function eliminar(id_familia){
-    promp_answer(ejecutar);
-}
-function ejecutar(){
-    alert();
 }

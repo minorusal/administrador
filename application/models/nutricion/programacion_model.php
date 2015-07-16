@@ -85,12 +85,23 @@ class programacion_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function get_ciclos($id_sucursal){
+	public function get_ciclos($id_sucursal, $id_ciclo = false){
+		$filtro = ($id_ciclo) ? 'AND nc.id_nutricion_ciclos = '.$id_ciclo : '';
 		$tbl   = $this->tbl;
-		$query = "SELECT * FROM $tbl[nutricion_ciclos] where activo = 1 AND id_sucursal = $id_sucursal";
+		$query = "  SELECT * 
+					FROM 
+						$tbl[nutricion_ciclos] nc
+					WHERE nc.id_nutricion_ciclos IN (
+							SELECT 
+								ncr.id_ciclo
+							FROM
+								$tbl[nutricion_ciclo_receta] ncr
+						) AND nc.activo = 1 AND nc.id_sucursal = $id_sucursal $filtro";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
+		}else{
+			return false;
 		}
 	}
 	public function get_ciclos_programados($id_sucursal){
@@ -396,7 +407,7 @@ class programacion_model extends Base_Model{
 		$insert = $this->db->insert_batch($tbl['nutricion_programacion_dias_descartados'], $data);
 		return $insert;
 	}
-	public function insert_ciclos_menus($data){
+	public function insert_programacion_ciclos($data){
 		$tbl = $this->tbl;
 		$insert = $this->db->insert_batch($tbl['nutricion_programacion_ciclos'], $data);
 		return $insert;

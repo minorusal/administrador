@@ -32,6 +32,8 @@ class recetario_model extends Base_Model{
 			return $query->result_array();
 		}	
 	}
+
+
 	public function get_data_receta_vnutricion($id_receta){
 		$tbl = $this->tbl;
 		$query = "SELECT 
@@ -49,12 +51,13 @@ class recetario_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	
+
 	public function get_data_recetas_x_familia($id_familia){
 			
+
 		$tbl = $this->tbl;
 		
-		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia";
+		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia $filtro";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

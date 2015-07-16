@@ -313,7 +313,7 @@ class ciclos extends Base_Controller{
 		$id_familia  = $this->ajax_post('id_familia');
 		$id_sucursal = $this->ajax_post('id_sucursal');
 		if($id_familia){
-			$receta  = $this->recetas->get_data_recetas_x_familia($id_familia);
+			$receta  = $this->recetas->get_data_recetas_x_familia($id_familia,$id_sucursal);
 
 			$recetas = array(
 							 'data'		=> $receta

@@ -11,7 +11,7 @@ $lang['programacion_de_menus']    = 'programación de menus';
 //MENU DE COMPRAS
 $lang['historial_ordenes']      = 'Historial de ordenes';
 $lang['proveedores']            = 'proveedores';
-$lang['listado_precios']        = 'Listado de precios';
+$lang['listado_precios']        = 'Listado de presentaciones';
 $lang['articulos']              = 'articulos';
 $lang['menu_ordenes']           = 'menu ordenes';	
 $lang['crear_orden']            = 'crear orden';

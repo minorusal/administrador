@@ -60,5 +60,42 @@ class stock_model extends Base_Model{
 			return false;
 		}
 	}
+
+	/*STOCK DELETED*/
+	public function copy_stock_to_deleted($data=array()){
+	/**
+    * Descripción:	Copia los registos de la tabla de stock a la tabla de stock_deleted
+    * @author 		Oscar Maldonado
+    * Creación:		2015-07-15
+    * Modificación:	
+    */
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_stock 	= (isset($data['id_stock']))?$data['id_stock']:false;
+		$filtro 	= ($id_stock)?"AND id_stock='$id_stock'":'';
+		// Query
+		$sql = "INSERT INTO $tbl[almacen_stock_deleted] (SELECT * FROM $tbl[almacen_stock] WHERE activo=0 AND stock=0 $filtro);";
+		$resultado = ($this->db->query($sql))?true:false;
+		return $resultado;
+	}
+
+	public function delete_stock_en_cero($data=array()){
+	/**
+    * Descripción:	Borrado físico de los registros con stock = 0
+    * @author 		Oscar Maldonado
+    * Creación:		2015-07-15
+    * Modificación:	
+    */
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$id_stock 	= (isset($data['id_stock']))?$data['id_stock']:false;
+		$filtro 	= ($id_stock)?"AND id_stock='$id_stock'":'';
+		// Query
+		$sql = "DELETE FROM $tbl[almacen_stock] WHERE activo=0 AND stock=0 $filtro;";
+		$query = ($this->db->query($sql))?true:false;
+		return $query;
+	}
 }
 ?>

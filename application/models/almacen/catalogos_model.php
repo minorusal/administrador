@@ -180,10 +180,9 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Filtro
-		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
-		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
+		$id_almacen = "AND id_almacen_almacenes = $data[id_almacen]";
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_pasillos] WHERE 1 AND activo=1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_pasillos] WHERE 1 AND activo=1 $id_almacen ;";
       	$query  = $this->db->query($sql);
       	$test = $query->result_array();
 		if($query->num_rows){
@@ -283,10 +282,9 @@ class catalogos_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		// Filtro
-		$id_almacen = (isset($data['id_almacen']))?$data['id_almacen']:false;
-		$filtro = ($id_almacen)?" AND id_almacen_almacenes='$id_almacen'":'';
+		$id_almacen = "AND id_almacen_almacenes = $data[id_almacen]";
 		// Query
-		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $filtro ;";
+		$sql  = "SELECT * FROM $tbl[almacen_gavetas] WHERE 1 AND activo=1 $id_almacen;";
       	$query  = $this->db->query($sql);
 		if($query->num_rows){
 			return $query->result_array();

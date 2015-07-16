@@ -83,6 +83,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['vw_proveedores_articulos']                     = $this->db2.'.'.$this->vars->db['db2_vw_proveedores_articulos'];		
 		$this->tbl['compras_articulos_tipo']                       = $this->db2.'.'.$this->vars->db['db2_tbl_compras_articulos_tipo'];
 		$this->tbl['almacen_stock']                                = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_stock'];
+		$this->tbl['almacen_stock_deleted'] 					   = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_stock_deleted'];
 		$this->tbl['almacen_stock_estatus']                        = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_stock_estatus'];
 		$this->tbl['almacen_stock_logs']                           = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_stock_logs'];
 		$this->tbl['almacen_stock_logs_acciones']                  = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_stock_logs_acciones'];

@@ -41,7 +41,24 @@
 	$lang['lbl_sucursal_formatos']           = 'Seleecione una sucursal';
 	$lang['msg_periodo_sin_contenido']       = 'No se tienen ciclos programados en el periodos definido.';
 	$lang['msg_sucursal_sin_contenido']      = 'Esta Sucursal no tiene ciclos programados';
-	
-
+	$lang['sucursal']                        = 'Sucursal';
+	$lang['dia']                             = 'Dia';
+	$lang['fecha']                           = 'Fecha';
+	$lang['ciclo']                           = 'Ciclo';
+	$lang['servicio']                        = 'Servicio';
+	$lang['receta']                          = 'Receta';
+	$lang['clave_receta']                    = 'Clave de receta';
+	$lang['porciones_receta_preparacion']    = 'Porción base de Receta';
+	$lang['porciones_recetas_ciclos']        = 'Cantidad de recetas por ciclos';
+	$lang['articulo']                        = 'Insumo';
+	$lang['porciones_articulo']              = 'Porción de insumos';
+	$lang['linea']                           = 'Linea del insumo';
+	$lang['marca']                           = 'Marca del insumo';
+	$lang['proveedor']                       = 'Proveedor del insumo';
+	$lang['presentacion']                    = 'Presentacion del insumo';
+	$lang['um']                              = 'Unidad de Medida del insumo';
+	$lang['rendimiento']                     = 'Rendimiento del insumo';
+	$lang['costo_x_um']                      = 'Costo por unidad de medida';
+	$lang['formato_programacion']            = 'Formato programacion con costos por Insumo';
 	
 ?>

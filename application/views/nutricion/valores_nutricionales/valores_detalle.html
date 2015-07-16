@@ -6,7 +6,10 @@
     </p>
     <p>
         <label>{lbl_cantidad_sugerida} (*): </label>
-        <span class="field"><input id="txt_cantidad_sugerida" type="text" name="txt_cantidad_sugerida" data-campo="txt_cantidad_sugerida" class="input-xlarge numerico" value="{txt_cantidad_sugerida}" /></span>
+        <span class="field input-prepend input-append">
+            <input type="text" id="txt_cantidad_sugerida" name="txt_cantidad_sugerida" value="{txt_cantidad_sugerida}" data-campo="txt_cantidad_sugerida" class="input-xlarge numerico" >
+            <span class="add-on">{txt_um}</span>       
+        </span>
     </p>
     <p>
         <label>{lbl_peso_bruto} (*):</label>

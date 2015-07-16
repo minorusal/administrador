@@ -285,16 +285,7 @@ function eliminar_ciclo(id_ciclo){
           }
         }
   });
-}    
-//UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-02 23:59:59' and '2015-07-06 23:59:59' and envio = 0
-//SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59' and envio = 1
-//UPDATE `notas_facturas` set envio = 0 WHERE fecha_registro between '2015-06-26 18:38:00' and '2015-06-26 23:59:59' and envio = 1
-
-//SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-06-28 00:00:00' and '2015-06-28 23:59:59'
-//SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-06-28 00:00:00' and '2015-06-28 23:59:59'
-//SELECT * FROM `notas_facturas` WHERE fecha_registro between '2015-06-28 00:00:00' and '2015-06-28 23:59:59
-//UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59'
+}
 
 
-//UPDATE `notas_facturas` set envio = 0 WHERE fecha_registro between '2015-07-02 08:12:13' and '2015-07-02 23:59:59'
-//UPDATE `notas_facturas` set envio = 1 WHERE fecha_registro between '2015-07-03 01:00:00' and '2015-07-03 23:59:59'
+

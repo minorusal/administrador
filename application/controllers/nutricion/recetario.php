@@ -77,6 +77,7 @@ class recetario extends Base_Controller{
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset=0){
+		//$detalle = $this->db_model->get_data_receta_vnutricion(1);
 		// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	

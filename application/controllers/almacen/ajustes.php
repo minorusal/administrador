@@ -125,9 +125,7 @@ class ajustes extends Base_Controller {
 				$tbl_data[] = array('id'             	=> $value['id_stock'],
 									'articulo'  	 	=> $value['articulo'].' - '.$peso_unitario.' '.$value['cl_um'],
 									'presentacion'   	=> $embalaje.$presentacion_x_embalaje.' '.$value['presentacion'],
-									//'stock'      		=> $stock,
 									'articulo_tipo'   	=> $value['articulo_tipo'],
-									//'fecha_recepcion'   => $value['fecha_recepcion'],
 									'almacenes'   	 	=> $value['almacenes'],
 									'gavetas'   	 	=> $value['gavetas'],
 									'acciones' 		 	=> $acciones
@@ -139,9 +137,7 @@ class ajustes extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("id_stock"),
 										$this->lang_item("articulo"),										
 										$this->lang_item("presentacion"),
-										//$this->lang_item("stock"),
 										$this->lang_item("articulo_tipo"),
-										//$this->lang_item("fecha_recepcion"),
 										$this->lang_item("almacen"),
 										$this->lang_item("gaveta"),
 										$this->lang_item("acciones")
@@ -186,25 +182,11 @@ class ajustes extends Base_Controller {
 								)
 				,'class' 	=> "requerido"
 			);
-		$dropArray2 = array(
-				 'data'		=> $listado_almacen
-				,'value' 	=> 'id_almacen_almacenes'
-				,'text' 	=> array('clave_corta','almacenes')
-				,'name' 	=> "lts_almacen_destino"
-				,'event'    => array('event'       => 'onchange',
-			   						 'function'    => 'load_gaveta_pas_destino',
-			   						 'params'      => array('this.value'),
-			   						 'params_type' => array(0)
-								)
-				,'class' 	=> "requerido"
-			);
 
 		$lts_almacen  		  = dropdown_tpl($dropArray);
-		$lts_almacen_destino  = dropdown_tpl($dropArray2);
-
 		$tabData['lts_almacen'] 		= $lts_almacen;
-		$tabData['lts_almacen_destino'] = $lts_almacen_destino;
 		$tabData['button_save'] = $btn_save;
+
 		$uri_view  = $this->modulo.'/'.$this->submodulo.'/'.$this->seccion.'/'.$view;
 		if($this->ajax_post(false)){
 				echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -237,22 +219,12 @@ class ajustes extends Base_Controller {
 		echo json_encode($data);
 	}
 	public function load_gaveta_pas(){
-		$id_almacen    		= $this->ajax_post('id_almacen');
-		$id_almacen_destino = $this->ajax_post('id_almacen_destino');
+		$id_almacen  = $this->ajax_post('id_almacen');
+		$vent 		 ='load_gaveta';
+		$name 		 = 'lts_pasillos';
+		$name_gav 	 = 'lts_gavetas';
+		$event_2	 ='load_articulos';
 
-		if($id_almacen_destino!=''){
-			$vent='load_gaveta_destino';
-			$name = 'lts_pasillos_destino';
-			$name_gav = 'lts_gavetas_destino';
-			$event_2='';
-			$id_almacen = $id_almacen_destino;
-		}else{
-			$vent='load_gaveta';
-			$name = 'lts_pasillos';
-			$name_gav = 'lts_gavetas';
-			$event_2='load_articulos';
-			$id_almacen = $id_almacen;
-		}
 		$datasql=array('id_almacen'=>$id_almacen);
 		$dropArray = array(
 				 'data'		=> $this->catalogos_model->db_get_data_pasillos_por_almacen($datasql)
@@ -280,7 +252,7 @@ class ajustes extends Base_Controller {
 		$datasql=array(
 				'id_almacen' => $id_almacen,
 				'id_pasillo' => '',
-				'id_gaveta' => '');
+				'id_gaveta'  => '');
 		$dropArray3 = array(
 				 'data'		=> $this->db_model->db_get_data_articulos($datasql)
 				,'value' 	=> 'id_articulo'
@@ -304,23 +276,10 @@ class ajustes extends Base_Controller {
 	public function load_gaveta(){
 		$id_almacen    =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
 		$id_pasillo    =  ($this->ajax_post('id_pasillo')!=0)?$this->ajax_post('id_pasillo'):'';
-		$id_gaveta    =   ($this->ajax_post('id_gaveta')!=0)?$this->ajax_post('id_gaveta'):'';
+		$id_gaveta     =  ($this->ajax_post('id_gaveta')!=0)?$this->ajax_post('id_gaveta'):'';
+		$event='load_articulos';
+		$name = 'lts_gavetas';
 
-		$id_pasillo_destino    =   $this->ajax_post('id_pasillo_destino');
-		$id_almacen_destino    =   $this->ajax_post('id_almacen_destino');
-		
-
-		if($id_almacen_destino!=''){
-			$event='';
-			$id_pasillo = $id_pasillo_destino;
-			$id_almacen=$id_almacen_destino;
-			$name = 'lts_gavetas_destino';
-		}else{
-			$event='load_articulos';
-			$id_pasillo = $id_pasillo;
-			$id_almacen = $id_almacen;
-			$name = 'lts_gavetas';
-		}
 		if($id_pasillo==0){
 			$datasql=array('id_almacen'=>$id_almacen);
 			$dropArray = array(
@@ -406,38 +365,76 @@ class ajustes extends Base_Controller {
 			$id_almacen 		= $this->ajax_post('id_almacen');
 			$id_pasillo 		= $this->ajax_post('id_pasillo');
 			$id_gaveta 			= $this->ajax_post('id_gavetas');
-			$id_almacen_destino = $this->ajax_post('id_almacen_destino');
-			$id_pasillo_destino = $this->ajax_post('id_pasillo_destino');
-			$id_pasillo_destino = $this->ajax_post('id_pasillo_destino');
 
 			$datasql=array(
 					'id_articulo' => $id_articulo,
-					'id_almacen' => $id_almacen,
-					'id_pasillo' => $id_pasillo,
-					'id_gaveta' => $id_gaveta);
+					'id_almacen'  => $id_almacen,
+					'id_pasillo'  => $id_pasillo,
+					'id_gaveta'   => $id_gaveta);
 
-			$data=$this->db_model->data_update($datasql);
-			//echo count($data);
+			$data=$this->db_model->get_data_stock($datasql);
+			dump_var($data);
+			//realiza la resta de la cantidad a mover
 			for($i=0;count($data)>$i;$i++){
-				//echo $i;
-				/*$cantidad=$data[$i]['stock']-$stock;
-				echo $stock.'<br>';*/
-				//echo $cantidad;
-
 				if($i==0){
+					//($data[$i]['id_articulo_tipo']==2)?
 					$cantidad=$data[$i]['stock']-$stock;
-					echo $data[$i]['stock'].'-'.$stock.'<br>';
+					if($cantidad<=0){
+						$stock=0;
+						$stock_um=0;
+						$status=0;
+					}else{
+						$stock=$cantidad;
+						$status=1;
+					}
 				}else{
 					if($cantidad<=0){
 						$cantidad= $cantidad*-1;
-						echo $data[$i]['stock'].'-'.$cantidad.'<br>';
 						$cantidad=$data[$i]['stock']-$cantidad;
+						if($cantidad<=0){
+							$stock=0;
+							$status=0;
+							$stock_um=0;
+						}else{
+							$stock=$cantidad;
+							$status=1;
+						}
 					}
 				}
-				/*die();*/
-				//echo $cantidad;
+				$data_update_stock=array(
+									'id_stock'  	  => $data[$i]['id_stock'],
+									'stock'  		  =>  $stock,
+									'stock_um'  	  => $stock,
+									'id_estatus' 	  => $status,
+									'edit_timestamp'  => $this->timestamp(),
+									'edit_id_usuario' =>$this->session->userdata('id_usuario')
+								);
+				if($data_update_stock){
+					$insert_stock_logs=array(
+						'id_accion'   					  =>	4,
+						'id_almacen_entradas_recepcion'   =>	$data[$i]['id_almacen_entradas_recepcion'],
+						'id_compras_orden_articulo'       =>	$data[$i]['id_compras_orden_articulo'],
+						'id_stock'   					  =>	$data[$i]['id_stock'],
+						'log_id_almacen_origen'   		  =>	$data[$i]['id_almacen'],
+						'log_id_pasillo_origen'   		  =>	$data[$i]['id_pasillo'],
+						'log_id_gaveta_origen'   		  =>	$data[$i]['id_gaveta'],
+						'log_stock_origen'   			  =>	$data[$i]['stock'],
+						'log_stock_um_origen'   		  =>	$data[$i]['stock_um'],
+						'log_id_almacen_destino'   	      =>	$data[$i]['id_almacen'],
+						'log_id_pasillo_destino'   	      =>	$data[$i]['id_pasillo'],
+						'log_id_gaveta_destino'   		  =>	$data[$i]['id_gaveta'],
+						'log_stock_destion'   			  =>	$stock,
+						'log_stock_um_destion'   		  =>	$stock,
+						'log_lote'   					  =>	$data[$i]['lote'],
+						'log_caducidad'   		  		  =>	$data[$i]['caducidad'],
+						'timestamp'   					  =>	$this->timestamp(),
+						'id_usuario'   					  =>	$this->session->userdata('id_usuario'),
+						'activo'   					      =>	1
+						);
+				}
 			}
-			dump_var($data);
+			dump_var($data_update_stock);
+			//dump_var($data);
 		}
 	}
 }

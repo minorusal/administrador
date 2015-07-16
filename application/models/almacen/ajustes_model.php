@@ -51,7 +51,7 @@ class ajustes_model extends Base_Model{
 				LEFT JOIN $tbl[almacen_gavetas] g on a.log_id_gaveta_destino=g.id_almacen_gavetas
 				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
-			WHERE a.id_accion = 4 $filtro
+			WHERE a.id_accion = 4  AND a.activo=1 $filtro
 			GROUP BY c.id_articulo
 			$limit";
 			//echo $query;
@@ -103,7 +103,7 @@ class ajustes_model extends Base_Model{
 				LEFT JOIN $tbl[compras_articulos_tipo] h on a.id_articulo_tipo=h.id_articulo_tipo
 				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
-			WHERE 1 $id_almacen $id_pasillo $id_gaveta
+			WHERE a.activo=1 $id_almacen $id_pasillo $id_gaveta
 			GROUP BY c.id_articulo";
 			//echo $query;
 	  	// Execute querie
@@ -155,7 +155,7 @@ class ajustes_model extends Base_Model{
 				LEFT JOIN $tbl[compras_articulos_tipo] h on a.id_articulo_tipo=h.id_articulo_tipo
 				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
-			WHERE  c.id_articulo = $data[id_articulo] $id_almacen $id_pasillo $id_gaveta";
+			WHERE  a.activo=1 AND c.id_articulo = $data[id_articulo] $id_almacen $id_pasillo $id_gaveta";
 			//echo $query;
 	  	// Execute querie
 
@@ -164,7 +164,7 @@ class ajustes_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function data_update($data=array()){	
+	public function get_data_stock($data=array()){	
 		$id_almacen = ($data['id_almacen']!=0)?"AND a.id_almacen=$data[id_almacen]":'';
 		$id_pasillo = ($data['id_pasillo']!=0)?" AND a.id_pasillo=$data[id_pasillo]":'';
 		$id_gaveta  = ($data['id_gaveta']!=0)?"AND a.id_gaveta=$data[id_gaveta]":'';
@@ -183,12 +183,21 @@ class ajustes_model extends Base_Model{
 					a.id_articulo_tipo,
 					a.stock,
 					a.stock_um,
+					a.lote,
+					a.caducidad,
+					a.id_estatus,
 					a.timestamp as fecha_recepcion,
-					a.caducidad
+					a.caducidad,
+					c.id_articulo,
+					e.clave_corta,
+					e.unidad_minima,
+					e.unidad_minima_cve
 				from $tbl[almacen_stock] a 
 				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
 				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
-				WHERE 1 $id_articulo $id_almacen $id_pasillo $id_gaveta
+				LEFT JOIN $tbl[compras_articulos] d on c.id_articulo=d.id_compras_articulo
+				LEFT JOIN $tbl[compras_um] e on d.id_compras_um = e.id_compras_um
+				WHERE a.activo=1 $id_articulo $id_almacen $id_pasillo $id_gaveta
 				ORDER BY a.caducidad, a.timestamp ASC;";
 			//echo $query;
 	  	// Execute querie
@@ -197,6 +206,15 @@ class ajustes_model extends Base_Model{
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+	public function update_stock($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$condicion = "id_stock = ".$data['id_stock']; 
+		$update    = $this->update_item($tbl['almacen_stock'], $data, 'id_stock', $condicion);
+		return $update;
+			
 	}
 }
 ?>

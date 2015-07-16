@@ -33,10 +33,29 @@ class recetario_model extends Base_Model{
 		}	
 	}
 
-	
-	public function get_data_recetas_x_familia($id_familia, $id_sucursal = false){
-		
-		$filtro = ($id_sucursal) ? 'AND r.id_sucursal = '.$id_sucursal : '';
+
+	public function get_data_receta_vnutricion($id_receta){
+		$tbl = $this->tbl;
+		$query = "SELECT 
+					 s.sucursal
+					,nf.familia
+					,nr.receta
+					,nr.porciones
+				  FROM $tbl[nutricion_recetas] nr
+				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = nr.id_sucursal
+				  LEFT JOIN $tbl[nutricion_familias] nf on nf.id_nutricion_familia = nr.id_nutricion_familia
+				  
+				  WHERE nr.id_nutricion_receta = $id_receta";
+		print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	public function get_data_recetas_x_familia($id_familia){
+			
+
 		$tbl = $this->tbl;
 		
 		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia $filtro";
@@ -45,6 +64,8 @@ class recetario_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
+
+	//,vn.cantidad_sugerida
 	public function get_data_unique($data = array()){	
 				
 		$tbl = $this->tbl;

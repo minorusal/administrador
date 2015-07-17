@@ -4,7 +4,7 @@
     tool_tips();
 
     jQuery( ".load_controller" ).click(function() {
-        jQuery("#loader_content").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
+        imgLoader('#loader_content');
         //jQuery(".maincontent").hide('slow');
     });
     config_datepicker();

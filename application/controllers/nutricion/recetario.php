@@ -363,7 +363,7 @@ class recetario extends Base_Controller{
 								'href'       => base_url($this->path.'export_rexlsx?filtro='.base64_encode($id_receta))
 								);
 		
-		//$tab_3['filtro']                   = (isset($id_receta) && $id_receta!="") ? sprintf($this->lang_item("msg_query_search",false),array() , $id_receta) : ""; 
+		$tab_3['filtro']                   = (isset($id_receta) && $id_receta!="") ? sprintf($this->lang_item("msg_query_search",false),array() , $id_receta) : ""; 
 		$tab_3['export']                   = button_tpl($buttonTPL);
 		$tab_3['id_receta']                = $id_nutricion_receta;
 		$tab_3['lbl_receta']               = $this->lang_item('lbl_receta');
@@ -497,7 +497,7 @@ class recetario extends Base_Controller{
                             'value'         => $value
                         );  
 	}
-	public function export_rexlsx($offset=0){
+	public function export_rexlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$contenido = $this->db_model->get_data_receta_vnutricion($filtro);
 		//print_debug($contenido);
@@ -509,7 +509,7 @@ class recetario extends Base_Controller{
 				,$value['porciones']
 				);
 		}
-		//print_debug($value);
+		
 		$set_heading = array(
 			 $this->lang_item("lbl_sucursal")
 			,$this->lang_item("lbl_familia")
@@ -521,7 +521,6 @@ class recetario extends Base_Controller{
 							'headers' => $set_heading
 						);
 		$this->excel->generate_xlsx($params);
-		//print_debug($contenido);
 	}
 
 	public function export_xlsx($offset=0){
@@ -543,7 +542,6 @@ class recetario extends Base_Controller{
 									);
 
 		}
-
 		$set_heading = array(
 								$this->lang_item("lbl_receta"),
 								$this->lang_item("lbl_clave_corta"),
@@ -552,7 +550,6 @@ class recetario extends Base_Controller{
 								$this->lang_item("lbl_familia"),
 								$this->lang_item("lbl_preparacion")
 							);
-
 		$params = array(	'title'   => $this->lang_item("ficha tecnica"),
 							'items'   => $set_data,
 							'headers' => $set_heading

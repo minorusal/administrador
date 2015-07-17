@@ -53,10 +53,7 @@ class recetario_model extends Base_Model{
 	}
 
 	public function get_data_recetas_x_familia($id_familia){
-			
-
 		$tbl = $this->tbl;
-		
 		$query="SELECT * FROM $tbl[nutricion_recetas] r WHERE r.id_nutricion_familia = $id_familia $filtro";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -66,7 +63,6 @@ class recetario_model extends Base_Model{
 
 	//,vn.cantidad_sugerida
 	public function get_data_unique($data = array()){	
-				
 		$tbl = $this->tbl;
 		
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;

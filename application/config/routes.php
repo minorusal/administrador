@@ -108,7 +108,7 @@ $route['almacen/entradas/entradas_almacen']		     = 'almacen/entradas_almacen/in
 /*Traspasos de alamcen*/
 $route['almacen/traspasos']			     			 = 'almacen/traspasos';
 /*Ajustes de alamcen*/
-$route['almacen/ajustes']			     			 = 'almacen/ajustes/index';
+$route['almacen/ajustes/agregar_ajustes']			 = 'almacen/agregar_ajustes/index';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/

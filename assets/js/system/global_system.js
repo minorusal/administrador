@@ -539,3 +539,7 @@ function dual_select(){
         return false;
     });
 }
+function regla_tres(valorA, valorB, cantidadBuscada){
+    var resultado = (cantidadBuscada*valorB)/valorA;
+    return resultado;
+}

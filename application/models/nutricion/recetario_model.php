@@ -44,9 +44,8 @@ class recetario_model extends Base_Model{
 				  FROM $tbl[nutricion_recetas] nr
 				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = nr.id_sucursal
 				  LEFT JOIN $tbl[nutricion_familias] nf on nf.id_nutricion_familia = nr.id_nutricion_familia
-				  
 				  WHERE nr.id_nutricion_receta = $id_receta";
-		print_debug($query);
+		//print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

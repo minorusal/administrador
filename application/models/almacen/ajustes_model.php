@@ -9,51 +9,77 @@ class ajustes_model extends Base_Model{
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 
-		$filtro = ($filtro!="") ? "and (f.almacenes LIKE '%$filtro%' 
-									   or d.articulo LIKE '%$filtro%'
-									   or e.presentacion LIKE '%$filtro%'
-									   or g.gavetas LIKE '%$filtro%'
-							   		)" : "";
+		$filtro = ($filtro!="") ? "and (b.articulo LIKE '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		// Query
 		$query="SELECT 
-					a.id_stock_log,
-					a.id_stock,
-					a.id_accion,
-					a.log_id_almacen_destino,
-					a.log_id_pasillo_destino,
-					a.log_id_gaveta_destino,
-					a.id_almacen_entradas_recepcion,
-					a.id_compras_orden_articulo,
-					a.log_stock_destino,
-					a.log_stock_um_destino,
-					a.log_stock_origen,
-					a.log_stock_um_origen,
-					a.timestamp as fecha_recepcion,
-					c.id_articulo,
-					d.articulo,
-					e.presentacion,
-					f.almacenes,
-					g.gavetas
-					,i.embalaje
-					,j.clave_corta as cl_um
-					,c.peso_unitario
-					,e.presentacion
-					,c.presentacion_x_embalaje
-					,j.unidad_minima_cve
-					
-				from $tbl[almacen_stock_logs] a 
-				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
-				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
-				LEFT JOIN $tbl[compras_articulos] d on c.id_articulo=d.id_compras_articulo
-				LEFT JOIN $tbl[compras_presentaciones] e on c.id_presentacion=e.id_compras_presentacion
-				LEFT JOIN $tbl[almacen_almacenes] f on a.log_id_almacen_destino=f.id_almacen_almacenes
-				LEFT JOIN $tbl[almacen_gavetas] g on a.log_id_gaveta_destino=g.id_almacen_gavetas
-				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
-				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
-			WHERE a.id_accion = 4  AND a.activo=1 $filtro
-			GROUP BY c.id_articulo
-			$limit";
+				a.id_almacen_ajuste,
+				a.id_stock,
+				a.stock_origen,
+				a.stock_um_origen,
+				a.stock_mov,
+				a.stock_um_mov,
+				a.stock_final,
+				a.stock_um_final,
+				a.id_articulo,
+				a.id_almacen,
+				a.id_pasillo,
+				a.id_gaveta,
+				b.articulo,
+				c.clave_corta as cl_almacen,
+				d.clave_corta as cl_gaveta,
+				e.clave_corta as cl_pasillo,
+				f.clave_corta as cl_um
+				from $tbl[almacen_ajustes] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo=b.id_compras_articulo
+				LEFT JOIN $tbl[almacen_almacenes] c on a.id_almacen=c.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] d on a.id_gaveta=d.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] e on a.id_pasillo=e.id_almacen_pasillos
+				LEFT JOIN $tbl[compras_um] f on b.id_compras_um = f.id_compras_um
+				WHERE a.estatus = 1 AND 1  $filtro
+				ORDER BY a.id_almacen_ajuste ASC
+				$limit";
+		
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_data_unico($id_almacen_ajuste){	
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		
+		// Query
+		$query="SELECT 
+				a.id_almacen_ajuste,
+				a.id_stock,
+				a.stock_origen,
+				a.stock_um_origen,
+				a.stock_mov,
+				a.stock_um_mov,
+				a.stock_final,
+				a.stock_um_final,
+				a.id_articulo,
+				a.id_almacen,
+				a.id_pasillo,
+				a.id_gaveta,
+				b.articulo,
+				c.clave_corta as cl_almacen,
+				d.clave_corta as cl_gaveta,
+				e.clave_corta as cl_pasillo,
+				f.clave_corta as cl_um
+				from $tbl[almacen_ajustes] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo=b.id_compras_articulo
+				LEFT JOIN $tbl[almacen_almacenes] c on a.id_almacen=c.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] d on a.id_gaveta=d.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] e on a.id_pasillo=e.id_almacen_pasillos
+				LEFT JOIN $tbl[compras_um] f on b.id_compras_um = f.id_compras_um
+				WHERE a.estatus =1 AND id_almacen_ajuste=$id_almacen_ajuste";
+		
 			//echo $query;
 	  	// Execute querie
 
@@ -207,14 +233,12 @@ class ajustes_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-	public function update_stock($data=array()){
+	public function insert($data=array()){
 		// DB Info
 		$tbl = $this->tbl;
 		// Query
-		$condicion = "id_stock = ".$data['id_stock']; 
-		$update    = $this->update_item($tbl['almacen_stock'], $data, 'id_stock', $condicion);
-		return $update;
-			
+		$insert = $this->insert_item($tbl['almacen_ajustes'], $data);
+		return $insert;
 	}
 }
 ?>

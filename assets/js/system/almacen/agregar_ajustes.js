@@ -7,7 +7,7 @@ function buscar(){
 	var filtro = jQuery('#search-query').val();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/ajustes/listado",
+		url: path()+"almacen/agregar_ajustes/listado",
 		dataType: "json",
 		data: {filtro : filtro},
 		beforeSend : function(){
@@ -23,6 +23,7 @@ function buscar(){
 	});
 }
 function load_content(uri, id_content){
+	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
     jQuery.ajax({
@@ -50,7 +51,7 @@ function detalle(id_articulo){
 	params.push('allow_only_numeric();');
 	jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/ajustes/detalle",
+        url: path()+"almacen/agregar_ajustes/detalle",
         dataType: 'json',
         data: {id_articulo : id_articulo},
         success: function(data){
@@ -65,23 +66,36 @@ function load_stock(id_articulo){
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	id_pasillo = jQuery('select[name=lts_pasillos] option:selected').val();
 	id_gavetas = jQuery('select[name=lts_gavetas] option:selected').val();
+	jQuery('#stock_destino').val('');
+	jQuery('#stock_um_destino').val('');
+	jQuery('#stock_num').val('');
+	jQuery('#value_stock_um').empty();
+	jQuery('#value_stock').empty();
+	jQuery('#stock_num_um').val('');
 	  jQuery.ajax({
 	        type: "POST",
-	        url: path()+"almacen/ajustes/load_stock",
+	        url: path()+"almacen/agregar_ajustes/load_stock",
 	        dataType: 'json',
 	        data: {id_articulo : id_articulo,id_almacen:id_almacen,id_pasillo:id_pasillo,id_gavetas:id_gavetas},
 	        success: function(data){
 	         var chosen = 'jQuery(".chzn-select").chosen();';
 	          jQuery('#value_stock').html(data['stock']+include_script(chosen));
 	          jQuery('#value_stock_um').html(data['stock_um']+' '+data['u_m_cv']);
+	          jQuery('#stock_num_um').val(data['stock_um']);
 	          jQuery('#stock_num').val(data['stock']);
 	        }
 	    });
 }
 function load_gaveta_pas(id_almacen){
+	jQuery('#stock_destino').val('');
+	jQuery('#stock_num').val('');
+	jQuery('#value_stock_um').empty();
+	jQuery('#value_stock').empty();
+	jQuery('#stock_num_um').val('');
+	jQuery('#stock_um_destino').val('');
   jQuery.ajax({
         type: "POST",
-        url: path()+"almacen/ajustes/load_gaveta_pas",
+        url: path()+"almacen/agregar_ajustes/load_gaveta_pas",
         dataType: 'json',
         data: {id_almacen : id_almacen},
         success: function(data){
@@ -93,10 +107,16 @@ function load_gaveta_pas(id_almacen){
     });
 }
 function load_gaveta(id_pasillo){
+	jQuery('#stock_destino').val('');
+	jQuery('#stock_um_destino').val('');
+	jQuery('#stock_num').val('');
+	jQuery('#stock_num_um').val('');
+	jQuery('#value_stock').empty();
+	jQuery('#value_stock_um').empty();
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	  jQuery.ajax({
 	        type: "POST",
-	        url: path()+"almacen/ajustes/load_gaveta",
+	        url: path()+"almacen/agregar_ajustes/load_gaveta",
 	        dataType: 'json',
 	        data: {id_pasillo : id_pasillo,id_almacen:id_almacen},
 	        success: function(data){
@@ -109,9 +129,15 @@ function load_gaveta(id_pasillo){
 function load_articulos(id_gaveta){
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	id_pasillo = jQuery('select[name=lts_pasillos] option:selected').val();
+	jQuery('#stock_destino').val('');
+	jQuery('#stock_um_destino').val('');
+	jQuery('#stock_num').val('');
+	jQuery('#value_stock').empty();
+	jQuery('#value_stock_um').empty();
+	jQuery('#stock_num_um').val('');
 	  jQuery.ajax({
 	        type: "POST",
-	        url: path()+"almacen/ajustes/load_articulos",
+	        url: path()+"almacen/agregar_ajustes/load_articulos",
 	        dataType: 'json',
 	        data: {id_almacen:id_almacen,id_pasillo:id_pasillo,id_gaveta:id_gaveta},
 	        success: function(data){
@@ -123,42 +149,19 @@ function load_articulos(id_gaveta){
 function realiza_calculos(){
 	var stock 	  =	jQuery('#stock_destino').val();
 	var stock_num = jQuery('#stock_num').val();
+	var stock_num_um = jQuery('#stock_num_um').val();
+	
 	var cantidad;
 	cantidad=stock_num-stock;
 	if(cantidad>=0){
+		var um = regla_tres(stock_num,stock_num_um,stock)
 		jQuery('#stock').val(stock);
+		jQuery('#stock_um_destino').val(um);
 	}else{
-		alert('nada');
+		alert('No puede ser mayor a la cantidad registrada');
 		jQuery('#stock').val('');
 	}
 }
-/*function load_gaveta_pas_destino(id_almacen_destino){
-	jQuery.ajax({
-        type: "POST",
-        url: path()+"almacen/ajustes/load_gaveta_pas",
-        dataType: 'json',
-        data: {id_almacen_destino : id_almacen_destino,},
-        success: function(data){
-         var chosen = 'jQuery(".chzn-select").chosen();';
-          jQuery('#lts_pasillo_destino').html(data['pasillos']+include_script(chosen));
-          jQuery('#lts_gavetas_destino').html(data['gavetas']+include_script(chosen));
-        }
-    });
-}*/
-/*function load_gaveta_destino(id_pasillo_destino){
-	id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
-	  jQuery.ajax({
-	        type: "POST",
-	        url: path()+"almacen/ajustes/load_gaveta",
-	        dataType: 'json',
-	        data: {id_pasillo_destino : id_pasillo_destino,id_almacen_destino:id_almacen_destino},
-	        success: function(data){
-	         var chosen = 'jQuery(".chzn-select").chosen();';
-	          jQuery('#lts_gavetas_destino').html(data['lts_gavetas']+include_script(chosen));
-	        }
-	    });
-}*/
-
 function agregar(){
 	var progress = progress_initialized('update_loader');
 	jQuery("#mensajes_update").html('').hide('slow');
@@ -166,31 +169,28 @@ function agregar(){
 	var btn = jQuery("button[name='ajuste_save']");
 	//btn.attr('disabled','disabled');
 	var stock = jQuery('#stock').val();
+	var stock_um_destino = jQuery('#stock_um_destino').val();
+	
 	var id_articulo = jQuery('select[name=lts_ajustes] option:selected').val();
 	//ORIGEN
 	var id_almacen  = jQuery('select[name=lts_almacen] option:selected').val();
 	var id_pasillo  = jQuery('select[name=lts_pasillos] option:selected').val();
 	var id_gavetas  = jQuery('select[name=lts_gavetas] option:selected').val();
 	//DESTINO
-	var id_almacen_destino = jQuery('select[name=lts_almacen_destino] option:selected').val();
-	var id_pasillo_destino = jQuery('select[name=lts_pasillos_destino] option:selected').val();
-	var id_gaveta_destino  = jQuery('select[name=lts_gavetas_destino] option:selected').val();
 
 	var incomplete = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
-		url: path()+"almacen/ajustes/update",
+		url: path()+"almacen/agregar_ajustes/update",
 		dataType: "json",			
 		data : {
 				incomplete			 :  incomplete,
 				stock	 			 :  stock,
+				stock_um_destino 	 :  stock_um_destino,
 				id_articulo	 		 :  id_articulo,	
 				id_almacen	 		 :	id_almacen,
 				id_pasillo	 		 :	id_pasillo,
-				id_gavetas	 		 :	id_gavetas,
-				id_almacen_destino	 :	id_almacen_destino,	
-				id_pasillo_destino	 :	id_pasillo_destino,
-				id_gaveta_destino	 :	id_gaveta_destino	
+				id_gavetas	 		 :	id_gavetas
 		},
 		beforeSend : function(){
 			btn.attr('disabled',true);
@@ -213,4 +213,18 @@ function agregar(){
 		        progress.progressTimer('complete');
 		        btn.attr('disabled',false);
 	  });
+}
+function detalle(id_almacen_ajuste){
+	jQuery('#ui-id-2').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/agregar_ajustes/detalle",
+        dataType: 'json',
+        data: {id_almacen_ajuste : id_almacen_ajuste},
+        success: function(data){
+         	jQuery('#a-0').html('');
+        	jQuery('#a-2').html(data);
+        	jQuery('#ui-id-2').show('slow');
+        }
+    });
 }

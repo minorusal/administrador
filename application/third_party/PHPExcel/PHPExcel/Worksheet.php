@@ -2397,7 +2397,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
             // start coordinate
             list ($startColumn, $startRow) = PHPExcel_Cell::coordinateFromString($startCell);
 
-            // Loop through $source
+            // Loop through $source 
             foreach ($source as $rowData) {
                 $currentColumn = $startColumn;
                 foreach($rowData as $cellValue) {

@@ -13,7 +13,7 @@ class excel extends PHPExcel{
 		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
 		$items   = (array_key_exists('items',$params)) ? $params['items'] : false;
-
+		//print_debug($items);
 		if($headers && $items){
 
 			$objPHPExcel = new PHPExcel();
@@ -90,6 +90,92 @@ class excel extends PHPExcel{
 		return $styleHeaders;
 	}
 
+	public function receta_generate_xlsx($params = array(), $save = false){
+		
+		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
+		$items_recetas   = (array_key_exists('items_receta',$params)) ? $params['items_receta'] : false;
+		$headers_receta  = (array_key_exists('headers_receta',$params)) ? $params['headers_receta'] : false;
+		$items_valores   = (array_key_exists('items_valores',$params)) ? $params['items_valores'] : false;
+		$headers_valores = (array_key_exists('headers_valores',$params)) ? $params['headers_valores'] : false;
+		
+		if($items_recetas && $headers_receta && $items_valores && $headers_valores){
+
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
+									->setLastModifiedBy("IS Intelligent Solution")
+									->setTitle($title)
+									->setSubject($title)
+									->setDescription($title)
+									->setKeywords("office 2007 openxml");
+
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Logo');
+			$objDrawing->setDescription('Logo');
+			$objDrawing->setPath('./assets/images/logo.png');
+			$objDrawing->setHeight(36);
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+			
+			$countHeadersReceta = count($params['headers_receta'])+64;
+			$columnReceta       = chr($countHeadersReceta).'3';
+
+			$countHeadersValor = count($params['headers_valores'])+64;
+			$columnValor       = chr($countHeadersValor).'3';
+
+			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('Candara');
+			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(22);
+			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
+			$objPHPExcel->getActiveSheet()->getStyle("A1:".chr($countHeadersReceta).'1')->applyFromArray($this->defaultStyle_headers());
+
+			//$objPHPExcel->getActiveSheet()->getStyle("A6:".chr($countHeadersValor).'1')->applyFromArray($this->defaultStyle_headers());
+			//$objPHPExcel->getActiveSheet()->getStyle("A6:".chr($countHeaders).'1')->applyFromArray($this->defaultStyle_headers());
+
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', $title);
+	        $objPHPExcel->setActiveSheetIndex(0);
+	        
+	      	$objPHPExcel->getActiveSheet()->fromArray($params['headers_receta'], null, 'A3');
+	      	$objPHPExcel->getActiveSheet()->getStyle("A3:$columnReceta")->applyFromArray($this->defaultStyle_headers());
+
+	      	$objPHPExcel->getActiveSheet()->fromArray($params['headers_valores'], null, 'A6');
+	      	$objPHPExcel->getActiveSheet()->getStyle("A6:$columnValor")->applyFromArray($this->defaultStyle_headers());
+	      	
+	       foreach(range('A',$columnReceta) as $columnID) {
+	       	//print_debug(range('A',$column));
+			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			}
+
+			foreach(range('A',$columnValor) as $columnID) {
+	       	//print_debug(range('A',$column));
+			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			}
+
+			//$objPHPExcel->getActiveSheet()->getColumnDimension('f4')->setAutoSize(true);
+	      	
+	      	$items = $objPHPExcel->getActiveSheet()->fromArray($params['items_receta'], null, 'A4'); 
+			$objPHPExcel->setActiveSheetIndex(0);
+
+			$items = $objPHPExcel->getActiveSheet()->fromArray($params['items_valores'], null, 'A7'); 
+			$objPHPExcel->setActiveSheetIndex(0);
+				
+			if($save){
+				$pathfile  = 'assets/docs/'.$title.'.xlsx';
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+				rename(APPPATH.'libraries/excel.xlsx', $pathfile);
+				return $pathfile;
+			}else{
+				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+				$objWriter->save('php://output');
+				$objWriter->save('php://output');
+				exit;
+			}
+			
+		}else{
+			redirect('override_404');
+		}
+	}
 	public function test(){
 		$inputFileName = 'application/xls/Catalogo_clientes.xlsx';
 

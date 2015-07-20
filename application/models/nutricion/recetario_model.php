@@ -33,23 +33,84 @@ class recetario_model extends Base_Model{
 		}	
 	}
 
-
-	public function get_data_receta_vnutricion($id_receta){
+	public function get_data_receta($id_receta){
 		$tbl = $this->tbl;
+
 		$query = "SELECT 
-					 s.sucursal
-					,nf.familia
-					,nr.receta
-					,nr.porciones
-				  FROM $tbl[nutricion_recetas] nr
-				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = nr.id_sucursal
-				  LEFT JOIN $tbl[nutricion_familias] nf on nf.id_nutricion_familia = nr.id_nutricion_familia
-				  WHERE nr.id_nutricion_receta = $id_receta";
+						 nr.receta
+						,nr.clave_corta as clave_receta
+						,s.sucursal
+						,nr.porciones
+						,nr.preparacion
+						,f.familia
+				FROM $tbl[nutricion_recetas] nr
+				LEFT JOIN  $tbl[sucursales] s ON s.id_sucursal = nr.id_sucursal
+				LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = nr.id_nutricion_familia
+				WHERE nr.id_nutricion_receta = $id_receta";
+
 		//print_debug($query);
-		$query = $this->db->query($query);
+      	$query = $this->db->query($query);
+      	
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
+	}
+
+	public function get_data_receta_vnutricion($data = array()){
+		$tbl = $this->tbl;
+		
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (array_key_exists('aplicar_limit', $data)) ? $data['aplicar_limit'] : false;
+		$unique         = (array_key_exists('unique', $data) ? $data['unique'] : false);
+
+		
+		$unique = ($unique) ? "AND r.id_nutricion_receta = $unique" : "";
+		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
+									r.receta like '%$filtro%' OR
+									r.clave_corta like '%$filtro%' OR
+									r.porciones like '%$filtro%' OR
+									s.sucursal like '%$filtro%')" : "";
+		$limit  = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		$query  = "	SELECT 
+						f.familia
+						,f.id_nutricion_familia
+						,r.*
+						,ca.*
+						,ri.id_compras_articulo
+						,ri.porciones as porciones_articulo
+						,ca.articulo
+						,ap.costo_x_um
+						,cu.um
+						,s.id_sucursal
+						,s.sucursal
+						,vn.*
+					FROM $tbl[nutricion_recetas] r
+					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
+					LEFT JOIN  $tbl[nutricion_recetas_articulos] ri on r.id_nutricion_receta = ri.id_nutricion_receta
+					LEFT JOIN  $tbl[compras_articulos] ca ON ca.id_compras_articulo = ri.id_compras_articulo
+					LEFT JOIN  $tbl[nutricion_valores_nutricionales] vn ON vn.id_compras_articulos = ca.id_compras_articulo
+					LEFT JOIN  $tbl[compras_um] cu on cu.id_compras_um = ca.id_compras_um
+					LEFT JOIN  $tbl[sucursales] s ON s.id_sucursal = r.id_sucursal
+					LEFT JOIN  (SELECT 
+									ap.id_articulo, 
+									ap.costo_x_um,
+									ap.id_administracion_region
+								FROM 
+									$tbl[compras_articulos_precios] ap
+								WHERE 
+									ap.articulo_default = 1
+					) ap ON (ap.id_articulo = ca.id_compras_articulo AND ap.id_administracion_region = s.id_region)
+
+					WHERE r.activo = 1 $unique $filtro";
+
+		//print_debug($query);
+      	$query = $this->db->query($query);
+      	
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 
 	public function get_data_recetas_x_familia($id_familia){

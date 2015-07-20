@@ -41,15 +41,15 @@ class recetario extends Base_Controller{
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/impuestos/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/impuestos/listado
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -499,28 +499,100 @@ class recetario extends Base_Controller{
 	}
 	public function export_rexlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
-		$contenido = $this->db_model->get_data_receta_vnutricion($filtro);
-		//print_debug($contenido);
-		foreach ($contenido as $value) {
-			$set_data[] = array(
-				 $value['sucursal']
-				,$value['familia']
-				,$value['receta']
-				,$value['porciones']
+		$receta = $this->db_model->get_data_receta($filtro);
+		foreach ($receta as $value){
+			$set_general_receta[] = array(
+							 $value['receta']
+							,$value['clave_receta']
+							,$value['sucursal']
+							,$value['porciones']
+							,$value['preparacion']
+							,$value['familia']
+					);
+			}
+			//print_debug($set_general_receta);
+			$set_heading_receta = array(
+						 $this->lang_item("lbl_receta")
+						,$this->lang_item("lbl_clave_receta")
+						,$this->lang_item("lbl_sucursal")
+						,$this->lang_item("lbl_porciones")
+						,$this->lang_item("lbl_preparacion")
+						,$this->lang_item("lbl_familia")
+			);
+		//print_debug($set_general);
+		$sqlData    = array(
+							 'buscar'        => false
+							,'offset' 		 => false
+							,'limit'      	 => false
+							,'aplicar_limit' => false
+							,'unique'        => $filtro
+						);
+		$contenido = $this->db_model->get_data_receta_vnutricion($sqlData);
+		
+		foreach($contenido as  $value){
+			$set_valores[] = array(
+				$value['articulo']
+				,$value['cantidad_sugerida']
+				,$value['peso_bruto']
+				,$value['peso_neto']
+				,$value['energia']
+				,$value['proteina']
+				,$value['lipidos']
+				,$value['hidratos_carbono']
+				,$value['fibra']
+				,$value['vitamina_a']
+				,$value['acido_ascorbico']
+				,$value['acido_folico']
+				,$value['hierro_nohem']
+				,$value['potasio']
+				,$value['azucar']
+				,$value['indice_glicemico']
+				,$value['carga_glicemica']
+				,$value['calcio']
+				,$value['sodio']
+				,$value['selenio']
+				,$value['fosforo']
+				,$value['colesterol']
+				,$value['ag_saturados']
+				 ,$value['ag_mono']
+				 ,$value['ag_poli']
 				);
 		}
-		
-		$set_heading = array(
-			 $this->lang_item("lbl_sucursal")
-			,$this->lang_item("lbl_familia")
-			,$this->lang_item("lbl_receta")
-			,$this->lang_item("lbl_porciones")
+		//print_debug($set_data);
+		$set_heading_valores = array(
+			 $this->lang_item("lbl_articulo")
+			,$this->lang_item("lbl_cantidad_sugerida")
+			,$this->lang_item("lbl_peso_bruto")
+			,$this->lang_item("lbl_peso_neto")
+			,$this->lang_item("lbl_energia")
+			,$this->lang_item("lbl_proteina")
+			,$this->lang_item("lbl_lipidos")
+			,$this->lang_item("lbl_hidratos_carbono")
+			,$this->lang_item("lbl_fibra")
+			,$this->lang_item("lbl_vitamina_a")
+			,$this->lang_item("lbl_acido_ascorbico")
+			,$this->lang_item("lbl_acido_folico")
+			,$this->lang_item("lbl_hierro_nohem")
+			,$this->lang_item("lbl_potasio")
+			,$this->lang_item("lbl_azucar")
+			,$this->lang_item("lbl_indice_glicemico")
+			,$this->lang_item("lbl_carga_glicemica")
+			,$this->lang_item("lbl_calcio")
+			,$this->lang_item("lbl_sodio")
+			,$this->lang_item("lbl_selenio")
+			,$this->lang_item("lbl_fosforo")
+			,$this->lang_item("lbl_colesterol")
+			,$this->lang_item("lbl_ag_saturados")
+			,$this->lang_item("lbl_ag_mono")
+			,$this->lang_item("lbl_ag_poli")
 			);
-		$params = array(	'title'   => $this->lang_item("Ficha Tecnica"),
-							'items'   => $set_data,
-							'headers' => $set_heading
+		$params = array(	'title'           => $this->lang_item("Ficha Tecnica"),
+							'items_receta'    => $set_general_receta,
+							'headers_receta'  => $set_heading_receta,
+							'items_valores'   => $set_valores,
+							'headers_valores' => $set_heading_valores
 						);
-		$this->excel->generate_xlsx($params);
+		$this->excel->receta_generate_xlsx($params);
 	}
 
 	public function export_xlsx($offset=0){

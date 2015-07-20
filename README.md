@@ -1,4 +1,4 @@
-Nuevo sistema de AdminControl v.2
+Nuevo sistema de AdminControl v.2.0
 
 Contenido:
     
@@ -14,8 +14,8 @@ Contenido:
 
 \assets\js\system\inc.config.js
 	if(!Folder){Folder='[nombre_de_folder]';}
-		i.e: if(!Folder){Folder='adminventas';}
+		i.e: if(!Folder){Folder='admincontrol';}
 
 \assets\cfg\codeigniter.cfg
 	cfg|base_url=[ruta_URI]
-		i.e: cfg|base_url=http://192.168.230.28/sandbox/adminventas2/
+		i.e: cfg|base_url=http://192.168.230.28/sandbox/admincontrol/

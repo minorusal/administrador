@@ -46,7 +46,7 @@ function load_content(uri, id_content){
         }
     });
 }
-function detalle(id_articulo){
+/*function detalle(id_articulo){
 	var params = [];
 	params.push('allow_only_numeric();');
 	jQuery.ajax({
@@ -61,7 +61,7 @@ function detalle(id_articulo){
         	jQuery('#ui-id-1').click();
         }
     });
-}
+}*/
 function load_stock(id_articulo){
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	id_pasillo = jQuery('select[name=lts_pasillos] option:selected').val();

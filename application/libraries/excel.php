@@ -9,13 +9,10 @@ class excel extends PHPExcel{
 	}
 	
 	public function generate_xlsx($params = array(), $save = false){
-		
 		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
 		$headers = (array_key_exists('headers',$params)) ? $params['headers'] : false;
 		$items   = (array_key_exists('items',$params)) ? $params['items'] : false;
-		//print_debug($items);
 		if($headers && $items){
-
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
 									->setLastModifiedBy("IS Intelligent Solution")

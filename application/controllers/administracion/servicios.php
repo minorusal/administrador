@@ -16,10 +16,10 @@ class servicios extends Base_Controller{
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'sucursales';
 		$this->seccion          = 'servicios';
-		$this->icon 			= 'fa fa-phone-square'; 
+		$this->icon 			= 'fa fa-upload'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 10;
+		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -344,6 +344,7 @@ class servicios extends Base_Controller{
 
 	public function export_xlsx($offset=0){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		
 		$limit 		 = $this->limit_max;
 		$sqlData     = array(
 			 'buscar'      	=> $filtro
@@ -352,26 +353,29 @@ class servicios extends Base_Controller{
 		);
 		$lts_content = $this->db_model->db_get_data($sqlData);
 		if(count($lts_content)>0){
-			foreach ($lts_content as $value) {
+			foreach ($lts_content as $value){
+				
 				$set_data[] = array(
 									 $value['servicio']
 								 	,$value['cv_servicio']
 								 	,$value['sucursal']
 								 	,$value['descripcion']
 								 	,$value['inicio']
-								 	,$value['final']);
+								 	,$value['final']
+								 	);
 			}
 			
 			$set_heading = array(
-									$this->lang_item("lbl_servicio"),
-									$this->lang_item("lbl_clave_corta"),
-									$this->lang_item("lbl_sucursal"),
-									$this->lang_item("lbl_descripcion"),
-									$this->lang_item("lbl_inicio"),
-									$this->lang_item("lbl_final"));
+									 $this->lang_item("lbl_servicio")
+									,$this->lang_item("lbl_clave_corta")
+									,$this->lang_item("lbl_sucursal")
+									,$this->lang_item("lbl_descripcion")
+									,$this->lang_item("lbl_inicio")
+									,$this->lang_item("lbl_final")
+									);
 		}
 
-		$params = array(	'title'   => $this->lang_item("Servicios"),
+		$params = array(	'title'   => $this->lang_item("Catálogos Servicios"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

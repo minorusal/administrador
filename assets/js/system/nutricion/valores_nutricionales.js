@@ -84,7 +84,7 @@ function actualizar(){
     type:"POST",
     url: path()+"nutricion/valores_nutricionales/actualizar",
     dataType: "json",
-    data: {objData},
+    data: {objData:objData},
     beforeSend : function(){
       btn.attr('disabled',true);
     },

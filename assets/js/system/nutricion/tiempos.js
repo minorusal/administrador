@@ -78,7 +78,7 @@ function actualizar(){
     type:"POST",
     url: path()+"nutricion/tiempos/actualizar",
     dataType: "json",
-    data: {objData},
+    data: {objData:objData},
     beforeSend : function(){
       btn.attr('disabled',true);
     },
@@ -116,7 +116,7 @@ function agregar(){
     type:"POST",
     url: path()+"nutricion/tiempos/insert_tiempo",
     dataType: "json",
-    data: {objData},
+    data: {objData:objData},
     beforeSend : function(){
       btn.attr('disabled',true);
     },

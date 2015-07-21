@@ -488,27 +488,6 @@ class ciclos extends Base_Controller{
 		$id_ciclo = $this->ajax_post('id_ciclo');
 		$elimina  = $this->ciclos->eliminar_ciclo($id_ciclo);
 		if($elimina){
-			/*$sqlData = array(
-							 'buscar' => $id_sucursal
-							,'offset' => 0
-							,'limit' => 0
-							);
-			$data_ciclo = $this->ciclos->db_get_data($sqlData);
-			
-			$dropdown_ciclos = array(
-					 'data'     => $data_ciclo
-					,'value' 	=> 'id_nutricion_ciclos'
-					,'text' 	=> array('ciclo')
-					,'class' 	=> "requerido"
-					,'leyenda'  => '-----'
-					,'name' 	=> "lts_ciclos"
-					,'event'    => array('event' => 'onchange',
-							   						'function' => 'load_contenido_ciclo',
-			   										'params'   => array('this.value'),
-			   										'params_type' => array(false)
-			   									));
-			$ciclos = dropdown_tpl($dropdown_ciclos);
-			$data['ciclos'] = $ciclos;*/
 			echo json_encode(1);
 		}else{
 			$detalle = $this->ciclo_detalle($id_ciclo);

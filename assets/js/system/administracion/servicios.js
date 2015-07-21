@@ -98,7 +98,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/servicios/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -135,7 +135,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/servicios/insert_servicio",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

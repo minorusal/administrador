@@ -27,7 +27,6 @@ function load_content(uri, id_content){
            		var db   = jQuery('#dualselected').find('.ds_arrow button');	
 				var sel1 = jQuery('#dualselected select:first-child');		
 				var sel2 = jQuery('#dualselected select:last-child');			
-				//sel2.empty(); 
 				db.click(function(){
 					var t = (jQuery(this).hasClass('ds_prev'))? 0 : 1;	
 					if(t){
@@ -66,12 +65,11 @@ function agregar(){
 	});
 	
 	objData['entidades']   = entidades;
-	//alert(dump_var(objData));
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"administracion/regiones/insert_region",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -114,7 +112,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/regiones/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

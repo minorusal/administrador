@@ -140,12 +140,11 @@ function agregar(){
   
   var objData = formData('#formulario');
   objData['incomplete'] = values_requeridos();
-  //alert(dump_var(objData));
   jQuery.ajax({
     type:"POST",
     url: path()+"nutricion/ciclos/insert_ciclo",
     dataType: "json",
-    data: {objData},
+    data: {objData:objData},
     beforeSend : function(){
       btn.attr('disabled',true);
     },
@@ -222,7 +221,6 @@ function eliminar_tiempo(id_tiempo,id_ciclo){
         dataType: 'json',
         data: {id_tiempo : id_tiempo,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
         beforeSend : function(){
-         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
           jQuery('#ciclo_detalle').html(data+include_script(treeview));
@@ -240,7 +238,6 @@ function eliminar_familia(id_familia,id_ciclo){
         dataType: 'json',
         data: {id_familia : id_familia,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
         beforeSend : function(){
-         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
           jQuery('#ciclo_detalle').html(data+include_script(treeview));
@@ -258,7 +255,6 @@ function eliminar_receta(id_vinculo,id_ciclo){
         dataType: 'json',
         data: {id_vinculo : id_vinculo,id_ciclo:id_ciclo, nombre_ciclo:nombre_ciclo},
         beforeSend : function(){
-         // jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
         },
         success: function(data){
           jQuery('#ciclo_detalle').html(data+include_script(treeview));
@@ -280,7 +276,7 @@ function eliminar_ciclo(id_ciclo){
           if(data == 1){
             jQuery('#ciclo_detalle').html('');
           }else{
-            alert('Este ciclo esta ocupado y no se puede eliminar');
+            jQuery('#mensajes').show('slow');
             jQuery('#ciclo_detalle').html(data+include_script(treeview));
           }
         }

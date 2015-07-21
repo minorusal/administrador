@@ -202,13 +202,13 @@ class agregar_ajustes extends stock{
 				,'class' 	=> "requerido"
 			);
 
-		$lts_almacen  		  = dropdown_tpl($dropArray);
-		$tabData['lts_almacen'] 		= $lts_almacen;
+		$lts_almacen  		    = dropdown_tpl($dropArray);
+		$tabData['lts_almacen'] = $lts_almacen;
 		$tabData['button_save'] = $btn_save;
 
 		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
 		if($this->ajax_post(false)){
-				echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 		}else{
 			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true,$includes));
 		}
@@ -217,19 +217,18 @@ class agregar_ajustes extends stock{
 		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
 		$detalle  		   = $this->db_model->get_data_unico($id_almacen_ajuste);
 		$view 			   = $this->tab['detalle'];
-		//dump_var($detalle);
 		//DATA
-		$tabData['articulo']	     = $detalle[0]['articulo'];
-		$tabData['cl_almacen']	     = $detalle[0]['cl_almacen'];
-		$tabData['cl_gaveta']	     = $detalle[0]['cl_gaveta'];
-		$tabData['cl_pasillo']	     = $detalle[0]['cl_pasillo'];
-		$tabData['stock_origen']	 = $detalle[0]['stock_origen'];
-		$tabData['stock_um_origen']  = $detalle[0]['stock_um_origen'];
-		$tabData['stock_mov']	     = $detalle[0]['stock_mov'];
-		$tabData['stock_um_mov']	 = $detalle[0]['stock_um_mov'];
-		$tabData['stock_final']	     = $detalle[0]['stock_final'];
-		$tabData['stock_um_final']	 = $detalle[0]['stock_um_final'];
-		$tabData['cl_um']			 = $detalle[0]['cl_um'];
+		$tabData['articulo']	         = $detalle[0]['articulo'];
+		$tabData['cl_almacen']	         = $detalle[0]['cl_almacen'];
+		$tabData['cl_gaveta']	         = $detalle[0]['cl_gaveta'];
+		$tabData['cl_pasillo']	         = $detalle[0]['cl_pasillo'];
+		$tabData['stock_origen']	     = $detalle[0]['stock_origen'];
+		$tabData['stock_um_origen']      = $detalle[0]['stock_um_origen'];
+		$tabData['stock_mov']	         = $detalle[0]['stock_mov'];
+		$tabData['stock_um_mov']	     = $detalle[0]['stock_um_mov'];
+		$tabData['stock_final']	         = $detalle[0]['stock_final'];
+		$tabData['stock_um_final']	     = $detalle[0]['stock_um_final'];
+		$tabData['cl_um']			     = $detalle[0]['cl_um'];
 		//DIC
 		$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
 		$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
@@ -248,7 +247,7 @@ class agregar_ajustes extends stock{
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function load_stock(){
-		$id_articulo    =  $this->ajax_post('id_articulo');
+		$id_articulo   =  $this->ajax_post('id_articulo');
 		$id_almacen    =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
 		$id_pasillo    =  ($this->ajax_post('id_pasillo')!=0)?$this->ajax_post('id_pasillo'):'';
 		$id_gavetas    =  ($this->ajax_post('id_gavetas')!=0)?$this->ajax_post('id_gavetas'):'';
@@ -262,7 +261,6 @@ class agregar_ajustes extends stock{
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
 		$stock=0;
 		$stock_um=0;
-		//dump_var($detalle);
 		for($i=0; count($detalle)>$i;$i++){
 			$stock+=$detalle[$i]['stock'];
 			$stock_um+=$detalle[$i]['stock_um'];
@@ -321,9 +319,9 @@ class agregar_ajustes extends stock{
 		$lts_gavetas  = dropdown_tpl($dropArray2);
 		$lts_ajustes  = dropdown_tpl($dropArray3);
 
-		$data['pasillos']=$lts_pasillo;
-		$data['gavetas']=$lts_gavetas;
-		$data['lts_ajustes']=$lts_ajustes;
+		$data['pasillos']    = $lts_pasillo;
+		$data['gavetas']     = $lts_gavetas;
+		$data['lts_ajustes'] = $lts_ajustes;
 		echo json_encode($data);
 	}
 	public function load_gaveta(){
@@ -363,7 +361,7 @@ class agregar_ajustes extends stock{
 		$datasql=array(
 					'id_almacen' => $id_almacen,
 					'id_pasillo' => $id_pasillo,
-					'id_gaveta' => '');
+					'id_gaveta'  => '');
 		$dropArray3 = array(
 						 'data'		=> $this->db_model->db_get_data_articulos($datasql)
 						,'value' 	=> 'id_articulo'
@@ -378,47 +376,48 @@ class agregar_ajustes extends stock{
 					);
 		$lts_ajustes  = dropdown_tpl($dropArray3);
 		$lts_gavetas  = dropdown_tpl($dropArray);
-		$data['lts_gavetas']=$lts_gavetas;
-		$data['lts_ajustes']=$lts_ajustes;
+		$data['lts_gavetas'] = $lts_gavetas;
+		$data['lts_ajustes'] = $lts_ajustes;
 		echo json_encode($data);
 	}
 	public function load_articulos(){
-		$id_almacen    =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
-		$id_pasillo    =  ($this->ajax_post('id_pasillo')!=0)?$this->ajax_post('id_pasillo'):'';
+		$id_almacen   =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
+		$id_pasillo   =  ($this->ajax_post('id_pasillo')!=0)?$this->ajax_post('id_pasillo'):'';
 		$id_gaveta    =  ($this->ajax_post('id_gaveta')!=0)?$this->ajax_post('id_gaveta'):'';
 
 		$datasql=array(
 					'id_almacen' => $id_almacen,
 					'id_pasillo' => $id_pasillo,
-					'id_gaveta' => $id_gaveta);
+					'id_gaveta'  => $id_gaveta);
 
 		$dropArray3 = array(
-				 'data'		=> $this->db_model->db_get_data_articulos($datasql)
-				,'value' 	=> 'id_articulo'
-				,'text' 	=> array('cl_um','articulo')
-				,'name' 	=> "lts_ajustes"
-				,'class' 	=> "requerido"
-				,'event'    => array('event'       => 'onchange',
+						 'data'	 => $this->db_model->db_get_data_articulos($datasql)
+						,'value' => 'id_articulo'
+						,'text'  => array('cl_um','articulo')
+						,'name'  => "lts_ajustes"
+						,'class' => "requerido"
+						,'event' => array(
+										'event'       => 'onchange',
 				   						 'function'    => 'load_stock',
 				   						 'params'      => array('this.value'),
 				   						 'params_type' => array(0)
-   									)
+									)
 			);
 		$lts_ajustes  = dropdown_tpl($dropArray3);
 		echo json_encode($lts_ajustes);
 	}
 	public function update(){
-		$incomplete		 	= $this->ajax_post('incomplete');
+		$incomplete	 = $this->ajax_post('incomplete');
 		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
-			$stock_mov 			= $this->ajax_post('stock');
-			$stock_um_mov 		= $this->ajax_post('stock_um_destino');
-			$id_articulo 		= $this->ajax_post('id_articulo');
-			$id_almacen 		= $this->ajax_post('id_almacen');
-			$id_pasillo 		= $this->ajax_post('id_pasillo');
-			$id_gaveta 			= $this->ajax_post('id_gavetas');
+			$stock_mov 	  = $this->ajax_post('stock');
+			$stock_um_mov = $this->ajax_post('stock_um_destino');
+			$id_articulo  = $this->ajax_post('id_articulo');
+			$id_almacen   = $this->ajax_post('id_almacen');
+			$id_pasillo   = $this->ajax_post('id_pasillo');
+			$id_gaveta 	  = $this->ajax_post('id_gavetas');
 			$cont=0;
 			$datasql=array(
 					'id_articulo' => $id_articulo,
@@ -429,41 +428,40 @@ class agregar_ajustes extends stock{
 			$data=$this->db_model->get_data_stock($datasql);
 			//realiza la resta de la cantidad a mover
 			for($i=0;count($data)>$i;$i++){
-				$realizar_insert=true;
+				$realizar_insert = true;
 				if($i==0){
-					$cantidad=$data[$i]['stock']-$stock_mov;
+					$cantidad = $data[$i]['stock']-$stock_mov;
 					if($cantidad<=0){
-						$stock=0;
-						$stock_um=0;
+						$stock    = 0;
+						$stock_um = 0;
 						//$status=0;
 					}else{
-						$stock=$cantidad;
-						//$status=1;
-						$stock_um=$this->regla_de_tres($data[$i]['stock'], $data[$i]['stock_um'], $cantidad);
+						$stock    = $cantidad;
+						$stock_um = $this->regla_de_tres($data[$i]['stock'], $data[$i]['stock_um'], $cantidad);
 						($data[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
 					}
 				}else{
 					if($cantidad<=0){
-						$cantidad= $cantidad*-1;
-						$cantidad=$data[$i]['stock']-$cantidad;
+						$cantidad  = $cantidad*-1;
+						$stock_mov = $cantidad;
+						$cantidad  = $data[$i]['stock']-$cantidad;
+						$stock_um  = $this->regla_de_tres($data[$i]['stock'], $data[$i]['stock_um'], $cantidad);
+						$stock_um_mov=$stock_um;
 						if($cantidad<=0){
-							$stock=0;
-							//$status=0;
-							$stock_um=0;
+							$stock        = 0;
+							$stock_um_mov = $data[$i]['stock_um'];
+							$stock_um     = 0;
 						}else{
-							$stock=$cantidad;
-							//$status=1;
-							$stock_um=$this->regla_de_tres($data[$i]['stock'], $data[$i]['stock_um'], $cantidad);
+							$stock    = $cantidad;							
+							$stock_um = $this->regla_de_tres($data[$i]['stock'], $data[$i]['stock_um'], $cantidad);
 							($data[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
 						}
 					}else{
-						//$stock = $data[$i]['stock'];
-						//$stock_um = $data[$i]['stock_um'];
 						$realizar_insert=false;
 					}
 				}
 				if($realizar_insert){
-					$slqData[]=array(
+					$slqData = array(
 									'id_stock'  	  => $data[$i]['id_stock'],
 									'stock_origen'    => $data[$i]['stock'],
 									'stock_um_origen' => $data[$i]['stock_um'],
@@ -479,7 +477,7 @@ class agregar_ajustes extends stock{
 									'timestamp'  	  => $this->timestamp(),
 									'id_usuario' 	  =>$this->session->userdata('id_usuario')
 								);
-					//$insert=$this->db_model->insert($slqData);
+					$insert=$this->db_model->insert($slqData);
 				}
 				
 				 	/*($data_update_stock)?$cont=0:$cont++;

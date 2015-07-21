@@ -63,7 +63,6 @@ class excel extends PHPExcel{
 				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save('php://output');
-				$objWriter->save('php://output');
 				exit;
 			}
 			

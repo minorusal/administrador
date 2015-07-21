@@ -19,7 +19,6 @@ class check_session extends Base_Controller
 					$reload .= "location.reload();";
 					$reload .= "</script>";
 					echo json_encode( $reload );
-					
 					exit;
 				}else{
 					redirect(base_url('login'));

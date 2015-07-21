@@ -1,9 +1,10 @@
 <?php	
-	$lang['fecha_actual']= 'de %s del %s';
-	$lang['timestamp_string'] = 'de %s del %s a las %s hrs.';
-	$lang['lbl_ultima_modificacion']   = 'Ultima modificacion';
-	$lang['lbl_sin_modificacion']      = 'Sin moficiaciones desde su creacion';
-	$lang['val_ultima_modificacion']   = 'Realizada el %s por %s';
+	$lang['close_session']       	= 'Cerrar Sesión';	
+	$lang['fecha_actual']			= 'de %s del %s';
+	$lang['timestamp_string'] 		= 'de %s del %s a las %s hrs.';
+	$lang['lbl_ultima_modificacion']= 'Ultima modificacion';
+	$lang['lbl_sin_modificacion']   = 'Sin moficiaciones desde su creacion';
+	$lang['val_ultima_modificacion']= 'Realizada el %s por %s';
 // Días y meses
 	$lang['lunes']      = 'Lunes';
 	$lang['martes']     = 'Martes';
@@ -97,12 +98,9 @@
 	$lang['ID']			= 'ID';
 	$lang['listado']   = 'listado';
 	$lang['detalle']   = 'detalle';
-
 	$lang['collapse']            = 'Contraer lista';
-$lang['expand']              = 'Expander Lista';
-
-$lang['lbl_fecha_inicio']                = 'Fecha de Inicio';
-	
-	$lang['lbl_fecha_termino']                = 'Fecha de Termino';
+	$lang['expand']              = 'Expander Lista';
+	$lang['lbl_fecha_inicio']    = 'Fecha de Inicio';	
+	$lang['lbl_fecha_termino']   = 'Fecha de Termino';
 
 ?>

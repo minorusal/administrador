@@ -75,7 +75,8 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
-		
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
 		$ext      = ($ext!='.html') ? '': $ext;
 		$uri      = $this->uri->segment_array();
 		$includes = $this->load_scripts($data_includes);
@@ -89,6 +90,7 @@ class Base_Controller extends CI_Controller {
 		$user_root          = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
 		$icon_root          = ($user_root) ? 'fa fa-user-secret' : '';
 
+		$dataheader['site_title'] 	  = $this->vars->cfg['site_title'];
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
 		$dataheader['data_css']       = (!empty($includes)) ? $includes['css'] : '';
 		$dataheader['base_url']       = base_url();
@@ -127,12 +129,15 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
 	public function load_view_unique($view, $data = array(), $autoload = false ,$data_includes = array() ,$ext = '.html'){
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
 		$ext      = ($ext!='.html') ? '': $ext;
 		$includes = $this->load_scripts($data_includes);
 
 		$data['data_js']  = (!empty($includes)) ? $includes['js']  : '';
 		$data['data_css'] = (!empty($includes)) ? $includes['css'] : '';
 		$data['base_url'] = base_url();
+		$data['site_title'] = $this->vars->cfg['site_title'];
 		
 		return $this->parser->parse($view.$ext, $data, $autoload);
 	}
@@ -142,6 +147,8 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
 	public function load_view_login(){
+		$this->vars = new config_vars();
+        $this->vars->load_vars();
 		$att_fopen = array('id' => 'login');
 		$att_hiden = array(
                             'name'    => 'id_user',
@@ -170,6 +177,7 @@ class Base_Controller extends CI_Controller {
 		$data['form_input_pwd']    = form_password($att_pwd, '', 'placeholder="'.$this->lang_item('lang_ph_pwd').'"');
 		$data['form_button']       = form_button($att_btn);
 		$data['form_close']        = form_close();
+		$data['site_title']        = $this->vars->cfg['site_title'];
 		
 		$this->parser->parse('login.html', $data);
 	}

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once('stock.php');
-class agregar_ajustes extends stock{
+class aprobar_ajustes extends stock{
 	/**
 	* Nombre:		Ajustes
 	* Ubicación:	Almacen>Ajustes
@@ -22,7 +22,7 @@ class agregar_ajustes extends stock{
 		$this->vars = new config_vars();
         $this->vars->load_vars();
 		$this->modulo 			= 'almacen';
-		$this->submodulo        = 'agregar_ajustes';
+		$this->submodulo        = 'aprobar_ajustes';
 		$this->seccion          = 'ajustes';
 		$this->icon 			= 'fa fa-wrench'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; //almacen/entradas_recepcion/
@@ -30,9 +30,9 @@ class agregar_ajustes extends stock{
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		$this->tab1 			= 'agregar';
-		$this->tab2 			= 'listado';
-		$this->tab3 			= 'detalle';
+		//$this->tab1 			= 'agregar';
+		$this->tab1 			= 'listado';
+		$this->tab2 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -45,7 +45,6 @@ class agregar_ajustes extends stock{
 		$this->tab_indice 		= array(
 									 $this->tab1
 									,$this->tab2
-									,$this->tab3
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -54,29 +53,26 @@ class agregar_ajustes extends stock{
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
-		$tab_3 	= $this->tab3;
+		//$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) //agregar
 										,$this->lang_item($tab_2) //listado
-										,$this->lang_item($tab_3) //listado
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1            //compras/listado_precios/agregar
-										,$path.$tab_2.'/'.$pagina //compras/listado_precios/listado/pagina
-										,$path.$tab_3            //compras/listado_precios/agregar
+										$path.$tab_1.'/'.$pagina //compras/listado_precios/listado/pagina
+										,$path.$tab_2            //compras/listado_precios/agregar
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 'load_content'
-										,'load_content'
+										'load_content'
 										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+		$config_tab['attr']     = array('', array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -90,7 +86,6 @@ class agregar_ajustes extends stock{
 		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		//$data['modal']            = $this->modal();
 
 		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$js['js'][]  = array('name' => 'numeral', 'dirname' => '');
@@ -185,7 +180,48 @@ class agregar_ajustes extends stock{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
+	public function detalle(){
+		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
+		$detalle  		   = $this->db_model->get_data_unico($id_almacen_ajuste);
+		$view 			   = $this->tab['detalle'];
+		//DATA
+		$accion_id 						 = $detalle[0]['id_almacen_ajuste'];
+		$btn_save          				 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
+		$tabData['articulo']	         = $detalle[0]['articulo'];
+		$tabData['cl_almacen']	         = $detalle[0]['cl_almacen'];
+		$tabData['cl_gaveta']	         = $detalle[0]['cl_gaveta'];
+		$tabData['cl_pasillo']	         = $detalle[0]['cl_pasillo'];
+		$tabData['stock_origen']	     = $detalle[0]['stock_origen'];
+		$tabData['stock_um_origen']      = $detalle[0]['stock_um_origen'];
+		$tabData['stock_mov']	         = $detalle[0]['stock_mov'];
+		$tabData['stock_um_mov']	     = $detalle[0]['stock_um_mov'];
+		$tabData['stock_final']	         = $detalle[0]['stock_final'];
+		$tabData['stock_um_final']	     = $detalle[0]['stock_um_final'];
+		$tabData['cl_um']			     = $detalle[0]['cl_um'];
+		$tabData['button_save']			 = $btn_save;
+		
+		//DIC
+		$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
+		$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
+		$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
+		$tabData['lbl_cl_pasillo']	     = $this->lang_item("cl_pasillo",false);
+		$tabData['lbl_stock_origen']	 = $this->lang_item("stock_origen",false);
+		$tabData['lbl_stock_um_origen']  = $this->lang_item("stock_um_origen",false);
+		$tabData['lbl_stock_mov']	     = $this->lang_item("stock_mov",false);
+		$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
+		$tabData['lbl_stock_final']	     = $this->lang_item("stock_final",false);
+		$tabData['lbl_stock_um_final']	 = $this->lang_item("stock_um_final",false);
+		$tabData['lbl_cl_um']			 = $this->lang_item("cl_um",false);
+		
+		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
+
+		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
+	}
 	public function agregar(){
+		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
+		dump_var($id_almacen_ajuste);
+	}
+	/*public function agregar(){
 		$view = $this->tab['agregar'];
 		$btn_save      = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$listado_almacen=$this->catalogos_model->db_get_data_almacen();
@@ -213,39 +249,7 @@ class agregar_ajustes extends stock{
 			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true,$includes));
 		}
 	}
-	public function detalle(){
-		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
-		$detalle  		   = $this->db_model->get_data_unico($id_almacen_ajuste);
-		$view 			   = $this->tab['detalle'];
-		//DATA
-		$tabData['articulo']	         = $detalle[0]['articulo'];
-		$tabData['cl_almacen']	         = $detalle[0]['cl_almacen'];
-		$tabData['cl_gaveta']	         = $detalle[0]['cl_gaveta'];
-		$tabData['cl_pasillo']	         = $detalle[0]['cl_pasillo'];
-		$tabData['stock_origen']	     = $detalle[0]['stock_origen'];
-		$tabData['stock_um_origen']      = $detalle[0]['stock_um_origen'];
-		$tabData['stock_mov']	         = $detalle[0]['stock_mov'];
-		$tabData['stock_um_mov']	     = $detalle[0]['stock_um_mov'];
-		$tabData['stock_final']	         = $detalle[0]['stock_final'];
-		$tabData['stock_um_final']	     = $detalle[0]['stock_um_final'];
-		$tabData['cl_um']			     = $detalle[0]['cl_um'];
-		//DIC
-		$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
-		$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
-		$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
-		$tabData['lbl_cl_pasillo']	     = $this->lang_item("cl_pasillo",false);
-		$tabData['lbl_stock_origen']	 = $this->lang_item("stock_origen",false);
-		$tabData['lbl_stock_um_origen']  = $this->lang_item("stock_um_origen",false);
-		$tabData['lbl_stock_mov']	     = $this->lang_item("stock_mov",false);
-		$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
-		$tabData['lbl_stock_final']	     = $this->lang_item("stock_final",false);
-		$tabData['lbl_stock_um_final']	 = $this->lang_item("stock_um_final",false);
-		$tabData['lbl_cl_um']			 = $this->lang_item("cl_um",false);
-		
-		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
-
-		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
-	}
+	
 	public function load_stock(){
 		$id_articulo   =  $this->ajax_post('id_articulo');
 		$id_almacen    =  ($this->ajax_post('id_almacen')!=0)?$this->ajax_post('id_almacen'):'';
@@ -514,7 +518,7 @@ class agregar_ajustes extends stock{
 				$this->eliminar_stock_en_cero($delArray);
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));*/
-			}	
+		/*	}	
 			//dump_var($slqData);
 			if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
@@ -524,6 +528,6 @@ class agregar_ajustes extends stock{
 				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 			}	
 		}
-	}
+	}*/
 }
 ?>

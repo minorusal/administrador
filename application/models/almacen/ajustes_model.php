@@ -1,5 +1,6 @@
 <?php
 class ajustes_model extends Base_Model{
+	//AJUsTES AGREGAR
 	public function db_get_data($data=array()){	
 		// DB Info
 		$tbl = $this->tbl;
@@ -240,5 +241,54 @@ class ajustes_model extends Base_Model{
 		$insert = $this->insert_item($tbl['almacen_ajustes'], $data);
 		return $insert;
 	}
+	//AJUSTES APROBAR
+	/*public function db_get_data_aprobar($data=array()){	
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$filtro = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+
+		$filtro = ($filtro!="") ? "and (b.articulo LIKE '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		// Query
+		$query="SELECT 
+				a.id_almacen_ajuste,
+				a.id_stock,
+				a.stock_origen,
+				a.stock_um_origen,
+				a.stock_mov,
+				a.stock_um_mov,
+				a.stock_final,
+				a.stock_um_final,
+				a.id_articulo,
+				a.id_almacen,
+				a.id_pasillo,
+				a.id_gaveta,
+				b.articulo,
+				c.clave_corta as cl_almacen,
+				d.clave_corta as cl_gaveta,
+				e.clave_corta as cl_pasillo,
+				f.clave_corta as cl_um
+				from $tbl[almacen_ajustes] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo=b.id_compras_articulo
+				LEFT JOIN $tbl[almacen_almacenes] c on a.id_almacen=c.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] d on a.id_gaveta=d.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] e on a.id_pasillo=e.id_almacen_pasillos
+				LEFT JOIN $tbl[compras_um] f on b.id_compras_um = f.id_compras_um
+				WHERE a.estatus = 1 AND 1  $filtro
+				ORDER BY a.id_almacen_ajuste ASC
+				$limit";
+		
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}*/
 }
 ?>

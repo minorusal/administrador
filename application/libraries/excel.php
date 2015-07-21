@@ -63,7 +63,6 @@ class excel extends PHPExcel{
 				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 				$objWriter->save('php://output');
-				$objWriter->save('php://output');
 				exit;
 			}
 			
@@ -89,16 +88,39 @@ class excel extends PHPExcel{
 								);
 		return $styleHeaders;
 	}
+	private function defaultStyle_totales(){
+		$styleTotales = array(
+									'alignment' => array(
+												'horizontal' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+									),
+							        'fill' => array(
+							            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+							            'color' => array('rgb' => 'FFFFFF'),
+							        ),
+									'font'  => array(
+									        'bold'  => false,
+									        'color' => array('rgb' => '000000'),
+									        'name'  => 'Verdana'
+									        ),
+									'borders' => array(
+											'style' => PHPExcel_Style_Border::BORDER_THIN
+										)
+								);
+		return $styleTotales;
+	}
 
 	public function receta_generate_xlsx($params = array(), $save = false){
-		
-		$title   = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
-		$items_recetas   = (array_key_exists('items_receta',$params)) ? $params['items_receta'] : false;
-		$headers_receta  = (array_key_exists('headers_receta',$params)) ? $params['headers_receta'] : false;
-		$items_valores   = (array_key_exists('items_valores',$params)) ? $params['items_valores'] : false;
-		$headers_valores = (array_key_exists('headers_valores',$params)) ? $params['headers_valores'] : false;
+		$title               = (array_key_exists('title',$params)) ? $params['title'] : 'IS_XLSX';
+		$items_recetas       = (array_key_exists('items_receta',$params)) ? $params['items_receta'] : false;
+		$headers_receta      = (array_key_exists('headers_receta',$params)) ? $params['headers_receta'] : false;
+		$items_valores       = (array_key_exists('items_valores',$params)) ? $params['items_valores'] : false;
+		$headers_valores     = (array_key_exists('headers_valores',$params)) ? $params['headers_valores'] : false;
+		$headers_costo_total = (array_key_exists('headers_costo_total',$params)) ? $params['headers_costo_total'] : false;
+		$items_costo_total   = (array_key_exists('items_costo_total',$params)) ? $params['items_costo_total'] : false;
+		$preparacion         = (array_key_exists('preparacion',$params)) ? $params['preparacion'] : false;
 		
 		if($items_recetas && $headers_receta && $items_valores && $headers_valores){
+		//if($items_valores && $headers_valores){
 
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->getProperties()->setCreator("IS Intelligent Solution")
@@ -118,17 +140,16 @@ class excel extends PHPExcel{
 			$countHeadersReceta = count($params['headers_receta'])+64;
 			$columnReceta       = chr($countHeadersReceta).'3';
 
-			$countHeadersValor = count($params['headers_valores'])+64;
-			$columnValor       = chr($countHeadersValor).'3';
-
+			$total_valores = (count($params['items_valores']));
+			$inicio_total  = 'D'.(count($params['items_valores'])+7);
+			$unidad_total  = 'D'.(count($params['items_valores'])+6);
+			//print_debug($inicio_total);
+			
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setName('Candara');
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(22);
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setUnderline(PHPExcel_Style_Font::UNDERLINE_SINGLE);
 			$objPHPExcel->getActiveSheet()->getStyle("A1:".chr($countHeadersReceta).'1')->applyFromArray($this->defaultStyle_headers());
-
-			//$objPHPExcel->getActiveSheet()->getStyle("A6:".chr($countHeadersValor).'1')->applyFromArray($this->defaultStyle_headers());
-			//$objPHPExcel->getActiveSheet()->getStyle("A6:".chr($countHeaders).'1')->applyFromArray($this->defaultStyle_headers());
 
 			$objPHPExcel->getActiveSheet()->setCellValue('C1', $title);
 	        $objPHPExcel->setActiveSheetIndex(0);
@@ -137,25 +158,51 @@ class excel extends PHPExcel{
 	      	$objPHPExcel->getActiveSheet()->getStyle("A3:$columnReceta")->applyFromArray($this->defaultStyle_headers());
 
 	      	$objPHPExcel->getActiveSheet()->fromArray($params['headers_valores'], null, 'A6');
-	      	$objPHPExcel->getActiveSheet()->getStyle("A6:$columnValor")->applyFromArray($this->defaultStyle_headers());
+	      	$objPHPExcel->getActiveSheet()->getStyle("A6:AC6")->applyFromArray($this->defaultStyle_headers());
 	      	
-	       foreach(range('A',$columnReceta) as $columnID) {
-	       	//print_debug(range('A',$column));
+	        foreach(range('A',$columnReceta) as $columnID) {
 			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
-
-			foreach(range('A',$columnValor) as $columnID) {
-	       	//print_debug(range('A',$column));
-			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			
+			for ($i="A" ; $i!="AE" ; $i++) { 
+    			$objPHPExcel->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
 			}
 
-			//$objPHPExcel->getActiveSheet()->getColumnDimension('f4')->setAutoSize(true);
+			foreach(range('A',$columnReceta) as $columnID) {
+			    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			} 			
 	      	
 	      	$items = $objPHPExcel->getActiveSheet()->fromArray($params['items_receta'], null, 'A4'); 
 			$objPHPExcel->setActiveSheetIndex(0);
 
 			$items = $objPHPExcel->getActiveSheet()->fromArray($params['items_valores'], null, 'A7'); 
 			$objPHPExcel->setActiveSheetIndex(0);
+
+			for($i='E';$i!='AD';$i++){
+				$objPHPExcel->getActiveSheet()->mergeCells('K'.(count($params['items_valores'])+9).':O'.(count($params['items_valores'])+9));
+				$objPHPExcel->getActiveSheet()->mergeCells('K'.(count($params['items_valores'])+7).':O'.(count($params['items_valores'])+7));
+				$objPHPExcel->getActiveSheet()->setCellValue('K'.(count($params['items_valores'])+7), 'Totales Nutricionales');
+				$objPHPExcel->getActiveSheet()->setCellValue('K'.(count($params['items_valores'])+9), 'Total Nutricional por Porción');
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.(count($params['items_valores'])+7), 'Costo Total $');
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.(count($params['items_valores'])+9), 'Costo Porción $');
+				$objPHPExcel->getActiveSheet()->getStyle($i.(count($params['items_valores'])+7).':'.$i.(count($params['items_valores'])+7))->applyFromArray($this->defaultStyle_headers());
+				$objPHPExcel->getActiveSheet()->getStyle($i.(count($params['items_valores'])+9).':'.$i.(count($params['items_valores'])+9))->applyFromArray($this->defaultStyle_headers());
+				$objPHPExcel->getActiveSheet()->setCellValue($i.(count($params['items_valores'])+8),'=SUM('.$i.'7:'.$i.(count($params['items_valores'])+7).')');
+				$objPHPExcel->getActiveSheet()->setCellValue($i.(count($params['items_valores'])+10),'=('.$i.(count($params['items_valores'])+8).'/100)');
+
+				
+				$objPHPExcel->setActiveSheetIndex(0);
+			}
+
+			$objPHPExcel->getActiveSheet()->getStyle('A'.(count($params['items_valores'])+12).':O'.(count($params['items_valores'])+12))->applyFromArray($this->defaultStyle_headers());
+			$objPHPExcel->getActiveSheet()->mergeCells('A'.(count($params['items_valores'])+12).':O'.(count($params['items_valores'])+12));
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.(count($params['items_valores'])+12), 'PREPARACIÓN');
+			$objPHPExcel->setActiveSheetIndex(0);
+
+			
+			$objPHPExcel->getActiveSheet()->mergeCells('A'.(count($params['items_valores'])+13).':O'.(count($params['items_valores'])+13));
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.(count($params['items_valores'])+13),$params['preparacion'][0][0]); 
+			$objPHPExcel->setActiveSheetIndex(0);			
 				
 			if($save){
 				$pathfile  = 'assets/docs/'.$title.'.xlsx';
@@ -167,7 +214,6 @@ class excel extends PHPExcel{
 				header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 				header('Content-Disposition: attachment;filename="'.$title.'.xlsx"');
 				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-				$objWriter->save('php://output');
 				$objWriter->save('php://output');
 				exit;
 			}

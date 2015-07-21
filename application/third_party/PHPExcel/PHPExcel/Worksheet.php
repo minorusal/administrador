@@ -2403,23 +2403,27 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
                 foreach($rowData as $cellValue) {
                     $this->getStyle($currentColumn . $startRow)->applyFromArray($this->arrayItems);
                     if ($strictNullComparison) {
-                        if ($cellValue !== $nullValue) {
+                        if ($cellValue !== $nullValue){
                             // Set cell value
                             $this->getCell($currentColumn . $startRow)->setValue($cellValue);
                         }
                     } else {
-                        if ($cellValue != $nullValue) {
+                        if($cellValue != $nullValue){
                             // Set cell value
                             $this->getCell($currentColumn . $startRow)->setValue($cellValue);
+                            //
                         }
                     }
                     ++$currentColumn;
                 }
                 ++$startRow;
             }
+
+           
         } else {
             throw new PHPExcel_Exception("Parameter \$source should be an array.");
         }
+       // print_debug($startRow);
         return $this;
     }
 

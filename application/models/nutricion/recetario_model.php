@@ -74,15 +74,17 @@ class recetario_model extends Base_Model{
 									s.sucursal like '%$filtro%')" : "";
 		$limit  = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query  = "	SELECT 
-						f.familia
+						 f.familia
 						,f.id_nutricion_familia
 						,r.*
 						,ca.*
 						,ri.id_compras_articulo
+						,ca.clave_corta as clave_articulo
 						,ri.porciones as porciones_articulo
 						,ca.articulo
 						,ap.costo_x_um
 						,cu.um
+						,cu.clave_corta as cv_um
 						,s.id_sucursal
 						,s.sucursal
 						,vn.*

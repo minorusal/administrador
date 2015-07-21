@@ -33,6 +33,7 @@ class recetario extends Base_Controller{
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
+
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
@@ -62,9 +63,11 @@ class recetario extends Base_Controller{
 		
 		return $config_tab;
 	}
+
 	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
+
 	public function index(){
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();
@@ -76,6 +79,7 @@ class recetario extends Base_Controller{
 		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
+
 	public function listado($offset=0){
 		//$detalle = $this->db_model->get_data_receta_vnutricion(1);
 		// Crea tabla con listado de elementos capturados 
@@ -153,6 +157,7 @@ class recetario extends Base_Controller{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
+
 	public function agregar(){
 		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
 		$sqlData = array(
@@ -217,6 +222,7 @@ class recetario extends Base_Controller{
 			return $this->load_view_unique($seccion, $tab_1, true);
 		}
 	}
+
 	public function insert(){
 		$objData  	= $this->ajax_post('objData');
 		
@@ -265,6 +271,7 @@ class recetario extends Base_Controller{
 			}
 		}	
 	}
+
 	public function detalle(){
 		$id_receta  = $this->ajax_post('id_receta');
 		$cantidades = '';
@@ -419,6 +426,7 @@ class recetario extends Base_Controller{
 			return $this->load_view_unique($seccion, $tab_3, true);
 		}
 	}
+
 	public function update(){
 		
 		$objData  	= $this->ajax_post('objData');
@@ -471,6 +479,7 @@ class recetario extends Base_Controller{
 			}
 		}	
 	}
+
 	public function detalle_articulo(){
 		$id_articulo = $this->ajax_post('id_articulo');
 
@@ -488,6 +497,7 @@ class recetario extends Base_Controller{
 	            </p>";
 		echo json_encode($data);
 	}
+
 	public function att_addon($campo, $value= ''){
 		return $att = array(
                             'data-campo'    => $campo,
@@ -497,6 +507,7 @@ class recetario extends Base_Controller{
                             'value'         => $value
                         );  
 	}
+
 	public function export_rexlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$receta = $this->db_model->get_data_receta($filtro);
@@ -506,20 +517,21 @@ class recetario extends Base_Controller{
 							,$value['clave_receta']
 							,$value['sucursal']
 							,$value['porciones']
-							,$value['preparacion']
+							//,$value['preparacion']
 							,$value['familia']
 					);
 			}
-			//print_debug($set_general_receta);
 			$set_heading_receta = array(
 						 $this->lang_item("lbl_receta")
-						,$this->lang_item("lbl_clave_receta")
+						,$this->lang_item("lbl_clave_corta")
 						,$this->lang_item("lbl_sucursal")
 						,$this->lang_item("lbl_porciones")
-						,$this->lang_item("lbl_preparacion")
+						//,$this->lang_item("lbl_preparacion")
 						,$this->lang_item("lbl_familia")
 			);
-		//print_debug($set_general);
+
+			$set_preparacion[] = array($value['preparacion']);
+		
 		$sqlData    = array(
 							 'buscar'        => false
 							,'offset' 		 => false
@@ -530,8 +542,14 @@ class recetario extends Base_Controller{
 		$contenido = $this->db_model->get_data_receta_vnutricion($sqlData);
 		
 		foreach($contenido as  $value){
-			$set_valores[] = array(
-				$value['articulo']
+			//print_debug($value);
+			$costo_total = $value['costo_x_um']*$value['porciones_articulo'];
+			$set_valores_nutricionales[] = array(
+				 $value['clave_articulo']
+				,$value['articulo']
+				,$value['porciones_articulo'].' '.$value['cv_um']
+			    ,$value['costo_x_um']
+			    ,$costo_total
 				,$value['cantidad_sugerida']
 				,$value['peso_bruto']
 				,$value['peso_neto']
@@ -554,13 +572,17 @@ class recetario extends Base_Controller{
 				,$value['fosforo']
 				,$value['colesterol']
 				,$value['ag_saturados']
-				 ,$value['ag_mono']
-				 ,$value['ag_poli']
+				,$value['ag_mono']
+				,$value['ag_poli']
 				);
 		}
-		//print_debug($set_data);
-		$set_heading_valores = array(
-			 $this->lang_item("lbl_articulo")
+		
+		$set_heading_valores_nutricionales = array(
+			 $this->lang_item('lbl_clave_articulo')
+			,$this->lang_item("lbl_articulo")
+			,$this->lang_item('lbl_cantidad')
+			,$this->lang_item('lbl_costo_x_um')
+			,$this->lang_item('lbl_total')
 			,$this->lang_item("lbl_cantidad_sugerida")
 			,$this->lang_item("lbl_peso_bruto")
 			,$this->lang_item("lbl_peso_neto")
@@ -586,11 +608,20 @@ class recetario extends Base_Controller{
 			,$this->lang_item("lbl_ag_mono")
 			,$this->lang_item("lbl_ag_poli")
 			);
-		$params = array(	'title'           => $this->lang_item("Ficha Tecnica"),
-							'items_receta'    => $set_general_receta,
-							'headers_receta'  => $set_heading_receta,
-							'items_valores'   => $set_valores,
-							'headers_valores' => $set_heading_valores
+		$set_items_costo_total[] = array(
+					$costo_total = $value['costo_x_um']+$value['porciones_articulo']
+					);
+		$set_heading_costo_total = array(
+							$this->lang_item('lbl_costo_total')
+			);
+		$params = array(	'title'                => $this->lang_item("Ficha Tecnica"),
+							'items_receta'         => $set_general_receta,
+							'headers_receta'       => $set_heading_receta,
+							'items_valores'        => $set_valores_nutricionales,
+							'headers_valores'      => $set_heading_valores_nutricionales,
+							'headers_costo_total'  => $set_heading_costo_total,
+							'items_costo_total'    => $set_items_costo_total,
+							'preparacion'		   => $set_preparacion
 						);
 		$this->excel->receta_generate_xlsx($params);
 	}
@@ -640,4 +671,3 @@ class recetario extends Base_Controller{
 
 
 }
-

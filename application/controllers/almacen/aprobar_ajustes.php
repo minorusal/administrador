@@ -34,6 +34,7 @@ class aprobar_ajustes extends stock{
 		$this->tab1 			= 'listado';
 		$this->tab2 			= 'detalle';
 		$this->tab3 			= 'listado_afectado';
+		//$this->tab3 			= 'listado_afectado_lineas';
 		
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
@@ -232,7 +233,9 @@ class aprobar_ajustes extends stock{
 		$stock_um_mov 	   = $this->ajax_post('stock_um_mov');
 		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
 		$view 			   = $this->tab['listado_afectado'];
-		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
+		$view_lineas 	   = 'listado_afectado_lineas';
+		$uri_view  		   = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
+		$uri_view_lineas   = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view_lineas;
 		
 		$sqlData=array(
 					'id_almacen'  => $id_almacen,
@@ -310,31 +313,36 @@ class aprobar_ajustes extends stock{
 				//tabla a mostrar
 				//DATA
 				$tabData['articulo'] = $articulo_detalle[$i]['articulo'];
-				$tabData['almacen'] = $articulo_detalle[$i]['almacenes'];
+				$tabData['almacen']  = $articulo_detalle[$i]['almacenes'];
 				$tabData['pasillo']  = $articulo_detalle[$i]['pasillos'];
 				$tabData['gaveta']   = $articulo_detalle[$i]['gavetas'];
-				//$tabData['cl_um'] 	  = $articulo_detalle[$i]['clave_corta'];
+				$tabData['cl_um'] 	 = $articulo_detalle[$i]['clave_corta'];
+				$tabData['stock'] 	 = $articulo_detalle[$i]['stock'];
+				$tabData['stock_um'] = $articulo_detalle[$i]['stock_um'];
+				
 				//DIC
-				$tabData['lbl_articulo']	= $this->lang_item("articulo",false);
-				$tabData['lbl_cl_almacen']	= $this->lang_item("cl_almacen",false);
-				$tabData['lbl_cl_gaveta']	= $this->lang_item("cl_gaveta",false);
-				$tabData['lbl_cl_pasillo']	= $this->lang_item("cl_pasillo",false);
-
-				$rtable[]=$this->load_view_unique($uri_view ,$tabData, true);
+				$rtable[]=$this->load_view_unique($uri_view_lineas ,$tabData, true);
 			}
-
 		}
+		//dump_var($rtable);
+		$tabData['lbl_articulo']	= $this->lang_item("articulo",false);
+		$tabData['lbl_cl_almacen']	= $this->lang_item("cl_almacen",false);
+		$tabData['lbl_cl_gaveta']	= $this->lang_item("cl_gaveta",false);
+		$tabData['lbl_cl_pasillo']	= $this->lang_item("cl_pasillo",false);
+
+		$tabData['lineas']   = implode('', $rtable);
+		$data = $this->load_view_unique($uri_view ,$tabData, true);
+
 		$slqDataajuste = array(
 									'id_almacen_ajuste' => $id_almacen_ajuste,
 									'estatus'      	  	=> 2,//ajuste aprobado
 									'edit_timestamp'  	=> $this->timestamp(),
 									'edit_id_usuario' 	=> $this->session->userdata('id_usuario')
 								);
-//		echo json_encode($rtable);
 		$insert=1;
 		if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $rtable ));
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));
 			}else{
 				$msg = $this->lang_item("msg_campos_obligatorios",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );

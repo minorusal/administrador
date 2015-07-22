@@ -33,6 +33,8 @@ class aprobar_ajustes extends stock{
 		//$this->tab1 			= 'agregar';
 		$this->tab1 			= 'listado';
 		$this->tab2 			= 'detalle';
+		$this->tab3 			= 'listado_afectado';
+		
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -45,6 +47,7 @@ class aprobar_ajustes extends stock{
 		$this->tab_indice 		= array(
 									 $this->tab1
 									,$this->tab2
+									,$this->tab3
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -53,26 +56,29 @@ class aprobar_ajustes extends stock{
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
-		//$tab_3 	= $this->tab3;
+		$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) //agregar
 										,$this->lang_item($tab_2) //listado
+										,$this->lang_item($tab_3) //listado_afectado
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										$path.$tab_1.'/'.$pagina //compras/listado_precios/listado/pagina
-										,$path.$tab_2            //compras/listado_precios/agregar
+										$path.$tab_1.'/'.$pagina //almacen/ajustes/listado/pagina
+										,$path.$tab_2            //almacen/ajustes/agregar
+										,$path.$tab_3            //almacen/ajustes/listado_afectado
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
 										'load_content'
 										,''
+										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('', array('style' => 'display:none'));
+		$config_tab['attr']     = array('', array('style' => 'display:none'), array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -173,18 +179,73 @@ class aprobar_ajustes extends stock{
 		$id_gaveta     =  ($detalle[0]['id_gaveta']!=0)?$detalle[0]['id_gaveta']:'';
 		$stock_mov     =   $detalle[0]['stock_mov'];
 		$stock_um_mov  =   $detalle[0]['stock_um_mov'];
-
 		$sqlData=array(
 					'id_almacen'  => $id_almacen,
 					'id_pasillo'  => $id_pasillo,
 					'id_gaveta'   => $id_gaveta,
 					'id_articulo' => $id_articulo
 				);
+
 		$articulo_detalle = $this->db_model->get_data_stock($sqlData);
+		$stock_total    = 0;
+		$stock_um_total = 0;
+		for($i=0;count($articulo_detalle)>$i;$i++){
+			$stock_total   	= $stock_total + $articulo_detalle[$i]['stock'];
+			$stock_um_total = $stock_um_total + $articulo_detalle[$i]['stock_um'];
+		}
+		$accion_id				 	= $detalle[0]['id_almacen_ajuste'];
+		$btn_save       		 	= form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
+		$tabData['stock_total']	    = $stock_total;
+		$tabData['stock_um_total']	= $stock_um_total;
+		$tabData['stock_mov']	    = $stock_mov;
+		$tabData['stock_um_mov']	= $stock_um_mov;
+		$tabData['articulo']	 	= $detalle[0]['articulo'];
+		$tabData['cl_almacen']	 	= $detalle[0]['cl_almacen'];
+		$tabData['cl_gaveta']	 	= $detalle[0]['cl_gaveta'];
+		$tabData['cl_pasillo']	 	= $detalle[0]['cl_pasillo'];
+		$tabData['cl_um']			= $detalle[0]['cl_um'];
+		$tabData['id_articulo'] 	= $id_articulo;
+		$tabData['id_almacen'] 		= $id_almacen;
+		$tabData['id_pasillo'] 		= $id_pasillo;
+		$tabData['id_gaveta'] 		= $id_gaveta;
+		
+		
+		
+		$tabData['button_save']     = $btn_save;
+		//DIC
+		$tabData['lbl_articulo']	= $this->lang_item("articulo",false);
+		$tabData['lbl_cl_almacen']	= $this->lang_item("cl_almacen",false);
+		$tabData['lbl_cl_gaveta']	= $this->lang_item("cl_gaveta",false);
+		$tabData['lbl_cl_pasillo']	= $this->lang_item("cl_pasillo",false);
+		$tabData['lbl_stock']	    = $this->lang_item("lbl_stock",false);
+		$tabData['lbl_stock_um']	= $this->lang_item("lbl_stock_um",false);
+		$tabData['lbl_cl_um']		= $this->lang_item("cl_um",false);
+
+		echo json_encode($this->load_view_unique($uri_view ,$tabData, true));
+	}
+	public function agregar(){
+		$id_articulo  	   = $this->ajax_post('id_articulo');
+		$id_almacen   	   = $this->ajax_post('id_almacen');
+		$id_pasillo   	   = $this->ajax_post('id_pasillo');
+		$id_gaveta    	   = $this->ajax_post('id_gaveta');
+		$stock_mov 	  	   = $this->ajax_post('stock_mov');
+		$stock_um_mov 	   = $this->ajax_post('stock_um_mov');
+		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
+		$view 			   = $this->tab['listado_afectado'];
+		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
+		
+		$sqlData=array(
+					'id_almacen'  => $id_almacen,
+					'id_pasillo'  => $id_pasillo,
+					'id_gaveta'   => $id_gaveta,
+					'id_articulo' => $id_articulo
+				);
+
+		$articulo_detalle  = $this->db_model->get_data_stock($sqlData);
 		for($i=0;count($articulo_detalle)>$i;$i++){
 			$muestra_tabla = true;
 			if($i==0){
-				$cantidad = $articulo_detalle[$i]['stock']-$stock_mov;
+				$cantidad  = $articulo_detalle[$i]['stock']-$stock_mov;
 				if($cantidad<=0){
 					$stock    = 0;
 					$stock_um = 0;
@@ -195,11 +256,11 @@ class aprobar_ajustes extends stock{
 				}
 			}else{
 				if($cantidad<=0){
-					$cantidad  = $cantidad*-1;
-					$stock_mov = $cantidad;
-					$cantidad  = $articulo_detalle[$i]['stock']-$cantidad;
-					$stock_um  = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
-					$stock_um_mov=$stock_um;
+					$cantidad  	  = $cantidad*-1;
+					$stock_mov 	  = $cantidad;
+					$cantidad  	  = $articulo_detalle[$i]['stock']-$cantidad;
+					$stock_um  	  = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
+					$stock_um_mov = $stock_um;
 					if($cantidad<=0){
 						$stock        = 0;
 						$stock_um_mov = $articulo_detalle[$i]['stock_um'];
@@ -210,74 +271,75 @@ class aprobar_ajustes extends stock{
 						($articulo_detalle[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
 					}
 				}else{
-					$muestra_tabla=false;
+					$muestra_tabla = false;
 				}
 			}
 			if($muestra_tabla){
-				/*$slqData[] = array(
-								'id_stock'  	  => $articulo_detalle[$i]['id_stock'],
-								'stock_origen'    => $articulo_detalle[$i]['stock'],
-								'stock_um_origen' => $articulo_detalle[$i]['stock_um'],
-								'stock_mov'  	  => $stock_mov,
-								'stock_um_mov'    => $stock_um_mov,
-								'stock_final'  	  => $stock,
-								'stock_um_final'  => $stock_um,
-								'id_articulo'     => $id_articulo,
-								'id_almacen'      => $id_almacen,
-								'id_pasillo'      => $id_pasillo,
-								'id_gaveta'       => $id_gaveta,
-								'estatus'         => 1,//en espera de aprobacion 
-								'timestamp'  	  => $this->timestamp(),
-								'id_usuario' 	  =>$this->session->userdata('id_usuario')
-							);*/
+				if($stock==0){
+					$id_estatus=0;
+				}else{
+					$id_estatus=1;
+				}
+				$slqDatastock = array(
+									'id_stock'        => $articulo_detalle[$i]['id_stock'],
+									'stock'  	      => $stock,
+									'stock_um'        => $stock_um,
+									'activo'      	  => $id_estatus,
+									'edit_timestamp'  => $this->timestamp(),
+									'edit_id_usuario' => $this->session->userdata('id_usuario')
+								);
+				$slqDatastockLogs = array(
+								'id_accion'  					 => 4,//Ajuste
+								'id_stock'  					 => $articulo_detalle[$i]['id_stock'],
+								'id_compras_orden_articulo'  	 => $articulo_detalle[$i]['id_compras_orden_articulo'],
+								'id_almacen_entradas_recepcion'  => $articulo_detalle[$i]['id_almacen_entradas_recepcion'],
+								'id_articulo_tipo'  			 => $articulo_detalle[$i]['id_articulo_tipo'],
+								'id_almacen_origen'  			 => $id_almacen,
+								'id_pasillo_origen'  			 => $id_pasillo,
+								'id_gaveta_origen'  			 => $id_gaveta,
+								'stock_origen'  				 => $articulo_detalle[$i]['stock'],
+								'stock_um_origen'  				 => $articulo_detalle[$i]['stock_um'],
+								'id_almacen_destino'  			 => $id_almacen,
+								'id_pasillo_destino'  			 => $id_pasillo,
+								'id_gaveta_destino'  			 => $id_gaveta,
+								'stock_destino'  				 => $stock,
+								'stock_um_destino'  			 => $stock_um,
+								'lote'  						 => $articulo_detalle[$i]['lote'],
+								'caducidad'  				     => $articulo_detalle[$i]['caducidad']
+							);
+				//tabla a mostrar
+				//DATA
+				$tabData['articulo'] = $articulo_detalle[$i]['articulo'];
+				$tabData['almacen'] = $articulo_detalle[$i]['almacenes'];
+				$tabData['pasillo']  = $articulo_detalle[$i]['pasillos'];
+				$tabData['gaveta']   = $articulo_detalle[$i]['gavetas'];
+				//$tabData['cl_um'] 	  = $articulo_detalle[$i]['clave_corta'];
+				//DIC
+				$tabData['lbl_articulo']	= $this->lang_item("articulo",false);
+				$tabData['lbl_cl_almacen']	= $this->lang_item("cl_almacen",false);
+				$tabData['lbl_cl_gaveta']	= $this->lang_item("cl_gaveta",false);
+				$tabData['lbl_cl_pasillo']	= $this->lang_item("cl_pasillo",false);
 
-					//DATA
-					$accion_id				 = $detalle[0]['id_almacen_ajuste'];
-					$btn_save       		 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
-					$tabData['articulo']	 = $detalle[0]['articulo'];
-					$tabData['cl_almacen']	 = $detalle[0]['cl_almacen'];
-					$tabData['cl_gaveta']	 = $detalle[0]['cl_gaveta'];
-					$tabData['cl_pasillo']	 = $detalle[0]['cl_pasillo'];
-
-					$tabData['origen_stock']	     = $articulo_detalle[$i]['stock'];
-					$tabData['origen_stock_um']	 	 = $articulo_detalle[$i]['stock_um'];
-					$tabData['origen_almacenes']	 = $articulo_detalle[$i]['almacenes'];
-					$tabData['origen_gavetas']	   	 = $articulo_detalle[$i]['gavetas'];
-					$tabData['origen_pasillos']	 	 = $articulo_detalle[$i]['pasillos'];
-					$tabData['origen_articulo']	 	 = $articulo_detalle[$i]['articulo'];
-					
-					$tabData['stock_mov']	         = $stock_mov;
-					$tabData['stock_um_mov']	     = $stock_um_mov;
-					$tabData['cl_um']			     = $detalle[0]['cl_um'];
-					
-					/*if($i==0){
-						$stock_total_1	 =  $articulo_detalle[$i]['stock'];
-						$final=false;
-					}else{
-						$stock_total_2	 =    $articulo_detalle[$i]['stock'] + $tabData['stock_total'];
-						$final=true;
-					}*/
-					//($final)?$tabData['stock_total']=$stock_total_2:$tabData['stock_total']=$stock_total_1;
-					
-					//DIC
-					$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
-					$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
-					$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
-					$tabData['lbl_cl_pasillo']	     = $this->lang_item("cl_pasillo",false);
-					$tabData['lbl_stock']	     	 = $this->lang_item("lbl_stock",false);
-					$tabData['lbl_stock_um']	 	 = $this->lang_item("lbl_stock_um",false);
-					$tabData['lbl_cl_um']			 = $this->lang_item("cl_um",false);
-					
-					($i==count($articulo_detalle)-2)?$tabData['button_save']= $btn_save:$tabData['button_save']='';
-					$rtable[]=$this->load_view_unique($uri_view ,$tabData, true);
+				$rtable[]=$this->load_view_unique($uri_view ,$tabData, true);
 			}
+
 		}
-		echo json_encode( $rtable);
-		//dump_var($detalle);
-	}
-	public function agregar(){
-		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
-		dump_var($id_almacen_ajuste);
+		$slqDataajuste = array(
+									'id_almacen_ajuste' => $id_almacen_ajuste,
+									'estatus'      	  	=> 2,//ajuste aprobado
+									'edit_timestamp'  	=> $this->timestamp(),
+									'edit_id_usuario' 	=> $this->session->userdata('id_usuario')
+								);
+//		echo json_encode($rtable);
+		$insert=1;
+		if($insert){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $rtable ));
+			}else{
+				$msg = $this->lang_item("msg_campos_obligatorios",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
+			}
+		//dump_var($articulo_detalle);
 	}
 }
 ?>

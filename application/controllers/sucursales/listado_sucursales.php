@@ -1,8 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-class sucursales extends Base_Controller{
+class listado_sucursales extends Base_Controller{
 	private $modulo;
-	private $submodulo;
 	private $seccion;
 	private $view_content;
 	private $path;
@@ -13,13 +11,12 @@ class sucursales extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'sucursales';
-		$this->seccion          = 'sucursales';
+		$this->modulo 			= 'sucursales';
+		$this->seccion          = 'listado_sucursales';
 		$this->icon 			= 'fa fa-sitemap'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/sucursales
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 10;
+		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -32,6 +29,7 @@ class sucursales extends Base_Controller{
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
+
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
@@ -40,15 +38,15 @@ class sucursales extends Base_Controller{
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
-										 $this->lang_item($tab_1) #agregar
-										,$this->lang_item($tab_2) #listado
-										,$this->lang_item($tab_3) #detalle
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1             #administracion/sucursales/agregar
-										,$path.$tab_2.'/'.$pagina #administracion/sucursales/listado
-										,$tab_3                   #detalle
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -69,12 +67,13 @@ class sucursales extends Base_Controller{
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['titulo_seccion']   = $this->lang_item('lbl_seccion');
+		$data['titulo_modulo']    = $this->lang_item('lbl_submodulo');
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		//print_debug($js);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
@@ -96,10 +95,8 @@ class sucursales extends Base_Controller{
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-		if($total_rows)
-		{
-			foreach ($list_content as $value)
-			{
+		if($total_rows){
+			foreach ($list_content as $value){
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
@@ -118,13 +115,13 @@ class sucursales extends Base_Controller{
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("id"),
-										$this->lang_item("sucursal"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("rfc"),
-										$this->lang_item("región"),
-										$this->lang_item("rs"),
-										$this->lang_item("direccion"));
+			$this->table->set_heading(	$this->lang_item("lbl_id"),
+										$this->lang_item("lbl_sucursal"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_rfc"),
+										$this->lang_item("lbl_region"),
+										$this->lang_item("lbl_rs"),
+										$this->lang_item("lbl_direccion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -132,9 +129,7 @@ class sucursales extends Base_Controller{
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
-		}
-		else
-		{
+		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
@@ -144,18 +139,14 @@ class sucursales extends Base_Controller{
 		$tabData['export']    = button_tpl($buttonTPL);
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
 
-	public function detalle()
-	{
+	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
 		$seccion 	                 = 'detalle';
@@ -217,14 +208,11 @@ class sucursales extends Base_Controller{
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 
-        if($detalle[0]['edit_id_usuario'])
-        {
+        if($detalle[0]['edit_id_usuario']){
         	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
         	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
-        }
-        else
-        {
+        }else{
         	$usuario_name = '';
     		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
         }
@@ -233,7 +221,7 @@ class sucursales extends Base_Controller{
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
       	$tabData['usuario_registro']	= $usuario_name;
         									   #administracion/catalogos/sucursales/sucursales_detalle	
-		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/listado_sucursales_detalle';
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
@@ -270,7 +258,7 @@ class sucursales extends Base_Controller{
 
 	public function agregar()
 	{							
-		$seccion       = $this->modulo.'/'.$this->seccion.'/sucursales_save';
+		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_sucursales_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
@@ -394,4 +382,4 @@ class sucursales extends Base_Controller{
 		
 		$this->excel->generate_xlsx($params);
 	}
-} 
+}

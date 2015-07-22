@@ -10,7 +10,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/empresa/insert",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

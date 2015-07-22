@@ -79,7 +79,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/entidades/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -116,7 +116,7 @@ function agregar(){
 		type: 'POST',
 		url: path()+'administracion/entidades/insert_entidad',
 		dataType: 'json',
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

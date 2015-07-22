@@ -111,6 +111,9 @@ class recetario extends Base_Controller{
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_receta'].')'
 						);
+				$btn_acciones['excel'] 		= '<span id="ico-detalle" style="cursor:pointer;"> <a href='.base_url($this->path.'export_rexlsx?filtro='.base64_encode($value['id_nutricion_receta'])).' class="iconsweets-excel" style="color:blue;" title="'.$this->lang_item("reporte").'"></a></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				
 				// Datos para tabla
 				$tbl_data[] = array('id'           => $value['id_nutricion_receta'],
 									'receta'       => tool_tips_tpl($value['receta'], $this->lang_item("tool_tip"), 'right' , $atrr),
@@ -118,7 +121,8 @@ class recetario extends Base_Controller{
 									'sucursal'     => $value['sucursal'],
 									'porciones'    => $value['porciones'],
 									'familia'      => $value['familia'],
-									'preparacion'  => $value['preparacion']
+									'preparacion'  => $value['preparacion'],
+									'acciones'	   => $acciones
 									
 									);
 			}
@@ -131,7 +135,8 @@ class recetario extends Base_Controller{
 										$this->lang_item("lbl_sucursal"),
 										$this->lang_item("lbl_porciones"),
 										$this->lang_item("lbl_familia"),
-										$this->lang_item("lbl_preparacion")
+										$this->lang_item("lbl_preparacion"),
+										$this->lang_item("lbl_acciones")
 										);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -365,13 +370,13 @@ class recetario extends Base_Controller{
 							);
 		$list_insumos  = multi_dropdown_tpl($insumos);
 		$btn_save      = form_button(array('class'=>'btn btn-primary', 'name'=>'update_receta', 'onclick'=>'actualizar()','content'=>$this->lang_item("btn_guardar")));
-		$buttonTPL     = array( 'text'   => $this->lang_item("btn_xlsx"), 
+		/*$buttonTPL     = array( 'text'   => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_rexlsx?filtro='.base64_encode($id_receta))
-								);
+								);*/
 		
 		$tab_3['filtro']                   = (isset($id_receta) && $id_receta!="") ? sprintf($this->lang_item("msg_query_search",false),array() , $id_receta) : ""; 
-		$tab_3['export']                   = button_tpl($buttonTPL);
+		//$tab_3['export']                   = button_tpl($buttonTPL);
 		$tab_3['id_receta']                = $id_nutricion_receta;
 		$tab_3['lbl_receta']               = $this->lang_item('lbl_receta');
 		$tab_3['lbl_clave_corta']          = $this->lang_item('lbl_clave_corta');
@@ -542,38 +547,37 @@ class recetario extends Base_Controller{
 		$contenido = $this->db_model->get_data_receta_vnutricion($sqlData);
 		
 		foreach($contenido as  $value){
-			//print_debug($value);
 			$costo_total = $value['costo_x_um']*$value['porciones_articulo'];
 			$set_valores_nutricionales[] = array(
-				 $value['clave_articulo']
-				,$value['articulo']
-				,$value['porciones_articulo'].' '.$value['cv_um']
-			    ,$value['costo_x_um']
-			    ,$costo_total
-				,$value['cantidad_sugerida']
-				,$value['peso_bruto']
-				,$value['peso_neto']
-				,$value['energia']
-				,$value['proteina']
-				,$value['lipidos']
-				,$value['hidratos_carbono']
-				,$value['fibra']
-				,$value['vitamina_a']
-				,$value['acido_ascorbico']
-				,$value['acido_folico']
-				,$value['hierro_nohem']
-				,$value['potasio']
-				,$value['azucar']
-				,$value['indice_glicemico']
-				,$value['carga_glicemica']
-				,$value['calcio']
-				,$value['sodio']
-				,$value['selenio']
-				,$value['fosforo']
-				,$value['colesterol']
-				,$value['ag_saturados']
-				,$value['ag_mono']
-				,$value['ag_poli']
+				 ($value['clave_articulo'])?$value['clave_articulo']:'0'
+				,($value['articulo'])?$value['articulo']:'0'
+				,($value['porciones_articulo'].' '.$value['cv_um'])?$value['porciones_articulo'].' '.$value['cv_um']:'0'
+			    ,($value['costo_x_um'])?$value['costo_x_um']:'0'
+			    ,($costo_total)?$costo_total:'0'
+				,($value['cantidad_sugerida'])?$value['cantidad_sugerida']:'0'
+				,($value['peso_bruto'])?$value['peso_bruto']:'0'
+				,($value['peso_neto'])?$value['peso_neto']:'0'
+				,($value['energia'])?$value['energia']:'0'
+				,($value['proteina'])?$value['proteina']:'0'
+				,($value['lipidos'])?$value['lipidos']:'0'
+				,($value['hidratos_carbono'])?$value['hidratos_carbono']:'0'
+				,($value['fibra'])?$value['fibra']:'0'
+				,($value['vitamina_a'])?$value['vitamina_a']:'0'
+				,($value['acido_ascorbico'])?$value['acido_ascorbico']:'0'
+				,($value['acido_folico'])?$value['acido_folico']:'0'
+				,($value['hierro_nohem'])?$value['hierro_nohem']:'0'
+				,($value['potasio'])?$value['potasio']:'0'
+				,($value['azucar'])?$value['azucar']:'0'
+				,($value['indice_glicemico'])?$value['indice_glicemico']:'0'
+				,($value['carga_glicemica'])?$value['carga_glicemica']:'0'
+				,($value['calcio'])?$value['calcio']:'0'
+				,($value['sodio'])?$value['sodio']:'0'
+				,($value['selenio'])?$value['selenio']:'0'
+				,($value['fosforo'])?$value['fosforo']:'0'
+				,($value['colesterol'])?$value['colesterol']:'0'
+				,($value['ag_saturados'])?$value['ag_saturados']:'0'
+				,($value['ag_mono'])?$value['ag_mono']:'0'
+				,($value['ag_poli'])?$value['ag_poli']:'0'
 				);
 		}
 		
@@ -609,12 +613,12 @@ class recetario extends Base_Controller{
 			,$this->lang_item("lbl_ag_poli")
 			);
 		$set_items_costo_total[] = array(
-					$costo_total = $value['costo_x_um']+$value['porciones_articulo']
+					$costo_total = ($value['costo_x_um']+$value['porciones_articulo'])?$value['costo_x_um']+$value['porciones_articulo']:'0'
 					);
 		$set_heading_costo_total = array(
 							$this->lang_item('lbl_costo_total')
 			);
-		$params = array(	'title'                => $this->lang_item("Ficha Tecnica"),
+		$params = array(	'title'                => $this->lang_item("Ficha Técnica de Platillos"),
 							'items_receta'         => $set_general_receta,
 							'headers_receta'       => $set_heading_receta,
 							'items_valores'        => $set_valores_nutricionales,

@@ -76,7 +76,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/areas/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -114,7 +114,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/areas/insert_area",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

@@ -14,6 +14,7 @@
 	$lang["lbl_placas"]	           = 'placas';
 	$lang['cvl_corta']            = 'clave corta';
 
+	$lang['lbl_excel']            = 'Catálogo transportes';
 	$lang['transportes']          = 'transportes';
 	$lang['agregar_transporte']   = 'nuevo transporte';
 	$lang['listado_transporte']   = 'transportes';

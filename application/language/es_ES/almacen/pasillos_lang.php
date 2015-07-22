@@ -5,6 +5,7 @@ $lang['agregar']            = 'nuevo pasillo';
 $lang['listado']            = 'listado de pasillos';
 $lang['detalle']            = 'detalle';
 
+$lang['lbl_excel']               = 'Catálogo Pasillos';
 $lang['lbl_fecha_registro']      = 'fecha de registro';
 $lang['lbl_usuario_registro']    = 'registrado por';
 $lang['lbl_ultima_modificacion'] = 'ultima modificación';

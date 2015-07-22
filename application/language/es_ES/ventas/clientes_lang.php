@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']               = 'Catálogo de clientes';
 $lang['titulo_submodulo']        = "Ventas";
 $lang['clientes']                = "Clientes";
 $lang['agregar_cliente']         = "nuevo cliente";

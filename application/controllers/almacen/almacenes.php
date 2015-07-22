@@ -381,7 +381,7 @@ class almacenes extends Base_Controller
 									$this->lang_item("descripcion"));
 	
 		}
-		$params = array(	'title'   => $this->lang_item("Almacenes"),
+		$params = array(	'title'   => $this->lang_item("lbl_excel_almacen"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

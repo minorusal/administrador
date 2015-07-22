@@ -10,6 +10,7 @@ $lang['telefono']           = 'teléfono';
 $lang['direccion']          = 'dirección';
 
 
+
 $lang['lbl_fecha_registro'] = 'fecha de registro';
 $lang['lbl_usuario_registro'] = 'registrado por';
 $lang['lbl_ultima_modificacion'] = 'ultima modificación';

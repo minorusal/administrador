@@ -251,12 +251,14 @@ class aprobar_ajustes extends stock{
 					$tabData['cl_um']			     = $detalle[0]['cl_um'];
 					
 					//DIC
+
+
 					$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
 					$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
 					$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
 					$tabData['lbl_cl_pasillo']	     = $this->lang_item("cl_pasillo",false);
-					$tabData['lbl_stock_mov']	     = $this->lang_item("stock_mov",false);
-					$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
+					$tabData['lbl_stock']	     	 = $this->lang_item("lbl_stock",false);
+					$tabData['lbl_stock_um']	 	 = $this->lang_item("lbl_stock_um",false);
 					$tabData['lbl_cl_um']			 = $this->lang_item("cl_um",false);
 					
 					($i==count($articulo_detalle)-2)?$tabData['button_save']= $btn_save:$tabData['button_save']='';

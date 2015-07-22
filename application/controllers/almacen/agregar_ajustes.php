@@ -229,7 +229,7 @@ class agregar_ajustes extends stock{
 					'id_articulo'=> $id_articulo,
 					'id_almacen' => $id_almacen,
 					'id_pasillo' => $id_pasillo, 
-					'id_gavetas' => $id_gavetas);
+					'id_gaveta' => $id_gavetas);
 
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
 		$stock=0;

@@ -45,7 +45,28 @@ function load_content(uri, id_content){
         }
     });
 }
-function agregar(id_almacen_ajuste){
+function detalle(id_almacen_ajuste){
+	jQuery('#ui-id-1').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/aprobar_ajustes/detalle",
+        dataType: 'json',
+        data: {id_almacen_ajuste : id_almacen_ajuste},
+        success: function(data){
+         	jQuery('#a-0').html('');
+        	jQuery('#a-1').html(data);
+        	jQuery('#ui-id-1').show('slow');
+        }
+    });
+}
+function calculos(){
+	/*var primer_valor = stock_mod;
+	var segundo_valor = stock_origen;
+	var segundo_valor = stock_origen;*/
+	
+	//var um = regla_tres(stock_num,stock_num_um,stock);
+}
+/*function agregar(id_almacen_ajuste){
 	var progress = progress_initialized('update_loader');
 	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();
@@ -79,18 +100,4 @@ function agregar(id_almacen_ajuste){
 		        progress.progressTimer('complete');
 		        btn.attr('disabled',false);
 	  });
-}
-function detalle(id_almacen_ajuste){
-	jQuery('#ui-id-1').click();
-	jQuery.ajax({
-        type: "POST",
-        url: path()+"almacen/aprobar_ajustes/detalle",
-        dataType: 'json',
-        data: {id_almacen_ajuste : id_almacen_ajuste},
-        success: function(data){
-         	jQuery('#a-0').html('');
-        	jQuery('#a-1').html(data);
-        	jQuery('#ui-id-1').show('slow');
-        }
-    });
-}
+}*/

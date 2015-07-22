@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']           = 'Catálogo formas de pago';
 $lang['titulo_seccion'] 	 = "formas de pago";
 $lang['titulo_submodulo'] 	 = "administración";
 $lang['agregar'] 			 = "Nueva forma de pago";

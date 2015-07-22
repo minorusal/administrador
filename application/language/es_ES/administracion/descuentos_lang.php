@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']          = 'Catálogos descuentos';
 $lang['titulo_seccion'] 	= "descuentos";
 $lang['titulo_submodulo'] 	= "administración";
 $lang['agregar'] 			= "Nuevo descuento";

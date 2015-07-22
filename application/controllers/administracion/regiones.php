@@ -334,7 +334,7 @@ class regiones extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogos Regiones"),
+		$params = array(	'title'   => $this->lang_item("lbl_excel"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']          = 'Catálogo sucursales';
 $lang['titulo_seccion'] 	= "sucursales";
 $lang['titulo_submodulo'] 	= "administración";
 $lang['agregar'] 			= "Nueva sucursal";

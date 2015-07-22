@@ -13,18 +13,18 @@ class servicios extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'sucursales';
+		$this->modulo        = 'administracion';
+		$this->submodulo     = 'sucursales';
 		$this->seccion          = 'servicios';
-		$this->icon 			= 'fa fa-upload'; 
-		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
-		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
-		$this->offset			= 0;
+		$this->icon          = 'fa fa-upload'; 
+		$this->path          = $this->modulo.'/'.$this->seccion.'/'; 
+		$this->view_content  = 'content';
+		$this->limit_max     = 5;
+		$this->offset        = 0;
 		// Tabs
-		$this->tab1 			= 'agregar';
-		$this->tab2 			= 'listado';
-		$this->tab3 			= 'detalle';
+		$this->tab1          = 'agregar';
+		$this->tab2          = 'listado';
+		$this->tab3          = 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model('administracion/sucursales_model','db_model2');
@@ -33,10 +33,10 @@ class servicios extends Base_Controller{
 	}
 
 	public function config_tabs(){
-		$tab_1 	= $this->tab1;
-		$tab_2 	= $this->tab2;
-		$tab_3 	= $this->tab3;
-		$path  	= $this->path;
+		$tab_1   = $this->tab1;
+		$tab_2   = $this->tab2;
+		$tab_3   = $this->tab3;
+		$path    = $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
@@ -66,13 +66,13 @@ class servicios extends Base_Controller{
 	}
 
 	public function index(){
-		$tabl_inicial 			  = 2;
-		$view_listado    		  = $this->listado();	
+		$tabl_inicial          = 2;
+		$view_listado          = $this->listado();   
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);   
 		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
@@ -80,20 +80,20 @@ class servicios extends Base_Controller{
 
 	public function listado($offset=0){
 		// Crea tabla con listado de elementos capturados 
-		$seccion 		= '/listado';
-		$tab_detalle	= $this->tab3;	
-		$limit 			= $this->limit_max;
-		$uri_view 		= $this->modulo.$seccion;
-		$url_link 		= $this->path.'listado';
-		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$seccion       = '/listado';
+		$tab_detalle   = $this->tab3; 
+		$limit         = $this->limit_max;
+		$uri_view      = $this->modulo.$seccion;
+		$url_link      = $this->path.'listado';
+		$filtro        = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 
 		$sqlData = array(
-			 'buscar'      	=> $filtro
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
+			 'buscar'         => $filtro
+			,'offset'      => $offset
+			,'limit'       => $limit
 		);
 		$uri_segment  = $this->uri_segment(); 
-		$total_rows	  = count($this->db_model->db_get_data($sqlData));
+		$total_rows   = count($this->db_model->db_get_data($sqlData));
 		$sqlData['aplicar_limit'] = false;
 		$list_content = $this->db_model->db_get_data($sqlData);
 		$url          = base_url($url_link);
@@ -104,7 +104,7 @@ class servicios extends Base_Controller{
 			// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_administracion_servicio'].')'
+								'onclick' => $tab_detalle.'('.$value['id_administracion_servicio'].')'
 						);
 				// Datos para tabla
 				$tbl_data[] = array('id'            => $value['id_administracion_servicio'],
@@ -119,7 +119,7 @@ class servicios extends Base_Controller{
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("lbl_id"),
+			$this->table->set_heading( $this->lang_item("lbl_id"),
 										$this->lang_item("lbl_servicio"),
 										$this->lang_item("lbl_clave_corta"),
 										$this->lang_item("lbl_sucursal"),
@@ -132,7 +132,7 @@ class servicios extends Base_Controller{
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
-								);				
+								);          
 		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
@@ -143,38 +143,35 @@ class servicios extends Base_Controller{
 		$tabData['export']    = button_tpl($buttonTPL);
 		$tabData['paginador'] = $paginador;
 		$tabData['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
 	}
 
 	public function detalle(){
 		$id_servicio                 = $this->ajax_post('id_servicio');
-		$detalle  	                 = $this->db_model->get_orden_unico_servicio($id_servicio);
-		$seccion 	                 = 'detalle';
+		$detalle                     = $this->db_model->get_orden_unico_servicio($id_servicio);
+		$seccion                     = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData = array(
-			 'buscar'      	 => ''
-			,'offset' 		 => 0
-			,'limit'      	 => 0
+			 'buscar'       => ''
+			,'offset'       => 0
+			,'limit'        => 0
 		);
 		$sucursales_array     = array(
 					 'data'     => $this->db_model2->db_get_data($sqlData)
-					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('sucursal')
-					,'name' 	=> "lts_sucursales"
-					,'class' 	=> "requerido"
+					,'value'    => 'id_sucursal'
+					,'text'     => array('sucursal')
+					,'name'     => "lts_sucursales"
+					,'class'    => "requerido"
 					,'selected' => $detalle[0]['id_sucursal']
 					);
 		$sucursales                        = dropdown_tpl($sucursales_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
-        $tabData['id_servicio']            = $id_servicio;
-        $tabData["lbl_servicio"]           = $this->lang_item("lbl_servicio");
+		$tabData['id_servicio']            = $id_servicio;
+		$tabData["lbl_servicio"]           = $this->lang_item("lbl_servicio");
 		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
 		$tabData["lbl_final"]              = $this->lang_item("lbl_final");
@@ -183,46 +180,43 @@ class servicios extends Base_Controller{
 
 		$tabData['txt_servicio']           = $detalle[0]['servicio'];
 		$tabData['txt_clave_corta']        = $detalle[0]['clave_corta'];
-        $tabData['timepicker1']            = substr($detalle[0]['inicio'], 0,5);
-        $tabData['timepicker2']            = substr($detalle[0]['final'], 0,5);
-        $tabData["list_sucursal"]          = $sucursales;
+		$tabData['timepicker1']            = substr($detalle[0]['inicio'], 0,5);
+		$tabData['timepicker2']            = substr($detalle[0]['final'], 0,5);
+		$tabData["list_sucursal"]          = $sucursales;
 
-        $tabData['txt_descripcion']        = $detalle[0]['descripcion'];
+		$tabData['txt_descripcion']        = $detalle[0]['descripcion'];
 		
-        $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
-        
-        $this->load_database('global_system');
-        $this->load->model('users_model');
+		  
+		$this->load_database('global_system');
+		$this->load->model('users_model');
 
-        $usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
-	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
-	    $tabData['val_usuarios_registro']  = $usuario_name;
+		$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+		$usuario_name                      = text_format_tpl($usuario_registro[0]['name'],"u");
+		$tabData['val_usuarios_registro']  = $usuario_name;
 
-        if($detalle[0]['edit_id_usuario'])
-        {
-        	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
-        	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
-        	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
-        }
-        else
-        {
-        	$usuario_name = '';
-    		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
-        }
+		if($detalle[0]['edit_id_usuario']){
+			$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+			$usuario_name                   = text_format_tpl($usuario_registro[0]['name'],"u");
+			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+		}else{
+			$usuario_name = '';
+			$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+		}
 
-        $tabData['button_save']           = $btn_save;
-        $tabData['registro_por']    	= $this->lang_item("registro_por",false);
-      	$tabData['usuario_registro']	= $usuario_name;
-        									   
-		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		$tabData['button_save']       = $btn_save;
+		$tabData['registro_por']      = $this->lang_item("registro_por",false);
+		$tabData['usuario_registro']  = $usuario_name;
+												
+		$uri_view                 = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function actualizar(){
-		$objData  	= $this->ajax_post('objData');
+		$objData    = $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
@@ -237,15 +231,15 @@ class servicios extends Base_Controller{
 			if($check_times['response']){
 				$sqlData = array(
 					 'id_administracion_servicio'   => $id_servicio
-					,'servicio'        				=> $objData['txt_servicio']
-					,'clave_corta'     				=> $objData['txt_clave_corta']
-					,'descripcion'     				=> $objData['txt_descripcion']
-					,'inicio'          				=> $ajax_inicio
-					,'final'           				=> $ajax_termino
-					,'id_sucursal'     				=> $id_sucursal
-					,'edit_timestamp'  				=> $this->timestamp()
-					,'edit_id_usuario' 				=> $this->session->userdata('id_usuario')
- 					);
+					,'servicio'                   => $objData['txt_servicio']
+					,'clave_corta'                => $objData['txt_clave_corta']
+					,'descripcion'                => $objData['txt_descripcion']
+					,'inicio'                     => $ajax_inicio
+					,'final'                      => $ajax_termino
+					,'id_sucursal'                => $id_sucursal
+					,'edit_timestamp'             => $this->timestamp()
+					,'edit_id_usuario'            => $this->session->userdata('id_usuario')
+					);
 				
 				$insert = $this->db_model->db_update_data($sqlData);
 
@@ -270,16 +264,16 @@ class servicios extends Base_Controller{
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
 		$sqlData = array(
-			 'buscar'      	 => ''
-			,'offset' 		 => 0
-			,'limit'      	 => 0
+			 'buscar'          => ''
+			,'offset'       => 0
+			,'limit'        => 0
 		);
 		$sucursales_array     = array(
 					 'data'     => $this->db_model2->db_get_data($sqlData)
-					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('sucursal')
-					,'name' 	=> "lts_sucursales"
-					,'class' 	=> "requerido"
+					,'value'    => 'id_sucursal'
+					,'text'  => array('sucursal')
+					,'name'  => "lts_sucursales"
+					,'class'    => "requerido"
 					);
 		$sucursales                      = dropdown_tpl($sucursales_array);
 		$tab_1["lbl_servicio"]           = $this->lang_item("lbl_servicio");
@@ -305,12 +299,12 @@ class servicios extends Base_Controller{
 	}
 
 	public function insert_servicio(){
-		$objData  	= $this->ajax_post('objData');
+		$objData    = $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$id_sucursal  =	$objData['lts_sucursales'];
+			$id_sucursal  =   $objData['lts_sucursales'];
 			$ajax_inicio  = $objData['timepicker1'];
 			$ajax_termino = $objData['timepicker2'];
 			$servicios    = $this->db_model->db_get_data_x_sucursal($id_sucursal);
@@ -325,8 +319,8 @@ class servicios extends Base_Controller{
 					,'final'       => $ajax_termino
 					,'id_sucursal' => $id_sucursal
 					,'id_usuario'  => $this->session->userdata('id_usuario')
-				 	,'timestamp'   => $this->timestamp()
- 					);
+					,'timestamp'   => $this->timestamp()
+					);
 				$insert = $this->db_model->db_insert_data($sqlData);
 				if($insert){
 					$$msg = $this->lang_item("msg_insert_success",false);
@@ -345,24 +339,25 @@ class servicios extends Base_Controller{
 	public function export_xlsx($offset=0){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		
-		$limit 		 = $this->limit_max;
+		$limit       = $this->limit_max;
 		$sqlData     = array(
-			 'buscar'      	=> $filtro
-			,'offset' 		=> $offset
-			,'limit'      	=> $limit
+			 'buscar'         => $filtro
+			,'offset'      => $offset
+			,'limit'       => $limit
 		);
+		//print_debug($sqlData);
 		$lts_content = $this->db_model->db_get_data($sqlData);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value){
 				
 				$set_data[] = array(
 									 $value['servicio']
-								 	,$value['cv_servicio']
-								 	,$value['sucursal']
-								 	,$value['descripcion']
-								 	,$value['inicio']
-								 	,$value['final']
-								 	);
+									,$value['cv_servicio']
+									,$value['sucursal']
+									,$value['descripcion']
+									,$value['inicio']
+									,$value['final']
+									);
 			}
 			
 			$set_heading = array(
@@ -375,7 +370,7 @@ class servicios extends Base_Controller{
 									);
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogos Servicios"),
+		$params = array(  'title'   => $this->lang_item("lbl_excel"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

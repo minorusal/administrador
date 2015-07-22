@@ -84,7 +84,7 @@ class Base_Controller extends CI_Controller {
 		$data_modulos = $this->sites_panel;
 		$img_path     = './assets/avatar/users/';
 		$img_path_    = base_url().'assets/avatar/users/';
-		$avatar_image = $this->session->userdata('avatar_user');
+		$avatar_image = ($this->session->userdata('avatar_user') =='' ) ? 'sin_foto.png' : $this->session->userdata('avatar_user');
 		
 		$perfil             = $this->session->userdata('perfil');
 		$user_root          = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;

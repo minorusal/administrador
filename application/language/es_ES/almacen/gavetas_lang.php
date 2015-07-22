@@ -8,7 +8,7 @@ $lang['detalle']            = 'detalle';
 $lang['lbl_fecha_registro'] = 'fecha de registro';
 $lang['lbl_usuario_registro'] = 'registrado por';
 $lang['lbl_ultima_modificacion'] = 'ultima modificación';
-
+$lang['lbl_excel']            = 'Catálogo gavetas';
 $lang['lbl_gavetas']          = 'gaveta';
 $lang['lbl_almacen']          = 'almacenes';
 $lang['lbl_pasillo']          = 'pasillos';

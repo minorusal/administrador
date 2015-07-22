@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']          = 'Catálogo impuestos';
 $lang['titulo_seccion'] 	= "impuestos";
 $lang['titulo_submodulo'] 	= "administración";
 $lang['agregar'] 			= "Nuevo impuesto";

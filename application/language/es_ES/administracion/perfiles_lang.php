@@ -1,4 +1,5 @@
 <?php 
+$lang['lbl_excel']          = 'Catálogo perfiles';
 $lang['lbl_id']             = 'ID';
 $lang['titulo_seccion']     = 'perfiles';
 $lang['titulo_submodulo']   = 'administracion';

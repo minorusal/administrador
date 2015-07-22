@@ -15,17 +15,13 @@ class ajustes_model extends Base_Model{
 		// Query
 		$query="SELECT 
 				a.id_almacen_ajuste,
-				a.id_stock,
-				a.stock_origen,
-				a.stock_um_origen,
 				a.stock_mov,
 				a.stock_um_mov,
-				a.stock_final,
-				a.stock_um_final,
 				a.id_articulo,
 				a.id_almacen,
 				a.id_pasillo,
 				a.id_gaveta,
+				a.timestamp,
 				b.articulo,
 				c.clave_corta as cl_almacen,
 				d.clave_corta as cl_gaveta,
@@ -57,17 +53,13 @@ class ajustes_model extends Base_Model{
 		// Query
 		$query="SELECT 
 				a.id_almacen_ajuste,
-				a.id_stock,
-				a.stock_origen,
-				a.stock_um_origen,
 				a.stock_mov,
 				a.stock_um_mov,
-				a.stock_final,
-				a.stock_um_final,
 				a.id_articulo,
 				a.id_almacen,
 				a.id_pasillo,
 				a.id_gaveta,
+				a.timestamp,
 				b.articulo,
 				c.clave_corta as cl_almacen,
 				d.clave_corta as cl_gaveta,
@@ -146,7 +138,7 @@ class ajustes_model extends Base_Model{
 
 		$id_almacen = ($data['id_almacen']!='')?"AND a.id_almacen=$data[id_almacen]":'';
 		$id_pasillo = ($data['id_pasillo']!='')?" AND a.id_pasillo=$data[id_pasillo]":'';
-		$id_gaveta  = ($data['id_gavetas']!='')?"AND a.id_gaveta=$data[id_gavetas]":'';
+		$id_gaveta  = ($data['id_gaveta']!='')?"AND a.id_gaveta=$data[id_gaveta]":'';
 		// Query
 		$query="SELECT 
 					a.id_stock,
@@ -216,14 +208,21 @@ class ajustes_model extends Base_Model{
 					a.timestamp as fecha_recepcion,
 					a.caducidad,
 					c.id_articulo,
+					d.articulo,
 					e.clave_corta,
 					e.unidad_minima,
-					e.unidad_minima_cve
+					e.unidad_minima_cve,
+					f.almacenes,
+					g.gavetas,
+					h.pasillos
 				from $tbl[almacen_stock] a 
 				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
 				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
 				LEFT JOIN $tbl[compras_articulos] d on c.id_articulo=d.id_compras_articulo
 				LEFT JOIN $tbl[compras_um] e on d.id_compras_um = e.id_compras_um
+				LEFT JOIN $tbl[almacen_almacenes] f on a.id_almacen=f.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] g on a.id_gaveta=g.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] h on a.id_pasillo=h.id_almacen_pasillos
 				WHERE a.activo=1 $id_articulo $id_almacen $id_pasillo $id_gaveta
 				ORDER BY a.caducidad, a.timestamp ASC;";
 			//echo $query;

@@ -362,7 +362,7 @@ class clientes extends Base_Controller {
 									$this->lang_item("fecha_registro"));
 		}
 
-		$params = array(	'title'  => $this->lang_item("seccion"),
+		$params = array(	'title'  => $this->lang_item("lbl_excel"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

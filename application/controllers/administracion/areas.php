@@ -116,7 +116,6 @@ class areas extends Base_Controller{
 			$this->table->set_heading(	$this->lang_item("ID"),
 										$this->lang_item("lbl_area"),
 										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_region"),
 										$this->lang_item("lbl_descripcion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -266,6 +265,7 @@ class areas extends Base_Controller{
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
 		);
+
 		$lts_content = $this->db_model->db_get_data($sqlData);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value){
@@ -284,7 +284,7 @@ class areas extends Base_Controller{
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogos Areas"),
+		$params = array(	'title'   => $this->lang_item("Catalogos_Areas"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

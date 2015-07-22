@@ -49,21 +49,24 @@
             <tr>
                 <td>
                     <label><strong>{lbl_stock}: </strong></label>
+                    <input type="hidden" class="input-small" id="stock_origen" value="{origen_stock}">
+                    <input type="hidden" class="input-small" id="stock_total" value="{stock_total}">
                     {origen_stock}
                 </td>
                 <td valign="middle">
                     <label><strong>{lbl_stock}: </strong></label>
-                    {stock_mov} {cl_um}
+                    <input type="text" class="input-small" id="stock_mod" value="{stock_mov}">{cl_um}
                 </td>
             </tr>
             <tr>
                 <td>
                     <label><strong>{lbl_stock_um}: </strong></label>
+                    <input type="hidden" class="input-small" id="stock_origen_um" value="{origen_stock_um}">
                     {origen_stock_um}
                 </td>
                  <td valign="middle">
                     <label><strong>{lbl_stock_um}: </strong></label>
-                    {stock_um_mov} {cl_um}
+                    <input type="text" class="input-small" id="stock_um_mod" value="{stock_um_mov}">{cl_um}
                 </td>
             </tr>
         </table>

@@ -7,7 +7,7 @@ $lang['detalle'] 	= "Detalle";
 $lang['expand'] 	= "Expander Lista";
 $lang['collapse'] 	= "Contraer Lista";
 
-
+$lang['lbl_excel']      = 'Catálogo usuarios';
 $lang['lbl_nombre'] 	= "Nombres";
 $lang['lbl_paterno'] 	= "Apellido paterno";
 $lang['lbl_materno'] 	= "Apellido materno";

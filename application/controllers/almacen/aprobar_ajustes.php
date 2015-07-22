@@ -250,9 +250,16 @@ class aprobar_ajustes extends stock{
 					$tabData['stock_um_mov']	     = $stock_um_mov;
 					$tabData['cl_um']			     = $detalle[0]['cl_um'];
 					
+					/*if($i==0){
+						$stock_total_1	 =  $articulo_detalle[$i]['stock'];
+						$final=false;
+					}else{
+						$stock_total_2	 =    $articulo_detalle[$i]['stock'] + $tabData['stock_total'];
+						$final=true;
+					}*/
+					//($final)?$tabData['stock_total']=$stock_total_2:$tabData['stock_total']=$stock_total_1;
+					
 					//DIC
-
-
 					$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
 					$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
 					$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
@@ -266,7 +273,7 @@ class aprobar_ajustes extends stock{
 			}
 		}
 		echo json_encode( $rtable);
-		//dump_var($articulo_detalle);
+		//dump_var($detalle);
 	}
 	public function agregar(){
 		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');

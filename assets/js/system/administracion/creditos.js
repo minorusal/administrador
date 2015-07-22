@@ -74,7 +74,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/creditos/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -118,7 +118,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/creditos/insert_credito",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

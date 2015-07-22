@@ -75,7 +75,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/impuestos/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -113,7 +113,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/impuestos/insert_impuesto",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

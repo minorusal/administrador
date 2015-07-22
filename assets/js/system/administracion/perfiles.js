@@ -98,7 +98,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/perfiles/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -151,7 +151,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/perfiles/insert_perfil",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

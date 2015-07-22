@@ -20,4 +20,3 @@ $lang['lbl_ultima_modificacion']  = "Ultima modificación";
 $lang['msg_err_clv']              = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, por favor intente con una clave diferente.';
 
 ?>
-

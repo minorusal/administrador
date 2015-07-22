@@ -75,7 +75,7 @@ function actualizar(){
 		type:"POST",
 		url: path()+"administracion/descuentos/actualizar",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -113,7 +113,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"administracion/descuentos/insert_descuento",
 		dataType: "json",
-		data: {objData},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

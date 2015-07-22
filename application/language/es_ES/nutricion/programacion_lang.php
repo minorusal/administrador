@@ -2,8 +2,8 @@
 	$lang['programacion']                    = 'Programación';
 	$lang['nutricion']                       = 'Nutrición';
 	$lang['lbl_sucursal']                    = 'Primero seleccione una sucursal';
-	$lang['config_programacion']             = 'Configuración de Programación';
-	$lang['ver_calendario']                  = 'Visualizar Calendario de Programación';
+	$lang['config_programacion']             = 'Configuración';
+	$lang['ver_calendario']                  = 'Calendario';
 	$lang['lbl_config_programacion']         = 'Configuración de Programacion';
 	$lang['lbl_input_fecha_inicio']          = 'Fecha de Inicio de Operación:';
 	$lang['lbl_input_fecha_termino']         = 'Fecha de termino de Operación:';
@@ -32,7 +32,7 @@
 	$lang['info_agregar_festivo']            = 'Agregar Fecha';
 	$lang['lbl_especial']                    = 'Ciclo Especial';
 	$lang['info_ciclos_especiales']          = 'Lista de ciclos especiales';
-	$lang['generar_formatos']                = 'Generar formatos';
+	$lang['generar_formatos']                = 'Formatos';
 	$lang['lbl_tipo_formato']                = 'Tipo de formato';
 	$lang['lbl_formato_abasto']              = 'Formato de Abasto';
 	$lang['lbl_formato_nutricional']         = 'Formato de valores nutriconales por receta';

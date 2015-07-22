@@ -389,7 +389,6 @@ class entradas_recepcion extends Base_Controller{
 						,'id_usuario' 		 => $this->session->userdata('id_usuario')
 						,'timestamp'  		 => $this->timestamp()
 						);
-			//dump_var($sqlData);
 			$id = $this->db_model->insert($sqlData);
 			if($id){
 				$id_articulo_tipo 	= $this->ajax_post('id_articulo_tipo');

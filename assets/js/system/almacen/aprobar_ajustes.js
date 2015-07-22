@@ -23,7 +23,7 @@ function buscar(){
 	});
 }
 function load_content(uri, id_content){
-	jQuery('#ui-id-2').hide('slow');
+	jQuery('#ui-id-1').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
     jQuery.ajax({
@@ -81,7 +81,7 @@ function agregar(id_almacen_ajuste){
 	  });
 }
 function detalle(id_almacen_ajuste){
-	jQuery('#ui-id-2').click();
+	jQuery('#ui-id-1').click();
 	jQuery.ajax({
         type: "POST",
         url: path()+"almacen/aprobar_ajustes/detalle",

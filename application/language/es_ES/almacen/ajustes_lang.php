@@ -1,0 +1,17 @@
+<?php
+$lang['agregar_ajustes']     	= 	'Agregar ajuste';
+$lang['articulo']     		 	= 	'Articulo';
+$lang['stock_mov']           	= 	'Stock a mover';
+$lang['stock_um_mov']     	 	=   'Stock en u.m. a mover';	
+$lang['fecha_registro']      	= 	'Fecha de registro';
+$lang['acciones']     		 	= 	'Acciones';
+$lang['almacen_lbl']     	 	= 	'Almacen';
+$lang['gaveta_lbl']     	 	= 	'Gaveta';
+$lang['pasillo_lbl']     	 	= 	'Pasillo';
+$lang['lblstock']     		 	= 	'Stock en existencia';
+$lang['stock_um_lbl']     	 	= 	'Stock en u.m. en existencia';
+$lang['aprobar_ajustes']     	= 	'Aprobar ajuste';
+$lang['xlsx_agregar_ajustes']   = 	'Listado de agregar ajuste';
+$lang['xlsx_aprobar_ajustes']   = 	'Listado de aprobar ajuste';
+$lang['id_almacen_ajuste']      = 	'Id';
+?>

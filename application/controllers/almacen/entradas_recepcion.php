@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class entradas_recepcion extends Base_Controller{
 		/**
-	* Nombre:		Historial Ordenes
-	* Ubicación:	Compras>Ordenes/historial ordenes
+	* Nombre:		Entradas Recepcion
+	* Ubicación:	Almacen>Entradas/Entradas recepcion
 	* Descripción:	Funcionamiento para la sección de ordenes de compra
 	* @author:		Alejandro Enciso
 	* Creación: 	2015-05-19
@@ -24,7 +24,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
 		$this->submodulo        = 'entradas_recepcion';
-		$this->icon 			= 'fa fa-book'; //Icono de modulo
+		$this->icon 			= 'fa fa-folder-open'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -151,7 +151,6 @@ class entradas_recepcion extends Base_Controller{
 									);
 			}
 			// Plantilla
-			// $tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),

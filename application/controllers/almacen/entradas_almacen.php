@@ -143,7 +143,8 @@ class entradas_almacen extends stock{
 									);
 			}
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			// $tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id_stock"),
 										$this->lang_item("articulo"),										

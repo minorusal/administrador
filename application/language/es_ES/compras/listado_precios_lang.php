@@ -26,4 +26,10 @@ $lang['rendimiento']  	 	  		  = 'rendimiento';
 $lang['region']  	 	  		  	  = 'región';
 $lang['cl_region']  	 	  		  = 'Clave corta región';
 $lang['articulo_default']  	 	      = 'articulo default';
+$lang['embalaje']  	 	      		  = 'Embalaje';
+
+$lang['articulo']  	 	      		  = 'Artículo';
+$lang['proveedor']  	 	      	  = 'Proveedor';
+$lang['marca']  	 	      		  = 'Marca';
+$lang['presentacion']  	 	   		  = 'Presentación';
 ?>

@@ -48,4 +48,9 @@ $lang['orden_cerrada']  	= "La orden de compra ha sido CERRADA correctamente. Pu
 $lang['orden_cancelada']  	= "La orden de compra ha sido CANCELADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];
 $lang['orden_aprobada']  	= "La orden de compra ha sido APROBADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];
 $lang['orden_rechazada']  	= "La orden de compra ha sido RECHAZADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];
+
+$lang['articulo']  			= "Artículo";
+$lang['cantidad']  			= "Cantidad";
+$lang['total']  			= "Total";
+
 ?>

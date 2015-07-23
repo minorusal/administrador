@@ -201,7 +201,7 @@ class embalaje extends Base_Controller {
 		$btn_save       = form_button(array('class'=>"btn btn-primary",'name' => 'update' , 'onclick'=>'update()','content' => $this->lang_item("btn_guardar") ));
 		
 		$data_tab['id_embalaje']      		 = $id_embalaje;
-        $data_tab["nombre_presentaciones"]	 = $this->lang_item("nombre_embalaje");
+        $data_tab["nombre_embalaje"]	 	 = $this->lang_item("nombre_embalaje");
 		$data_tab["cvl_corta"]        	  	 = $this->lang_item("cvl_corta");
 		$data_tab["descrip"]         	     = $this->lang_item("descripcion");
 		$data_tab['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');

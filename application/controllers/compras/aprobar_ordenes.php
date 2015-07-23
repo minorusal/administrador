@@ -289,6 +289,7 @@ class aprobar_ordenes extends Base_Controller {
 		$tabData['style']					 = $style;
 		$tabData['class']					 = $class;
 		$tabData['lbl_ultima_modificacion']  = $this->lang_item('lbl_ultima_modificacion', false);
+		$tabData['registro_por']  			 = $this->lang_item("registro_por",false);
 
 		$this->load->model('users_model');
     	$usuario_registro              = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);

@@ -30,6 +30,7 @@ class traspasos_model extends Base_Model{
 					c.id_articulo,
 					d.articulo,
 					e.presentacion,
+					IF(e.presentacion IS NOT NULL, CONVERT(CONCAT(IF(i.embalaje IS NOT NULL,CONCAT(i.embalaje,' CON '),''), IFNULL(c.presentacion_x_embalaje,''), ' ', IFNULL(e.presentacion,''), ' DE ', IFNULL(c.um_x_presentacion,''), ' ', IFNULL(j.clave_corta,'')) USING utf8),null) as presentacion_detalle,
 					f.almacenes,
 					g.gavetas,
 					h.articulo_tipo

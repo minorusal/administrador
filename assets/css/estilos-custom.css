@@ -19,6 +19,11 @@
 	cursor: pointer;
 	color: black;
 }
+.ico_excel{
+	cursor: pointer;
+	color: green;
+}
+
 .stdform .formwrapper{
 	padding-top: 0px;
 	margin-left: 0px;

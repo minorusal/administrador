@@ -384,7 +384,7 @@ class traspasos extends stock{
 								$this->lang_item("almacen"),
 								$this->lang_item("gaveta")
 							);
-		$params = array(	'title'   => $this->lang_item("traspasos_file"),
+		$params = array(	'title'   => $this->lang_item("traspasos_file",false).'_'.date('Ymd-his'),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

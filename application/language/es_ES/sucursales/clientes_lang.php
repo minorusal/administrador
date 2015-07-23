@@ -25,4 +25,6 @@ $lang['rfc_clientes']	         = "rfc";
 $lang['val_usuarios_registro']	 = "registrado por";
 $lang['msg_err_clv']             = '<strong>Advertencia!</strong><br>La clave asignada ya se ha proporcionado a otro registro, porfavor intente con una clave diferente';
 $lang['seccion']          		 = "Catalogo de Clientes";
+$lang['sucursal']                = "Sucursal";
+$lang['rfc']               		 = "RFC";
 ?>

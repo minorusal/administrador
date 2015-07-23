@@ -168,5 +168,47 @@ class stock extends Base_Controller{
 		}
 		return $success;
 	}
+	public function stock_logs_insert($data=array()){
+		$id_accion 						= (isset($data['id_accion']))?$data['id_accion']:'';
+		$id_stock 						= (isset($data['id_stock']))?$data['id_stock']:'';
+		$id_compras_orden_articulo 		= (isset($data['id_compras_orden_articulo']))?$data['id_compras_orden_articulo']:'';
+		$id_almacen_entradas_recepcion 	= (isset($data['id_almacen_entradas_recepcion']))?$data['id_almacen_entradas_recepcion']:'';
+		$id_articulo_tipo 				= (isset($data['id_articulo_tipo']))?$data['id_articulo_tipo']:'';
+		$id_almacen_origen				= (isset($data['id_almacen_origen']))?$data['id_almacen_origen']:''; 
+		$id_pasillo_origen 				= (isset($data['id_pasillo_origen']) && $data['id_pasillo_origen']==0)?null:$data['id_pasillo_origen'];
+		$id_gaveta_origen				= (isset($data['id_gaveta_origen']))?$data['id_gaveta_origen']:''; 
+		$stock_origen 					= (isset($data['stock_origen']))?$data['stock_origen']:''; 
+		$stock_um_origen 				= (isset($data['stock_um_origen']))?$data['stock_um_origen']:''; 
+		$id_almacen_destino				= (isset($data['id_almacen_destino']))?$data['id_almacen_destino']:''; 
+		$id_pasillo_destino 			= (isset($data['id_pasillo_destino']) && $data['id_pasillo_destino']==0)?null:$data['id_pasillo_destino'];
+		$id_gaveta_destino				= (isset($data['id_gaveta_destino']))?$data['id_gaveta_destino']:''; 
+		$stock_destino					= (isset($data['stock_destino']))?$data['stock_destino']:''; 
+		$stock_um_destino				= (isset($data['stock_um_destino']))?$data['stock_um_destino']:''; 		
+		$lote 							= (isset($data['lote']))?$data['lote']:'';
+		$caducidad 						= (isset($data['caducidad']))?$data['caducidad']:'';
+
+		$sqldatalog_stock= array(
+								'id_accion'			  		   => $id_accion,
+								'id_stock'			   		   => $traspaso,
+								'id_almacen_entradas_recepcion'=> $id_almacen_entradas_recepcion,
+								'id_compras_orden_articulo'    => $id_compras_orden_articulo,
+								'log_id_almacen_origen'		   => $id_almacen_origen,
+								'log_id_pasillo_origen'		   => $id_pasillo_origen,
+								'log_id_gaveta_origen'		   => $id_gaveta_origen,
+								'log_stock_origen'    	 	   => $stock_origen,
+								'log_stock_um_origen'  	 	   => $stock_um_origen,
+								'log_id_almacen_destino'	   => $id_almacen_destino,
+								'log_id_pasillo_destino'	   => $id_pasillo_destino,
+								'log_id_gaveta_destino'		   => $id_gaveta_destino,
+								'log_stock_destino'    	 	   => $stock_destino,
+								'log_stock_um_destino'  	   => $stock_um_destino,
+								'log_lote'					   => $lote,
+								'log_caducidad'			   	   => $caducidad,
+								'timestamp'  	 		       => $this->timestamp(),
+								'id_usuario'   		   		   => $this->session->userdata('id_usuario')
+							);
+				$insertlog = $this->stock_model->insert_stock_log($sqldatalog_stock);
+		return $insertlog;
+	}
 }
 ?>

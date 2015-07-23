@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class sucursales extends Base_Controller
-{
+class sucursales extends Base_Controller{
 	private $modulo;
 	private $submodulo;
 	private $seccion;
@@ -12,8 +11,7 @@ class sucursales extends Base_Controller
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'administracion';
 		$this->submodulo		= 'sucursales';
@@ -34,8 +32,7 @@ class sucursales extends Base_Controller
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
-	public function config_tabs()
-	{
+	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
 		$tab_3 	= $this->tab3;
@@ -64,13 +61,11 @@ class sucursales extends Base_Controller
 		return $config_tab;
 	}
 
-	private function uri_view_principal()
-	{
+	private function uri_view_principal(){
 		return $this->modulo.'/'.$this->view_content;
 	}
 
-	public function index()
-	{
+	public function index(){
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
@@ -83,9 +78,7 @@ class sucursales extends Base_Controller
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function listado($offset=0)
-	{
-	// Crea tabla con listado de elementos capturados 
+	public function listado($offset=0){
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
@@ -394,7 +387,7 @@ class sucursales extends Base_Controller
 	
 		}
 
-		$params = array(	'title'   => $this->lang_item("Catálogo Sucursales"),
+		$params = array(	'title'   => $this->lang_item("lbl_excel"),
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

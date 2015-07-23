@@ -1,4 +1,5 @@
 <?php 
+$lang['lbl_excel']        = 'Catálogos entidades';
 $lang['titulo_seccion']   = 'entidades';
 $lang['titulo_submodulo'] = 'administracion';
 $lang['agregar']          = 'nueva entidad';

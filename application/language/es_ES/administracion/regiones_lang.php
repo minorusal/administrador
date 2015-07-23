@@ -1,4 +1,5 @@
 <?php 
+$lang['lbl_excel']          = 'Catálogo regiones';
 $lang['titulo_seccion']     = 'regiones';
 $lang['titulo_submodulo']   = 'administracion';
 $lang['agregar']            = 'nueva región';

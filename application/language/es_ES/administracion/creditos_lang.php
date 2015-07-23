@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_excel']          = 'Catálogo creditos';
 $lang['titulo_seccion'] 	= "creditos";
 $lang['titulo_submodulo'] 	= "administración";
 $lang['agregar'] 			= "Nuevo credito";

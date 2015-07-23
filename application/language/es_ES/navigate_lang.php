@@ -48,6 +48,21 @@ $lang['usuarios']               = 'usuarios';
 $lang['puestos']                = 'puestos';
 $lang['areas']                  = 'areas';
 
+//SUCURSALES
+
+$lang['listado_de_sucursales'] = 'listado de sucursales';
+$lang['horarios_de_servicio']  = 'horarios de servicio';
+$lang['clientes']			   = 'clientes';
+$lang['operadores']            = 'operadores';
+$lang['horarios_de_artencion'] = 'horarios de atención';
+$lang['parametrizacion']       = 'parametrización';
+$lang['sincronizacion']        = 'sincronización';
+$lang['tickets']               = 'tickets';
+$lang['tipo_de_compra']        = 'tipo de compra';
+$lang['forma_de_pago']         = 'forma de pago';
+$lang['carga_de_datos']        = 'carga de datos';
+$lang['descarga_de_datos']     = 'descarga de datos';
+
 $lang['catalogos_generales']    = 'Catalogos generales';
 $lang['sucursales']             = 'sucursales';
 $lang['impuestos']              = 'impuestos';

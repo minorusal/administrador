@@ -147,11 +147,11 @@ function load_articulos(id_gaveta){
 	    });
 }
 function realiza_calculos(){
-	var stock 	  =	jQuery('#stock_destino').val();
-	var stock_num = jQuery('#stock_num').val();
+	var stock 	     = jQuery('#stock_destino').val();
+	var stock_num    = jQuery('#stock_num').val();
 	var stock_num_um = jQuery('#stock_num_um').val();
-	
 	var cantidad;
+
 	cantidad=stock_num-stock;
 	if(cantidad>=0){
 		var um = regla_tres(stock_num,stock_num_um,stock)

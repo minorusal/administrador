@@ -80,7 +80,7 @@ var progress = progress_initialized('loader');
 		type:"POST",
 		url: path()+"compras/proveedores/insert",
 		dataType: "json",
-		data : {objData},
+		data : {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -118,7 +118,7 @@ function actualizar(){
 			type:"POST",
 			url: path()+"compras/proveedores/actualizar",
 			dataType: "json",			
-			data : {objData},
+			data : {objData:objData},
 			beforeSend : function(){
 			btn.attr('disabled',true);
 		},

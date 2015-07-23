@@ -1,5 +1,5 @@
 <?php
-$lang['inventario']             = 'inventario';	
+$lang['nutricion']             = 'nutricion';	
 $lang['catalogos']              = 'catalogos';
 
 //VALORES NUTRICIONALES

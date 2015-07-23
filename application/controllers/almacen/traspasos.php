@@ -40,7 +40,7 @@ class traspasos extends stock{
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 		// Tabs
-		$this->tab_inicial 			= 1;
+		$this->tab_inicial 		= 1;
 		$this->tab_indice 		= array(
 									 $this->tab1
 									,$this->tab2
@@ -110,7 +110,7 @@ class traspasos extends stock{
 		$list_content 			  = $this->db_model->db_get_data($sqlData);
 		//dump_var($list_content);
 		$url          			  = base_url($url_link);
-		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'0'));
 		if($total_rows){
 			foreach ($list_content as $value) {
 				// Evento de enlace

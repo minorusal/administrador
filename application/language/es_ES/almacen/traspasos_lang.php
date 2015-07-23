@@ -57,6 +57,6 @@
 	$lang['gaveta_origen_lbl']      = 'Gaveta origen';
 	$lang['origen']     			= 'origen';
 	$lang['destino']     		    = 'destino';
+	$lang['traspasos_file']     	= 'XLS_Traspasos';
 	
-
 ?>

@@ -259,7 +259,7 @@ class listado_precios extends Base_Controller {
 		$tab_1["region"]             	  = $this->lang_item("region");
 		$tab_1["marcas"]                  = $this->lang_item("marcas");
 		$tab_1["presentaciones"]          = $this->lang_item("presentaciones");
-		$tab_1["embajale"]                = $this->lang_item("embajale");
+		$tab_1["embajale"]                = $this->lang_item("embalaje");
 		$tab_1["embalaje_aplica"]         = $this->lang_item("embalaje_aplica");
 		$tab_1["presentacion_x_embalaje"] = $this->lang_item("presentacion_x_embalaje");
 		$tab_1["um_x_embalaje"]           = $this->lang_item("um_x_embalaje");
@@ -519,7 +519,7 @@ class listado_precios extends Base_Controller {
 		$data_tab["region"]             	     = $this->lang_item("region");
 		$data_tab["marcas"]                      = $this->lang_item("marcas");
 		$data_tab["presentaciones"]              = $this->lang_item("presentaciones");
-		$data_tab["embajale"]                    = $this->lang_item("embajale");
+		$data_tab["embajale"]                    = $this->lang_item("embalaje");
 		$data_tab["embalaje_aplica"]             = $this->lang_item("embalaje_aplica");
 		$data_tab["presentacion_x_embalaje"]     = $this->lang_item("presentacion_x_embalaje");
 		$data_tab["um_x_embalaje"]               = $this->lang_item("um_x_embalaje");

@@ -34,6 +34,7 @@
 	/*MARCAS*/
 
 	$lang['marcas']         = 'Marcas';
+	$lang['marca']          = 'Marca';
 	$lang['nueva_marcas']   = 'nueva Marca';
 	$lang['listado_marcas'] = 'Marcas';
 	$lang['detalle_marcas'] = 'detalle';

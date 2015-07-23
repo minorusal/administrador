@@ -96,7 +96,7 @@ class traspasos extends stock{
 		$accion 		= $this->tab['listado'];
 		$limit 			= $this->limit_max;
 		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->modulo.'/'.$this->seccion.'/'.$accion;
+		$url_link 		= $this->modulo.'/'.$this->submodulo.'/'.$accion;
 		$buttonTPL 		= '';
 		$filtro  = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 		$sqlData = array(
@@ -119,14 +119,11 @@ class traspasos extends stock{
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 
-				$peso_unitario = (substr($value['peso_unitario'], strpos($value['peso_unitario'], "." ))=='.000')?number_format($value['peso_unitario'],0):$value['peso_unitario'];
-				$presentacion_x_embalaje = (substr($value['presentacion_x_embalaje'], strpos($value['presentacion_x_embalaje'], "." ))=='.000')?number_format($value['presentacion_x_embalaje'],0):$value['presentacion_x_embalaje'];
-				$embalaje = ($value['embalaje'])?$value['embalaje'].' CON ':'';
 				$stock = (substr($value['stock'], strpos($value['stock'], "." ))=='.000' && $value['articulo_tipo']!=strtoupper('INSUMO'))?number_format($value['stock'],0).' '.$this->lang_item("pieza_abrev"):$value['stock'].' '.$value['unidad_minima_cve'];
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_stock'],
-									'articulo'  	 	=> $value['articulo'].' - '.$peso_unitario.' '.$value['cl_um'],
-									'presentacion'   	=> $embalaje.$presentacion_x_embalaje.' '.$value['presentacion'],
+									'articulo'  	 	=> $value['articulo'],
+									'presentacion'   	=> $value['presentacion_detalle'],
 									'stock'      		=> $stock,
 									'articulo_tipo'   	=> $value['articulo_tipo'],
 									'fecha_recepcion'   => $value['fecha_recepcion'],

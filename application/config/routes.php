@@ -166,7 +166,7 @@ $route['ventas/catalogos/vendedores']			= 'ventas/vendedores/index';
 
 /*SUCURSALES*/
 $route['sucursales/listado_sucursales']				    =	'sucursales/listado_sucursales/index';
-$route['sucursales/horarios_de_servicio']				=	'sucursales/horarios_de_servicio/index';
+$route['sucursales/horarios_servicio']				    =	'sucursales/horarios_servicio/index';
 $route['sucursales/clientes']							=	'sucursales/clientes/index';
 $route['sucursales/operadores']							=	'sucursales/operadores/index';
 $route['sucursales/horarios_de_atencion']				=	'sucursales/horarios_de_atencion/index';

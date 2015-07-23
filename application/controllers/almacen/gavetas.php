@@ -192,7 +192,7 @@ class gavetas extends Base_Controller
 		$pasillos     = dropdown_tpl($pasillos_array);
 		$btn_save     = ($detalle[0]['edit'])?form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") )):$this->lang_item("no_editable");
         $tabData['id_gaveta']              = $id_almacen_gavetas;
-        $tabData["lbl_gabetas"]            = $this->lang_item("lbl_gabetas");
+        $tabData["lbl_gavetas"]            = $this->lang_item("lbl_gavetas");
 		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
 		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 		$tabData["list_almacen"]           = $almacenes;

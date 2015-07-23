@@ -21,4 +21,10 @@
 	$lang['detalle_transporte']   = 'detalle';
 	$lang['nombre_transportes']   = 'transportes';
 	$lang['num_lic']              = 'número de licencia';
+
+	$lang['placas']              = 'Placas';
+	$lang['conductor']           = 'Conductor';
+	$lang['marca']               = 'Marca';
+	$lang['modelo']              = 'Modelo';
+	$lang['descripcion']         = 'Descripción';
 ?>

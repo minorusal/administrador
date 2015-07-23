@@ -71,7 +71,7 @@ class ciclos extends Base_Controller{
 		$view_agregar    		  = $this->agregar();	
 		$contenidos_tab           = $view_agregar;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		

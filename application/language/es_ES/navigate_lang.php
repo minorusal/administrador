@@ -6,6 +6,7 @@ $lang['catalogos']              = 'catalogos';
 $lang['valores_nutricionales']    = 'valores nutricionales';
 $lang['recetario']                = 'recetario';
 $lang['conformacion_de_ciclos']   = 'conformación de ciclos';
+$lang['conformacion_de_menus']  = 'Conformación de menus';
 $lang['programacion_de_menus']    = 'programación de menus';
 
 //MENU DE COMPRAS

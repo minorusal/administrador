@@ -1,5 +1,5 @@
 <?php
-class recetario_model extends Base_Model{
+class menus_model extends Base_Model{
 	public function get_data($data=array()){
 		// DB Info		
 		$tbl = $this->tbl;

@@ -668,7 +668,7 @@ class Base_Controller extends CI_Controller {
 
     public function lang_item($index, $format = true){
     	$index = str_replace('lang_', '', $index);
-    	$lang_item = ($this->lang->line($index)) ? $this->lang->line($index) : $index;
+    	$lang_item = ($this->lang->line($index)) ? $this->lang->line($index) : 'lang_'.$index;
     	
     	if($format==true){
     		$lang_item = text_format_tpl($lang_item);

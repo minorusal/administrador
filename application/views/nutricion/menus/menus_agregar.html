@@ -1,0 +1,27 @@
+<div  id="formatos" class="stdform stdform2">
+	<p>
+		<label>{lbl_nombre_menu}: (*)</label>
+		<span class='field'>
+			<input type="text" name="menu" data-campo="menu" />
+		</span>
+	</p>
+	<p>
+		<label>{lbl_clave_corta}: (*)</label>
+		<span class="field">
+			<input type="text"  class="input-medium" name="clave_corta" data-campo="clave_corta" />
+		</span>
+	</p>
+	<p>
+		<label>{lbl_sucursal}: (*)</label>
+		<span class='field'>
+			{dropdown_sucursales}			
+		</span>
+	</p>
+	
+
+	<div id= "loader_formatos" class="progress progress-striped" style="display:none;"></div>
+    <div id="mensajes_formatos" style="display:none"></div>
+    <p class="stdformbutton">
+        {btn_formato}
+    </p> 
+</div>

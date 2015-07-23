@@ -34,8 +34,6 @@ class aprobar_ajustes extends stock{
 		$this->tab1 			= 'listado';
 		$this->tab2 			= 'detalle';
 		$this->tab3 			= 'listado_afectado';
-		//$this->tab3 			= 'listado_afectado_lineas';
-		
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -134,7 +132,6 @@ class aprobar_ajustes extends stock{
 			}
 
 			// Plantilla
-			// $tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id_almacen_ajuste"),
@@ -292,46 +289,65 @@ class aprobar_ajustes extends stock{
 									'edit_timestamp'  => $this->timestamp(),
 									'edit_id_usuario' => $this->session->userdata('id_usuario')
 								);
+				$stock_update = $this->stock_model->update_data_stock($slqDatastock);
+				if($stock==0){
+					$delete = array(
+								'fisico'   => true, 
+								'id_stock' => $articulo_detalle[$i]['id_stock']
+								);
+					$this->eliminar_stock_en_cero($delete);
+				}
 				$slqDatastockLogs = array(
 								'id_accion'  					 => 4,//Ajuste
 								'id_stock'  					 => $articulo_detalle[$i]['id_stock'],
 								'id_compras_orden_articulo'  	 => $articulo_detalle[$i]['id_compras_orden_articulo'],
 								'id_almacen_entradas_recepcion'  => $articulo_detalle[$i]['id_almacen_entradas_recepcion'],
-								'id_articulo_tipo'  			 => $articulo_detalle[$i]['id_articulo_tipo'],
-								'id_almacen_origen'  			 => $id_almacen,
-								'id_pasillo_origen'  			 => $id_pasillo,
-								'id_gaveta_origen'  			 => $id_gaveta,
-								'stock_origen'  				 => $articulo_detalle[$i]['stock'],
-								'stock_um_origen'  				 => $articulo_detalle[$i]['stock_um'],
-								'id_almacen_destino'  			 => $id_almacen,
-								'id_pasillo_destino'  			 => $id_pasillo,
-								'id_gaveta_destino'  			 => $id_gaveta,
-								'stock_destino'  				 => $stock,
-								'stock_um_destino'  			 => $stock_um,
-								'lote'  						 => $articulo_detalle[$i]['lote'],
-								'caducidad'  				     => $articulo_detalle[$i]['caducidad']
+								//'id_articulo_tipo'  			 => $articulo_detalle[$i]['id_articulo_tipo'],
+								'log_id_almacen_origen'  		 => $id_almacen,
+								'log_id_pasillo_origen'  		 => $id_pasillo,
+								'log_id_gaveta_origen'  		 => $id_gaveta,
+								'log_stock_origen'  			 => $articulo_detalle[$i]['stock'],
+								'log_stock_um_origen'  			 => $articulo_detalle[$i]['stock_um'],
+								'log_id_almacen_destino'  		 => $id_almacen,
+								'log_id_pasillo_destino'  		 => $id_pasillo,
+								'log_id_gaveta_destino'  		 => $id_gaveta,
+								'log_stock_destino'  			 => $stock,
+								'log_stock_um_destino'  		 => $stock_um,
+								'log_lote'  					 => $articulo_detalle[$i]['lote'],
+								'log_caducidad'  				 => $articulo_detalle[$i]['caducidad'],
+								'timestamp'  	 		         => $this->timestamp(),
+								'id_usuario'   		   		     => $this->session->userdata('id_usuario')
 							);
 				//tabla a mostrar
+				$this->stock_model->insert_stock_log($slqDatastockLogs);
 				//DATA
-				$tabData['articulo'] = $articulo_detalle[$i]['articulo'];
-				$tabData['almacen']  = $articulo_detalle[$i]['almacenes'];
-				$tabData['pasillo']  = $articulo_detalle[$i]['pasillos'];
-				$tabData['gaveta']   = $articulo_detalle[$i]['gavetas'];
-				$tabData['cl_um'] 	 = $articulo_detalle[$i]['clave_corta'];
-				$tabData['stock'] 	 = $articulo_detalle[$i]['stock'];
-				$tabData['stock_um'] = $articulo_detalle[$i]['stock_um'];
-				
-				//DIC
-				$rtable[]=$this->load_view_unique($uri_view_lineas ,$tabData, true);
+				$tbl_data[] = array('id'            => $articulo_detalle[$i]['articulo'],
+									'articulo'  	=> $articulo_detalle[$i]['articulo'],
+									'almacenes'   	=> $articulo_detalle[$i]['almacenes'],
+									'pasillos'   	=> $articulo_detalle[$i]['pasillos'],
+									'gavetas'   	=> $articulo_detalle[$i]['gavetas'],
+									'clave_corta'   => $articulo_detalle[$i]['clave_corta'],
+									'stock'   	 	=> $articulo_detalle[$i]['stock'],
+									'stock_um'   	=> $articulo_detalle[$i]['stock_um']
+									);
 			}
 		}
-		//dump_var($rtable);
-		$tabData['lbl_articulo']	= $this->lang_item("articulo",false);
-		$tabData['lbl_cl_almacen']	= $this->lang_item("cl_almacen",false);
-		$tabData['lbl_cl_gaveta']	= $this->lang_item("cl_gaveta",false);
-		$tabData['lbl_cl_pasillo']	= $this->lang_item("cl_pasillo",false);
+			$tbl_plantilla = set_table_tpl();
+			// Titulos de tabla
+			$this->table->set_heading(	$this->lang_item("lbl_articulo"),
+										$this->lang_item("lbl_articulo"),										
+										$this->lang_item("lbl_cl_almacen"),
+										$this->lang_item("lbl_cl_pasillo"),
+										$this->lang_item("lbl_cl_gaveta"),
+										$this->lang_item("lbl_clave_corta"),
+										$this->lang_item("lbl_stock"),
+										$this->lang_item("lbl_stock_um")
+									);
+			// Generar tabla
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
 
-		$tabData['lineas']   = implode('', $rtable);
+		$tabData['tabla']     		= $tabla;
 		$data = $this->load_view_unique($uri_view ,$tabData, true);
 
 		$slqDataajuste = array(
@@ -340,7 +356,8 @@ class aprobar_ajustes extends stock{
 									'edit_timestamp'  	=> $this->timestamp(),
 									'edit_id_usuario' 	=> $this->session->userdata('id_usuario')
 								);
-		$insert=1;
+
+		$insert=$this->db_model->update_data($slqDataajuste);
 		if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));
@@ -348,7 +365,6 @@ class aprobar_ajustes extends stock{
 				$msg = $this->lang_item("msg_campos_obligatorios",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 			}
-		//dump_var($articulo_detalle);
 	}
 }
 ?>

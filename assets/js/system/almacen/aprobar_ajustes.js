@@ -59,19 +59,39 @@ function detalle(id_almacen_ajuste){
         }
     });
 }
-function calculos(){
+function calculos(id){
 	var stock_total    = parseFloat(jQuery('#stock_total').val());
 	var stock_um_total = parseFloat(jQuery('#stock_um_total').val());
 	var stock_mov      = parseFloat(jQuery('#stock_mov').val());
+	var stock_um_mov   = parseFloat(jQuery('#stock_um_mov').val());
+	var mensaje=0;
 	if(isNaN(stock_mov)){
 		stock_mov=0;
 	}
-	if(parseFloat(stock_total)>=parseFloat(stock_mov)){
-		var um = regla_tres(stock_total,stock_um_total,stock_mov);
-		jQuery('#stock_um_mov').val(um);
-	}else{
-		alert('no puede ser mayor a la cantidad registrada');
+	if(isNaN(stock_um_mov)){
+		stock_um_mov=0;
 	}
+	
+		if(id==1){
+			if(parseFloat(stock_total)>=parseFloat(stock_mov)){
+				var um = regla_tres(stock_total,stock_um_total,stock_mov);
+				jQuery('#stock_um_mov').val(um);
+			}else{mensaje=1;
+				jQuery('#stock_um_mov').val(0);
+				}
+
+		}else{
+			if(parseFloat(stock_um_total)>=parseFloat(stock_um_mov)){
+				var um = regla_tres(stock_um_total,stock_total,stock_um_mov);
+				jQuery('#stock_mov').val(um);
+			}else{
+				mensaje=1;
+				jQuery('#stock_mov').val(0)
+			}
+		}
+		if(mensaje){
+			alert('no puede ser mayor a la cantidad registrada');
+		}
 }
 function agregar(id_almacen_ajuste){
 	var progress = progress_initialized('update_loader');

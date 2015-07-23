@@ -393,7 +393,7 @@ class agregar_ajustes extends stock{
 			$id_pasillo   = $this->ajax_post('id_pasillo');
 			$id_gaveta 	  = $this->ajax_post('id_gavetas');
 			//
-			$sqlData= array(
+			$sqlData = array(
 						'stock_mov'    => $stock_mov,
 						'stock_um_mov' => $stock_um_mov,
 						'id_articulo'  => $id_articulo,

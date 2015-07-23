@@ -101,7 +101,7 @@
                     <label>{lbl_stock}:</label>
                 </td>
                 <td>
-                    <input type="text" class="input-small" id="stock_mov" onkeyup="calculos();" value="{stock_mov}"> {cl_um}
+                    <input type="text" class="input-small" id="stock_mov" onkeyup="calculos(1);" value="{stock_mov}"> {cl_um}
                 </td>
             </tr>
             <tr>
@@ -109,7 +109,7 @@
                     <label>{lbl_stock_um}</label>
                 </td>
                 <td>
-                    <input type="text" class="input-small" id="stock_um_mov" value="{stock_um_mov}"> {cl_um}
+                    <input type="text" class="input-small" id="stock_um_mov" onkeyup="calculos(2);" value="{stock_um_mov}"> {cl_um}
                 </td>
             </tr>
         </table>

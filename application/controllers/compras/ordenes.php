@@ -235,7 +235,7 @@ class ordenes extends Base_Controller {
 					,'value' 	=> 'id_administracion_creditos'
 					,'text' 	=> array('clave_corta','credito')
 					,'name' 	=> "id_administracion_creditos"
-					,'class' 	=> "requerido"
+					,'class' 	=> ""
 				);
 		$creditos	    = dropdown_tpl($dropArray4);
 
@@ -349,7 +349,7 @@ class ordenes extends Base_Controller {
 					,'value' 	=> 'id_administracion_creditos'
 					,'text' 	=> array('clave_corta','credito')
 					,'name' 	=> "id_administracion_creditos"
-					,'class' 	=> "requerido"
+					,'class' 	=> ""
 				);
 		$creditos	    = dropdown_tpl($dropArray4);
 

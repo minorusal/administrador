@@ -43,6 +43,7 @@ $lang['rechazar_orden']  	= "Rechazar orden";
 $lang['estatus']  			= "Estatus";
 $lang['impreso_el']  		= "Consultado el";
 $lang['consecutivo']  		= "#";
+$lang['creditos']  			= "Créditos";
 $lang['orden_cerrada']  	= "La orden de compra ha sido CERRADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];
 $lang['orden_cancelada']  	= "La orden de compra ha sido CANCELADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];
 $lang['orden_aprobada']  	= "La orden de compra ha sido APROBADA correctamente. Puede consultarla en el aparatado de ".$lang['historial_ordenes'];

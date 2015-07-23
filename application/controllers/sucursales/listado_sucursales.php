@@ -1,8 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-class impuestos extends Base_Controller{
+class listado_sucursales extends Base_Controller{
 	private $modulo;
-	private $submodulo;
 	private $seccion;
 	private $view_content;
 	private $path;
@@ -13,13 +11,12 @@ class impuestos extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		$this->modulo 			= 'administracion';
-		$this->submodulo		= 'catalogos';
-		$this->seccion          = 'impuestos';
-		$this->icon 			= 'fa fa-tasks'; 
+		$this->modulo 			= 'sucursales';
+		$this->seccion          = 'listado_sucursales';
+		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 10;
+		$this->limit_max		= 5;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -27,6 +24,8 @@ class impuestos extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model('administracion/entidades_model','db_model2');
+		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -68,17 +67,17 @@ class impuestos extends Base_Controller{
 		$tabl_inicial 			  = 2;
 		$view_listado    		  = $this->listado();	
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['titulo_seccion']   = $this->lang_item('lbl_seccion');
+		$data['titulo_modulo']    = $this->lang_item('lbl_submodulo');
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		//print_debug($js);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
 	public function listado($offset=0){
-	// Crea tabla con listado de elementos capturados 
 		$seccion 		= '/listado';
 		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
@@ -101,24 +100,28 @@ class impuestos extends Base_Controller{
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_administracion_impuestos'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_sucursal'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_administracion_impuestos'],
-									'impuesto'      => tool_tips_tpl($value['impuesto'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'valor'         => $value['valor'],
+				$tbl_data[] = array('id'            => $value['id_sucursal'],
+									'sucursal'      => tool_tips_tpl($value['sucursal'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'clave_corta'   => $value['clave_corta'],
-									'descripcion'   => $value['descripcion']
+									'razon_social'  => $value['rfc'],
+									'regiones'      => $value['region'],
+									'rfc'  => $value['razon_social'],
+									'direccion'     => tool_tips_tpl($value['direccion'], $this->lang_item("tool_tip"), 'right' , $atrr)
 									);
 			}
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("lbl_id"),
-										$this->lang_item("lbl_impuesto"),
-										$this->lang_item("lbl_valor"),
+										$this->lang_item("lbl_sucursal"),
 										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_descripcion"));
+										$this->lang_item("lbl_rfc"),
+										$this->lang_item("lbl_region"),
+										$this->lang_item("lbl_rs"),
+										$this->lang_item("lbl_direccion"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -144,8 +147,8 @@ class impuestos extends Base_Controller{
 	}
 
 	public function detalle(){
-		$id_impuesto                 = $this->ajax_post('id_impuesto');
-		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_impuesto);
+		$id_sucursal                 = $this->ajax_post('id_sucursal');
+		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData        = array(
@@ -153,19 +156,49 @@ class impuestos extends Base_Controller{
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
+		$regiones_array = array(
+					'data'			 => $this->regiones->db_get_data($sqlData)
+					,'value' 	     => 'id_administracion_region'
+					,'text' 	     => array('region')
+					,'name' 	     => "lts_regiones"
+					,'class' 	     => "requerido"
+					,'selected'      => $detalle[0]['id_region']
+			);
+		$regiones                    = dropdown_tpl($regiones_array);
+		$entidades_array = array(
+					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
+					,'value' 	     => 'id_administracion_entidad'
+					,'text' 	     => array('entidad')
+					,'name' 	     => "lts_entidades"
+					,'class' 	     => "requerido"
+					,'selected'      => $detalle[0]['id_entidad']
+					);
+		$entidades                         = dropdown_tpl($entidades_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
-        $tabData['id_impuesto']            = $id_impuesto;
-        $tabData["lbl_impuesto"]           = $this->lang_item("lbl_impuesto");
-		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
-		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
-		$tabData["lbl_valor"]              = $this->lang_item("lbl_valor");
-        $tabData['txt_impuesto']           = $detalle[0]['impuesto'];
-		$tabData['txt_clave_corta']        = $detalle[0]['clave_corta'];
-        $tabData['txt_descripcion']        = $detalle[0]['descripcion'];
-        $tabData['txt_valor']              = $detalle[0]['valor'];
+        $tabData['id_sucursal']            = $id_sucursal;
+        $tabData["nombre_sucursal"]        = $this->lang_item("nombre_sucursal");
+		$tabData["cvl_corta"]              = $this->lang_item("clave_corta");
+		$tabData["r_social"]               = $this->lang_item("rs");
+		$tabData["r_f_c"]                  = $this->lang_item("rfc");
+		$tabData["lbl_email"]              = $this->lang_item("lbl_email");
+		$tabData["lbl_encargado"]          = $this->lang_item("lbl_encargado");
+		$tabData["dir"]                    = $this->lang_item("direccion");
+		$tabData["tel"]                    = $this->lang_item("tel");
+		$tabData["list_entidad"]           = $entidades;
+		$tabData["list_region"]            = $regiones;
+		$tabData["lbl_entidad"]            = $this->lang_item("lbl_entidad");
+		$tabData["lbl_region"]             = $this->lang_item("lbl_region");
+        $tabData['sucursal']               = $detalle[0]['sucursal'];
+		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
+        $tabData['razon_social']           = $detalle[0]['razon_social'];
+        $tabData['rfc']                    = $detalle[0]['rfc'];
+        $tabData['email']                  = $detalle[0]['email'];
+		$tabData['encargado']              = $detalle[0]['encargado'];
+        $tabData['direccion']              = $detalle[0]['direccion'];
+        $tabData['telefono']               = $detalle[0]['telefono'];
         $tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
-        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
-		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro', false);
+        $tabData['val_fecha_registro']     = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']     = $this->lang_item('lbl_fecha_registro', false);
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro', false);
         
         $this->load_database('global_system');
@@ -187,25 +220,30 @@ class impuestos extends Base_Controller{
         $tabData['button_save']           = $btn_save;
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
       	$tabData['usuario_registro']	= $usuario_name;
-        									   	
-		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+        									   #administracion/catalogos/sucursales/sucursales_detalle	
+		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/listado_sucursales_detalle';
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function actualizar(){
-		$objData  	= $this->ajax_post('objData');
-		if($objData['incomplete']>0){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$sqlData = array(
-						 'id_administracion_impuestos'	=> $objData['id_impuesto']
-						,'impuesto'          => $objData['txt_impuesto']
-						,'valor'             => $objData['txt_valor']
-						,'clave_corta' 	     => $objData['txt_clave_corta']
-						,'descripcion'	     => $objData['txt_descripcion']
-						,'edit_timestamp'    => $this->timestamp()
-						,'edit_id_usuario'	 => $this->session->userdata('id_usuario')
+						 'id_sucursal'	 => $this->ajax_post('id_sucursal')
+						,'sucursal'      => $this->ajax_post('sucursal')
+						,'clave_corta' 	 => $this->ajax_post('clave_corta')
+						,'razon_social'	 => $this->ajax_post('razon_social')
+						,'rfc'			 => $this->ajax_post('rfc')
+						,'email'	     => $this->ajax_post('email')
+						,'encargado'	 => $this->ajax_post('encargado')
+						,'id_entidad'	 => $this->ajax_post('id_entidad')
+						,'telefono'		 => $this->ajax_post('telefono')
+						,'direccion'	 => $this->ajax_post('direccion')
+						,'edit_timestamp'	=> $this->timestamp()
+						,'edit_id_usuario'	=> $this->session->userdata('id_usuario')
 						);
 			$insert = $this->db_model->db_update_data($sqlData);
 			if($insert){
@@ -218,45 +256,85 @@ class impuestos extends Base_Controller{
 		}
 	}
 
-	public function agregar(){							
-		$seccion       = $this->modulo.'/'.$this->seccion.'/impuestos_save';
+	public function agregar()
+	{							
+		$seccion       = $this->modulo.'/'.$this->seccion.'/listado_sucursales_save';
 		$sqlData        = array(
 			 'buscar'      	=> ''
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
+		$regiones_array = array(
+			      'data'   => $this->regiones->db_get_data($sqlData)
+			     ,'value'  => 'id_administracion_region'
+			     ,'text'   => array('region')
+			     ,'name'   => 'lts_regiones'
+			     ,'class'  => 'requerido'
+			);
+		$regiones = dropdown_tpl($regiones_array);
+		$entidades_array = array(
+					 'data'			 => $this->db_model2->get_entidades_default($sqlData)
+					,'value' 	  => 'id_administracion_entidad'
+					,'text' 	  => array('entidad')
+					,'name' 	  => "lts_entidades"
+					,'class' 	  => "requerido"
+					);
+		$entidades    = dropdown_tpl($entidades_array);
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		//$tab_1["nombre_impuesto"]  = $this->lang_item("nombre_impuesto");
-		$tab_1["lbl_impuesto"]     = $this->lang_item("lbl_impuesto");
-		$tab_1["lbl_valor"]        = $this->lang_item("lbl_valor");
-		$tab_1["lbl_clave_corta"]  = $this->lang_item("lbl_clave_corta");
-		$tab_1["lbl_descripcion"]  = $this->lang_item("lbl_descripcion");
+		$tab_1["nombre_sucursal"]  = $this->lang_item("nombre_sucursal");
+		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
+		$tab_1["r_social"]         = $this->lang_item("rs");
+		$tab_1["r_f_c"]            = $this->lang_item("rfc");
+		$tab_1["lbl_email"]        = $this->lang_item("lbl_email");
+		$tab_1["lbl_encargado"]    = $this->lang_item("lbl_encargado");
+		$tab_1["tel"]              = $this->lang_item("telefono");
+		$tab_1["list_entidad"]     = $entidades;
+		$tab_1["list_region"]      = $regiones;
+		$tab_1["lbl_region"]       = $this->lang_item("lbl_region");
+		$tab_1["lbl_entidad"]      = $this->lang_item("lbl_entidad");
+		$tab_1["direccion"]        = $this->lang_item("direccion");
 
         $tab_1['button_save']      = $btn_save;
         $tab_1['button_reset']     = $btn_reset;
 
 
-        if($this->ajax_post(false)){
+        if($this->ajax_post(false)) {
 				echo json_encode($this->load_view_unique($seccion , $tab_1, true));
 		}else{
 			return $this->load_view_unique($seccion , $tab_1, true);
 		}
 	}
 
-	public function insert_impuesto(){
-		$objData  	= $this->ajax_post('objData');
-		if($objData['incomplete']>0){
+	public function insert_sucursal(){
+		$incomplete  = $this->ajax_post('incomplete');
+		if($incomplete>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$data_insert     = array('impuesto' => $objData['txt_impuesto'],
-								 'valor'        => $objData['txt_valor'],
-								 'clave_corta'  => $objData['txt_clave_corta'],
-								 'descripcion'  => $objData['txt_descripcion'],
-								 'id_usuario'   => $this->session->userdata('id_usuario'),  
-								 'timestamp'     => $this->timestamp());
+			$sucursal        = $this->ajax_post('sucursal');
+			$clave_corta     = $this->ajax_post('clave_corta');
+			$razon_social    = $this->ajax_post('razon_social');
+			$rfc             = $this->ajax_post('rfc');
+			$email           = $this->ajax_post('email');
+			$encargado       = $this->ajax_post('encargado');
+			$telefono        = $this->ajax_post('tel');
+			$region          = $this->ajax_post('id_region');
+			$entidad         = $this->ajax_post('id_entidad');
+			$direccion       = $this->ajax_post('direccion');
+			$data_insert     = array('sucursal' => $sucursal,
+								 'clave_corta'  => $clave_corta,
+								 'direccion'    => $direccion,
+								 'id_usuario'   => $this->session->userdata('id_usuario'),
+								 'id_region'    => $region,
+								 'id_entidad'   => $entidad,
+								 'razon_social' => $razon_social,
+								 'rfc'          => $rfc,
+								 'email'        => $email,
+								 'encargado'    => $encargado,
+								 'telefono'     => $telefono,  
+								 'timestamp'    => $this->timestamp());
 			$insert = $this->db_model->db_insert_data($data_insert);
 			
 			if($insert){
@@ -281,17 +359,19 @@ class impuestos extends Base_Controller{
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
-									 $value['impuesto'],
-									 $value['valor'],
+									 $value['sucursal'],
 									 $value['clave_corta'],
-									 $value['descripcion']);
+									 $value['razon_social'],
+									 $value['rfc'],
+									 $value['direccion']);
 			}
 			
 			$set_heading = array(
-									$this->lang_item("impuesto"),
-									$this->lang_item("valor"),
+									$this->lang_item("sucursal"),
 									$this->lang_item("clave_corta"),
-									$this->lang_item("descripcion"));
+									$this->lang_item("rs"),
+									$this->lang_item("rfc"),
+									$this->lang_item("direccion"));
 	
 		}
 

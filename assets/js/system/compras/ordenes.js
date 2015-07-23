@@ -334,9 +334,6 @@ function calcula_valores_finales(id){
 	});
 
 	//CALCULA EL SUBTOTAL
-	/*jQuery('[name^=subtotal__hidden]').each(function(){
-		valor.push(parseFloat(jQuery(this).val()));
-	});*/
 	jQuery(valor_4).each(function(index,value){
 		result=parseFloat(value);
 		subtotal= subtotal+result;

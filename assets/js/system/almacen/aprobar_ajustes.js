@@ -60,33 +60,56 @@ function detalle(id_almacen_ajuste){
     });
 }
 function calculos(){
-	/*var primer_valor = stock_mod;
-	var segundo_valor = stock_origen;
-	var segundo_valor = stock_origen;*/
-	
-	//var um = regla_tres(stock_num,stock_num_um,stock);
+	var stock_total    = parseFloat(jQuery('#stock_total').val());
+	var stock_um_total = parseFloat(jQuery('#stock_um_total').val());
+	var stock_mov      = parseFloat(jQuery('#stock_mov').val());
+	if(isNaN(stock_mov)){
+		stock_mov=0;
+	}
+	if(parseFloat(stock_total)>=parseFloat(stock_mov)){
+		var um = regla_tres(stock_total,stock_um_total,stock_mov);
+		jQuery('#stock_um_mov').val(um);
+	}else{
+		alert('no puede ser mayor a la cantidad registrada');
+	}
 }
-/*function agregar(id_almacen_ajuste){
+function agregar(id_almacen_ajuste){
 	var progress = progress_initialized('update_loader');
 	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();
 	var btn = jQuery("button[name='ajuste_save']");
 	//btn.attr('disabled','disabled');
+	var id_articulo    = jQuery('#id_articulo').val();
+	var id_almacen 	   = jQuery('#id_almacen').val();
+	var id_pasillo 	   = jQuery('#id_pasillo').val();
+	var id_gaveta 	   = jQuery('#id_gaveta').val();
+	var stock_mov      = parseFloat(jQuery('#stock_mov').val());
+	var stock_um_mov   = parseFloat(jQuery('#stock_um_mov').val());
+
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"almacen/aprobar_ajustes/agregar",
 		dataType: "json",			
 		data : {
-				id_almacen_ajuste			 :  id_almacen_ajuste
+				id_articulo	 	  :  id_articulo,
+				id_almacen	 	  :  id_almacen,
+				id_pasillo	 	  :  id_pasillo,
+				id_gaveta	 	  :  id_gaveta,
+				stock_mov 	 	  :  stock_mov,
+				stock_um_mov 	  :  stock_um_mov,
+				id_almacen_ajuste :  id_almacen_ajuste
 		},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
+			//alert(data);
 			if(data.success == 'true' ){
 				jgrowl(data.mensaje);
+				jQuery("#listaod_afectado").html(data.table).show('slow').delay(3000).fadeIn("slow");	
 			}else{
 				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+
 			}
 		}
 	  }).error(function(){
@@ -100,4 +123,4 @@ function calculos(){
 		        progress.progressTimer('complete');
 		        btn.attr('disabled',false);
 	  });
-}*/
+}

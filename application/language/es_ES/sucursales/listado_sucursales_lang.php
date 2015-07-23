@@ -6,6 +6,15 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
+$lang['lbl_direccion']		= 'dirección';
+$lang['lbl_rs']				= 'razón social';
+$lang['lbl_region']			= 'región';
+$lang['lbl_rfc']			= 'RFC';
+$lang['lbl_clave_corta']	= 'clave corta';
+$lang['lbl_seccion']		= 'Catálogo de sucursales';
+$lang['listado_sucursales']	= 'Listado';
+$lang['lbl_submodulo']      = 'sucursales';
+$lang['lbl_sucursal']		= 'sucursal';
 $lang['lbl_entidad']        = 'entidad';
 $lang['lbl_region']         = 'región';
 $lang['nombre_sucursal'] 	= "sucursal";

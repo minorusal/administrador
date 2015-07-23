@@ -25,7 +25,7 @@ $lang['rfc'] 		        = "rfc";
 $lang['tel'] 		        = "teléfono";
 $lang['lbl_email'] 		    = "email";
 $lang['lbl_encargado'] 		= "encargado";
-$lang['tel'] 		        = "teléfono";
+$lang['telefono'] 		        = "teléfono";
 
 $lang['fecha_registro'] 	      = "Creado el";
 $lang['lbl_usuario_registro']     = "Creado por";

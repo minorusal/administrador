@@ -714,10 +714,36 @@ class Base_Controller extends CI_Controller {
 		return $this->session->userdata($index);
 	}
 
+	/**
+	* Devuelve un arreglo con mensaje y respuesta true o false
+	*@param string $inicio, string $termino
+	*@param array 
+	*/
+	public function check_time_longer($inicio, $termino){
+		//print_debug($inicio);
+		$response = '';
+		$msg = '';
+		$mk_inicio       =  explode(':', $inicio);
+		$mk_termino      =  explode(':', $termino);
+		$mk_inicio       =  mktime($mk_inicio[0],  $mk_inicio[1],  0,0,0,0);
+		$mk_termino      =  mktime($mk_termino[0], $mk_termino[1],0,0,0,0);
+		if($mk_inicio==$mk_termino){
+			$msg = 'msg_hora_igual';
+			$response = false;
+		}else if($mk_inicio>$mk_termino){
+			$msg = 'msg_horainicio_mayor';
+			$response = false;
+		}else{
+			$msg = 'msg_insert_success';
+			$response = true;
+		}
+		//print_debug(array('response'=> $response, 'msg' =>  $msg));
+		return array('response'=> $response, 'msg' =>  $msg);
+	}
 
 	/**
     * Devuelve un arreglo con mensaje y respuesta true o false
-    * @param time $inicio, time $termino, array $times
+    * @param string $inicio, string $termino, array $times
     * @return array
     */
 	public function check_times_ranges($incio, $termino, $times = array()){

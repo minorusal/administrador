@@ -195,7 +195,7 @@ class agregar_ajustes extends stock{
 		$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
 		$tabData['lblstock']	     = $this->lang_item("lblstock",false);
 		$tabData['stock_um_lbl']	 = $this->lang_item("stock_um_lbl",false);
-
+		$tabData['configuracion']	 = $this->lang_item("configuracion",false);
 
 		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
 		if($this->ajax_post(false)){
@@ -241,14 +241,16 @@ class agregar_ajustes extends stock{
 					'id_gaveta' => $id_gavetas);
 
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
+		//dump_var($detalle);
 		$stock=0;
 		$stock_um=0;
 		for($i=0; count($detalle)>$i;$i++){
 			$stock+=$detalle[$i]['stock'];
 			$stock_um+=$detalle[$i]['stock_um'];
 		}
-		$um= $detalle[0]['unidad_minima_cve'];
-		$data=array('stock'=> $stock,'stock_um'=>$stock_um, 'u_m_cv'=>$um);
+		$um_mimina= $detalle[0]['unidad_minima_cve'];
+		$cl_um= $detalle[0]['cl_um'];
+		$data=array('stock'=> $stock,'stock_um'=>$stock_um, 'u_m_cv'=>$um_mimina, 'um' => $cl_um);
 		echo json_encode($data);
 	}
 	public function load_gaveta_pas(){

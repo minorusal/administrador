@@ -1,6 +1,6 @@
 <?php
 $lang['agregar_ajustes']     	= 	'Agregar ajuste';
-$lang['articulo']     		 	= 	'Articulo';
+$lang['articulo']     		 	= 	'Artículo';
 $lang['stock_mov']           	= 	'Stock a mover';
 $lang['stock_um_mov']     	 	=   'Stock en u.m. a mover';	
 $lang['fecha_registro']      	= 	'Fecha de registro';
@@ -14,4 +14,5 @@ $lang['aprobar_ajustes']     	= 	'Aprobar ajuste';
 $lang['xlsx_agregar_ajustes']   = 	'Listado de agregar ajuste';
 $lang['xlsx_aprobar_ajustes']   = 	'Listado de aprobar ajuste';
 $lang['id_almacen_ajuste']      = 	'Id';
+$lang['configuracion']  		= 'Configuración';
 ?>

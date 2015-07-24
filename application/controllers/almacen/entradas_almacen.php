@@ -155,7 +155,7 @@ class entradas_almacen extends stock{
 			// XLS
 			$buttonTPL = array( 'text'   => $this->lang_item("btn_xlsx"), 
 							'iconsweets' => 'iconsweets-excel',
-							'href'       => base_url($this->modulo.'/'.$this->submodulo).'/export_xlsx?filtro='.base64_encode($filtro)
+							'href'       => base_url($this->modulo.'/'.$this->seccion).'/export_xlsx?filtro='.base64_encode($filtro)
 							);
 		}else{
 			$msg   = $this->lang_item("msg_query_null");
@@ -333,5 +333,45 @@ class entradas_almacen extends stock{
 			$msg = $this->lang_item("msg_err_clv",false);
 			echo json_encode('0|'.alertas_tpl('', $msg ,false));
 		}		
+	}
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array(
+			 'buscar'     => $filtro
+		);
+		$list_content 			  = $this->db_model->db_get_data($sqlData);
+
+		if(count($list_content)>0){
+			foreach ($list_content as $value) {
+				$set_data[] = array(
+									$value['id_stock'],
+									$value['articulo'],
+									$value['presentacion'],
+									$value['stock'],
+									$value['clave_corta'],
+									$value['fecha_recepcion'],
+									$value['almacenes'],
+									$value['gavetas']
+								);
+			}
+
+			$set_heading = array(		
+								$this->lang_item("id"),
+								$this->lang_item("articulo"),										
+								$this->lang_item("presentacion"),
+								$this->lang_item("stock"),
+								$this->lang_item("clave_corta"),
+								$this->lang_item("fecha_recepcion"),
+								$this->lang_item("almacenes"),
+								$this->lang_item("gavetas")
+							);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("xlsx_entradas_almacen"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
 	}
 }

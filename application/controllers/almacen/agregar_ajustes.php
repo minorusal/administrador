@@ -24,7 +24,7 @@ class agregar_ajustes extends stock{
 		$this->modulo 			= 'almacen';
 		$this->submodulo        = 'agregar_ajustes';
 		$this->seccion          = 'ajustes';
-		$this->icon 			= 'fa fa-list-alt'; //Icono de modulo
+		$this->icon 			= 'fa fa-inbox'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;

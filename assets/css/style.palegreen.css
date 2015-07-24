@@ -107,7 +107,9 @@ body.loginpage,
 { background-color: #47755e; }
 
 
-
+.fa-spinner{
+  color: #47755e;
+}
 /* color */
 
 a,a:hover,a:link,a:active,a:focus,

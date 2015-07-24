@@ -495,7 +495,7 @@ function imgLoader(idDiv, imageFile){
 
     imageFile       = imgPath + imageName ;
 
-    var htmlLoader  = '<img src="'+imageFile+'"/>';
+    var htmlLoader  = '<i class="fa fa-spinner fa-pulse fa-3x"></i>';//'<img src="'+imageFile+'"/>';
     jQuery(idDiv).html(htmlLoader);
     return true;
 }

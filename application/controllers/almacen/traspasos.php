@@ -352,5 +352,43 @@ class traspasos extends stock{
 			echo json_encode('0|'.alertas_tpl('', $msg ,false));
 		}		
 	}
+
+	public function export_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$sqlData     = array(
+			 'buscar'      	=> $filtro,
+			 'offset' 		=> $offset
+		);
+		$lts_content = $this->db_model->db_get_data($sqlData);
+		foreach ($lts_content as $value){
+					$stock = (substr($value['stock'], strpos($value['stock'], "." ))=='.000' && $value['articulo_tipo']!=strtoupper('INSUMO'))?number_format($value['stock'],0).' '.$this->lang_item("pieza_abrev"):$value['stock'].' '.$value['unidad_minima_cve'];
+					$set_data[] = array('id'            => $value['id_stock'],
+									'articulo'  	 	=> $value['articulo'],
+									'presentacion'   	=> $value['presentacion_detalle'],
+									'stock'      		=> $stock,
+									'articulo_tipo'   	=> $value['articulo_tipo'],
+									'fecha_recepcion'   => $value['fecha_recepcion'],
+									'almacenes'   	 	=> $value['almacenes'],
+									'gavetas'   	 	=> $value['gavetas']
+									);
+
+		}
+		$set_heading = array(
+								$this->lang_item("id_stock"),
+								$this->lang_item("articulo"),										
+								$this->lang_item("presentacion"),
+								$this->lang_item("stock"),
+								$this->lang_item("articulo_tipo"),
+								$this->lang_item("fecha_recepcion"),
+								$this->lang_item("almacen"),
+								$this->lang_item("gaveta")
+							);
+		$params = array(	'title'   => $this->lang_item("traspasos_file",false).'_'.date('Ymd-his'),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		$this->excel->generate_xlsx($params);
+	}
 }
 ?>

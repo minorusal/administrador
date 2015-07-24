@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class entradas_recepcion extends Base_Controller{
 		/**
-	* Nombre:		Historial Ordenes
-	* Ubicación:	Compras>Ordenes/historial ordenes
+	* Nombre:		Entradas Recepcion
+	* Ubicación:	Almacen>Entradas/Entradas recepcion
 	* Descripción:	Funcionamiento para la sección de ordenes de compra
 	* @author:		Alejandro Enciso
 	* Creación: 	2015-05-19
@@ -24,7 +24,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->modulo 			= 'almacen';
 		$this->seccion          = 'entradas';
 		$this->submodulo        = 'entradas_recepcion';
-		$this->icon 			= 'fa fa-book'; //Icono de modulo
+		$this->icon 			= 'fa fa-folder-open'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -151,7 +151,6 @@ class entradas_recepcion extends Base_Controller{
 									);
 			}
 			// Plantilla
-			// $tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id"),
@@ -551,5 +550,46 @@ class entradas_recepcion extends Base_Controller{
 		$html_modal = toggle_modal_tpl('lote', $arg_body);
 		echo json_encode($html_modal);
 	}
+	public function export_xlsx(){
+		echo '??';
+		die();
+	}
+	/*public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array(
+			 'buscar'     => $filtro
+		);
+		$list_content 			  = $this->db_model->db_get_data($sqlData);
+
+		if(count($list_content)>0){
+			foreach ($list_content as $value) {
+				$set_data[] = array(
+									$value['id_compras_orden'],
+									$value['orden_num'],
+									$value['descripcion'],
+									$value['timestamp'],
+									$value['entrega_fecha'],
+									$value['estatus']
+									);
+			}
+
+			$set_heading = array(		
+									$this->lang_item("id"),
+									$this->lang_item("orden_num"),										
+									$this->lang_item("descripcion"),
+									$this->lang_item("fecha_registro"),
+									$this->lang_item("entrega_fecha"),
+									$this->lang_item("estatus")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("xlsx_entradas_recepcion"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		dump_var($params);
+		$this->excel->generate_xlsx($params);
+	}*/
 }
 ?>

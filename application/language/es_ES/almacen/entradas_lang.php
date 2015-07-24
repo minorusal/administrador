@@ -59,4 +59,8 @@
 	$lang['stock']					= 'Stock';
 	$lang['clave_corta']			= 'Clave';
 	$lang['fecha_recepcion']		= 'Recepción';
+
+	$lang['id']						= 'Id';
+	$lang['xlsx_entradas_recepcion']= 'Listado de entradas recepción';
+	$lang['xlsx_entradas_almacen']  = 'Listado de entradas a almacen';
 ?>

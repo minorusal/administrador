@@ -46,22 +46,6 @@ function load_content(uri, id_content){
         }
     });
 }
-/*function detalle(id_articulo){
-	var params = [];
-	params.push('allow_only_numeric();');
-	jQuery.ajax({
-        type: "POST",
-        url: path()+"almacen/agregar_ajustes/detalle",
-        dataType: 'json',
-        data: {id_articulo : id_articulo},
-        success: function(data){
-        	params.push('jQuery(".chzn-select").chosen();');
-        	jQuery('#a-1').html(data+include_script(params));
-        	jQuery('#ui-id-1').show('slow');
-        	jQuery('#ui-id-1').click();
-        }
-    });
-}*/
 function load_stock(id_articulo){
 	id_almacen = jQuery('select[name=lts_almacen] option:selected').val();
 	id_pasillo = jQuery('select[name=lts_pasillos] option:selected').val();

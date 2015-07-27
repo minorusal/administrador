@@ -115,6 +115,7 @@ class agregar_ajustes extends stock{
 		$list_content 			  = $this->db_model->db_get_data($sqlData);
 		$url          			  = base_url($url_link);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		//dump_var($list_content);
 		if($total_rows){
 			foreach ($list_content as $value) {
 				// Evento de enlace
@@ -122,10 +123,11 @@ class agregar_ajustes extends stock{
 				$accion_id 						= $value['id_almacen_ajuste'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_almacen_ajuste'],
 									'articulo'  	 	=> $value['articulo'],
-									'stock_mov'   	 	=> $value['stock_mov'].'-'.$value['cl_um'],
+									'stock_mov'   	 	=> $value['stock_mov'].'-'.$etiqueta,
 									'stock_um_mov'   	=> $value['stock_um_mov'].'-'.$value['cl_um'],
 									'timestamp'  	 	=> $value['timestamp'],
 									'acciones' 		 	=> $acciones
@@ -241,15 +243,14 @@ class agregar_ajustes extends stock{
 					'id_gaveta' => $id_gavetas);
 
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
-		//dump_var($detalle);
 		$stock=0;
 		$stock_um=0;
 		for($i=0; count($detalle)>$i;$i++){
 			$stock+=$detalle[$i]['stock'];
 			$stock_um+=$detalle[$i]['stock_um'];
 		}
+		($detalle[0]['id_articulo_tipo']==2)?$cl_um= $detalle[0]['cl_um']:$cl_um= $this->lang_item("pieza_abrev");
 		$um_mimina= $detalle[0]['unidad_minima_cve'];
-		$cl_um= $detalle[0]['cl_um'];
 		$data=array('stock'=> $stock,'stock_um'=>$stock_um, 'u_m_cv'=>$um_mimina, 'um' => $cl_um);
 		echo json_encode($data);
 	}
@@ -291,7 +292,7 @@ class agregar_ajustes extends stock{
 		$dropArray3 = array(
 				 'data'		=> $this->db_model->db_get_data_articulos($datasql)
 				,'value' 	=> 'id_articulo'
-				,'text' 	=> array('cl_um','articulo')
+				,'text' 	=> array('cl_articulo','articulo')
 				,'name' 	=> "lts_ajustes"
 				,'event'    => array('event'       => 'onchange',
 				   						 'function'    => 'load_stock',
@@ -435,10 +436,11 @@ class agregar_ajustes extends stock{
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				$set_data[] = array(
 									$value['id_almacen_ajuste'],
 									$value['articulo'],
-									$value['stock_mov'].'-'.$value['cl_um'],
+									$value['stock_mov'].'-'.$etiqueta,
 									$value['stock_um_mov'].'-'.$value['cl_um'],
 									$value['timestamp']
 									);

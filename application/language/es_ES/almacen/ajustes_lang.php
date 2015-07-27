@@ -18,4 +18,5 @@ $lang['configuracion']  		= 	'Configuración';
 $lang['stock_afec']  			= 	'Stock afectado';
 $lang['stock_um_afec']  		= 	'Stock por u.m. afectado';
 $lang['xlsx_historial_ajustes'] = 	'Listado de HIstorial de ajustes';
+$lang['pieza_abrev']			= 	'Pza';
 ?>

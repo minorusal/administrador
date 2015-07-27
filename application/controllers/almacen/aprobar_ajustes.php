@@ -352,8 +352,7 @@ class aprobar_ajustes extends stock{
 									'edit_id_usuario' 	=> $this->session->userdata('id_usuario')
 								);
 
-		//$insert=$this->db_model->update_data($slqDataajuste);
-		$insert=1;
+		$insert=$this->db_model->update_data($slqDataajuste);
 		if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));

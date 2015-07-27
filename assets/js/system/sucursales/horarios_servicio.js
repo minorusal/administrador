@@ -25,16 +25,16 @@ function load_content(uri, id_content){
            }else{
            		jQuery('#a-'+id_content).html(data);
            		jQuery('#timepicker1,#timepicker2').timepicker({
-				beforeShow: function(input, inst) {
-					var newclass = 'smart-forms'; 
-					var smartpikr = inst.dpDiv.parent();
-					if (!smartpikr.hasClass('smart-forms')){
-						inst.dpDiv.wrap('<div class="'+newclass+'"></div>');
-					}
-				}					
-			});
+					beforeShow: function(input, inst){
+						var newclass = 'smart-forms'; 
+						var smartpikr = inst.dpDiv.parent();
+						if (!smartpikr.hasClass('smart-forms')){
+							inst.dpDiv.wrap('<div class="'+newclass+'"></div>');
+						}
+					}					
+				});
 
-           }
+           	}
         }
     });
 }

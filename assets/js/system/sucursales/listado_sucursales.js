@@ -25,6 +25,15 @@ function load_content(uri, id_content){
            		jQuery('#a-'+id_content).html(data);
            		var chosen  = 'jQuery(".chzn-select").chosen();';
            		jQuery('#a-'+id_content).html(data+include_script(chosen));
+           		jQuery('#timepicker1,#timepicker2').timepicker({
+               beforeShow: function(input, inst){
+                  var newclass = 'smart-forms'; 
+                  var smartpikr = inst.dpDiv.parent();
+                  if (!smartpikr.hasClass('smart-forms')){
+                     inst.dpDiv.wrap('<div class="'+newclass+'"></div>');
+                  }
+               }              
+            });
            }
         }
     });
@@ -62,6 +71,15 @@ function detalle(id_sucursal){
         	jQuery('#a-2').html(data);
         	jQuery('#a-2').html(data+include_script(chosen));
         	jQuery('#ui-id-2').show('slow');
+        	jQuery('#timepicker1,#timepicker2').timepicker({
+            beforeShow: function(input, inst) {
+               var newclass = 'smart-forms'; 
+               var smartpikr = inst.dpDiv.parent();
+               if (!smartpikr.hasClass('smart-forms')){
+                  inst.dpDiv.wrap('<div class="'+newclass+'"></div>');
+               }
+            }              
+         });
         }
     });
 }
@@ -71,7 +89,13 @@ function actualizar(){
 	var btn          = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text     = btn.html();	
-	var incomplete   = values_requeridos();
+
+	var objData = formData('#formulario');
+ 	objData['incomplete'] = values_requeridos();
+
+ 	alert(dump_var(objData));
+
+	/*var incomplete   = values_requeridos();
 	var id_sucursal  = jQuery('#id_sucursal').val();
     var sucursal     = jQuery('#sucursal').val();
     var clave_corta  = jQuery('#clave_corta').val();
@@ -80,13 +104,17 @@ function actualizar(){
     var email        = jQuery('#email').val();
     var encargado    = jQuery('#encargado').val();
     var telefono     = jQuery('#telefono').val();
+    var inicio       = jQuery("#timepicker1").val();
+    var fin          = jQuery("#timepicker2").val();
+    var id_region    = jQuery("select[name='lts_regiones'] option:selected").val();
     var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
-    var direccion	 = jQuery("#direccion").val();
+    var direccion	 = jQuery("#direccion").val();*/
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"sucursales/listado_sucursales/actualizar",
 		dataType: "json",
-		data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, email:email, encargado:encargado, telefono:telefono, id_entidad:id_entidad,direccion:direccion},
+		//data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, email:email, encargado:encargado, telefono:telefono, id_region:id_region, inicio:inicio, fin:fin, id_entidad:id_entidad,direccion:direccion},
+		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
@@ -125,6 +153,8 @@ function agregar(){
     var tel          = jQuery('#telefono').val();
     var email        = jQuery('#email').val();
     var encargado    = jQuery('#encargado').val();
+    var inicio       = jQuery("#timepicker1").val();
+    var fin          = jQuery("#timepicker2").val();
     var id_region    = jQuery("select[name='lts_regiones'] option:selected").val();
     var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
     var direccion    =jQuery('#direccion').val();
@@ -132,7 +162,7 @@ function agregar(){
 		type:"POST",
 		url: path()+"sucursales/listado_sucursales/insert_sucursal",
 		dataType: "json",
-		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, id_region:id_region, id_entidad:id_entidad, direccion:direccion },
+		data: {incomplete :incomplete ,sucursal:sucursal, clave_corta:clave_corta, razon_social:razon_social, rfc:rfc, tel:tel, email:email, encargado:encargado, inicio:inicio, fin:fin, id_region:id_region, id_entidad:id_entidad, direccion:direccion },
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},

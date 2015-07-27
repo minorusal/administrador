@@ -18,13 +18,15 @@ class listado_sucursales_model extends Base_Model{
 		$query = "	SELECT 
 						 su.id_sucursal
 						,su.clave_corta
-						,su.rfc
+						,su.inicio
+						,su.final
 						,su.direccion
 						,su.sucursal
-						,su.razon_social
+						,e.entidad
 						,r.clave_corta as region
 					FROM $tbl[sucursales] su
 					LEFT JOIN $tbl[administracion_regiones] r on su.id_region = r.id_administracion_region
+					LEFT JOIN $tbl[administracion_entidades] e on e.id_administracion_entidad = su.id_entidad
 					WHERE su.activo = 1 $filtro
 					ORDER BY su.id_sucursal ASC
 					$limit
@@ -35,6 +37,43 @@ class listado_sucursales_model extends Base_Model{
 		}	
 	}
 
+	public function get_esquema_pago(){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[sucursales_esquema_pago] ";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_esquema_venta(){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT * FROM $tbl[sucursales_esquema_venta] ";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	public function db_update_data_pago($data = array()){
+		print_debug($data);
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "DELETE 
+				  FROM $tbl[sucursales_pago]
+				  WHERE id_sucursal = $data[id_sucursal] AND
+				  id_esquema_pago = $data[id_esquema_pago]
+				  ";
+		$query = $this->db->query($query);
+		if($query){
+			$insert = $this->insert_item($tbl['sucursales_pago'], $data);
+			return $insert;
+		}
+	}
 	/*Trae la información para el formulario de edición de sucursales*/
 	public function get_orden_unico_sucursal($id_sucursal){
 		// DB Info		

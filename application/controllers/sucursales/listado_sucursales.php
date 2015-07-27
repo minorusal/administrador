@@ -153,6 +153,11 @@ class listado_sucursales extends Base_Controller{
 	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
+		foreach ($detalle as $value) {
+			$id_pago[]  = $value['id_sucursales_esquema_pago'];
+			$id_venta[] = $value['id_sucursales_esquema_venta'];
+		}
+		//print_debug($id_pago);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData        = array(
@@ -185,6 +190,7 @@ class listado_sucursales extends Base_Controller{
 						,'text' 	=> array('clave_corta','esquema_pago')
 						,'name' 	=> "lts_esquema_pago"
 						,'class' 	=> "requerido"
+						,'selected' => $id_pago
 					);
 		$list_esquema_pago  = multi_dropdown_tpl($esquema_pago_array);
 
@@ -194,6 +200,7 @@ class listado_sucursales extends Base_Controller{
 						,'text' 	=> array('clave_corta','esquema_venta')
 						,'name' 	=> "lts_esquema_venta"
 						,'class' 	=> "requerido"
+						,'selected' => $id_venta
 					);
 		$list_esquema_venta  = multi_dropdown_tpl($esquema_venta_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
@@ -257,7 +264,6 @@ class listado_sucursales extends Base_Controller{
 
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
-		//print_debug($objData);
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
@@ -286,34 +292,39 @@ class listado_sucursales extends Base_Controller{
 						,'edit_id_usuario'	=> $this->session->userdata('id_usuario')
 						);
 				$insert = $this->db_model->db_update_data($sqlData);
-
-				$arr_pago  = explode(',',$objData['lts_esquema_pago']);
-				if(!empty($arr_pago)){
-					$sqlData = array();
-					foreach ($arr_pago as $key => $value){
-						$sqlData = array(
-							 'id_sucursal'       => $objData['id_sucursal']
-							,'id_esquema_pago'   => $value
-							,'edit_id_usuario'   => $this->session->userdata('id_usuario')
-							,'edit_timestamp'    => $this->timestamp()
-							);
-						$insert_pago = $this->db_model->db_update_data_pago($sqlData);
+				
+					$arr_pago  = explode(',',$objData['lts_esquema_pago']);
+					//print_debug($arr_pago);
+					$pago     = $this->db_model->delete_pago($objData['id_sucursal']);
+					
+					if(!empty($arr_pago)){
+						$sqlData = array();
+						foreach ($arr_pago as $key => $value){
+							$sqlData = array(
+								 'id_sucursal'       => $objData['id_sucursal']
+								,'id_esquema_pago'   => $value
+								,'id_usuario'   => $this->session->userdata('id_usuario')
+								,'timestamp'    => $this->timestamp()
+								);
+							$insert_pago = $this->db_model->db_update_data_pago($sqlData);
+						}
 					}
-				}
 
-				$arr_venta  = explode(',',$objData['lts_esquema_venta']);
-				if(!empty($arr_venta)){
-					$sqlData = array();
-					foreach ($arr_venta as $key => $value){
-						$sqlData = array(
-							 'id_sucursal'       => $objData['id_sucursal']
-							,'id_esquema_venta'  => $value
-							,'edit_id_usuario'   => $this->session->userdata('id_usuario')
-							,'edit_timestamp'    => $this->timestamp()
-							);
-						$insert_venta = $this->db_model->db_update_data_venta($sqlData);
+					$arr_venta  = explode(',',$objData['lts_esquema_venta']);
+					$venta      = $this->db_model->delete_venta($objData['id_sucursal']);
+					
+					if(!empty($arr_venta)){
+						$sqlData = array();
+						foreach ($arr_venta as $key => $value){
+							$sqlData = array(
+								 'id_sucursal'       => $objData['id_sucursal']
+								,'id_esquema_venta'  => $value
+								,'id_usuario'   => $this->session->userdata('id_usuario')
+								,'timestamp'    => $this->timestamp()
+								);
+							$insert_venta = $this->db_model->db_update_data_venta($sqlData);
+						}
 					}
-				}
 				if($insert){
 					$msg = $this->lang_item("msg_update_success",false);
 					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));

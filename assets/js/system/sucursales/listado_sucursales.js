@@ -93,33 +93,16 @@ function actualizar(){
 	var objData = formData('#formulario');
  	objData['incomplete'] = values_requeridos();
 
- 	alert(dump_var(objData));
-
-	/*var incomplete   = values_requeridos();
-	var id_sucursal  = jQuery('#id_sucursal').val();
-    var sucursal     = jQuery('#sucursal').val();
-    var clave_corta  = jQuery('#clave_corta').val();
-    var razon_social = jQuery('#razon_social').val();
-    var rfc          = jQuery('#rfc').val();
-    var email        = jQuery('#email').val();
-    var encargado    = jQuery('#encargado').val();
-    var telefono     = jQuery('#telefono').val();
-    var inicio       = jQuery("#timepicker1").val();
-    var fin          = jQuery("#timepicker2").val();
-    var id_region    = jQuery("select[name='lts_regiones'] option:selected").val();
-    var id_entidad   = jQuery("select[name='lts_entidades'] option:selected").val();
-    var direccion	 = jQuery("#direccion").val();*/
 	jQuery.ajax({
 		type:"POST",
 		url: path()+"sucursales/listado_sucursales/actualizar",
 		dataType: "json",
-		//data: {incomplete:incomplete, id_sucursal:id_sucursal, sucursal:sucursal,clave_corta:clave_corta,razon_social:razon_social,rfc:rfc, email:email, encargado:encargado, telefono:telefono, id_region:id_region, inicio:inicio, fin:fin, id_entidad:id_entidad,direccion:direccion},
 		data: {objData:objData},
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-			if(data.success == 'true' ){
+			if(data.success == 'true'){
 				jgrowl(data.mensaje);
 			}else{
 				jQuery("#mensajes_update").html(data.mensaje).show('slow');	

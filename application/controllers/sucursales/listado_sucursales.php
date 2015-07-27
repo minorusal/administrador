@@ -24,6 +24,7 @@ class listado_sucursales extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model('sucursales/horarios_atencion_model','horario');
 		$this->load->model('administracion/entidades_model','db_model2');
 		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario
@@ -97,19 +98,21 @@ class listado_sucursales extends Base_Controller{
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value){
+				//print_debug($list_content);
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_sucursal'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_sucursal'],
-									'sucursal'      => tool_tips_tpl($value['sucursal'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'   => $value['clave_corta'],
-									'razon_social'  => $value['rfc'],
-									'regiones'      => $value['region'],
-									'rfc'  => $value['razon_social'],
-									'direccion'     => tool_tips_tpl($value['direccion'], $this->lang_item("tool_tip"), 'right' , $atrr)
+				$tbl_data[] = array('id'                => $value['id_sucursal'],
+									'sucursal'          => tool_tips_tpl($value['sucursal'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'       => $value['clave_corta'],
+									'horario_atencion'  => $value['inicio'].' a '.$value['final'],
+									'regiones'          => $value['region'],
+									'entidad'  			=> $value['entidad'],
+									'direccion'         => tool_tips_tpl($value['direccion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'acciones'			=> ''
 									);
 			}
 			// Plantilla
@@ -118,10 +121,11 @@ class listado_sucursales extends Base_Controller{
 			$this->table->set_heading(	$this->lang_item("lbl_id"),
 										$this->lang_item("lbl_sucursal"),
 										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_rfc"),
+										$this->lang_item("lbl_horario_atencion"),
 										$this->lang_item("lbl_region"),
-										$this->lang_item("lbl_rs"),
-										$this->lang_item("lbl_direccion"));
+										$this->lang_item("lbl_entidad"),
+										$this->lang_item("lbl_direccion"),
+										$this->lang_item("lbl_acciones"));
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
 			$tabla = $this->table->generate($tbl_data);
@@ -156,6 +160,7 @@ class listado_sucursales extends Base_Controller{
 			,'offset' 		=> 0
 			,'limit'      	=> 0
 		);
+
 		$regiones_array = array(
 					'data'			 => $this->regiones->db_get_data($sqlData)
 					,'value' 	     => 'id_administracion_region'
@@ -174,6 +179,23 @@ class listado_sucursales extends Base_Controller{
 					,'selected'      => $detalle[0]['id_entidad']
 					);
 		$entidades                         = dropdown_tpl($entidades_array);
+		$esquema_pago_array  = array(
+						'data'		=> $this->db_model->get_esquema_pago($sqlData)
+						,'value' 	=> 'id_sucursales_esquema_pago'
+						,'text' 	=> array('clave_corta','esquema_pago')
+						,'name' 	=> "lts_esquema_pago"
+						,'class' 	=> "requerido"
+					);
+		$list_esquema_pago  = multi_dropdown_tpl($esquema_pago_array);
+
+		$esquema_venta_array  = array(
+						 'data'		=> $this->db_model->get_esquema_venta($sqlData)
+						,'value' 	=> 'id_sucursales_esquema_venta'
+						,'text' 	=> array('clave_corta','esquema_venta')
+						,'name' 	=> "lts_esquema_venta"
+						,'class' 	=> "requerido"
+					);
+		$list_esquema_venta  = multi_dropdown_tpl($esquema_venta_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_sucursal']            = $id_sucursal;
         $tabData["nombre_sucursal"]        = $this->lang_item("nombre_sucursal");
@@ -182,10 +204,18 @@ class listado_sucursales extends Base_Controller{
 		$tabData["r_f_c"]                  = $this->lang_item("rfc");
 		$tabData["lbl_email"]              = $this->lang_item("lbl_email");
 		$tabData["lbl_encargado"]          = $this->lang_item("lbl_encargado");
+		$tabData['lbl_esquema_pago']       = $this->lang_item('lbl_esquema_pago');
+		$tabData['lbl_esquema_venta']      = $this->lang_item('lbl_esquema_venta');
 		$tabData["dir"]                    = $this->lang_item("direccion");
 		$tabData["tel"]                    = $this->lang_item("tel");
+		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
+		$tabData["lbl_final"]              = $this->lang_item("lbl_final");
 		$tabData["list_entidad"]           = $entidades;
 		$tabData["list_region"]            = $regiones;
+		$tabData["list_esquema_pago"]      = $list_esquema_pago;
+		$tabData["list_esquema_venta"]     = $list_esquema_venta;
+		$tabData["timepicker1"]            = $detalle[0]['inicio'];
+		$tabData["timepicker2"]            = $detalle[0]['final'];
 		$tabData["lbl_entidad"]            = $this->lang_item("lbl_entidad");
 		$tabData["lbl_region"]             = $this->lang_item("lbl_region");
         $tabData['sucursal']               = $detalle[0]['sucursal'];
@@ -217,40 +247,82 @@ class listado_sucursales extends Base_Controller{
     		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
         }
 
-        $tabData['button_save']           = $btn_save;
+        $tabData['button_save']         = $btn_save;
         $tabData['registro_por']    	= $this->lang_item("registro_por",false);
       	$tabData['usuario_registro']	= $usuario_name;
-        									   #administracion/catalogos/sucursales/sucursales_detalle	
+        									   	
 		$uri_view   				  = $this->modulo.'/'.$this->seccion.'/listado_sucursales_detalle';
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function actualizar(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
+		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
+		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$sqlData = array(
-						 'id_sucursal'	 => $this->ajax_post('id_sucursal')
-						,'sucursal'      => $this->ajax_post('sucursal')
-						,'clave_corta' 	 => $this->ajax_post('clave_corta')
-						,'razon_social'	 => $this->ajax_post('razon_social')
-						,'rfc'			 => $this->ajax_post('rfc')
-						,'email'	     => $this->ajax_post('email')
-						,'encargado'	 => $this->ajax_post('encargado')
-						,'id_entidad'	 => $this->ajax_post('id_entidad')
-						,'telefono'		 => $this->ajax_post('telefono')
-						,'direccion'	 => $this->ajax_post('direccion')
+			$ajax_inicio  =  $objData['timepicker1'];
+			$ajax_termino =  $objData['timepicker2'];
+			
+			$check_times  =  $this->check_time_longer($ajax_inicio,$ajax_termino);
+			if($check_times['response']){
+
+				$sqlData = array(
+						 'id_sucursal'	 => $objData['id_sucursal']
+						,'sucursal'      => $objData['sucursal']
+						,'clave_corta' 	 => $objData['clave_corta']
+						,'razon_social'	 => $objData['razon_social']
+						,'rfc'			 => $objData['rfc']
+						,'email'	     => $objData['email']
+						,'encargado'	 => $objData['encargado']
+						,'inicio'	     => $ajax_inicio
+						,'final'	     => $ajax_termino
+						,'id_region'	 => $objData['lts_regiones']
+						,'id_entidad'	 => $objData['lts_entidades']
+						,'telefono'		 => $objData['telefono']
+						,'direccion'	 => $objData['direccion']
 						,'edit_timestamp'	=> $this->timestamp()
 						,'edit_id_usuario'	=> $this->session->userdata('id_usuario')
 						);
-			$insert = $this->db_model->db_update_data($sqlData);
-			if($insert){
-				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+				$insert = $this->db_model->db_update_data($sqlData);
+
+				$arr_pago  = explode(',',$objData['lts_esquema_pago']);
+				if(!empty($arr_pago)){
+					$sqlData = array();
+					foreach ($arr_pago as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'       => $objData['id_sucursal']
+							,'id_esquema_pago'   => $value
+							,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+							,'edit_timestamp'    => $this->timestamp()
+							);
+						$insert_pago = $this->db_model->db_update_data_pago($sqlData);
+					}
+				}
+
+				$arr_venta  = explode(',',$objData['lts_esquema_venta']);
+				if(!empty($arr_venta)){
+					$sqlData = array();
+					foreach ($arr_venta as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'       => $objData['id_sucursal']
+							,'id_esquema_venta'  => $value
+							,'edit_id_usuario'   => $this->session->userdata('id_usuario')
+							,'edit_timestamp'    => $this->timestamp()
+							);
+						$insert_venta = $this->db_model->db_update_data_venta($sqlData);
+					}
+				}
+				if($insert){
+					$msg = $this->lang_item("msg_update_success",false);
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+				}
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
+				$msg = $this->lang_item("msg_horainicio_mayor",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
@@ -290,8 +362,11 @@ class listado_sucursales extends Base_Controller{
 		$tab_1["lbl_email"]        = $this->lang_item("lbl_email");
 		$tab_1["lbl_encargado"]    = $this->lang_item("lbl_encargado");
 		$tab_1["tel"]              = $this->lang_item("telefono");
+		$tab_1["lbl_inicio"]       = $this->lang_item("lbl_inicio");
+		$tab_1["lbl_final"]        = $this->lang_item("lbl_final");
 		$tab_1["list_entidad"]     = $entidades;
 		$tab_1["list_region"]      = $regiones;
+		
 		$tab_1["lbl_region"]       = $this->lang_item("lbl_region");
 		$tab_1["lbl_entidad"]      = $this->lang_item("lbl_entidad");
 		$tab_1["direccion"]        = $this->lang_item("direccion");
@@ -313,36 +388,37 @@ class listado_sucursales extends Base_Controller{
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$sucursal        = $this->ajax_post('sucursal');
-			$clave_corta     = $this->ajax_post('clave_corta');
-			$razon_social    = $this->ajax_post('razon_social');
-			$rfc             = $this->ajax_post('rfc');
-			$email           = $this->ajax_post('email');
-			$encargado       = $this->ajax_post('encargado');
-			$telefono        = $this->ajax_post('tel');
-			$region          = $this->ajax_post('id_region');
-			$entidad         = $this->ajax_post('id_entidad');
-			$direccion       = $this->ajax_post('direccion');
-			$data_insert     = array('sucursal' => $sucursal,
-								 'clave_corta'  => $clave_corta,
-								 'direccion'    => $direccion,
-								 'id_usuario'   => $this->session->userdata('id_usuario'),
-								 'id_region'    => $region,
-								 'id_entidad'   => $entidad,
-								 'razon_social' => $razon_social,
-								 'rfc'          => $rfc,
-								 'email'        => $email,
-								 'encargado'    => $encargado,
-								 'telefono'     => $telefono,  
-								 'timestamp'    => $this->timestamp());
-			$insert = $this->db_model->db_insert_data($data_insert);
+			$ajax_inicio  =  $this->ajax_post('inicio');
+			$ajax_termino =  $this->ajax_post('fin');
 			
-			if($insert){
-				$msg = $this->lang_item("msg_insert_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+			$check_times  =  $this->check_time_longer($ajax_inicio,$ajax_termino);
+			if($check_times['response']){
+				$data_insert     = array('sucursal' => $this->ajax_post('sucursal'),
+								 'clave_corta'  => $this->ajax_post('clave_corta'),
+								 'direccion'    => $this->ajax_post('direccion'),
+								 'id_usuario'   => $this->session->userdata('id_usuario'),
+								 'id_region'    => $this->ajax_post('id_region'),
+								 'inicio'       => $ajax_inicio,
+								 'final'        => $ajax_termino,
+								 'id_entidad'   => $this->ajax_post('id_entidad'),
+								 'razon_social' => $this->ajax_post('razon_social'),
+								 'rfc'          => $this->ajax_post('rfc'),
+								 'email'        => $this->ajax_post('email'),
+								 'encargado'    => $this->ajax_post('encargado'),
+								 'telefono'     => $this->ajax_post('tel'),
+								 'timestamp'    => $this->timestamp());
+				$insert = $this->db_model->db_insert_data($data_insert);
+				
+				if($insert){
+					$msg = $this->lang_item("msg_insert_success",false);
+					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+				}else{
+					$msg = $this->lang_item("msg_err_clv",false);
+					echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+				}
 			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+				$msg = $this->lang_item("msg_horainicio_mayor",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
@@ -361,16 +437,16 @@ class listado_sucursales extends Base_Controller{
 				$set_data[] = array(
 									 $value['sucursal'],
 									 $value['clave_corta'],
-									 $value['razon_social'],
-									 $value['rfc'],
+									 $value['inicio'],
+									 $value['inicio'],
 									 $value['direccion']);
 			}
 			
 			$set_heading = array(
 									$this->lang_item("sucursal"),
 									$this->lang_item("clave_corta"),
-									$this->lang_item("rs"),
-									$this->lang_item("rfc"),
+									$this->lang_item("lbl_inicio"),
+									$this->lang_item("lbl_final"),
 									$this->lang_item("direccion"));
 	
 		}

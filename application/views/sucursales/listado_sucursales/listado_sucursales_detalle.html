@@ -1,16 +1,42 @@
 <div id="formulario" class="stdform stdform2">
-    <input id="id_sucursal" type="hidden" name="id_sucursal" value="{id_sucursal}" />
+    <input id="id_sucursal" type="hidden" name="id_sucursal" data-campo="id_sucursal" value="{id_sucursal}" />
     <p>
         <label>{nombre_sucursal}: (*)</label>
-        <span class="field"><input id="sucursal" type="text" name="sucursal" class="input-xlarge requerido" value="{sucursal}" /></span>
+        <span class="field"><input id="sucursal" type="text" name="sucursal" data-campo="sucursal" class="input-xlarge requerido" value="{sucursal}" /></span>
     </p>
     <p>
         <label>{cvl_corta}: (*)</label>
-        <span class="field"><input id="clave_corta" type="text" name="clave_corta" class="input-xlarge requerido" value="{clave_corta}" /></span>
+        <span class="field"><input id="clave_corta" type="text" name="clave_corta" data-campo="clave_corta" class="input-xlarge requerido" value="{clave_corta}" /></span>
+    </p>
+    <p>
+        <label>
+            {lbl_inicio}: (*)
+            <small>Horario de atención.</small>
+        </label>
+        <span class="field"><input type="text" id="timepicker1" name="timepicker1 time start" data-campo="timepicker1" value="{timepicker1}" class="gui-input"></span>
+    </p>
+    <p>
+        <label>
+            {lbl_final}: (*)
+            <small>Horario de atención.</small>
+        </label>
+        <span class="field"><input type="text" id="timepicker2" name="timepicker2 time end" data-campo="timepicker2" value="{timepicker2}" class="gui-input"></span>
+    </p>
+    <p>
+        <label>{lbl_esquema_pago} (*)</label>
+        <span class="field">
+            {list_esquema_pago}
+        </span>
+    </p>
+    <p>
+        <label>{lbl_esquema_venta} (*)</label>
+        <span class="field">
+            {list_esquema_venta}
+        </span>
     </p>
     <p>
         <label>{r_social}: (*)</label>
-        <span class="field"><input id="razon_social" type="text" name="razon_social" class="input-xlarge requerido" value="{razon_social}" /></span>
+        <span class="field"><input id="razon_social" type="text" name="razon_social" data-campo="razon_social" class="input-xlarge requerido" value="{razon_social}" /></span>
     </p>
      <p>
         <label>{lbl_region}: (*)</label>
@@ -22,23 +48,23 @@
     </p>
     <p>
         <label>{r_f_c}: (*)</label>
-        <span class="field"><input id="rfc" type="text" name="rfc" class="input-xlarge requerido" value="{rfc}" /></span>
+        <span class="field"><input id="rfc" type="text" name="rfc" data-campo="rfc" class="input-xlarge requerido" value="{rfc}" /></span>
     </p>
     <p>
         <label>{lbl_email}:</label>
-        <span class="field"><input id="email" type="email" name="email" class="input-xlarge " value="{email}" /></span>
+        <span class="field"><input id="email" type="text" name="email" data-campo="email" class="input-xlarge requerido" value="{email}" /></span>
     </p>
     <p>
         <label>{lbl_encargado}:</label>
-        <span class="field"><input id="encargado" type="text" name="encargado" class="input-xlarge " value="{encargado}" /></span>
+        <span class="field"><input id="encargado" type="text" name="encargado" data-campo="encargado" class="input-xlarge " value="{encargado}" /></span>
     </p>
     <p>
         <label>{tel}:</label>
-        <span class="field"><input id="telefono" type="text" name="telefono" class="input-xlarge " value="{telefono}" /></span>
+        <span class="field"><input id="telefono" type="text" name="telefono" data-campo="telefono" class="input-xlarge " value="{telefono}" /></span>
     </p>
     <p>
         <label>{dir}:</label>
-        <span class="field"><textarea id="direccion" name="direccion"  class="span5" style="resize: vertical; height: 100px;">{direccion}</textarea></span>
+        <span class="field"><textarea id="direccion" name="direccion" data-campo="direccion" class="span5" style="resize: vertical; height: 100px;">{direccion}</textarea></span>
     </p>
     <p>
         <label>{lbl_fecha_registro}: </label>

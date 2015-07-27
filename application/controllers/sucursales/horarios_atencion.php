@@ -1,8 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class servicios extends Base_Controller{
+class horarios_atencion extends Base_Controller{
 	private $modulo;
-	private $submodulo;
 	private $seccion;
 	private $view_content;
 	private $path;
@@ -13,10 +12,9 @@ class servicios extends Base_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		$this->modulo        = 'administracion';
-		$this->submodulo     = 'sucursales';
-		$this->seccion          = 'servicios';
-		$this->icon          = 'fa fa-upload'; 
+		$this->modulo        = 'sucursales';
+		$this->seccion       = 'horarios_atencion';
+		$this->icon          = 'fa fa-clock-o'; 
 		$this->path          = $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content  = 'content';
 		$this->limit_max     = 5;
@@ -27,7 +25,7 @@ class servicios extends Base_Controller{
 		$this->tab3          = 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		$this->load->model('administracion/sucursales_model','db_model2');
+		//$this->load->model($this->modulo.'/listado_sucursales_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -66,11 +64,11 @@ class servicios extends Base_Controller{
 	}
 
 	public function index(){
-		$tabl_inicial          = 2;
-		$view_listado          = $this->listado();   
+		$tabl_inicial          	  = 2;
+		$view_listado             = $this->listado();   
 		$contenidos_tab           = $view_listado;
-		$data['titulo_seccion']   = $this->lang_item($this->seccion);
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['titulo_seccion']   = $this->lang_item('titulo_seccion');
+		$data['titulo_modulo']    = $this->lang_item("titulo_submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);   
 		
@@ -79,7 +77,6 @@ class servicios extends Base_Controller{
 	}
 
 	public function listado($offset=0){
-		// Crea tabla con listado de elementos capturados 
 		$seccion       = '/listado';
 		$tab_detalle   = $this->tab3; 
 		$limit         = $this->limit_max;
@@ -88,7 +85,7 @@ class servicios extends Base_Controller{
 		$filtro        = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
 
 		$sqlData = array(
-			 'buscar'         => $filtro
+			 'buscar'      => $filtro
 			,'offset'      => $offset
 			,'limit'       => $limit
 		);
@@ -99,19 +96,16 @@ class servicios extends Base_Controller{
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
-			foreach ($list_content as $value)
-			{
+			foreach ($list_content as $value){
 			// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-								'onclick' => $tab_detalle.'('.$value['id_administracion_servicio'].')'
+								'onclick' => $tab_detalle.'('.$value['id_administracion_horario_atencion'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'            => $value['id_administracion_servicio'],
-									'servicio'      => tool_tips_tpl($value['servicio'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'   => $value['cv_servicio'],
-									'sucursal'      => $value['sucursal'],
-									'descripcion'   => $value['descripcion'],
+				$tbl_data[] = array('id'            => $value['id_administracion_horario_atencion'],
+									'servicio'      => tool_tips_tpl($value['horario'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'clave_corta'   => $value['clave_corta'],
 									'inicio'        => $value['inicio'],
 									'final'         => $value['final']
 									);
@@ -119,11 +113,9 @@ class servicios extends Base_Controller{
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading( $this->lang_item("lbl_id"),
-										$this->lang_item("lbl_servicio"),
+			$this->table->set_heading(  $this->lang_item("lbl_id"),
+										$this->lang_item("lbl_horario"),
 										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_sucursal"),
-										$this->lang_item("lbl_descripcion"),
 										$this->lang_item("lbl_inicio"),
 										$this->lang_item("lbl_final"));
 			// Generar tabla
@@ -151,38 +143,30 @@ class servicios extends Base_Controller{
 	}
 
 	public function detalle(){
-		$id_servicio                 = $this->ajax_post('id_servicio');
-		$detalle                     = $this->db_model->get_orden_unico_servicio($id_servicio);
-		$seccion                     = 'detalle';
-		$tab_detalle                 = $this->tab3;
+		$id_horario                 = $this->ajax_post('id_horario');
+		$detalle                    = $this->db_model->get_orden_unico_horario($id_horario);
+		$seccion                    = 'detalle';
+		$tab_detalle                = $this->tab3;
 		$sqlData = array(
 			 'buscar'       => ''
 			,'offset'       => 0
 			,'limit'        => 0
 		);
-		$sucursales_array     = array(
-					 'data'     => $this->db_model2->db_get_data($sqlData)
-					,'value'    => 'id_sucursal'
-					,'text'     => array('sucursal')
-					,'name'     => "lts_sucursales"
-					,'class'    => "requerido"
-					,'selected' => $detalle[0]['id_sucursal']
-					);
-		$sucursales                        = dropdown_tpl($sucursales_array);
+		
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
-		$tabData['id_servicio']            = $id_servicio;
-		$tabData["lbl_servicio"]           = $this->lang_item("lbl_servicio");
+		$tabData['id_horario_atencion']            = $id_horario;
+		$tabData["lbl_horario"]            = $this->lang_item("lbl_horario");
 		$tabData["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
 		$tabData["lbl_final"]              = $this->lang_item("lbl_final");
-		$tabData["lbl_sucursal"]           = $this->lang_item("lbl_sucursal");
+		
 		$tabData["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 
-		$tabData['txt_servicio']           = $detalle[0]['servicio'];
+		$tabData['txt_horario_atencion']   = $detalle[0]['horario'];
 		$tabData['txt_clave_corta']        = $detalle[0]['clave_corta'];
 		$tabData['timepicker1']            = substr($detalle[0]['inicio'], 0,5);
 		$tabData['timepicker2']            = substr($detalle[0]['final'], 0,5);
-		$tabData["list_sucursal"]          = $sucursales;
+		
 
 		$tabData['txt_descripcion']        = $detalle[0]['descripcion'];
 		
@@ -211,32 +195,30 @@ class servicios extends Base_Controller{
 		$tabData['registro_por']      = $this->lang_item("registro_por",false);
 		$tabData['usuario_registro']  = $usuario_name;
 												
-		$uri_view                 = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_'.$seccion;
+		$uri_view   				  = $this->modulo.'/horarios_atencion/horarios_atencion_detalle';
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
 	public function actualizar(){
 		$objData    = $this->ajax_post('objData');
+		
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$id_servicio  =  $objData['id_servicio'];
-			$id_sucursal  =  $objData['lts_sucursales'];
+			$id_horario   =  $objData['id_horario_atencion'];
 			$ajax_inicio  =  $objData['timepicker1'];
 			$ajax_termino =  $objData['timepicker2'];
-			$servicios    =  $this->db_model->db_get_data_x_sucursal($id_sucursal,$id_servicio);
-			$check_times  =  $this->check_times_ranges($ajax_inicio,$ajax_termino, $servicios);
 			
+			$check_times  =  $this->check_time_longer($ajax_inicio,$ajax_termino);
 			if($check_times['response']){
 				$sqlData = array(
-					 'id_administracion_servicio'   => $id_servicio
-					,'servicio'                   => $objData['txt_servicio']
+					 'id_administracion_horario_atencion' => $id_horario
+					,'horario'                    => $objData['txt_horario_atencion']
 					,'clave_corta'                => $objData['txt_clave_corta']
 					,'descripcion'                => $objData['txt_descripcion']
 					,'inicio'                     => $ajax_inicio
 					,'final'                      => $ajax_termino
-					,'id_sucursal'                => $id_sucursal
 					,'edit_timestamp'             => $this->timestamp()
 					,'edit_id_usuario'            => $this->session->userdata('id_usuario')
 					);
@@ -252,48 +234,32 @@ class servicios extends Base_Controller{
 					echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 				}
 			}else{
-				$msg = $this->lang_item("msg_horario_empalmado",false);
+				$msg = $this->lang_item("msg_horainicio_mayor",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}
 
 	public function agregar(){
-		$seccion = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_save';
+		$seccion       = $this->modulo.'/horarios_atencion/horarios_atencion_save';
 		$btn_save = form_button(array('class'=>'btn btn-primary', 'name'=>'save_puesto', 'onclick'=>'agregar()','content'=>$this->lang_item("btn_guardar")));
 		$btn_reset = form_button(array('class'=>'btn btn_primary', 'name'=>'reset','onclick'=>'clean_formulario()','content'=>$this->lang_item('btn_limpiar')));
 
-		$sqlData = array(
-			 'buscar'          => ''
-			,'offset'       => 0
-			,'limit'        => 0
-		);
-		$sucursales_array     = array(
-					 'data'     => $this->db_model2->db_get_data($sqlData)
-					,'value'    => 'id_sucursal'
-					,'text'  => array('sucursal')
-					,'name'  => "lts_sucursales"
-					,'class'    => "requerido"
-					);
-		$sucursales                      = dropdown_tpl($sucursales_array);
-		$tab_1["lbl_servicio"]           = $this->lang_item("lbl_servicio");
+		                      
+		$tab_1["lbl_horario"]            = $this->lang_item("lbl_horario");
 		$tab_1["lbl_clave_corta"]        = $this->lang_item("lbl_clave_corta");
 		$tab_1["lbl_inicio"]             = $this->lang_item("lbl_inicio");
 		$tab_1["lbl_final"]              = $this->lang_item("lbl_final");
-		$tab_1["lbl_sucursal"]           = $this->lang_item("lbl_sucursal");
+		
 		$tab_1["lbl_descripcion"]        = $this->lang_item("lbl_descripcion");
 
-		$tab_1["list_sucursal"]          = $sucursales;
-
+		
 		$tab_1['button_save'] = $btn_save;
 		$tab_1['button_reset'] = $btn_reset;
 
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($seccion,$tab_1,true));
-		}
-		else
-		{
+		}else{
 			return $this->load_view_unique($seccion, $tab_1, true);
 		}
 	}

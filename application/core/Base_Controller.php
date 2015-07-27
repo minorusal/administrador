@@ -77,18 +77,16 @@ class Base_Controller extends CI_Controller {
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
 		$this->vars = new config_vars();
         $this->vars->load_vars();
-		$ext      = ($ext!='.html') ? '': $ext;
-		$uri      = $this->uri->segment_array();
-		$includes = $this->load_scripts($data_includes);
-
+		$ext          = ($ext!='.html') ? '': $ext;
+		$uri          = $this->uri->segment_array();
+		$includes     = $this->load_scripts($data_includes);
 		$data_modulos = $this->sites_panel;
 		$img_path     = './assets/avatar/users/';
 		$img_path_    = base_url().'assets/avatar/users/';
 		$avatar_image = ($this->session->userdata('avatar_user') =='' ) ? 'sin_foto.png' : $this->session->userdata('avatar_user');
-		
-		$perfil             = $this->session->userdata('perfil');
-		$user_root          = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
-		$icon_root          = ($user_root) ? 'fa fa-user-secret' : '';
+		$perfil       = $this->session->userdata('perfil');
+		$user_root    = (md5(strtolower($perfil))=='63a9f0ea7bb98050796b649e85481845') ? true : false;
+		$icon_root    = ($user_root) ? 'fa fa-user-secret' : '';
 
 		$dataheader['site_title'] 	  = $this->vars->cfg['site_title'];
 		$dataheader['data_js']        = (!empty($includes)) ? $includes['js']  : '';
@@ -96,7 +94,6 @@ class Base_Controller extends CI_Controller {
 		$dataheader['base_url']       = base_url();
 		$dataheader['panel_navigate'] = $this->sites_panel;
 		$dataheader['avatar_user']    = (file_exists($img_path.$avatar_image))? $img_path_.$avatar_image : $img_path_.'sin_foto.png';
-		
 		$dataheader['avatar_pais']    = $this->session->userdata('avatar_pais');
 		$dataheader['user_mail']      = $this->session->userdata('mail');
 		$dataheader['user_name']      = $this->session->userdata('name');
@@ -105,7 +102,6 @@ class Base_Controller extends CI_Controller {
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
 		$dataheader['fecha_hoy']	  = $this->timestamp_complete();
-
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
 
@@ -114,7 +110,7 @@ class Base_Controller extends CI_Controller {
 		$data = (empty($data)) ? array() : $data;
 		$this->parser->parse('includes/header.html', $dataheader);
 		$this->parser->parse($view.$ext, $data);
-		$this->parser->parse('includes/footer.html',$datafooter); 
+		$this->parser->parse('includes/footer.html', $datafooter); 
 	}
 
 	/**
@@ -714,10 +710,36 @@ class Base_Controller extends CI_Controller {
 		return $this->session->userdata($index);
 	}
 
+	/**
+	* Devuelve un arreglo con mensaje y respuesta true o false
+	*@param string $inicio, string $termino
+	*@param array 
+	*/
+	public function check_time_longer($inicio, $termino){
+		//print_debug($inicio);
+		$response = '';
+		$msg = '';
+		$mk_inicio       =  explode(':', $inicio);
+		$mk_termino      =  explode(':', $termino);
+		$mk_inicio       =  mktime($mk_inicio[0],  $mk_inicio[1],  0,0,0,0);
+		$mk_termino      =  mktime($mk_termino[0], $mk_termino[1],0,0,0,0);
+		if($mk_inicio==$mk_termino){
+			$msg = 'msg_hora_igual';
+			$response = false;
+		}else if($mk_inicio>$mk_termino){
+			$msg = 'msg_horainicio_mayor';
+			$response = false;
+		}else{
+			$msg = 'msg_insert_success';
+			$response = true;
+		}
+		//print_debug(array('response'=> $response, 'msg' =>  $msg));
+		return array('response'=> $response, 'msg' =>  $msg);
+	}
 
 	/**
     * Devuelve un arreglo con mensaje y respuesta true o false
-    * @param time $inicio, time $termino, array $times
+    * @param string $inicio, string $termino, array $times
     * @return array
     */
 	public function check_times_ranges($incio, $termino, $times = array()){

@@ -106,7 +106,9 @@ body.loginpage,
 .chzn-container .chzn-results .highlighted 
 { background-color: #0096d2; }
 
-
+.fa-spinner{
+  color: #0096d2;
+}
 
 /* color */
 

@@ -76,6 +76,11 @@ class Base_Model extends CI_Model {
 		$this->tbl['nutricion_programacion_dias_especiales']       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_especiales'];
 		$this->tbl['nutricion_programacion_dias_festivos']         = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_festivos'];
 
+		$this->tbl['sucursales_esquema_pago']                      = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_pago'];
+		$this->tbl['sucursales_esquema_venta']                     = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_venta'];
+		$this->tbl['sucursales_pago']                              = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_pago'];
+		$this->tbl['sucursales_venta']                             = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_venta'];
+
 		$this->tbl['ventas_clientes']                              = $this->db2.'.'.$this->vars->db['db2_tbl_ventas_clientes'];
 		$this->tbl['ventas_vendedores']                            = $this->db2.'.'.$this->vars->db['db2_tbl_ventas_vendedores'];
 		$this->tbl['vw_compras_orden_articulos']                   = $this->db2.'.'.$this->vars->db['db2_vw_compras_orden_articulos'];

@@ -34,6 +34,9 @@ Created by: Mienard Lumaad (@themepixels)
   	background-color: transparent;
 }
 
+.fa-spinner{
+	color: #0866c6;
+}
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
 	background: #0866c6;
 }

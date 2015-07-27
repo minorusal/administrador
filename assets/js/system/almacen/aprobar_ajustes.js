@@ -98,7 +98,7 @@ function agregar(id_almacen_ajuste){
 	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();
 	var btn = jQuery("button[name='ajuste_save']");
-	//btn.attr('disabled','disabled');
+	btn.attr('disabled','disabled');
 	var id_articulo    = jQuery('#id_articulo').val();
 	var id_almacen 	   = jQuery('#id_almacen').val();
 	var id_pasillo 	   = jQuery('#id_pasillo').val();
@@ -123,10 +123,10 @@ function agregar(id_almacen_ajuste){
 			btn.attr('disabled',true);
 		},
 		success : function(data){
-			//alert(data);
 			if(data.success == 'true' ){
 				jgrowl(data.mensaje);
 				jQuery("#listaod_afectado").html(data.table).show('slow').delay(3000).fadeIn("slow");	
+				btn.hide();
 			}else{
 				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
 

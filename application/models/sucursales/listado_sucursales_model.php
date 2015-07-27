@@ -58,19 +58,46 @@ class listado_sucursales_model extends Base_Model{
 		}
 	}
 
-	public function db_update_data_pago($data = array()){
-		print_debug($data);
+	public function delete_pago($id_sucursal){
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
 		$query = "DELETE 
 				  FROM $tbl[sucursales_pago]
-				  WHERE id_sucursal = $data[id_sucursal] AND
-				  id_esquema_pago = $data[id_esquema_pago]
-				  ";
+				  WHERE id_sucursal =".$id_sucursal;
 		$query = $this->db->query($query);
 		if($query){
-			$insert = $this->insert_item($tbl['sucursales_pago'], $data);
+			return $query;
+		}
+	}
+	public function db_update_data_pago($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['sucursales_pago'], $data);
+		if($insert){
+			return $insert;
+		}
+	}
+
+	public function delete_venta($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "DELETE 
+				  FROM $tbl[sucursales_venta]
+				  WHERE id_sucursal =".$id_sucursal;
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+	public function db_update_data_venta($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['sucursales_venta'], $data);
+		if($insert){
 			return $insert;
 		}
 	}
@@ -79,12 +106,27 @@ class listado_sucursales_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		$query = "SELECT * FROM $tbl[sucursales] WHERE id_sucursal = $id_sucursal";
+		//$query = "SELECT * FROM $tbl[sucursales] WHERE id_sucursal = $id_sucursal";
+		$query = "SELECT 
+					 s.*
+					 ,ep.esquema_pago
+					 ,ep.id_sucursales_esquema_pago
+					 ,ev.id_sucursales_esquema_venta
+
+				  FROM $tbl[sucursales] s
+				 
+				  LEFT JOIN $tbl[sucursales_pago] p on p.id_sucursal = s.id_sucursal
+				  LEFT JOIN $tbl[sucursales_venta] v on v.id_sucursal = s.id_sucursal
+				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
+				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta				  
+				  WHERE s.id_sucursal = $id_sucursal AND p.id_sucursal = $id_sucursal";
+				 // print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}
 	}
+
 
 	/*Actualliza la información en el formuladio de edición de sucursales*/
 	public function db_update_data($data=array()){

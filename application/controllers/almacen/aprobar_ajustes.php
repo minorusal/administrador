@@ -240,6 +240,7 @@ class aprobar_ajustes extends stock{
 				);
 
 		$articulo_detalle  = $this->db_model->get_data_stock($sqlData);
+		//dump_var($articulo_detalle);
 		for($i=0;count($articulo_detalle)>$i;$i++){
 			$muestra_tabla = true;
 			if($i==0){
@@ -286,7 +287,7 @@ class aprobar_ajustes extends stock{
 									'edit_timestamp'  => $this->timestamp(),
 									'edit_id_usuario' => $this->session->userdata('id_usuario')
 								);
-				$stock_update = $this->stock_model->update_data_stock($slqDatastock);
+					$stock_update = $this->stock_model->update_data_stock($slqDatastock);
 				if($stock==0){
 					$delete = array(
 								'fisico'   => true, 
@@ -299,15 +300,14 @@ class aprobar_ajustes extends stock{
 								'id_stock'  					 => $articulo_detalle[$i]['id_stock'],
 								'id_compras_orden_articulo'  	 => $articulo_detalle[$i]['id_compras_orden_articulo'],
 								'id_almacen_entradas_recepcion'  => $articulo_detalle[$i]['id_almacen_entradas_recepcion'],
-								//'id_articulo_tipo'  			 => $articulo_detalle[$i]['id_articulo_tipo'],
-								'log_id_almacen_origen'  		 => $id_almacen,
-								'log_id_pasillo_origen'  		 => $id_pasillo,
-								'log_id_gaveta_origen'  		 => $id_gaveta,
+								'log_id_almacen_origen'  		 => $articulo_detalle[$i]['id_almacen'],
+								'log_id_pasillo_origen'  		 => $articulo_detalle[$i]['id_pasillo'],
+								'log_id_gaveta_origen'  		 => $articulo_detalle[$i]['id_gaveta'],
 								'log_stock_origen'  			 => $articulo_detalle[$i]['stock'],
 								'log_stock_um_origen'  			 => $articulo_detalle[$i]['stock_um'],
-								'log_id_almacen_destino'  		 => $id_almacen,
-								'log_id_pasillo_destino'  		 => $id_pasillo,
-								'log_id_gaveta_destino'  		 => $id_gaveta,
+								'log_id_almacen_destino'  		 => $articulo_detalle[$i]['id_almacen'],
+								'log_id_pasillo_destino'  		 => $articulo_detalle[$i]['id_pasillo'],
+								'log_id_gaveta_destino'  		 => $articulo_detalle[$i]['id_gaveta'],
 								'log_stock_destino'  			 => $stock,
 								'log_stock_um_destino'  		 => $stock_um,
 								'log_lote'  					 => $articulo_detalle[$i]['lote'],
@@ -318,27 +318,25 @@ class aprobar_ajustes extends stock{
 				//tabla a mostrar
 				$this->stock_model->insert_stock_log($slqDatastockLogs);
 				//DATA
-				$tbl_data[] = array('id'            => $articulo_detalle[$i]['articulo'],
+				$tbl_data[] = array( 'id'            => $articulo_detalle[$i]['articulo'],
 									'articulo'  	=> $articulo_detalle[$i]['articulo'],
 									'almacenes'   	=> $articulo_detalle[$i]['almacenes'],
 									'pasillos'   	=> $articulo_detalle[$i]['pasillos'],
 									'gavetas'   	=> $articulo_detalle[$i]['gavetas'],
-									'clave_corta'   => $articulo_detalle[$i]['clave_corta'],
-									'stock'   	 	=> $articulo_detalle[$i]['stock'],
-									'stock_um'   	=> $articulo_detalle[$i]['stock_um']
+									'stock'   	 	=> $stock.' '.$articulo_detalle[$i]['clave_corta'],
+									'stock_um'   	=> $stock_um.' '.$articulo_detalle[$i]['clave_corta']
 									);
 			}
 		}
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("lbl_articulo"),
-										$this->lang_item("lbl_articulo"),										
-										$this->lang_item("lbl_cl_almacen"),
-										$this->lang_item("lbl_cl_pasillo"),
-										$this->lang_item("lbl_cl_gaveta"),
-										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_stock"),
-										$this->lang_item("lbl_stock_um")
+			$this->table->set_heading(	$this->lang_item("id"),
+										$this->lang_item("articulo"),										
+										$this->lang_item("almacen_lbl"),
+										$this->lang_item("pasillo_lbl"),
+										$this->lang_item("gaveta_lbl"),
+										$this->lang_item("stock_afec"),
+										$this->lang_item("stock_um_afec")
 									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -354,7 +352,8 @@ class aprobar_ajustes extends stock{
 									'edit_id_usuario' 	=> $this->session->userdata('id_usuario')
 								);
 
-		$insert=$this->db_model->update_data($slqDataajuste);
+		//$insert=$this->db_model->update_data($slqDataajuste);
+		$insert=1;
 		if($insert){
 				$msg = $this->lang_item("msg_update_success",false);
 				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));

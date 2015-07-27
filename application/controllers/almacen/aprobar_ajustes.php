@@ -121,10 +121,11 @@ class aprobar_ajustes extends stock{
 				$accion_id 						= $value['id_almacen_ajuste'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_almacen_ajuste'],
 									'articulo'  	 	=> $value['articulo'],
-									'stock_mov'   	 	=> $value['stock_mov'].'-'.$value['cl_um'],
+									'stock_mov'   	 	=> $value['stock_mov'].'-'.$etiqueta,
 									'stock_um_mov'   	=> $value['stock_um_mov'].'-'.$value['cl_um'],
 									'timestamp'  	 	=> $value['timestamp'],
 									'acciones' 		 	=> $acciones
@@ -191,6 +192,7 @@ class aprobar_ajustes extends stock{
 			$stock_total   	= $stock_total + $articulo_detalle[$i]['stock'];
 			$stock_um_total = $stock_um_total + $articulo_detalle[$i]['stock_um'];
 		}
+		($articulo_detalle[0]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[0]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 		$accion_id				 	 = $detalle[0]['id_almacen_ajuste'];
 		$btn_save       		 	 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
 		$tabData['stock_total']	     = $stock_total;
@@ -202,6 +204,7 @@ class aprobar_ajustes extends stock{
 		$tabData['cl_gaveta']	 	 = $detalle[0]['cl_gaveta'];
 		$tabData['cl_pasillo']	 	 = $detalle[0]['cl_pasillo'];
 		$tabData['cl_um']			 = $detalle[0]['cl_um'];
+		$tabData['cl_stock']		 = $etiqueta;
 		$tabData['id_articulo'] 	 = $id_articulo;
 		$tabData['id_almacen'] 		 = $id_almacen;
 		$tabData['id_pasillo'] 		 = $id_pasillo;
@@ -216,7 +219,6 @@ class aprobar_ajustes extends stock{
 		$tabData['lbl_stock_um_mov'] = $this->lang_item("stock_um_mov",false);
 		$tabData['lbl_stock']		 = $this->lang_item("lblstock",false);
 		$tabData['lbl_stock_um']	 = $this->lang_item("stock_um_lbl",false);
-
 		echo json_encode($this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function agregar(){
@@ -370,10 +372,11 @@ class aprobar_ajustes extends stock{
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				$set_data[] = array(
 									$value['id_almacen_ajuste'],
 									$value['articulo'],
-									$value['stock_mov'].'-'.$value['cl_um'],
+									$value['stock_mov'].'-'.$etiqueta,
 									$value['stock_um_mov'].'-'.$value['cl_um'],
 									$value['timestamp']
 									);

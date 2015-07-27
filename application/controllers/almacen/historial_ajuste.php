@@ -106,8 +106,8 @@ class historial_ajuste extends Base_Controller {
 		$uri_segment  			  = $this->uri_segment(); 
 		$total_rows   			  = count($this->db_model->get_data_historial($sqlData));
 		$sqlData['aplicar_limit'] = false;
-		//dump_var($sqlData);
 		$list_content 			  = $this->db_model->get_data_historial($sqlData);
+		//dump_var($list_content);
 		$url          			  = base_url($url_link);
 		$paginador    			  = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
@@ -116,12 +116,13 @@ class historial_ajuste extends Base_Controller {
 				$accion_id 						= $value['id_almacen_ajuste'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_almacen_ajuste'],
 									'articulo'  	 	=> $value['articulo'],
-									'stock_mov'   	 	=> $value['stock_mov'].'-'.$value['cl_um'],
+									'stock_mov'   	 	=> $value['stock_mov'].'-'.$etiqueta,
 									'stock_um_mov'   	=> $value['stock_um_mov'].'-'.$value['cl_um'],
-									'estatus'  	 	=> $value['estatus'],
+									'estatus'  	 	    => $value['estatus'],
 									'timestamp'  	 	=> $value['timestamp']
 									//'acciones' 		 	=> $acciones
 									);
@@ -171,10 +172,11 @@ class historial_ajuste extends Base_Controller {
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				$set_data[] = array(
 									$value['id_almacen_ajuste'],
 									$value['articulo'],
-									$value['stock_mov'].'-'.$value['cl_um'],
+									$value['stock_mov'].'-'.$etiqueta,
 									$value['stock_um_mov'].'-'.$value['cl_um'],
 									$value['estatus'],
 									$value['timestamp']
@@ -193,7 +195,6 @@ class historial_ajuste extends Base_Controller {
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);
-		//dump_var($params);
 		$this->excel->generate_xlsx($params);
 	}
 }

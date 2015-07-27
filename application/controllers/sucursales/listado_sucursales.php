@@ -16,7 +16,7 @@ class listado_sucursales extends Base_Controller{
 		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -73,7 +73,6 @@ class listado_sucursales extends Base_Controller{
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
-		//print_debug($js);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
@@ -97,7 +96,6 @@ class listado_sucursales extends Base_Controller{
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value){
-				//print_debug($list_content);
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
@@ -152,12 +150,10 @@ class listado_sucursales extends Base_Controller{
 	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
-		//print_debug($detalle);
 		foreach ($detalle as $value){
 			$id_pago[]  = $value['id_sucursales_esquema_pago'];
 			$id_venta[] = $value['id_sucursales_esquema_venta'];
 		}
-		//print_debug($id_pago);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData        = array(
@@ -294,7 +290,6 @@ class listado_sucursales extends Base_Controller{
 				$insert = $this->db_model->db_update_data($sqlData);
 				
 					$arr_pago  = explode(',',$objData['lts_esquema_pago']);
-					//print_debug($arr_pago);
 					$pago     = $this->db_model->delete_pago($objData['id_sucursal']);
 					
 					if(!empty($arr_pago)){
@@ -416,7 +411,6 @@ class listado_sucursales extends Base_Controller{
 	}
 
 	public function insert_sucursal(){
-		//print_debug($this->ajax_post('objData'));
 		$objData  	= $this->ajax_post('objData');
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);

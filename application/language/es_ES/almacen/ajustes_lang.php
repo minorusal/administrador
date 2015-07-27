@@ -14,7 +14,8 @@ $lang['aprobar_ajustes']     	= 	'Aprobar ajuste';
 $lang['xlsx_agregar_ajustes']   = 	'Listado de agregar ajuste';
 $lang['xlsx_aprobar_ajustes']   = 	'Listado de aprobar ajuste';
 $lang['id_almacen_ajuste']      = 	'Id';
-$lang['configuracion']  		= 'Configuración';
-$lang['stock_afec']  			= 'Stock afectado';
-$lang['stock_um_afec']  		= 'Stock por u.m. afectado';
+$lang['configuracion']  		= 	'Configuración';
+$lang['stock_afec']  			= 	'Stock afectado';
+$lang['stock_um_afec']  		= 	'Stock por u.m. afectado';
+$lang['xlsx_historial_ajustes'] = 	'Listado de HIstorial de ajustes';
 ?>

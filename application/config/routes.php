@@ -114,6 +114,7 @@ $route['almacen/traspasos']			     			 = 'almacen/traspasos';
 /*Catalogo de Ajustes de alamcen*/
 $route['almacen/ajustes/agregar_ajustes']			 = 'almacen/agregar_ajustes/index';
 $route['almacen/ajustes/aprobar_ajustes']			 = 'almacen/aprobar_ajustes/index';
+$route['almacen/ajustes/historial_ajuste']			 = 'almacen/historial_ajuste/index';
 /*Catalogo de almacenes*/
 $route['almacen/catalogos/almacenes']			     = 'almacen/almacenes/index';
 /*Catalogo de pasillos*/

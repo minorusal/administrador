@@ -36,6 +36,7 @@ $lang['entradas_almacen']     	= 'Ingreso a almacén';
 $lang['traspasos']              = 'traspasos';
 $lang['ajustes']                = 'ajustes';
 $lang['aprobar']                = 'aprobar';
+$lang['historial_ajuste']       = 'Historial';
 $lang['almacenes']              = 'almacenes';
 $lang['pasillos']               = 'pasillos';
 $lang['gavetas']                = 'gavetas';

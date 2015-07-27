@@ -111,7 +111,9 @@ class recetario extends Base_Controller{
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_nutricion_receta'].')'
 						);
-				$btn_acciones['excel'] 		= '<span id="ico-detalle" style="cursor:pointer;"> <a href='.base_url($this->path.'export_rexlsx?filtro='.base64_encode($value['id_nutricion_receta'])).' class="iconsweets-excel" style="color:blue;" title="'.$this->lang_item("reporte").'"></a></span>';
+				// $btn_acciones['excel']	= '<span id="ico-excel" style="cursor:pointer;"> <a href='.base_url($this->path.'export_rexlsx?filtro='.base64_encode($value['id_nutricion_receta'])).' title="'.$this->lang_item("reporte").'"></a></span>';
+				$accion_id 					= $value['id_nutricion_receta'];
+				$btn_acciones['excel']      = '<span id="ico-excel_'.$accion_id.'" class="ico_acciones ico_excel fa fa-file-text" onclick="window.location.href=\''.base_url($this->path.'export_rexlsx?filtro='.base64_encode($value['id_nutricion_receta'])).'\';" title="'.$this->lang_item("reporte").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				
 				// Datos para tabla

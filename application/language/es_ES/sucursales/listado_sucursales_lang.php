@@ -6,6 +6,7 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
+
 $lang['lbl_esquema_venta']    = 'esquemas de venta';
 $lang['lbl_esquema_pago']     = 'esquemas de pago';
 $lang['lbl_inicio']           = 'inicio';
@@ -31,6 +32,7 @@ $lang['tel'] 		          = "teléfono";
 $lang['lbl_email'] 		      = "email";
 $lang['lbl_encargado'] 		  = "encargado";
 $lang['tel'] 		          = "teléfono";
+
 
 $lang['fecha_registro'] 	      = "Creado el";
 $lang['lbl_usuario_registro']     = "Creado por";

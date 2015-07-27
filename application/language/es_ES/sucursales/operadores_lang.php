@@ -11,4 +11,17 @@ $lang['num_int']   			= "Número interior";
 $lang['num_ext']   			= "número exterior";
 $lang['val_usuarios_registro']= "registrado por";
 $lang['seccion']            = "Catalogo de Vendedores";
+
+$lang['telefonos']			= "Teléfonos";
+$lang['entidad']			= "Entidad";
+$lang['sucursal']			= "Sucursal";
+$lang['paterno']			= "Apellido Paterno";
+$lang['materno']			= "Apellido Materno";
+$lang['rfc']				= "RFC";
+$lang['calle']				= "Calle";
+$lang['colonia']			= "Colonia";
+$lang['municipio']			= "Municipio";
+$lang['cp']					= "Código Postal";
+$lang['lbl_email']			= "Correo electrónico";
+
 ?>

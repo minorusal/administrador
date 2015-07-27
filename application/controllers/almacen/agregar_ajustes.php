@@ -24,7 +24,7 @@ class agregar_ajustes extends stock{
 		$this->modulo 			= 'almacen';
 		$this->submodulo        = 'agregar_ajustes';
 		$this->seccion          = 'ajustes';
-		$this->icon 			= 'fa fa-wrench'; //Icono de modulo
+		$this->icon 			= 'fa fa-inbox'; //Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; //almacen/entradas_recepcion/
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
@@ -39,7 +39,7 @@ class agregar_ajustes extends stock{
 		$this->load->model('stock_model','stock_model');
 
 		// Diccionario
-		//$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 		// Tabs
 		$this->tab_inicial 		= 2;
 		$this->tab_indice 		= array(
@@ -133,7 +133,8 @@ class agregar_ajustes extends stock{
 			}
 
 			// Plantilla
-			$tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			// $tbl_plantilla = array ('table_open'  => '<table id="tbl_grid" class="table table-bordered responsive ">');
+			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("id_almacen_ajuste"),
 										$this->lang_item("articulo"),										
@@ -186,6 +187,15 @@ class agregar_ajustes extends stock{
 		$lts_almacen  		    = dropdown_tpl($dropArray);
 		$tabData['lts_almacen'] = $lts_almacen;
 		$tabData['button_save'] = $btn_save;
+		$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
+		$tabData['lbl_almacen']	     = $this->lang_item("almacen_lbl",false);
+		$tabData['lbl_gaveta']	     = $this->lang_item("gaveta_lbl",false);
+		$tabData['lbl_pasillo']	     = $this->lang_item("pasillo_lbl",false);
+		$tabData['lbl_stock_mov']	     = $this->lang_item("stock_mov",false);
+		$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
+		$tabData['lblstock']	     = $this->lang_item("lblstock",false);
+		$tabData['stock_um_lbl']	 = $this->lang_item("stock_um_lbl",false);
+		$tabData['configuracion']	 = $this->lang_item("configuracion",false);
 
 		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
 		if($this->ajax_post(false)){
@@ -208,12 +218,11 @@ class agregar_ajustes extends stock{
 		$tabData['cl_um']			     = $detalle[0]['cl_um'];
 		//DIC
 		$tabData['lbl_articulo']	     = $this->lang_item("articulo",false);
-		$tabData['lbl_cl_almacen']	     = $this->lang_item("cl_almacen",false);
-		$tabData['lbl_cl_gaveta']	     = $this->lang_item("cl_gaveta",false);
-		$tabData['lbl_cl_pasillo']	     = $this->lang_item("cl_pasillo",false);
+		$tabData['lbl_cl_almacen']	     = $this->lang_item("almacen_lbl",false);
+		$tabData['lbl_cl_gaveta']	     = $this->lang_item("gaveta_lbl",false);
+		$tabData['lbl_cl_pasillo']	     = $this->lang_item("pasillo_lbl",false);
 		$tabData['lbl_stock_mov']	     = $this->lang_item("stock_mov",false);
 		$tabData['lbl_stock_um_mov']	 = $this->lang_item("stock_um_mov",false);
-		$tabData['lbl_cl_um']			 = $this->lang_item("cl_um",false);
 		
 		$uri_view  = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
 
@@ -232,14 +241,16 @@ class agregar_ajustes extends stock{
 					'id_gaveta' => $id_gavetas);
 
 		$detalle  = $this->db_model->db_get_data_x_articulo($slqdata);
+		//dump_var($detalle);
 		$stock=0;
 		$stock_um=0;
 		for($i=0; count($detalle)>$i;$i++){
 			$stock+=$detalle[$i]['stock'];
 			$stock_um+=$detalle[$i]['stock_um'];
 		}
-		$um= $detalle[0]['unidad_minima_cve'];
-		$data=array('stock'=> $stock,'stock_um'=>$stock_um, 'u_m_cv'=>$um);
+		$um_mimina= $detalle[0]['unidad_minima_cve'];
+		$cl_um= $detalle[0]['cl_um'];
+		$data=array('stock'=> $stock,'stock_um'=>$stock_um, 'u_m_cv'=>$um_mimina, 'um' => $cl_um);
 		echo json_encode($data);
 	}
 	public function load_gaveta_pas(){
@@ -392,7 +403,7 @@ class agregar_ajustes extends stock{
 			$id_pasillo   = $this->ajax_post('id_pasillo');
 			$id_gaveta 	  = $this->ajax_post('id_gavetas');
 			//
-			$sqlData= array(
+			$sqlData = array(
 						'stock_mov'    => $stock_mov,
 						'stock_um_mov' => $stock_um_mov,
 						'id_articulo'  => $id_articulo,
@@ -414,6 +425,39 @@ class agregar_ajustes extends stock{
 				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 			}	
 		}
+	}
+	public function export_xlsx(){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$sqlData = array(
+			 'buscar'     => $filtro
+		);
+		$list_content 			  = $this->db_model->db_get_data($sqlData);
+
+		if(count($list_content)>0){
+			foreach ($list_content as $value) {
+				$set_data[] = array(
+									$value['id_almacen_ajuste'],
+									$value['articulo'],
+									$value['stock_mov'].'-'.$value['cl_um'],
+									$value['stock_um_mov'].'-'.$value['cl_um'],
+									$value['timestamp']
+									);
+			}
+			$set_heading = array(	$this->lang_item("id_almacen_ajuste"),
+										$this->lang_item("articulo"),										
+										$this->lang_item("stock_mov"),
+										$this->lang_item("stock_um_mov"),
+										$this->lang_item("fecha_registro")
+									);
+	
+		}
+
+		$params = array(	'title'   => $this->lang_item("xlsx_agregar_ajustes"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		//dump_var($params);
+		$this->excel->generate_xlsx($params);
 	}
 }
 ?>

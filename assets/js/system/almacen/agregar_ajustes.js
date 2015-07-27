@@ -79,10 +79,12 @@ function load_stock(id_articulo){
 	        data: {id_articulo : id_articulo,id_almacen:id_almacen,id_pasillo:id_pasillo,id_gavetas:id_gavetas},
 	        success: function(data){
 	         var chosen = 'jQuery(".chzn-select").chosen();';
-	          jQuery('#value_stock').html(data['stock']+include_script(chosen));
+	          jQuery('#value_stock').html(data['stock']+' '+data['um']+include_script(chosen));
 	          jQuery('#value_stock_um').html(data['stock_um']+' '+data['u_m_cv']);
 	          jQuery('#stock_num_um').val(data['stock_um']);
 	          jQuery('#stock_num').val(data['stock']);
+	          jQuery('#um_minima').html(data['u_m_cv']);
+	          jQuery('#um').html(data['um']);
 	        }
 	    });
 }
@@ -146,21 +148,44 @@ function load_articulos(id_gaveta){
 	        }
 	    });
 }
-function realiza_calculos(){
-	var stock 	     = jQuery('#stock_destino').val();
-	var stock_num    = jQuery('#stock_num').val();
-	var stock_num_um = jQuery('#stock_num_um').val();
+function realiza_calculos(id){
+	var stock 	     	  = jQuery('#stock_destino').val();
+	var stock_um_destino  = jQuery('#stock_um_destino').val();
+	var stock_num    	  = jQuery('#stock_num').val();
+	var stock_num_um      = jQuery('#stock_num_um').val();
 	var cantidad;
+	var mensaje=0;
+	if(isNaN(stock)){
+		stock=0;
+	}
+	if(isNaN(stock_um_destino)){
+		stock_um_destino=0;
+	}
 
 	cantidad=stock_num-stock;
-	if(cantidad>=0){
-		var um = regla_tres(stock_num,stock_num_um,stock)
-		jQuery('#stock').val(stock);
-		jQuery('#stock_um_destino').val(um);
+	cantidad2=stock_num_um-stock_um_destino;
+	if(id==1){
+		if(cantidad>=0){
+			var um = regla_tres(stock_num,stock_num_um,stock);
+			jQuery('#stock').val(stock);
+			jQuery('#stock_um_destino').val(um);
+		}else{
+			mensaje=1;
+			jQuery('#stock_um_destino').val(0);
+		}
 	}else{
-		alert('No puede ser mayor a la cantidad registrada');
-		jQuery('#stock').val('');
+		if(cantidad2>=0){
+			var um = regla_tres(stock_num_um,stock_num,stock_um_destino);
+			jQuery('#stock_destino').val(um);
+			//jQuery('#stock_um_destino').val(stock_num_um);
+		}else{
+			mensaje=1;
+			jQuery('#stock_um_destino').val(0);
+		}
 	}
+		if(mensaje){
+			alert('no puede ser mayor a la cantidad registrada');
+		}
 }
 function agregar(){
 	var progress = progress_initialized('update_loader');

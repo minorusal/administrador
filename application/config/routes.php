@@ -54,16 +54,19 @@ $route['logout']                   = 'login/logout';
 /*NUTRICION*/
 
 /*Valores nutricionales*/
-$route['nutricion/valores_nutricionales']    	= 'nutricion/valores_nutricionales/index';
+$route['nutricion/valores_nutricionales']    	 = 'nutricion/valores_nutricionales/index';
 /*Familias*/
-$route['nutricion/catalogos/familias']    	    = 'nutricion/familias/index';
+$route['nutricion/catalogos/familias']    	     = 'nutricion/familias/index';
 /*Servicios*/
-$route['nutricion/catalogos/tiempos']    	    = 'nutricion/tiempos/index';
-
+$route['nutricion/catalogos/tiempos']    	     = 'nutricion/tiempos/index';
 /*Recetario*/
-$route['nutricion/recetario']              = 'nutricion/recetario/index';
-$route['nutricion/programacion']              = 'nutricion/programacion/index';
-$route['nutricion/conformacion_de_ciclos'] = 'nutricion/ciclos/index';
+$route['nutricion/recetario']                    = 'nutricion/recetario/index';
+/*Programacion*/
+$route['nutricion/programacion']                 = 'nutricion/programacion/index';
+/*Conformacion de Ciclos*/
+$route['nutricion/conformacion_de_ciclos']       = 'nutricion/ciclos/index';
+/*Conformacion de menus*/
+$route['nutricion/conformacion_de_menus']        = 'nutricion/menus/index';
 
 /*COMPRAS*/
 
@@ -94,14 +97,15 @@ $route['compras/catalogos/unidad_de_medida/listado_um']        = 'compras/um/lis
 $route['compras/catalogos/unidad_de_medida/listado_um/(:num)'] = 'compras/um/listado_um/$1';
 
 /*Catalogo de Embalaje*/
-$route['compras/catalogos/embalaje']                               = 'compras/embalaje/index';
+$route['compras/catalogos/embalaje']    = 'compras/embalaje/index';
 
 /*Catalogo de Ordenes*/
-$route['compras/ordenes/ordenes']                   	 = 'compras/ordenes/index';
-$route['compras/ordenes/aprobar_ordenes']                = 'compras/aprobar_ordenes/index';
-$route['compras/ordenes/historial_ordenes']                = 'compras/historial_ordenes/index';
+$route['compras/ordenes/ordenes']                    = 'compras/ordenes/index';
+$route['compras/ordenes/aprobar_ordenes']            = 'compras/aprobar_ordenes/index';
+$route['compras/ordenes/historial_ordenes']          = 'compras/historial_ordenes/index';
 
 /*ALMACEN*/
+
 /*ENtradas Recepcion*/
 $route['almacen/entradas/entradas_recepcion']		 = 'almacen/entradas_recepcion/index';
 $route['almacen/entradas/entradas_almacen']		     = 'almacen/entradas_almacen/index';
@@ -130,18 +134,18 @@ $route['administracion/control_de_usuarios/usuarios']        = 'administracion/u
 /*Catalogo de Usuarios*/
 $route['administracion/control_de_usuarios/perfiles']        = 'administracion/perfiles/index';
 /*Catalogo de Puestos*/
-$route['administracion/control_de_usuarios/puestos']        = 'administracion/puestos/index';
+$route['administracion/control_de_usuarios/puestos']         = 'administracion/puestos/index';
 /*Catalogo de Areas*/
-$route['administracion/control_de_usuarios/areas']        = 'administracion/areas/index';
+$route['administracion/control_de_usuarios/areas']           = 'administracion/areas/index';
 /*Catalogo de Perfiles*/
 $route['administracion/control_de_usuarios/perfiles']        = 'administracion/perfiles/index';
 /*Catalogo de Perfiles*/
-$route['administracion/control_de_usuarios/empresa']        = 'administracion/empresa/index';
+$route['administracion/control_de_usuarios/empresa']         = 'administracion/empresa/index';
 /*
  * CATALOGOS GENERALES
  */
 /*Catalogo de Sucursales*/
-$route['administracion/sucursales/sucursales']             = 'administracion/sucursales/index';
+$route['administracion/sucursales/sucursales']               = 'administracion/sucursales/index';
 /*Catalogo de Impuestos*/
 $route['administracion/catalogos_generales/impuestos']       = 'administracion/impuestos/index';
 /*Catalogo de Descuentos*/
@@ -155,7 +159,7 @@ $route['administracion/catalogos_generales/entidades']       = 'administracion/e
 /*Catálogo de Regiones*/ 
 $route['administracion/catalogos_generales/regiones']        = 'administracion/regiones/index'; 
 /*Catálogo de Servicios*/ 
-$route['administracion/sucursales/servicios']       = 'administracion/servicios/index';
+$route['administracion/sucursales/servicios']                = 'administracion/servicios/index';
 
 /*VENTAS*/
 

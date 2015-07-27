@@ -14,8 +14,8 @@
 	$lang['#'] 						= '#';	
 	$lang['costo_unitario']         = 'Costo unitario';	
 	$lang['costo_cantidad']        	= 'costo*cantidad';	
-	$lang['valor_imp']         		= 'valor del imp.';	
-	$lang['aceptar']         		= 'Aceptar listado';
+	$lang['valor_imp']         		= '$ Imp.';	
+	$lang['aceptar']         		= 'Aceptar';
 	$lang['comentarios_entrada']    = 'Comentarios de entrada';
 	$lang['recibir_enetrada']       = 'Recibir entrada';
 	$lang['rechazar_entrada']       = 'Rechazar entrada';
@@ -43,6 +43,24 @@
 	$lang['gaveta_origen_lbl']      = 'Gaveta origen';
 	$lang['origen']     			= 'origen';
 	$lang['destino']     		    = 'destino';
-	
 
+
+	$lang['descripcion']     		= 'Descripción';
+	$lang['estatus']     			= 'Estatus';
+	$lang['sucursal']     			= 'Sucursal';
+	$lang['proveedor']     			= 'Proveedor';
+	$lang['articulo']     			= 'Artículo';
+	$lang['presentacion']  			= 'Presentación';
+	$lang['cantidad']  				= 'Cantidad';
+	$lang['imp']  					= '% Imp.';
+	$lang['total']  				= 'Total';
+	$lang['observaciones']			= 'Observaciones';
+	
+	$lang['stock']					= 'Stock';
+	$lang['clave_corta']			= 'Clave';
+	$lang['fecha_recepcion']		= 'Recepción';
+
+	$lang['id']						= 'Id';
+	$lang['xlsx_entradas_recepcion']= 'Listado de entradas recepción';
+	$lang['xlsx_entradas_almacen']  = 'Listado de entradas a almacen';
 ?>

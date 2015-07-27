@@ -225,10 +225,13 @@ class operadores extends Base_Controller {
 		$data_tab_3['sucursal'] 	   		   = $this->lang_item("sucursal");
 		$data_tab_3['cp'] 			   		   = $this->lang_item("cp");
 		$data_tab_3['telefonos'] 	   		   = $this->lang_item("telefonos");
-		$data_tab_3['email'] 		   		   = $this->lang_item("email");
+		$data_tab_3['lbl_email'] 			   = $this->lang_item("lbl_email");
 		$data_tab_3['timestamp'] 	   		   = $this->lang_item("fecha_registro");
 		$data_tab_3['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion', false);
 		$data_tab_3['button_save']     		   = form_button(array('class'=>"btn btn-primary",'name' => 'update_vendedor','onclick'=>'update()' , 'content' => $this->lang_item("btn_guardar") ));
+
+		$data_tab_3['paterno'] 	   		   = $this->lang_item("paterno");
+		$data_tab_3['materno'] 	   		   = $this->lang_item("materno");
 
 		$data_tab_3['id_vendedor']     	 = $detalle[0]['id_ventas_vendedores'];
 		$data_tab_3['vendedor_value']  	 = $detalle[0]['nombre'];

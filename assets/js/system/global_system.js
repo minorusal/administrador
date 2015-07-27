@@ -1,4 +1,4 @@
- jQuery(document).ready(function() {
+jQuery(document).ready(function(){
     jQuery(".tabbedwidget").tabs();  
     window.onload = live_clock;
     tool_tips();
@@ -383,16 +383,16 @@ function values_requeridos(formulario, debug){
     return items_vacios;
 }
 function values_numericos(){
-     var ids = "";
-     var items_numericos = 0;
-     jQuery('#formulario .numerico').each(function(){
+    var ids = "";
+    var items_numericos = 0;
+    jQuery('#formulario .numerico').each(function(){
         if(jQuery.isNumeric(jQuery(this).val())){
         }else{
             ids = jQuery(this).attr("id")+'|'+ids;
             items_numericos++;
         }
-     });
-     return items_numericos;
+    });
+    return items_numericos;
 }
 function allow_only_numeric(){
     jQuery('.numerico').numeric('.'); 

@@ -24,7 +24,6 @@ class listado_sucursales extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		$this->load->model('sucursales/horarios_atencion_model','horario');
 		$this->load->model('administracion/entidades_model','db_model2');
 		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario

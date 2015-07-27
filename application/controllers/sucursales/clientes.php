@@ -33,9 +33,9 @@ class clientes extends Base_Controller {
 	public function index(){
 		$view_listado 	= $this->listado();
 
-		$data['titulo_seccion']   = $this->lang_item("cliente");
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'fa fa-users';
+		$data['titulo_seccion']   = $this->lang_item("lbl_cliente");
+		$data['titulo_modulo'] = $this->lang_item("titulo_modulo");
+		$data['icon']             = 'fa fa-ticket';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado);
 		
 		$js['js'][]     = array('name' => 'clientes', 'dirname' => 'sucursales');

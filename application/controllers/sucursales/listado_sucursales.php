@@ -150,6 +150,12 @@ class listado_sucursales extends Base_Controller{
 	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
+		if($detalle[0]['factura'] == 0){
+			$checked_fact = '';
+		}else{
+			$checked_fact = 'checked';
+		}
+		//print_debug($detalle);
 		foreach ($detalle as $value){
 			$id_pago[]  = $value['id_sucursales_esquema_pago'];
 			$id_venta[] = $value['id_sucursales_esquema_venta'];
@@ -209,6 +215,7 @@ class listado_sucursales extends Base_Controller{
 		$tabData["lbl_encargado"]          = $this->lang_item("lbl_encargado");
 		$tabData['lbl_esquema_pago']       = $this->lang_item('lbl_esquema_pago');
 		$tabData['lbl_esquema_venta']      = $this->lang_item('lbl_esquema_venta');
+		$tabData['lbl_comprobante_factura']= $this->lang_item('lbl_comprobante_factura');
 		$tabData["dir"]                    = $this->lang_item("direccion");
 		$tabData["lbl_telefono"]           = $this->lang_item("lbl_telefono");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
@@ -221,6 +228,7 @@ class listado_sucursales extends Base_Controller{
 		$tabData["timepicker2"]            = $detalle[0]['final'];
 		$tabData["lbl_entidad"]            = $this->lang_item("lbl_entidad");
 		$tabData["lbl_region"]             = $this->lang_item("lbl_region");
+		$tabData['factura'] 			   = $checked_fact;
         $tabData['sucursal']               = $detalle[0]['sucursal'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['razon_social']           = $detalle[0]['razon_social'];
@@ -280,6 +288,7 @@ class listado_sucursales extends Base_Controller{
 						,'encargado'	 => $objData['encargado']
 						,'inicio'	     => $ajax_inicio
 						,'final'	     => $ajax_termino
+						,'factura'	     => ($objData['factura']=="true")?1:0
 						,'id_region'	 => $objData['lts_regiones']
 						,'id_entidad'	 => $objData['lts_entidades']
 						,'telefono'		 => $objData['telefono']
@@ -428,6 +437,7 @@ class listado_sucursales extends Base_Controller{
 								 ,'id_region'    => $objData['lts_regiones']
 								 ,'inicio'       => $objData['timepicker1']
 								 ,'final'        => $objData['timepicker2']
+								 ,'factura'	     => ($objData['factura']=="true")?1:0
 								 ,'id_entidad'   => $objData['lts_entidades']
 								 ,'razon_social' => $objData['razon_social']
 								 ,'rfc'          => $objData['rfc']

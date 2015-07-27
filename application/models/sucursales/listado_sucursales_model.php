@@ -106,7 +106,6 @@ class listado_sucursales_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		
 		$query = "SELECT 
 					 s.*
 					 ,ep.esquema_pago
@@ -120,7 +119,6 @@ class listado_sucursales_model extends Base_Model{
 				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
 				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta				  
 				  WHERE s.id_sucursal = $id_sucursal ";
-				 //print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

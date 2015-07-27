@@ -192,7 +192,8 @@ function agregar(){
 	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();
 	var btn = jQuery("button[name='ajuste_save']");
-	//btn.attr('disabled','disabled');
+	btn.attr('disabled','disabled');
+
 	var stock = jQuery('#stock').val();
 	var stock_um_destino = jQuery('#stock_um_destino').val();
 	
@@ -201,8 +202,6 @@ function agregar(){
 	var id_almacen  = jQuery('select[name=lts_almacen] option:selected').val();
 	var id_pasillo  = jQuery('select[name=lts_pasillos] option:selected').val();
 	var id_gavetas  = jQuery('select[name=lts_gavetas] option:selected').val();
-	//DESTINO
-
 	var incomplete = values_requeridos();
 	jQuery.ajax({
 		type:"POST",
@@ -218,12 +217,14 @@ function agregar(){
 				id_gavetas	 		 :	id_gavetas
 		},
 		beforeSend : function(){
-			btn.attr('disabled',true);
+			//btn.attr('disabled',true);
 		},
 		success : function(data){
 			if(data.success == 'true' ){
 				jgrowl(data.mensaje);
+				btn.hide();
 			}else{
+				btn.removeAttr('disabled');
 				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
 			}
 		}

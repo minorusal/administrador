@@ -16,7 +16,7 @@ class listado_sucursales extends Base_Controller{
 		$this->icon 			= 'fa fa-sitemap'; 
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
 		$this->view_content 	= 'content';
-		$this->limit_max		= 5;
+		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
 		$this->tab1 			= 'agregar';
@@ -24,7 +24,6 @@ class listado_sucursales extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		$this->load->model('sucursales/horarios_atencion_model','horario');
 		$this->load->model('administracion/entidades_model','db_model2');
 		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario
@@ -74,7 +73,6 @@ class listado_sucursales extends Base_Controller{
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
 		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
-		//print_debug($js);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
@@ -98,7 +96,6 @@ class listado_sucursales extends Base_Controller{
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows){
 			foreach ($list_content as $value){
-				//print_debug($list_content);
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
@@ -153,11 +150,10 @@ class listado_sucursales extends Base_Controller{
 	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
-		foreach ($detalle as $value) {
+		foreach ($detalle as $value){
 			$id_pago[]  = $value['id_sucursales_esquema_pago'];
 			$id_venta[] = $value['id_sucursales_esquema_venta'];
 		}
-		//print_debug($id_pago);
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
 		$sqlData        = array(
@@ -214,7 +210,7 @@ class listado_sucursales extends Base_Controller{
 		$tabData['lbl_esquema_pago']       = $this->lang_item('lbl_esquema_pago');
 		$tabData['lbl_esquema_venta']      = $this->lang_item('lbl_esquema_venta');
 		$tabData["dir"]                    = $this->lang_item("direccion");
-		$tabData["tel"]                    = $this->lang_item("tel");
+		$tabData["lbl_telefono"]           = $this->lang_item("lbl_telefono");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
 		$tabData["lbl_final"]              = $this->lang_item("lbl_final");
 		$tabData["list_entidad"]           = $entidades;
@@ -294,7 +290,6 @@ class listado_sucursales extends Base_Controller{
 				$insert = $this->db_model->db_update_data($sqlData);
 				
 					$arr_pago  = explode(',',$objData['lts_esquema_pago']);
-					//print_debug($arr_pago);
 					$pago     = $this->db_model->delete_pago($objData['id_sucursal']);
 					
 					if(!empty($arr_pago)){
@@ -363,21 +358,43 @@ class listado_sucursales extends Base_Controller{
 					,'class' 	  => "requerido"
 					);
 		$entidades    = dropdown_tpl($entidades_array);
+
+		$esquema_pago_array  = array(
+						'data'		=> $this->db_model->get_esquema_pago($sqlData)
+						,'value' 	=> 'id_sucursales_esquema_pago'
+						,'text' 	=> array('clave_corta','esquema_pago')
+						,'name' 	=> "lts_esquema_pago"
+						,'class' 	=> "requerido"
+					);
+		$list_esquema_pago  = multi_dropdown_tpl($esquema_pago_array);
+
+		$esquema_venta_array  = array(
+						 'data'		=> $this->db_model->get_esquema_venta($sqlData)
+						,'value' 	=> 'id_sucursales_esquema_venta'
+						,'text' 	=> array('clave_corta','esquema_venta')
+						,'name' 	=> "lts_esquema_venta"
+						,'class' 	=> "requerido"
+					);
+		$list_esquema_venta  = multi_dropdown_tpl($esquema_venta_array);
+
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
-		$tab_1["nombre_sucursal"]  = $this->lang_item("nombre_sucursal");
-		$tab_1["cvl_corta"]        = $this->lang_item("clave_corta");
-		$tab_1["r_social"]         = $this->lang_item("rs");
-		$tab_1["r_f_c"]            = $this->lang_item("rfc");
-		$tab_1["lbl_email"]        = $this->lang_item("lbl_email");
-		$tab_1["lbl_encargado"]    = $this->lang_item("lbl_encargado");
-		$tab_1["tel"]              = $this->lang_item("telefono");
-		$tab_1["lbl_inicio"]       = $this->lang_item("lbl_inicio");
-		$tab_1["lbl_final"]        = $this->lang_item("lbl_final");
-		$tab_1["list_entidad"]     = $entidades;
-		$tab_1["list_region"]      = $regiones;
-		
+		$tab_1["nombre_sucursal"]   = $this->lang_item("nombre_sucursal");
+		$tab_1["cvl_corta"]         = $this->lang_item("clave_corta");
+		$tab_1["r_social"]          = $this->lang_item("rs");
+		$tab_1["r_f_c"]             = $this->lang_item("rfc");
+		$tab_1["lbl_email"]         = $this->lang_item("lbl_email");
+		$tab_1["lbl_encargado"]     = $this->lang_item("lbl_encargado");
+		$tab_1["lbl_telefono"]      = $this->lang_item("lbl_telefono");
+		$tab_1["lbl_inicio"]        = $this->lang_item("lbl_inicio");
+		$tab_1["lbl_final"]         = $this->lang_item("lbl_final");
+		$tab_1["lbl_esquema_pago"]  = $this->lang_item("lbl_esquema_pago");
+		$tab_1["lbl_esquema_venta"] = $this->lang_item("lbl_esquema_venta");
+		$tab_1["list_entidad"]      = $entidades;
+		$tab_1["list_region"]       = $regiones;
+		$tab_1["list_esquema_pago"] = $list_esquema_pago;
+		$tab_1["list_esquema_venta"]= $list_esquema_venta;
 		$tab_1["lbl_region"]       = $this->lang_item("lbl_region");
 		$tab_1["lbl_entidad"]      = $this->lang_item("lbl_entidad");
 		$tab_1["direccion"]        = $this->lang_item("direccion");
@@ -394,31 +411,63 @@ class listado_sucursales extends Base_Controller{
 	}
 
 	public function insert_sucursal(){
-		$incomplete  = $this->ajax_post('incomplete');
-		if($incomplete>0){
+		$objData  	= $this->ajax_post('objData');
+		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
-			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$ajax_inicio  =  $this->ajax_post('inicio');
-			$ajax_termino =  $this->ajax_post('fin');
+			$ajax_inicio  =  $objData['timepicker1'];
+			$ajax_termino =  $objData['timepicker2'];
 			
 			$check_times  =  $this->check_time_longer($ajax_inicio,$ajax_termino);
 			if($check_times['response']){
-				$data_insert     = array('sucursal' => $this->ajax_post('sucursal'),
-								 'clave_corta'  => $this->ajax_post('clave_corta'),
-								 'direccion'    => $this->ajax_post('direccion'),
-								 'id_usuario'   => $this->session->userdata('id_usuario'),
-								 'id_region'    => $this->ajax_post('id_region'),
-								 'inicio'       => $ajax_inicio,
-								 'final'        => $ajax_termino,
-								 'id_entidad'   => $this->ajax_post('id_entidad'),
-								 'razon_social' => $this->ajax_post('razon_social'),
-								 'rfc'          => $this->ajax_post('rfc'),
-								 'email'        => $this->ajax_post('email'),
-								 'encargado'    => $this->ajax_post('encargado'),
-								 'telefono'     => $this->ajax_post('tel'),
-								 'timestamp'    => $this->timestamp());
+				$data_insert     = array(
+								  'sucursal'     => $objData['sucursal']
+								 ,'clave_corta'  => $objData['clave_corta']
+								 ,'direccion'    => $objData['direccion']
+								 ,'id_region'    => $objData['lts_regiones']
+								 ,'inicio'       => $objData['timepicker1']
+								 ,'final'        => $objData['timepicker2']
+								 ,'id_entidad'   => $objData['lts_entidades']
+								 ,'razon_social' => $objData['razon_social']
+								 ,'rfc'          => $objData['rfc']
+								 ,'email'        => $objData['email']
+								 ,'encargado'    => $objData['ecnargado']
+								 ,'telefono'     => $objData['telefono']
+								 ,'id_usuario'   => $this->session->userdata('id_usuario')
+								 ,'timestamp'    => $this->timestamp());
 				$insert = $this->db_model->db_insert_data($data_insert);
+
+				$res = $this->db_model->get_id_sucursal();
+				$arr_pago  = explode(',',$objData['lts_esquema_pago']);
+				
+				if(!empty($arr_pago)){
+					$sqlData = array();
+					foreach ($arr_pago as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'       => ($res[0]['cuantos'])
+							,'id_esquema_pago'   => $value
+							,'id_usuario'   	 => $this->session->userdata('id_usuario')
+							,'timestamp'    	 => $this->timestamp()
+							);
+						$insert_pago = $this->db_model->db_update_data_pago($sqlData);
+					}
+				}
+
+				$arr_venta  = explode(',',$objData['lts_esquema_venta']);
+				
+				if(!empty($arr_venta)){
+					$sqlData = array();
+					foreach ($arr_venta as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'       => ($res[0]['cuantos'])
+							,'id_esquema_venta'  => $value
+							,'id_usuario'   => $this->session->userdata('id_usuario')
+							,'timestamp'    => $this->timestamp()
+							);
+						$insert_venta = $this->db_model->db_update_data_venta($sqlData);
+					}
+				}
 				
 				if($insert){
 					$msg = $this->lang_item("msg_insert_success",false);

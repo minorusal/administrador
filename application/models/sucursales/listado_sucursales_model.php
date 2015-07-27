@@ -106,7 +106,7 @@ class listado_sucursales_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		//$query = "SELECT * FROM $tbl[sucursales] WHERE id_sucursal = $id_sucursal";
+		
 		$query = "SELECT 
 					 s.*
 					 ,ep.esquema_pago
@@ -119,8 +119,8 @@ class listado_sucursales_model extends Base_Model{
 				  LEFT JOIN $tbl[sucursales_venta] v on v.id_sucursal = s.id_sucursal
 				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
 				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta				  
-				  WHERE s.id_sucursal = $id_sucursal AND p.id_sucursal = $id_sucursal";
-				 // print_debug($query);
+				  WHERE s.id_sucursal = $id_sucursal ";
+				 //print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -128,6 +128,16 @@ class listado_sucursales_model extends Base_Model{
 	}
 
 
+	public function get_id_sucursal(){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT COUNT(*) AS cuantos FROM $tbl[sucursales] WHERE activo = 1";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 	/*Actualliza la información en el formuladio de edición de sucursales*/
 	public function db_update_data($data=array()){
 		// DB Info		

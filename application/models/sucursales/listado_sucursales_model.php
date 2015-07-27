@@ -63,12 +63,15 @@ class listado_sucursales_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		// Query
-		$query = "SELECT * 
-				  FROM $tbl[sucursales_esquema_pago]
+		$query = "DELETE 
+				  FROM $tbl[sucursales_pago]
+				  WHERE id_sucursal = $data[id_sucursal] AND
+				  id_esquema_pago = $data[id_esquema_pago]
 				  ";
 		$query = $this->db->query($query);
-		if($query->num_rows >= 1){
-			return $query->result_array();
+		if($query){
+			$insert = $this->insert_item($tbl['sucursales_pago'], $data);
+			return $insert;
 		}
 	}
 	/*Trae la información para el formulario de edición de sucursales*/

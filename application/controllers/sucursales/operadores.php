@@ -33,8 +33,8 @@ class operadores extends Base_Controller {
 	public function index(){
 		$view_listado 			  = $this->listado();		
 		$data['titulo_seccion']   = $this->lang_item("vendedores");
-		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
-		$data['icon']             = 'fa fa-users';
+		$data['titulo_modulo']    = $this->lang_item("titulo_modulo");
+		$data['icon']             = 'fa fa-briefcase';
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado);
 		
 		$js['js'][]     = array('name' => 'operadores', 'dirname' => 'sucursales');

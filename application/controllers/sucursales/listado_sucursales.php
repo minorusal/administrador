@@ -24,6 +24,7 @@ class listado_sucursales extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		$this->load->model('administracion/formas_de_pago_model','forma_pago');
 		$this->load->model('administracion/entidades_model','db_model2');
 		$this->load->model('administracion/regiones_model','regiones');
 		// Diccionario
@@ -150,9 +151,16 @@ class listado_sucursales extends Base_Controller{
 	public function detalle(){
 		$id_sucursal                 = $this->ajax_post('id_sucursal');
 		$detalle  	                 = $this->db_model->get_orden_unico_sucursal($id_sucursal);
+		if($detalle[0]['factura'] == 0){
+			$checked_fact = '';
+		}else{
+			$checked_fact = 'checked';
+		}
+		//print_debug($detalle);
 		foreach ($detalle as $value){
 			$id_pago[]  = $value['id_sucursales_esquema_pago'];
 			$id_venta[] = $value['id_sucursales_esquema_venta'];
+			$id_fpago[] = $value['id_forma_pago'];
 		}
 		$seccion 	                 = 'detalle';
 		$tab_detalle                 = $this->tab3;
@@ -199,6 +207,16 @@ class listado_sucursales extends Base_Controller{
 						,'selected' => $id_venta
 					);
 		$list_esquema_venta  = multi_dropdown_tpl($esquema_venta_array);
+
+		$forma_pago_array  = array(
+						 'data'		=> $this->forma_pago->db_get_data($sqlData)
+						,'value' 	=> 'id_forma_pago'
+						,'text' 	=> array('clave_corta','forma_pago')
+						,'name' 	=> "lts_forma_pago"
+						,'class' 	=> "requerido"
+						,'selected' => $id_fpago
+					);
+		$list_forma_pago  = multi_dropdown_tpl($forma_pago_array);
 		$btn_save                          = form_button(array('class'=>"btn btn-primary",'name' => 'actualizar' , 'onclick'=>'actualizar()','content' => $this->lang_item("btn_guardar") ));   
         $tabData['id_sucursal']            = $id_sucursal;
         $tabData["nombre_sucursal"]        = $this->lang_item("nombre_sucursal");
@@ -209,6 +227,8 @@ class listado_sucursales extends Base_Controller{
 		$tabData["lbl_encargado"]          = $this->lang_item("lbl_encargado");
 		$tabData['lbl_esquema_pago']       = $this->lang_item('lbl_esquema_pago');
 		$tabData['lbl_esquema_venta']      = $this->lang_item('lbl_esquema_venta');
+		$tabData['lbl_forma_pago']         = $this->lang_item('lbl_forma_pago');
+		$tabData['lbl_comprobante_factura']= $this->lang_item('lbl_comprobante_factura');
 		$tabData["dir"]                    = $this->lang_item("direccion");
 		$tabData["lbl_telefono"]           = $this->lang_item("lbl_telefono");
 		$tabData["lbl_inicio"]             = $this->lang_item("lbl_inicio");
@@ -217,10 +237,12 @@ class listado_sucursales extends Base_Controller{
 		$tabData["list_region"]            = $regiones;
 		$tabData["list_esquema_pago"]      = $list_esquema_pago;
 		$tabData["list_esquema_venta"]     = $list_esquema_venta;
+		$tabData['list_forma_pago']        = $list_forma_pago;
 		$tabData["timepicker1"]            = $detalle[0]['inicio'];
 		$tabData["timepicker2"]            = $detalle[0]['final'];
 		$tabData["lbl_entidad"]            = $this->lang_item("lbl_entidad");
 		$tabData["lbl_region"]             = $this->lang_item("lbl_region");
+		$tabData['factura'] 			   = $checked_fact;
         $tabData['sucursal']               = $detalle[0]['sucursal'];
 		$tabData['clave_corta']            = $detalle[0]['clave_corta'];
         $tabData['razon_social']           = $detalle[0]['razon_social'];
@@ -280,6 +302,7 @@ class listado_sucursales extends Base_Controller{
 						,'encargado'	 => $objData['encargado']
 						,'inicio'	     => $ajax_inicio
 						,'final'	     => $ajax_termino
+						,'factura'	     => ($objData['factura']=="true")?1:0
 						,'id_region'	 => $objData['lts_regiones']
 						,'id_entidad'	 => $objData['lts_entidades']
 						,'telefono'		 => $objData['telefono']
@@ -318,6 +341,22 @@ class listado_sucursales extends Base_Controller{
 								,'timestamp'    => $this->timestamp()
 								);
 							$insert_venta = $this->db_model->db_update_data_venta($sqlData);
+						}
+					}
+
+					$arr_fpago  = explode(',',$objData['lts_forma_pago']);
+					$fpago      = $this->db_model->delete_fpago($objData['id_sucursal']);
+					
+					if(!empty($arr_fpago)){
+						$sqlData = array();
+						foreach ($arr_fpago as $key => $value){
+							$sqlData = array(
+								 'id_sucursal'       => $objData['id_sucursal']
+								,'id_forma_pago'  => $value
+								,'id_usuario'   => $this->session->userdata('id_usuario')
+								,'timestamp'    => $this->timestamp()
+								);
+							$insert_fpago = $this->db_model->db_update_data_fpago($sqlData);
 						}
 					}
 				if($insert){
@@ -428,6 +467,7 @@ class listado_sucursales extends Base_Controller{
 								 ,'id_region'    => $objData['lts_regiones']
 								 ,'inicio'       => $objData['timepicker1']
 								 ,'final'        => $objData['timepicker2']
+								 ,'factura'	     => ($objData['factura']=="true")?1:0
 								 ,'id_entidad'   => $objData['lts_entidades']
 								 ,'razon_social' => $objData['razon_social']
 								 ,'rfc'          => $objData['rfc']

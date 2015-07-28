@@ -27,6 +27,7 @@ $lang['presentaciones']         = 'presentaciones';
 $lang['lineas']                 = 'lineas';
 $lang['marcas']                 = 'marcas';
 $lang['unidad_de_medida']       = 'Unidad de medida';	
+$lang['embalaje']       = 'Embalaje';
 
 /*Almacenes*/
 $lang['almacen']                = 'Almacenes';

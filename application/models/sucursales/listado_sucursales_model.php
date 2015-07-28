@@ -101,6 +101,27 @@ class listado_sucursales_model extends Base_Model{
 			return $insert;
 		}
 	}
+	public function delete_fpago($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "DELETE 
+				  FROM $tbl[sucursales_forma_pago]
+				  WHERE id_sucursal =".$id_sucursal;
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+	public function db_update_data_fpago($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['sucursales_forma_pago'], $data);
+		if($insert){
+			return $insert;
+		}
+	}
 	/*Trae la información para el formulario de edición de sucursales*/
 	public function get_orden_unico_sucursal($id_sucursal){
 		// DB Info		
@@ -111,13 +132,16 @@ class listado_sucursales_model extends Base_Model{
 					 ,ep.esquema_pago
 					 ,ep.id_sucursales_esquema_pago
 					 ,ev.id_sucursales_esquema_venta
+					 ,fp.id_forma_pago
 
 				  FROM $tbl[sucursales] s
 				 
 				  LEFT JOIN $tbl[sucursales_pago] p on p.id_sucursal = s.id_sucursal
 				  LEFT JOIN $tbl[sucursales_venta] v on v.id_sucursal = s.id_sucursal
+				  LEFT JOIN $tbl[sucursales_forma_pago] f on f.id_sucursal = s.id_sucursal
 				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
 				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta				  
+				  LEFT JOIN $tbl[administracion_forma_pago] fp on fp.id_forma_pago =  f.id_forma_pago
 				  WHERE s.id_sucursal = $id_sucursal ";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){

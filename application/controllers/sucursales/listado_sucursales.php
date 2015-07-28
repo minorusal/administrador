@@ -105,7 +105,7 @@ class listado_sucursales extends Base_Controller{
 				// Datos para tabla
 				$tbl_data[] = array('id'                => $value['id_sucursal'],
 									'sucursal'          => tool_tips_tpl($value['sucursal'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'clave_corta'       => $value['clave_corta'],
+									'clave_corta'       => $value['cv_sucursal'],
 									'horario_atencion'  => $value['inicio'].' a '.$value['final'],
 									'regiones'          => $value['region'],
 									'entidad'  			=> $value['entidad'],
@@ -415,6 +415,14 @@ class listado_sucursales extends Base_Controller{
 						,'class' 	=> "requerido"
 					);
 		$list_esquema_venta  = multi_dropdown_tpl($esquema_venta_array);
+		$forma_pago_array  = array(
+						 'data'		=> $this->forma_pago->db_get_data($sqlData)
+						,'value' 	=> 'id_forma_pago'
+						,'text' 	=> array('clave_corta','forma_pago')
+						,'name' 	=> "lts_forma_pago"
+						,'class' 	=> "requerido"
+					);
+		$list_forma_pago  = multi_dropdown_tpl($forma_pago_array);
 
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
 		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
@@ -430,10 +438,13 @@ class listado_sucursales extends Base_Controller{
 		$tab_1["lbl_final"]         = $this->lang_item("lbl_final");
 		$tab_1["lbl_esquema_pago"]  = $this->lang_item("lbl_esquema_pago");
 		$tab_1["lbl_esquema_venta"] = $this->lang_item("lbl_esquema_venta");
+		$tab_1["lbl_comprobante_factura"] = $this->lang_item("lbl_comprobante_factura");
+		$tab_1["lbl_forma_pago"]    = $this->lang_item("lbl_forma_pago");
 		$tab_1["list_entidad"]      = $entidades;
 		$tab_1["list_region"]       = $regiones;
 		$tab_1["list_esquema_pago"] = $list_esquema_pago;
 		$tab_1["list_esquema_venta"]= $list_esquema_venta;
+		$tab_1["list_forma_pago"]   = $list_forma_pago;
 		$tab_1["lbl_region"]       = $this->lang_item("lbl_region");
 		$tab_1["lbl_entidad"]      = $this->lang_item("lbl_entidad");
 		$tab_1["direccion"]        = $this->lang_item("direccion");
@@ -508,6 +519,21 @@ class listado_sucursales extends Base_Controller{
 						$insert_venta = $this->db_model->db_update_data_venta($sqlData);
 					}
 				}
+
+				$arr_fpago  = explode(',',$objData['lts_forma_pago']);
+				
+				if(!empty($arr_fpago)){
+					$sqlData = array();
+					foreach ($arr_fpago as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'       => ($res[0]['cuantos'])
+							,'id_forma_pago'  => $value
+							,'id_usuario'   => $this->session->userdata('id_usuario')
+							,'timestamp'    => $this->timestamp()
+							);
+						$insert_venta = $this->db_model->db_update_data_fpago($sqlData);
+					}
+				}
 				
 				if($insert){
 					$msg = $this->lang_item("msg_insert_success",false);
@@ -536,7 +562,7 @@ class listado_sucursales extends Base_Controller{
 			foreach ($lts_content as $value) {
 				$set_data[] = array(
 									 $value['sucursal'],
-									 $value['clave_corta'],
+									 $value['cv_sucursal'],
 									 $value['inicio'],
 									 $value['inicio'],
 									 $value['direccion']);

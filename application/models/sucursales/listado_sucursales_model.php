@@ -12,12 +12,16 @@ class listado_sucursales_model extends Base_Model{
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
 		$filtro = ($filtro) ? "AND (su.clave_corta like '%$filtro%' OR
 									su.direccion like '%$filtro%' OR
+									su.inicio like '%$filtro%' OR
+									su.final like '%$filtro%' OR
+									e.entidad like '%$filtro%' OR
+									r.clave_corta like '%$filtro%' OR
 									su.sucursal like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT 
 						 su.id_sucursal
-						,su.clave_corta
+						,su.clave_corta as cv_sucursal
 						,su.inicio
 						,su.final
 						,su.direccion
@@ -148,7 +152,6 @@ class listado_sucursales_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
-
 
 	public function get_id_sucursal(){
 		// DB Info		

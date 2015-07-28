@@ -17,8 +17,26 @@
 			{dropdown_sucursales}			
 		</span>
 	</p>
-	
-
+	<p>
+		<label>{lbl_asigna_recetas}: (*)</label>
+		<span class='field'>
+			<label>{lbl_list_recetas_selected}</label>
+			<span class='field formwrapper'>
+				<select id = "recetas_selected" class="clean chosen-multiselect input-xlarge chzn-select"  multiple='multiple'>
+				</select>
+			</span>
+		</span>
+	</p>
+	<p>
+		<label>{lbl_asigna_articulos}: (*)</label>
+		<span class='field'>
+			<label>{lbl_list_articulos_selected}</label>
+			<span class = 'field formwrapper'>
+				<select id="articulos_selected" class="clean chosen-multiselect input-xlarge chzn-select" multiple='multiple'>
+				</select>
+			</span>
+		</span>
+	</p>
 	<div id= "loader_formatos" class="progress progress-striped" style="display:none;"></div>
     <div id="mensajes_formatos" style="display:none"></div>
     <p class="stdformbutton">

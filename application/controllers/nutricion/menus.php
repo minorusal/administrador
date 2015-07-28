@@ -52,17 +52,17 @@ class menus extends Base_Controller{
 
 	public function index(){
 		$tabl_inicial 			  = 1;	
-		$contenidos_tab           = $this->configuracion_menu();
+		$contenidos_tab           = $this->agregar();
 		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
-		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
+		$data['titulo_seccion']   = $this->lang_item('conformacion_menus');
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]  = array('name' => $this->modulo, 'dirname' => $this->modulo);
+		$js['js'][]  = array('name' => $this->submodulo, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function configuracion_menu(){
+	public function agregar(){
 		$data['lbl_sucursal'] = $this->lang_item('lbl_sucursal');
 		$sqlData = array(
 							 'buscar' => 0
@@ -77,22 +77,60 @@ class menus extends Base_Controller{
 						,'leyenda' 	=> "-----"
 						,'class' 	=> "requerido"
 						,'event'    => array('event'      => 'onchange', 
-											'function'    => 'load_ciclos', 
+											'function'    => 'load_dropdowns', 
 											'params'      => array('this.value'), 
 											'params_type' => array(false))
 					);
 		$sucursales = dropdown_tpl($dropdown_sucursales);
+		
+		$data['lbl_clave_corta']              = $this->lang_item('lbl_clave_corta', false);
+		$data['lbl_nombre_menu']              = $this->lang_item('lbl_nombre_menu', false);
+		$data['lbl_sucursal']                 = $this->lang_item('lbl_sucursal', false);
+		$data['lbl_asigna_recetas']           = $this->lang_item('lbl_asigna_recetas', false);
+		$data['lbl_list_recetas']             = $this->lang_item('lbl_list_recetas', false);
+		$data['lbl_list_recetas_selected']    = $this->lang_item('lbl_list_recetas_selected', false);
+		$data['lbl_asigna_articulos']         = $this->lang_item('lbl_asigna_articulos', false);
+		$data['lbl_list_articulos']           = $this->lang_item('lbl_list_articulos', false);
+		$data['lbl_list_articulos_selected']  = $this->lang_item('lbl_list_articulos_selected', false);
 
+		$data['dropdown_sucursales']          = $sucursales;
+		$data['dropdown_recetas']             = dropdown_tpl(array('data' => null,'name' => "lts_recetas", 'leyenda' => "-----"));
+		$data['dropdown_articulos']           = dropdown_tpl(array('data' => null,'name' => "lts_articulos", 'leyenda' => "-----"));
+		$data['btn_formato']                  = 'pndiente';
 
-		$data['dropdown_sucursales'] = $sucursales;
-
-		if($this->ajax_post(false))
-		{
+		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($this->view_agregar,$data,true));
 		}
-		else
-		{
+		else{
 			return $this->load_view_unique($this->view_agregar, $data, true);
 		}
+	}
+
+	public function load_dropdowns(){
+		$id_sucursal    = ($this->ajax_post('id_sucursal')) ? $this->ajax_post('id_sucursal') : false;
+		$json_recetas   = array();
+		$json_articulos = array();
+		if($id_sucursal){
+			$lts_recetas = $this->db_model->get_lts_recetas( $id_sucursal );
+			if(is_array($lts_recetas)){
+				foreach ($lts_recetas as $key => $value) {
+					$json_recetas[] = array(
+											'key'  => $value['id_nutricion_receta'], 
+											'item' => $value['clave_corta'].'-'.$value['receta']
+									);
+				}
+			}
+			
+			$lts_articulos = $this->db_model->get_lts_articulos($id_sucursal);
+			if(is_array($lts_articulos)){
+				foreach ($lts_articulos as $key => $value) {
+					$json_articulos[] = array(
+											'key'  => $value['id_compras_articulo_precios'],
+											'item' => $value['articulo']
+										);
+				}
+			}
+		}
+		echo json_encode(array('recetas' => $json_recetas, 'articulos' => $json_articulos));
 	}
 }

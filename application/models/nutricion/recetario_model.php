@@ -8,7 +8,6 @@ class recetario_model extends Base_Model{
 		$aplicar_limit 	= (array_key_exists('aplicar_limit', $data)) ? $data['aplicar_limit'] : false;
 		$unique         = (array_key_exists('unique', $data) ? $data['unique'] : false);
 
-		
 		$unique = ($unique) ? "AND r.id_nutricion_receta = $unique" : "";
 		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
 									r.receta like '%$filtro%' OR

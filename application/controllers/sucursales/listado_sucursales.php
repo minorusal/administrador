@@ -306,15 +306,15 @@ class listado_sucursales extends Base_Controller{
 		}
 		
 		$tbl_data[] = array('id'                => $detalle[0]['id_sucursal'],
-							'nombre'            => $this->lang_item("lbl_sucursal"),
+							'nombre'            => '<strong>'.$this->lang_item("lbl_sucursal").':</strong>',
 							'nombre_bd'         => $detalle[0]['sucursal'],
-							'clave_corta'       => $this->lang_item("lbl_clave_corta"),
+							'clave_corta'       => '<strong>'.$this->lang_item("lbl_clave_corta").':</strong>',
 							'clave_corta_bd'    => $detalle[0]['clave_corta']);
 		
 		$tbl_data[] = array('id'                => $detalle[0]['id_sucursal'],
-							'atencion'       	=> $this->lang_item("lbl_horario_atencion"),
+							'atencion'       	=> '<strong>'.$this->lang_item("lbl_horario_atencion").':</strong>',
 							'atencion_bd'    	=> $detalle[0]['inicio'].' a '.$detalle[0]['final'],
-							'forma_pago'        => $this->lang_item("lbl_forma_pago"),
+							'forma_pago'        => '<strong>'.$this->lang_item("lbl_forma_pago").':</strong>',
 							'forma_pago_bd'     => $forma
 							);
 
@@ -336,6 +336,26 @@ class listado_sucursales extends Base_Controller{
 							'region_bd'   => $detalle[0]['region'],
 							'entidad'     => $this->lang_item("lbl_entidad"),
 							'entidad_bd'  => $detalle[0]['entidad']
+							);
+
+		$tbl_data[] = array('id'       => $detalle[0]['id_sucursal'],
+							'rfc'      => $this->lang_item("rfc"),
+							'rfc_bd'   => $detalle[0]['rfc'],
+							'email'    => $this->lang_item("lbl_email"),
+							'email_bd' => $detalle[0]['email']
+							);
+
+		$tbl_data[] = array('id'        => $detalle[0]['id_sucursal'],
+							'encargado' => $this->lang_item("lbl_encargado"),
+							'rfc_bd'    => $detalle[0]['encargado'],
+							'email'     => $this->lang_item("lbl_telefono"),
+							'email_bd'  => $detalle[0]['telefono']
+							);
+		$tbl_data[] = array('id'           => $detalle[0]['id_sucursal'],
+							'direccion'    => $this->lang_item("direccion"),
+							'direccion_bd' => $detalle[0]['direccion'],
+							'vacio'        => $this->lang_item("lbl_nada"),
+							'vacio_bd'     => $this->lang_item("lbl_nada")
 							);
 		// Plantilla
 		$tbl_plantilla = set_table_tpl();

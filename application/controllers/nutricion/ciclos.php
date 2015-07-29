@@ -89,7 +89,7 @@ class ciclos extends Base_Controller{
 		$dropdown_sucursales = array(
 						 'data'		=> $this->sucursales->db_get_data($sqlData)
 						,'value' 	=> 'id_sucursal'
-						,'text' 	=> array('clave_corta','sucursal')
+						,'text' 	=> array('sucursal')
 						,'name' 	=> "lts_sucursales"
 						,'leyenda' 	=> "-----"
 						,'class' 	=> "requerido"
@@ -164,7 +164,7 @@ class ciclos extends Base_Controller{
 		$dropdown_sucursales = array(
 						 'data'		=> $this->sucursales->db_get_data($sqlData)
 						,'value' 	=> 'id_sucursal'
-						,'text' 	=> array('clave_corta','sucursal')
+						,'text' 	=> array('sucursal')
 						,'name' 	=> "lts_sucursales"
 						,'class' 	=> "requerido"
 						,'leyenda' 	=> "-----"

@@ -6,8 +6,10 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
+$lang['lbl_informacion_general'] = 'información general';
+$lang['lbl_nada']				 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 $lang['lbl_forma_pago']          = 'Formas de pago';
-$lang['lbl_comprobante_factura'] = 'factura';
+$lang['lbl_comprobante_factura'] = 'imprime factura?';
 $lang['lbl_esquema_venta']    = 'esquemas de venta';
 $lang['lbl_esquema_pago']     = 'esquemas de pago';
 $lang['lbl_inicio']           = 'inicio';

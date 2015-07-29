@@ -175,7 +175,7 @@ class recetario extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_agregar"
 									,'class' 	=> "requerido"
 								);
@@ -344,7 +344,7 @@ class recetario extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_update"
 									,'class' 	=> "requerido"
 									,'selected' => $id_sucursal

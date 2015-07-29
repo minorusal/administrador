@@ -210,7 +210,7 @@ class ordenes extends Base_Controller {
 					 'data'		=> $this->sucursales_model->db_get_data()
 					 ,'selected'=> $detalle[0]['id_sucursal']
 					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
+					,'text' 	=> array('cv_sucursal','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',
@@ -326,7 +326,7 @@ class ordenes extends Base_Controller {
 		$dropArray2 = array(
 					 'data'		=> $this->sucursales_model->db_get_data()
 					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
+					,'text' 	=> array('cv_sucursal','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',

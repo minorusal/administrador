@@ -30,7 +30,7 @@ class almacenes extends Base_Controller
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
-		$this->load->model('administracion/sucursales_model','db_model2');
+		$this->load->model('sucursales/listado_sucursales_model','db_model2');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->submodulo,"es_ES");
 	}

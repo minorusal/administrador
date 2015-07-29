@@ -67,7 +67,7 @@ class programacion extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales"
 									,'class' 	=> "requerido"
 									,'leyenda' 	=> "-----"
@@ -399,7 +399,7 @@ class programacion extends Base_Controller{
 		$dropdown = array(
 						 'data'		=> $this->sucursales->db_get_data($sqlData)
 						,'value' 	=> 'id_sucursal'
-						,'text' 	=> array('clave_corta','sucursal')
+						,'text' 	=> array('cv_sucursal','sucursal')
 						,'name' 	=> "lts_sucursales_calendario"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_calendario', 
@@ -610,7 +610,7 @@ class programacion extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_formatos"
 									,'leyenda' 	=> "-----"
 									,'class'    => "requerido"

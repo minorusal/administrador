@@ -407,6 +407,31 @@
 		              );
 		}
 	}
+	if(!function_exists('plantilla_table_tpl')){
+		function set_table_resumen_tpl(){
+			return  array (
+		                    'table_open'          => '<table class="table table-bordered responsive dataTable" >',
+
+		                    'heading_row_start'   => '<tr>',
+		                    'heading_row_end'     => '</tr>',
+		                    'heading_cell_start'  => '<th colspan="4">',
+		                    'heading_cell_end'    => '</th>',
+
+		                    'row_start'           => '<tr>',
+		                    'row_end'             => '</tr>',
+		                    'cell_start'          => '<td style="max-width:80px;text-align:left;word-wrap:break-word;"><p style="white-space: pre">',
+		                    'cell_end'            => '</td></p>',
+		                    
+
+		                    'row_alt_start'       => '<tr>',
+		                    'row_alt_end'         => '</tr>',
+		                    'cell_alt_start'      => '<td style="max-width:80px;text-align:left;word-wrap:break-word;background: #eee;"><p style="white-space: pre">',
+		                    'cell_alt_end'        => '</td></p>',
+
+		                    'table_close'         => '</table>'
+		              );
+		}
+	}
 	if(!function_exists('widgetbox_tpl')){
 		function widgetbox_tpl($name, $content){
 			

@@ -367,13 +367,13 @@ class listado_sucursales extends Base_Controller{
 							'vacio_bd'     => $this->lang_item("lbl_nada")
 							);
 		// Plantilla
-		$tbl_plantilla = set_table_tpl();
+		$tbl_plantilla = set_table_resumen_tpl();
 		// Titulos de tabla
 		$this->table->set_heading(	$this->lang_item("lbl_id"),
-									$this->lang_item("lbl_informacion_general"),
-									$this->lang_item("lbl_nada"),
+									$this->lang_item("lbl_informacion_general")
+									/*$this->lang_item("lbl_nada"),
 									$detalle[0]['sucursal'],
-									$this->lang_item("lbl_nada")
+									$this->lang_item("lbl_nada")*/
 									);
 		// Generar tabla
 		$this->table->set_template($tbl_plantilla);
@@ -535,7 +535,7 @@ class listado_sucursales extends Base_Controller{
 		$list_forma_pago  = multi_dropdown_tpl($forma_pago_array);
 
 		$btn_save     = form_button(array('class'=>"btn btn-primary",'name' => 'save_almacen','onclick'=>'agregar()' , 'content' => $this->lang_item("btn_guardar") ));
-		$btn_reset     = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
+		$btn_reset    = form_button(array('class'=>"btn btn-primary",'name' => 'reset','value' => 'reset','onclick'=>'clean_formulario()','content' => $this->lang_item("btn_limpiar")));
 
 		$tab_1["nombre_sucursal"]   = $this->lang_item("nombre_sucursal");
 		$tab_1["cvl_corta"]         = $this->lang_item("clave_corta");

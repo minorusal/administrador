@@ -726,7 +726,7 @@ class listado_sucursales extends Base_Controller{
 									$this->lang_item("direccion"));
 			
 		}
-		$params = array(	'title'   => $this->lang_item("lbl_excel"),
+		$params = array(	'title'   =>  $value['sucursal'],
 							'items'   => $set_data,
 							'headers' => $set_heading
 						);

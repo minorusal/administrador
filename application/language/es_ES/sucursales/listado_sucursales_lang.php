@@ -6,6 +6,7 @@ $lang['agregar'] 			= "Nueva sucursal";
 $lang['listado'] 			= "Listado de sucursales";
 $lang['detalle'] 			= "Detalle";
 
+$lang['lbl_id']					='ID';
 $lang['lbl_resumen']             = 'información general';
 $lang['lbl_ficha_tecnica']       = 'Ficha tecnica';
 $lang['lbl_informacion_general'] = 'información general';

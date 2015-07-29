@@ -9,8 +9,7 @@ class users_model extends Base_Model{
     */
 	public function search_user_for_login($user, $pwd){
 		// DB Info
-		$tbl = $this->tbl;
-		// Query
+		$tbl    = $this->tbl;
 		$query  = "	SELECT 
 						U.id_usuario
 						,P.id_personal
@@ -61,9 +60,8 @@ class users_model extends Base_Model{
     * @return array
     */
 	public function search_user_for_id($id_user){
-		// DB Info
-		$tbl = $this->tbl;
-		// Query
+		
+		$tbl    = $this->tbl;
 		$query  = "	SELECT 
 						U.id_usuario
 						,P.id_personal
@@ -116,13 +114,13 @@ class users_model extends Base_Model{
 	* @return array
 	*/
 	public function search_modules_for_user($id_menu_n1= '' , $id_menu_n2= '', $id_menu_n3= '', $root = false ){
-		$id_menu_n1 = ($id_menu_n1=='') ? '0' : $id_menu_n1;
-		$id_menu_n2 = ($id_menu_n2=='') ? '0' : $id_menu_n2;
-		$id_menu_n3 = ($id_menu_n3=='') ? '0' : $id_menu_n3;
+		$id_menu_n1 = ($id_menu_n1 == '') ? '0' : $id_menu_n1;
+		$id_menu_n2 = ($id_menu_n2 == '') ? '0' : $id_menu_n2;
+		$id_menu_n3 = ($id_menu_n3 == '') ? '0' : $id_menu_n3;
 
-		// DB Info
+		
 		$tbl = $this->tbl;
-		// Query
+		
 		if($root){
 			$sys_navigate_n1 = "n1.activo = 1";
 			$sys_navigate_n2 = "SELECT * FROM $tbl[menu2] WHERE activo = 1";
@@ -158,8 +156,6 @@ class users_model extends Base_Model{
 			return $query->result_array();
 		}		
 	}
-
-
 	
 }
 

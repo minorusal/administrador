@@ -25,7 +25,9 @@ class ordenes_model extends Base_Model{
 	public function db_get_data($data=array()){	
 		// DB Info
 		$tbl = $this->tbl;
-		// Filtro
+		
+		$filtro_sucursal = $this->privileges_sucursal('e.id_sucursal');
+
 		$filtro = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -35,6 +37,7 @@ class ordenes_model extends Base_Model{
 							   or b.razon_social LIKE '%$filtro%'
 							   or a.descripcion LIKE '%$filtro%'
 							   or c.estatus LIKE '%$filtro%'
+							   or e.sucursal LIKE '%$filtro%'
 							   )" 
 							: "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
@@ -62,7 +65,7 @@ class ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[sucursales] e on a.id_sucursal=e.id_sucursal
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
-				WHERE a.activo=1 AND a.estatus IN (1,3) AND 1  $filtro
+				WHERE a.activo=1 $filtro_sucursal AND a.estatus IN (1,3) AND 1  $filtro
 				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;
@@ -247,7 +250,7 @@ class ordenes_model extends Base_Model{
 	public function db_get_data_historial($data=array()){	
 		// DB Info
 		$tbl = $this->tbl;
-		// Filtro
+		$filtro_sucursal = $this->privileges_sucursal('e.id_sucursal');
 		$filtro = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -257,6 +260,7 @@ class ordenes_model extends Base_Model{
 							   or b.razon_social LIKE '%$filtro%'
 							   or a.descripcion LIKE '%$filtro%'
 							   or c.estatus LIKE '%$filtro%'
+							    or e.sucursal LIKE '%$filtro%'
 							   )" 
 							: "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
@@ -284,7 +288,7 @@ class ordenes_model extends Base_Model{
 				LEFT JOIN $tbl[sucursales] e on a.id_sucursal=e.id_sucursal
 				LEFT JOIN $tbl[administracion_forma_pago] f on a.id_forma_pago=f.id_forma_pago
 				LEFT JOIN $tbl[administracion_creditos] g on a.id_credito=g.id_administracion_creditos
-				WHERE a.activo=1 AND 1  $filtro
+				WHERE a.activo=1 $filtro_sucursal AND 1  $filtro
 				ORDER BY orden_num ASC
 				$limit";
 				//echo $query;

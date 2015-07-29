@@ -98,7 +98,11 @@ class Base_Model extends CI_Model {
 		/*FIN dbmodel*/
 	}
 
+	public function privileges_sucursal( $row = "id_sucursal" ){
+		$privileges = ($this->sucursales_availables) ? "AND ".$row." IN (".$this->sucursales_availables.")" : "";
 
+		return $privileges;
+	}
 	public function last_id(){
 		return $this->db->insert_id();
 	}

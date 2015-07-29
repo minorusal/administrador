@@ -3,9 +3,11 @@ class listado_sucursales_model extends Base_Model{
 
 	//Función que obtiene toda la información de la tabla sys_sucursales
 	public function db_get_data($data=array()){
-		// DB Info		
+		
+
 		$tbl = $this->tbl;
-		// Filtro
+		$filtro_sucursal = $this->privileges_sucursal('su.id_sucursal');
+					
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
@@ -21,20 +23,23 @@ class listado_sucursales_model extends Base_Model{
 		//Query
 		$query = "	SELECT 
 						 su.id_sucursal
+						,su.clave_corta
 						,su.clave_corta as cv_sucursal
 						,su.inicio
 						,su.final
 						,su.direccion
 						,su.sucursal
+						,su.razon_social
 						,e.entidad
 						,r.clave_corta as region
 					FROM $tbl[sucursales] su
 					LEFT JOIN $tbl[administracion_regiones] r on su.id_region = r.id_administracion_region
 					LEFT JOIN $tbl[administracion_entidades] e on e.id_administracion_entidad = su.id_entidad
-					WHERE su.activo = 1 $filtro
+					WHERE su.activo = 1 $filtro_sucursal $filtro
 					ORDER BY su.id_sucursal ASC
 					$limit
 					";
+
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

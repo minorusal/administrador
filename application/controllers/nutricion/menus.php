@@ -28,7 +28,7 @@ class menus extends Base_Controller{
 		$this->offset			= 0;
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model' );
-		$this->load->model('administracion/sucursales_model','sucursales');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales');
 		// Diccionario
 		$this->lang->load( $this->modulo.'/'.$this->submodulo,"es_ES" );
 	}

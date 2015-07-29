@@ -4,6 +4,7 @@ class Base_Controller extends CI_Controller {
  	public $sites;
  	public $sites_availables;
  	public $sites_panel;
+ 	public $sucursales_availables;
 
     public function __construct(){
         parent::__construct();
@@ -11,9 +12,10 @@ class Base_Controller extends CI_Controller {
         $this->lang_load("system","es_ES");
         $this->lang_load("navigate");
         if($this->session->userdata('is_logged')){
-        	$this->sites            = $this->sites_privilege_navigate();
-        	$this->sites_availables = $this->sites['sites'];
-			$this->sites_panel      = $this->sites['modules'];
+        	$this->sites                 = $this->sites_privilege_navigate();
+        	$this->sites_availables      = $this->sites['sites'];
+			$this->sites_panel           = $this->sites['modules'];
+			$this->sucursales_availables = $this->sites['sucursales'];
         }
     }
 
@@ -37,12 +39,13 @@ class Base_Controller extends CI_Controller {
     * @return array
     */
     private function sites_privilege_navigate(){
-    	$uri                = $this->uri->segment_array();
-		$nivel_1            = $this->session->userdata('id_menu_n1');
-		$nivel_2            = $this->session->userdata('id_menu_n2');
-		$nivel_3            = $this->session->userdata('id_menu_n3');
-		$perfil             = $this->session->userdata('perfil');
-		$sites_priviles     = array();
+    	$uri                    = $this->uri->segment_array();
+		$nivel_1                = $this->session->userdata('id_menu_n1');
+		$nivel_2                = $this->session->userdata('id_menu_n2');
+		$nivel_3                = $this->session->userdata('id_menu_n3');
+		$perfil                 = $this->session->userdata('perfil');
+		$sucursal_origin        = $this->session->userdata('id_sucursal');
+		$sites_privileges       = array();
 		$this->load->database('global_system',TRUE);
 		$this->load->model('users_model');
 
@@ -50,17 +53,27 @@ class Base_Controller extends CI_Controller {
 		$data_modulos       = $this->users_model->search_modules_for_user($nivel_1, $nivel_2, $nivel_3,$user_root);
 
 		if((is_array($data_modulos))){
-			$data_modulos   = $this->build_array_navigator($data_modulos);
-			$navigate_items = $data_modulos[1];
-			$sites_priviles = $data_modulos[0];
-			$panel_navigate = $this->build_panel_navigate($navigate_items,$uri);
+			$data_modulos     = $this->build_array_navigator($data_modulos);
+			$navigate_items   = $data_modulos[1];
+			$sites_privileges = $data_modulos[0];
+			$panel_navigate   = $this->build_panel_navigate($navigate_items,$uri);
 		}else{
 			$data_modulos   = "";
 			$navigate_items = "";
 			$panel_navigate = "";
 		}
 
-		$data_sites = array('sites' => $sites_priviles, 'modules' => $panel_navigate);
+		if($user_root){
+			$sucursales_privileges = false;
+		}else{
+			$sucursales_privileges = trim($sucursal_origin.','.trim($this->session->userdata('user_sucursales'), ','), ',');
+		}
+
+		$data_sites = array(
+								'sites'      => $sites_privileges, 
+								'modules'    => $panel_navigate, 
+								'sucursales' => $sucursales_privileges
+							);
 
 		return $data_sites;
 	}

@@ -23,7 +23,7 @@ class programacion extends Base_Controller{
 		$this->tab3 			= 'generar_formatos';
 
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		$this->load->model('administracion/sucursales_model','sucursales');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales');
 		$this->load->model('nutricion/ciclos_model','ciclos');
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}

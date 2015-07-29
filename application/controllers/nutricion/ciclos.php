@@ -25,7 +25,7 @@ class ciclos extends Base_Controller{
 		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','ciclos');
-		$this->load->model('administracion/sucursales_model','sucursales');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales');
 		$this->load->model('administracion/servicios_model','servicios');
 		$this->load->model('nutricion/tiempos_model','tiempos');
 		$this->load->model('nutricion/familias_model','familias');

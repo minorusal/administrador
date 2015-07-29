@@ -40,7 +40,7 @@ class entradas_recepcion extends Base_Controller{
 		$this->load->model('compras/ordenes_model','ordenes_model');
 		$this->load->model('stock_model','stock_model');
 		$this->load->model('compras/listado_precios_model','listado_precios_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 

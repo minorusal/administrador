@@ -41,7 +41,7 @@ class historial_ordenes extends Base_Controller {
 		}
 		// DB Model
 		$this->load->model($this->modulo.'/ordenes_model','ordenes_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		// Diccionario

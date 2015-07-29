@@ -134,9 +134,13 @@ class listado_sucursales_model extends Base_Model{
 		$query = "SELECT 
 					 s.*
 					 ,ep.esquema_pago
+					 ,ev.esquema_venta
+					 ,fp.forma_pago
 					 ,ep.id_sucursales_esquema_pago
 					 ,ev.id_sucursales_esquema_venta
 					 ,fp.id_forma_pago
+					 ,r.region
+					 ,e.entidad
 
 				  FROM $tbl[sucursales] s
 				 
@@ -146,6 +150,8 @@ class listado_sucursales_model extends Base_Model{
 				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
 				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta				  
 				  LEFT JOIN $tbl[administracion_forma_pago] fp on fp.id_forma_pago =  f.id_forma_pago
+				  LEFT JOIN $tbl[administracion_regiones] r on r.id_administracion_region = s.id_region
+				  LEFT JOIN $tbl[administracion_entidades] e on e.id_administracion_entidad = s.id_entidad
 				  WHERE s.id_sucursal = $id_sucursal ";
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
@@ -192,4 +198,55 @@ class listado_sucursales_model extends Base_Model{
 			return false;
 		}
 	}
+
+	public function get_forma_pago($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT fp.forma_pago
+				  FROM $tbl[sucursales_forma_pago] p
+				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = p.id_sucursal
+				  LEFT JOIN $tbl[administracion_forma_pago] fp on fp.id_forma_pago = p.id_forma_pago
+		          WHERE p.id_sucursal = $id_sucursal
+		          ";
+		          //print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_esquemas_pago($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT ep.esquema_pago
+				  FROM $tbl[sucursales_pago] p
+				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = p.id_sucursal
+				  LEFT JOIN $tbl[sucursales_esquema_pago] ep on ep.id_sucursales_esquema_pago = p.id_esquema_pago
+		          WHERE p.id_sucursal = $id_sucursal
+		          ";
+		          //print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+
+	public function get_esquemas_venta($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT ev.esquema_venta
+				  FROM $tbl[sucursales_venta] v
+				  LEFT JOIN $tbl[sucursales] s on s.id_sucursal = v.id_sucursal
+				  LEFT JOIN $tbl[sucursales_esquema_venta] ev on ev.id_sucursales_esquema_venta = v.id_esquema_venta
+		          WHERE v.id_sucursal = $id_sucursal
+		          ";
+		          //print_debug($query);
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
 }
+

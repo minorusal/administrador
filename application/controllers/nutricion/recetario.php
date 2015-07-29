@@ -29,7 +29,7 @@ class recetario extends Base_Controller{
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
 		$this->load->model($this->modulo.'/familias_model','familias');
 		$this->load->model('compras/catalogos_model','compras');
-		$this->load->model('administracion/sucursales_model','sucursales');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales');
 		// Diccionario
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -175,7 +175,7 @@ class recetario extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_agregar"
 									,'class' 	=> "requerido"
 								);
@@ -344,7 +344,7 @@ class recetario extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_update"
 									,'class' 	=> "requerido"
 									,'selected' => $id_sucursal

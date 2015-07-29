@@ -42,7 +42,7 @@ class ordenes extends Base_Controller {
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model('users_model','users_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		$this->load->model('administracion/variables_model','variables_model');
@@ -208,7 +208,7 @@ class ordenes extends Base_Controller {
 					 'data'		=> $this->sucursales_model->db_get_data()
 					 ,'selected'=> $detalle[0]['id_sucursal']
 					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
+					,'text' 	=> array('cv_sucursal','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',
@@ -324,7 +324,7 @@ class ordenes extends Base_Controller {
 		$dropArray2 = array(
 					 'data'		=> $this->sucursales_model->db_get_data()
 					,'value' 	=> 'id_sucursal'
-					,'text' 	=> array('clave_corta','sucursal')
+					,'text' 	=> array('cv_sucursal','sucursal')
 					,'name' 	=> "id_sucursal"
 					,'class' 	=> "requerido"
 					,'event'    => array('event'       => 'onchange',

@@ -43,7 +43,7 @@ class aprobar_ordenes extends Base_Controller {
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model($this->modulo.'/ordenes_model','ordenes_model');
 		$this->load->model('users_model','users_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		$this->load->model('administracion/variables_model','variables_model');

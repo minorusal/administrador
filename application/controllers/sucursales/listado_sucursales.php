@@ -102,8 +102,8 @@ class listado_sucursales extends Base_Controller{
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_sucursal'].')'
 						);
-
-				$btn_acciones['agregar'] 		= '<span id="ico-detalle_'.$value['id_sucursal'].'" class="ico_acciones ico_articulos fa fa-file-text-o" onclick="sucursales('.$value['id_sucursal'].')" title="'.$this->lang_item("lbl_ficha_tecnica").'"></span>';
+				$btn_acciones['ficha'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-search-plus" onclick="sucursales('.$value['id_sucursal'].')" title="'.$this->lang_item("lbl_ficha_tecnica").'"></span>';
+				$btn_acciones['excel']      = '<span id="ico-excel_'.$value['id_sucursal'].'" class="ico_acciones ico_excel fa fa-file-text" onclick="window.location.href=\''.base_url($this->path.'export_sucursal_xlsx?filtro='.base64_encode($value['id_sucursal'])).'\';" title="'.$this->lang_item("reporte").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
 				$tbl_data[] = array('id'                => $value['id_sucursal'],
@@ -134,11 +134,13 @@ class listado_sucursales extends Base_Controller{
 								'iconsweets' => 'iconsweets-excel',
 								'href'       => base_url($this->path.'export_xlsx?filtro='.base64_encode($filtro))
 								);
+
 		}else{
 			$buttonTPL = "";
 			$msg   = $this->lang_item("msg_query_null");
 			$tabla = alertas_tpl('', $msg ,false);
 		}
+
 		$tabData['filtro']    = (isset($filtro) && $filtro!="") ? sprintf($this->lang_item("msg_query_search",false),$total_rows , $filtro) : "";
 		$tabData['tabla']     = $tabla;
 		$tabData['export']    = button_tpl($buttonTPL);
@@ -283,34 +285,35 @@ class listado_sucursales extends Base_Controller{
 	}
 
 	public function sucursales(){
-		$forma = '';
-		$pago = '';
-		$venta = '';
+		$forma 			= '';
+		$pago  			= '';
+		$venta 			= '';
 		$id_sucursal    = $this->ajax_post('id_sucursal');
-		$fpago = $this->db_model->get_forma_pago($id_sucursal);
-		$epago = $this->db_model->get_esquemas_pago($id_sucursal);
-		$eventa = $this->db_model->get_esquemas_venta($id_sucursal);
+		$fpago 			= $this->db_model->get_forma_pago($id_sucursal);
+		$epago 			= $this->db_model->get_esquemas_pago($id_sucursal);
+		$eventa 		= $this->db_model->get_esquemas_venta($id_sucursal);
 		$detalle  	    = $this->db_model->get_orden_unico_sucursal($id_sucursal);
-		//print_debug($detalle);
+		$total_rows     =count($detalle);
+		
 		if($fpago && $epago && $eventa){
 			foreach ($fpago as $key => $value) {
-			$forma_pago[]   = $value['forma_pago'];
-			$forma .= $forma_pago[$key].'<br>';	
+				$forma_pago[]   = $value['forma_pago'];
+				$forma .= '-'.$forma_pago[$key].'<br>';	
 			}
 			foreach ($epago as $key => $value) {
 				$esquema_pago[]   = $value['esquema_pago'];
-				$pago .= $esquema_pago[$key].'<br>';	
+				$pago .= '-'.$esquema_pago[$key].'<br>';	
 			}
 			foreach ($eventa as $key => $value) {
 				$esquema_venta[]   = $value['esquema_venta'];
-				$venta .= $esquema_venta[$key].'<br>';	
+				$venta .= '-'.$esquema_venta[$key].'<br>';	
 			}
 		}else{
-			$fpago = "";
-			$epago = "";
+			$fpago  = "";
+			$epago  = "";
 			$eventa = "";
 		}
-		
+		//print_debug($forma);
 		$tbl_data[] = array('id'                => $detalle[0]['id_sucursal'],
 							'nombre'            => '<strong>'.$this->lang_item("lbl_sucursal").':</strong>',
 							'nombre_bd'         => $detalle[0]['sucursal'],
@@ -375,9 +378,15 @@ class listado_sucursales extends Base_Controller{
 		// Generar tabla
 		$this->table->set_template($tbl_plantilla);
 		$tabla = $this->table->generate($tbl_data);
-
-		$tabData['tabla'] = $tabla;
-		$uri_view   	= $this->modulo.'/'.$this->seccion.'/ficha_sucursales_detalle';
+		$buttonTPL 		= array( 'text'       => $this->lang_item("btn_xlsx"), 
+							     'iconsweets' => 'iconsweets-excel',
+							     'href'       => base_url($this->path.'export_sucursal_xlsx?filtro='.base64_encode($detalle[0]['id_sucursal']))
+								);
+		
+		$tabData['export']  = button_tpl($buttonTPL);
+		$tabData['lbl_resumen'] = $this->lang_item('lbl_resumen');
+		$tabData['tabla']   = $tabla;
+		$uri_view   	    = $this->modulo.'/'.$this->seccion.'/ficha_sucursales_detalle';
 		echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 	}
 
@@ -649,7 +658,81 @@ class listado_sucursales extends Base_Controller{
 			}
 		}
 	}
+	public function export_sucursal_xlsx($offset=0){
+		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
+		$limit 		 = $this->limit_max;
+		$forma 			= '';
+		$pago  			= '';
+		$venta 			= '';
+		
+		$fpago 			= $this->db_model->get_forma_pago($filtro);
+		$epago 			= $this->db_model->get_esquemas_pago($filtro);
+		$eventa 		= $this->db_model->get_esquemas_venta($filtro);
+		$detalle  	    = $this->db_model->get_orden_unico_sucursal($filtro);
+		
+		if($fpago && $epago && $eventa){
+			foreach ($fpago as $key => $value) {
+				$forma_pago[]   = $value['forma_pago'];
+				$forma .= $forma_pago[$key].', ';	
+			}
+			foreach ($epago as $key => $value) {
+				$esquema_pago[]   = $value['esquema_pago'];
+				$pago .= $esquema_pago[$key].', ';	
+			}
+			foreach ($eventa as $key => $value) {
+				$esquema_venta[]   = $value['esquema_venta'];
+				$venta .= $esquema_venta[$key].', ';	
+			}
+		}else{
+			$fpago  = "";
+			$epago  = "";
+			$eventa = "";
+		}
+		
+		$detalle  	    = $this->db_model->get_orden_unico_sucursal($filtro);
+		if(count($detalle)>0){
+			foreach ($detalle as $value) {
+				$set_data[0] = array(
+									 $value['sucursal'],
+									 $value['clave_corta'],
+									 $value['inicio'].' a '.$value['final'],
+									 $forma,
+									 $pago,
+									 $venta,
+									 $value['razon_social'],
+									 $value['rfc'],
+									 $value['email'],
+									 $value['encargado'],
+									 $value['telefono'],
+									 $value['region'],
+									 $value['entidad'],
+									 $value['direccion']);
+			}
 
+			$set_heading = array(
+									$this->lang_item("lbl_sucursal"),
+									$this->lang_item("clave_corta"),
+									$this->lang_item("lbl_horario_atencion"),
+									$this->lang_item("lbl_forma_pago"),
+									$this->lang_item("lbl_esquema_pago"),
+									$this->lang_item("lbl_esquema_venta"),
+									$this->lang_item("rs"),
+									$this->lang_item("rfc"),
+									$this->lang_item("lbl_email"),
+									$this->lang_item("lbl_encargado"),
+									$this->lang_item("lbl_telefono"),
+									$this->lang_item("lbl_region"),
+									$this->lang_item("lbl_entidad"),
+									$this->lang_item("direccion"));
+			
+		}
+		$params = array(	'title'   => $this->lang_item("lbl_excel"),
+							'items'   => $set_data,
+							'headers' => $set_heading
+						);
+		
+		$this->excel->generate_xlsx($params);
+	}
 	public function export_xlsx($offset=0){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";
 		$limit 		 = $this->limit_max;
@@ -657,7 +740,7 @@ class listado_sucursales extends Base_Controller{
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
-		);
+			);
 		$lts_content = $this->db_model->db_get_data($sqlData);
 		if(count($lts_content)>0){
 			foreach ($lts_content as $value) {

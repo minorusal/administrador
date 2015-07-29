@@ -128,6 +128,7 @@ class recetario extends Base_Controller{
 									
 									);
 			}
+
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla

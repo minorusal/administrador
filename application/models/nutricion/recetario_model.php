@@ -3,7 +3,7 @@ class recetario_model extends Base_Model{
 	public function get_data($data = array()){	
 		$tbl = $this->tbl;
 		
-		$filtro_sucursal = $this->privileges_sucursal('s.id_sucursal');
+		$filtro_sucursal = $this->privileges_sucursal('s');
 
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;

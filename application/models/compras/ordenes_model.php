@@ -26,7 +26,7 @@ class ordenes_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		
-		$filtro_sucursal = $this->privileges_sucursal('e.id_sucursal');
+		$filtro_sucursal = $this->privileges_sucursal('e');
 
 		$filtro = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -250,7 +250,7 @@ class ordenes_model extends Base_Model{
 	public function db_get_data_historial($data=array()){	
 		// DB Info
 		$tbl = $this->tbl;
-		$filtro_sucursal = $this->privileges_sucursal('e.id_sucursal');
+		$filtro_sucursal = $this->privileges_sucursal('e');
 		$filtro = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;

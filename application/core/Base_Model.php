@@ -98,8 +98,10 @@ class Base_Model extends CI_Model {
 		/*FIN dbmodel*/
 	}
 
-	public function privileges_sucursal( $row = "id_sucursal" ){
-		$privileges = ($this->sucursales_availables) ? "AND ".$row." IN (".$this->sucursales_availables.")" : "";
+	public function privileges_sucursal( $tbl = false ){
+		$referencia = $this->tbl;
+		$tbl        = ($tbl) ? $tbl : $referencia['sucursales'];
+		$privileges = ($this->sucursales_availables) ? "AND ".$tbl.".id_sucursal IN (".$this->sucursales_availables.")" : "";
 
 		return $privileges;
 	}

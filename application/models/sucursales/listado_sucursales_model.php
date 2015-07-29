@@ -6,7 +6,7 @@ class listado_sucursales_model extends Base_Model{
 		
 
 		$tbl = $this->tbl;
-		$filtro_sucursal = $this->privileges_sucursal('su.id_sucursal');
+		$filtro_sucursal = $this->privileges_sucursal('su');
 					
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;

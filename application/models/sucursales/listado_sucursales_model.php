@@ -135,6 +135,7 @@ class listado_sucursales_model extends Base_Model{
 	public function get_orden_unico_sucursal($id_sucursal){
 		// DB Info		
 		$tbl = $this->tbl;
+		$filtro_sucursal = $this->privileges_sucursal('s');
 		// Query
 		$query = "SELECT 
 					 s.*
@@ -157,7 +158,8 @@ class listado_sucursales_model extends Base_Model{
 				  LEFT JOIN $tbl[administracion_forma_pago] fp on fp.id_forma_pago =  f.id_forma_pago
 				  LEFT JOIN $tbl[administracion_regiones] r on r.id_administracion_region = s.id_region
 				  LEFT JOIN $tbl[administracion_entidades] e on e.id_administracion_entidad = s.id_entidad
-				  WHERE s.id_sucursal = $id_sucursal ";
+				  WHERE s.id_sucursal = $id_sucursal AND s.activo = 1 $filtro_sucursal ";
+
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();

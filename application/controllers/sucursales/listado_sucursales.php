@@ -292,17 +292,23 @@ class listado_sucursales extends Base_Controller{
 		$eventa = $this->db_model->get_esquemas_venta($id_sucursal);
 		$detalle  	    = $this->db_model->get_orden_unico_sucursal($id_sucursal);
 		//print_debug($detalle);
-		foreach ($fpago as $key => $value) {
+		if($fpago && $epago && $eventa){
+			foreach ($fpago as $key => $value) {
 			$forma_pago[]   = $value['forma_pago'];
 			$forma .= $forma_pago[$key].'<br>';	
-		}
-		foreach ($epago as $key => $value) {
-			$esquema_pago[]   = $value['esquema_pago'];
-			$pago .= $esquema_pago[$key].'<br>';	
-		}
-		foreach ($eventa as $key => $value) {
-			$esquema_venta[]   = $value['esquema_venta'];
-			$venta .= $esquema_venta[$key].'<br>';	
+			}
+			foreach ($epago as $key => $value) {
+				$esquema_pago[]   = $value['esquema_pago'];
+				$pago .= $esquema_pago[$key].'<br>';	
+			}
+			foreach ($eventa as $key => $value) {
+				$esquema_venta[]   = $value['esquema_venta'];
+				$venta .= $esquema_venta[$key].'<br>';	
+			}
+		}else{
+			$fpago = "";
+			$epago = "";
+			$eventa = "";
 		}
 		
 		$tbl_data[] = array('id'                => $detalle[0]['id_sucursal'],
@@ -319,42 +325,42 @@ class listado_sucursales extends Base_Controller{
 							);
 
 		$tbl_data[] = array('id'                => $detalle[0]['id_sucursal'],
-							'esquema_pago'      => $this->lang_item("lbl_esquema_pago"),
+							'esquema_pago'      => '<strong>'.$this->lang_item("lbl_esquema_pago").':</strong>',
 							'esquema_pago_bd'   => $pago,
-							'esquema_venta'     => $this->lang_item("lbl_esquema_venta"),
+							'esquema_venta'     => '<strong>'.$this->lang_item("lbl_esquema_venta").':</strong>',
 							'esquema_venta_bd'  => $venta
 							);
 
 		$tbl_data[] = array('id'           => $detalle[0]['id_sucursal'],
-							'factura'      => $this->lang_item("lbl_comprobante_factura"),
+							'factura'      => '<strong>'.$this->lang_item("lbl_comprobante_factura").':</strong>',
 							'factura_bd'   => ($detalle[0]['factura']==1)?'si':'no',
-							'r_social'     => $this->lang_item("rs"),
+							'r_social'     => '<strong>'.$this->lang_item("rs").':</strong>',
 							'r_social_bd'  => $detalle[0]['razon_social']
 							);
 		$tbl_data[] = array('id'          => $detalle[0]['id_sucursal'],
-							'region'      => $this->lang_item("lbl_region"),
+							'region'      => '<strong>'.$this->lang_item("lbl_region").':</strong>',
 							'region_bd'   => $detalle[0]['region'],
-							'entidad'     => $this->lang_item("lbl_entidad"),
+							'entidad'     => '<strong>'.$this->lang_item("lbl_entidad").':</strong>',
 							'entidad_bd'  => $detalle[0]['entidad']
 							);
 
 		$tbl_data[] = array('id'       => $detalle[0]['id_sucursal'],
-							'rfc'      => $this->lang_item("rfc"),
+							'rfc'      =>'<strong>'. $this->lang_item("rfc").':</strong>',
 							'rfc_bd'   => $detalle[0]['rfc'],
-							'email'    => $this->lang_item("lbl_email"),
+							'email'    => '<strong>'.$this->lang_item("lbl_email").':</strong>',
 							'email_bd' => $detalle[0]['email']
 							);
 
 		$tbl_data[] = array('id'        => $detalle[0]['id_sucursal'],
-							'encargado' => $this->lang_item("lbl_encargado"),
+							'encargado' => '<strong>'.$this->lang_item("lbl_encargado").':</strong>',
 							'rfc_bd'    => $detalle[0]['encargado'],
-							'email'     => $this->lang_item("lbl_telefono"),
+							'email'     => '<strong>'.$this->lang_item("lbl_telefono").':</strong>',
 							'email_bd'  => $detalle[0]['telefono']
 							);
 		$tbl_data[] = array('id'           => $detalle[0]['id_sucursal'],
-							'direccion'    => $this->lang_item("direccion"),
+							'direccion'    => '<strong>'.$this->lang_item("direccion").':</strong>',
 							'direccion_bd' => $detalle[0]['direccion'],
-							'vacio'        => $this->lang_item("lbl_nada"),
+							'vacio'        => '<strong>'.$this->lang_item("lbl_nada").':</strong>',
 							'vacio_bd'     => $this->lang_item("lbl_nada")
 							);
 		// Plantilla

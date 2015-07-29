@@ -376,10 +376,11 @@ class Base_Controller extends CI_Controller {
     */
 	public function treeview_perfiles($id_perfil=false, $locked = false){
 		$this->load_database('global_system');
+		$this->load->model('administracion/perfiles_model','perfiles_model');
 		$this->load->model('users_model');
 		if($id_perfil)
 		{
-			$info_perfil  = $this->users_model->search_data_perfil($id_perfil);
+			$info_perfil  = $this->perfiles_model->search_data_perfil($id_perfil);
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
 			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];

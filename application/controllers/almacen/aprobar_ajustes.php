@@ -121,10 +121,11 @@ class aprobar_ajustes extends stock{
 				$accion_id 						= $value['id_almacen_ajuste'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_almacen_ajuste'],
 									'articulo'  	 	=> $value['articulo'],
-									'stock_mov'   	 	=> $value['stock_mov'].'-'.$value['cl_um'],
+									'stock_mov'   	 	=> $value['stock_mov'].'-'.$etiqueta,
 									'stock_um_mov'   	=> $value['stock_um_mov'].'-'.$value['cl_um'],
 									'timestamp'  	 	=> $value['timestamp'],
 									'acciones' 		 	=> $acciones
@@ -191,6 +192,7 @@ class aprobar_ajustes extends stock{
 			$stock_total   	= $stock_total + $articulo_detalle[$i]['stock'];
 			$stock_um_total = $stock_um_total + $articulo_detalle[$i]['stock_um'];
 		}
+		($articulo_detalle[0]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[0]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 		$accion_id				 	 = $detalle[0]['id_almacen_ajuste'];
 		$btn_save       		 	 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
 		$tabData['stock_total']	     = $stock_total;
@@ -202,6 +204,7 @@ class aprobar_ajustes extends stock{
 		$tabData['cl_gaveta']	 	 = $detalle[0]['cl_gaveta'];
 		$tabData['cl_pasillo']	 	 = $detalle[0]['cl_pasillo'];
 		$tabData['cl_um']			 = $detalle[0]['cl_um'];
+		$tabData['cl_stock']		 = $etiqueta;
 		$tabData['id_articulo'] 	 = $id_articulo;
 		$tabData['id_almacen'] 		 = $id_almacen;
 		$tabData['id_pasillo'] 		 = $id_pasillo;
@@ -216,7 +219,6 @@ class aprobar_ajustes extends stock{
 		$tabData['lbl_stock_um_mov'] = $this->lang_item("stock_um_mov",false);
 		$tabData['lbl_stock']		 = $this->lang_item("lblstock",false);
 		$tabData['lbl_stock_um']	 = $this->lang_item("stock_um_lbl",false);
-
 		echo json_encode($this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function agregar(){
@@ -240,6 +242,7 @@ class aprobar_ajustes extends stock{
 				);
 
 		$articulo_detalle  = $this->db_model->get_data_stock($sqlData);
+		//dump_var($articulo_detalle);
 		for($i=0;count($articulo_detalle)>$i;$i++){
 			$muestra_tabla = true;
 			if($i==0){
@@ -286,7 +289,7 @@ class aprobar_ajustes extends stock{
 									'edit_timestamp'  => $this->timestamp(),
 									'edit_id_usuario' => $this->session->userdata('id_usuario')
 								);
-				$stock_update = $this->stock_model->update_data_stock($slqDatastock);
+					$stock_update = $this->stock_model->update_data_stock($slqDatastock);
 				if($stock==0){
 					$delete = array(
 								'fisico'   => true, 
@@ -299,15 +302,14 @@ class aprobar_ajustes extends stock{
 								'id_stock'  					 => $articulo_detalle[$i]['id_stock'],
 								'id_compras_orden_articulo'  	 => $articulo_detalle[$i]['id_compras_orden_articulo'],
 								'id_almacen_entradas_recepcion'  => $articulo_detalle[$i]['id_almacen_entradas_recepcion'],
-								//'id_articulo_tipo'  			 => $articulo_detalle[$i]['id_articulo_tipo'],
-								'log_id_almacen_origen'  		 => $id_almacen,
-								'log_id_pasillo_origen'  		 => $id_pasillo,
-								'log_id_gaveta_origen'  		 => $id_gaveta,
+								'log_id_almacen_origen'  		 => $articulo_detalle[$i]['id_almacen'],
+								'log_id_pasillo_origen'  		 => $articulo_detalle[$i]['id_pasillo'],
+								'log_id_gaveta_origen'  		 => $articulo_detalle[$i]['id_gaveta'],
 								'log_stock_origen'  			 => $articulo_detalle[$i]['stock'],
 								'log_stock_um_origen'  			 => $articulo_detalle[$i]['stock_um'],
-								'log_id_almacen_destino'  		 => $id_almacen,
-								'log_id_pasillo_destino'  		 => $id_pasillo,
-								'log_id_gaveta_destino'  		 => $id_gaveta,
+								'log_id_almacen_destino'  		 => $articulo_detalle[$i]['id_almacen'],
+								'log_id_pasillo_destino'  		 => $articulo_detalle[$i]['id_pasillo'],
+								'log_id_gaveta_destino'  		 => $articulo_detalle[$i]['id_gaveta'],
 								'log_stock_destino'  			 => $stock,
 								'log_stock_um_destino'  		 => $stock_um,
 								'log_lote'  					 => $articulo_detalle[$i]['lote'],
@@ -318,27 +320,25 @@ class aprobar_ajustes extends stock{
 				//tabla a mostrar
 				$this->stock_model->insert_stock_log($slqDatastockLogs);
 				//DATA
-				$tbl_data[] = array('id'            => $articulo_detalle[$i]['articulo'],
+				$tbl_data[] = array( 'id'            => $articulo_detalle[$i]['articulo'],
 									'articulo'  	=> $articulo_detalle[$i]['articulo'],
 									'almacenes'   	=> $articulo_detalle[$i]['almacenes'],
 									'pasillos'   	=> $articulo_detalle[$i]['pasillos'],
 									'gavetas'   	=> $articulo_detalle[$i]['gavetas'],
-									'clave_corta'   => $articulo_detalle[$i]['clave_corta'],
-									'stock'   	 	=> $articulo_detalle[$i]['stock'],
-									'stock_um'   	=> $articulo_detalle[$i]['stock_um']
+									'stock'   	 	=> $stock.' '.$articulo_detalle[$i]['clave_corta'],
+									'stock_um'   	=> $stock_um.' '.$articulo_detalle[$i]['clave_corta']
 									);
 			}
 		}
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
-			$this->table->set_heading(	$this->lang_item("lbl_articulo"),
-										$this->lang_item("lbl_articulo"),										
-										$this->lang_item("lbl_cl_almacen"),
-										$this->lang_item("lbl_cl_pasillo"),
-										$this->lang_item("lbl_cl_gaveta"),
-										$this->lang_item("lbl_clave_corta"),
-										$this->lang_item("lbl_stock"),
-										$this->lang_item("lbl_stock_um")
+			$this->table->set_heading(	$this->lang_item("id"),
+										$this->lang_item("articulo"),										
+										$this->lang_item("almacen_lbl"),
+										$this->lang_item("pasillo_lbl"),
+										$this->lang_item("gaveta_lbl"),
+										$this->lang_item("stock_afec"),
+										$this->lang_item("stock_um_afec")
 									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -372,10 +372,11 @@ class aprobar_ajustes extends stock{
 
 		if(count($list_content)>0){
 			foreach ($list_content as $value) {
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				$set_data[] = array(
 									$value['id_almacen_ajuste'],
 									$value['articulo'],
-									$value['stock_mov'].'-'.$value['cl_um'],
+									$value['stock_mov'].'-'.$etiqueta,
 									$value['stock_um_mov'].'-'.$value['cl_um'],
 									$value['timestamp']
 									);

@@ -19,7 +19,9 @@ $lang['historial_ordenes']      = 'Historial de ordenes';
 $lang['proveedores']            = 'proveedores';
 $lang['listado_precios']        = 'Listado de presentaciones';
 $lang['articulos']              = 'articulos';
+
 $lang['ordenes']                = 'ordenes';	
+
 $lang['crear_orden']            = 'crear orden';
 $lang['aprobar_orden']          = 'aprobar orden';
 $lang['catalogos']              = 'catalogos';
@@ -36,6 +38,7 @@ $lang['entradas_almacen']     	= 'Ingreso a almacén';
 $lang['traspasos']              = 'traspasos';
 $lang['ajustes']                = 'ajustes';
 $lang['aprobar']                = 'aprobar';
+$lang['historial_ajuste']       = 'Historial';
 $lang['almacenes']              = 'almacenes';
 $lang['pasillos']               = 'pasillos';
 $lang['gavetas']                = 'gavetas';

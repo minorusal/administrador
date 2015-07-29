@@ -41,6 +41,7 @@ class Base_Model extends CI_Model {
 		$this->tbl['administracion_variables']                     = $this->db2.'.'.$this->vars->db['db2_tbl_administracion_variables'];
 
 		$this->tbl['almacen_ajustes']                              = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_ajustes'];
+		$this->tbl['almacen_ajustes_estatus']                      = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_ajustes_status'];
 		$this->tbl['almacen_almacenes']                            = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_almacenes'];
 		$this->tbl['almacen_entradas_recibir']                     = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_recibir'];
 		$this->tbl['almacen_entradas_partidas']                    = $this->db2.'.'.$this->vars->db['db2_tbl_almacen_entradas_partidas'];
@@ -78,6 +79,7 @@ class Base_Model extends CI_Model {
 
 		$this->tbl['sucursales_esquema_pago']                      = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_pago'];
 		$this->tbl['sucursales_esquema_venta']                     = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_venta'];
+		$this->tbl['sucursales_forma_pago']                        = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_forma_pago'];
 		$this->tbl['sucursales_pago']                              = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_pago'];
 		$this->tbl['sucursales_venta']                             = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_venta'];
 

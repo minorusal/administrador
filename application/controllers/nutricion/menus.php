@@ -81,8 +81,14 @@ class menus extends Base_Controller{
 											'params'      => array('this.value'), 
 											'params_type' => array(false))
 					);
-		$sucursales = dropdown_tpl($dropdown_sucursales);
-		
+		$btn_guardar = form_button(array( 
+											'content'  => $this->lang_item('btn_guardar'),
+											'class'    => 'btn btn-primary',
+											'disabled' => 'disabled',
+											'name'     => 'guardar_menu'
+										));
+
+		$sucursales                           = dropdown_tpl($dropdown_sucursales);
 		$data['lbl_clave_corta']              = $this->lang_item('lbl_clave_corta', false);
 		$data['lbl_nombre_menu']              = $this->lang_item('lbl_nombre_menu', false);
 		$data['lbl_sucursal']                 = $this->lang_item('lbl_sucursal', false);
@@ -92,11 +98,10 @@ class menus extends Base_Controller{
 		$data['lbl_asigna_articulos']         = $this->lang_item('lbl_asigna_articulos', false);
 		$data['lbl_list_articulos']           = $this->lang_item('lbl_list_articulos', false);
 		$data['lbl_list_articulos_selected']  = $this->lang_item('lbl_list_articulos_selected', false);
-
 		$data['dropdown_sucursales']          = $sucursales;
 		$data['dropdown_recetas']             = dropdown_tpl(array('data' => null,'name' => "lts_recetas", 'leyenda' => "-----"));
 		$data['dropdown_articulos']           = dropdown_tpl(array('data' => null,'name' => "lts_articulos", 'leyenda' => "-----"));
-		$data['btn_formato']                  = 'pndiente';
+		$data['btn_formato']                  = $btn_guardar;
 
 		if($this->ajax_post(false)){
 			echo json_encode($this->load_view_unique($this->view_agregar,$data,true));

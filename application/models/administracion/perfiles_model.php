@@ -39,6 +39,21 @@ class perfiles_model extends Base_Model{
 		}
 	}
 
+		/**
+	* Consulta la info de un perfil en especifico
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_perfil
+	* @return array
+	*/
+
+	public function search_data_perfil($id_perfil){
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT * FROM $tbl[perfiles] WHERE id_perfil = $id_perfil";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+
 	/*Actualiza la información en el formuladio de edición de la tabla sys_perfiles*/
 	public function db_update_data($data=array()){
 		// DB Info		

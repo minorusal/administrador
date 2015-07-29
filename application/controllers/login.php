@@ -87,7 +87,6 @@ class login extends Base_Controller {
 								'id_menu_n1'  => trim($value['id_menu_n1'],',').trim($value['user_id_menu_n1'],','),
 								'id_menu_n2'  => trim($value['id_menu_n2'],',').trim($value['user_id_menu_n2'],','),
 								'id_menu_n3'  => trim($value['id_menu_n3'],',').trim($value['user_id_menu_n3'],','),
-								//'registro'    => $value['registro'],
 								'timestamp'    => $value['timestamp'],
 								'activo'      => $value['activo'],
 								'user'        => $value['user'],

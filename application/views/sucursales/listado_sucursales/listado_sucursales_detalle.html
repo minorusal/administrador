@@ -35,6 +35,16 @@
         </span>
     </p>
     <p>
+        <label>{lbl_forma_pago} (*)</label>
+        <span class="field">
+            {list_forma_pago}
+        </span>
+    </p>
+    <p>
+        <label>{lbl_comprobante_factura}:</label>
+        <span class="field"><input type="checkbox" id="factura" name="factura" data-campo="factura" {factura}></span>
+    </p>
+    <p>
         <label>{r_social}: (*)</label>
         <span class="field"><input id="razon_social" type="text" name="razon_social" data-campo="razon_social" class="input-xlarge requerido" value="{razon_social}" /></span>
     </p>
@@ -59,7 +69,7 @@
         <span class="field"><input id="encargado" type="text" name="encargado" data-campo="encargado" class="input-xlarge " value="{encargado}" /></span>
     </p>
     <p>
-        <label>{tel}:</label>
+        <label>{lbl_telefono}:</label>
         <span class="field"><input id="telefono" type="text" name="telefono" data-campo="telefono" class="input-xlarge " value="{telefono}" /></span>
     </p>
     <p>

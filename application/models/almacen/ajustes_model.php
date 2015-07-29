@@ -23,6 +23,7 @@ class ajustes_model extends Base_Model{
 				a.id_gaveta,
 				a.timestamp,
 				b.articulo,
+				b.id_articulo_tipo,
 				c.clave_corta as cl_almacen,
 				d.clave_corta as cl_gaveta,
 				e.clave_corta as cl_pasillo,
@@ -101,6 +102,7 @@ class ajustes_model extends Base_Model{
 					a.timestamp as fecha_recepcion,
 					c.id_articulo,
 					d.articulo,
+					d.clave_corta as cl_articulo,
 					e.presentacion,
 					f.almacenes,
 					g.gavetas,
@@ -153,6 +155,7 @@ class ajustes_model extends Base_Model{
 					a.timestamp as fecha_recepcion,
 					c.id_articulo,
 					d.articulo,
+					d.clave_corta as cl_articulo,
 					e.presentacion,
 					f.almacenes,
 					g.gavetas,
@@ -247,6 +250,55 @@ class ajustes_model extends Base_Model{
 		// Query
 		$update = $this->update_item($tbl['almacen_ajustes'], $data, 'id_almacen_ajuste', $condicion);
 		return $update;
+	}
+	//Historial Ajuste
+	public function get_data_historial($data=array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		$filtro = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+
+		$filtro = ($filtro!="") ? "and (b.articulo LIKE '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		// Query
+		$query="SELECT 
+				a.id_almacen_ajuste,
+				a.stock_mov,
+				a.stock_um_mov,
+				a.id_articulo,
+				a.id_almacen,
+				a.id_pasillo,
+				a.id_gaveta,
+				a.timestamp,
+				b.articulo,
+				b.id_articulo_tipo,
+				c.clave_corta as cl_almacen,
+				d.clave_corta as cl_gaveta,
+				e.clave_corta as cl_pasillo,
+				f.clave_corta as cl_um,
+				g.estatus
+				from $tbl[almacen_ajustes] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo=b.id_compras_articulo
+				LEFT JOIN $tbl[almacen_almacenes] c on a.id_almacen=c.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] d on a.id_gaveta=d.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] e on a.id_pasillo=e.id_almacen_pasillos
+				LEFT JOIN $tbl[compras_um] f on b.id_compras_um = f.id_compras_um
+				LEFT JOIN $tbl[almacen_ajustes_estatus] g on a.estatus = g.id_almacen_ajuste_estatus
+				
+				WHERE 1  $filtro
+				ORDER BY a.id_almacen_ajuste ASC
+				$limit";
+		
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
 	}
 }
 ?>

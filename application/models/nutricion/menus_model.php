@@ -1,28 +1,48 @@
 <?php
 class menus_model extends Base_Model{
-	public function get_data($data=array()){
-		// DB Info		
+	public function get_lts_recetas( $id_sucursal ){	
 		$tbl = $this->tbl;
-		// Query
-		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
-		$limit 			= (isset($data['limit']))?$data['limit']:0;
-		$offset 		= (isset($data['offset']))?$data['offset']:0;
-		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$filtro = ($filtro) ? "AND (r.familia like '%$filtro%' OR
-									r.clave_corta like '%$filtro%' OR
-									r.descripcion like '%$filtro%')" : "";
-		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
-		//Query
-		$query = "	SELECT *
-					FROM $tbl[db2_tbl_nutricion_rcetas] r
-					WHERE r.activo = 1 $filtro
-					GROUP BY r.id_nutricion_familia ASC
-					$limit
-					";
-      	$query = $this->db->query($query);
+		$query = "  SELECT 
+						r.id_nutricion_receta
+						,r.receta
+						,r.clave_corta		
+					FROM 
+						$tbl[nutricion_recetas] r
+					WHERE r.id_sucursal = $id_sucursal ";
+
+		$query = $this->db->query($query);
+		if($query->num_rows >=1){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+	}
+	public function get_lts_articulos( $id_sucursal ){
+		$tbl =$this->tbl;
+
+		$query = "  SELECT
+						s.sucursal
+						,s.id_region
+						,a.id_articulo
+						,a.id_compras_articulo_precios
+						,CONCAT_WS(' ', ar.articulo, p.presentacion, a.um_x_presentacion, u.um) as articulo
+					FROM
+						$tbl[sucursales] s
+					LEFT JOIN $tbl[compras_articulos_precios] a on a.id_administracion_region = s.id_region
+					LEFT JOIN $tbl[compras_articulos] ar on ar.id_compras_articulo = a.id_articulo
+					LEFT JOIN $tbl[compras_presentaciones] p on p.id_compras_presentacion = a.id_presentacion
+					LEFT JOIN $tbl[compras_um]  u on u.id_compras_um = ar.id_compras_um
+					WHERE
+						ar.id_articulo_tipo = 3
+					AND	s.id_sucursal = $id_sucursal";
+
+		//print_debug($query);
+		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
-		}	
+		}else{
+			return false;
+		}
 	}
 
 }

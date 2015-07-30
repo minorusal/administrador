@@ -568,7 +568,7 @@ class listado_sucursales extends Base_Controller{
 		}else{
 			return $this->load_view_unique($seccion , $tab_1, true);
 		}
-	}
+	}//55531521 diana alva alvarez
 
 	public function insert_sucursal(){
 		$objData  	= $this->ajax_post('objData');

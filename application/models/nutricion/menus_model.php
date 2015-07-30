@@ -45,5 +45,43 @@ class menus_model extends Base_Model{
 		}
 	}
 
+	/*Inserta registro de sucursales*/
+	public function db_insert_data($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$existe = $this->row_exist($tbl['nutricion_menu'], array('clave_corta'=> $data['clave_corta']));
+		if(!$existe){
+			$insert = $this->insert_item($tbl['nutricion_menu'], $data,true);
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	public function db_insert_receta($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['nutricion_programacion_receta_menu'], $data);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	public function db_insert_articulo($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['nutricion_programacion_articulo_menu'], $data);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
 }
 ?>

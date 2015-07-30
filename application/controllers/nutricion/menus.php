@@ -84,7 +84,8 @@ class menus extends Base_Controller{
 		$btn_guardar = form_button(array( 
 											'content'  => $this->lang_item('btn_guardar'),
 											'class'    => 'btn btn-primary',
-											'disabled' => 'disabled',
+											//'disabled' => 'disabled',
+											'onclick'  => 'conformar_menu()',
 											'name'     => 'guardar_menu'
 										));
 
@@ -137,5 +138,60 @@ class menus extends Base_Controller{
 			}
 		}
 		echo json_encode(array('recetas' => $json_recetas, 'articulos' => $json_articulos));
+	}
+
+	public function conformar_menu(){
+		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
+		if($objData['incomplete']>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
+			$data_insert = array(
+				  'menu'        => $objData['menu']
+				 ,'clave_corta' => $objData['clave_corta']
+				 ,'id_usuario'  => $this->session->userdata('id_usuario')
+				 ,'timestamp'   => $this->timestamp()
+				);
+			$insert = $this->db_model->db_insert_data($data_insert);
+			
+			$arr_receta  = explode(',',$objData['recetas_selected']);
+			
+			if(!empty($arr_receta)){
+				$sqlData = array();
+				foreach ($arr_receta as $key => $value){
+					$sqlData = array(
+						 'id_sucursal'  => $insert
+						,'id_receta'    => $value
+						,'id_usuario'   => $this->session->userdata('id_usuario')
+						,'timestamp'    => $this->timestamp()
+						);
+					$insert_pago = $this->db_model->db_insert_receta($sqlData);
+				}
+			}
+
+			$arr_articulo  = explode(',',$objData['articulos_selected']);
+			
+			if(!empty($arr_articulo)){
+				$sqlData = array();
+				foreach ($arr_articulo as $key => $value){
+					$sqlData = array(
+						 'id_sucursal'  => $insert
+						,'id_articulo'  => $value
+						,'id_usuario'   => $this->session->userdata('id_usuario')
+						,'timestamp'    => $this->timestamp()
+						);
+					$insert_pago = $this->db_model->db_insert_articulo($sqlData);
+				}
+			}
+
+			if($insert){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+			}
+		}
 	}
 }

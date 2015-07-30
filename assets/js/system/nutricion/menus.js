@@ -33,3 +33,43 @@ function load_dropdowns(id_sucursal){
 
 	});
 }
+
+function conformar_menu(){
+var progress = progress_initialized('loader_formatos');
+	var btn = jQuery("button[name='save_formato']");
+	btn.attr('disabled','disabled');
+	jQuery('#mensajes_formatos').hide();
+
+	var objData = formData('#formatos');
+  	objData['incomplete'] = values_requeridos();
+  	
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"nutricion/menus/conformar_menu",
+		dataType: "json",
+		data: {objData:objData},
+		beforeSend : function(){
+			btn.attr('disabled',true);
+		},
+		success : function(data){
+		    if(data.success == 'true' ){
+				clean_formulario();
+				multi_articulos.find('option').empty();
+				multi_recetas.find('option').empty();
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_formatos").html(data.mensaje).show('slow');	
+			} 
+		}
+	}).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
+}

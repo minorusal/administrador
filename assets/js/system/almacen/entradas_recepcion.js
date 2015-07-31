@@ -110,6 +110,8 @@ function calculos(id){
 	var result_2;
 	var result_3;
 	var functions = [];
+	//
+	var cantidad = jQuery('#cantidad_'+id).val();
 	var caducidad_val  	= jQuery('#caducidad_val_'+id).val();
 	var lote_val		= jQuery('#lote_val_'+id).val();
 	var cantidad_lote			= jQuery('#cantidad_lote_'+id).val();
@@ -162,6 +164,7 @@ function calculos(id){
 			url: path()+"almacen/entradas_recepcion/modal_lote_caducidad",
 			dataType: "json",
 			data : {id:id,
+					cantidad:cantidad,
 					caducidad_val : caducidad_val,
 					lote_val : lote_val,
 					cantidad_lote : cantidad_lote,

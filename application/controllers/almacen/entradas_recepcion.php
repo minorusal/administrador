@@ -524,12 +524,19 @@ class entradas_recepcion extends Base_Controller{
 		$caducidad = $this->ajax_post('caducidad_val');
 		$lote = $this->ajax_post('lote_val');
 		$cantidad_lote = $this->ajax_post('cantidad_lote');		
+		$cantidad = $this->ajax_post('cantidad');	
 		$proveedor = $this->ajax_post('proveedor');
 		$articulo = $this->ajax_post('articulo');
 		$presentacion = $this->ajax_post('presentacion');
+		if($cantidad_lote!=''){
+			$cantidad_lote=$cantidad_lote;
+		}else{
+			$cantidad_lote=$cantidad;
+		}
 		
 		// template html modal
 		$tabData_modal = array('id'=>$id, 'caducidad'=>$caducidad, 'lote'=>$lote, 'cantidad_lote'=>$cantidad_lote, 'proveedor_val'=>$proveedor,'articulo_val'=>$articulo, 'presentacion_val'=>$presentacion);
+		$tabData_modal['cantidad'] 			= $cantidad;
 		$tabData_modal['lbl_lote'] 			= $this->lang_item("lote",true);
 		$tabData_modal['lbl_caducidad'] 	= $this->lang_item("caducidad",true);
 		$tabData_modal['lbl_cantidad'] 		= $this->lang_item("cantidad",true);

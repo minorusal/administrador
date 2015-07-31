@@ -20,7 +20,7 @@ class empresa extends Base_Controller {
 		$this->submodulo 		= 'empresa';
 		$this->icon 			= 'fa fa-building-o'; 
 		$this->template 		= 'contentInfo';
-		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; #administracion/entidades
+		$this->path 			= $this->modulo.'/'.$this->submodulo.'/'; 
 		$this->view_content 	= 'contentInfo';
 		$this->limit_max		= 5;
 		$this->offset			= 0;

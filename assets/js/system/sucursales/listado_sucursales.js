@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
 })
 function load_content(uri, id_content){
 	jQuery('#ui-id-2').hide('slow');
+	jQuery('#ui-id-3').hide('slow');
 	var filtro = jQuery('#search-query').val();
     jQuery.ajax({
         type: "POST",
@@ -83,6 +84,20 @@ function detalle(id_sucursal){
         }
     });
 }
+
+function sucursales(id_sucursal){	
+	jQuery('#ui-id-2').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"sucursales/listado_sucursales/sucursales",
+        dataType: 'json',
+        data: {id_sucursal : id_sucursal},
+        success: function(data){
+        	jQuery('#a-2').html(data);
+        	jQuery('#ui-id-2').show('slow');
+        }
+    });
+}
 function actualizar(){
 	var progress = progress_initialized('update_loader');
 	jQuery('#mensajes_update').hide();
@@ -101,6 +116,7 @@ function actualizar(){
 		beforeSend : function(){
 			btn.attr('disabled',true);
 		},
+
 		success : function(data){
 			if(data.success == 'true'){
 				jgrowl(data.mensaje);

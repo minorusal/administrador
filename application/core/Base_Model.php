@@ -65,6 +65,7 @@ class Base_Model extends CI_Model {
 		
 		$this->tbl['nutricion_ciclo_receta']                       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_ciclo_receta'];
 		$this->tbl['nutricion_ciclos']                             = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_ciclos'];
+		$this->tbl['nutricion_menu']                               = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_menu'];
 		$this->tbl['nutricion_familias']                           = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_familias'];
 		$this->tbl['nutricion_recetas']                            = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas'];
 		$this->tbl['nutricion_recetas_articulos']                  = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_recetas_articulos'];
@@ -72,10 +73,12 @@ class Base_Model extends CI_Model {
 		$this->tbl['nutricion_valores_nutricionales']              = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_valores_nutricionales'];
 		
 		$this->tbl['nutricion_programacion']                       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion'];
+		$this->tbl['nutricion_programacion_articulo_menu']		   = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_articulo_menu'];
 		$this->tbl['nutricion_programacion_ciclos']                = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_ciclos'];
 		$this->tbl['nutricion_programacion_dias_descartados']      = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_descartados'];
 		$this->tbl['nutricion_programacion_dias_especiales']       = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_especiales'];
 		$this->tbl['nutricion_programacion_dias_festivos']         = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_dias_festivos'];
+		$this->tbl['nutricion_programacion_receta_menu']           = $this->db2.'.'.$this->vars->db['db2_tbl_nutricion_programacion_receta_menu'];
 
 		$this->tbl['sucursales_esquema_pago']                      = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_pago'];
 		$this->tbl['sucursales_esquema_venta']                     = $this->db2.'.'.$this->vars->db['db2_tbl_sucursales_esquema_venta'];
@@ -98,7 +101,13 @@ class Base_Model extends CI_Model {
 		/*FIN dbmodel*/
 	}
 
+	public function privileges_sucursal( $tbl = false ){
+		$referencia = $this->tbl;
+		$tbl        = ($tbl) ? $tbl : $referencia['sucursales'];
+		$privileges = ($this->sucursales_availables) ? "AND ".$tbl.".id_sucursal IN (".$this->sucursales_availables.")" : "";
 
+		return $privileges;
+	}
 	public function last_id(){
 		return $this->db->insert_id();
 	}

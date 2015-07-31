@@ -5,6 +5,8 @@ class sucursales_model extends Base_Model{
 	public function db_get_data($data=array()){
 		// DB Info		
 		$tbl = $this->tbl;
+
+		$filtro_sucursal = ($this->sucursales_availables) ? "AND su.id_sucursal IN (".$this->sucursales_availables.")" : "";
 		// Filtro
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
@@ -25,7 +27,7 @@ class sucursales_model extends Base_Model{
 						,r.clave_corta as region
 					FROM $tbl[sucursales] su
 					LEFT JOIN $tbl[administracion_regiones] r on su.id_region = r.id_administracion_region
-					WHERE su.activo = 1 $filtro
+					WHERE su.activo = 1 $filtro_sucursal $filtro
 					ORDER BY su.id_sucursal ASC
 					$limit
 					";

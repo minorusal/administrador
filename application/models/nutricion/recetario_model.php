@@ -2,13 +2,15 @@
 class recetario_model extends Base_Model{
 	public function get_data($data = array()){	
 		$tbl = $this->tbl;
+		
+		$filtro_sucursal = $this->privileges_sucursal('s');
+
 		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (array_key_exists('aplicar_limit', $data)) ? $data['aplicar_limit'] : false;
 		$unique         = (array_key_exists('unique', $data) ? $data['unique'] : false);
 
-		
 		$unique = ($unique) ? "AND r.id_nutricion_receta = $unique" : "";
 		$filtro = ($filtro) ? "AND (f.familia like '%$filtro%' OR
 									r.receta like '%$filtro%' OR
@@ -24,7 +26,7 @@ class recetario_model extends Base_Model{
 					FROM $tbl[nutricion_recetas] r
 					LEFT JOIN  $tbl[nutricion_familias] f ON f.id_nutricion_familia  = r.id_nutricion_familia
 					LEFT JOIN $tbl[sucursales] s ON s.id_sucursal = r.id_sucursal
-					WHERE r.activo = 1 $unique $filtro 
+					WHERE r.activo = 1 $filtro_sucursal $unique $filtro 
 					$limit 
 					";
       	$query = $this->db->query($query);

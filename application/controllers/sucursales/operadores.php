@@ -9,7 +9,7 @@ class operadores extends Base_Controller {
 		parent::__construct();
 		$this->load->model('sucursales/operadores_model','operadores_model');
 		$this->load->model('administracion/entidades_model','ent_model');
-		$this->load->model('administracion/sucursales_model','sucur_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucur_model');
 		$this->lang->load("sucursales/operadores","es_ES");
 	}
 	public function config_tabs(){

@@ -23,7 +23,7 @@ class programacion extends Base_Controller{
 		$this->tab3 			= 'generar_formatos';
 
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
-		$this->load->model('administracion/sucursales_model','sucursales');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales');
 		$this->load->model('nutricion/ciclos_model','ciclos');
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
@@ -67,7 +67,7 @@ class programacion extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales"
 									,'class' 	=> "requerido"
 									,'leyenda' 	=> "-----"
@@ -399,7 +399,7 @@ class programacion extends Base_Controller{
 		$dropdown = array(
 						 'data'		=> $this->sucursales->db_get_data($sqlData)
 						,'value' 	=> 'id_sucursal'
-						,'text' 	=> array('clave_corta','sucursal')
+						,'text' 	=> array('cv_sucursal','sucursal')
 						,'name' 	=> "lts_sucursales_calendario"
 						,'event'    => array('event'      => 'onchange', 
 											'function'    => 'load_calendario', 
@@ -610,7 +610,7 @@ class programacion extends Base_Controller{
 		$dropdown_sucursales = array(
 									 'data'		=> $this->sucursales->db_get_data($sqlData)
 									,'value' 	=> 'id_sucursal'
-									,'text' 	=> array('clave_corta','sucursal')
+									,'text' 	=> array('cv_sucursal','sucursal')
 									,'name' 	=> "lts_sucursales_formatos"
 									,'leyenda' 	=> "-----"
 									,'class'    => "requerido"

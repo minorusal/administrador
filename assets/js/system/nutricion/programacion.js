@@ -143,7 +143,7 @@ function guardar_configuracion_programacion(){
 		});
 		jQuery('#ciclos_programados li').each(function(index, item){
 			orden_ciclos.push({
-								index     : index,
+								index      : index,
 								ciclo_id   : jQuery(item).attr('id'),
 								ciclo_name : jQuery(item).text()
 							});
@@ -169,13 +169,13 @@ function guardar_configuracion_programacion(){
 			var progress = progress_initialized('registro_loader');
 			jQuery('#mensajes').hide();
 			params = {	id_sucursal  : jQuery('select[name=lts_sucursales]').val(),
-					fecha_inicio     : fecha_inicio,
-					fecha_termino    : fecha_termino,
-					dias_descartados : dias_descartados,
-					orden_ciclos     : orden_ciclos,
-					especiales       : especiales,
-					festivos         : festivos
-				};
+						fecha_inicio     : fecha_inicio,
+						fecha_termino    : fecha_termino,
+						dias_descartados : dias_descartados,
+						orden_ciclos     : orden_ciclos,
+						especiales       : especiales,
+						festivos         : festivos
+					};
 
 			jQuery.ajax({
 		        type: "POST",

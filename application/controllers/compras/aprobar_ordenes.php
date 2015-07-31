@@ -43,7 +43,7 @@ class aprobar_ordenes extends Base_Controller {
 		$this->load->model($this->modulo.'/'.$this->submodulo.'_model','db_model');
 		$this->load->model($this->modulo.'/ordenes_model','ordenes_model');
 		$this->load->model('users_model','users_model');
-		$this->load->model('administracion/sucursales_model','sucursales_model');
+		$this->load->model('sucursales/listado_sucursales_model','sucursales_model');
 		$this->load->model('administracion/formas_de_pago_model','formas_de_pago_model');
 		$this->load->model('administracion/creditos_model','creditos_model');
 		$this->load->model('administracion/variables_model','variables_model');
@@ -131,6 +131,7 @@ class aprobar_ordenes extends Base_Controller {
 				$tbl_data[] = array('id'             => $value['id_compras_orden'],
 									'orden_num'      => tool_tips_tpl($value['orden_num'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'descripcion'    => tool_tips_tpl($value['descripcion'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'sucursal'       => $value['sucursal'],
 									'timestamp'      => $value['timestamp'],
 									'entrega_fecha'  => $value['entrega_fecha'],
 									'estatus'   	 => $value['estatus'],
@@ -143,6 +144,7 @@ class aprobar_ordenes extends Base_Controller {
 			$this->table->set_heading(	$this->lang_item("id"),
 										$this->lang_item("orden_num"),										
 										$this->lang_item("descripcion"),
+										$this->lang_item("sucursal"),
 										$this->lang_item("fecha_registro"),
 										$this->lang_item("entrega_fecha"),
 										$this->lang_item("estatus"),

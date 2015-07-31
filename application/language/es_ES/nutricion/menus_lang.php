@@ -9,4 +9,5 @@ $lang['lbl_list_recetas_selected']     = 'Recetas asignadas';
 $lang['lbl_asigna_articulos']          = 'Asignar articulos';
 $lang['lbl_list_articulos']            = 'Lista de articulos disponibles';
 $lang['lbl_list_articulos_selected']   = 'Articulos asignados';
+$lang['lbl_menu']                      = 'Menú';
 ?>

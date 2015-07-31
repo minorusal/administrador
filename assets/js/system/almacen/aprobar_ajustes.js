@@ -94,6 +94,7 @@ function calculos(id){
 		}
 }
 function agregar(id_almacen_ajuste){
+	calculos(1);
 	var progress = progress_initialized('update_loader');
 	jQuery("#mensajes_update").html('').hide('slow');
 	jQuery('#mensajes').hide();

@@ -18,7 +18,7 @@ class usuarios extends Base_Controller {
 		$this->icon 			= 'fa fa-user'; #Icono de modulo
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/';
 		$this->view_agregar     = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_agregar';
-		$this->view_detalle     = $this->modulo.'/'.$this->seccion.'_detalle';
+		$this->view_detalle    = $this->modulo.'/'.$this->seccion.'/'.$this->seccion.'_detalle';
 		$this->view_content 	= 'content';
 		$this->limit_max		= 10;
 		$this->offset			= 0;
@@ -85,7 +85,8 @@ class usuarios extends Base_Controller {
 		$uri_view 		= $this->modulo.'/'.$accion;
 		$url_link 		= $this->path.$seccion.$accion;		
 		$sqlData = array(
-						 'buscar'      	=> $filtro
+						'user'         => $this->session->userdata('id_usuario')
+						,'buscar'      	=> $filtro
 						,'offset' 		=> $offset
 						,'limit'      	=>  $limit
 						,'aplicar_limit'=> true
@@ -100,12 +101,12 @@ class usuarios extends Base_Controller {
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_personal'].')'
 						);
 				// Datos para tabla
-				$tbl_data[] = array('id'               => $value['id'],
+				$tbl_data[] = array('id'               => $value['id_personal'],
 									'nombre'           => tool_tips_tpl($value['nombre'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'nombre_de_usuario'=> $value['usuario'],
+									'nombre_de_usuario'=> $value['user'],
 									'perfil'           => $value['perfil'],
 									'area'             => $value['area'],
 									'puesto'           => $value['puesto']
@@ -147,7 +148,98 @@ class usuarios extends Base_Controller {
 		}
 	}
 	public function detalle(){
-		
+		$id_usuario = $this->ajax_post('id_usuario');
+		$boton = array(
+						'class'   => 'btn btn-primary'
+					   ,'name'    => 'actualizar'
+					   ,'onclick' => 'actualizar()'
+					   ,'content' => $this->lang_item("btn_guardar"));
+		$btn_save   = form_button($boton);
+		$tabData['id_usuario']   = $id_usuario;
+		$tabData['lbl_usuario']  = $this->lang_item("lbl_usuario");
+		$tabData['lbl_paterno']  = $this->lang_item("lbl_paterno");
+		$tabData['lbl_materno']  = $this->lang_item("lbl_materno");
+		$tabData['lbl_telefono'] = $this->lang_item("lbl_telefono");
+		$tabData['lbl_email']    = $this->lang_item("lbl_email");
+		$tabData['lbl_area']     = $this->lang_item("lbl_area");
+		$tabData['lbl_puesto']   = $this->lang_item("lbl_puesto");
+		$tabData['lbl_perfil']   = $this->lang_item("lbl_perfil");
+
+		//Función que genera el contenido de los campos para edición
+		$sqlData = array(
+						'buscar'      	 => $id_usuario
+						,'offset' 		 => 0
+						,'limit'      	 => 10
+						,'aplicar_limit' => true
+					);
+		$detalle = $this->db_model->get_users($sqlData);
+		//print_debug($detalle);
+		$tabData['txt_nombre']    = $detalle[0]['nom'];
+		$tabData['txt_paterno']   = $detalle[0]['paterno'];
+		$tabData['txt_materno']   = $detalle[0]['materno'];
+		$tabData['txt_usuario']   = $detalle[0]['user'];
+		$tabData['txt_telefono']  = $detalle[0]['telefono'];
+		$tabData['txt_email']     = $detalle[0]['mail'];
+		$areas_array      = array(
+								 'data'		=> $this->areas->db_get_data()
+								,'value' 	=> 'id_administracion_areas'
+								,'text' 	=> array('area')
+								,'name' 	=> "lts_areas"
+								,'class' 	=> "requerido"
+								,'selected' => $detalle[0]['id_administracion_areas']);
+		$list_area            =  dropdown_tpl($areas_array);
+		$tabData['dropdown_area']   = $list_area;
+		$puestos_array      = array(
+								 'data'		=> $this->puestos->db_get_data()
+								,'value' 	=> 'id_administracion_puestos'
+								,'text' 	=> array('puesto')
+								,'name' 	=> "lts_puestos"
+								,'class' 	=> "requerido"
+								,'selected' => $detalle[0]['id_administracion_puestos']);
+		$list_puesto            =  dropdown_tpl($puestos_array);
+		$tabData['dropdown_puesto'] = $list_puesto;
+		$perfiles_array   = array(
+								 'data'		=> $this->perfiles->db_get_data()
+								,'value' 	=> 'id_perfil'
+								,'text' 	=> array('perfil')
+								,'name' 	=> "lts_perfiles"
+								,'class' 	=> "requerido"
+								,'selected' => $detalle[0]['id_perfil']
+								,'event'    => array('event'       => 'onchange',
+							   						 'function'    => 'load_tree_view',
+							   						 'params'      => array('this.value'),
+							   						 'params_type' => array(0)
+			   										)
+								);
+		$list_perfil                    =  dropdown_tpl($perfiles_array);
+		$tabData['dropdown_perfil'] = $list_perfil;
+		$tabData['tree_view']       =  '';
+
+		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
+        $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
+		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
+		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
+
+		$usuario_registro                  = $this->users_model->search_user_for_id($detalle[0]['id_usuario']);
+	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
+	    $tabData['val_usuarios_registro']  = $usuario_name;
+
+	    if($detalle[0]['edit_id_usuario']){
+	    	$usuario_registro = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
+			$usuario_name     = text_format_tpl($usuario_registro[0]['name'],"u");
+			$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion',false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
+	    }else{
+	    	$usuario_name = '';
+			$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
+	    }
+	    $tabData['button_save']      = $btn_save;
+		$tabData['registro_por']     = $this->lang_item('registro_por', false);
+		$tabData['usuario_registro'] = $usuario_name;
+
+		$uri_view = $this->view_detalle;
+		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
+		//print_debug($detalle);
+
 	}
 	public function agregar(){
 		$seccion 		= '';

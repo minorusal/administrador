@@ -345,7 +345,7 @@ class menus extends Base_Controller{
 				$sqlData = array();
 				foreach ($arr_articulo as $key => $value){
 					$sqlData = array(
-						 'id_sucursal'  => $objData['lts_sucursales']//$insert
+						 'id_sucursal'  => $objData['lts_sucursales']
 						,'id_menu'      => $insert
 						,'id_articulo'  => $value
 						,'id_usuario'   => $this->session->userdata('id_usuario')
@@ -374,11 +374,11 @@ class menus extends Base_Controller{
 		}else{
 			$sqlData = array(
 				 'id_nutricion_menu'=> $objData['id_nutricion_menu']
-				,'menu'            => $objData['txt_menu']
-				,'clave_corta'     => $objData['txt_clave_corta']
-				,'id_sucursal'     => $objData['lts_sucursales']
-				,'edit_timestamp'  => $this->timestamp()
-				,'edit_id_usuario' => $this->session->userdata('id_usuario')
+				,'menu'             => $objData['txt_menu']
+				,'clave_corta'      => $objData['txt_clave_corta']
+				,'id_sucursal'      => $objData['lts_sucursales']
+				,'edit_timestamp'   => $this->timestamp()
+				,'edit_id_usuario'  => $this->session->userdata('id_usuario')
 				);
 
 			$insert = $this->db_model->db_update_data($sqlData);

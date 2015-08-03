@@ -156,6 +156,68 @@ class users_model extends Base_Model{
 			return $query->result_array();
 		}		
 	}
+
+
+	/**
+	* Consulta los usuarios para mostrarlos en lista y hacer busquedas,
+	* @param array $data
+	* @return array
+	*/
+	public function get_users($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$aplicar_user   = (isset($data['user']))?$data['user']:false;
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$user           = ($aplicar_user)?"AND u.id_usuario <> $aplicar_user" : "";
+		$filtro = ($filtro) ? "AND (u.id_usuario = $filtro OR
+									p.nombre like '%$filtro%' OR
+									p.paterno like '%$filtro%' OR
+									p.materno like '%$filtro%' OR
+									pe.perfil like '%$filtro%' OR
+									a.area like '%$filtro%' OR
+									pu.puesto like '%$filtro%' OR
+									c.user like '%$filtro%')" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
+		//Query
+		$query = "	SELECT
+						u.id_usuario 
+						,p.id_personal
+						,CONCAT_WS(' ',p.nombre, p.paterno, p.materno) as nombre
+						,p.nombre as nom
+						,p.paterno
+						,p.materno
+						,p.telefono
+						,p.mail
+						,a.id_administracion_areas
+						,pu.id_administracion_puestos
+						,pe.id_perfil
+						,c.user
+						,pe.perfil
+						,a.area
+						,pu.puesto
+						,p.edit_id_usuario
+						,p.edit_timestamp
+						,p.timestamp
+					FROM $tbl[personales] p
+					LEFT JOIN $tbl[usuarios] u on u.id_personal = p.id_personal 
+					LEFT JOIN $tbl[claves] c on c.id_clave = u.id_clave
+					LEFT JOIN $tbl[perfiles] pe on pe.id_perfil = u.id_perfil
+					LEFT JOIN $tbl[administracion_areas] a on a.id_administracion_areas = u.id_area
+					LEFT JOIN $tbl[administracion_puestos] pu on pu.id_administracion_puestos = u.id_puesto
+					WHERE u.activo = 1 $user $filtro
+					ORDER BY p.id_personal ASC
+					$limit
+					";
+					//print_debug($query);
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
 	
 }
 

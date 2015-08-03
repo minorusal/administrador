@@ -41,12 +41,12 @@ class menus_model extends Base_Model{
 
 	public function get_lts_articulos_x_menu($data=array()){
 		$tbl = $this->tbl;
-		/*$query = "  SELECT 
+		$query = "  SELECT 
 						am.*		
 					FROM 
 						$tbl[nutricion_programacion_articulo_menu] am
-					WHERE am.id_menu = $data[id_menu] AND am.id_sucursal = $data[id_sucursal]";*/
-		$query = "SELECT
+					WHERE am.id_menu = $data[id_menu] AND am.id_sucursal = $data[id_sucursal]";
+		/*$query = "SELECT
 						s.sucursal
 						,s.id_region
 						,a.id_articulo
@@ -61,7 +61,7 @@ class menus_model extends Base_Model{
 					LEFT JOIN $tbl[compras_um]  u on u.id_compras_um = ar.id_compras_um
 					WHERE
 						ar.id_articulo_tipo = 3
-					AND	s.id_sucursal = $data[id_sucursal]";
+					AND	s.id_sucursal = $data[id_sucursal]";*/
 					//print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >=1){
@@ -71,6 +71,7 @@ class menus_model extends Base_Model{
 		}
 	}
 	public function get_lts_recetas_x_menu($data=array()){
+		//print_debug($data);
 		$tbl = $this->tbl;
 		$query = "  SELECT 
 						r.id_nutricion_receta
@@ -80,7 +81,7 @@ class menus_model extends Base_Model{
 						$tbl[nutricion_recetas] r
 					LEFT JOIN $tbl[nutricion_programacion_receta_menu] rm on rm.id_receta = r.id_nutricion_receta
 					WHERE r.id_sucursal = $data[id_sucursal] 
-						  AND rm.id_menu = $data[id_menu]";
+					AND rm.id_menu = $data[id_menu]";
 
 		$query = $this->db->query($query);
 		if($query->num_rows >=1){
@@ -135,7 +136,7 @@ class menus_model extends Base_Model{
 		}
 	}
 
-	/*Inserta registro de sucursales*/
+	/*Inserta registro de menus*/
 	public function db_insert_data($data = array()){
 		// DB Info		
 		$tbl = $this->tbl;
@@ -173,5 +174,68 @@ class menus_model extends Base_Model{
 		}
 	}
 
+	public function db_update_data($data=array()){
+		//print_debug($data);
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+			$condicion = "id_nutricion_menu = ".$data['id_nutricion_menu']; 
+			$update    = $this->update_item($tbl['nutricion_menu'], $data, 'id_nutricion_menu', $condicion);
+		if($update){
+			return $update;
+		}else{
+			//print_debug($update);
+			return false;
+		}
+	}
+
+	public function delete_receta($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "DELETE 
+				  FROM $tbl[nutricion_programacion_receta_menu]
+				  WHERE id_sucursal =".$id_sucursal;
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+
+	public function db_update_data_receta($data = array()){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['nutricion_programacion_receta_menu'], $data);
+		if($insert){
+			return $insert;
+		}
+	}
+
+	public function delete_articulo($id_sucursal){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "DELETE 
+				  FROM $tbl[nutricion_programacion_articulo_menu]
+				  WHERE id_sucursal =".$id_sucursal;
+		$query = $this->db->query($query);
+		if($query){
+			return $query;
+		}
+	}
+
+	public function db_update_data_articulo($data = array()){
+		//print_debug($data);
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['nutricion_programacion_articulo_menu'], $data);
+		if($insert){
+			return $insert;
+		}
+	}
+
 }
+//55531521 diana alva
 ?>

@@ -69,7 +69,7 @@ class menus extends Base_Controller{
 		$uri_view 		= $this->modulo.$seccion;
 		$url_link 		= $this->path.'listado';
 		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$sqlData = array(
+		$sqlData = array( 
 			 'buscar'      	=> $filtro
 			,'offset' 		=> $offset
 			,'limit'      	=> $limit
@@ -140,7 +140,7 @@ class menus extends Base_Controller{
 													   ,'name'    => 'actualizar'
 													   ,'onclick' => 'modificar_menu()'
 													   ,'content' => $this->lang_item("btn_guardar")));
-		$tabData['id_menu']                     = $id_menu;
+		$tabData['id_nutricion_menu']                     = $id_menu;
 		$tabData['lbl_nombre_menu']             = $this->lang_item("lbl_menu");
 		$tabData['lbl_clave_corta']             = $this->lang_item("lbl_clave_corta");
 		$tabData['lbl_sucursal']                = $this->lang_item("lbl_sucursal");
@@ -166,7 +166,7 @@ class menus extends Base_Controller{
 
 		$articulos = $this->db_model->get_lts_articulos_x_menu($data);
 		foreach ($articulos as $value){
-			$id_articulo[]  = $value['id_compras_articulo_precios'];
+			$id_articulo[]  = $value['id_articulo'];
 		}
 		$recetas_array  = array(
 						'data'		=> $this->db_model->get_lts_recetas($detalle[0]['id_sucursal'])
@@ -361,6 +361,68 @@ class menus extends Base_Controller{
 			}else{
 				$msg = $this->lang_item("msg_err_clv",false);
 				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+			}
+		}
+	}
+
+	public function modificar_menu(){
+		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
+		if($objData['incomplete']>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
+			$sqlData = array(
+				 'id_nutricion_menu'=> $objData['id_nutricion_menu']
+				,'menu'            => $objData['txt_menu']
+				,'clave_corta'     => $objData['txt_clave_corta']
+				,'id_sucursal'     => $objData['lts_sucursales']
+				,'edit_timestamp'  => $this->timestamp()
+				,'edit_id_usuario' => $this->session->userdata('id_usuario')
+				);
+
+			$insert = $this->db_model->db_update_data($sqlData);
+			if($insert){
+
+				$arr_receta  = explode(',',$objData['lts_recetas']);
+				$receta      = $this->db_model->delete_receta($objData['lts_sucursales']);
+				
+				if(!empty($arr_receta)){
+					$sqlData = array();
+					foreach ($arr_receta as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'   => $objData['lts_sucursales']
+							,'id_menu'       => $objData['id_nutricion_menu']
+							,'id_receta'     => $value
+							,'id_usuario'    => $this->session->userdata('id_usuario')
+							,'timestamp'     => $this->timestamp()
+							);
+						$insert_pago = $this->db_model->db_update_data_receta($sqlData);
+					}
+				}
+
+
+				$arr_articulo  = explode(',',$objData['lts_articulos']);
+				$articulo      = $this->db_model->delete_articulo($objData['lts_sucursales']);
+				
+				if(!empty($arr_articulo)){
+					$sqlData = array();
+					foreach ($arr_articulo as $key => $value){
+						$sqlData = array(
+							 'id_sucursal'   => $objData['lts_sucursales']
+							,'id_menu'       => $objData['id_nutricion_menu']
+							,'id_articulo'   => $value
+							,'id_usuario'    => $this->session->userdata('id_usuario')
+							,'timestamp'     => $this->timestamp()
+							);
+						$insert_pago = $this->db_model->db_update_data_articulo($sqlData);
+					}
+				}
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
 			}
 		}
 	}

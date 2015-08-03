@@ -149,4 +149,34 @@ function modificar_menu(){
 	var btn             = jQuery("button[name='actualizar']");
 	btn.attr('disabled','disabled');
 	var btn_text        = btn.html();
+
+	var objData = formData('#formatos');
+  	objData['incomplete'] = values_requeridos();
+  	
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"nutricion/menus/modificar_menu",
+		dataType: "json",
+		data: {objData:objData},
+		beforeSend : function(){
+			btn.attr('disabled',true);
+		},
+		success : function(data){
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+			}
+		}
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+	  });
 }

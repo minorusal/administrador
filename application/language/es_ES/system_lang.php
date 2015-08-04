@@ -32,6 +32,7 @@
 	$lang['calendar_today'] = 'Hoy';
 
 // Mensajes
+	$lang['msg_user_repetido']                 = '<strong>Atencion!</strong><br>El usuario que tratas de ingresar ya esta ocupado, intenta otro, gracias.';
 	$lang['msg_sin_recetas']                   = '<strong>Atencion!</strong><br>No se encontraron recetas asociadas con este ciclo.';
 	$lang['msg_searh_fail']          		   = '<strong>Atencion!</strong><br>No se encontraron coincidencias.';
 	$lang['msg_query_null']          		   = '<strong>Atencion!</strong><br>No se encontraron registros.';

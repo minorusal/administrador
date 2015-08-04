@@ -27,7 +27,7 @@ function buscar_usuario(){
   });
 }
 function load_content(uri, id_content){
-  jQuery('#ui-id-2').hide('slow');
+    jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
         jQuery.ajax({
            type: "POST",
@@ -35,15 +35,36 @@ function load_content(uri, id_content){
            dataType: 'json',
            data: {filtro : filtro, tabs:1},
            success: function(data){
+            var treeview           = 'load_treeview("treeview-modules");';
+            var treeview_childrens = 'treeview_childrens();'; 
                if(id_content==1){
               		var funcion = 'buscar_usuario';
               		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
               		jQuery('#search-query').val(filtro).focus();
               		tool_tips();
-               }else{
-             	 	var chosen  = 'jQuery(".chzn-select").chosen();';
-              		jQuery('#a-'+id_content).html(data+include_script(chosen));
+               }else{  
+                    var escribir = 'jQuery("#txt_nombre_usuario").on("keyup", function(){ find_string("administracion/usuarios/find_string",jQuery("#txt_nombre_usuario").val(),jQuery("#txt_nombre_usuario").attr("name"));});';
+             	 	var chosen   = 'jQuery(".chzn-select").chosen();';
+              		jQuery('#a-'+id_content).html(data+include_script(chosen+treeview+treeview_childrens+escribir));
                 }
+        }
+    });
+}
+
+function find_string(uri,id,nom){
+    jQuery.ajax({
+        type: "POST",
+        url: path()+uri,
+        dataType: 'json',
+        data: {item: id, nom : nom},
+        success: function(data){
+            if(data.existe == 0){
+                jQuery('#'+data.campo).css("border", " 1px solid red");
+                jQuery('#no_disponible').css({ color: "red", display: "block" });
+            }else{
+                jQuery('#'+data.campo).css("border", " 1px solid #339933");
+                jQuery('#no_disponible').css('display','none');
+            }
         }
     });
 }
@@ -69,66 +90,72 @@ function detalle(id_usuario){
         dataType: 'json',
         data: {id_usuario : id_usuario},
         success: function(data){
-          var chosen = 'jQuery(".chzn-select").chosen();';
-          jQuery('#a-0').html('');
-          jQuery('#a-2').html(data+include_script(chosen));
-          jQuery('#ui-id-2').show('slow');
+            var treeview = 'load_treeview("treeview-modules");';
+            var treeview_childrens = 'treeview_childrens();'; 
+            var chosen = 'jQuery(".chzn-select").chosen();';
+            jQuery('#a-0').html('');
+            jQuery('#a-2').html(data+include_script(chosen+treeview+treeview_childrens));
+            jQuery('#ui-id-2').show('slow');
         }
     });
 }
 
 function insert(){
-  var btn = jQuery("button[name='save_usuario']");
-  btn.attr('disabled','disabled');
-  jQuery('#mensajes').hide();
-  var nivel_1 = [];
-  var nivel_2 = [];
-  var nivel_3 = [];
-  var objData = formData('#formulario');
-  
-  jQuery("input[name='nivel_1']:enabled:checked").each(function(){
-      nivel_1.push(jQuery(this).val());
-  });
+    var progress = progress_initialized('update_loader');
+    jQuery("#mensajes_update").html('').hide('slow');
+    jQuery('#mensajes').hide();
+    var btn             = jQuery("button[name='actualizar']");
+    btn.attr('disabled','disabled');
+    var btn_text        = btn.html();
 
-  jQuery("input[name='nivel_2']:enabled:checked").each(function(){
-    nivel_2.push(jQuery(this).val());
-  });
-  
-  jQuery("input[name='nivel_3']:enabled:checked").each(function(){
-    nivel_3.push(jQuery(this).val());
-  });
+    var nivel_1 = [];
+    var nivel_2 = [];
+    var nivel_3 = [];
+    var objData = formData('#formulario');
+    
+    jQuery("input[name='nivel_1']:enabled:checked").each(function(){
+        nivel_1.push(jQuery(this).val());
+    });
+    
+    jQuery("input[name='nivel_2']:enabled:checked").each(function(){
+      nivel_2.push(jQuery(this).val());
+    });
+    
+    jQuery("input[name='nivel_3']:enabled:checked").each(function(){
+      nivel_3.push(jQuery(this).val());
+    });
+    
+    objData['incomplete']  = values_requeridos();
+    objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+    objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+    objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
 
-  objData['incomplete']  = values_requeridos();
-  objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
-  objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
-  objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
-  objData['nombre']      = jQuery('#nombre').val();
-  objData['paterno']     = jQuery('#paterno').val();
-  objData['materno']     = jQuery('#materno').val();
-  objData['telefono']    = jQuery('#telefono').val();
-  objData['mail']        = jQuery('#mail').val();
-  objData['id_area']     = jQuery("select[name='lts_areas'] option:selected").val();
-  objData['id_puesto']   = jQuery("select[name='lts_puestos'] option:selected").val();
-  objData['id_perfil']   = jQuery("select[name='lts_perfiles'] option:selected").val();
-
-  jQuery.ajax({
-    type:"POST",
-    url: path()+"administracion/usuarios/insert",
-    dataType: "json",
-    data: objData,
-    beforeSend : function(){
-      jQuery("#registro_loader").html('<img src="'+path()+'assets/images/loaders/loader.gif"/>');
-    },
-    success : function(data){
-      btn.removeAttr('disabled');
-
-      var data = data.split('|');
-      if(data[0]==1){
-      clean_formulario();
-      }
-      jQuery("#registro_loader").html('');
-      jQuery("#mensajes").html(data[1]).show('slow');
-    }
-  });
+    jQuery.ajax({
+        type:"POST",
+        url: path()+"administracion/usuarios/insert",
+        dataType: "json",
+        data: {objData:objData},
+        beforeSend : function(){
+            btn.attr('disabled',true);
+        },
+        success : function(data){
+            if(data.success == 'true' ){
+                clean_formulario();
+                jgrowl(data.mensaje);
+            }else{
+                jQuery("#mensajes").html(data.mensaje).show('slow');    
+            } 
+        }
+    }).error(function(){
+                progress.progressTimer('error', {
+                    errorText:'ERROR!',
+                    onFinish:function(){
+                    }
+                });
+               btn.attr('disabled',false);
+            }).done(function(){
+                progress.progressTimer('complete');
+                btn.attr('disabled',false);
+      });
 }
 //emartinez@hyundai-universidad.mx

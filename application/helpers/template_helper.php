@@ -129,7 +129,7 @@
 	}
 	if(!function_exists('dropdown_tpl')){
 		// Crea una lista <select>
-		function dropdown_tpl($params=array()){			
+		function dropdown_tpl($params=array()){	
 			if(!empty($params)){
 				$data 		= (isset($params['data']))?$params['data']:false;
 				$selected 	= (isset($params['selected']))?$params['selected']:'';

@@ -258,17 +258,6 @@ class users_model extends Base_Model{
 			return false;
 		}
 	}
-
-	/**
-	* Valida si existe nombre de usuario en la base de datos
-	* @param string $a
-	* @return boolean
-	*/
-	/*public function db_exist_user($data = array()){
-		// DB Info
-		$tbl = $this->tbl;
-		$existe = $this->row_exist($tbl['claves'], array('clave_corta'=> $data['clave_corta']));
-	}*/
 	/**
 	* Inserta el nombre de usuario y password del usuario en la base de datos,
 	* @param array $data
@@ -302,6 +291,21 @@ class users_model extends Base_Model{
 		}else{
 			return false;
 		}
+	}
+
+	/**
+	* Consulta la info de un perfil en especifico
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_usuario
+	* @return array
+	*/
+
+	public function search_data_perfil_usuario($id_usuario){
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT * FROM $tbl[usuarios] WHERE id_usuario = $id_usuario";
+		$query = $this->db->query($query);
+		return $query->result_array();
 	}
 }
 ?>

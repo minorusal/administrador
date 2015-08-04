@@ -215,7 +215,7 @@ class usuarios extends Base_Controller {
 								);
 		$list_perfil                    =  dropdown_tpl($perfiles_array);
 		$tabData['dropdown_perfil'] = $list_perfil;
-		$tabData['tree_view']       =  $this->treeview_perfiles($id_usuario);
+		$tabData['tree_view']       =  $this->treeview_perfiles_usuarios($id_usuario);
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];

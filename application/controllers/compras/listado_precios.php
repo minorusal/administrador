@@ -756,7 +756,19 @@ class listado_precios extends Base_Controller {
 	}
 	public function eliminar(){
 		$msj_grid = $this->ajax_post('msj_grid');
-		$sqlData = array(
+		$data = $this->db_model->db_get_data_x_articulos($this->ajax_post('id_compras_articulo_precios'));
+		$data_recetas = $this->db_model->get_recetas_articulo($data[0]['id_articulo']);
+
+		if(count($data_recetas)>0){
+			$msg = $this->lang_item("msg_con_recetas",false);
+				$json_respuesta = array(
+						 'id' 		=> 0
+						,'contenido'=> alertas_tpl('', $msg ,false)
+						,'success' 	=> false
+						,'msj_grid'	=> $msj_grid
+				);
+		}else{
+			$sqlData = array(
 						 'id_compras_articulo_precios'	=> $this->ajax_post('id_compras_articulo_precios')
 						,'activo' 		 =>0
 						,'edit_timestamp'  	 => $this->timestamp()
@@ -780,6 +792,7 @@ class listado_precios extends Base_Controller {
 						,'msj_grid'	=> $msj_grid
 				);
 			}
+		}
 		echo json_encode($json_respuesta);
 	}
 }

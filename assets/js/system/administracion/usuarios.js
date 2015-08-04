@@ -61,11 +61,11 @@ function load_tree_view(id_perfil){
         }
     });
 }
-function detalle_usuario(id_usuario){
+function detalle(id_usuario){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
-        url: path()+"administracion/usuarios/load_tree_view_perfil",
+        url: path()+"administracion/usuarios/detalle",
         dataType: 'json',
         data: {id_usuario : id_usuario},
         success: function(data){

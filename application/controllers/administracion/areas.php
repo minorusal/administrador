@@ -51,10 +51,10 @@ class areas extends Base_Controller{
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 'load_content'
+										 
+								);'load_content'
 										,'load_content'
 										,''
-								);
 		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
@@ -145,8 +145,6 @@ class areas extends Base_Controller{
 		$id_area = $this->ajax_post('id_area');
 		$detalle = $this->db_model->get_orden_unico_area($id_area);
 		$seccion = $this->tab3;
-		$tab_detalle = $this->tab3;
-		
 
 		$btn_save                   = form_button(array('class' => 'btn btn-primary' , 'name' => 'actualizar', 'onclick' => 'actualizar()', 'content' => $this->lang_item("btn_guardar")));
 		$tabData['id_area']         = $id_area;

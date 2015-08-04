@@ -201,7 +201,7 @@ class listado_sucursales extends Base_Controller{
 						,'selected' => $id_pago
 					);
 		$list_esquema_pago  = multi_dropdown_tpl($esquema_pago_array);
-
+/*print_debug($esquema_pago_array);*/
 		$esquema_venta_array  = array(
 						 'data'		=> $this->db_model->get_esquema_venta($sqlData)
 						,'value' 	=> 'id_sucursales_esquema_venta'

@@ -223,14 +223,11 @@ class almacenes extends Base_Controller
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 
-        if($detalle[0]['edit_id_usuario'])
-        {
+        if($detalle[0]['edit_id_usuario']){
         	$usuario_registro                   = $this->users_model->search_user_for_id($detalle[0]['edit_id_usuario']);
         	$usuario_name 				        = text_format_tpl($usuario_registro[0]['name'],"u");
         	$tabData['val_ultima_modificacion'] = sprintf($this->lang_item('val_ultima_modificacion', false), $this->timestamp_complete($detalle[0]['edit_timestamp']), $usuario_name);
-        }
-        else
-        {
+        }else{
         	$usuario_name = '';
     		$tabData['val_ultima_modificacion'] = $this->lang_item('lbl_sin_modificacion', false);
         }

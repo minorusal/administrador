@@ -259,5 +259,24 @@ class listado_precios_model extends Base_Model{
 			return $query->result_array();
 		}
 	}
+
+	///CONSULTA PARA VALIDAR QUE EL ARTICULO SE ENCUENTRA EN UNA RECETA
+	public function get_recetas_articulo($id_compras_articulo){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query="SELECT 
+					*
+				from 
+					$tbl[nutricion_recetas_articulos] 
+				WHERE 
+				id_compras_articulo=$id_compras_articulo";
+      	// Execute querie
+				//echo $query;
+      	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
 }
 ?>

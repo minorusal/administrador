@@ -209,7 +209,6 @@ class ajustes_model extends Base_Model{
 					a.caducidad,
 					a.id_estatus,
 					a.timestamp as fecha_recepcion,
-					a.caducidad,
 					c.id_articulo,
 					d.articulo,
 					e.clave_corta,
@@ -273,6 +272,7 @@ class ajustes_model extends Base_Model{
 				a.id_pasillo,
 				a.id_gaveta,
 				a.timestamp,
+				a.estatus as id_estatus,
 				b.articulo,
 				b.id_articulo_tipo,
 				c.clave_corta as cl_almacen,
@@ -292,6 +292,94 @@ class ajustes_model extends Base_Model{
 				ORDER BY a.id_almacen_ajuste ASC
 				$limit";
 		
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_data_unico_x_historial($id_almacen_ajuste){	
+		// DB Info
+		$tbl = $this->tbl;
+		// Filtro
+		
+		// Query
+		$query="SELECT 
+				a.id_almacen_ajuste,
+				a.stock_mov,
+				a.stock_um_mov,
+				a.id_articulo,
+				a.id_almacen,
+				a.id_pasillo,
+				a.id_gaveta,
+				a.timestamp,
+				b.articulo,
+				b.id_articulo_tipo,
+				c.clave_corta as cl_almacen,
+				d.clave_corta as cl_gaveta,
+				e.clave_corta as cl_pasillo,
+				f.clave_corta as cl_um
+				from $tbl[almacen_ajustes] a 
+				LEFT JOIN $tbl[compras_articulos] b on a.id_articulo=b.id_compras_articulo
+				LEFT JOIN $tbl[almacen_almacenes] c on a.id_almacen=c.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] d on a.id_gaveta=d.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] e on a.id_pasillo=e.id_almacen_pasillos
+				LEFT JOIN $tbl[compras_um] f on b.id_compras_um = f.id_compras_um
+				WHERE a.estatus =2 AND id_almacen_ajuste=$id_almacen_ajuste";
+		
+			//echo $query;
+	  	// Execute querie
+
+	  	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}
+	}
+	public function get_data_stock_logs($data=array()){	
+		//dump_var($data);
+		$id_almacen = ($data['id_almacen']!=0)?"AND a.log_id_almacen_destino=$data[id_almacen]":'';
+		$id_pasillo = ($data['id_pasillo']!=0)?" AND a.log_id_pasillo_destino=$data[id_pasillo]":'';
+		$id_gaveta  = ($data['id_gaveta']!=0)?"AND a.log_id_gaveta_destino=$data[id_gaveta]":'';
+		$id_articulo  = ($data['id_articulo']!=0)?"AND c.id_articulo=$data[id_articulo]":'';
+		
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$query="SELECT 
+					a.id_stock_log,
+					a.id_almacen_entradas_recepcion,
+					a.id_compras_orden_articulo,
+					a.log_id_almacen_destino,
+					a.log_id_pasillo_destino,
+					a.log_id_gaveta_destino,
+					a.log_stock_origen,
+					a.log_stock_um_origen,
+					a.log_stock_destino,
+					a.log_stock_um_destino,
+					a.log_lote,
+					a.log_caducidad,
+					a.timestamp as fecha_recepcion,
+					c.id_articulo,
+					d.articulo,
+					d.id_articulo_tipo,
+					e.clave_corta,
+					e.unidad_minima,
+					e.unidad_minima_cve,
+					f.almacenes,
+					g.gavetas,
+					h.pasillos
+				from $tbl[almacen_stock_logs] a 
+				LEFT JOIN $tbl[compras_ordenes_articulos] b on a.id_compras_orden_articulo=b.id_compras_orden_articulo
+				LEFT JOIN $tbl[compras_articulos_precios] c on b.id_compras_articulo_precios=c.id_compras_articulo_precios
+				LEFT JOIN $tbl[compras_articulos] d on c.id_articulo=d.id_compras_articulo
+				LEFT JOIN $tbl[compras_um] e on d.id_compras_um = e.id_compras_um
+				LEFT JOIN $tbl[almacen_almacenes] f on a.log_id_almacen_origen=f.id_almacen_almacenes
+				LEFT JOIN $tbl[almacen_gavetas] g on a.log_id_gaveta_origen=g.id_almacen_gavetas
+				LEFT JOIN $tbl[almacen_pasillos] h on a.log_id_pasillo_origen=h.id_almacen_pasillos
+				WHERE a.activo=1 AND a.id_accion=4 $id_articulo $id_almacen $id_pasillo $id_gaveta
+				ORDER BY a.id_stock_log, a.timestamp ASC;";
 			//echo $query;
 	  	// Execute querie
 

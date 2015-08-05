@@ -62,8 +62,8 @@ class historial_ajuste extends Base_Controller {
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_2.'/'.$pagina //almacen/ajuste/listado/pagina
-										,$path.$tab_1            //detalle
+										 $path.$tab_1.'/'.$pagina //almacen/ajuste/listado/pagina
+										,$path.$tab_2            //detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
@@ -115,7 +115,11 @@ class historial_ajuste extends Base_Controller {
 				// Acciones
 				$accion_id 						= $value['id_almacen_ajuste'];
 				$btn_acciones['agregar'] 		= '<span id="ico-articulos_'.$accion_id.'" class="ico_detalle fa fa-search-plus" onclick="detalle('.$accion_id.')" title="'.$this->lang_item("agregar_articulos").'"></span>';
-				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				if($value['id_estatus']==2){
+					$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				}else{
+					$acciones='';
+				}
 				($value['id_articulo_tipo']==2)?$etiqueta=$value['cl_um']:$etiqueta=$this->lang_item("pieza_abrev");
 				// Datos para tabla
 				$tbl_data[] = array('id'             	=> $value['id_almacen_ajuste'],
@@ -123,8 +127,8 @@ class historial_ajuste extends Base_Controller {
 									'stock_mov'   	 	=> $value['stock_mov'].'-'.$etiqueta,
 									'stock_um_mov'   	=> $value['stock_um_mov'].'-'.$value['cl_um'],
 									'estatus'  	 	    => $value['estatus'],
-									'timestamp'  	 	=> $value['timestamp']
-									//'acciones' 		 	=> $acciones
+									'timestamp'  	 	=> $value['timestamp'],
+									'acciones' 		 	=> $acciones
 									);
 			}
 
@@ -136,8 +140,8 @@ class historial_ajuste extends Base_Controller {
 										$this->lang_item("stock_afec"),
 										$this->lang_item("stock_um_afec"),
 										$this->lang_item("estatus"),
-										$this->lang_item("fecha_registro")
-										//$this->lang_item("acciones")
+										$this->lang_item("fecha_registro"),
+										$this->lang_item("acciones")
 									);
 			// Generar tabla
 			$this->table->set_template($tbl_plantilla);
@@ -162,6 +166,79 @@ class historial_ajuste extends Base_Controller {
 		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
 		}
+	}
+	public function detalle(){
+		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
+		$view 			   = $this->tab['detalle'];
+		$uri_view  		   = $this->modulo.'/'.$this->seccion.'/'.$this->submodulo.'/'.$view;
+		$detalle  		   = $this->db_model->get_data_unico_x_historial($id_almacen_ajuste);
+
+		$id_articulo   =   $detalle[0]['id_articulo'];
+		$id_almacen    =  ($detalle[0]['id_almacen']!=0)?$detalle[0]['id_almacen']:'';
+		$id_pasillo    =  ($detalle[0]['id_pasillo']!=0)?$detalle[0]['id_pasillo']:'';
+		$id_gaveta     =  ($detalle[0]['id_gaveta']!=0)?$detalle[0]['id_gaveta']:'';
+		$stock_mov     =   $detalle[0]['stock_mov'];
+		$stock_um_mov  =   $detalle[0]['stock_um_mov'];
+		$sqlData=array(
+					'id_almacen'  => $id_almacen,
+					'id_pasillo'  => $id_pasillo,
+					'id_gaveta'   => $id_gaveta,
+					'id_articulo' => $id_articulo
+				);
+		$articulo_detalle = $this->db_model->get_data_stock_logs($sqlData);
+		$total_rows   			  = count($this->db_model->get_data_stock_logs($sqlData));
+		if($total_rows){
+			foreach ($articulo_detalle as $value) {
+				($value['id_articulo_tipo']==2)?$etiqueta=$value['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
+				$tbl_data[] = array( 	'id'            	=> $value['articulo'],
+										'articulo'  		=> $value['articulo'],
+										'almacenes'   		=> $value['almacenes'],
+										'pasillos'   		=> $value['pasillos'],
+										'gavetas'   		=> $value['gavetas'],
+										'stock_origen'   	=> $value['log_stock_origen'].' '.$etiqueta,
+										'stock_um_origen'   => $value['log_stock_um_origen'].' '.$value['clave_corta'],
+										'stock'   	 		=> $value['log_stock_destino'].' '.$etiqueta,
+										'stock_um'   		=> $value['log_stock_um_destino'].' '.$value['clave_corta']
+								);
+			}
+
+		}
+		($detalle[0]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[0]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
+
+		$tabData['articulo']		= 	$detalle[0]['articulo'];
+		$tabData['cl_almacen']		= 	$detalle[0]['cl_almacen'];
+		$tabData['cl_gaveta']		= 	$detalle[0]['cl_gaveta'];
+		$tabData['cl_pasillo']		= 	$detalle[0]['cl_pasillo'];
+		$tabData['stock_mov']		= 	$detalle[0]['stock_mov'];
+		$tabData['stock_um_mov']	= 	$detalle[0]['stock_um_mov'];
+		$tabData['cl_um']			= 	$detalle[0]['cl_um'];
+		$tabData['cl_stock']		= 	$etiqueta;
+		$tbl_plantilla 				= set_table_tpl();
+		//DIC
+		$tabData['lbl_articulo']	 = $this->lang_item("articulo",false);
+		$tabData['lbl_cl_almacen']	 = $this->lang_item("almacen_lbl",false);
+		$tabData['lbl_cl_gaveta']	 = $this->lang_item("gaveta_lbl",false);
+		$tabData['lbl_cl_pasillo']	 = $this->lang_item("pasillo_lbl",false);
+		$tabData['lbl_stock_mov']	 = $this->lang_item("stock_mov",false);
+		$tabData['lbl_stock_um_mov'] = $this->lang_item("stock_um_mov",false);
+		$tabData['lbl_stock']		 = $this->lang_item("lblstock",false);
+		$tabData['lbl_stock_um']	 = $this->lang_item("stock_um_lbl",false);
+		// Titulos de tabla
+		$this->table->set_heading(	$this->lang_item("id"),
+									$this->lang_item("articulo"),										
+									$this->lang_item("almacen_lbl"),
+									$this->lang_item("pasillo_lbl"),
+									$this->lang_item("gaveta_lbl"),
+									$this->lang_item("stock_afec"),
+									$this->lang_item("stock_um_afec"),
+									$this->lang_item("stock_existencia"),
+									$this->lang_item("stock_um_existencia")
+								);
+
+		$this->table->set_template($tbl_plantilla);
+		$tabla 			 = $this->table->generate($tbl_data);
+		$tabData['tabla'] = $tabla;
+		echo json_encode($this->load_view_unique($uri_view ,$tabData, true));
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

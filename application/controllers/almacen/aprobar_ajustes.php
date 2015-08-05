@@ -254,6 +254,7 @@ class aprobar_ajustes extends stock{
 					$stock    = $cantidad;
 					$stock_um = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
 					($articulo_detalle[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
+					($articulo_detalle[$i]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[$i]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 				}
 			}else{
 				if($cantidad<=0){
@@ -270,6 +271,7 @@ class aprobar_ajustes extends stock{
 						$stock    = $cantidad;							
 						$stock_um = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
 						($articulo_detalle[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
+						($articulo_detalle[$i]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[$i]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 					}
 				}else{
 					$muestra_tabla = false;
@@ -325,7 +327,7 @@ class aprobar_ajustes extends stock{
 									'almacenes'   	=> $articulo_detalle[$i]['almacenes'],
 									'pasillos'   	=> $articulo_detalle[$i]['pasillos'],
 									'gavetas'   	=> $articulo_detalle[$i]['gavetas'],
-									'stock'   	 	=> $stock.' '.$articulo_detalle[$i]['clave_corta'],
+									'stock'   	 	=> $stock.' '.$etiqueta,
 									'stock_um'   	=> $stock_um.' '.$articulo_detalle[$i]['clave_corta']
 									);
 			}

@@ -20,4 +20,6 @@ $lang['stock_um_afec']  		= 	'Stock por u.m. afectado';
 $lang['xlsx_historial_ajustes'] = 	'Listado de HIstorial de ajustes';
 $lang['pieza_abrev']			= 	'Pza';
 $lang['estatus']				= 	'Estatus';
+$lang['stock_existencia'] 		=	'Stock en existencia';
+$lang['stock_um_existencia'] 	=	'Stock por u.m. en existencia';
 ?>

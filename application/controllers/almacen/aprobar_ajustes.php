@@ -195,6 +195,7 @@ class aprobar_ajustes extends stock{
 		($articulo_detalle[0]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[0]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 		$accion_id				 	 = $detalle[0]['id_almacen_ajuste'];
 		$btn_save       		 	 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_save','onclick'=>'agregar('.$accion_id.')' , 'content' => $this->lang_item("btn_guardar") ));
+		$btn_delete       		 	 = form_button(array('class'=>"btn btn-primary",'name' => 'ajuste_delete','onclick'=>'rechazar('.$accion_id.')' , 'content' => $this->lang_item("btn_rechazar") ));
 		$tabData['stock_total']	     = $stock_total;
 		$tabData['stock_um_total']	 = $stock_um_total;
 		$tabData['stock_mov']	     = $stock_mov;
@@ -210,6 +211,7 @@ class aprobar_ajustes extends stock{
 		$tabData['id_pasillo'] 		 = $id_pasillo;
 		$tabData['id_gaveta'] 		 = $id_gaveta;
 		$tabData['button_save']      = $btn_save;
+		$tabData['button_delete']    = $btn_delete;
 		//DIC
 		$tabData['lbl_articulo']	 = $this->lang_item("articulo",false);
 		$tabData['lbl_cl_almacen']	 = $this->lang_item("almacen_lbl",false);
@@ -242,7 +244,6 @@ class aprobar_ajustes extends stock{
 				);
 
 		$articulo_detalle  = $this->db_model->get_data_stock($sqlData);
-		//dump_var($articulo_detalle);
 		for($i=0;count($articulo_detalle)>$i;$i++){
 			$muestra_tabla = true;
 			if($i==0){
@@ -254,6 +255,7 @@ class aprobar_ajustes extends stock{
 					$stock    = $cantidad;
 					$stock_um = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
 					($articulo_detalle[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
+					($articulo_detalle[$i]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[$i]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 				}
 			}else{
 				if($cantidad<=0){
@@ -270,6 +272,7 @@ class aprobar_ajustes extends stock{
 						$stock    = $cantidad;							
 						$stock_um = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);
 						($articulo_detalle[$i]['id_articulo_tipo']==2)?$stock_um=$stock_um:$stock_um=$cantidad;
+						($articulo_detalle[$i]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[$i]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 					}
 				}else{
 					$muestra_tabla = false;
@@ -325,7 +328,7 @@ class aprobar_ajustes extends stock{
 									'almacenes'   	=> $articulo_detalle[$i]['almacenes'],
 									'pasillos'   	=> $articulo_detalle[$i]['pasillos'],
 									'gavetas'   	=> $articulo_detalle[$i]['gavetas'],
-									'stock'   	 	=> $stock.' '.$articulo_detalle[$i]['clave_corta'],
+									'stock'   	 	=> $stock.' '.$etiqueta,
 									'stock_um'   	=> $stock_um.' '.$articulo_detalle[$i]['clave_corta']
 									);
 			}
@@ -362,6 +365,24 @@ class aprobar_ajustes extends stock{
 				$msg = $this->lang_item("msg_campos_obligatorios",false);
 				echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 			}
+	}
+	public function rechazar(){
+		$id_almacen_ajuste = $this->ajax_post('id_almacen_ajuste');
+		$sqlData = array(
+						'id_almacen_ajuste' => $id_almacen_ajuste, 
+						'estatus' 			=> 3,
+						'edit_timestamp'  	=> $this->timestamp(),
+						'edit_id_usuario'  	=> $this->session->userdata('id_usuario')
+						);
+		$update = $this->db_model->update_data($sqlData);
+		if($update){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+			}
+		//echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

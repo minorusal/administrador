@@ -45,3 +45,17 @@ function load_content(uri, id_content){
         }
     });
 }
+function detalle(id_almacen_ajuste){
+	jQuery('#ui-id-1').click();
+	jQuery.ajax({
+        type: "POST",
+        url: path()+"almacen/historial_ajuste/detalle",
+        dataType: 'json',
+        data: {id_almacen_ajuste : id_almacen_ajuste},
+        success: function(data){
+         	jQuery('#a-0').html('');
+        	jQuery('#a-1').html(data);
+        	jQuery('#ui-id-1').show('slow');
+        }
+    });
+}

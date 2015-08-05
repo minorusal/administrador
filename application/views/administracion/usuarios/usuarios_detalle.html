@@ -28,6 +28,10 @@
         <span class="field">{dropdown_puesto}</span>
     </p>
     <p>
+        <label>{lbl_perfil}: (*)</label>
+        <span class="field">{dropdown_perfil}</span>
+    </p>
+    <p>
         <label>{lbl_usuario_registro}: </label>
         <span class="field"><span id="usuario_registro" type="text" data-campo="usuario_registro" class="input-xlarge uneditable-input" readonly >{val_usuarios_registro} </span></span>
     </p>
@@ -39,7 +43,11 @@
         <label>{lbl_ultima_modificacion}: </label>
         <span class="field"><textarea id="ultima_modifiacion" class=" span5 textareaUneditable" style="resize: vertical; height: 100px;  " readonly  >{val_ultima_modificacion}</textarea></span>
     </p>
-    
+    <span class="field">
+        <div id="treeview_perfiles">
+            {tree_view}
+        </div>
+    </span>
     <div id="registro_loader"></div>
     <div id="mensajes" style="display:none"></div>    
     <p class="stdformbutton"> 

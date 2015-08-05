@@ -66,6 +66,9 @@ class users_model extends Base_Model{
 						U.id_usuario
 						,P.id_personal
 						,CONCAT_WS(' ', P.nombre, P.paterno ,P.materno) as name
+						,P.nombre
+						,P.paterno 
+						,P.materno
 						,P.telefono
 						,P.mail
 						,P.avatar as avatar_user
@@ -89,6 +92,7 @@ class users_model extends Base_Model{
 						,U.id_menu_n3 as user_id_menu_n3
 						,U.timestamp
 						,U.activo
+						,U.id_usuario_reg
 						,C.user
 					FROM $tbl[usuarios] U
 					left join $tbl[personales] P on U.id_personal = P.id_personal
@@ -157,7 +161,6 @@ class users_model extends Base_Model{
 		}		
 	}
 
-
 	/**
 	* Consulta los usuarios para mostrarlos en lista y hacer busquedas,
 	* @param array $data
@@ -172,53 +175,137 @@ class users_model extends Base_Model{
 		$limit 			= (isset($data['limit']))?$data['limit']:0;
 		$offset 		= (isset($data['offset']))?$data['offset']:0;
 		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
-		$user           = ($aplicar_user)?"AND u.id_usuario <> $aplicar_user" : "";
-		$filtro = ($filtro) ? "AND (u.id_usuario = $filtro OR
-									p.nombre like '%$filtro%' OR
-									p.paterno like '%$filtro%' OR
-									p.materno like '%$filtro%' OR
-									pe.perfil like '%$filtro%' OR
+		//$user           = ($aplicar_user)?"AND u.id_usuario <> $aplicar_user AND pe.id_perfil <> 1" : "";
+		$filtro = ($filtro) ? "AND (u.id_usuario = '$filtro' OR
+									pe.nombre like '%$filtro%' OR
+									pe.paterno like '%$filtro%' OR
+									pe.materno like '%$filtro%' OR
+									p.perfil like '%$filtro%' OR
 									a.area like '%$filtro%' OR
 									pu.puesto like '%$filtro%' OR
 									c.user like '%$filtro%')" : "";
 		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		//Query
 		$query = "	SELECT
-						u.id_usuario 
-						,p.id_personal
-						,CONCAT_WS(' ',p.nombre, p.paterno, p.materno) as nombre
-						,p.nombre as nom
-						,p.paterno
-						,p.materno
-						,p.telefono
-						,p.mail
+						 u.id_usuario 
+						,pe.id_personal
+						,CONCAT_WS(' ',pe.nombre, pe.paterno, pe.materno) as name
+						,pe.nombre as nom
+						,pe.paterno
+						,pe.materno
+						,pe.telefono
+						,pe.mail
 						,a.id_administracion_areas
 						,pu.id_administracion_puestos
-						,pe.id_perfil
+						,u.id_perfil
 						,c.user
-						,pe.perfil
+						,p.perfil
 						,a.area
 						,pu.puesto
-						,p.edit_id_usuario
-						,p.edit_timestamp
-						,p.timestamp
-					FROM $tbl[personales] p
-					LEFT JOIN $tbl[usuarios] u on u.id_personal = p.id_personal 
+						,pe.edit_id_usuario
+						,pe.edit_timestamp
+						,pe.timestamp
+					FROM $tbl[usuarios] u
+					LEFT JOIN $tbl[personales] pe on pe.id_personal = u.id_personal
 					LEFT JOIN $tbl[claves] c on c.id_clave = u.id_clave
-					LEFT JOIN $tbl[perfiles] pe on pe.id_perfil = u.id_perfil
-					LEFT JOIN $tbl[administracion_areas] a on a.id_administracion_areas = u.id_area
+					LEFT JOIN $tbl[perfiles] p on p.id_perfil = u.id_perfil
 					LEFT JOIN $tbl[administracion_puestos] pu on pu.id_administracion_puestos = u.id_puesto
-					WHERE u.activo = 1 $user $filtro
-					ORDER BY p.id_personal ASC
+					LEFT JOIN $tbl[administracion_areas] a on a.id_administracion_areas = u.id_area
+					WHERE u.activo = 1 AND u.id_usuario <> 1  $filtro
+					ORDER BY pe.id_personal ASC
 					$limit
 					";
-					//print_debug($query);
       	$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
 	}
-	
-}
 
+	/**
+	* Consulta usuario por nombre de usuario,
+	* @param string $user
+	* @return boolean
+	*/
+	public function get_user_by_userName($user){
+		// DB Info		
+		$tbl = $this->tbl;
+		// Query
+		$query = "SELECT c.user
+				  FROM $tbl[claves] c
+				  WHERE c.user = '$user'";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return true;
+		}else{
+			return false;
+		}	
+	}
+
+	/**
+	* Inserta los datos personales del usuario en la base de datos,
+	* @param array $data
+	* @return boolean
+	* @return int id_row
+	*/
+	public function db_insert_personal($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['personales'], $data, true);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+	/**
+	* Inserta el nombre de usuario y password del usuario en la base de datos,
+	* @param array $data
+	* @return boolean
+	* @return int id_row
+	*/
+	public function db_insert_claves($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['claves'], $data, true);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	* Inserta elementos de usuario en la base de datos,
+	* @param array $data
+	* @return boolean
+	*/
+	public function db_insert_usuarios($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		// Query
+		$insert = $this->insert_item($tbl['usuarios'], $data, true);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	* Consulta la info de un perfil en especifico
+	* y de acuerdo a permisos especiales (tabla usuarios)
+	* @param string $id_usuario
+	* @return array
+	*/
+
+	public function search_data_perfil_usuario($id_usuario){
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT * FROM $tbl[usuarios] WHERE id_usuario = $id_usuario";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+}
 ?>

@@ -1,4 +1,7 @@
 <?php
+$lang['lbl_perfiles'] = 'perfiles';
+$lang['lbl_asignar_perfil'] = 'asignar perfil';
+$lang['lbl_acciones'] = 'acciones';
 $lang['lbl_no_disponible'] = 'este nombre de usuario ya existe.';
 $lang['lbl_nombre_usuario'] = 'nombre de usuario';
 $lang['seccion'] 	= "Usuarios";

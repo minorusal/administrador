@@ -42,11 +42,28 @@ function load_content(uri, id_content){
               		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
               		jQuery('#search-query').val(filtro).focus();
               		tool_tips();
-               }else{  
+               }else{ 
                     var escribir = 'jQuery("#txt_nombre_usuario").on("keyup", function(){ find_string("administracion/usuarios/find_string",jQuery("#txt_nombre_usuario").val(),jQuery("#txt_nombre_usuario").attr("name"));});';
              	 	var chosen   = 'jQuery(".chzn-select").chosen();';
               		jQuery('#a-'+id_content).html(data+include_script(chosen+treeview+treeview_childrens+escribir));
                 }
+        }
+    });
+}
+
+function asignar_perfil(id_personal,id_usuario, id_perfil){   
+    jQuery('#ui-id-2').click();
+    jQuery.ajax({
+        type: "POST",
+        url: path()+"administracion/usuarios/asignar_perfil",
+        dataType: 'json',
+        data: {id_personal : id_personal, id_usuario : id_usuario, id_perfil : id_perfil},
+        success: function(data){
+            var treeview           = 'load_treeview("treeview-modules");';
+            var treeview_childrens = 'treeview_childrens();'; 
+            var chosen = 'jQuery(".chzn-select").chosen();';
+            jQuery('#a-2').html(data+include_script(chosen+treeview+treeview_childrens));
+            jQuery('#ui-id-2').show('slow');
         }
     });
 }
@@ -82,6 +99,21 @@ function load_tree_view(id_perfil){
         }
     });
 }
+
+function load_tree_view_perfil_usuario(id_usuario,id_perfil){
+    var treeview = [];
+    jQuery.ajax({
+        type: "POST",
+        url : path()+'administracion/usuarios/load_tree_view_perfil_usuario',
+        dataType : 'json',
+        data : {id_usuario:id_usuario,id_perfil: id_perfil},
+        success: function(data){
+            treeview.push('load_treeview("treeview-modules");');
+            treeview.push('treeview_childrens();');
+            jQuery('#treeview_perfiles').html(data+include_script(treeview)).show('show');
+        }
+    });
+}
 function detalle(id_usuario){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
@@ -101,7 +133,7 @@ function detalle(id_usuario){
 }
 
 function insert(){
-    var progress = progress_initialized('update_loader');
+    var progress = progress_initialized('registro_loader');
     jQuery("#mensajes_update").html('').hide('slow');
     jQuery('#mensajes').hide();
     var btn             = jQuery("button[name='actualizar']");
@@ -158,4 +190,3 @@ function insert(){
                 btn.attr('disabled',false);
       });
 }
-//emartinez@hyundai-universidad.mx

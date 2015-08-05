@@ -294,6 +294,23 @@ class users_model extends Base_Model{
 	}
 
 	/**
+	* Consulta los perfiles asignados de una persona
+	* @param string $id_personal
+	* @return array
+	*/
+	public function search_data_perfil($id_personal){
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT u.id_perfil
+						,p.clave_corta
+						,p.perfil
+			      FROM $tbl[perfiles] p
+			      LEFT JOIN $tbl[usuarios] u on u.id_perfil = p.id_perfil
+			      WHERE u.id_personal = $id_personal";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	/**
 	* Consulta la info de un perfil en especifico
 	* y de acuerdo a permisos especiales (tabla usuarios)
 	* @param string $id_usuario

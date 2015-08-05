@@ -60,6 +60,7 @@ class usuarios extends Base_Controller {
 										,''
 								);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
+		$config_tab['style_content'] = array('','','');
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -98,19 +99,21 @@ class usuarios extends Base_Controller {
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
 		if($total_rows>0){
 			foreach ($list_content as $value) {
-				//print_debug($value);
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
 							  	'onclick' => $tab_detalle.'('.$value['id_usuario'].')'
 						);
+				$btn_acciones['ficha'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-user" onclick="asignar_perfil('.$value['id_personal'].','.$value['id_usuario'].','.$value['id_perfil'].')" title="'.$this->lang_item("lbl_asignar_perfil").'"></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
 				$tbl_data[] = array('id'               => $value['id_usuario'],
 									'nombre'           => tool_tips_tpl($value['name'], $this->lang_item("tool_tip"), 'right' , $atrr),
 									'nombre_de_usuario'=> $value['user'],
 									'perfil'           => $value['perfil'],
 									'area'             => $value['area'],
-									'puesto'           => $value['puesto']
+									'puesto'           => $value['puesto'],
+									'acciones'		   => $acciones
 									);
 			}
 
@@ -121,7 +124,8 @@ class usuarios extends Base_Controller {
 										$this->lang_item("lbl_user"),
 										$this->lang_item("lbl_perfil"),
 										$this->lang_item("lbl_area"),
-										$this->lang_item("lbl_puesto")
+										$this->lang_item("lbl_puesto"),
+										$this->lang_item("lbl_acciones")
 
 									);
 			$buttonTPL = array( 'text'       => $this->lang_item("btn_xlsx"), 
@@ -146,6 +150,42 @@ class usuarios extends Base_Controller {
 			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
 		}else{
 			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
+
+	public function asignar_perfil(){
+		$id_perfil   = $this->ajax_post('id_perfil');
+		$id_personal = $this->ajax_post('id_personal');
+		$id_usuario  = $this->ajax_post('id_usuario');
+		$perfiles    = $this->db_model->search_data_perfil($id_personal);
+		
+		if($perfiles){
+			$boton = array(
+						'class'   => 'btn btn-primary'
+					   ,'name'    => 'agregar_perfil'
+					   ,'onclick' => 'agregar_perfil()'
+					   ,'content' => $this->lang_item("btn_guardar"));
+			$btn_save   = form_button($boton);
+			$perfil_array      = array(
+								 'data'		=> $perfiles
+								,'value' 	=> 'id_perfil'
+								,'text' 	=> array('clave_corta','perfil')
+								,'name'  	=> "lts_perfiles"
+								,'class' 	=> "requerido"
+								,'selected' => $id_perfil
+								,'event'    => array('event'       => 'onchange',
+							   						 'function'    => 'load_tree_view_perfil_usuario',
+							   						 'params'      => array($id_usuario,'this.value'),
+							   						 'params_type' => array(0,0)
+			   										));
+		    $list_perfiles            =  dropdown_tpl($perfil_array);
+
+		    $tabData['lbl_perfiles']   = $this->lang_item("lbl_perfiles");
+		    $tabData['list_perfiles']  = $list_perfiles;
+		    $tabData['tree_view']      = $this->treeview_perfiles_usuarios($id_usuario,$id_perfil, true);
+		    $tabData['button_save']    = $btn_save;
+			$uri_view = $this->modulo.'/'.$this->seccion.'/ficha_asignar_perfiles';
+			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
 		}
 	}
 	public function detalle(){
@@ -175,13 +215,14 @@ class usuarios extends Base_Controller {
 						,'aplicar_limit' => true
 					);
 		$detalle = $this->db_model->get_users($sqlData);
-		//print_debug($detalle);
+		
 		$tabData['txt_nombre']    = $detalle[0]['nom'];
 		$tabData['txt_paterno']   = $detalle[0]['paterno'];
 		$tabData['txt_materno']   = $detalle[0]['materno'];
 		$tabData['txt_usuario']   = $detalle[0]['user'];
 		$tabData['txt_telefono']  = $detalle[0]['telefono'];
 		$tabData['txt_email']     = $detalle[0]['mail'];
+		
 		$areas_array      = array(
 								 'data'		=> $this->areas->db_get_data()
 								,'value' 	=> 'id_administracion_areas'
@@ -206,7 +247,7 @@ class usuarios extends Base_Controller {
 								,'text' 	=> array('perfil')
 								,'name' 	=> "lts_perfiles"
 								,'class' 	=> "requerido"
-								,'selected' => $id_usuario
+								,'selected' => $detalle[0]['id_perfil']
 								,'event'    => array('event'       => 'onchange',
 							   						 'function'    => 'load_tree_view',
 							   						 'params'      => array('this.value'),
@@ -215,7 +256,7 @@ class usuarios extends Base_Controller {
 								);
 		$list_perfil                    =  dropdown_tpl($perfiles_array);
 		$tabData['dropdown_perfil'] = $list_perfil;
-		$tabData['tree_view']       =  $this->treeview_perfiles_usuarios($id_usuario);
+		//$tabData['tree_view']       =  $this->treeview_perfiles_usuarios($id_usuario);
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
         $tabData['val_fecha_registro']      = $detalle[0]['timestamp'];
@@ -240,8 +281,6 @@ class usuarios extends Base_Controller {
 
 		$uri_view = $this->view_detalle;
 		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
-		//print_debug($detalle);
-
 	}
 	public function agregar(){
 		$seccion 		= '';
@@ -263,7 +302,18 @@ class usuarios extends Base_Controller {
 								,'name' 	=> "lts_puestos"
 								,'class' 	=> "requerido");
 		$puestos            =  dropdown_tpl($puestos_array);
-		$perfiles_array   = array(
+
+		$perfiles_array  = array(
+						 'data'		=> $this->perfiles->db_get_data()
+						,'value' 	=> 'id_perfil'
+						,'text' 	=> array('clave_corta','perfil')
+						,'name' 	=> "lts_perfiles"
+						,'class' 	=> "requerido"
+						
+					);
+		$perfiles  = multi_dropdown_tpl($perfiles_array);
+
+		/*$perfiles_array   = array(
 								 'data'		=> $this->perfiles->db_get_data()
 								,'value' 	=> 'id_perfil'
 								,'text' 	=> array('perfil')
@@ -275,7 +325,7 @@ class usuarios extends Base_Controller {
 							   						 'params_type' => array(0)
 			   										)
 								);
-		$perfiles                    =  dropdown_tpl($perfiles_array);
+		$perfiles                    =  dropdown_tpl($perfiles_array);*/
 		$tabData['base_url']         =  base_url();
 		$tabData['lbl_nombre_usuario']  = $this->lang_item("lbl_nombre_usuario");
 		$tabData['lbl_no_disponible']  = $this->lang_item("lbl_no_disponible");
@@ -307,59 +357,68 @@ class usuarios extends Base_Controller {
 		$treeview_perfiles = $this->treeview_perfiles($id_perfil, true);
 		echo json_encode($treeview_perfiles);
 	}
+
+	public function load_tree_view_perfil_usuario(){
+		$id_perfil         = $this->ajax_post('id_perfil');
+		$id_usuario         = $this->ajax_post('id_usuario');
+		$treeview_perfiles = $this->treeview_perfiles_usuarios($id_usuario,$id_perfil, true);
+		echo json_encode($treeview_perfiles);
+	}
 	public function insert(){
 		$objData  	= $this->ajax_post('objData');
-		//print_debug($objData);
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$existe = $this->db_model->get_user_by_userName($objData['txt_nombre_usuario']);
-			if($existe){
-				$msg = $this->lang_item("msg_user_repetido",false);
-				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
-			}else{
-				$sqlData = array(
-					'nombre'       => $objData['txt_nombre']
-					,'paterno'     => $objData['txt_paterno']
-					,'materno'     => $objData['txt_materno']
-					,'telefono'    => $objData['txt_telefono']
-					,'mail'        => $objData['txt_mail']
-					,'id_usuario'  => $this->session->userdata('id_usuario')
-					,'timestamp'   => $this->timestamp());
-				$insert_personal = $this->db_model->db_insert_personal($sqlData);
+			
+			$sqlData = array(
+				'nombre'       => $objData['txt_nombre']
+				,'paterno'     => $objData['txt_paterno']
+				,'materno'     => $objData['txt_materno']
+				,'telefono'    => $objData['txt_telefono']
+				,'mail'        => $objData['txt_mail']
+				,'id_usuario'  => $this->session->userdata('id_usuario')
+				,'timestamp'   => $this->timestamp());
+			$insert_personal = $this->db_model->db_insert_personal($sqlData);
 
-				$sqlData = array(
-					'user' => $objData['txt_nombre_usuario']
-					,'pwd'  => ''
-					,'id_usuario'  => $this->session->userdata('id_usuario')
-					,'timestamp'   => $this->timestamp());
-				$insert_claves = $this->db_model->db_insert_claves($sqlData);
+			$sqlData = array(
+				// 'user' => $objData['txt_nombre_usuario']
+				 'user' => ''
+				,'pwd'  => ''
+				,'id_usuario'  => $this->session->userdata('id_usuario')
+				,'timestamp'   => $this->timestamp());
+			$insert_claves = $this->db_model->db_insert_claves($sqlData);
 
-				$sqlData = array(
-					'id_personal'     => $insert_personal
-					,'id_clave'        => $insert_claves
-					,'id_perfil'       => $objData['lts_perfiles']
-					,'id_pais'	       => $this->session->userdata('id_pais')
-					,'id_empresa'      => $this->session->userdata('id_empresa')
-					,'id_sucursal'     => $this->session->userdata('id_sucursal')
-					,'id_puesto'       => $objData['lts_puestos']
-					,'id_area'         => $objData['lts_areas']
-					,'id_menu_n1'      => ($objData['nivel_1'])?$objData['nivel_1']:''
-					,'id_menu_n2'      => ($objData['nivel_2'])?$objData['nivel_2']:''
-					,'id_menu_n3'      => ($objData['nivel_3'])?$objData['nivel_3']:''
-					,'id_usuario_reg'  => $this->session->userdata('id_usuario')
-					,'timestamp'       => $this->timestamp()
-					);
-				$insert_usuarios = $this->db_model->db_insert_usuarios($sqlData);
-				if($insert_usuarios){
-					$msg = $this->lang_item("msg_insert_success",false);
-					echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
-				}else{
-					$msg = $this->lang_item("msg_err_clv",false);
-					echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+			$arr_perfil  = explode(',',$objData['lts_perfiles']);
+			if(!empty($arr_perfil)){
+				$sqlData = array();
+				foreach ($arr_perfil as $key => $value){
+					$sqlData = array(
+						 'id_personal'     => $insert_personal
+						,'id_clave'        => $insert_claves
+						,'id_perfil'       => $value
+						,'id_pais'	       => $this->session->userdata('id_pais')
+						,'id_empresa'      => $this->session->userdata('id_empresa')
+						,'id_sucursal'     => $this->session->userdata('id_sucursal')
+						,'id_puesto'       => $objData['lts_puestos']
+						,'id_area'         => $objData['lts_areas']
+						,'id_menu_n1'      => ''//($objData['nivel_1'])?$objData['nivel_1']:''
+						,'id_menu_n2'      => ''//($objData['nivel_2'])?$objData['nivel_2']:''
+						,'id_menu_n3'      => ''//($objData['nivel_3'])?$objData['nivel_3']:''
+						,'id_usuario_reg'  => $this->session->userdata('id_usuario')
+						,'timestamp'       => $this->timestamp()
+						);
+					$insert_usuarios = $this->db_model->db_insert_usuarios($sqlData);
 				}
-			}			
+			}
+			if($insert_claves){
+				$msg = $this->lang_item("msg_insert_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('', $msg ,false)));
+			}
+					
 		}
 	}
 	public function export_xlsx($offset=0){
@@ -404,7 +463,6 @@ class usuarios extends Base_Controller {
 		$string = $this->ajax_post('item');
 		$campo = $this->ajax_post('nom');
 		$detalle = $this->db_model->get_user_by_userName($string);
-		
 		if($detalle){
 			echo json_encode(array('existe' => 0, 'string' => $string, 'campo' => $campo));
 		}else{

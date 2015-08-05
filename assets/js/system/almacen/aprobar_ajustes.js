@@ -145,3 +145,48 @@ function agregar(id_almacen_ajuste){
 		        btn.attr('disabled',false);
 	  });
 }
+function rechazar(id_almacen_ajuste){
+	var progress = progress_initialized('update_loader');
+	jQuery("#mensajes_update").html('').hide('slow');
+	jQuery('#mensajes').hide();
+	var btn = jQuery("button[name='ajuste_delete']");
+	var btn2 = jQuery("button[name='ajuste_save']");
+
+	btn.attr('disabled','disabled');
+	btn2.attr('disabled','disabled');
+	jQuery.ajax({
+		type:"POST",
+		url: path()+"almacen/aprobar_ajustes/rechazar",
+		dataType: "json",			
+		data : {
+				id_almacen_ajuste :  id_almacen_ajuste
+		},
+		beforeSend : function(){
+			btn.attr('disabled',true);
+			btn2.attr('disabled',true);
+		},
+		success : function(data){
+			if(data.success == 'true' ){
+				jgrowl(data.mensaje);
+				jQuery("#listaod_afectado").html(data.table).show('slow').delay(3000).fadeIn("slow");	
+				btn.hide();
+				btn2.hide();
+			}else{
+				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
+
+			}
+		}
+	  }).error(function(){
+	       		progress.progressTimer('error', {
+		            errorText:'ERROR!',
+		            onFinish:function(){
+		            }
+	            });
+	           btn.attr('disabled',false);
+	           btn2.attr('disabled',false);
+	        }).done(function(){
+		        progress.progressTimer('complete');
+		        btn.attr('disabled',false);
+		        btn2.attr('disabled',false);
+	  });
+}

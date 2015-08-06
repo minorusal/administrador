@@ -335,7 +335,7 @@ class Base_Controller extends CI_Controller {
 		        	case 1:
 		        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
 		        			$checked = "checked='checked'";
-		        			$lock = ($locked) ? 'disabled = disabled' : '';
+		        			$lock = ($locked)  ? 'disabled = disabled' : '';
 		        		}else{
 		        			$checked = '';
 		        		}
@@ -343,7 +343,7 @@ class Base_Controller extends CI_Controller {
 		        	case 2:
 		        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
 		        			$checked = "checked='checked'";
-		        			$lock = ($locked) ? 'disabled = disabled' : '';
+		        			$lock = ($locked)  ? 'disabled = disabled' : '';
 		        		}else{
 		        			$checked = '';
 		        		}
@@ -417,9 +417,6 @@ class Base_Controller extends CI_Controller {
 		if($id_personal && $id_perfil){	
 			$info_perfil  = $this->perfiles_model->search_data_perfil($id_perfil);
 			
-			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
-			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
-			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
 			
 			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
 			$id_niveles   = array(	
@@ -436,7 +433,7 @@ class Base_Controller extends CI_Controller {
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked,$locked);
+		return $controls.$this->list_tree_view($data_modulos, $id_niveles, false, $checked, $locked);
 	}
 
 	/**

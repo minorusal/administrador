@@ -414,24 +414,21 @@ class Base_Controller extends CI_Controller {
 		$this->load_database('global_system');
 		$this->load->model('administracion/perfiles_model','perfiles_model');
 		$this->load->model('administracion/users_model','users_model');
-		if($id_personal && $id_perfil)
-		{
-			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
-			//print_debug($info_usuario);
+		if($id_personal && $id_perfil){	
 			$info_perfil  = $this->perfiles_model->search_data_perfil($id_perfil);
+			
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
 			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
-
+			
+			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
 			$id_niveles   = array(	
 						'id_menu_n1' => explode(',', ($info_perfil[0]['id_menu_n1'].','.$info_usuario[0]['id_menu_n1'])),
 						'id_menu_n2' => explode(',', ($info_perfil[0]['id_menu_n2'].','.$info_usuario[0]['id_menu_n2'])),
 						'id_menu_n3' => explode(',', ($info_perfil[0]['id_menu_n3'].','.$info_usuario[0]['id_menu_n3'])),
 						);
 			$checked = true;
-		}
-		else
-		{
+		}else{
 			$id_niveles = "";
 			$checked = false;
 		}

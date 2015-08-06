@@ -173,7 +173,6 @@ function rechazar(id_almacen_ajuste){
 				btn2.hide();
 			}else{
 				jQuery("#mensajes_update").html(data.mensaje).show('slow');	
-
 			}
 		}
 	  }).error(function(){

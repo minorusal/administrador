@@ -175,7 +175,7 @@ class usuarios extends Base_Controller {
 								,'selected' => $id_perfil
 								,'event'    => array('event'       => 'onchange',
 							   						 'function'    => 'load_tree_view_perfil_usuario',
-							   						 'params'      => array($id_usuario,'this.value'),
+							   						 'params'      => array($id_personal,'this.value'),
 							   						 'params_type' => array(0,0)
 			   										));
 		    $list_perfiles            =  dropdown_tpl($perfil_array);
@@ -183,7 +183,7 @@ class usuarios extends Base_Controller {
 		    $tabData['lbl_perfiles']   = $this->lang_item("lbl_perfiles");
 		    $tabData['id_personal']     = $id_personal;
 		    $tabData['list_perfiles']  = $list_perfiles;
-		    $tabData['tree_view']      = $this->treeview_perfiles_usuarios($id_usuario,$id_perfil, true);
+		    $tabData['tree_view']      = $this->treeview_perfiles_usuarios($id_personal,$id_perfil);
 		    $tabData['button_save']    = $btn_save;
 			$uri_view = $this->modulo.'/'.$this->seccion.'/ficha_asignar_perfiles';
 			echo json_encode( $this->load_view_unique($uri_view ,$tabData, true));
@@ -192,21 +192,16 @@ class usuarios extends Base_Controller {
 
 	public function insert_perfiles(){
 		$objData  	= $this->ajax_post('objData');
-		//print_debug($objData);
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
-			$menus = $this->db_model->get_perfiles_usuarios($objData['id_personal'],$objData['lts_perfiles']);
-			$id_menu_n1 = (isset($menus[0]['id_menu_n1']))?$menus[0]['id_menu_n1']:'';
-			$id_menu_n2 = (isset($menus[0]['id_menu_n2']))?$menus[0]['id_menu_n2']:'';
-			$id_menu_n3 = (isset($menus[0]['id_menu_n3']))?$menus[0]['id_menu_n3']:'';
 			$sqlData = array(
 							 'id_personal'  => $objData['id_personal']
 							,'id_perfil'    => $objData['lts_perfiles']
-							,'id_menu_n1'   => (isset($objData['nivel_1'])) ? $objData['nivel_1'].','.$id_menu_n1:$id_menu_n1
-							,'id_menu_n2'   => (isset($objData['nivel_2'])) ? $objData['nivel_2'].','.$id_menu_n2:$id_menu_n2
-							,'id_menu_n3'   => (isset($objData['nivel_3'])) ? $objData['nivel_3'].','.$id_menu_n3:$id_menu_n3
+							,'id_menu_n1'   => (isset($objData['nivel_1'])) ? $objData['nivel_1']:''/*.','.$id_menu_n1:$id_menu_n1*/
+							,'id_menu_n2'   => (isset($objData['nivel_2'])) ? $objData['nivel_2']:''/*.','.$id_menu_n2:$id_menu_n2*/
+							,'id_menu_n3'   => (isset($objData['nivel_3'])) ? $objData['nivel_3']:''/*.','.$id_menu_n3:$id_menu_n3*/
 							,'edit_id_usuario'  => $this->session->userdata('id_usuario')
 							,'edit_timestamp'   => $this->timestamp()
 							);
@@ -379,8 +374,9 @@ class usuarios extends Base_Controller {
 
 	public function load_tree_view_perfil_usuario(){
 		$id_perfil         = $this->ajax_post('id_perfil');
-		$id_usuario         = $this->ajax_post('id_usuario');
-		$treeview_perfiles = $this->treeview_perfiles_usuarios($id_usuario,$id_perfil, true);
+		$id_personal       = $this->ajax_post('id_personal');
+		//print_debug($id_personal);
+		$treeview_perfiles = $this->treeview_perfiles_usuarios($id_personal,$id_perfil);
 		echo json_encode($treeview_perfiles);
 	}
 	public function insert(){

@@ -100,13 +100,13 @@ function load_tree_view(id_perfil){
     });
 }
 
-function load_tree_view_perfil_usuario(id_usuario,id_perfil){
+function load_tree_view_perfil_usuario(id_personal,id_perfil){
     var treeview = [];
     jQuery.ajax({
         type: "POST",
         url : path()+'administracion/usuarios/load_tree_view_perfil_usuario',
         dataType : 'json',
-        data : {id_usuario:id_usuario,id_perfil: id_perfil},
+        data : {id_personal:id_personal,id_perfil: id_perfil},
         success: function(data){
             treeview.push('load_treeview("treeview-modules");');
             treeview.push('treeview_childrens();');

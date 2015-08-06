@@ -1,4 +1,5 @@
 <?php
+$lang['lbl_enviar_email'] = 'enviar email';
 $lang['lbl_perfiles'] = 'perfiles';
 $lang['lbl_asignar_perfil'] = 'asignar perfil';
 $lang['lbl_acciones'] = 'acciones';

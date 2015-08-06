@@ -420,6 +420,8 @@ class Base_Controller extends CI_Controller {
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
 			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
+
+			//$per_locked = 
 			
 			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
 			$id_niveles   = array(	
@@ -436,7 +438,79 @@ class Base_Controller extends CI_Controller {
 		$data_modulos = $this->users_model->search_modules_for_user('', '' , '' , true);
 		$data_modulos = $this->build_array_treeview($data_modulos);
 		$controls     = '<div id="sidetreecontrol"><a href="?#">'.$this->lang_item('collapse', false).'</a> | <a href="?#">'.$this->lang_item('expand', false).'</a></div>';
-		return $controls.$this->list_tree_view($data_modulos, $id_niveles,false,$checked,$locked);
+		return $controls.$this->list_tree_view_mix($data_modulos, $id_niveles,false,$checked,$locked);
+	}
+	public function list_tree_view_mix($items, $id_niveles = array(), $sub = false, $checado = false, $locked = false){
+
+	    $panel    = "";
+	    $style_ul = "";
+	    $style    = "treeview-gray";
+	    if($sub){ 
+	    	$panel .= "<ul>";
+		}else{
+			$panel .= "<ul id = 'treeview-modules' class='treeview-gray '>";
+	    }
+	    
+	    foreach ($items as $item => $subitems) {
+	    	$item         = explode('-', $item);
+	    	$itemId       = $item[0]; 
+	    	$itemName     = $item[1];
+	    	$content      = "";	
+			$sub_nivel    = "";
+			$checked      = "";
+			$lock         = "";
+	        if(array_key_exists('content', $subitems)){
+	        	$content .= $this->list_tree_view_mix($subitems['content'],$id_niveles, $sub = true, $checado, $locked);
+	        }
+	        
+	        $icon      = $subitems['icon'];
+	        $nivel     = $subitems['nivel'];
+	        $lang_item = $this->lang_item(str_replace(' ','_', $itemName));
+	        if(!$checado)
+	        {
+
+	        	$panel    .= "<li>&nbsp;<input name = 'nivel_$nivel' $checked  type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= $content;
+	       		$panel    .= "</li>";
+	        }
+	    	else
+	    	{
+		        switch ($nivel) {
+		        	case 1:
+		        		if(in_array($itemId, $id_niveles['id_menu_n1'])){
+		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
+		        		}else{
+		        			$checked = '';
+		        		}
+		        		break;
+		        	case 2:
+		        		if(in_array($itemId, $id_niveles['id_menu_n2'])){
+		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
+		        		}else{
+		        			$checked = '';
+		        		}
+		        		break;
+		        	case 3:
+		        		if(in_array($itemId, $id_niveles['id_menu_n3'])){
+		        			$checked = "checked='checked'";
+		        			$lock = ($locked) ? 'disabled = disabled' : '';
+		        		}else{
+		        			$checked = '';
+		        			$lock = '';
+		        		}
+		        		break;
+		        	default:
+		        		break;
+		        }
+		    	$panel    .= "<li>&nbsp;<input $lock name = 'nivel_$nivel' $checked type ='checkbox' value='$itemId' />&nbsp;<span class='$icon'></span>&nbsp;<span>".text_format_tpl($lang_item).'</span>';
+	        	$panel    .= $content;
+	       		$panel    .= "</li>";    
+		    }
+	    }
+	    if($sub){$panel .= "</ul>";}
+	    return $panel;
 	}
 
 	/**

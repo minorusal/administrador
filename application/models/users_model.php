@@ -121,7 +121,6 @@ class users_model extends Base_Model{
 		$id_menu_n1 = ($id_menu_n1 == '') ? '0' : $id_menu_n1;
 		$id_menu_n2 = ($id_menu_n2 == '') ? '0' : $id_menu_n2;
 		$id_menu_n3 = ($id_menu_n3 == '') ? '0' : $id_menu_n3;
-
 		
 		$tbl = $this->tbl;
 		
@@ -258,6 +257,11 @@ class users_model extends Base_Model{
 			return false;
 		}
 	}
+
+	/*public function origen(){
+		$tbl = $this->tbl;
+		return
+	}*/
 	/**
 	* Inserta el nombre de usuario y password del usuario en la base de datos,
 	* @param array $data

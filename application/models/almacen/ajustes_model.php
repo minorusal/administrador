@@ -125,7 +125,7 @@ class ajustes_model extends Base_Model{
 				LEFT JOIN $tbl[compras_embalaje] i on c.id_embalaje = i.id_compras_embalaje
 				LEFT JOIN $tbl[compras_um] j on d.id_compras_um = j.id_compras_um
 			WHERE a.activo=1 $id_almacen $id_pasillo $id_gaveta
-			GROUP BY c.id_articulo";
+			GROUP BY c.id_articulo;";
 			//echo $query;
 	  	// Execute querie
 

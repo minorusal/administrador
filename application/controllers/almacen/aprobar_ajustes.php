@@ -87,7 +87,7 @@ class aprobar_ajustes extends stock{
 		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
-		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
+		$data['titulo_submodulo'] = $this->lang_item($this->seccion);
 		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
@@ -131,7 +131,6 @@ class aprobar_ajustes extends stock{
 									'acciones' 		 	=> $acciones
 									);
 			}
-
 			// Plantilla
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
@@ -376,13 +375,12 @@ class aprobar_ajustes extends stock{
 						);
 		$update = $this->db_model->update_data($sqlData);
 		if($update){
-				$msg = $this->lang_item("msg_update_success",false);
-				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
-			}else{
-				$msg = $this->lang_item("msg_err_clv",false);
-				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
-			}
-		//echo json_encode(array(  'success'=>'true', 'mensaje' => $msg, 'table' => $data ));
+			$msg = $this->lang_item("msg_update_success",false);
+			echo json_encode(array( 'success'=>'true', 'mensaje' => $msg ));
+		}else{
+			$msg = $this->lang_item("msg_err_clv",false);
+			echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+		}
 	}
 	public function export_xlsx(){
 		$filtro      = ($this->ajax_get('filtro')) ?  base64_decode($this->ajax_get('filtro') ): "";

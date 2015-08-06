@@ -86,7 +86,7 @@ class agregar_ajustes extends stock{
 		$tabl_inicial 			  = $this->tab_inicial;
 		$view_listado    		  = $this->listado();
 		$contenidos_tab           = $view_listado;
-		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
+		$data['titulo_submodulo'] = $this->lang_item($this->seccion);
 		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	

@@ -83,7 +83,7 @@ class historial_ajuste extends Base_Controller {
 		//$view_listado    		  = 'tab';	
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->submodulo);
-		$data['titulo_submodulo'] = $this->lang_item($this->modulo);
+		$data['titulo_submodulo'] = $this->lang_item($this->seccion);
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		

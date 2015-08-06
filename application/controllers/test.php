@@ -107,5 +107,40 @@ class test extends Base_Controller {
 		echo $respuesta;
 		echo '<hr/>Proceso terminado a las: '.date('Y-m-d H:i:s');		
 	}
+
+
+	public function mailing(){
+
+		
+	    $config['protocol']  = 'smtp';
+	    $config['smtp_host'] = 'ssl://smtp.gmail.com';
+	    $config['smtp_port'] = 465;
+	    $config['smtp_user'] = 'admcontrol.gcontempo@gmail.com';
+	    $config['smtp_pass'] = '@dmincontrol';
+	    $config['mailtype']  = 'html';
+			
+			
+		$this->email->initialize($config);
+
+			// Set to, from, message, etc.
+		$this->email->from('jorge.martinez@isolution.mx', 'Prueba');
+		$list = array(	
+						 'jorge.martinez@isolution.mx'
+						,'alvaro.enciso@isolution.mx'
+						,'oscar.maldonado@isolution.mx'
+						,'daniel.salazar@isolution.mx'
+					);
+		$this->email->to($list);
+		//$this->email->reply_to('my-email@gmail.com', 'Explendid Videos');
+
+
+		$this->email->subject('Correo de Prueba');
+		$this->email->message('Probando la clase email');	
+
+		$this->email->send();
+
+		echo $this->email->print_debugger();
+
+	}
 }
 ?>

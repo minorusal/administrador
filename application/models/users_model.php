@@ -258,10 +258,7 @@ class users_model extends Base_Model{
 		}
 	}
 
-	/*public function origen(){
-		$tbl = $this->tbl;
-		return
-	}*/
+	/* */
 	/**
 	* Inserta el nombre de usuario y password del usuario en la base de datos,
 	* @param array $data

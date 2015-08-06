@@ -420,16 +420,22 @@ class Base_Controller extends CI_Controller {
 
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
-			$id_menu_n3   = $info_perfil[0]['id_menu_n3'];
-
-			//$per_locked = 
+			$id_menu_n3   = $info_perfil[0]['id_menu_n3']; 
 
 			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
-			$id_niveles   = array(	
+			if($info_usuario[0]['id_menu_n1'] == '' || $info_usuario[0]['id_menu_n2'] == '' || $info_usuario[0]['id_menu_n3'] == ''){
+				$id_niveles   = array(	
+						'id_menu_n1' => explode(',', $info_usuario[0]['id_menu_n1']),
+						'id_menu_n2' => explode(',', $info_usuario[0]['id_menu_n2']),
+						'id_menu_n3' => explode(',', $info_usuario[0]['id_menu_n3']),
+						);
+			}else{
+				$id_niveles   = array(	
 						'id_menu_n1' => explode(',', ($info_perfil[0]['id_menu_n1'].','.$info_usuario[0]['id_menu_n1'])),
 						'id_menu_n2' => explode(',', ($info_perfil[0]['id_menu_n2'].','.$info_usuario[0]['id_menu_n2'])),
 						'id_menu_n3' => explode(',', ($info_perfil[0]['id_menu_n3'].','.$info_usuario[0]['id_menu_n3'])),
-						);
+						);	
+			}
 			$checked = true;
 		}else{
 			$id_niveles = "";

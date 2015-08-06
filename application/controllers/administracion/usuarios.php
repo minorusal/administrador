@@ -192,12 +192,12 @@ class usuarios extends Base_Controller {
 
 	public function insert_perfiles(){
 		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
 		if($objData['incomplete']>0){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
 			$menus = $this->db_model->get_perfiles_usuarios($objData['id_personal'],$objData['lts_perfiles']);
-			//print_debug($menus[0]['id_menu_n1']);
 			$id_menu_n1 = (isset($menus[0]['id_menu_n1']))?$menus[0]['id_menu_n1']:'';
 			$id_menu_n2 = (isset($menus[0]['id_menu_n2']))?$menus[0]['id_menu_n2']:'';
 			$id_menu_n3 = (isset($menus[0]['id_menu_n3']))?$menus[0]['id_menu_n3']:'';

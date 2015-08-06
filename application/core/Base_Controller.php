@@ -410,13 +410,14 @@ class Base_Controller extends CI_Controller {
     * @param array $id_perfil
     * @return array
     */
-	public function treeview_perfiles_usuarios($id_usuario=false, $id_perfil=false, $locked = false){
+	public function treeview_perfiles_usuarios($id_personal=false, $id_perfil=false, $locked = false){
 		$this->load_database('global_system');
 		$this->load->model('administracion/perfiles_model','perfiles_model');
 		$this->load->model('administracion/users_model','users_model');
-		if($id_usuario && $id_perfil)
+		if($id_personal && $id_perfil)
 		{
-			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_usuario);
+			$info_usuario  = $this->users_model->search_data_perfil_usuario($id_personal,$id_perfil);
+			//print_debug($info_usuario);
 			$info_perfil  = $this->perfiles_model->search_data_perfil($id_perfil);
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
@@ -427,12 +428,6 @@ class Base_Controller extends CI_Controller {
 						'id_menu_n2' => explode(',', ($info_perfil[0]['id_menu_n2'].','.$info_usuario[0]['id_menu_n2'])),
 						'id_menu_n3' => explode(',', ($info_perfil[0]['id_menu_n3'].','.$info_usuario[0]['id_menu_n3'])),
 						);
-			//print_debug($id_niveles);
-			/*$id_niveles   = array(	
-						'id_menu_n1' => explode(',', $info_perfil[0]['id_menu_n1']),
-						'id_menu_n2' => explode(',', $info_perfil[0]['id_menu_n2']),
-						'id_menu_n3' => explode(',', $info_perfil[0]['id_menu_n3']),
-						);*/
 			$checked = true;
 		}
 		else

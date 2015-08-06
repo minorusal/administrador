@@ -317,10 +317,10 @@ class users_model extends Base_Model{
 	* @param string $id_usuario
 	* @return array
 	*/
-	public function search_data_perfil_usuario($id_usuario){
+	public function search_data_perfil_usuario($id_personal,$id_perfil){
 		// DB Info
 		$tbl = $this->tbl;
-		$query = "SELECT * FROM $tbl[usuarios] WHERE id_usuario = $id_usuario";
+		$query = "SELECT * FROM $tbl[usuarios] WHERE id_personal = $id_personal AND id_perfil = $id_perfil";
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
@@ -334,10 +334,28 @@ class users_model extends Base_Model{
 		//print_debug($data);
 		// DB Info
 		$tbl = $this->tbl;
-		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil']); 
+		
+		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil']);
 		$update = $this->update_item($tbl['usuarios'],$data,'id_personal',$condicion);
 		if($update){
 			return $update;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	*Limpia los privilegios en la tabla usuarios
+	* @param array $data
+	* @param bool
+	*/
+	public function clean_perfiles_usuario($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil']);
+		$clean = $this->update_item($tbl['usuarios'],$data,'id_personal',$condicion);
+		if($clean){
+			return $clean;
 		}else{
 			return false;
 		}

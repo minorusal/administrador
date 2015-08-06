@@ -310,19 +310,54 @@ class users_model extends Base_Model{
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
+
 	/**
 	* Consulta la info de un perfil en especifico
 	* y de acuerdo a permisos especiales (tabla usuarios)
 	* @param string $id_usuario
 	* @return array
 	*/
-
 	public function search_data_perfil_usuario($id_usuario){
 		// DB Info
 		$tbl = $this->tbl;
 		$query = "SELECT * FROM $tbl[usuarios] WHERE id_usuario = $id_usuario";
 		$query = $this->db->query($query);
 		return $query->result_array();
+	}
+
+	/**
+	*Inserta los privilegios en la tabla usuarios
+	* @param array $data
+	* @param bool
+	*/
+	public function insert_perfiles_usuario($data = array()){
+		//print_debug($data);
+		// DB Info
+		$tbl = $this->tbl;
+		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil']); 
+		$update = $this->update_item($tbl['usuarios'],$data,'id_personal',$condicion);
+		if($update){
+			return $update;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	*Busca perfiles en la tabla de usuartios
+	* @param int $id_personal
+	* @param int $id_perfil
+	* @param array
+	*/
+	public function get_perfiles_usuarios($id_personal,$id_perfil){
+		// DB Info
+		$tbl = $this->tbl;
+		//Query
+		$query = "SELECT * FROM $tbl[usuarios] WHERE id_personal = $id_personal AND id_perfil = $id_perfil";
+		$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
 	}
 }
 ?>

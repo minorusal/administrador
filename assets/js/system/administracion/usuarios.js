@@ -132,6 +132,65 @@ function detalle(id_usuario){
     });
 }
 
+
+function agregar_perfil(){
+    var progress = progress_initialized('registro_loader');
+    jQuery("#mensajes_update").html('').hide('slow');
+    jQuery('#mensajes').hide();
+    var btn             = jQuery("button[name='agregar_perfil']");
+    btn.attr('disabled','disabled');
+    var btn_text        = btn.html();
+
+    var nivel_1 = [];
+    var nivel_2 = [];
+    var nivel_3 = [];
+    var objData = formData('#formulario');
+
+    jQuery("input[name='nivel_1']:enabled:checked").each(function(){
+        nivel_1.push(jQuery(this).val());
+    });
+    
+    jQuery("input[name='nivel_2']:enabled:checked").each(function(){
+      nivel_2.push(jQuery(this).val());
+    });
+    
+    jQuery("input[name='nivel_3']:enabled:checked").each(function(){
+      nivel_3.push(jQuery(this).val());
+    });
+
+    objData['incomplete']  = values_requeridos();
+    objData['nivel_1']     = (nivel_1.length>0) ? nivel_1.join(',') : nivel_1;
+    objData['nivel_2']     = (nivel_2.length>0) ? nivel_2.join(',') : nivel_2;
+    objData['nivel_3']     = (nivel_3.length>0) ? nivel_3.join(',') : nivel_3;
+    
+    jQuery.ajax({
+        type:"POST",
+        url: path()+"administracion/usuarios/insert_perfiles",
+        dataType: "json",
+        data: {objData:objData},
+        beforeSend : function(){
+            btn.attr('disabled',true);
+        },
+        success : function(data){
+            if(data.success == 'true' ){
+                jgrowl(data.mensaje);
+            }else{
+                jQuery("#mensajes_update").html(data.mensaje).show('slow'); 
+            }
+        }
+      }).error(function(){
+                progress.progressTimer('error', {
+                    errorText:'ERROR!',
+                    onFinish:function(){
+                    }
+                });
+               btn.attr('disabled',false);
+            }).done(function(){
+                progress.progressTimer('complete');
+                btn.attr('disabled',false);
+      });
+}
+
 function insert(){
     var progress = progress_initialized('registro_loader');
     jQuery("#mensajes_update").html('').hide('slow');

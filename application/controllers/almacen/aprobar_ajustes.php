@@ -250,6 +250,7 @@ class aprobar_ajustes extends stock{
 				if($cantidad<=0){
 					$stock    = 0;
 					$stock_um = 0;
+					($articulo_detalle[$i]['id_articulo_tipo']==2)?$etiqueta=$articulo_detalle[$i]['clave_corta']:$etiqueta=$this->lang_item("pieza_abrev");
 				}else{
 					$stock    = $cantidad;
 					$stock_um = $this->regla_de_tres($articulo_detalle[$i]['stock'], $articulo_detalle[$i]['stock_um'], $cantidad);

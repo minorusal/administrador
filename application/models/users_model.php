@@ -308,7 +308,11 @@ class users_model extends Base_Model{
 			      LEFT JOIN $tbl[usuarios] u on u.id_perfil = p.id_perfil
 			      WHERE u.id_personal = $id_personal";
 		$query = $this->db->query($query);
-		return $query->result_array();
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}else{
+			return false;
+		}	
 	}
 
 	/**

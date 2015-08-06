@@ -65,6 +65,8 @@ $autoload['libraries'] = array(	'database',
 								,'codeqr'
 								,'html_pdf'
 								,'jcrop'
+								,'email'
+								,'mailing'
 								);
 
 

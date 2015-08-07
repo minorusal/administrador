@@ -105,7 +105,7 @@ class usuarios extends Base_Controller {
 							  	'onclick' => $tab_detalle.'('.$value['id_usuario'].')'
 						);
 				$btn_acciones['ficha'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-user" onclick="asignar_perfil('.$value['id_personal'].','.$value['id_usuario'].','.$value['id_perfil'].')" title="'.$this->lang_item("lbl_asignar_perfil").'"></span>';
-				$btn_acciones['email'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-envelope" onclick="enviar_email()" title="'.$this->lang_item("lbl_enviar_email").'"></span>';
+				$btn_acciones['email'] 	= '<span style="color:green;"  class="ico_acciones ico_articulos fa fa-envelope" onclick="enviar_email()" title="'.$this->lang_item("lbl_enviar_email").'"></span>';
 
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla
@@ -160,6 +160,50 @@ class usuarios extends Base_Controller {
 		$id_personal = $this->ajax_post('id_personal');
 		$id_usuario  = $this->ajax_post('id_usuario');
 		$perfiles    = $this->db_model->search_data_perfil($id_personal);
+
+		$sqlData = array(
+						'buscar'      	 => $id_usuario
+						,'offset' 		 => 0
+						,'limit'      	 => 10
+						,'aplicar_limit' => true
+					);
+		$detalle = $this->db_model->get_users($sqlData);
+		//print_debug($detalle);	
+		$tbl_data[] = array('id'                => $detalle[0]['id_usuario'],
+							'nombre'            => '<strong>'.$this->lang_item("lbl_nombre_usuario").':</strong>',
+							'nombre_bd'         => $detalle[0]['name'],
+							'clave_corta'       => '<strong>'.$this->lang_item("lbl_telefono").':</strong>',
+							'clave_corta_bd'    => $detalle[0]['telefono']);
+
+		$tbl_data[] = array('id'                => $detalle[0]['id_usuario'],
+							'nombre'            => '<strong>'.$this->lang_item("lbl_email").':</strong>',
+							'nombre_bd'         => $detalle[0]['mail'],
+							'clave_corta'       => '<strong>'.$this->lang_item("lbl_user").':</strong>',
+							'clave_corta_bd'    => $detalle[0]['user']);
+
+		$tbl_data[] = array('id'                => $detalle[0]['id_usuario'],
+							'nombre'            => '<strong>'.$this->lang_item("lbl_perfil").':</strong>',
+							'nombre_bd'         => $detalle[0]['perfil'],
+							'clave_corta'       => '<strong>'.$this->lang_item("lbl_area").':</strong>',
+							'clave_corta_bd'    => $detalle[0]['area']);
+
+		$tbl_data[] = array('id'                => $detalle[0]['id_usuario'],
+							'nombre'            => '<strong>'.$this->lang_item("lbl_puesto").':</strong>',
+							'nombre_bd'         => $detalle[0]['puesto'],
+							'clave_corta'       => '',
+							'clave_corta_bd'    => '');
+		// Plantilla
+		$tbl_plantilla = set_table_resumen_tpl();
+		// Titulos de tabla
+		$this->table->set_heading(	$this->lang_item("lbl_id"),
+									$this->lang_item("lbl_informacion_general")
+									/*$this->lang_item("lbl_nada"),
+									$detalle[0]['sucursal'],
+									$this->lang_item("lbl_nada")*/
+									);
+		// Generar tabla
+		$this->table->set_template($tbl_plantilla);
+		$tabla = $this->table->generate($tbl_data);
 		
 		if($perfiles){
 			$boton = array(
@@ -182,6 +226,8 @@ class usuarios extends Base_Controller {
 			   										));
 		    $list_perfiles            =  dropdown_tpl($perfil_array);
 
+		    $tabData['tabla']   = $tabla;
+		    //print_debug($tabData['tabla']);
 		    $tabData['lbl_perfiles']   = $this->lang_item("lbl_perfiles");
 		    $tabData['id_personal']     = $id_personal;
 		    $tabData['list_perfiles']  = $list_perfiles;

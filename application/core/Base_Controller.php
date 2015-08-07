@@ -192,6 +192,45 @@ class Base_Controller extends CI_Controller {
 	}
 
 	/**
+    * Carga la vista de Registro de Usuario
+    * @return void
+    */
+	public function load_view_registro(){
+		/*$this->vars = new config_vars();
+        $this->vars->load_vars();
+		$att_fopen = array('id' => 'login');
+		$att_hiden = array(
+                            'name'    => 'id_user',
+                            'id'      => 'id_user',
+                            'type'    => 'hidden'
+                        );  
+		$att_user = array(
+                            'name'    => 'user',
+                            'id'      => 'user'
+                        );  
+		$att_pwd = array(
+                            'name'    => 'pwd',
+                            'id'      => 'pwd'
+                        ); 
+		$att_btn = array(
+                            'name'    => 'button',
+                            'id'      => 'button_login',
+                            'value'   => 'true',
+                            'content' => $this->lang_item('lang_btn_ingresar')
+                        );
+
+		$data['base_url']          = base_url();
+		$data['form_open']         = form_open('', $att_fopen);
+		$data['form_input_hidden'] = form_input($att_hiden);
+		$data['form_input_user']   = form_input($att_user, '', 'placeholder="'.$this->lang_item('lang_ph_user').'"');
+		$data['form_input_pwd']    = form_password($att_pwd, '', 'placeholder="'.$this->lang_item('lang_ph_pwd').'"');
+		$data['form_button']       = form_button($att_btn);
+		$data['form_close']        = form_close();
+		$data['site_title']        = $this->vars->cfg['site_title'];*/
+		
+		$this->parser->parse('registro.html', '');
+	}
+	/**
     * Carga archivos js & css en el header
     * @param array $data
     * @return array
@@ -861,6 +900,70 @@ class Base_Controller extends CI_Controller {
 	public function regla_de_tres($valorA, $valorB, $cantidadBuscada=1){
 		$resultado = ($cantidadBuscada*$valorB)/$valorA;
 		return $resultado;
+	}
+
+	/**
+	* Devuelve la cadena encryptada
+	* @param string $string
+	* @param bool $key
+	* @return string
+	*/
+	public function encrypt_encode($string = '', $key = false){
+		if($key){
+			return $this->encrypt->encode($string, $key);
+		}else{
+			return $this->encrypt->encode($string);
+		}
+		
+	}
+	/**
+	* Devuelve la cadena desencryptada
+	* @param string $string
+	* @param bool $key
+	* @return string
+	*/
+	public function encrypt_decode($string = '', $key = false){
+		if($key){
+			return $this->encrypt->decode($string, $key);
+		}else{
+			return $this->encrypt->decode($string);
+		}
+	}
+
+
+	public function generate_token($encrypt = true , $key = false){
+		$key_encrypt = ($key) ? $key : '';
+
+		$settings = array(
+							'upercase' => true ,
+							'lowercase' => true ,
+							'int' => true, 
+							'symbol' => true
+						);
+
+		$token =  ($encrypt) ? $this->encrypt_encode($this->random_string(30,$settings, $key_encrypt)) : $this->random_string(30,$settings, $key_encrypt);
+		
+		return $token;
+	}
+
+
+	public function random_string($length = 10, $params = array(),  $key = ''){
+		if(empty($params)){
+			return false;
+		}
+	    $characters  = '';
+	    $characters .= ($key!='') ? $key : '';
+	    $characters .= (array_key_exists('upercase', $params))  ?  ($params['upercase'])  ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '' : '';
+	    $characters .= (array_key_exists('lowercase', $params)) ?  ($params['lowercase']) ? 'abcdefghijklmnopqrstuvwxyz' : '' : '';
+	    $characters .= (array_key_exists('int', $params))       ?  ($params['int'])       ? '1234567890'                 : '' : '';
+	    $characters .= (array_key_exists('symbol', $params))    ?  ($params['symbol'])    ? '|@#~$%()=^*+[]{}-_'  : '' : '';
+	    
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
 	}
 }
 ?>

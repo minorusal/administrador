@@ -17,11 +17,14 @@
 	* @return array $array
 	*/
 	if(!function_exists('print_debug')){
-		function print_debug($array){
+		function print_debug($array, $die = true){
 			echo '<pre>';
 			print_r($array);
 			echo '</pre>';
-			die();
+			if($die){
+				die();	
+			}
+			
 		}
 	}
 

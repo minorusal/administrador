@@ -1,4 +1,5 @@
-<?php	
+<?php
+	$lang['admincontrol']  = 'Admincontrol';
 	$lang['close_session']       	= 'Cerrar Sesión';	
 	$lang['fecha_actual']			= 'de %s del %s';
 	$lang['timestamp_string'] 		= 'de %s del %s a las %s hrs.';

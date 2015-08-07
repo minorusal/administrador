@@ -21,7 +21,14 @@ class check_session extends Base_Controller
 					echo json_encode( $reload );
 					exit;
 				}else{
-					redirect(base_url('login'));
+					if(!mb_strstr($this->ci->uri_segment_end(),'sign_up')){
+						redirect(base_url('login'));
+					}else{
+						if(!$this->ci->ajax_get(false)){
+							redirect(base_url('login'));
+						}
+					}
+					
 				}
 			}
 		}else{
@@ -48,6 +55,7 @@ class check_session extends Base_Controller
 			$sites_availables[] = 'inicio';
 			$sites_availables[] = 'logout';
 			$sites_availables[] = 'login';
+			$sites_availables[] = 'sign_up/index';
 			$sites_availables[] = 'test/imprimir_ticket'; #tmp
 			$sites_availables[] = 'test/barcode'; #tmp
 			$sites_availables[] = 'test/codeqr'; #tmp

@@ -1,31 +1,39 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once(APPPATH.'third_party/PHPMailer/PHPMailerAutoload.php');
 
-class mailing extends CI_Email{
+class mailing extends PHPMailer{
+	
+	public $SMTPDebug      = 0;
+	public $Host           = 'smtp.gmail.com';
+	public $Port           = '465';
+	public $SMTPSecure     = 'ssl';
+	public $SMTPAuth       = true;
+	public $Mailer         = 'smtp';
+	public $Username       = 'isolutionappsmx@gmail.com';
+	public $Password       = '1Sd3v3l0p3r.';
 
-	var $protocol  = 'smtp';
-    var $smtp_host = 'ssl://smtp.gmail.com';
-    var $smtp_port =  465;
-    var $smtp_user = 'isolutionappsmx@gmail.com';
-    var $smtp_pass = '1Sd3v3l0p3r.';
-    var $mailtype  = 'html';
+	public $ContentType    = 'text/html';
+	public $From           = '';
+	public $FromName       = '';
+	public $Subject        = '';
+	public $Body           = '';
+	public $AltBody        = '';
+	
+	public $Hostname       = '';
+	
 
-    private $ci;
+	
+	
+	public $Debugoutput    = '';
+	public $to             = '';
+	public $cc             = '';
+	public $bcc            = '';
+	public $ReplyTo        = '';
+	public $all_recipients = '';
 	
 	public function __construct(){
-		$this->ci =& get_instance();
+		parent::__construct();
 	}
+	
 
-	public function set_config(){
-		
-		$config['protocol']  = $this->protocol;
-	    $config['smtp_host'] = $this->smtp_host;
-	    $config['smtp_port'] = $this->smtp_port;
-	    $config['smtp_user'] = $this->smtp_user;
-	    $config['smtp_pass'] = $this->smtp_pass;
-	    $config['mailtype']  = $this->mailtype;
-	    $config['newline']   = $this->newline;
-	}
-	public function send_mail($send_params = array(), $confing = array()){
-
-	}	
 }

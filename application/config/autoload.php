@@ -52,7 +52,8 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array(	'database', 
+$autoload['libraries'] = array(	'encrypt',
+								'database', 
 								'pagination',
 								'excel',
 								'pagination_bootstrap',
@@ -65,7 +66,6 @@ $autoload['libraries'] = array(	'database',
 								,'codeqr'
 								,'html_pdf'
 								,'jcrop'
-								,'email'
 								,'mailing'
 								);
 

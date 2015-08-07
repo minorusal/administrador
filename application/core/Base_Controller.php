@@ -417,7 +417,6 @@ class Base_Controller extends CI_Controller {
 		if($id_personal && $id_perfil){	
 			$info_perfil  = $this->perfiles_model->search_data_perfil($id_perfil);
 			
-
 			$id_menu_n1   = $info_perfil[0]['id_menu_n1'];
 			$id_menu_n2   = $info_perfil[0]['id_menu_n2'];
 			$id_menu_n3   = $info_perfil[0]['id_menu_n3']; 

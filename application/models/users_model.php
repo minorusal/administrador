@@ -121,7 +121,6 @@ class users_model extends Base_Model{
 		$id_menu_n1 = ($id_menu_n1 == '') ? '0' : $id_menu_n1;
 		$id_menu_n2 = ($id_menu_n2 == '') ? '0' : $id_menu_n2;
 		$id_menu_n3 = ($id_menu_n3 == '') ? '0' : $id_menu_n3;
-
 		
 		$tbl = $this->tbl;
 		
@@ -211,7 +210,7 @@ class users_model extends Base_Model{
 					LEFT JOIN $tbl[perfiles] p on p.id_perfil = u.id_perfil
 					LEFT JOIN $tbl[administracion_puestos] pu on pu.id_administracion_puestos = u.id_puesto
 					LEFT JOIN $tbl[administracion_areas] a on a.id_administracion_areas = u.id_area
-					WHERE u.activo = 1 AND u.id_usuario <> 1  $filtro
+					WHERE u.activo = 1 AND pe.id_personal <> 1  $filtro
 					ORDER BY pe.id_personal ASC
 					$limit
 					";
@@ -258,6 +257,8 @@ class users_model extends Base_Model{
 			return false;
 		}
 	}
+
+	/* */
 	/**
 	* Inserta el nombre de usuario y password del usuario en la base de datos,
 	* @param array $data

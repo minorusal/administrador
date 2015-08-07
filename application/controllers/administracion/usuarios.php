@@ -105,7 +105,7 @@ class usuarios extends Base_Controller {
 							  	'onclick' => $tab_detalle.'('.$value['id_usuario'].')'
 						);
 				$btn_acciones['ficha'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-user" onclick="asignar_perfil('.$value['id_personal'].','.$value['id_usuario'].','.$value['id_perfil'].')" title="'.$this->lang_item("lbl_asignar_perfil").'"></span>';
-				$btn_acciones['email'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-envelope" onclick="enviar_email()" title="'.$this->lang_item("lbl_enviar_email").'"></span>';
+				$btn_acciones['email'] 	= '<span style="color:green;"  class="ico_acciones ico_articulos fa fa-envelope" onclick="enviar_email()" title="'.$this->lang_item("lbl_enviar_email").'"></span>';
 
 				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
 				// Datos para tabla

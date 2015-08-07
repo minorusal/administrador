@@ -23,7 +23,7 @@ function buscar(){
 	});
 }
 function load_content(uri, id_content){
-	jQuery('#ui-id-1').hide('slow');
+	jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
 	var functions = [];
     jQuery.ajax({
@@ -46,7 +46,7 @@ function load_content(uri, id_content){
     });
 }
 function detalle(id_almacen_ajuste){
-	jQuery('#ui-id-1').click();
+	jQuery('#ui-id-2').click();
 	jQuery.ajax({
         type: "POST",
         url: path()+"almacen/historial_ajuste/detalle",
@@ -54,8 +54,8 @@ function detalle(id_almacen_ajuste){
         data: {id_almacen_ajuste : id_almacen_ajuste},
         success: function(data){
          	jQuery('#a-0').html('');
-        	jQuery('#a-1').html(data);
-        	jQuery('#ui-id-1').show('slow');
+        	jQuery('#a-2').html(data);
+          jQuery('#ui-id-2').show('slow');
         }
     });
 }

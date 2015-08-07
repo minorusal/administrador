@@ -30,10 +30,10 @@ class aprobar_ajustes extends stock{
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		//$this->tab1 			= 'agregar';
-		$this->tab1 			= 'listado';
-		$this->tab2 			= 'detalle';
-		$this->tab3 			= 'listado_afectado';
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
+		//$this->tab3 			= 'listado_afectado';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -66,18 +66,18 @@ class aprobar_ajustes extends stock{
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										$path.$tab_1.'/'.$pagina //almacen/ajustes/listado/pagina
-										,$path.$tab_2            //almacen/ajustes/agregar
+										 $path.$tab_1            //almacen/ajustes/agregar
+										,$path.$tab_2.'/'.$pagina //almacen/ajustes/listado/pagina
 										,$path.$tab_3            //almacen/ajustes/listado_afectado
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										'load_content'
-										,''
+										''
+										,'load_content'
 										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('', array('style' => 'display:none'), array('style' => 'display:none'));
+		$config_tab['attr']     = array(array('style' => 'display:none'), '', array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){

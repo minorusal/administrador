@@ -30,9 +30,9 @@ class historial_ajuste extends Base_Controller {
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 		// Tabs
-		//$this->tab1 			= 'agregar';
-		$this->tab1 			= 'listado';
-		$this->tab2 			= 'detalle';
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
 		// DB Model
 		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');		
 		$this->load->model($this->modulo.'/catalogos_model','catalogos_model');
@@ -45,6 +45,7 @@ class historial_ajuste extends Base_Controller {
 		$this->tab_indice 		= array(
 									 $this->tab1
 									,$this->tab2
+									,$this->tab3
 								);
 		for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
@@ -53,25 +54,29 @@ class historial_ajuste extends Base_Controller {
 	public function config_tabs(){
 		$tab_1 	= $this->tab1;
 		$tab_2 	= $this->tab2;
+		$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		// Nombre de Tabs
 		$config_tab['names']    = array(
 										 $this->lang_item($tab_1) //agregar
-										,$this->lang_item($tab_2) //detalle
+										,$this->lang_item($tab_2) //LISTADO
+										,$this->lang_item($tab_3) //detalle
 								); 
 		// Href de tabs
 		$config_tab['links']    = array(
-										 $path.$tab_1.'/'.$pagina //almacen/ajuste/listado/pagina
-										,$path.$tab_2            //detalle
+										 $path.$tab_1            //detalle
+										,$path.$tab_2.'/'.$pagina //almacen/ajuste/listado/pagina
+										,$path.$tab_3            //detalle
 								); 
 		// Accion de tabs
 		$config_tab['action']   = array(
-										 'load_content'
+										 ''
+										,'load_content'
 										,''
 								);
 		// Atributos 
-		$config_tab['attr']     = array('', array('style' => 'display:none'));
+		$config_tab['attr']     = array(array('style' => 'display:none'), '', array('style' => 'display:none'));
 		return $config_tab;
 	}
 	private function uri_view_principal(){

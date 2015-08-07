@@ -102,7 +102,7 @@ class usuarios extends Base_Controller {
 				// Evento de enlace
 				$atrr = array(
 								'href' => '#',
-							  	'onclick' => $tab_detalle.'('.$value['id_usuario'].')'
+							  	'onclick' => $tab_detalle.'('.$value['id_personal'].')'
 						);
 				$btn_acciones['ficha'] 	= '<span style="color:blue;"  class="ico_acciones ico_articulos fa fa-user" onclick="asignar_perfil('.$value['id_personal'].','.$value['id_usuario'].','.$value['id_perfil'].')" title="'.$this->lang_item("lbl_asignar_perfil").'"></span>';
 				$btn_acciones['email'] 	= '<span style="color:green;"  class="ico_acciones ico_articulos fa fa-envelope" onclick="enviar_email()" title="'.$this->lang_item("lbl_enviar_email").'"></span>';
@@ -264,15 +264,14 @@ class usuarios extends Base_Controller {
 		}
 	}
 	public function detalle(){
-		$id_usuario = $this->ajax_post('id_usuario');
+		$id_personal = $this->ajax_post('id_personal');
 		$boton = array(
 						'class'   => 'btn btn-primary'
 					   ,'name'    => 'actualizar'
 					   ,'onclick' => 'actualizar()'
 					   ,'content' => $this->lang_item("btn_guardar"));
 		$btn_save   = form_button($boton);
-		$tabData['id_usuario']   = $id_usuario;
-		$tabData['lbl_nombre_usuario']  = $this->lang_item("lbl_nombre_usuario");
+		$tabData['id_personal']  = $id_personal;
 		$tabData['lbl_usuario']  = $this->lang_item("lbl_usuario");
 		$tabData['lbl_paterno']  = $this->lang_item("lbl_paterno");
 		$tabData['lbl_materno']  = $this->lang_item("lbl_materno");
@@ -282,19 +281,14 @@ class usuarios extends Base_Controller {
 		$tabData['lbl_puesto']   = $this->lang_item("lbl_puesto");
 		$tabData['lbl_perfil']   = $this->lang_item("lbl_perfil");
 
-		//Función que genera el contenido de los campos para edición
-		$sqlData = array(
-						'buscar'      	 => $id_usuario
-						,'offset' 		 => 0
-						,'limit'      	 => 10
-						,'aplicar_limit' => true
-					);
-		$detalle = $this->db_model->get_users($sqlData);
-		
-		$tabData['txt_nombre']    = $detalle[0]['nom'];
+		$detalle = $this->db_model->get_user_detalle($id_personal);
+		foreach ($detalle as $value){
+			$id_perfil[]  = $value['id_perfil'];
+		}
+		//print_debug($id_perfil);
+		$tabData['txt_nombre']    = $detalle[0]['nombre'];
 		$tabData['txt_paterno']   = $detalle[0]['paterno'];
 		$tabData['txt_materno']   = $detalle[0]['materno'];
-		$tabData['txt_usuario']   = $detalle[0]['user'];
 		$tabData['txt_telefono']  = $detalle[0]['telefono'];
 		$tabData['txt_email']     = $detalle[0]['mail'];
 		
@@ -304,7 +298,7 @@ class usuarios extends Base_Controller {
 								,'text' 	=> array('area')
 								,'name' 	=> "lts_areas"
 								,'class' 	=> "requerido"
-								,'selected' => $detalle[0]['id_administracion_areas']);
+								,'selected' => $detalle[0]['id_area']);
 		$list_area            =  dropdown_tpl($areas_array);
 		$tabData['dropdown_area']   = $list_area;
 		$puestos_array      = array(
@@ -313,24 +307,18 @@ class usuarios extends Base_Controller {
 								,'text' 	=> array('puesto')
 								,'name' 	=> "lts_puestos"
 								,'class' 	=> "requerido"
-								,'selected' => $detalle[0]['id_administracion_puestos']);
+								,'selected' => $detalle[0]['id_puesto']);
 		$list_puesto            =  dropdown_tpl($puestos_array);
 		$tabData['dropdown_puesto'] = $list_puesto;
-		$perfiles_array   = array(
-								 'data'		=> $this->perfiles->db_get_data()
-								,'value' 	=> 'id_perfil'
-								,'text' 	=> array('perfil')
-								,'name' 	=> "lts_perfiles"
-								,'class' 	=> "requerido"
-								,'selected' => $detalle[0]['id_perfil']
-								,'event'    => array('event'       => 'onchange',
-							   						 'function'    => 'load_tree_view',
-							   						 'params'      => array('this.value'),
-							   						 'params_type' => array(0)
-			   										)
-								);
-		$list_perfil                    =  dropdown_tpl($perfiles_array);
-		$tabData['dropdown_perfil'] = $list_perfil;
+		$perfiles_array  = array(
+						 'data'		=> $this->perfiles->db_get_data()
+						,'value' 	=> 'id_perfil'
+						,'text' 	=> array('clave_corta','perfil')
+						,'name' 	=> "lts_perfiles"
+						,'class' 	=> "requerido"
+						,'selected' => $id_perfil);
+		$perfiles  = multi_dropdown_tpl($perfiles_array);
+		$tabData['dropdown_perfil'] = $perfiles;
 		//$tabData['tree_view']       =  $this->treeview_perfiles_usuarios($id_usuario);
 
 		$tabData['lbl_ultima_modificacion'] = $this->lang_item('lbl_ultima_modificacion');
@@ -338,7 +326,7 @@ class usuarios extends Base_Controller {
 		$tabData['lbl_fecha_registro']      = $this->lang_item('lbl_fecha_registro');
 		$tabData['lbl_usuario_registro']    = $this->lang_item('lbl_usuario_registro');
 
-		$usuario_registro                  = $this->users_model->search_user_for_id($id_usuario);
+		$usuario_registro                  = $this->users_model->search_user_for_id($id_personal);
 	    $usuario_name	                   = text_format_tpl($usuario_registro[0]['name'],"u");
 	    $tabData['val_usuarios_registro']  = $usuario_name;
 
@@ -356,6 +344,67 @@ class usuarios extends Base_Controller {
 
 		$uri_view = $this->view_detalle;
 		echo json_encode($this->load_view_unique($uri_view,$tabData,true));
+	}
+
+	public function actualizar(){
+		$objData  	= $this->ajax_post('objData');
+		//print_debug($objData);
+		if($objData['incomplete']>0){
+			$msg = $this->lang_item("msg_campos_obligatorios",false);
+			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
+		}else{
+			$sqlData = array(
+				 'id_personal' => $objData['id_personal']
+				,'nombre'      => $objData['txt_nombre']
+				,'paterno'     => $objData['txt_paterno']
+				,'materno'     => $objData['txt_materno']
+				,'telefono'    => $objData['txt_telefono']
+				,'mail'		   => $objData['txt_email']
+				,'edit_id_usuario'  => $this->session->userdata('id_usuario')
+				,'edit_timestamp'   => $this->timestamp()
+				);
+
+			$insert = $this->db_model->db_update_personal($sqlData);
+
+			$sqlData = array(
+				 'id_personal'      => $objData['id_personal']
+				,'id_area'          => $objData['lts_areas']
+				,'id_puesto'        => $objData['lts_puestos']
+				,'edit_id_usuario'  => $this->session->userdata('id_usuario')
+				,'edit_timestamp'   => $this->timestamp()
+				);
+			$insert = $this->db_model->db_update_usuarios($sqlData);
+
+			$arr_perfil  = explode(',',$objData['lts_perfiles']);
+
+			//print_debug($arr);
+			if(!empty($arr_perfil)){
+				$sqlData = array();
+				foreach($arr_perfil as $key => $value_perfil){
+					$data[] = $this->db_model->search_data_perfil_personal($objData['id_personal']);
+					print_debug($arr_perfil);
+					foreach ($data as $key => $value) {
+						print_debug($data);
+						$sqlData = array(
+						 'id_personal'     => $objData['id_personal']
+						,'id_perfil_tabla' => $value
+						,'id_perfil'       => $value_perfil
+						,'edit_id_usuario' => $this->session->userdata('id_usuario')
+						,'edit_timestamp'  => $this->timestamp()
+						);
+						$update = $this->db_model->insert_perfiles_usuario($sqlData);
+					}
+				}
+			}
+
+			if($insert){
+				$msg = $this->lang_item("msg_update_success",false);
+				echo json_encode(array(  'success'=>'true', 'mensaje' => $msg ));
+			}else{
+				$msg = $this->lang_item("msg_err_clv",false);
+				echo json_encode( array( 'success'=>'false', 'mensaje' =>alertas_tpl('', $msg ,false)));
+			}
+		}
 	}
 	public function agregar(){
 		$seccion 		= '';

@@ -114,13 +114,13 @@ function load_tree_view_perfil_usuario(id_personal,id_perfil){
         }
     });
 }
-function detalle(id_usuario){
+function detalle(id_personal){
   jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
         url: path()+"administracion/usuarios/detalle",
         dataType: 'json',
-        data: {id_usuario : id_usuario},
+        data: {id_personal : id_personal},
         success: function(data){
             var treeview = 'load_treeview("treeview-modules");';
             var treeview_childrens = 'treeview_childrens();'; 
@@ -195,7 +195,7 @@ function insert(){
     var progress = progress_initialized('registro_loader');
     jQuery("#mensajes_update").html('').hide('slow');
     jQuery('#mensajes').hide();
-    var btn             = jQuery("button[name='actualizar']");
+    var btn             = jQuery("button[name='insert']");
     btn.attr('disabled','disabled');
     var btn_text        = btn.html();
 
@@ -238,6 +238,45 @@ function insert(){
             } 
         }
     }).error(function(){
+                progress.progressTimer('error', {
+                    errorText:'ERROR!',
+                    onFinish:function(){
+                    }
+                });
+               btn.attr('disabled',false);
+            }).done(function(){
+                progress.progressTimer('complete');
+                btn.attr('disabled',false);
+      });
+}
+
+function actualizar(){
+    var progress = progress_initialized('update_loader');
+    jQuery("#mensajes_update").html('').hide('slow');
+    jQuery('#mensajes').hide();
+    var btn             = jQuery("button[name='actualizar']");
+    btn.attr('disabled','disabled');
+    var btn_text        = btn.html();
+
+    var objData = formData('#formulario');
+    objData['incomplete'] = values_requeridos();
+
+    jQuery.ajax({
+        type:"POST",
+        url: path()+"administracion/usuarios/actualizar",
+        dataType: "json",
+        data: {objData:objData},
+        beforeSend : function(){
+            btn.attr('disabled',true);
+        },
+        success : function(data){
+            if(data.success == 'true' ){
+                jgrowl(data.mensaje);
+            }else{
+                jQuery("#mensajes_update").html(data.mensaje).show('slow'); 
+            }
+        }
+      }).error(function(){
                 progress.progressTimer('error', {
                     errorText:'ERROR!',
                     onFinish:function(){

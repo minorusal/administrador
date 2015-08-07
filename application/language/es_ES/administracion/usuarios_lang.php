@@ -1,11 +1,11 @@
 <?php
 $lang['lbl_informacion_general'] = 'informacón general';
-$lang['lbl_enviar_email'] = 'enviar email';
-$lang['lbl_perfiles'] = 'perfiles';
-$lang['lbl_asignar_perfil'] = 'asignar perfil';
-$lang['lbl_acciones'] = 'acciones';
-$lang['lbl_no_disponible'] = 'este nombre de usuario ya existe.';
-$lang['lbl_nombre_usuario'] = 'nombre de usuario';
+$lang['lbl_enviar_email']        = 'enviar email';
+$lang['lbl_perfiles']            = 'perfiles';
+$lang['lbl_asignar_perfil']      = 'asignar perfil';
+$lang['lbl_acciones']            = 'acciones';
+$lang['lbl_no_disponible']       = 'este nombre de usuario ya existe.';
+$lang['lbl_nombre_usuario']      = 'nombre de usuario';
 $lang['seccion'] 	= "Usuarios";
 $lang['submodulo'] 	= "Control de usuarios";
 $lang['agregar'] 	= "Nuevo Usuario";

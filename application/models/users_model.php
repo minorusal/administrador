@@ -214,7 +214,39 @@ class users_model extends Base_Model{
 					ORDER BY pe.id_personal ASC
 					$limit
 					";
+					//print_debug($query);
       	$query = $this->db->query($query);
+		if($query->num_rows >= 1){
+			return $query->result_array();
+		}	
+	}
+
+	/**
+	* Consulta usuario por id_personal de la tabla personales,
+	* @param int $id_personal
+	* @return array 
+	*/
+	public function get_user_detalle($id_personal){
+		// DB Info		
+		$tbl = $this->tbl;
+		//Query
+		$query = "	SELECT 
+						 u.id_personal
+						,pe.nombre
+						,pe.paterno
+						,pe.materno
+						,pe.telefono
+						,pe.mail
+						,u.id_puesto
+						,u.id_area
+						,u.id_perfil
+						,u.timestamp
+						,u.edit_id_usuario
+						,u.edit_timestamp
+					FROM $tbl[usuarios] u
+					LEFT JOIN $tbl[personales] pe on pe.id_personal = u.id_personal
+					WHERE u.id_personal = $id_personal";
+		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
 		}	
@@ -251,6 +283,44 @@ class users_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$insert = $this->insert_item($tbl['personales'], $data, true);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	* Actualiza los datos personales del usuario en la base de datos,
+	* @param array $data
+	* @return boolean
+	* @return int id_row
+	*/
+	public function db_update_personal($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		$condicion = array('id_personal ='=> $data['id_personal']);
+		// Query
+		$insert = $this->update_item($tbl['personales'], $data,'id_personal', $condicion);
+		if($insert){
+			return $insert;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	* Actualiza los id's del usuario en la base de datos,
+	* @param array $data
+	* @return boolean
+	* @return int id_row
+	*/
+	public function db_update_usuarios($data = array()){
+		// DB Info
+		$tbl = $this->tbl;
+		$condicion = array('id_personal ='=> $data['id_personal']);
+		// Query
+		$insert = $this->update_item($tbl['usuarios'], $data,'id_personal', $condicion);
 		if($insert){
 			return $insert;
 		}else{
@@ -326,6 +396,16 @@ class users_model extends Base_Model{
 		// DB Info
 		$tbl = $this->tbl;
 		$query = "SELECT * FROM $tbl[usuarios] WHERE id_personal = $id_personal AND id_perfil = $id_perfil";
+		print_debug($query);
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+
+	public function search_data_perfil_personal($id_personal){
+		// DB Info
+		$tbl = $this->tbl;
+		$query = "SELECT * FROM $tbl[usuarios] WHERE id_personal = $id_personal";
+		print_debug($query);
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
@@ -336,11 +416,11 @@ class users_model extends Base_Model{
 	* @param bool
 	*/
 	public function insert_perfiles_usuario($data = array()){
-		//print_debug($data);
+		print_debug($data);
 		// DB Info
 		$tbl = $this->tbl;
 		
-		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil']);
+		$condicion = array('id_personal ='=> $data['id_personal'],'id_perfil = '=>$data['id_perfil_tabla']);
 		$update = $this->update_item($tbl['usuarios'],$data,'id_personal',$condicion);
 		if($update){
 			return $update;

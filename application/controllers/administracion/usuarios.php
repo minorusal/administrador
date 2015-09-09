@@ -282,6 +282,7 @@ class usuarios extends Base_Controller {
 		$tabData['lbl_perfil']   = $this->lang_item("lbl_perfil");
 
 		$detalle = $this->db_model->get_user_detalle($id_personal);
+		//print_debug($detalle);
 		foreach ($detalle as $value){
 			$id_perfil[]  = $value['id_perfil'];
 		}
@@ -381,10 +382,9 @@ class usuarios extends Base_Controller {
 			if(!empty($arr_perfil)){
 				$sqlData = array();
 				foreach($arr_perfil as $key => $value_perfil){
-					$data[] = $this->db_model->search_data_perfil_personal($objData['id_personal']);
-					print_debug($arr_perfil);
-					foreach ($data as $key => $value) {
-						print_debug($data);
+					$data = $this->db_model->get_user_detalle($objData['id_personal']);
+					foreach ($data as $key => $value) {	
+						print_debug($value[]);
 						$sqlData = array(
 						 'id_personal'     => $objData['id_personal']
 						,'id_perfil_tabla' => $value

@@ -257,7 +257,7 @@ function actualizar(){
     var btn             = jQuery("button[name='actualizar']");
     btn.attr('disabled','disabled');
     var btn_text        = btn.html();
-
+        
     var objData = formData('#formulario');
     objData['incomplete'] = values_requeridos();
 

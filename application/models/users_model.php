@@ -49,6 +49,7 @@ class users_model extends Base_Model{
 					ORDER BY 
 						N.id_perfil;
 				";
+				//print_debug($query);
 		$query = $this->db->query($query);
 		if($query->num_rows >= 1){
 			return $query->result_array();
@@ -230,8 +231,9 @@ class users_model extends Base_Model{
 		// DB Info		
 		$tbl = $this->tbl;
 		//Query
-		$query = "	SELECT 
-						 u.id_personal
+		$query = "	SELECT
+						u.id_usuario 
+						,u.id_personal
 						,pe.nombre
 						,pe.paterno
 						,pe.materno

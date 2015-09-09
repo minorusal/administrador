@@ -60,7 +60,7 @@ $autoload['libraries'] = array(	'encrypt',
 								'session', 
 								'table',
 								'parser'
-								,'config_vars' 
+								//,'config_vars' 
 								,'impresion'
 								,'barcode'
 								,'codeqr'

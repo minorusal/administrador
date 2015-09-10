@@ -122,8 +122,8 @@ class Base_Controller extends CI_Controller {
 		
 		$data = (empty($data)) ? array() : $data;
 		$this->parser->parse('includes/header.html', $dataheader);
-		$this->parser->parse($view.$ext, $data);
-		$this->parser->parse('includes/footer.html', $datafooter); 
+		/*$this->parser->parse($view.$ext, $data);
+		$this->parser->parse('includes/footer.html', $datafooter); */
 	}
 
 	/**

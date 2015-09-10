@@ -1,4 +1,101 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Play IdeA!</title>
+
+    <link rel="shortcut icon" href="{base_url}favicon.ico" />
+    <link rel="stylesheet"    href="{base_url}assets/css/progressbar/static.min.css">
+    <link rel="stylesheet"    href="{base_url}assets/css/jquery-impromptu.css" type="text/css" />
+        
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery-migrate-1.1.1.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery-ui-1.9.2.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/modernizr.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery.cookie.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery-impromptu.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/progressbar/jquery.progresstimer.js"></script>
+    
+    <link rel="stylesheet"    href="{base_url}assets/template/bootstrap/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> 
+    
+    <link rel="stylesheet" href="{base_url}assets/template/dist/css/AdminLTE.min.css">
+    
+    <link rel="stylesheet" href="{base_url}assets/template/plugins/iCheck/square/blue.css">
+
+    
+    
+    
+    <script src="{base_url}assets/template/bootstrap/js/bootstrap.min.js"></script>    <!-- iCheck -->
+    
+    <script src="{base_url}assets/template/plugins/iCheck/icheck.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/system/inc.config.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/system/global_system.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/system/login.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/custom.js"></script>
+
+  </head>
+  <body class="hold-transition login-page">
+    <div class="login-box">
+      <div class="login-logo ">
+        <a href="{base_url}"><b>Admin Control Play</b>ideA!</a>
+      </div><!-- /.login-logo -->
+
+      <div class="login-box-body">
+      <div id= "progress" class=" progress-login " ></div>
+        <p class="login-box-msg">Introduce tu usuario y password para iniciar sesion</p>
+        {form_open}
+          <div class="form-group has-feedback">
+            {form_input_hidden}
+            {form_input_user}
+            <!-- <input type="text" class="form-control" placeholder="Username"> -->
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback">
+            {form_input_pwd}
+            <!-- <input type="password" class="form-control" placeholder="Password"> -->
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <div class="row">
+            <div class="col-xs-8">
+              
+            </div><!-- /.col -->
+            <div class="col-xs-4">
+            {form_button}
+            
+              <!-- <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button> -->
+            </div><!-- /.col -->
+
+          </div>
+        {form_close}
+
+        
+
+        <a href="#">Olvidaste tu contraseña?</a><br>
+
+      </div><!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+
+    
+    <script>
+      jQuery(function () {
+        jQuery('input').iCheck({
+          checkboxClass: 'icheckbox_square-blue',
+          radioClass: 'iradio_square-blue',
+          increaseArea: '20%' // optional
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<!-- <!DOCTYPE html> 
 <html lang="es-ES">
     <head>
         <title>{site_title}</title>
@@ -16,12 +113,13 @@
         <script type="text/javascript" src="{base_url}assets/js/template/jquery.cookie.js"></script>
         <script type="text/javascript" src="{base_url}assets/js/template/jquery-impromptu.js"></script>
         <script type="text/javascript" src="{base_url}assets/js/template/progressbar/jquery.progresstimer.js"></script>
-        <!--Archivos del sistema -->
+        
+
         <script type="text/javascript" src="{base_url}assets/js/system/inc.config.js"></script>
         <script type="text/javascript" src="{base_url}assets/js/system/global_system.js"></script>
         <script type="text/javascript" src="{base_url}assets/js/system/login.js"></script>
         <script type="text/javascript" src="{base_url}assets/js/template/custom.js"></script>
-        <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{base_url}assets/js/excanvas.min.js"></script><![endif]-->
+
     </head>
 <body class="loginpage">
     <div class="loginpanel">
@@ -48,4 +146,4 @@
         </div>      
     </div>
 </body>
-</html>    
+</html>     -->

@@ -386,7 +386,7 @@
 	if(!function_exists('plantilla_table_tpl')){
 		function set_table_tpl(){
 			return  array (
-		                    'table_open'          => '<table class="table table-bordered responsive dataTable" >',
+		                    'table_open'          => '<table class="table table-bordered table-striped" >',
 
 		                    'heading_row_start'   => '<tr>',
 		                    'heading_row_end'     => '</tr>',

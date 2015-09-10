@@ -166,16 +166,19 @@ class Base_Controller extends CI_Controller {
                         );  
 		$att_user = array(
                             'name'    => 'user',
-                            'id'      => 'user'
+                            'id'      => 'user',
+                            'class'	  => 'form-control'
                         );  
 		$att_pwd = array(
                             'name'    => 'pwd',
-                            'id'      => 'pwd'
+                            'id'      => 'pwd',
+                            'class'	  => 'form-control'
                         ); 
 		$att_btn = array(
                             'name'    => 'button',
                             'id'      => 'button_login',
                             'value'   => 'true',
+                            'class'	  => 'btn btn-primary btn-block btn-flat',
                             'content' => $this->lang_item('lang_btn_ingresar')
                         );
 

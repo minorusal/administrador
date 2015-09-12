@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{site_title}</title>
-    <!-- Tell the browser to be responsive to screen width -->
+    
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.5 -->
+  
     <link rel="stylesheet" href="{base_url}assets/template/bootstrap/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
     <link rel="stylesheet" href="{base_url}assets/template/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{base_url}assets/template/dist/css/skins/_all-skins.min.css">
     <!-- jQuery 2.1.4 -->
     <script src="{base_url}assets/template/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery-migrate-1.1.1.min.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/jquery-ui-1.9.2.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/timepicker/jquery-ui-1.10.4.custom.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/timepicker/jquery-ui-timepicker.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/timepicker/jquery-ui-touch-punch.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/modernizr.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src="{base_url}assets/template/bootstrap/js/bootstrap.min.js"></script>
     <!-- SlimScroll -->
@@ -30,16 +33,36 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{base_url}assets/template/dist/js/demo.js"></script>
 
+    <script type="text/javascript" src="{base_url}assets/js/template/cropper/cropper.min.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/cropper/main.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/chosen.jquery.min.js"></script>
 
-		<!-- Customs -->
-		
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery.cookie.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/jquery.uniform.min.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/flot/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/flot/jquery.flot.resize.min.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/responsive-tables.js"></script>
+	<script type="text/javascript" src="{base_url}assets/js/template/jquery-impromptu.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/treeview/jquery.treeview.js" ></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/numeric/jquery-numeric.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/fullcalendar/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/jquery.jgrowl.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/progressbar/jquery.progresstimer.js"></script>
+    <!--Archivos del sistema -->
+    <script type="text/javascript" src="{base_url}assets/js/system/inc.config.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/system/global_system.js"></script>
+    <script type="text/javascript" src="{base_url}assets/js/template/custom.js"></script>
+
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  	<body class="hold-transition skin-blue sidebar-mini">
+  		
+
     <!-- Site wrapper -->
     <div class="wrapper">
 
       <header class="main-header">
         <!-- Logo -->
+
         <a href="../../index2.html" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>P</b>I</span>
@@ -47,7 +70,7 @@
           <span class="logo-lg"><b>Play</b>IdeA!</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
+        <nav class="navbar navbar-static-top" role="navigation">             
           <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -57,9 +80,10 @@
           </a>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              
+              <li>
               </li>
               <!-- User Account: style can be found in dropdown.less -->
+              
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="{avatar_user}" class="user-image" alt="User Image">
@@ -73,6 +97,7 @@
                       {user_name} - {user_perfil}
                     </p>
                   </li>
+                  
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
@@ -107,18 +132,24 @@
             </div>
             <div class="pull-left info">
               <p>{user_name}</p>
+              <p>
+              	<span><span id="liveclock"></span></span>
+              </p>
               <a href="#"><i class="fa fa-circle text-success"></i> {user_mail}</li></a>
             </div>
+            
           </div>
           
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
-            <li class="treeview">
+            <li class="header">NAVIGATION</li>
+            
+            <!-- <li class="treeview">
               <a href="#">
                 <i class="fa fa-home"></i> <span>Inicio</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
-            </li>
+            </li> -->
+            {panel_navigate}
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -165,9 +196,9 @@
 
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
+          <b>Version</b> 1.0.0
         </div>
-        <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; {anio} <a href="http://www.playweb.com.mx">Play Web</a>.</strong> All rights reserved.
       </footer>
 
       <!-- Control Sidebar -->

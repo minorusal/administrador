@@ -114,6 +114,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['icon_root']      = $icon_root;
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
+		$dataheader['anio']           = date('Y');
 		$dataheader['fecha_hoy']	  = $this->timestamp_complete();
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
@@ -502,7 +503,10 @@ class Base_Controller extends CI_Controller {
 		
 	    $panel    = "";
 	    $style_ul = "";
-	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='' $style_ul>";}
+
+	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='treeview-menu' >";}
+
+
 	    foreach ($items as $item => $subitems) {
 	        $mod_dropdown = "";
 	       	$content      = "";	
@@ -514,27 +518,32 @@ class Base_Controller extends CI_Controller {
 	       	$lang_item    = "";
 	       	$class_clik   = "";
 	       	if(in_array(strtolower(str_replace(' ','_', $item)), $uri)){
-	        	$active  = "active";
+	        	$active  = "";
 	        	$bool    = true;
 	        } 
+	       
 	        if(array_key_exists('content', $subitems)){
-	        	$mod_dropdown = "dropdown";
+	        	$mod_dropdown = "treeview";
 	        	$content     .= $this->build_panel_navigate($subitems['content'],$uri,$sub = true, $bool);
 	        	$routes       = base_url();
 	        	$icon         = $subitems['icon'];
 	        	$class_clik   = "";
-	        	$sub_nivel    = "<span class='iconfa-circle-arrow-down' style='float:right;'></span>";
+	        	$sub_nivel    = "<i class='fa fa-angle-left pull-right'></i>";
 	        }else{
 	        	$routes       = base_url().$subitems['routes'];
 	        	$icon         = $subitems['icon'] ;
 	        	$class_clik   = "load_controller";
 	        }
-	        $lang_item = $this->lang_item(str_replace(' ','_', $item));//<--Si se activa esta funcion se alentiza la carga de la vista "OPTIMIZAR!!!!!!!";
-    		$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
+	         $lang_item = $this->lang_item(str_replace(' ','_', $item));
+	        //<--Si se activa esta funcion se alentiza la carga de la vista "OPTIMIZAR!!!!!!!";
+    		//$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
+    		$panel .= "<li class='$mod_dropdown '><a href='$routes'><i class='$icon'></i><span>".text_format_tpl($lang_item)."</span> $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";
+
 	    }
 	    if($sub){$panel .= "</ul>";}
+
 	    return $panel;
 	}         		
 

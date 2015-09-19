@@ -1,10 +1,11 @@
 <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
-	<div  class="dataTables_length" style="overflow: hidden;;">
+	<div  class="dataTables_length" style="overflow: hidden;">
 		<div  style="display: table-cell;">
 			<div>
-				<span class="searchbar" style="position:inherit;">
-					<input type="text" name="keyword" placeholder="Search" class="biginput" id="search-query" autocomplete="off">
-				</span>
+				<div class="has-feedback">
+					<input type="text" name="keyword" placeholder="Search" class="form-control input-sm" id="search-query" autocomplete="off">
+					<span class="glyphicon glyphicon-search form-control-feedback"></span>
+				</div>
 				{export}
 			</div>
 			<div id="loader"></div>

@@ -17,14 +17,14 @@ class inicio extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->modulo 			= 'inicio';
-		$this->icon 			= 'iconfa-laptop'; 
+		$this->icon 			= '<span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>'; 
 		$this->template 		= 'content';
 		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; #administracion/entidades
 		$this->view_content 	= 'content';
 		$this->limit_max		= 5;
 		$this->offset			= 0;
 		$this->titulo 			= 'Inicio';
-		$this->mensaje 			= '<h4>Bienvenido al sistema AdminVentas.</h4> <br/>Por favor seleccione una opción del menú lateral.';
+		$this->mensaje 			= '<h4>Bienvenido al sistema AdminVentass.</h4> <br/>Por favor seleccione una opción del menú lateral.';
 		// Tabs
 		$this->tab1 			= 'inicio';
 

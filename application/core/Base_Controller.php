@@ -114,7 +114,7 @@ class Base_Controller extends CI_Controller {
 		$dataheader['icon_root']      = $icon_root;
 		$dataheader['close_session']  = $this->lang_item('close_session');
 		$dataheader['date']           = date('d/m/Y');
-		$dataheader['anio']           = date('Y');
+		//$dataheader['anio']           = date('Y');
 		$dataheader['fecha_hoy']	  = $this->timestamp_complete();
 		$uri_nav                      = $this->array2string_lang(explode('/', $this->uri->uri_string()),array("navigate","es_ES"),' » ');
 		$dataheader['uri_string']     = $uri_nav;
@@ -123,8 +123,8 @@ class Base_Controller extends CI_Controller {
 		
 		$data = (empty($data)) ? array() : $data;
 		$this->parser->parse('includes/header.html', $dataheader);
-		/*$this->parser->parse($view.$ext, $data);
-		$this->parser->parse('includes/footer.html', $datafooter); */
+		$this->parser->parse($view.$ext, $data);
+		$this->parser->parse('includes/footer.html', $datafooter); 
 	}
 
 	/**
@@ -504,8 +504,7 @@ class Base_Controller extends CI_Controller {
 	    $panel    = "";
 	    $style_ul = "";
 
-	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='treeview-menu' >";}
-
+	    if($sub){ if($bool){ $style_ul = "style='display: block;'";} $panel .= "<ul class='treeview-menu'  $style_ul >";}
 
 	    foreach ($items as $item => $subitems) {
 	        $mod_dropdown = "";
@@ -535,8 +534,6 @@ class Base_Controller extends CI_Controller {
 	        	$class_clik   = "load_controller";
 	        }
 	         $lang_item = $this->lang_item(str_replace(' ','_', $item));
-	        //<--Si se activa esta funcion se alentiza la carga de la vista "OPTIMIZAR!!!!!!!";
-    		//$panel .= "<li class='$mod_dropdown $active $class_clik'><a href='$routes'><span class='$icon'></span>".text_format_tpl($lang_item)." $sub_nivel </a>";
     		$panel .= "<li class='$mod_dropdown '><a href='$routes'><i class='$icon'></i><span>".text_format_tpl($lang_item)."</span> $sub_nivel </a>";
 	        $panel .= $content;
 	       	$panel .= "</li>";

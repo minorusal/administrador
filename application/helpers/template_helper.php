@@ -20,6 +20,7 @@
 	}	
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
+			
 			$link         = "";
 			$tabs         = "";
 			$tabbed       = "";
@@ -386,7 +387,7 @@
 	if(!function_exists('plantilla_table_tpl')){
 		function set_table_tpl(){
 			return  array (
-		                    'table_open'          => '<table class="table table-bordered table-striped" >',
+		                    'table_open'          => '<table class="table table-hover" >',
 
 		                    'heading_row_start'   => '<tr>',
 		                    'heading_row_end'     => '</tr>',

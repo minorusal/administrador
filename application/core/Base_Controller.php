@@ -88,11 +88,14 @@ class Base_Controller extends CI_Controller {
     * @return void
     */
     public function load_view($view, $data = array(), $data_includes = array() ,$ext = '.html'){
+		
 		$this->vars = new config_vars();
         $this->vars->load_vars();
+
 		$ext          = ($ext!='.html') ? '': $ext;
 		$uri          = $this->uri->segment_array();
 		$includes     = $this->load_scripts($data_includes);
+		//print_debug($data_includes);
 		$data_modulos = $this->sites_panel;
 		$img_path     = './assets/avatar/users/';
 		$img_path_    = base_url().'assets/avatar/users/';
@@ -269,6 +272,7 @@ class Base_Controller extends CI_Controller {
 				$files_css.= '<link rel="stylesheet" href="'.$url_css.'/'.$css_name.'.css" type="text/css" />';
 			}
 		}
+
 		$data_load['js']  = $files_js;
 		$data_load['css'] = $files_css;
 

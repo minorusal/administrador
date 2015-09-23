@@ -23,14 +23,12 @@ class usuarios extends Base_Controller {
 		$this->limit_max		= 10;
 		$this->offset			= 0;
 
-		$this->tab_indice 		= array(
-									 'agregar'
-									,'listado'
-									,'detalle'
-								);
-		for($i=0; $i<=count($this->tab_indice)-1; $i++){
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
+		/*for($i=0; $i<=count($this->tab_indice)-1; $i++){
 			$this->tab[$this->tab_indice[$i]] = $this->tab_indice[$i];
-		}
+		}*/
 		$this->load->model('users_model','db_model');
 		$this->load->model($this->modulo.'/perfiles_model','perfiles');
 		$this->load->model($this->modulo.'/areas_model','areas');
@@ -38,9 +36,12 @@ class usuarios extends Base_Controller {
 		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
-		for($i=1; $i<=count($this->tab); $i++){
+		/*for($i=1; $i<=count($this->tab); $i++){
 			${'tab_'.$i} = $this->tab [$this->tab_indice[$i-1]];
-		}
+		}*/
+		$tab_1 	= $this->tab1;
+		$tab_2 	= $this->tab2;
+		$tab_3 	= $this->tab3;
 		$path  	= $this->path;
 		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
 		
@@ -61,6 +62,7 @@ class usuarios extends Base_Controller {
 								);
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 		$config_tab['style_content'] = array('','','');
+		//print_debug($config_tab);
 		return $config_tab;
 	}
 	private function uri_view_principal(){
@@ -74,17 +76,17 @@ class usuarios extends Base_Controller {
 		$data['titulo_submodulo'] = $this->lang_item("submodulo");
 		$data['icon']             = $this->icon;
 		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
-		$js['js'][]               = array('name' => $this->seccion, 'dirname' => $this->modulo);
+		$js['js'][]               = array('name' => 'usuarios', 'dirname' => 'administracion');
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 	public function listado($offset = 0){
-		$seccion 		= '';
+		$seccion 		= '/listado';
 		$filtro         = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$accion 		= $this->tab['listado'];
-		$tab_detalle	= $this->tab['detalle'];
+		//$accion 		= $this->tab['listado'];
+		$tab_detalle	= $this->tab3;	
 		$limit 			= $this->limit_max;
-		$uri_view 		= $this->modulo.'/'.$accion;
-		$url_link 		= $this->path.$seccion.$accion;		
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'listado';		
 		$sqlData = array(
 						'user'         => $this->session->userdata('id_usuario')
 						,'buscar'      	=> $filtro
@@ -97,6 +99,7 @@ class usuarios extends Base_Controller {
 		$list_content = $this->db_model->get_users($sqlData);
 		$url          = base_url($url_link);
 		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+		//print_debug($paginador);
 		if($total_rows>0){
 			foreach ($list_content as $value) {
 				// Evento de enlace

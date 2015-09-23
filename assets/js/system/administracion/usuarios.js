@@ -27,7 +27,7 @@ function buscar_usuario(){
   });
 }
 function load_content(uri, id_content){
-    jQuery('#ui-id-2').hide('slow');
+    //jQuery('#ui-id-2').hide('slow');
 	var filtro = jQuery('#search-query').val();
         jQuery.ajax({
            type: "POST",
@@ -35,17 +35,23 @@ function load_content(uri, id_content){
            dataType: 'json',
            data: {filtro : filtro, tabs:1},
            success: function(data){
+            //alert(id_content);
             var treeview           = 'load_treeview("treeview-modules");';
             var treeview_childrens = 'treeview_childrens();'; 
-               if(id_content==1){
-              		var funcion = 'buscar_usuario';
-              		jQuery('#a-1').html(data+input_keypress('search-query', funcion));
+               if(id_content==0){
+                jQuery('#tab_1').hide();
+                jQuery('#tab_'+id_content).html(data);
+                jQuery('#tab_'+id_content).show();
+              		/*var funcion = 'buscar_usuario';
+              		jQuery('#tab_1').html(data+input_keypress('search-query', funcion));
               		jQuery('#search-query').val(filtro).focus();
-              		tool_tips();
-               }else{ 
+              		tool_tips();*/
+               }else if(id_content==1){ 
                     var escribir = 'jQuery("#txt_nombre_usuario").on("keyup", function(){ find_string("administracion/usuarios/find_string",jQuery("#txt_nombre_usuario").val(),jQuery("#txt_nombre_usuario").attr("name"));});';
              	 	var chosen   = 'jQuery(".chzn-select").chosen();';
-              		jQuery('#a-'+id_content).html(data+include_script(chosen+treeview+treeview_childrens+escribir));
+              		jQuery('#tab_'+id_content).html(data);
+                    jQuery('#tab_'+id_content).show();
+                    jQuery('#tab_0').hide();
                 }
         }
     });
@@ -115,7 +121,6 @@ function load_tree_view_perfil_usuario(id_personal,id_perfil){
     });
 }
 function detalle(id_personal){
-  jQuery('#ui-id-2').click();
   jQuery.ajax({
         type: "POST",
         url: path()+"administracion/usuarios/detalle",

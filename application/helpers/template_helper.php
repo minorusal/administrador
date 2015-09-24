@@ -30,9 +30,9 @@
 			//print_debug($total_tabs);
 
 			for ($i=0; $i < $total_tabs; $i++) { 
-				$activate = ($i==($segment)) ? 'active' : "";
-				$selected = ($i==($segment)) ? 'true' : 'false';
-				$display  = ($i==($segment)) ? 'display: block' : "";
+				$activate      = ($i==($segment-1)) ? 'active' : "";
+				$aria_expanded = ($i==($segment-1)) ? 'true' : 'false';
+				//$display  = ($i==($segment)) ? 'display: block' : "";
 				if(is_array($content)){
 					$data = (array_key_exists($i, $content) ) ? $content[$i] : '';
 				}else{
@@ -62,7 +62,7 @@
 
 				$attr     = array_2_string_format($config['attr'][$i]);
 				$tabs_li .= "<li   class='$activate' >
-								<a $attr href='#tab_$i' aria-expanded='$selected' data-toggle='tab' $onclick >
+								<a $attr href='#tab_$i' aria-expanded='$aria_expanded' data-toggle='tab' $onclick >
 									".$config['names'][$i]."
 								</a>
 							</li>";
@@ -72,12 +72,18 @@
     								</div>";
 			}
 
+			$tabbed .= "<section class='content'>";
+			$tabbed .= "<div class='row'>";
+			$tabbed .= "<div class='col-xs-12'>";
 			$tabbed .= "<div class='nav-tabs-custom'>";
     		$tabbed .= "<ul class='nav nav-tabs'>";
     		$tabbed .= $tabs_li;
     		$tabbed .= "</ul>";
     		$tabbed .= $tabs_content;
     		$tabbed .= "</div>";
+    		$tabbed .= "</div>";
+    		$tabbed .= "</div>";
+    		$tabbed .= "</section>";
     		return $tabbed;
 		}
 	}

@@ -51,6 +51,13 @@ $route['login/valindando']         = 'login/redireccion';
 $route['logout']                   = 'login/logout';
 /*******/
 
+/*COTIZACIONES*/
+
+/*Juegos*/
+$route['cotizaciones/juegos']	  = 'cotizaciones/juegos/index';
+/*areas_bebe*/
+$route['cotizaciones/areas_bebe'] = 'cotizaciones/areas_bebe/index';
+
 /*NUTRICION*/
 
 /*Valores nutricionales*/

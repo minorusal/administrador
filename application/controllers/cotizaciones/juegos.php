@@ -67,7 +67,8 @@ class juegos extends Base_Controller{
 
 	public function index(){
 		$tabl_inicial 			  = 2;
-		$view_listado    		  = $this->listado();	
+		$view_listado    		  = $this->listado();
+		$limit 			          = $this->limit_max;	
 		$contenidos_tab           = $view_listado;
 		$data['titulo_seccion']   = $this->lang_item($this->seccion);
 		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
@@ -78,7 +79,31 @@ class juegos extends Base_Controller{
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
 
-	public function listado(){
-		
+	public function listado($offset=0){
+		$seccion 		= '/listado';
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'listado';
+		$uri_segment    = $this->uri_segment();
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$total_rows	    = $this->juegos_bd->get_db_count_conectores();
+		$tabData['tabla']     = 'esta es una tabla';
+		if($this->ajax_post(false)){
+			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+		}else{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
+	}
+
+	public function agregar(){
+		$seccion 		= '/juegos/juegos_guardar';
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'agregar';
+		$uri_segment    = $this->uri_segment();
+		$tabData['tabla']     = 'ehola desde agregar';
+		if($this->ajax_post(false)){
+			echo json_encode( $this->load_view_unique($uri_view , $tabData, true));
+		}else{
+			return $this->load_view_unique($uri_view , $tabData, true);
+		}
 	}
 }

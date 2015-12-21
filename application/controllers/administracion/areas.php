@@ -6,7 +6,7 @@ class areas extends Base_Controller{
 	private $seccion;
 	private $view_content;
 	private $path;
-	private $icon;
+	private $icon; 
 
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;

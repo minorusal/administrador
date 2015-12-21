@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50626
 File Encoding         : 65001
 
-Date: 2015-12-21 16:26:17
+Date: 2015-12-21 17:07:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -116,8 +116,8 @@ INSERT INTO `sys_menu_n2` VALUES ('5', 'catalogos_generales', 'administracion/ca
 INSERT INTO `sys_menu_n2` VALUES ('6', 'empresa', 'administracion/empresa', 'fa fa-building', '6', '2', '2015-12-18 12:31:32', '1');
 INSERT INTO `sys_menu_n2` VALUES ('7', 'listado_de_sucursales', 'sucursales/listado_sucursales', 'iconfa-sitemap', '1', '3', '2015-12-18 12:34:02', '1');
 INSERT INTO `sys_menu_n2` VALUES ('8', 'horarios_de_servicio', 'sucursales/horarios_servicio', 'fa fa-clock-o', '2', '3', '2015-12-18 12:34:44', '1');
-INSERT INTO `sys_menu_n2` VALUES ('9', 'parametrizacion', 'sucursales/parametrizacion', 'fa fa-th-list', '3', '3', '2015-12-18 12:35:12', '1');
-INSERT INTO `sys_menu_n2` VALUES ('10', 'sincronizacion', 'sucursales/sincronizacion', 'fa fa-pie-chart', '4', '3', '2015-12-18 12:35:43', '1');
+INSERT INTO `sys_menu_n2` VALUES ('9', 'eventos', 'sucursales/eventos', 'fa fa-th-list', '3', '3', '2015-12-18 12:35:12', '1');
+INSERT INTO `sys_menu_n2` VALUES ('10', 'catalogos', 'sucursales/catalogos', 'fa fa-pie-chart', '4', '3', '2015-12-18 12:35:43', '1');
 INSERT INTO `sys_menu_n2` VALUES ('11', 'punto_venta', 'sucursales/punto_venta', 'fa fa-pie-chart', '5', '3', '2015-12-18 12:36:16', '1');
 INSERT INTO `sys_menu_n2` VALUES ('12', 'proveedores', 'compras/proveedores', 'iconfa-exclamation-sign', '1', '4', '2015-12-21 16:12:38', '1');
 INSERT INTO `sys_menu_n2` VALUES ('13', 'presentacion_articulo', 'compras/presentacion_articulo', 'iconfa-exclamation-sign', '2', '4', '2015-12-21 16:13:17', '1');
@@ -140,7 +140,7 @@ CREATE TABLE `sys_menu_n3` (
   `registro` datetime NOT NULL,
   `activo` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_menu_n3`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_menu_n3
@@ -162,6 +162,11 @@ INSERT INTO `sys_menu_n3` VALUES ('14', 'presentaciones', 'compras/catalogos/pre
 INSERT INTO `sys_menu_n3` VALUES ('15', 'marcas', 'compras/catalogos/marcas', 'iconfa-exclamation-sign', '4', '15', '2015-12-21 16:17:15', '1');
 INSERT INTO `sys_menu_n3` VALUES ('16', 'um', 'compras/catalogos/um', 'iconfa-exclamation-sign', '5', '15', '2015-12-21 16:17:55', '1');
 INSERT INTO `sys_menu_n3` VALUES ('17', 'familias', 'menus/catalogos/familias', 'iconfa-exclamation-sign', '1', '17', '2015-12-21 16:22:40', '1');
+INSERT INTO `sys_menu_n3` VALUES ('18', 'contratos', 'sucursales/eventos/contratos', 'iconfa-exclamation-sign', '1', '9', '2015-12-21 16:44:10', '1');
+INSERT INTO `sys_menu_n3` VALUES ('19', 'tipo_contrato', 'sucursales/eventos/tipo_contrato', 'iconfa-exclamation-sign', '2', '9', '2015-12-21 16:45:10', '1');
+INSERT INTO `sys_menu_n3` VALUES ('20', 'clientes', 'sucursales/catalogos/clientes', 'iconfa-exclamation-sign', '1', '10', '2015-12-21 16:46:47', '1');
+INSERT INTO `sys_menu_n3` VALUES ('21', 'paquetes', 'sucursales/catalogos/paquetes', 'iconfa-exclamation-sign', '2', '10', '2015-12-21 16:47:14', '1');
+INSERT INTO `sys_menu_n3` VALUES ('22', 'rango_evento', 'sucursales/catalogos/rango_evento', 'iconfa-exclamation-sign', '3', '10', '2015-12-21 16:47:41', '1');
 
 -- ----------------------------
 -- Table structure for `sys_paises`

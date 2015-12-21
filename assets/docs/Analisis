@@ -4,10 +4,11 @@
 	2 Precio por proveedor
 	2 Catalogos
 		3 Articulos
+		3 Lineas
 		3 Presentaciones
 		3 Marca
 		3 Unidad de medida
-1 Nutrición
+1 menus
 	2 Catalogos
 		3 Familias
 	2 Recetario
@@ -20,3 +21,23 @@
 		3 Clientes
 		3 Paquetes
 		3 Rangos de evento
+
+Compras/Proveedores
+
+#form_edit_proveedor
+#form_add_proveedor
+	razon_social
+	nombre_proveedor
+	clave_corta
+	rfc
+	calle
+	n_interior
+	n_exterior
+	colonia
+	municipio
+	cp
+	telefono
+	email
+	contacto
+	comentario
+

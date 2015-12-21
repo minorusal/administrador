@@ -194,7 +194,17 @@ class perfiles extends Base_Controller{
 
 	public function actualizar(){
 		$objData  	= $this->ajax_post('objData');
-		if($objData['incomplete']>0){
+		if(!isset($objData['nivel_1'])){
+			$objData['nivel_1'] = '';
+		}
+		if(!isset($objData['nivel_2'])){
+			$objData['nivel_2'] = '';
+		}
+		if(!isset($objData['nivel_3'])){
+			$objData['nivel_3'] = '';
+		}
+		
+		if($objData['incomplete']>0 || $objData['nivel_1'] == ''){
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode(array(  'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)));
 		}else{
@@ -243,10 +253,22 @@ class perfiles extends Base_Controller{
 
 	public function insert_perfil(){
 		$objData  	= $this->ajax_post('objData');
-		if($objData['incomplete']>0){
+		if(!isset($objData['nivel_1'])){
+			$objData['nivel_1'] = '';
+		}
+		if(!isset($objData['nivel_2'])){
+			$objData['nivel_2'] = '';
+		}
+		if(!isset($objData['nivel_3'])){
+			$objData['nivel_3'] = '';
+		}
+		
+		if($objData['incomplete']>0 || $objData['nivel_1'] == ''){
+			
 			$msg = $this->lang_item("msg_campos_obligatorios",false);
 			echo json_encode( array( 'success'=>'false', 'mensaje' => alertas_tpl('error', $msg ,false)) );
 		}else{
+			
 			$data_insert = array('perfil'          => $objData['txt_perfil']
 								,'clave_corta'     => $objData['txt_clave_corta']
 								,'id_menu_n1'      => $objData['nivel_1']

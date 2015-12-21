@@ -1,0 +1,22 @@
+1 Compras
+	2 Proveedores
+	2 Presentación por articulo
+	2 Precio por proveedor
+	2 Catalogos
+		3 Articulos
+		3 Presentaciones
+		3 Marca
+		3 Unidad de medida
+1 Nutrición
+	2 Catalogos
+		3 Familias
+	2 Recetario
+1 Sucursales
+	2 Listado de sucursales
+	2 Eventos
+		3 Listado de contratos
+		3 tipo de contrato
+	2 Catalogos
+		3 Clientes
+		3 Paquetes
+		3 Rangos de evento

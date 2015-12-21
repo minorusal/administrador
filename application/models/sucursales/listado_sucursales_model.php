@@ -310,37 +310,9 @@ class listado_sucursales_model extends Base_Model{
 		$tbl = $this->tbl;
 		// Query
 		$query = "SELECT count(*) as num_sucursales from (
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_dias_festivos where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_dias_especiales where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_dias_descartados where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_almacen_almacenes where id_sucursal = $id_sucursal
-				  UNION ALL 
 				  SELECT id_sucursal FROM 00_ac_mx.av_sucursales_punto_venta where id_sucursal = $id_sucursal
 				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_ventas_clientes where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_ciclos where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_ciclos where id_sucursal = $id_sucursal
-				  UNION ALL 
 				  SELECT id_sucursal FROM 00_ac_mx.av_administracion_servicios where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_recetas where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_receta_menu where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_menu where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_nutricion_programacion_articulo_menu where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_ventas_vendedores where id_sucursal = $id_sucursal
-				  UNION ALL 
-				  SELECT id_sucursal FROM 00_ac_mx.av_compras_ordenes where id_sucursal = $id_sucursal
 				  UNION ALL 
 				  SELECT id_sucursal FROM 00_ac_system.sys_usuarios where id_sucursal = $id_sucursal
 				  ) a";

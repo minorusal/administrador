@@ -2,7 +2,8 @@
 class clientes extends Base_Controller { 
 
 	var $uri_modulo     = 'sucursales/';
-	var $uri_submodulo  = 'clientes/';
+	var $uri_submodulo  = 'catalogos/';
+	var $uri_seccion    = 'clientes/';
 	var $view_content   = 'content';
 
 	public function __construct(){

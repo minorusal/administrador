@@ -99,13 +99,9 @@ $route['administracion/sucursales/servicios']                = 'administracion/s
 $route['sucursales/listado_sucursales']				    =	'sucursales/listado_sucursales/index';
 $route['sucursales/horarios_servicio']				    =	'sucursales/horarios_servicio/index';
 $route['sucursales/punto_venta']				        =	'sucursales/punto_venta/index';
-$route['sucursales/clientes']							=	'sucursales/clientes/index';
+$route['sucursales/catalogos/clientes']					=	'sucursales/clientes/index';
 $route['sucursales/operadores']							=	'sucursales/operadores/index';
 $route['sucursales/horarios_atencion']				    =	'sucursales/horarios_atencion/index';
-$route['sucursales/parametrizacion/tickets']			=	'sucursales/parametrizacion/tickets/index';
-$route['sucursales/parametrizacion/tipo_de_compra']		=	'sucursales/parametrizacion/tipo_de_compra/index';
-$route['sucursales/parametrizacion/forma_de_pago']		=	'sucursales/parametrizacion/forma_de_pago/index';
-$route['sucursales/sincronizacion/carga_de_datos']		=	'sucursales/sincronizacion/carga_de_datos/index';
-$route['sucursales/sincronizacion/descarga_de_datos']	= 	'sucursales/sincronizacion/descarga_de_datos/index';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -38,5 +38,6 @@ $lang['familias']               = 'familias';
 $lang['sucursales']             = 'sucursales';
 $lang['listado_de_sucursales']  = 'listado de sucursales';
 $lang['horarios_de_servicio']   = 'horarios de servicio';
+$lang['clientes']               = 'clientes';
 
 ?>

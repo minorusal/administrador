@@ -8,7 +8,7 @@ class areas extends Base_Controller{
 	private $path;
 	private $icon; 
 	private $offset, $limit_max;
-	private $tab, $tab1, $tab2, $tab3;
+	private $tab, $tab1, $tab2,  $tab3;
 
 	public function __construct(){
 		parent::__construct();

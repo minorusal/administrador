@@ -1,6 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class clientes extends Base_Controller { 
 
+	private $modulo;
+	private $submodulo;
+	private $seccion;
+	private $view_content;
+	private $path;
+	private $icon;
+
+	private $offset, $limit_max;
+	private $tab, $tab1, $tab2, $tab3;
+	
 	var $uri_modulo     = 'sucursales/';
 	var $uri_submodulo  = 'catalogos/';
 	var $uri_seccion    = 'clientes/';

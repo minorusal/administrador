@@ -209,7 +209,8 @@ function eliminar(id_cliente){
       });
 }
 
-function confirm_delete(id_cliente){
+function confirm_delete(id_cliente,text){
+  alert(text);
   promp_delete(eliminar,id_cliente);
 }
 

@@ -13,12 +13,12 @@ jQuery(document).ready(function(){
 });
 function promp_delete(call_fucntion,id){
     jQuery.prompt(msg_eliminar, {
-        title: msg_atencion,
+        title: msg_atencion+id,
         buttons: { "Sí": true, "No": false },
         submit: function(e,v,m,f){
-            if(v){
+            //if(v){
                 call_fucntion(id);
-            }
+            //}
         }
     });
 }

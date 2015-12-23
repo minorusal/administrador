@@ -14,51 +14,46 @@ class clientes_model extends Base_Model{
 		}	
 	}
 
-	public function insert_cliente_venta($data = array()){
+	function listado_clientes($data = array()){
 		// DB Info
 		$tbl = $this->tbl;
+		$filtro         = (isset($data['buscar']))?$data['buscar']:false;
+		$limit 			= (isset($data['limit']))?$data['limit']:0;
+		$offset 		= (isset($data['offset']))?$data['offset']:0;
+		$aplicar_limit 	= (isset($data['aplicar_limit']))?true:false;
+		$filtro = ($filtro) ? "AND ( 	sc.nombre LIKE '%$filtro%' OR 
+									    sc.paterno LIKE '%$filtro%' OR 
+									    sc.materno LIKE '%$filtro%' OR 
+									    sc.razon_social   LIKE '%$filtro%' OR 
+									    sc.clave_corta    LIKE '%$filtro%' OR  
+									    sc.rfc            LIKE '%$filtro%' OR 
+									    su.sucursal       LIKE '%$filtro%' 
+											)" : "";
+		$limit 			= ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		// Query
-		$insert = $this->insert_item($tbl['sucursales_cliente_venta'], $data,true);
-		return $insert;
-	}
-	function consulta_clientes($limit, $offset, $filtro="", $aplicar_limit = true){
-		// DB Info
-		$tbl = $this->tbl;
-		// Query
-		$filtro = ($filtro=='') ? "" : "AND ( 	vc.nombre LIKE '%$filtro%' OR 
-												vc.paterno LIKE '%$filtro%' OR 
-												vc.materno LIKE '%$filtro%' OR 
-												vc.razon_social   LIKE '%$filtro%' OR 
-												vc.clave_corta    LIKE '%$filtro%' OR  
-												vc.rfc            LIKE '%$filtro%' OR 
-												e.entidad         LIKE '%$filtro%' OR
-												su.sucursal       LIKE '%$filtro%' 
-											)";
-		$limit = ($aplicar_limit) ? "LIMIT $offset ,$limit" : "";
 		$query = "SELECT 
-						vc.id_ventas_clientes,
-						vc.nombre,
-						vc.paterno,
-						vc.materno,
-						vc.razon_social,
-						vc.clave_corta AS cv_cliente,
-						vc.rfc,
-						vc.telefonos,
-						vc.calle,
-						vc.num_int,
-						vc.num_ext,
-						vc.colonia,
-						vc.municipio,
-						vc.cp,
-						vc.email,
-						vc.timestamp,
-						e.entidad,
+						sc.id_sucursales_clientes,
+						sc.nombre,
+						sc.apellido_paterno,
+						sc.apellido_materno,
+						CONCAT_WS(' ',sc.nombre,sc.apellido_paterno,sc.apellido_materno) AS name,
+						sc.razon_social,
+						sc.clave_corta AS cv_cliente,
+						sc.rfc,
+						sc.telefono,
+						sc.calle,
+						sc.numero_interior,
+						sc.numero_exterior,
+						sc.colonia,
+						sc.municipio,
+						sc.codigo_postal,
+						sc.email,
+						sc.timestamp,
 						su.sucursal
-					FROM $tbl[ventas_clientes] vc
-					LEFT JOIN $tbl[administracion_entidades] e on vc.id_entidad = e.id_administracion_entidad
-					LEFT JOIN $tbl[sucursales]  su on vc.id_sucursal = su.id_sucursal
-					WHERE vc.activo = 1 $filtro
-					ORDER BY vc.id_ventas_clientes
+					FROM $tbl[sucursales_clientes] sc
+					LEFT JOIN $tbl[sucursales]  su on sc.id_sucursal = su.id_sucursal
+					WHERE sc.activo = 1 $filtro
+					ORDER BY sc.id_sucursales_clientes
 				$limit;";
 		$query = $this->db->query($query);
 

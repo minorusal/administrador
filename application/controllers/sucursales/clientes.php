@@ -10,49 +10,156 @@ class clientes extends Base_Controller {
 
 	private $offset, $limit_max;
 	private $tab, $tab1, $tab2, $tab3;
-	
-	var $uri_modulo     = 'sucursales/';
-	var $uri_submodulo  = 'catalogos/';
-	var $uri_seccion    = 'clientes/';
-	var $view_content   = 'content';
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model($this->uri_modulo.'clientes_model');
-		$this->load->model('administracion/entidades_model','ent_model');
-		$this->load->model('sucursales/listado_sucursales_model','sucur_model');
-		$this->load->model('sucursales/punto_venta_model','pventa');
-		$this->lang->load("sucursales/clientes","es_ES");
+		$this->modulo 			= 'sucursales';
+		$this->submodulo		= 'catalogos';
+		$this->seccion          = 'clientes';
+		$this->icon 			= 'iconfa-fire'; 
+		$this->path 			= $this->modulo.'/'.$this->seccion.'/'; 
+		$this->view_content 	= 'content';
+		$this->limit_max		= 5;
+		$this->offset			= 0;
+		// Tabs
+		$this->tab1 			= 'agregar';
+		$this->tab2 			= 'listado';
+		$this->tab3 			= 'detalle';
+		// DB Model
+		$this->load->model($this->modulo.'/'.$this->seccion.'_model','db_model');
+		// Diccionario
+		$this->lang->load($this->modulo.'/'.$this->seccion,"es_ES");
 	}
 	public function config_tabs(){
-		$pagina = (is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
-		$config_tab['names']    = array($this->lang_item("agregar_cliente"), 
-										$this->lang_item("listado_cliente"),
-										$this->lang_item("detalle_cliente")); 
-		$config_tab['links']    = array('sucursales/clientes/agregar', 
-										'sucursales/clientes/listado/'.$pagina,
-										'detalle'); 
-		$config_tab['action']   = array('load_content',
-										'load_content',
-										'');
+		$tab_1 	= $this->tab1;
+		$tab_2 	= $this->tab2;
+		$tab_3 	= $this->tab3;
+		$path  	= $this->path;
+		$pagina =(is_numeric($this->uri_segment_end()) ? $this->uri_segment_end() : "");
+		// Nombre de Tabs
+		$config_tab['names']    = array(
+										 $this->lang_item($tab_1) 
+										,$this->lang_item($tab_2) 
+										,$this->lang_item($tab_3) 
+								); 
+		// Href de tabs
+		$config_tab['links']    = array(
+										 $path.$tab_1             
+										,$path.$tab_2.'/'.$pagina 
+										,$tab_3                   
+								); 
+		// Accion de tabs
+		$config_tab['action']   = array(
+									     'load_content'
+										,'load_content'
+										,'' 
+								);
+		// Atributos 
 		$config_tab['attr']     = array('','', array('style' => 'display:none'));
 
 		return $config_tab;
 	}
 	private function uri_view_principal(){
-		return $this->uri_modulo.$this->view_content;
+		return $this->modulo.'/'.$this->view_content;
 	}
 	public function index(){
-		$view_listado 	= $this->listado();
-
-		$data['titulo_seccion']   = $this->lang_item("lbl_cliente");
-		$data['titulo_modulo'] = $this->lang_item("titulo_modulo");
-		$data['icon']             = 'fa fa-ticket';
-		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),2,$view_listado);
+		$tabl_inicial 			  = 2;
+		$view_listado    		  = $this->listado();	
+		$contenidos_tab           = $view_listado;
+		$data['titulo_seccion']   = $this->lang_item($this->seccion);
+		$data['titulo_submodulo'] = $this->lang_item("titulo_submodulo");
+		$data['icon']             = $this->icon;
+		$data['tabs']             = tabbed_tpl($this->config_tabs(),base_url(),$tabl_inicial,$contenidos_tab);	
 		
-		$js['js'][]     = array('name' => 'clientes', 'dirname' => 'sucursales');
+		$js['js'][]  = array('name' => $this->seccion, 'dirname' => $this->modulo);
 		$this->load_view($this->uri_view_principal(), $data, $js);
 	}
+
+	public function listado($offset = 0){
+		// Crea tabla con listado de elementos capturados 
+		$seccion 		= '/listado';
+		$tab_detalle	= $this->tab3;	
+		$limit 			= $this->limit_max;
+		$uri_view 		= $this->modulo.$seccion;
+		$url_link 		= $this->path.'listado';
+		$filtro      	= ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
+		$sqlData = array(
+			 'buscar'      	=> $filtro
+			,'offset' 		=> $offset
+			,'limit'      	=> $limit
+		);
+		$uri_segment  = $this->uri_segment(); 
+		$total_rows	  = count($this->db_model->listado_clientes($sqlData));
+		$sqlData['aplicar_limit'] = true;
+		$list_content = $this->db_model->listado_clientes($sqlData);
+		$url          = base_url($url_link);
+		$paginador    = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
+
+		if($total_rows>0){
+			foreach ($list_content as $value) {
+				//print_debug($value);
+				$atrr = array(
+								'href' => '#',
+							  	'onclick' => 'detalle('.$value['id_sucursales_clientes'].')'
+						);
+				$name = "'".$value['name']."'";
+				//$clientes = $this->clientes_model->sucursales_cliente_venta($value['id_ventas_clientes']);
+				$eliminar 	= '<span style="color:red;" id="ico-eliminar_'.$value['id_sucursales_clientes'].'" class="ico_eliminar fa fa-times" onclick="confirm_delete('.$value['id_sucursales_clientes'].','.$name.')" title="'.$this->lang_item("lbl_eliminar").'"></span>';
+				$btn_acciones['eliminar'] = ($clientes[0]['num_clientes'] == 0)?$eliminar:'<span style="color:gray;" id="ico-eliminar_'.$value['id_sucursales_clientes'].'" class="ico_eliminar fa fa-times" title="'.$this->lang_item("lbl_eliminar").'"></span>';
+				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
+				$tbl_data[] = array('id'              => $value['nombre'],
+									'nombre_cliente'  => tool_tips_tpl($value['nombre'].' '.$value['paterno'].' '.$value['materno'], $this->lang_item("tool_tip"), 'right' , $atrr),
+									'razon_social'    => $value['razon_social'],
+									'clave_corta'     => $value['cv_cliente'],
+									'rfc'  			  => $value['rfc'],
+									'telefonos'       => $value['telefono'],
+									'id_sucursal'     => $value['sucursal'],
+									'acciones'        => $acciones);
+			}
+
+			$tbl_plantilla = set_table_tpl();
+		
+			$this->table->set_heading(	$this->lang_item("nombre_cliente"),
+										$this->lang_item("nombre_cliente"),
+										$this->lang_item("razon_social"),
+										$this->lang_item("clave_corta"),
+										$this->lang_item("rfc_clientes"),
+										$this->lang_item("telefonos"),
+										$this->lang_item("sucursal"),
+										$this->lang_item("acciones"));
+			$this->table->set_template($tbl_plantilla);
+			$tabla = $this->table->generate($tbl_data);
+			$buttonTPL = array( 	'text'       => array( $this->lang_item('btn_import_xlsx'), $this->lang_item("btn_xlsx")), 
+									/*'id'         => array('upload_file'),
+									'type'       => array('file'),*/
+									'event'      => array(array('event'       => 'onclick', 
+																'function'    => 'upload_file', 
+																'params'      => ''
+																)
+													),
+									'iconsweets' => array('fa fa-cloud-upload', 'fa fa-file-excel-o'),
+									'href'       => array('', base_url($this->uri_modulo.$this->uri_submodulo.'export_xlsx?filtro='.base64_encode($filtro)))
+							);
+		}else{
+			$msg   = $this->lang_item("msg_query_null");
+			$tabla = alertas_tpl('', $msg ,false);
+			$buttonTPL = "";
+		}
+		
+
+		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
+		$data_tab_2['export']    = button_tpl($buttonTPL);
+		$data_tab_2['tabla']     = $tabla;
+		$data_tab_2['paginador'] = $paginador;
+		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
+
+		if($this->ajax_post(false)){
+			echo json_encode($this->load_view_unique($uri_view,$data_tab_2,true));
+		}else{
+			return $this->load_view_unique($uri_view , $data_tab_2, true);
+		}
+	}
+
 	public function agregar(){
 		// Listas
 		$punto_venta_array  = array(
@@ -108,96 +215,6 @@ class clientes extends Base_Controller {
 			echo json_encode($this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true));
 		}else{
 			return $this->load_view_unique($this->uri_modulo.$this->uri_submodulo.'clientes_save', $data_1, true);
-		}
-	}
-
-	public function load_punto_venta(){
-		$id_sucursal = $this->ajax_post('id_sucursal');
-		$punto_venta_array  = array(
-						 'data'		=> $this->pventa->get_punto_venta_x_sucursal($id_sucursal)
-						,'value' 	=> 'id_sucursales_punto_venta'
-						,'text' 	=> array('clave_corta','punto_venta')
-						,'name' 	=> "lts_punto_venta"
-						,'class' 	=> "requerido"
-					);
-		$list_punto_venta  = multi_dropdown_tpl($punto_venta_array);
-		echo json_encode($list_punto_venta);
-	}
-	public function listado($offset = 0){
-		$data_tab_2  = "";
-		$filtro      = ($this->ajax_post('filtro')) ? $this->ajax_post('filtro') : "";
-		$uri_view    = $this->uri_modulo.'listado';
-		$limit       = 10;
-		$uri_segment = $this->uri_segment(); 
-
-		$lts_content =$this->clientes_model->consulta_clientes($limit,$offset,$filtro);
-		$total_rows  = count($this->clientes_model->consulta_clientes($limit, $offset, $filtro, false));
-		$url         = base_url($this->uri_modulo.$this->uri_submodulo.'listado');
-
-		$paginador   = $this->pagination_bootstrap->paginator_generate($total_rows, $url, $limit, $uri_segment, array('evento_link' => 'onclick', 'function_js' => 'load_content', 'params_js'=>'1'));
-
-		if($total_rows>0){
-			foreach ($lts_content as $value) {
-				$atrr = array(
-								'href' => '#',
-							  	'onclick' => 'detalle('.$value['id_ventas_clientes'].')'
-						);
-				$clientes = $this->clientes_model->sucursales_cliente_venta($value['id_ventas_clientes']);
-				$eliminar 	= '<span style="color:red;" id="ico-eliminar_'.$value['id_ventas_clientes'].'" class="ico_eliminar fa fa-times" onclick="confirm_delete('.$value['id_ventas_clientes'].')" title="'.$this->lang_item("lbl_eliminar").'"></span>';
-				$btn_acciones['eliminar'] = ($clientes[0]['num_clientes'] == 0)?$eliminar:'<span style="color:gray;" id="ico-eliminar_'.$value['id_ventas_clientes'].'" class="ico_eliminar fa fa-times" title="'.$this->lang_item("lbl_eliminar").'"></span>';
-				$acciones = implode('&nbsp;&nbsp;&nbsp;',$btn_acciones);
-				$tbl_data[] = array('id'              => $value['nombre'],
-									'nombre_cliente'  => tool_tips_tpl($value['nombre'].' '.$value['paterno'].' '.$value['materno'], $this->lang_item("tool_tip"), 'right' , $atrr),
-									'razon_social'    => $value['razon_social'],
-									'clave_corta'     => $value['cv_cliente'],
-									'rfc'  			  => $value['rfc'],
-									'telefonos'       => $value['telefonos'],
-									'id_entidad'      => $value['entidad'],
-									'id_sucursal'     => $value['sucursal'],
-									'acciones'        => $acciones);
-			}
-
-			$tbl_plantilla = set_table_tpl();
-		
-			$this->table->set_heading(	$this->lang_item("nombre_cliente"),
-										$this->lang_item("nombre_cliente"),
-										$this->lang_item("razon_social"),
-										$this->lang_item("clave_corta"),
-										$this->lang_item("rfc_clientes"),
-										$this->lang_item("telefonos"),
-										$this->lang_item("entidad"),
-										$this->lang_item("sucursal"),
-										$this->lang_item("acciones"));
-			$this->table->set_template($tbl_plantilla);
-			$tabla = $this->table->generate($tbl_data);
-			$buttonTPL = array( 	'text'       => array( $this->lang_item('btn_import_xlsx'), $this->lang_item("btn_xlsx")), 
-									/*'id'         => array('upload_file'),
-									'type'       => array('file'),*/
-									'event'      => array(array('event'       => 'onclick', 
-																'function'    => 'upload_file', 
-																'params'      => ''
-																)
-													),
-									'iconsweets' => array('fa fa-cloud-upload', 'fa fa-file-excel-o'),
-									'href'       => array('', base_url($this->uri_modulo.$this->uri_submodulo.'export_xlsx?filtro='.base64_encode($filtro)))
-							);
-		}else{
-			$msg   = $this->lang_item("msg_query_null");
-			$tabla = alertas_tpl('', $msg ,false);
-			$buttonTPL = "";
-		}
-		
-
-		$data_tab_2['filtro']    = ($filtro!="") ? sprintf($this->lang_item("msg_query_search"),$total_rows , $filtro) : "";
-		$data_tab_2['export']    = button_tpl($buttonTPL);
-		$data_tab_2['tabla']     = $tabla;
-		$data_tab_2['paginador'] = $paginador;
-		$data_tab_2['item_info'] = $this->pagination_bootstrap->showing_items($limit, $offset, $total_rows);
-
-		if($this->ajax_post(false)){
-			echo json_encode($this->load_view_unique($uri_view,$data_tab_2,true));
-		}else{
-			return $this->load_view_unique($uri_view , $data_tab_2, true);
 		}
 	}
 	public function insert(){

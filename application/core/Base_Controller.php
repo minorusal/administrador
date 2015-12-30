@@ -230,6 +230,8 @@ class Base_Controller extends CI_Controller {
 		$vars_js.= "var calendar_day      = '".$this->lang_item('calendar_day',false)."';";
 		$vars_js.= "var calendar_today    = '".$this->lang_item('calendar_today',false)."';";
 		$vars_js.= "var msg_eliminar      = '".$this->lang_item('msg_eliminar',false)."';";
+		$vars_js.= "var msg_eliminar_in   = '".$this->lang_item('msg_eliminar_in',false)."';";
+		$vars_js.= "var msg_eliminar_end  = '".$this->lang_item('msg_eliminar_end',false)."';";
 		$vars_js.= "var msg_atencion      = '".$this->lang_item('msg_atencion',false)."';";
 
 		$files_js  		   = "<script type='text/javascript'>".$vars_js." </script>";

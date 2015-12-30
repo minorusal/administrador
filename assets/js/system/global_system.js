@@ -12,13 +12,13 @@ jQuery(document).ready(function(){
     GoTop();
 });
 function promp_delete(call_fucntion,id){
-    jQuery.prompt(msg_eliminar, {
-        title: msg_atencion+id,
+    jQuery.prompt(msg_eliminar_in+' '+id+' '+msg_eliminar_end, {
+        title: msg_atencion,
         buttons: { "Sí": true, "No": false },
         submit: function(e,v,m,f){
-            //if(v){
+            if(v){
                 call_fucntion(id);
-            //}
+            }
         }
     });
 }

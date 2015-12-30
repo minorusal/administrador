@@ -62,6 +62,8 @@
 	$lang['msg_query_insert']             	   = '<strong>Advertencia!</strong><br>No se puedo realizar el registro';
 	$lang['msg_insert_orden_success']          = '<strong>Exito!</strong><br>El registro se dio de alta correctamente. Con el numero de orden %s';
 	$lang['msg_existencia_listado']            = '<strong>Atencion!</strong><br>El articulo ya se encuentra registrado, por favor seleccione otro, gracias.';
+	$lang['msg_eliminar_in']                   = '¿Desea eliminar el registro';
+	$lang['msg_eliminar_end']                  = 'de la base de datos?';
 
 // Botones
 	$lang['btn_xlsx']     		= 'Generar Excel';

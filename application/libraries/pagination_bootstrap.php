@@ -37,7 +37,7 @@ class pagination_bootstrap extends CI_Pagination{
 	*/
 
 	public function paginator_generate($total_rows = 5 , $url = '' , $per_page = 2 , $uri_segment = 4, $arr_config = array()){
-		
+		//print_debug($arr_config);
 		if(!empty($arr_config)){
 			foreach ($arr_config as $key => $value) {
 				$config[$key] = $value;
@@ -53,6 +53,7 @@ class pagination_bootstrap extends CI_Pagination{
 		$config['uri_segment'] = $uri_segment;
 
 		$this->initialize($config);
+		//print_debug($this->initialize);
 		
 		
 		$links = $this->create_links();

@@ -20,18 +20,19 @@
 	}	
 	if(!function_exists('tabbed_tpl')){
 		function tabbed_tpl($config, $uri_string, $segment = 1, $content = ""){
-			
+			//print_debug($config);
 			$link         = "";
 			$tabs         = "";
 			$tabbed       = "";
 			$tabs_li      = "";
 			$tabs_content = "";
 			$total_tabs   = count($config['names']);
+			//print_debug($total_tabs);
 
 			for ($i=0; $i < $total_tabs; $i++) { 
-				$activate = ($i==($segment-1)) ? 'ui-tabs-active ui-state-active' : "";
-				$selected = ($i==($segment-1)) ? 'true' : "";
-				$display  = ($i==($segment-1)) ? 'display: block' : "";
+				$activate      = ($i==($segment-1)) ? 'active' : "";
+				$aria_expanded = ($i==($segment-1)) ? 'true' : 'false';
+				//$display  = ($i==($segment)) ? 'display: block' : "";
 				if(is_array($content)){
 					$data = (array_key_exists($i, $content) ) ? $content[$i] : '';
 				}else{
@@ -54,36 +55,35 @@
 							$onclick  = "onclick='$function($link, $params);'";
 						}
 					}else{
+						
 						$onclick  = "onclick='$action($link, $i);'";
 					}
 				}
 
 				$attr     = array_2_string_format($config['attr'][$i]);
-				$tabs_li .= "<li   class='ui-state-default ui-corner-top $activate' role='tab' tabindex='$i' aria-controls='a-$i' aria-labelledby='ui-id-$i' aria-selected='$selected'>
-								<a $attr href='#a-$i' $onclick class='ui-tabs-anchor' role='presentation' tabindex='$i' id='ui-id-$i'>
+				$tabs_li .= "<li   class='$activate' >
+								<a $attr href='#tab_$i' aria-expanded='$aria_expanded' data-toggle='tab' $onclick >
 									".$config['names'][$i]."
 								</a>
 							</li>";
-				if(array_key_exists('style_content',$config)){
-					if(array_key_exists($i,$config['style_content'])){
-						$overflow_x = $config['style_content'][$i];
-					}else{
-						$overflow_x = "overflow-x:auto;";
-					}
-				}else{
-					$overflow_x = "overflow-x:auto;";
-				}
-				$tabs_content .= "<div id='a-$i' aria-labelledby='ui-id-$i' class='ui-tabs-panel ui-widget-content ui-corner-bottom' role='tabpanel' aria-expanded='$selected' aria-hidden='false' style='$overflow_x $display'>
+
+				$tabs_content .= "<div id='tab_$i' class='tab-pane $activate' >
         							$data
     								</div>";
 			}
 
-			$tabbed .= "<div class='tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all' style='overflow:visible;'>";
-    		$tabbed .= "<ul class='ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all' role='tablist'>";
+			$tabbed .= "<section class='content'>";
+			$tabbed .= "<div class='row'>";
+			$tabbed .= "<div class='col-xs-12'>";
+			$tabbed .= "<div class='nav-tabs-custom'>";
+    		$tabbed .= "<ul class='nav nav-tabs'>";
     		$tabbed .= $tabs_li;
     		$tabbed .= "</ul>";
     		$tabbed .= $tabs_content;
     		$tabbed .= "</div>";
+    		$tabbed .= "</div>";
+    		$tabbed .= "</div>";
+    		$tabbed .= "</section>";
     		return $tabbed;
 		}
 	}
@@ -166,6 +166,7 @@
 					$count++;
 				}
 				$selected = "<span class='formwrapper'>".form_dropdown($name, $options, $selected, " class='chzn-select $class' $event $disabled data-campo='$name'")."</span>";
+				
 				return $selected;
 			}
 			if(!$data){

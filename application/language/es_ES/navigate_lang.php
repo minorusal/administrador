@@ -1,5 +1,11 @@
 <?php
 $lang['inicio']                   = 'Inicio';
+
+/*Cotizaciones*/
+$lang['cotizaciones']             = 'cotizaciones';
+$lang['juegos']					  = 'juegos';
+$lang['areas_bebe']				  = 'areas de bebe';
+
 /*Nutrición*/
 $lang['nutricion']                = 'Nutricion';
 $lang['valores_nutricionales']    = 'valores nutricionales';

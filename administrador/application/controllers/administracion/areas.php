@@ -119,7 +119,7 @@ class areas extends Base_Controller{
 			$tbl_plantilla = set_table_tpl();
 			// Titulos de tabla
 			$this->table->set_heading(	$this->lang_item("ID"),
-										$this->lang_item("lbl_area"),
+										$this->lang_item("lbl_areas"),
 										$this->lang_item("lbl_clave_corta"),
 										$this->lang_item("lbl_descripcion"),
 										$this->lang_item("lbl_acciones"));
